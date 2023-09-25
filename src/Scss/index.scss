@@ -1,0 +1,23 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+:root{
+    --main-color-one: #6A017A;
+    --main-color-two: #00fcf8;
+}
+
+body{
+    background-color: var(--main-color-one);
+}
+
+ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+a{
+    color: #FFF;
+    text-decoration: none;
+}
