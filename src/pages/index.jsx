@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import { BsFillCartPlusFill, BsFillSuitHeartFill } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
-import { BiSolidCategory } from "react-icons/bi";
+import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
 import productImageTest from "../../public/images/productImageTest.jpg";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
@@ -34,19 +34,29 @@ export default function Home() {
           </div>
         </section>
         <div className="container-fluid">
-          <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
-            <Link href="/" className="display-product-link me-5 text-center">
-              <BiSolidCategory className="icon mb-2" />
-              <h5 className="link-name">Category</h5>
-            </Link>
-            <Link href="/" className="display-product-link me-5 text-center">
-              <BiSolidCategory className="icon mb-2" />
-              <h5 className="link-name">Last Added</h5>
-            </Link>
-            <Link href="/" className="display-product-link me-5 text-center">
-              <BiSolidCategory className="icon mb-2" />
-              <h5 className="link-name">Best</h5>
-            </Link>
+          <div className="row">
+            <div className="col-md-3">
+              <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
+            </div>
+            <div className="col-md-9">
+              <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
+                <Link href="/" className="display-product-link me-5 text-center">
+                  <BiSolidCategory className="icon mb-2" />
+                  <h5 className="link-name">Category</h5>
+                </Link>
+                <Link href="/" className="display-product-link me-5 text-center">
+                  <BiSolidCategory className="icon mb-2" />
+                  <h5 className="link-name">Last Added</h5>
+                </Link>
+                <Link href="/" className="display-product-link me-5 text-center">
+                  <BiSolidCategory className="icon mb-2" />
+                  <h5 className="link-name">Best</h5>
+                </Link>
+              </section>
+            </div>
+          </div>
+          <section className="search mb-5 text-end">
+            <BiSearchAlt className="search-icon p-2" />
           </section>
           <section className="ads mb-5">
             <h1 className="text-white text-center">At Asfour we offer many great products for you</h1>

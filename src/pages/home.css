@@ -39,6 +39,14 @@
   font-size: 70px;
 }
 
+.home .search .search-icon {
+  background-color: #FFF;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 .home .some-of-products .product-details {
   background-color: var(--main-color-two);
   height: 500px;
