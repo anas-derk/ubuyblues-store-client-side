@@ -1,0 +1,99 @@
+.home{
+    .links-and-logo{
+        position: relative;
+        border: {
+            top: 4px solid var(--main-color-two);
+            bottom: 4px solid var(--main-color-two);
+        };
+        margin-bottom: 100px;
+        .link-icon{
+            font-size: 60px;
+            color: var(--main-color-one);
+            &:hover{
+                color: var(--main-color-two);
+            }
+        }
+        .logo-box{
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            background-color: #FFF;
+            border: 4px solid var(--main-color-two);
+        }
+    }
+    .navigate-link-for-display-products{
+        border-radius: 15px;
+        border: 5p solid var(--main-color-three);
+        .display-product-link{
+            color: var(--main-color-one);
+            .icon{
+                font-size: 70px;
+            }
+        }
+    }
+    .some-of-products{
+        .product-details{
+            background-color: var(--main-color-two);
+            height: 500px;
+            overflow-y: auto;
+            img{
+                width: 100%;
+                height: 300px;
+            }
+        }
+    }
+    .categories{
+        border-radius: 15px;
+        .category-details{
+            background-color: var(--main-color-two);
+            border-left: 10px solid #FFF;
+            border-radius: 15px;
+            &:hover{
+                border-left: none;
+            }
+            .forward-arrow-icon{
+                background-color: #FFF;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                font-size: 15px;
+            }
+        }
+    }
+    .latest-added-products, .best-seller{
+        border: 4px solid var(--main-color-three);
+        border-radius: 15px;
+        .product-details{
+            img{
+                width: 100%;
+                height: 250px;
+                border: 4px solid var(--main-color-three);
+                border-radius: 15px;
+            }
+            .add-to-cart-btn{
+                background-color: var(--main-color-two);
+                border: 2px solid #CCC;
+                border-top-left-radius: 15px;
+            }
+        }
+    }
+    .best-group{
+        .product-details{
+            img{
+                width: 100%;
+                height: 250px;
+                border: 4px solid var(--main-color-three);
+                border-radius: 15px;
+            }
+            .add-to-cart-btn{
+                background-color: var(--main-color-two);
+                border: 2px solid #CCC;
+                border-top-left-radius: 15px;
+            }
+        }
+    }
+}

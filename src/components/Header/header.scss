@@ -1,0 +1,10 @@
+.global-header{
+    .global-header-icon{
+        color: #FFF;
+        font-size: 40px;
+        cursor: pointer;
+        &:hover{
+            color: var(--main-color-two);
+        }
+    }
+}
