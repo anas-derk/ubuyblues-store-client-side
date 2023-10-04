@@ -22,3 +22,17 @@ a{
     color: #FFF;
     text-decoration: none;
 }
+
+.password-field-box, .email-field-box, .confirm-password-field-box{
+    position: relative;
+    .icon-box{
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        .icon{
+            font-size: 30px;
+            cursor: pointer;
+        }
+    }
+}
