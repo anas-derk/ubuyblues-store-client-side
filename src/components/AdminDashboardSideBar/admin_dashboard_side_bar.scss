@@ -6,13 +6,18 @@
     top: 0;
     min-height: 100vh;
     background-color: #FFF;
-    .managment-links-list{
-        .managment-link{
+    .managment-items-list{
+        .managment-item{
             cursor: pointer;
-            font-size: 18px;
-            &:hover{
-                background-color: #EEE;
-                font-weight: bold;
+                font-size: 18px;
+                transition: 0.3s;
+                &:hover{
+                    background-color: #EEE;
+                    font-weight: bold;
+                    text-indent: 10px;
+                }
+            .managment-link{
+                color: #000;
             }
         }
     }

@@ -5,3 +5,11 @@ body {
 .admin-dashboard {
   background-color: #FFF;
 }
+
+.admin-dashboard .page-content {
+  position: absolute;
+  left: 300px;
+  top: 0;
+  width: calc(100% - 300px);
+  min-height: 100vh;
+}

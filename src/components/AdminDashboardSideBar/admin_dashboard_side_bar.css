@@ -8,12 +8,18 @@
   background-color: #FFF;
 }
 
-.admin-dashboard-side-bar .managment-links-list .managment-link {
+.admin-dashboard-side-bar .managment-items-list .managment-item {
   cursor: pointer;
   font-size: 18px;
+  transition: 0.3s;
 }
 
-.admin-dashboard-side-bar .managment-links-list .managment-link:hover {
+.admin-dashboard-side-bar .managment-items-list .managment-item:hover {
   background-color: #EEE;
   font-weight: bold;
+  text-indent: 10px;
+}
+
+.admin-dashboard-side-bar .managment-items-list .managment-item .managment-link {
+  color: #000;
 }
