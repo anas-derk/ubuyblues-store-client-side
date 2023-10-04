@@ -5,6 +5,8 @@ import Logo from "../../../../public/images/Logo-ASFOUR-White-footer.png";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
+import validations from "../../../../public/global_functions/validations";
+import Axios from "axios";
 
 export default function AdminLogin() {
 
@@ -31,10 +33,10 @@ export default function AdminLogin() {
                 value: email,
                 rules: {
                     isRequired: {
-                        msg: "عذراً هذا الحقل لا يمكن أن يكون فارغاً",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                     isEmail: {
-                        msg: "عذراً ، البريد الالكتروني المُدخل غير صالح",
+                        msg: "Sorry, This Email Is Not Valid !!",
                     }
                 },
             },
@@ -43,7 +45,7 @@ export default function AdminLogin() {
                 value: password,
                 rules: {
                     isRequired: {
-                        msg: "عذراً هذا الحقل لا يمكن أن يكون فارغاً",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                 },
             },
@@ -52,7 +54,7 @@ export default function AdminLogin() {
         if (Object.keys(errorsObject).length == 0) {
             setIsLoginingStatus(true);
             try {
-                const res = await Axios.get(`${process.env.BASE_API_URL}/users/login?email=${email}&password=${password}`);
+                const res = await Axios.get(`${process.env.BASE_API_URL}/admin/login?email=${email}&password=${password}`);
                 const data = await res.data;
                 if (typeof data === "string") {
                     setIsLoginingStatus(false);
@@ -61,12 +63,12 @@ export default function AdminLogin() {
                         setErrorMsg("");
                     }, 2000);
                 } else {
-                    localStorage.setItem("syria-card-user-id", data._id);
-                    router.push("/");
+                    localStorage.setItem("asfour-admin-user-id", data._id);
+                    // router.push("/");
                 }
             } catch (err) {
                 console.log(err);
-                setErrorMsg("عذراً ، حدث خطأ الرجاء إعادة العملية !!");
+                setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             }
         }
     }
