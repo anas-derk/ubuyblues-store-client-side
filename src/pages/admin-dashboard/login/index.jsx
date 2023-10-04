@@ -64,7 +64,7 @@ export default function AdminLogin() {
                     }, 2000);
                 } else {
                     localStorage.setItem("asfour-admin-user-id", data._id);
-                    // router.push("/");
+                    router.push("/admin-dashboard");
                 }
             } catch (err) {
                 console.log(err);

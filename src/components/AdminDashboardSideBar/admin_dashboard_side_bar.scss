@@ -1,0 +1,19 @@
+.admin-dashboard-side-bar{
+    width: 300px;
+    border-right: 1px solid #CCC;
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-height: 100vh;
+    background-color: #FFF;
+    .managment-links-list{
+        .managment-link{
+            cursor: pointer;
+            font-size: 18px;
+            &:hover{
+                background-color: #EEE;
+                font-weight: bold;
+            }
+        }
+    }
+}
