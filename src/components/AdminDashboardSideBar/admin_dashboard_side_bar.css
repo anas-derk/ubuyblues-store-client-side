@@ -15,11 +15,44 @@
 }
 
 .admin-dashboard-side-bar .managment-items-list .managment-item:hover {
-  background-color: #EEE;
-  font-weight: bold;
+  background-color: #03edd0 !important;
   text-indent: 10px;
 }
 
-.admin-dashboard-side-bar .managment-items-list .managment-item .managment-link {
+.admin-dashboard-side-bar .managment-items-list .managment-item:hover .managment-button {
+  font-weight: bold;
+}
+
+.admin-dashboard-side-bar .managment-items-list .managment-item.active {
+  background-color: #03edd0 !important;
+  text-indent: 10px;
+}
+
+.admin-dashboard-side-bar .managment-items-list .managment-item.active .managment-button {
+  font-weight: bold;
+}
+
+.admin-dashboard-side-bar .managment-items-list .managment-item .managment-button {
+  font-size: 18px;
+}
+
+.admin-dashboard-side-bar .managment-items-list .links-list {
+  background-color: #EEE;
+}
+
+.admin-dashboard-side-bar .managment-items-list .links-list .link-item {
+  transition: 0.3s;
+}
+
+.admin-dashboard-side-bar .managment-items-list .links-list .link-item:hover {
+  text-indent: 10px;
+}
+
+.admin-dashboard-side-bar .managment-items-list .links-list .link-item.active {
+  background-color: #CCC;
+}
+
+.admin-dashboard-side-bar .managment-items-list .links-list .link-item .managment-link {
   color: #000;
+  font-size: 18px;
 }

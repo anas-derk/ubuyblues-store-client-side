@@ -4,7 +4,7 @@ import { PiHandWavingThin } from "react-icons/pi";
 
 export default function AdminDashboard() {
     return (
-        <div className="admin-dashboard">
+        <div className="main admin-dashboard">
             <Head>
                 <title>Asfour Store - Admin Dashboard</title>
             </Head>
