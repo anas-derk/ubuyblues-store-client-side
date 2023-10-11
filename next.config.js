@@ -2,12 +2,12 @@
 const nextConfig = {
   reactStrictMode: false,
   env: {
-    BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5300" : "https://api.asfourintlco.com",
+    BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api3.outcircle2023.com",
   },
   async headers() {
     return [
       {
-        source: process.env.NODE_ENV === "development" ? "//localhost:5300/(.*)" : "//api.asfourintlco.com/(.*)",
+        source: process.env.NODE_ENV === "development" ? "//localhost:5200/(.*)" : "//api3.outcircle2023.com/(.*)",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
