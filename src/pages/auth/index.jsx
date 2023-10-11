@@ -10,11 +10,17 @@ import Axios from "axios";
 
 export default function UserLogin() {
 
-    const [email, setEmail] = useState("");
+    const [emailForLogin, setEmailForLogin] = useState("");
 
-    const [password, setPassword] = useState("");
+    const [passwordForLogin, setPasswordForLogin] = useState("");
 
     const [isLoginingStatus, setIsLoginingStatus] = useState(false);
+
+    const [emailForSignup, setEmailForSignup] = useState("");
+
+    const [passwordForSignup, setPasswordForSignup] = useState("");
+
+    const [isSignupStatus, setIsSignupStatus] = useState(false);
 
     const [errMsg, setErrorMsg] = useState("");
 
@@ -22,17 +28,21 @@ export default function UserLogin() {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
-    const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+    const [isVisiblePasswordForLogin, setIsVisiblePasswordForLogin] = useState(false);
+
+    const [isVisiblePasswordForSignup, setIsVisiblePasswordForSignup] = useState(false);
 
     const router = useRouter();
 
     const userLogin = async (e) => {
         e.preventDefault();
         setFormValidationErrors({});
+        setErrorMsg("");
+        setSuccessMsg("");
         let errorsObject = validations.inputValuesValidation([
             {
-                name: "email",
-                value: email,
+                name: "emailForLogin",
+                value: emailForLogin,
                 rules: {
                     isRequired: {
                         msg: "Sorry, This Field Can't Be Empty !!",
@@ -43,8 +53,8 @@ export default function UserLogin() {
                 },
             },
             {
-                name: "password",
-                value: password,
+                name: "passwordForLogin",
+                value: passwordForLogin,
                 rules: {
                     isRequired: {
                         msg: "Sorry, This Field Can't Be Empty !!",
@@ -56,32 +66,40 @@ export default function UserLogin() {
         if (Object.keys(errorsObject).length == 0) {
             setIsLoginingStatus(true);
             try {
-                const res = await Axios.get(`${process.env.BASE_API_URL}/admin/login?email=${email}&password=${password}`);
-                const data = await res.data;
-                if (typeof data === "string") {
-                    setIsLoginingStatus(false);
-                    setErrorMsg(data);
-                    setTimeout(() => {
+                const res = await Axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`);
+                const result = await res.data;
+                setIsLoginingStatus(false);
+                if (typeof result === "string") {
+                    setErrorMsg(result);
+                    let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
-                    }, 2000);
+                        clearTimeout(errorTimeout);
+                    }, 5000);
                 } else {
-                    localStorage.setItem("asfour-admin-user-id", data._id);
-                    router.push("/admin-dashboard");
+                    localStorage.setItem("asfour-store-user-id", result._id);
+                    router.push("/");
                 }
             } catch (err) {
                 console.log(err);
+                setIsLoginingStatus(false);
                 setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 5000);
             }
         }
     }
 
     const userSignup = async (e) => {
         e.preventDefault();
+        setErrorMsg("");
+        setSuccessMsg("");
         setFormValidationErrors({});
         let errorsObject = validations.inputValuesValidation([
             {
-                name: "email",
-                value: email,
+                name: "emailForSignup",
+                value: emailForSignup,
                 rules: {
                     isRequired: {
                         msg: "Sorry, This Field Can't Be Empty !!",
@@ -92,8 +110,8 @@ export default function UserLogin() {
                 },
             },
             {
-                name: "password",
-                value: password,
+                name: "passwordForSignup",
+                value: passwordForSignup,
                 rules: {
                     isRequired: {
                         msg: "Sorry, This Field Can't Be Empty !!",
@@ -103,23 +121,34 @@ export default function UserLogin() {
         ]);
         setFormValidationErrors(errorsObject);
         if (Object.keys(errorsObject).length == 0) {
-            setIsLoginingStatus(true);
+            setIsSignupStatus(true);
             try {
-                const res = await Axios.get(`${process.env.BASE_API_URL}/admin/login?email=${email}&password=${password}`);
-                const data = await res.data;
-                if (typeof data === "string") {
-                    setIsLoginingStatus(false);
-                    setErrorMsg(data);
-                    setTimeout(() => {
+                const res = await Axios.post(`${process.env.BASE_API_URL}/users/create-new-user`, {
+                    email: emailForSignup,
+                    password: passwordForSignup,
+                });
+                const result = await res.data;
+                setIsSignupStatus(false);
+                if (result === "Sorry, Can't Create User Because it is Exist !!!") {
+                    setErrorMsg(result);
+                    let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
+                        clearTimeout(errorTimeout);
                     }, 2000);
                 } else {
-                    localStorage.setItem("asfour-admin-user-id", data._id);
-                    router.push("/admin-dashboard");
+                    setSuccessMsg(result);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 5000);
                 }
             } catch (err) {
                 console.log(err);
                 setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 2000);
             }
         }
     }
@@ -132,7 +161,7 @@ export default function UserLogin() {
             <Header />
             <div className="page-content text-white p-4 text-center">
                 <div className="container-fluid">
-                    {(errMsg || successMsg) && <p className={`result-auth-msg text-start mb-5 p-3 alert ${errMsg ? "alert-danger" : ""} ${successMsg ? "alert-success" : ""}`}>aa</p>}
+                    {(errMsg || successMsg) && <p className={`result-auth-msg text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
                     <div className="row">
                         <div className="col-md-6">
                             <div className="signup-section ps-5">
@@ -142,37 +171,33 @@ export default function UserLogin() {
                                         <input
                                             type="text"
                                             placeholder="Please Enter Your Email"
-                                            className={`form-control p-3 border-2 ${formValidationErrors["email"] ? "border-danger mb-2" : "mb-5"}`}
-                                            onChange={(e) => setEmail(e.target.value.trim())}
+                                            className={`form-control p-3 border-2 ${formValidationErrors["emailForSignup"] ? "border-danger mb-2" : "mb-5"}`}
+                                            onChange={(e) => setEmailForSignup(e.target.value.trim())}
                                         />
                                         <div className='icon-box text-dark'>
                                             <BiSolidUser className="icon" />
                                         </div>
                                     </div>
-                                    {formValidationErrors["email"] && <p className='error-msg text-danger'>{formValidationErrors["email"]}</p>}
+                                    {formValidationErrors["emailForSignup"] && <p className='error-msg text-danger'>{formValidationErrors["emailForSignup"]}</p>}
                                     <div className="password-field-box">
                                         <input
-                                            type={isVisiblePassword ? "text" : "password"}
+                                            type={isVisiblePasswordForSignup ? "text" : "password"}
                                             placeholder="Please Enter Your Password"
-                                            className={`form-control p-3 border-2 ${formValidationErrors["password"] ? "border-danger mb-2" : "mb-5"}`}
-                                            onChange={(e) => setPassword(e.target.value.trim())}
+                                            className={`form-control p-3 border-2 ${formValidationErrors["passwordForSignup"] ? "border-danger mb-2" : "mb-5"}`}
+                                            onChange={(e) => setPasswordForSignup(e.target.value.trim())}
                                         />
                                         <div className='icon-box text-dark'>
-                                            {!isVisiblePassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
-                                            {isVisiblePassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
+                                            {!isVisiblePasswordForSignup && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
+                                            {isVisiblePasswordForSignup && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
                                         </div>
                                     </div>
-                                    {formValidationErrors["password"] && <p className='error-msg text-danger'>{formValidationErrors["password"]}</p>}
+                                    {formValidationErrors["passwordForSignup"] && <p className='error-msg text-danger'>{formValidationErrors["passwordForSignup"]}</p>}
                                     {!isLoginingStatus && !errMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                         <span className="me-2">Signup</span>
                                         <FiLogIn />
                                     </button>}
                                     {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4">
                                         <span className="me-2">Wait Signup ...</span>
-                                    </button>}
-                                    {errMsg && <button disabled className="btn btn-danger w-100 mb-4">
-                                        <span className="me-2">{errMsg}</span>
-                                        <FiLogIn />
                                     </button>}
                                 </form>
                             </div>
@@ -185,37 +210,33 @@ export default function UserLogin() {
                                         <input
                                             type="text"
                                             placeholder="Please Enter Your Email"
-                                            className={`form-control p-3 border-2 ${formValidationErrors["email"] ? "border-danger mb-2" : "mb-5"}`}
-                                            onChange={(e) => setEmail(e.target.value.trim())}
+                                            className={`form-control p-3 border-2 ${formValidationErrors["emailForLogin"] ? "border-danger mb-2" : "mb-5"}`}
+                                            onChange={(e) => setEmailForLogin(e.target.value.trim())}
                                         />
                                         <div className='icon-box text-dark'>
                                             <BiSolidUser className="icon" />
                                         </div>
                                     </div>
-                                    {formValidationErrors["email"] && <p className='error-msg text-danger'>{formValidationErrors["email"]}</p>}
+                                    {formValidationErrors["emailForLogin"] && <p className='error-msg text-danger'>{formValidationErrors["emailForLogin"]}</p>}
                                     <div className="password-field-box">
                                         <input
-                                            type={isVisiblePassword ? "text" : "password"}
+                                            type={isVisiblePasswordForLogin ? "text" : "password"}
                                             placeholder="Please Enter Your Password"
-                                            className={`form-control p-3 border-2 ${formValidationErrors["password"] ? "border-danger mb-2" : "mb-5"}`}
-                                            onChange={(e) => setPassword(e.target.value.trim())}
+                                            className={`form-control p-3 border-2 ${formValidationErrors["passwordForLogin"] ? "border-danger mb-2" : "mb-5"}`}
+                                            onChange={(e) => setPasswordForLogin(e.target.value.trim())}
                                         />
                                         <div className='icon-box text-dark'>
-                                            {!isVisiblePassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
-                                            {isVisiblePassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
+                                            {!isVisiblePasswordForLogin && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
+                                            {isVisiblePasswordForLogin && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
                                         </div>
                                     </div>
-                                    {formValidationErrors["password"] && <p className='error-msg text-danger'>{formValidationErrors["password"]}</p>}
+                                    {formValidationErrors["passwordForLogin"] && <p className='error-msg text-danger'>{formValidationErrors["passwordForLogin"]}</p>}
                                     {!isLoginingStatus && !errMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                         <span className="me-2">Login</span>
                                         <FiLogIn />
                                     </button>}
                                     {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4">
                                         <span className="me-2">Wait Loging ...</span>
-                                    </button>}
-                                    {errMsg && <button disabled className="btn btn-danger w-100 mb-4">
-                                        <span className="me-2">{errMsg}</span>
-                                        <FiLogIn />
                                     </button>}
                                 </form>
                             </div>
