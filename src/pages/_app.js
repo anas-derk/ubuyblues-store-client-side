@@ -5,6 +5,7 @@ import "../components/Footer/footer.css";
 import "../pages/admin-dashboard/login/login.css";
 import "../components/AdminDashboardSideBar/admin_dashboard_side_bar.css";
 import "../pages/admin-dashboard/admin_dashboard.css";
+import "../pages/auth/auth.css";
 
 export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />

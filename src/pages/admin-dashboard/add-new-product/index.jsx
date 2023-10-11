@@ -7,8 +7,8 @@ import Axios from "axios";
 export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     const [productData, setProductData] = useState({ name: "", price: "", description: "", image: null });
     const [isWaitStatus, setIsWaitStatus] = useState(false);
-    const [errorMsg, setErrorMsg] = useState(false);
-    const [successMsg, setSuccessMsg] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
     const addNewProduct = async (e, productData) => {
         e.preventDefault();
         let formData = new FormData();
