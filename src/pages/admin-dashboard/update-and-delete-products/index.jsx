@@ -11,11 +11,67 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     const [successMsg, setSuccessMsg] = useState(false);
     useEffect(() => {
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
-        .then((res) => {
-            setAllProductsData(res.data);
-        })
-        .catch(err => console.log(err));
+            .then((res) => {
+                setAllProductsData(res.data);
+            })
+            .catch(err => console.log(err));
     }, []);
+    const changeProductData = (productIndex, fieldName, newValue) => {
+        let productsDataTemp = allProductsData;
+        productsDataTemp[productIndex][fieldName] = newValue;
+        console.log(productsDataTemp);
+        setAllProductsData(productsDataTemp);
+    }
+    const updateProduct = async (productIndex) => {
+        setIsWaitStatus(true);
+        try {
+            const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
+                name: allProductsData[productIndex].name,
+                price: allProductsData[productIndex].price,
+                description: allProductsData[productIndex].description,
+            });
+            const result = await res.data;
+            setIsWaitStatus(false);
+            if (result === "Updating New Product Process It Successfuly ...") {
+                setSuccessMsg(result);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
+            }
+        }
+        catch (err) {
+            console.log(err.response.data);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+    const deleteProduct = async (productId) => {
+        setIsWaitStatus(true);
+        try {
+            const res = await Axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
+            const result = await res.data;
+            setIsWaitStatus(false);
+            if (result === "Deleting New Product Process It Successfuly ...") {
+                setSuccessMsg(result);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
+            }
+        }
+        catch (err) {
+            console.log(err.response.data);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
     return (
         <div className="update-and-delete-product admin-dashboard">
             <Head>
@@ -47,7 +103,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                                             placeholder="Enter New Product Name"
                                             defaultValue={product.name}
                                             className="p-2 form-control"
-                                            onChange={(e) => changeProductName(index, e.target.value.trim())}
+                                            onChange={(e) => changeProductData(index, "name", e.target.value.trim())}
                                         ></input>
                                     </td>
                                     <td className="product-price-cell">
@@ -56,7 +112,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                                             placeholder="Enter New Product Price"
                                             defaultValue={product.price}
                                             className="p-2 form-control"
-                                            onChange={(e) => changeProductPrice(index, e.target.value.trim())}
+                                            onChange={(e) => changeProductData(index, "price", e.target.valueAsNumber)}
                                         ></input>
                                     </td>
                                     <td className="product-description-cell">
@@ -64,14 +120,14 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                                             placeholder="Enter New Product Description"
                                             defaultValue={product.description}
                                             className="p-2 form-control"
-                                            onChange={(e) => changeProductPrice(index, e.target.value.trim())}
+                                            onChange={(e) => changeProductData(index, "description", e.target.value.trim())}
                                         ></textarea>
                                     </td>
                                     <td className="product-image-cell">
                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image !!" width="100" height="100" />
                                     </td>
                                     <td className="update-cell">
-                                        {!isWaitStatus && <>
+                                        {!isWaitStatus && !errorMsg && !successMsg && <>
                                             <button
                                                 className="btn btn-success d-block mb-3 mx-auto"
                                                 onClick={() => updateProduct(index)}
