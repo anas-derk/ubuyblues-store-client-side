@@ -37,7 +37,16 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         </Link>
                     </li>
                     <li className="link-item p-3">
-                        <Link href="/" className="managment-link p-0">
+                        <Link
+                            href={{
+                                pathname: "/admin-dashboard/update-and-delete-products",
+                                query: {
+                                    activeParentLink: "products-managment",
+                                    activeChildLink: "update-and-delete-products"
+                                }
+                            }}
+                            className="managment-link p-0"
+                        >
                             <span>Update / Delete</span>
                         </Link>
                     </li>

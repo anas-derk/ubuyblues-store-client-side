@@ -38,3 +38,14 @@ a {
   font-size: 30px;
   cursor: pointer;
 }
+
+.managment-table td, .managment-table th {
+  border: 1px solid;
+  padding: 15px;
+  text-align: center;
+}
+
+.managment-table textarea {
+  resize: none;
+  height: 150px;
+}

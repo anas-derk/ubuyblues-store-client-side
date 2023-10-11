@@ -36,3 +36,15 @@ a{
         }
     }
 }
+
+.managment-table{
+    td, th{
+        border: 1px solid;
+        padding: 15px;
+        text-align: center;
+    }
+    textarea{
+        resize: none;
+        height: 150px;
+    }
+}
