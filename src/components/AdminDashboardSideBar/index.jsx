@@ -51,6 +51,47 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         </Link>
                     </li>
                 </ul>}
+                <li
+                    className={`managment-item p-3 ${activeLinks === "categories-managment" ? "active" : ""}`}
+                    onClick={() => activeLinks ? setActiveLinks("") : setActiveLinks("categories-managment")}
+                >
+                    <MdProductionQuantityLimits className="me-2" />
+                    <button
+                        className="managment-button btn p-0"
+                    >
+                        <span>Categories</span>
+                    </button>
+                </li>
+                {activeLinks === "categories-managment" && <ul className="links-list">
+                    <li className={`link-item p-3 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
+                        <Link
+                            href={{
+                                pathname: "/admin-dashboard/add-new-category",
+                                query: {
+                                    activeParentLink: "categories-managment",
+                                    activeChildLink: "add-new-category"
+                                }
+                            }}
+                            className="managment-link p-0"
+                        >
+                            <span>Add New</span>
+                        </Link>
+                    </li>
+                    <li className={`link-item p-3 ${activeChildLink === "update-and-delete-categories" ? "active" : ""}`}>
+                        <Link
+                            href={{
+                                pathname: "/admin-dashboard/update-and-delete-categories",
+                                query: {
+                                    activeParentLink: "categories-managment",
+                                    activeChildLink: "update-and-delete-categories"
+                                }
+                            }}
+                            className="managment-link p-0"
+                        >
+                            <span>Update / Delete</span>
+                        </Link>
+                    </li>
+                </ul>}
             </ul>
         </aside>
     );

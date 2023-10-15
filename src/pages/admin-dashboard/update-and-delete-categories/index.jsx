@@ -4,35 +4,32 @@ import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 
-export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
-    const [allProductsData, setAllProductsData] = useState({ name: "", price: "", description: "", image: null });
+export default function UpdateAndDeleteCategories({ activeParentLink, activeChildLink }) {
+    const [allCategories, setAllCategories] = useState([]);
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState(false);
     useEffect(() => {
-        Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
+        Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
             .then((res) => {
-                setAllProductsData(res.data);
+                setAllCategories(res.data);
             })
             .catch(err => console.log(err));
     }, []);
-    const changeProductData = (productIndex, fieldName, newValue) => {
-        let productsDataTemp = allProductsData;
-        productsDataTemp[productIndex][fieldName] = newValue;
-        console.log(productsDataTemp);
-        setAllProductsData(productsDataTemp);
+    const changeCategoryName = (categoryIndex, newValue) => {
+        let categoriesTemp = allCategories;
+        categoriesTemp[categoryIndex].name = newValue;
+        setAllCategories(categoriesTemp);
     }
-    const updateProduct = async (productIndex) => {
+    const updateCategory = async (categoryIndex) => {
         setIsWaitStatus(true);
         try {
-            const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
-                name: allProductsData[productIndex].name,
-                price: allProductsData[productIndex].price,
-                description: allProductsData[productIndex].description,
+            const res = await Axios.put(`${process.env.BASE_API_URL}/categories/${allCategories[categoryIndex]._id}`, {
+                newCategoryName: allCategories[categoryIndex].name,
             });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Updating New Product Process It Successfuly ...") {
+            if (result === "Updating Category Process It Successfuly ...") {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
@@ -50,13 +47,13 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             }, 1500);
         }
     }
-    const deleteProduct = async (productId) => {
+    const deleteCategory = async (categoryId) => {
         setIsWaitStatus(true);
         try {
-            const res = await Axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
+            const res = await Axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`);
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Deleting New Product Process It Successfuly ...") {
+            if (result === "Deleting Categories Process It Successfuly ...") {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
@@ -75,69 +72,46 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         }
     }
     return (
-        <div className="update-and-delete-product admin-dashboard">
+        <div className="update-and-delete-category admin-dashboard">
             <Head>
-                <title>Asfour Store - Update / Delete Products</title>
+                <title>Asfour Store - Update / Delete Categories</title>
             </Head>
             <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
             <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                 <h1 className="fw-bold w-fit pb-2 mb-4">
                     <PiHandWavingThin className="me-2" />
-                    Hi, Mr Asfour In Your Update / Delete Products Page
+                    Hi, Mr Asfour In Your Update / Delete Categories Page
                 </h1>
-                {allProductsData.length > 0 ? <div className="products-box w-100">
+                {allCategories.length > 0 ? <div className="categories-box w-100">
                     <table className="products-table mb-4 managment-table bg-white w-100">
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Price</th>
-                                <th>Description</th>
-                                <th>Image</th>
                                 <th>Process</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {allProductsData.map((product, index) => (
-                                <tr key={product._id}>
+                            {allCategories.map((category, index) => (
+                                <tr key={category._id}>
                                     <td className="product-name-cell">
                                         <input
                                             type="text"
-                                            placeholder="Enter New Product Name"
-                                            defaultValue={product.name}
+                                            placeholder="Enter New Category Name"
+                                            defaultValue={category.name}
                                             className="p-2 form-control"
-                                            onChange={(e) => changeProductData(index, "name", e.target.value.trim())}
+                                            onChange={(e) => changeCategoryName(index, e.target.value.trim())}
                                         ></input>
-                                    </td>
-                                    <td className="product-price-cell">
-                                        <input
-                                            type="number"
-                                            placeholder="Enter New Product Price"
-                                            defaultValue={product.price}
-                                            className="p-2 form-control"
-                                            onChange={(e) => changeProductData(index, "price", e.target.valueAsNumber)}
-                                        ></input>
-                                    </td>
-                                    <td className="product-description-cell">
-                                        <textarea
-                                            placeholder="Enter New Product Description"
-                                            defaultValue={product.description}
-                                            className="p-2 form-control"
-                                            onChange={(e) => changeProductData(index, "description", e.target.value.trim())}
-                                        ></textarea>
-                                    </td>
-                                    <td className="product-image-cell">
-                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image !!" width="100" height="100" />
                                     </td>
                                     <td className="update-cell">
                                         {!isWaitStatus && !errorMsg && !successMsg && <>
                                             <button
                                                 className="btn btn-success d-block mb-3 mx-auto"
-                                                onClick={() => updateProduct(index)}
+                                                onClick={() => updateCategory(index)}
                                             >Update</button>
                                             <hr />
                                             <button
                                                 className="btn btn-danger"
-                                                onClick={() => deleteProduct(product._id)}
+                                                onClick={() => deleteCategory(category._id)}
                                             >Delete</button>
                                         </>}
                                         {isWaitStatus && <button
@@ -148,7 +122,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                             ))}
                         </tbody>
                     </table>
-                </div> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Products !!</p>}
+                </div> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Categories !!</p>}
             </div>
         </div>
     );
