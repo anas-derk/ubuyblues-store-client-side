@@ -1,0 +1,33 @@
+.cart{
+    .products{
+        .user-products-table{
+            thead{
+                border-bottom: 2px solid #FFF;
+            }
+            th, td{
+                padding: 20px;
+            }
+            tbody{
+                tr{
+                    border-bottom: 2px dashed #FFF;
+                }
+            }
+            .update-product-quantity-cell{
+                .update-product-quantity{
+                    border: 1px solid #FFF;
+                    width: fit-content;
+                    .update-product-icon{
+                        cursor: pointer;
+                        font-size: 22px;
+                        height: 25px;
+                        border-radius: 2px;
+                        &:hover{
+                            background-color: #FFF;
+                            color: #000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

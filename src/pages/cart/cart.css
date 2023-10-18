@@ -1,0 +1,28 @@
+.cart .products .user-products-table thead {
+  border-bottom: 2px solid #FFF;
+}
+
+.cart .products .user-products-table th, .cart .products .user-products-table td {
+  padding: 20px;
+}
+
+.cart .products .user-products-table tbody tr {
+  border-bottom: 2px dashed #FFF;
+}
+
+.cart .products .user-products-table .update-product-quantity-cell .update-product-quantity {
+  border: 1px solid #FFF;
+  width: fit-content;
+}
+
+.cart .products .user-products-table .update-product-quantity-cell .update-product-quantity .update-product-icon {
+  cursor: pointer;
+  font-size: 22px;
+  height: 25px;
+  border-radius: 2px;
+}
+
+.cart .products .user-products-table .update-product-quantity-cell .update-product-quantity .update-product-icon:hover {
+  background-color: #FFF;
+  color: #000;
+}

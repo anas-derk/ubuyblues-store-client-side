@@ -58,7 +58,8 @@ export default function Home() {
         description,
         category,
         discount,
-        imagePath
+        imagePath,
+        quantity: 1,
       });
       localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
       setIsWaitAddToCart(false);
@@ -75,7 +76,8 @@ export default function Home() {
         description,
         category,
         discount,
-        imagePath
+        imagePath,
+        quantity: 1,
       });
       localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
       setIsWaitAddToCart(false);
