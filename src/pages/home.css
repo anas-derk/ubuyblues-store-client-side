@@ -58,6 +58,16 @@
   height: 300px;
 }
 
+.home .some-of-products .product-details .product-managment-buttons-box .add-to-cart-btn {
+  background-color: #FFF;
+  border: 2px solid #CCC;
+  border-top-left-radius: 15px;
+}
+
+.home .some-of-products .product-details .product-managment-buttons-box .product-managment-icon {
+  cursor: pointer;
+}
+
 .home .categories {
   border-radius: 15px;
 }

@@ -9,7 +9,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
-import Axios, { all } from "axios";
+import Axios from "axios";
 
 export default function Home() {
   const [allProductsData, setAllProductsData] = useState([]);
@@ -100,6 +100,10 @@ export default function Home() {
                       <h4 className="product-name">{ product.name }</h4>
                       <h5 className="product-category">{ product.category }</h5>
                       <h4>{product.price} $</h4>
+                      <div className="product-managment-buttons-box">
+                        <BsFillSuitHeartFill className="product-managment-icon me-2" />
+                        <button className="add-to-cart-btn p-2">Add To Cart</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -133,7 +137,6 @@ export default function Home() {
                       <h4>{product.price} $</h4>
                       <div className="product-managment-buttons-box">
                         <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                        <AiFillEye className="product-managment-icon me-2" />
                         <button className="add-to-cart-btn p-2">Add To Cart</button>
                       </div>
                     </div>
@@ -198,7 +201,6 @@ export default function Home() {
                     <h4>Price: $</h4>
                     <div className="product-managment-buttons-box">
                       <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                      <AiFillEye className="product-managment-icon me-2" />
                       <button className="add-to-cart-btn p-2">Add To Cart</button>
                     </div>
                   </div>
