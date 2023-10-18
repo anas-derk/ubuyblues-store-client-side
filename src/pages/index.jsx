@@ -12,8 +12,14 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 
 export default function Home() {
+
   const [allProductsData, setAllProductsData] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
+  const [productAddingId, setProductAddingId] = useState("");
+  const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
+  const [isSuccessAddToCart, setIsSuccessAddToCart] = useState(false);
+  const [errorInAddToCart, setErrorInAddToCart] = useState("");
+
   useEffect(() => {
     Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
       .then((res) => {
@@ -26,6 +32,7 @@ export default function Home() {
       })
       .catch(err => console.log(err));
   }, []);
+
   const getLastSevenProducts = () => {
     let lastSevenProducts = [];
     if (allProductsData.length >= 7) {
@@ -38,6 +45,47 @@ export default function Home() {
       }
     }
     return lastSevenProducts;
+  }
+
+  const addToCart = (id, name, price, description, category, discount, imagePath) => {
+    setProductAddingId(id);
+    setIsWaitAddToCart(true);
+    let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+    if (allProductsData) {
+      allProductsData.push({
+        name,
+        price,
+        description,
+        category,
+        discount,
+        imagePath
+      });
+      localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+      setIsWaitAddToCart(false);
+      setIsSuccessAddToCart(true);
+      let successAddToCartTimeout = setTimeout(() => {
+        setIsSuccessAddToCart(false);
+        clearTimeout(successAddToCartTimeout);
+      }, 1500);
+    } else {
+      let allProductsData = [];
+      allProductsData.push({
+        name,
+        price,
+        description,
+        category,
+        discount,
+        imagePath
+      });
+      localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+      setIsWaitAddToCart(false);
+      setIsSuccessAddToCart(true);
+      let successAddToCartTimeout = setTimeout(() => {
+        setIsSuccessAddToCart(false);
+        clearTimeout(successAddToCartTimeout);
+      }, 1500);
+    }
+    setProductAddingId("");
   }
   return (
     <div className="home">
@@ -97,12 +145,15 @@ export default function Home() {
                   <div className="product-details p-3 text-center">
                     <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
                     <div className="details">
-                      <h4 className="product-name">{ product.name }</h4>
-                      <h5 className="product-category">{ product.category }</h5>
+                      <h4 className="product-name">{product.name}</h4>
+                      <h5 className="product-category">{product.category}</h5>
                       <h4>{product.price} $</h4>
                       <div className="product-managment-buttons-box">
                         <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                        <button className="add-to-cart-btn p-2">Add To Cart</button>
+                        {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                        {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
+                        {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
+                        {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
                       </div>
                     </div>
                   </div>
@@ -129,7 +180,7 @@ export default function Home() {
           <section className="latest-added-products mb-5 bg-white p-3">
             <div className="row">
               {allProductsData.length > 0 && getLastSevenProducts().map((product) => (
-                <div className="col-md-3">
+                <div className="col-md-3" key={product._id}>
                   <div className="product-details p-3 text-center">
                     <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
                     <div className="details">
@@ -154,37 +205,10 @@ export default function Home() {
                   <div className="details">
                     <h4 className="product-name">Product Name</h4>
                     <h4>Price: $</h4>
-                    <button className="add-to-cart-btn p-2">Add To Cart</button>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <button className="add-to-cart-btn p-2">Add To Cart</button>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <button className="add-to-cart-btn p-2">Add To Cart</button>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <button className="add-to-cart-btn p-2">Add To Cart</button>
+                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2">Add To Cart</button>}
+                    {isWaitAddToCart && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
+                    {errorInAddToCart && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
+                    {isSuccessAddToCart && <button className="success-to-cart-btn p-2 btn-success" disabled>Display Your Cart</button>}
                   </div>
                 </div>
               </div>
