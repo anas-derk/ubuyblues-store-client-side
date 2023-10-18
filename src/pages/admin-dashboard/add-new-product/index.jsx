@@ -6,7 +6,7 @@ import Axios from "axios";
 
 export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     const [allCategories, setAllCategories] = useState([]);
-    const [productData, setProductData] = useState({ name: "", price: "", description: "", category: "", image: null });
+    const [productData, setProductData] = useState({ name: "", price: "", description: "", category: "", discount: 0, image: null });
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
@@ -24,6 +24,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
         formData.append("price", productData.price);
         formData.append("description", productData.description);
         formData.append("category", productData.category);
+        formData.append("discount", productData.discount);
         formData.append("image", productData.image);
         try {
             setIsWaitStatus(true);
@@ -90,6 +91,14 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                             <option value={category.name} key={category._id}>{ category.name }</option>
                         ))}
                     </select>
+                    <input
+                        type="number"
+                        className="form-control product-price-discount-field p-2 mb-4"
+                        placeholder="Please Enter Discount"
+                        required
+                        min="0"
+                        onChange={(e) => setProductData({ ...productData, discount: e.target.valueAsNumber })}
+                    />
                     <input
                         type="file"
                         className="form-control product-image-field p-2 mb-4"

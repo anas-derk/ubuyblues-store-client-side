@@ -35,6 +35,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                 name: allProductsData[productIndex].name,
                 price: allProductsData[productIndex].price,
                 description: allProductsData[productIndex].description,
+                discount: allProductsData[productIndex].discount,
                 category: allProductsData[productIndex].category,
             });
             const result = await res.data;
@@ -87,7 +88,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                 <title>Asfour Store - Update / Delete Products</title>
             </Head>
             <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
-            <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
+            <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                 <h1 className="fw-bold w-fit pb-2 mb-4">
                     <PiHandWavingThin className="me-2" />
                     Hi, Mr Asfour In Your Update / Delete Products Page
@@ -100,6 +101,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                 <th>Price</th>
                                 <th>Description</th>
                                 <th>Category</th>
+                                <th>Discount</th>
                                 <th>Image</th>
                                 <th>Process</th>
                             </tr>
@@ -151,6 +153,15 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                                 <option value={category.name} key={category._id}>{category.name}</option>
                                             ))}
                                         </select>
+                                    </td>
+                                    <td className="product-price-discount-cell">
+                                        <input
+                                            type="number"
+                                            placeholder="Enter New Discount Price"
+                                            defaultValue={product.discount}
+                                            className="p-2 form-control"
+                                            onChange={(e) => changeProductData(index, "discount", e.target.valueAsNumber)}
+                                        ></input>
                                     </td>
                                     <td className="product-image-cell">
                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image !!" width="100" height="100" />
