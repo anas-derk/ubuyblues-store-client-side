@@ -6,6 +6,7 @@ import Axios from "axios";
 
 export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
     const [allProductsData, setAllProductsData] = useState({ name: "", price: "", description: "", image: null });
+    const [allCategories, setAllCategories] = useState([]);
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState(false);
@@ -13,6 +14,11 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
                 setAllProductsData(res.data);
+                Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+                    .then((res) => {
+                        setAllCategories(res.data);
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
     }, []);
@@ -29,6 +35,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                 name: allProductsData[productIndex].name,
                 price: allProductsData[productIndex].price,
                 description: allProductsData[productIndex].description,
+                category: allProductsData[productIndex].category,
             });
             const result = await res.data;
             setIsWaitStatus(false);
@@ -92,6 +99,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Description</th>
+                                <th>Category</th>
                                 <th>Image</th>
                                 <th>Process</th>
                             </tr>
@@ -124,6 +132,25 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                             className="p-2 form-control"
                                             onChange={(e) => changeProductData(index, "description", e.target.value.trim())}
                                         ></textarea>
+                                    </td>
+                                    <td className="product-category-cell">
+                                        <input
+                                            type="text"
+                                            disabled
+                                            defaultValue={product.category}
+                                            className="p-2 form-control mb-3"
+                                        ></input>
+                                        <hr />
+                                        <select
+                                            className="product-category-select form-select mb-4"
+                                            required
+                                            onChange={(e) => changeProductData(index, "category", e.target.value)}
+                                        >
+                                            <option defaultValue="" hidden>Please Select Your Category</option>
+                                            {allCategories.map((category) => (
+                                                <option value={category.name} key={category._id}>{category.name}</option>
+                                            ))}
+                                        </select>
                                     </td>
                                     <td className="product-image-cell">
                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image !!" width="100" height="100" />

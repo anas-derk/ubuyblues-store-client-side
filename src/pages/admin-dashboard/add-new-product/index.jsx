@@ -1,20 +1,29 @@
 import Head from "next/head";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Axios from "axios";
 
 export default function AddNewProduct({ activeParentLink, activeChildLink }) {
-    const [productData, setProductData] = useState({ name: "", price: "", description: "", image: null });
+    const [allCategories, setAllCategories] = useState([]);
+    const [productData, setProductData] = useState({ name: "", price: "", description: "", category: "", image: null });
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
+    useEffect(() => {
+        Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+            .then((res) => {
+                setAllCategories(res.data);
+            })
+            .catch(err => console.log(err));
+    }, []);
     const addNewProduct = async (e, productData) => {
         e.preventDefault();
         let formData = new FormData();
         formData.append("name", productData.name);
         formData.append("price", productData.price);
         formData.append("description", productData.description);
+        formData.append("category", productData.category);
         formData.append("image", productData.image);
         try {
             setIsWaitStatus(true);
@@ -71,6 +80,16 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                         required
                         onChange={(e) => setProductData({ ...productData, description: e.target.value })}
                     />
+                    <select
+                        className="category-select form-select mb-4"
+                        required
+                        onChange={(e) => setProductData({ ...productData, category: e.target.value })}
+                    >
+                        <option defaultValue="" hidden>Please Select Your Category</option>
+                        {allCategories.map((category) => (
+                            <option value={category.name} key={category._id}>{ category.name }</option>
+                        ))}
+                    </select>
                     <input
                         type="file"
                         className="form-control product-image-field p-2 mb-4"
