@@ -80,6 +80,11 @@
   font-size: 15px;
 }
 
+.home .categories .category-details .forward-arrow-icon:hover {
+  background-color: var(--main-color-one);
+  color: #FFF;
+}
+
 .home .latest-added-products, .home .best-seller {
   border: 4px solid var(--main-color-three);
   border-radius: 15px;

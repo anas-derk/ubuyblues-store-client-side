@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 
 export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
-    const [allProductsData, setAllProductsData] = useState({ name: "", price: "", description: "", image: null });
+    const [allProductsData, setAllProductsData] = useState({ name: "", price: "", description: "", category: "", discount: 0, image: null });
     const [allCategories, setAllCategories] = useState([]);
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
