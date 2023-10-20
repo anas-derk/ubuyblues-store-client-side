@@ -53,6 +53,7 @@ export default function Home() {
     let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
     if (allProductsData) {
       allProductsData.push({
+        id,
         name,
         price,
         description,
@@ -71,6 +72,7 @@ export default function Home() {
     } else {
       let allProductsData = [];
       allProductsData.push({
+        id,
         name,
         price,
         description,

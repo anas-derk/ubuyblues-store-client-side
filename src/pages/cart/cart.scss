@@ -28,6 +28,27 @@
                     }
                 }
             }
+            .delete-product-cell{
+                .trash-icon{
+                    cursor: pointer;
+                    font-size: 22px;
+                }
+            }
+        }
+    }
+    .order-total{
+        .total{
+            border-bottom: 2px dashed #FFF;
+        }
+        .checkout-link{
+            background-color: var(--main-color-two);
+            color: #000;
+            border: 5px solid #FFF;
+            border-top-left-radius: 20px;
+            &:hover{
+                background-color: var(--main-color-one);
+                color: #FFF;
+            }
         }
     }
 }

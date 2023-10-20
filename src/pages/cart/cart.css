@@ -26,3 +26,24 @@
   background-color: #FFF;
   color: #000;
 }
+
+.cart .products .user-products-table .delete-product-cell .trash-icon {
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.cart .order-total .total {
+  border-bottom: 2px dashed #FFF;
+}
+
+.cart .order-total .checkout-link {
+  background-color: var(--main-color-two);
+  color: #000;
+  border: 5px solid #FFF;
+  border-top-left-radius: 20px;
+}
+
+.cart .order-total .checkout-link:hover {
+  background-color: var(--main-color-one);
+  color: #FFF;
+}
