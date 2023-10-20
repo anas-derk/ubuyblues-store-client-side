@@ -7,6 +7,7 @@ import "../components/AdminDashboardSideBar/admin_dashboard_side_bar.css";
 import "../pages/admin-dashboard/admin_dashboard.css";
 import "../pages/auth/auth.css";
 import "../pages/cart/cart.css";
+import "../components/CustomerDashboardSideBar/customer_dashboard_side_bar.css";
 
 export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />

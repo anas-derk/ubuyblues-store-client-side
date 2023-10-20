@@ -1,0 +1,18 @@
+.customer-dashboard-side-bar{
+    border-radius: 5px;
+    .managment-customer-account-link-list{
+        .managment-customer-account-link-item{
+            &:hover{
+                background-color: var(--main-color-two);
+            }
+            .managment-customer-account-link{
+                .customer-account-managment-link-icon{
+                    font-size: 25px;
+                }
+                .customer-dashboard-link-name{
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}
