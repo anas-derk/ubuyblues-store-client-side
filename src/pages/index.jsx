@@ -82,6 +82,23 @@ export default function Home() {
     }
   }
 
+  const deleteProductFromFavoriteUserProducts = async (productIndex, userId) => {
+    try {
+      setIsWaitAddProductToFavoriteUserProductsList(true);
+      setFavoriteProductAddingId(allProductsData[productIndex]._id);
+      const res = await Axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
+      const result = await res.data;
+      if (result === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
+        setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favorite_product) => favorite_product._id != allProductsData[productIndex]._id));
+        setIsWaitAddProductToFavoriteUserProductsList(false);
+        setFavoriteProductAddingId("");
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
   const addToCart = (id, name, price, description, category, discount, imagePath) => {
     setProductAddingId(id);
     setIsWaitAddToCart(true);
@@ -190,7 +207,7 @@ export default function Home() {
                       <div className="product-managment-buttons-box">
                         {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
                           className="product-managment-icon me-2"
-                          onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                          onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
                         /> : <BsSuitHeart
                           className="product-managment-icon me-2"
                           onClick={() => addProductToFavoriteUserProducts(index, userId)}
