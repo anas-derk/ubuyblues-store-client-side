@@ -1,0 +1,10 @@
+.customer-wish-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-wish-list .favorite-products-list-for-user .favorite-products-table-for-user td {
+  padding: 20px;
+  border: 1px solid #FFF;
+  color: #FFF;
+}
+
+.customer-wish-list .favorite-products-list-for-user .favorite-products-table-for-user .delete-product-from-favorite-user-list-icon {
+  font-size: 25px;
+  cursor: pointer;
+}

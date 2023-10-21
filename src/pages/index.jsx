@@ -152,10 +152,10 @@ export default function Home() {
       <div className="page-content">
         <section className="links-and-logo bg-white pt-3 pb-3 text-center">
           <div className="links-box">
-            <Link href="/shop">
+            <Link href="/">
               <FaShoppingCart className="cart-icon link-icon me-5" />
             </Link>
-            <Link href="/wish-list">
+            <Link href="/customer-dashboard/wish-list">
               <BsFillSuitHeartFill className="cart-icon link-icon me-5" />
             </Link>
             <Link href="/cart">
@@ -238,7 +238,7 @@ export default function Home() {
               ))}
             </div>
           </section>
-          <h2 className="section-name text-center text-white mb-4" id="latest-added-products">Recently added products</h2>
+          {/* <h2 className="section-name text-center text-white mb-4" id="latest-added-products">Recently added products</h2>
           <section className="latest-added-products mb-5 bg-white p-3">
             <div className="row">
               {allProductsData.length > 0 && getLastSevenProducts().map((product) => (
@@ -257,7 +257,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
           <section className="best-group mb-5 p-3 text-white">
             <h2 className="section-name text-center mb-4">Best Group</h2>
             <div className="row">
@@ -276,7 +276,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <h2 className="section-name text-center text-white mb-4" id="best-seller">Best Seller</h2>
+          {/* <h2 className="section-name text-center text-white mb-4" id="best-seller">Best Seller</h2>
           <section className="best-seller mb-5 bg-white p-3">
             <div className="row">
               <div className="col-md-3">
@@ -335,7 +335,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
         </div>
         <Footer />
       </div>
