@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { BsFillCartPlusFill, BsFillSuitHeartFill } from "react-icons/bs";
+import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
 import productImageTest from "../../public/images/productImageTest.jpg";
@@ -12,23 +12,32 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 
 export default function Home() {
-
+  const [userId, setUserId] = useState("");
+  const [userInfo, setUserInfo] = useState("");
+  const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
   const [allProductsData, setAllProductsData] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
   const [productAddingId, setProductAddingId] = useState("");
   const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
   const [isSuccessAddToCart, setIsSuccessAddToCart] = useState(false);
   const [errorInAddToCart, setErrorInAddToCart] = useState("");
-
+  const [favoriteProductAddingId, setFavoriteProductAddingId] = useState("");
+  const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
+  const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
+  const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
   useEffect(() => {
+    const userId = localStorage.getItem("asfour-store-user-id");
+    setUserId(userId);
     Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
-      .then((res) => {
+      .then(async (res) => {
         setAllProductsData(res.data);
-        Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
-          .then((res) => {
-            setAllCategories(res.data);
-          })
-          .catch(err => console.log(err));
+        const res1 = await Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
+        const result1 = await res1.data;
+        setAllCategories(result1);
+        const res2 = await Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
+        const result2 = await res2.data;
+        setUserInfo(result2);
+        setFavoriteProductsListForUser(result2.favorite_products_list);
       })
       .catch(err => console.log(err));
   }, []);
@@ -45,6 +54,32 @@ export default function Home() {
       }
     }
     return lastSevenProducts;
+  }
+
+  const isFavoriteProductForUser = (favorite_products_list, productId) => {
+    for (let i = 0; i < favorite_products_list.length; i++) {
+      if (favorite_products_list[i]._id === productId) return true;
+    }
+    return false;
+  }
+
+  const addProductToFavoriteUserProducts = async (productIndex, userId) => {
+    try {
+      setIsWaitAddProductToFavoriteUserProductsList(true);
+      setFavoriteProductAddingId(allProductsData[productIndex]._id);
+      const res = await Axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
+      const result = await res.data;
+      if (result === "Ok !!, Adding New Favorite Product To This User Is Successfuly !!") {
+        let tempFavoriteProductsForUser = favoriteProductsListForUser;
+        tempFavoriteProductsForUser.push(allProductsData[productIndex]);
+        setFavoriteProductsListForUser(tempFavoriteProductsForUser);
+        setIsWaitAddProductToFavoriteUserProductsList(false);
+        setFavoriteProductAddingId("");
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   const addToCart = (id, name, price, description, category, discount, imagePath) => {
@@ -144,7 +179,7 @@ export default function Home() {
           </section>
           <section className="some-of-products mb-5">
             <div className="row">
-              {allProductsData.length > 0 && getLastSevenProducts().map((product) => (
+              {allProductsData.length > 0 && getLastSevenProducts().map((product, index) => (
                 <div className="col-md-3" key={product._id}>
                   <div className="product-details p-3 text-center">
                     <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
@@ -153,7 +188,13 @@ export default function Home() {
                       <h5 className="product-category">{product.category}</h5>
                       <h4>{product.price} $</h4>
                       <div className="product-managment-buttons-box">
-                        <BsFillSuitHeartFill className="product-managment-icon me-2" />
+                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
+                          className="product-managment-icon me-2"
+                          onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                        /> : <BsSuitHeart
+                          className="product-managment-icon me-2"
+                          onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                        />}
                         {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
                         {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
                         {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}

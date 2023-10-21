@@ -4,6 +4,7 @@
         .managment-customer-account-link-item{
             &:hover{
                 background-color: var(--main-color-two);
+                border-radius: 5px;
             }
             .managment-customer-account-link{
                 .customer-account-managment-link-icon{
