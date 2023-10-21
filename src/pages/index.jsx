@@ -203,7 +203,8 @@ export default function Home() {
                     <div className="details">
                       <h4 className="product-name">{product.name}</h4>
                       <h5 className="product-category">{product.category}</h5>
-                      <h4>{product.price} $</h4>
+                      <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
+                      {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
                       <div className="product-managment-buttons-box">
                         {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
                           className="product-managment-icon me-2"
