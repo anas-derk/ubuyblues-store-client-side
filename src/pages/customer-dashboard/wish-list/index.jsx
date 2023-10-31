@@ -114,7 +114,7 @@ export default function CustomerWishList() {
                     </div>
                 </div>
             </> : <div className="loading-box d-flex justify-content-center align-items-center">
-                <span class="loader"></span>
+                <span className="loader"></span>
             </div>}
         </div>
     );

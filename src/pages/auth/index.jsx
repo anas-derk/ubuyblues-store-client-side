@@ -49,7 +49,7 @@ export default function UserLogin() {
                     }
                 });
         } else {
-            router.push("/auth");
+            setIsLoadingPage(false);
         }
     }, []);
 
