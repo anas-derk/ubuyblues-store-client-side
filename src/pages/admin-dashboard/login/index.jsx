@@ -1,14 +1,17 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../../../../public/images/Logo-ASFOUR-White-footer.png";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
 import validations from "../../../../public/global_functions/validations";
 import Axios from "axios";
+import LoaderPage from "@/components/LoaderPage";
 
 export default function AdminLogin() {
+
+    const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [email, setEmail] = useState("");
 
@@ -23,6 +26,23 @@ export default function AdminLogin() {
     const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
     const router = useRouter();
+
+    useEffect(() => {
+        const userId = localStorage.getItem("asfour-store-user-id");
+        if (userId) {
+            Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+                .then((res) => {
+                    const result = res.data;
+                    if (result !== "Sorry, The Email Or Password Is Not Exist, Or Not Valid !!") {
+                        router.push("/admin-dashboard/login");
+                    } else {
+                        setIsLoadingPage(false);
+                    }
+                });
+        } else {
+            setIsLoadingPage(false);
+        }
+    }, []);
 
     const adminLogin = async (e) => {
         e.preventDefault();
@@ -78,7 +98,7 @@ export default function AdminLogin() {
             <Head>
                 <title>Asfour Store - Admin Dashboard Login</title>
             </Head>
-            <div className="page-content text-center w-50 mx-auto">
+            {!isLoadingPage ? <div className="page-content text-center w-50 mx-auto">
                 <div className="container p-4">
                     <img src={Logo.src} alt="logo" width="250" height="200" className="mb-5" />
                     <form className="admin-login-form mb-3" onSubmit={adminLogin}>
@@ -120,7 +140,7 @@ export default function AdminLogin() {
                         </button>}
                     </form>
                 </div>
-            </div>
+            </div> : <LoaderPage />}
         </div>
     );
 }

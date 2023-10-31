@@ -6,6 +6,7 @@ import Axios from "axios";
 import { BsTrash, BsClock } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
+import LoaderPage from "@/components/LoaderPage";
 
 export default function CustomerWishList() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -113,9 +114,7 @@ export default function CustomerWishList() {
                         </div>
                     </div>
                 </div>
-            </> : <div className="loading-box d-flex justify-content-center align-items-center">
-                <span className="loader"></span>
-            </div>}
+            </> : <LoaderPage />}
         </div>
     );
 }

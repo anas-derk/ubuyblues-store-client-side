@@ -7,6 +7,7 @@ import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
 import validations from "../../../public/global_functions/validations";
 import Axios from "axios";
+import LoaderPage from "@/components/LoaderPage";
 
 export default function UserLogin() {
 
@@ -42,7 +43,7 @@ export default function UserLogin() {
             Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another Email ..") {
+                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         router.push("/");
                     } else {
                         setIsLoadingPage(false);
@@ -264,9 +265,7 @@ export default function UserLogin() {
                     </div>
                 </div>
             </div>
-            </> : <div className="loading-box d-flex justify-content-center align-items-center">
-                <span className="loader"></span>
-            </div>}
+            </> : <LoaderPage />}
         </div>
     );
 }
