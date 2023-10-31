@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
@@ -9,6 +9,8 @@ import validations from "../../../public/global_functions/validations";
 import Axios from "axios";
 
 export default function UserLogin() {
+
+    const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [emailForLogin, setEmailForLogin] = useState("");
 
@@ -33,6 +35,23 @@ export default function UserLogin() {
     const [isVisiblePasswordForSignup, setIsVisiblePasswordForSignup] = useState(false);
 
     const router = useRouter();
+
+    useEffect(() => {
+        const userId = localStorage.getItem("asfour-store-user-id");
+        if (userId) {
+            Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+                .then((res) => {
+                    const result = res.data;
+                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another Email ..") {
+                        router.push("/");
+                    } else {
+                        setIsLoadingPage(false);
+                    }
+                });
+        } else {
+            router.push("/auth");
+        }
+    }, []);
 
     const userLogin = async (e) => {
         e.preventDefault();
@@ -158,7 +177,8 @@ export default function UserLogin() {
             <Head>
                 <title>Asfour Store - User Auth</title>
             </Head>
-            <Header />
+            {!isLoadingPage ? <>
+                <Header />
             <div className="page-content text-white p-4 text-center">
                 <div className="container-fluid">
                     {(errMsg || successMsg) && <p className={`result-auth-msg text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
@@ -244,6 +264,9 @@ export default function UserLogin() {
                     </div>
                 </div>
             </div>
+            </> : <div className="loading-box d-flex justify-content-center align-items-center">
+                <span className="loader"></span>
+            </div>}
         </div>
     );
 }

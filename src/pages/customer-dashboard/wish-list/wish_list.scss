@@ -1,12 +1,14 @@
 .customer-wish-list{
     .favorite-products-list-for-user{
+        overflow-y: auto;
+        height: 450px;
         .favorite-products-table-for-user{
             th, td{
                 padding: 20px;
                 border: 1px solid #FFF;
                 color: #FFF;
             }
-            .delete-product-from-favorite-user-list-icon{
+            .managment-favorite-products-icon{
                 font-size: 25px;
                 cursor: pointer;
             }

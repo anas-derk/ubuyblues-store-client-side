@@ -34,10 +34,12 @@ export default function Home() {
         const res1 = await Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
         const result1 = await res1.data;
         setAllCategories(result1);
-        const res2 = await Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
-        const result2 = await res2.data;
-        setUserInfo(result2);
-        setFavoriteProductsListForUser(result2.favorite_products_list);
+        if (userId) {
+          const res2 = await Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
+          const result2 = await res2.data;
+          setUserInfo(result2);
+          setFavoriteProductsListForUser(result2.favorite_products_list);
+        }
       })
       .catch(err => console.log(err));
   }, []);
