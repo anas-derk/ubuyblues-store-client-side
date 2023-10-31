@@ -28,14 +28,15 @@ export default function AdminLogin() {
     const router = useRouter();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
+        const userId = localStorage.getItem("asfour-store-admin-user-id");
         if (userId) {
-            Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+            Axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
-                    if (result !== "Sorry, The Email Or Password Is Not Exist, Or Not Valid !!") {
-                        router.push("/admin-dashboard/login");
+                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
+                        router.push("/admin-dashboard");
                     } else {
+                        localStorage.removeItem("asfour-store-admin-user-id");
                         setIsLoadingPage(false);
                     }
                 });
@@ -74,7 +75,7 @@ export default function AdminLogin() {
         if (Object.keys(errorsObject).length == 0) {
             setIsLoginingStatus(true);
             try {
-                const res = await Axios.get(`${process.env.BASE_API_URL}/admin/login?email=${email}&password=${password}`);
+                const res = await Axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
                 const data = await res.data;
                 if (typeof data === "string") {
                     setIsLoginingStatus(false);
@@ -83,7 +84,7 @@ export default function AdminLogin() {
                         setErrorMsg("");
                     }, 2000);
                 } else {
-                    localStorage.setItem("asfour-admin-user-id", data._id);
+                    localStorage.setItem("asfour-store-admin-user-id", data._id);
                     router.push("/admin-dashboard");
                 }
             } catch (err) {
