@@ -121,3 +121,22 @@ a {
     transform: rotate(-90deg);
   }
 }
+
+.navigate-to-up-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  font-size: 27px;
+  background-color: var(--main-color-two);
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.navigate-to-up-button:hover {
+  background-color: #000;
+  color: #FFF;
+}

@@ -10,6 +10,7 @@ import { AiFillEye } from "react-icons/ai";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import Axios from "axios";
+import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -25,7 +26,9 @@ export default function Home() {
   const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
   const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
   const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
+  const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
   useEffect(() => {
+    window.onscroll = function () { handleScrollToUpAndDown(this) };
     const userId = localStorage.getItem("asfour-store-user-id");
     setUserId(userId);
     Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
@@ -43,6 +46,30 @@ export default function Home() {
       })
       .catch(err => console.log(err));
   }, []);
+
+  const handleScrollToUpAndDown = (window) => {
+    if (window.scrollY > 500) {
+      setAppearedNavigateIcon("up");
+    } else {
+      setAppearedNavigateIcon("down");
+    }
+  }
+
+  const navigateToUpOrDown = (navigateOrientation) => {
+    if (navigateOrientation === "up") {
+      window.scrollTo({
+        behavior: "smooth",
+        top: 0,
+        left: 0,
+      });
+    } else if (navigateOrientation === "down") {
+      window.scrollTo({
+        behavior: "smooth",
+        top: window.innerHeight,
+        left: 0,
+      });
+    }
+  }
 
   const getLastSevenProducts = () => {
     let lastSevenProducts = [];
@@ -151,6 +178,10 @@ export default function Home() {
         <title>Asfour Store - Home</title>
       </Head>
       <Header />
+      <div className="navigate-to-up-button">
+        {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
+        {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
+      </div>
       <div className="page-content">
         <section className="links-and-logo bg-white pt-3 pb-3 text-center">
           <div className="links-box">

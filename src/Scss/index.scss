@@ -109,4 +109,22 @@ a{
     0% , 50% , 100%{ transform: rotate(0deg)}
     25% { transform: rotate(90deg)}
     75%{ transform: rotate(-90deg)}
-}  
+}
+
+.navigate-to-up-button{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 27px;
+    background-color: var(--main-color-two);
+    cursor: pointer;
+    border-radius: 50%;
+    text-align: center;
+    &:hover{
+        background-color: #000;
+        color: #FFF;
+    }
+}
