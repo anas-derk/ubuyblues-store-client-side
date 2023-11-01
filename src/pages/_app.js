@@ -10,6 +10,7 @@ import "../pages/cart/cart.css";
 import "../components/CustomerDashboardSideBar/customer_dashboard_side_bar.css";
 import "../pages/customer-dashboard/wish-list/wish_list.css";
 import "../pages/customer-dashboard/customer_dashboard.css";
+import "../pages/customer-dashboard/addreses/addreses.css";
 import "../pages/404/404.css";
 
 export default function App({ Component, pageProps }) {

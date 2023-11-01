@@ -26,7 +26,7 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
+                    <Link href="/customer-dashboard/orders" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
                         <LuShoppingBag className="me-3 customer-account-managment-link-icon" />
                         <span className="customer-dashboard-link-name">Orders</span>
                     </Link>
@@ -34,7 +34,7 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
+                    <Link href="/customer-dashboard/addreses" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
                         <HiOutlineHome className="me-3 customer-account-managment-link-icon" />
                         <span className="customer-dashboard-link-name">Addresses</span>
                     </Link>
@@ -42,7 +42,7 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
+                    <Link href="/customer-dashboard/account-details" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
                         <BsPerson className="me-3 customer-account-managment-link-icon" />
                         <span className="customer-dashboard-link-name">Account Details</span>
                     </Link>

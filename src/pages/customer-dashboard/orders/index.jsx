@@ -7,7 +7,7 @@ import Axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
 
-export default function CustomerDashboard() {
+export default function CustomerOrders() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
     const [userInfo, setUserInfo] = useState(true);
     const router = useRouter();
@@ -29,14 +29,10 @@ export default function CustomerDashboard() {
             router.push("/auth");
         }
     }, []);
-    const userLogout = () => {
-        localStorage.removeItem("asfour-store-user-id");
-        router.push("/auth");
-    }
     return (
-        <div className="customer-dashboard">
+        <div className="customer-orders">
             <Head>
-                <title>Asfour Store - Customer Dashboard</title>
+                <title>Asfour Store - Customer Orders</title>
             </Head>
             {!isLoadingPage ? <>
                 <Header />
@@ -47,19 +43,11 @@ export default function CustomerDashboard() {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-md-9">
-                                <div className="customer-info-and-managment-account-links-for-customer">
-                                    <h1 className="h5 welcome-msg fw-bold mb-4">
-                                        <span className="me-2">Hello {userInfo.email} ( not {userInfo.email} ?)</span>
-                                        <button className="logout-btn managment-link" onClick={userLogout}>Log out</button>
+                                <div className="customer-orders">
+                                    <h1 className="h5 text-white">
+                                        <span className="me-2">No order has been made yet.</span>
+                                        <Link href="/" className="btn btn-danger">Browse Products</Link>
                                     </h1>
-                                    <h2 className="h6 managment-links">
-                                        <span className="me-2">From your account dashboard you can view your</span>
-                                        <Link href="/customer-dashboard/orders" className="managment-link me-2">recent orders</Link>
-                                        <span className="me-2">manage your</span>
-                                        <Link href="/customer-dashboard/addreses" className="managment-link me-2">shipping and billing addresses</Link>
-                                        <span className="me-2">and</span>
-                                        <Link href="/customer-dashboard/account-details" className="managment-link me-2">edit your password and account details</Link>
-                                    </h2>
                                 </div>
                             </div>
                         </div>
@@ -67,5 +55,5 @@ export default function CustomerDashboard() {
                 </div>
             </> : <LoaderPage />}
         </div>
-    )
+    );
 }
