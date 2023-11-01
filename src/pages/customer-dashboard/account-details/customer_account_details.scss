@@ -1,0 +1,15 @@
+.customer-account-details{
+    .edit-customer-account-details-form{
+        height: 500px;
+        overflow-y: scroll;
+        color: #FFF;
+        .change-password{
+            fieldset{
+                border: 1px dashed #FFF;
+                legend{
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}
