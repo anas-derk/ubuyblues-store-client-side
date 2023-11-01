@@ -1,0 +1,15 @@
+.customer-dashboard{
+    .customer-info-and-managment-account-links-for-customer{
+        color: #FFF;
+        .managment-link{
+            background: none;
+            border: none;
+            color: var(--main-color-two);
+            border-bottom: 1px solid var(--main-color-two);
+        }
+        .managment-links{
+            line-height: 2.2;
+            word-spacing: 5px;
+        }
+    }
+}

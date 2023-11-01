@@ -11,7 +11,6 @@ import { PiSmileySad } from "react-icons/pi";
 
 export default function CustomerWishList() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
-    const [userInfo, setUserInfo] = useState(true);
     const [userId, setUserId] = useState("");
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
     const [deletingFavoriteProductIndex, setDeletingFavoriteProductIndex] = useState(-1);
@@ -27,7 +26,6 @@ export default function CustomerWishList() {
                 const result = res.data;
                 if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                     setUserId(userId);
-                    setUserInfo(result);
                     const res1 = await Axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
                     setFavoriteProductsListForUser(await res1.data);
                     setIsLoadingPage(false);
