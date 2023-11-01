@@ -9,6 +9,7 @@ import "../pages/auth/auth.css";
 import "../pages/cart/cart.css";
 import "../components/CustomerDashboardSideBar/customer_dashboard_side_bar.css";
 import "../pages/customer-dashboard/wish-list/wish_list.css";
+import "../pages/404/404.css";
 
 export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />
