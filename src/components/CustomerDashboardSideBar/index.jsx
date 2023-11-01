@@ -50,7 +50,7 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
+                    <Link href="/customer-dashboard/wish-list" className="text-dark w-100 d-block p-4 managment-customer-account-link fw-bold">
                         <MdOutlineFavoriteBorder className="me-3 customer-account-managment-link-icon" />
                         <span className="customer-dashboard-link-name">Wish List</span>
                     </Link>

@@ -1,8 +1,35 @@
 .auth{
-    .login-section{
-        border-left: 1px dashed;
-    }
     .result-auth-msg{
         font-size: 22px;
+    }
+    .auth-part-display-control{
+        display: grid;
+        grid-template-columns: auto auto;
+        background-color: #FFF;
+        color: #000;
+        border: 2px solid #CCC;
+        cursor: pointer;
+        .display-btn{
+            &:hover{
+                background-color: #b3aeae;
+            }
+        }
+    }
+    .authentication{
+        .signup-section, .login-section{
+            animation: displayAuthPartAnimation 2s ease-in-out 0s 1 forwards;
+        }
+    }
+}
+
+@keyframes displayAuthPartAnimation {
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 1;
     }
 }
