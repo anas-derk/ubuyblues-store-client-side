@@ -12,6 +12,8 @@ import "../pages/customer-dashboard/wish-list/wish_list.css";
 import "../pages/customer-dashboard/customer_dashboard.css";
 import "../pages/customer-dashboard/addreses/addreses.css";
 import "../pages/customer-dashboard/account-details/customer_account_details.css";
+import "../pages/customer-dashboard/addreses/billing-address/customer_billing_address.css";
+import "../pages/customer-dashboard/addreses/shipping-address/customer_shipping_address.css";
 import "../pages/404/404.css";
 
 export default function App({ Component, pageProps }) {

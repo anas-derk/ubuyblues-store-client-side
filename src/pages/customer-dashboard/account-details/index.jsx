@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
-import Link from "next/link";
 
 export default function CustomerAccountDetails() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
