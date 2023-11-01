@@ -7,9 +7,11 @@ import { BsTrash, BsClock } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
+import { PiSmileySad } from "react-icons/pi";
 
 export default function CustomerWishList() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+    const [userInfo, setUserInfo] = useState(true);
     const [userId, setUserId] = useState("");
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
     const [deletingFavoriteProductIndex, setDeletingFavoriteProductIndex] = useState(-1);
@@ -20,17 +22,20 @@ export default function CustomerWishList() {
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
-            setUserId(userId);
-            Axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
-                .then((res) => {
-                    const result = res.data;
-                    if (result.length === 0) {
+            Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+            .then(async (res) => {
+                const result = res.data;
+                if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
+                    setUserId(userId);
+                    setUserInfo(result);
+                    const res1 = await Axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
+                    setFavoriteProductsListForUser(await res1.data);
+                    setIsLoadingPage(false);
+                } else {
                         router.push("/auth");
-                    } else {
-                        setFavoriteProductsListForUser(result);
                     }
-                });
-            setIsLoadingPage(false);
+                })
+                .catch((err) => console.log(err));
         } else {
             router.push("/auth");
         }
@@ -44,9 +49,9 @@ export default function CustomerWishList() {
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
+                setFavoriteProductsListForUser(result.newFavoriteProductsList);
                 setIsSuccessDeletingFavoriteProduct(false);
                 setDeletingFavoriteProductIndex(-1);
-                setFavoriteProductsListForUser(result.newFavoriteProductsList);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
@@ -70,12 +75,12 @@ export default function CustomerWishList() {
                 <Header />
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
-                        <div className="row">
+                        <div className="row align-items-center">
                             <div className="col-md-3">
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-md-9">
-                                {favoriteProductsListForUser.length > 0 && <section className="favorite-products-list-for-user text-center">
+                                {favoriteProductsListForUser.length > 0 ? <section className="favorite-products-list-for-user text-center">
                                     <table className="favorite-products-table-for-user w-100">
                                         <thead>
                                             <tr>
@@ -109,6 +114,9 @@ export default function CustomerWishList() {
                                             ))}
                                         </tbody>
                                     </table>
+                                </section> : <section className="not-found-any-favorite-products-for-user text-center">
+                                    <PiSmileySad className="sorry-icon mb-5" />
+                                    <h1 className="h4">Sorry, Can't Find Any Favorite Products For You !!</h1>
                                 </section>}
                             </div>
                         </div>

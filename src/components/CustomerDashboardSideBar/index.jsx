@@ -66,5 +66,5 @@ export default function CustomerDashboardSideBar() {
                 </li>
             </ul>
         </aside>
-    )
+    );
 }
