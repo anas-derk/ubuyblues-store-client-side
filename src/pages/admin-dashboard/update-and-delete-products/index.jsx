@@ -64,16 +64,17 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             const res = await Axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Deleting New Product Process It Successfuly ...") {
+            if (result === "Deleting Product Process It Successfuly ...") {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    setAllProductsData(allProductsData.filter((product) => product._id !== productId));
                     clearTimeout(successTimeout);
                 }, 1500);
             }
         }
         catch (err) {
-            console.log(err.response.data);
+            console.log(err);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
