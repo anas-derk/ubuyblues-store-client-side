@@ -6,7 +6,15 @@ import Axios from "axios";
 
 export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     const [allCategories, setAllCategories] = useState([]);
-    const [productData, setProductData] = useState({ name: "", price: "", description: "", category: "", discount: 0, image: null });
+    const [productData, setProductData] = useState({
+        name: "",
+        price: "",
+        description: "",
+        category: "",
+        discount: 0,
+        image: null,
+        galleryImages: [],
+    });
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
@@ -25,7 +33,10 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
         formData.append("description", productData.description);
         formData.append("category", productData.category);
         formData.append("discount", productData.discount);
-        formData.append("image", productData.image);
+        formData.append("productImage", productData.image);
+        for(let galleryImage of productData.galleryImages) {
+            formData.append("galleryImages", galleryImage);
+        }
         try {
             setIsWaitStatus(true);
             const res = await Axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData);
@@ -99,12 +110,22 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                         min="0"
                         onChange={(e) => setProductData({ ...productData, discount: e.target.valueAsNumber })}
                     />
+                    <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
                     <input
                         type="file"
                         className="form-control product-image-field p-2 mb-4"
                         placeholder="Please Enter Product Image"
                         required
                         onChange={(e) => setProductData({ ...productData, image: e.target.files[0] })}
+                    />
+                    <h6 className="mb-3 fw-bold">Please Select Product Gallery Images</h6>
+                    <input
+                        type="file"
+                        className="form-control product-images-gallery-field p-2 mb-4"
+                        placeholder="Please Enter Product Images Gallery"
+                        required
+                        multiple
+                        onChange={(e) => setProductData({ ...productData, galleryImages: e.target.files })}
                     />
                     {!isWaitStatus && !successMsg && !errorMsg && <button
                         type="submit"
