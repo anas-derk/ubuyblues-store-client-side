@@ -14,6 +14,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const [productIndex, setProductIndex] = useState(-1);
     const [isDeleteProductGalleryImage, setIsDeleteProductGalleryImage] = useState(false);
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
+    const [newProductGalleryImageFile, setNewProductGalleryImageFile] = useState(null);
+    const [isUpdatingProductGalleryImage, setIsUpdatingProductGalleryImage] = useState(false);
     useEffect(() => {
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
@@ -99,7 +101,27 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             allProductsData[productIndex].galleryImagesPaths = newProductGalleryImagePaths;
         }
         catch (err) {
+            setIsUpdatingProductGalleryImage(false);
+            setProductGalleryImageIndex(-1);
             console.log(err);
+        }
+    }
+    const changeProductGalleryImage = async (productGalleryImageIndex) => {
+        try{
+            let formData = new FormData();
+            formData.append("productGalleryImage", newProductGalleryImageFile);
+            setIsUpdatingProductGalleryImage(true);
+            setProductGalleryImageIndex(productGalleryImageIndex);
+            const res = await Axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsData[productIndex]._id}?oldGalleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData);
+            const newGalleryImagePath = await res.data;
+            setIsUpdatingProductGalleryImage(false);
+            setProductGalleryImageIndex(-1);
+            allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex] = newGalleryImagePath;
+        }
+        catch(err) {
+            console.log(err);
+            setIsUpdatingProductGalleryImage(false);
+            setProductGalleryImageIndex(-1);
         }
     }
     return (
@@ -115,8 +137,10 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                     <div className="gallery-images-table-box w-100 p-3">
                         <table className="gallery-images-table w-100">
                             <thead>
-                                <th>Image</th>
-                                <th>Process</th>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Process</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 {allProductsData[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
@@ -130,7 +154,23 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                         <td>
                                             {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
                                             <hr />
-                                            <button className="btn btn-success d-block mx-auto w-50">Change</button>
+                                            <input
+                                                type="file"
+                                                className="form-control w-50 d-block mx-auto mb-3"
+                                                onChange={(e) => setNewProductGalleryImageFile(e.target.files[0])}
+                                            />
+                                            {!newProductGalleryImageFile && !isUpdatingProductGalleryImage && !isDeleteProductGalleryImage && <button
+                                                className="btn btn-success d-block mx-auto w-50"
+                                                disabled
+                                            >
+                                                Change
+                                            </button>}
+                                            {newProductGalleryImageFile && !isUpdatingProductGalleryImage && !isDeleteProductGalleryImage && <button
+                                                className="btn btn-success d-block mx-auto w-50"
+                                                onClick={() => changeProductGalleryImage(index)}
+                                            >
+                                                Change
+                                            </button>}
                                         </td>
                                     </tr>
                                 ))}
