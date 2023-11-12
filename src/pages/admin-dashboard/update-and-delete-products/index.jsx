@@ -16,6 +16,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
     const [newProductGalleryImageFile, setNewProductGalleryImageFile] = useState(null);
     const [isUpdatingProductGalleryImage, setIsUpdatingProductGalleryImage] = useState(false);
+    const [newProductGalleryImages, setNewProductGalleryImages] = useState([]);
+    const [isAddingNewImagesToProductGallery, setIsAddingNewImagesToProductGallery] = useState(false);
     useEffect(() => {
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
@@ -107,7 +109,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         }
     }
     const changeProductGalleryImage = async (productGalleryImageIndex) => {
-        try{
+        try {
             let formData = new FormData();
             formData.append("productGalleryImage", newProductGalleryImageFile);
             setIsUpdatingProductGalleryImage(true);
@@ -118,10 +120,28 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             setProductGalleryImageIndex(-1);
             allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex] = newGalleryImagePath;
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
             setIsUpdatingProductGalleryImage(false);
             setProductGalleryImageIndex(-1);
+        }
+    }
+    const addingNewImagesToProductGallery = async () => {
+        try {
+            let formData = new FormData();
+            for(let productGalleryImage of newProductGalleryImages) {
+                formData.append("productGalleryImage", productGalleryImage);
+            }
+            setIsAddingNewImagesToProductGallery(true);
+            const res = await Axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsData[productIndex]._id}`, formData);
+            const newGalleryImagePaths = await res.data;
+            console.log(newGalleryImagePaths);
+            allProductsData[productIndex].galleryImagesPaths = [...allProductsData[productIndex].galleryImagesPaths, newGalleryImagePaths];
+            setIsAddingNewImagesToProductGallery(false);
+        }
+        catch (err) {
+            console.log(err);
+            setIsAddingNewImagesToProductGallery(false);
         }
     }
     return (
@@ -176,6 +196,27 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="add-new-product-images-for-gallery w-100">
+                        <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-4 mx-auto">Add New Images For Product Gallery Images</h3>
+                        <input
+                            type="file"
+                            className="form-control w-50 d-block mx-auto mb-3"
+                            multiple
+                            onChange={(e) => setNewProductGalleryImages(e.target.files)}
+                        />
+                        {newProductGalleryImages.length === 0 && !isAddingNewImagesToProductGallery && <button
+                            className="btn btn-success d-block mx-auto w-50"
+                            disabled
+                        >
+                            Add New Images
+                        </button>}
+                        {newProductGalleryImages.length > 0 && !isAddingNewImagesToProductGallery && <button
+                            className="btn btn-success d-block mx-auto w-50"
+                            onClick={() => addingNewImagesToProductGallery()}
+                        >
+                            Add New Images
+                        </button>}
                     </div>
                 </div>
             </div>}

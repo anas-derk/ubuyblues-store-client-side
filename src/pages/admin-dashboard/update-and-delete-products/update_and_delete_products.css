@@ -44,3 +44,7 @@
   width: 150px;
   height: 100px;
 }
+
+.update-and-delete-product .overlay .gallery-images-box .add-new-product-images-for-gallery h3 {
+  width: fit-content;
+}
