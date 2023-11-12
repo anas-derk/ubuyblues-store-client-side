@@ -12,6 +12,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const [errorMsg, setErrorMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState(false);
     const [productIndex, setProductIndex] = useState(-1);
+    const [isDeleteProductGalleryImage, setIsDeleteProductGalleryImage] = useState(false);
+    const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
     useEffect(() => {
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
@@ -87,9 +89,14 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     }
     const deleteImageFromProductImagesGallery = async (productIndex, productGalleryImageIndex) => {
         try{
+            setIsDeleteProductGalleryImage(true);
+            setProductGalleryImageIndex(productGalleryImageIndex);
             const res = await Axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsData[productIndex]._id}?galleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`);
-            const result = await res.data;
-            console.log(result);
+            await res.data;
+            setIsDeleteProductGalleryImage(false);
+            setProductGalleryImageIndex(-1);
+            const newProductGalleryImagePaths = allProductsData[productIndex].galleryImagesPaths.filter((path) => path !== allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]);
+            allProductsData[productIndex].galleryImagesPaths = newProductGalleryImagePaths;
         }
         catch(err){
             console.log(err);
@@ -112,7 +119,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                     src={`${process.env.BASE_API_URL}/${galleryImagePath}`}
                                     className="gallery-image mb-4 d-block mx-auto"
                                 />
-                                <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>
+                                {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
                             </li>
                         ))}
                     </ul>
