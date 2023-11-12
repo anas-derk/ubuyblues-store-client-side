@@ -3,6 +3,7 @@ import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import Axios from "axios";
+import { GrFormClose } from "react-icons/gr";
 
 export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
     const [allProductsData, setAllProductsData] = useState({ name: "", price: "", description: "", category: "", discount: 0, image: null });
@@ -10,6 +11,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState(false);
+    const [productIndex, setProductIndex] = useState(-1);
     useEffect(() => {
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
@@ -83,12 +85,40 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             }, 1500);
         }
     }
+    const deleteImageFromProductImagesGallery = async (productIndex, productGalleryImageIndex) => {
+        try{
+            const res = await Axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsData[productIndex]._id}?galleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`);
+            const result = await res.data;
+            console.log(result);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
     return (
         <div className="update-and-delete-product admin-dashboard">
             <Head>
                 <title>Asfour Store - Update / Delete Products</title>
             </Head>
             <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
+            {productIndex > -1 && <div className="overlay">
+                <div className="gallery-images-box d-flex flex-column align-items-center justify-content-center p-4">
+                    <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
+                    <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Product Gallery Images</h3>
+                    <ul className="gallery-images-list w-100 p-4 row justify-content-center">
+                        {allProductsData[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
+                            <li className="col-md-3 text-center" key={index}>
+                                <img
+                                    src={`${process.env.BASE_API_URL}/${galleryImagePath}`}
+                                    className="gallery-image mb-4 d-block mx-auto"
+                                />
+                                <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>}
+            {/* End Overlay */}
             <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                 <h1 className="fw-bold w-fit pb-2 mb-4">
                     <PiHandWavingThin className="me-2" />
@@ -169,6 +199,11 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                     </td>
                                     <td className="update-cell">
                                         {!isWaitStatus && !errorMsg && !successMsg && <>
+                                            <button
+                                                className="btn btn-success d-block mb-3 mx-auto"
+                                                onClick={() => setProductIndex(index)}
+                                            >Show Gallery</button>
+                                            <hr />
                                             <button
                                                 className="btn btn-success d-block mb-3 mx-auto"
                                                 onClick={() => updateProduct(index)}
