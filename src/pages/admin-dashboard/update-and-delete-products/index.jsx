@@ -88,7 +88,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         }
     }
     const deleteImageFromProductImagesGallery = async (productIndex, productGalleryImageIndex) => {
-        try{
+        try {
             setIsDeleteProductGalleryImage(true);
             setProductGalleryImageIndex(productGalleryImageIndex);
             const res = await Axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsData[productIndex]._id}?galleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`);
@@ -98,7 +98,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             const newProductGalleryImagePaths = allProductsData[productIndex].galleryImagesPaths.filter((path) => path !== allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]);
             allProductsData[productIndex].galleryImagesPaths = newProductGalleryImagePaths;
         }
-        catch(err){
+        catch (err) {
             console.log(err);
         }
     }
@@ -111,18 +111,32 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             {productIndex > -1 && <div className="overlay">
                 <div className="gallery-images-box d-flex flex-column align-items-center justify-content-center p-4">
                     <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
-                    <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Product Gallery Images</h3>
-                    <ul className="gallery-images-list w-100 p-4 row justify-content-center">
-                        {allProductsData[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
-                            <li className="col-md-3 text-center" key={index}>
-                                <img
-                                    src={`${process.env.BASE_API_URL}/${galleryImagePath}`}
-                                    className="gallery-image mb-4 d-block mx-auto"
-                                />
-                                {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
-                            </li>
-                        ))}
-                    </ul>
+                    <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-4">Product Gallery Images</h3>
+                    <div className="gallery-images-table-box w-100 p-3">
+                        <table className="gallery-images-table w-100">
+                            <thead>
+                                <th>Image</th>
+                                <th>Process</th>
+                            </thead>
+                            <tbody>
+                                {allProductsData[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <img
+                                                src={`${process.env.BASE_API_URL}/${galleryImagePath}`}
+                                                className="gallery-image d-block mx-auto"
+                                            />
+                                        </td>
+                                        <td>
+                                            {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
+                                            <hr />
+                                            <button className="btn btn-success d-block mx-auto w-50">Change</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>}
             {/* End Overlay */}

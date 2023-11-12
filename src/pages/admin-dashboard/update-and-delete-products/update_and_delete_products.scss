@@ -25,10 +25,19 @@
                 border-radius: 50%;
                 padding: 5px;
             }
-            .gallery-images-list{
-                .gallery-image{
-                    width: 150px;
-                    height: 200px;
+            .gallery-images-table-box{
+                height: 330px;
+                overflow-y: scroll;
+                .gallery-images-table{
+                    th, td{
+                        border: 3px solid;
+                        padding: 10px;
+                        text-align: center;
+                    }
+                    .gallery-image{
+                        width: 150px;
+                        height: 100px;
+                    }
                 }
             }
         }

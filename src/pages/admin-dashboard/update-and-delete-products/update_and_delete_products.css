@@ -29,7 +29,18 @@
   padding: 5px;
 }
 
-.update-and-delete-product .overlay .gallery-images-box .gallery-images-list .gallery-image {
+.update-and-delete-product .overlay .gallery-images-box .gallery-images-table-box {
+  height: 330px;
+  overflow-y: scroll;
+}
+
+.update-and-delete-product .overlay .gallery-images-box .gallery-images-table-box .gallery-images-table th, .update-and-delete-product .overlay .gallery-images-box .gallery-images-table-box .gallery-images-table td {
+  border: 3px solid;
+  padding: 10px;
+  text-align: center;
+}
+
+.update-and-delete-product .overlay .gallery-images-box .gallery-images-table-box .gallery-images-table .gallery-image {
   width: 150px;
-  height: 200px;
+  height: 100px;
 }
