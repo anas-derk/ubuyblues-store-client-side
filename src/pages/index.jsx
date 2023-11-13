@@ -305,6 +305,14 @@ export default function Home() {
                                 </h5>
                             </div>
                         </div>
+                        <div className="product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 me-3">
+                            <div className="col-md-6 text-center">
+                                <h6 className="p-2">Description</h6>
+                            </div>
+                            <div className="col-md-6 text-center">
+                                <h6 className="p-2">Referrals (0)</h6>
+                            </div>
+                        </div>
                         <Footer />
                     </div>
                 </div>
