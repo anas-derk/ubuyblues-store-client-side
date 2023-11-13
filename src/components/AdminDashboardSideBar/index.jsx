@@ -2,12 +2,25 @@ import Logo from "../../../public/images/Logo-ASFOUR-White-footer.png";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import Link from "next/link";
 import { useState } from "react";
+import { MdOutlineLogout } from "react-icons/md";
+import { useRouter } from "next/router";
 
 export default function AdminDashboardSideBar({ activeParentLink, activeChildLink }) {
     const [activeLinks, setActiveLinks] = useState(activeParentLink);
+    const router = useRouter();
+    const adminLogout = () => {
+        localStorage.removeItem("asfour-store-admin-user-id");
+        router.push("/admin-dashboard/login");
+    }
     return (
         <aside className="admin-dashboard-side-bar pt-3">
-            <img src={Logo.src} alt="logo" width="100" height="100" className="d-block mx-auto logo-img" />
+            <Link href="/admin-dashboard" className="d-block text-center mb-3">
+                <img src={Logo.src} alt="logo" width="100" height="100" className="logo" />
+            </Link>
+            <button className="btn btn-danger d-block mx-auto w-50" onClick={adminLogout}>
+                <MdOutlineLogout className="me-2" />
+                <span>Logout</span>
+            </button>
             <hr className="mb-0" />
             <ul className="managment-items-list">
                 <li
