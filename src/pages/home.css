@@ -1,3 +1,95 @@
+.home .overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+.home .overlay .content {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 75%;
+  background-color: var(--main-color-one);
+  box-shadow: 1px 1px 10px #000;
+}
+
+.home .overlay .content .close-overlay-icon {
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  font-size: 40px;
+  background-color: red;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.home .overlay .content .overlay-header {
+  border-bottom: 1px solid;
+}
+
+.home .overlay .content .overlay-header .navigate-links .navigate-link:hover {
+  color: var(--main-color-two);
+}
+
+.home .overlay .content .overlay-header .navigate-links .navigate-link .overlay-header-icon {
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.home .overlay .content .product-details-box {
+  height: 450px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.home .overlay .content .product-details-box .product-images-box .gallery-image-box {
+  cursor: pointer;
+  height: 100px;
+}
+
+.home .overlay .content .product-details-box .product-images-box .gallery-image-box:hover {
+  border: 3px solid #000;
+}
+
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .product-managment-icon {
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .add-to-cart-btn, .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .wait-to-cart-btn, .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .error-to-cart-btn {
+  border-top-right-radius: 20px;
+  border: 5px solid #FFF;
+  background-color: var(--main-color-two);
+}
+
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .add-to-cart-btn:hover, .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .wait-to-cart-btn:hover, .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .error-to-cart-btn:hover {
+  background-color: transparent;
+  color: #FFF;
+}
+
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box {
+  border: 1px solid #FFF;
+}
+
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-icon {
+  cursor: pointer;
+  font-size: 22px;
+  height: 25px;
+  border-radius: 2px;
+}
+
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-icon:hover {
+  background-color: #FFF;
+  color: #000;
+}
+
 .home .links-and-logo {
   position: relative;
   border-top: 4px solid var(--main-color-two);
@@ -66,6 +158,7 @@
 
 .home .some-of-products .product-details .product-managment-buttons-box .product-managment-icon {
   cursor: pointer;
+  font-size: 20px;
 }
 
 .home .categories {
