@@ -135,8 +135,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             setIsAddingNewImagesToProductGallery(true);
             const res = await Axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsData[productIndex]._id}`, formData);
             const newGalleryImagePaths = await res.data;
-            console.log(newGalleryImagePaths);
-            allProductsData[productIndex].galleryImagesPaths = [...allProductsData[productIndex].galleryImagesPaths, newGalleryImagePaths];
+            allProductsData[productIndex].galleryImagesPaths = allProductsData[productIndex].galleryImagesPaths.concat(newGalleryImagePaths);
             setIsAddingNewImagesToProductGallery(false);
         }
         catch (err) {
