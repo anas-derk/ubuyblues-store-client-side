@@ -49,12 +49,28 @@
   overflow-x: hidden;
 }
 
+.home .overlay .content .product-details-box .product-images-box .main-product-image-box {
+  height: 400px;
+}
+
+.home .overlay .content .product-details-box .product-images-box .product-image-box {
+  cursor: pointer;
+}
+
+.home .overlay .content .product-details-box .product-images-box .product-image-box.selection {
+  border: 3px solid #000;
+}
+
 .home .overlay .content .product-details-box .product-images-box .gallery-image-box {
   cursor: pointer;
   height: 100px;
 }
 
 .home .overlay .content .product-details-box .product-images-box .gallery-image-box:hover {
+  border: 3px solid #000;
+}
+
+.home .overlay .content .product-details-box .product-images-box .gallery-image-box.selection {
   border: 3px solid #000;
 }
 

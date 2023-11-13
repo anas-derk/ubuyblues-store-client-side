@@ -33,6 +33,8 @@ export default function Home() {
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
     const [productIndex, setProductIndex] = useState(-1);
+    const [productQuantity, setProductQuantity] = useState(1);
+    const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
     const router = useRouter();
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
@@ -231,15 +233,28 @@ export default function Home() {
                         <div className="row mb-3">
                             <div className="col-md-6">
                                 <div className="product-images-box">
-                                    <img
-                                        src={`${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}`}
-                                        alt="product image !!"
-                                        className="mw-100 mb-3"
-                                    />
+                                    <div className="main-product-image-box mb-3">
+                                        <img
+                                            src={productGalleryImageIndex < 0 ? `${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}` : `${process.env.BASE_API_URL}/${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`}
+                                            alt="product image !!"
+                                            className="w-100 product-image h-100"
+                                        />
+                                    </div>
                                     <div className="row">
+                                        <div className="col-md-3">
+                                            <div
+                                                className={`product-image-box ${productGalleryImageIndex === -1 ? "selection" : ""}`}
+                                                onClick={() => setProductGalleryImageIndex(-1)}
+                                            >
+                                                <img
+                                                    src={`${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}`}
+                                                    className="w-100 h-100 product-gallery-image"
+                                                />
+                                            </div>
+                                        </div>
                                         {allProductsData[productIndex].galleryImagesPaths.map((path, pathIndex) => (
-                                            <div className="col-md-3" key={pathIndex}>
-                                                <div className="gallery-image-box">
+                                            <div className="col-md-3" key={pathIndex} onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                <div className={`gallery-image-box ${productGalleryImageIndex === pathIndex ? "selection" : ""}`} onClick={() => setProductGalleryImageIndex(pathIndex)}>
                                                     <img
                                                         src={`${process.env.BASE_API_URL}/${path}`}
                                                         alt="product image !!"
@@ -275,19 +290,19 @@ export default function Home() {
                                         </div>
                                         <div className="select-product-quantity-box p-3 col-md-4">
                                             <HiMinus className="select-product-quantity-icon"
-                                            // onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
+                                                onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
                                             />
-                                            <span className="ms-3 me-3">1</span>
+                                            <span className="ms-3 me-3">{productQuantity}</span>
                                             <HiPlus className="select-product-quantity-icon"
-                                            // onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
+                                                onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity + 1)}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <h6 className="product-category-name">
+                                <h5 className="product-category-name">
                                     <span className="fw-bold">Category: </span>
                                     <span>{allProductsData[productIndex].category}</span>
-                                </h6>
+                                </h5>
                             </div>
                         </div>
                         <Footer />

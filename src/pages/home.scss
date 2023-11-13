@@ -45,10 +45,22 @@
                 overflow-y: scroll;
                 overflow-x: hidden;
                 .product-images-box{
+                    .main-product-image-box{
+                        height: 400px;
+                    }
+                    .product-image-box{
+                        cursor: pointer;
+                        &.selection {
+                            border: 3px solid #000;
+                        }
+                    }
                     .gallery-image-box{
                         cursor: pointer;
                         height: 100px;
                         &:hover{
+                            border: 3px solid #000;
+                        }
+                        &.selection {
                             border: 3px solid #000;
                         }
                     }
