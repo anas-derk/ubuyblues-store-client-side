@@ -78,14 +78,14 @@
   border: 1px solid #FFF;
 }
 
-.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-icon {
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-quantity-icon {
   cursor: pointer;
   font-size: 22px;
   height: 25px;
   border-radius: 2px;
 }
 
-.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-icon:hover {
+.home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-quantity-icon:hover {
   background-color: #FFF;
   color: #000;
 }
