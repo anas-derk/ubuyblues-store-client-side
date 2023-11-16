@@ -6,7 +6,7 @@ import Axios from "axios";
 import { GrFormClose } from "react-icons/gr";
 
 export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
-    const [allProductsData, setAllProductsData] = useState({ name: "", price: "", description: "", category: "", discount: 0, image: null });
+    const [allProductsData, setAllProductsData] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
@@ -18,6 +18,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const [isUpdatingProductGalleryImage, setIsUpdatingProductGalleryImage] = useState(false);
     const [newProductGalleryImages, setNewProductGalleryImages] = useState([]);
     const [isAddingNewImagesToProductGallery, setIsAddingNewImagesToProductGallery] = useState(false);
+    const [isShowPeriodFields, setIsShowPeriodFields] = useState(false);
     useEffect(() => {
         Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
@@ -33,38 +34,49 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const changeProductData = (productIndex, fieldName, newValue) => {
         let productsDataTemp = allProductsData;
         productsDataTemp[productIndex][fieldName] = newValue;
-        console.log(productsDataTemp);
         setAllProductsData(productsDataTemp);
+    }
+    const updateProductImage = async (productIndex) => {
+        try{
+            let formData = new FormData();
+            formData.append("productImage", allProductsData[productIndex].image);
+            const res = await Axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsData[productIndex]._id}`, formData);
+            const result = await res.data;
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
     const updateProduct = async (productIndex) => {
         setIsWaitStatus(true);
-        try {
-            const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
-                name: allProductsData[productIndex].name,
-                price: allProductsData[productIndex].price,
-                description: allProductsData[productIndex].description,
-                discount: allProductsData[productIndex].discount,
-                category: allProductsData[productIndex].category,
-            });
-            const result = await res.data;
-            setIsWaitStatus(false);
-            if (result === "Updating New Product Process It Successfuly ...") {
-                setSuccessMsg(result);
-                let successTimeout = setTimeout(() => {
-                    setSuccessMsg("");
-                    clearTimeout(successTimeout);
-                }, 1500);
-            }
-        }
-        catch (err) {
-            console.log(err.response.data);
-            setIsWaitStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(errorTimeout);
-            }, 1500);
-        }
+        console.log(allProductsData[productIndex])
+        // try {
+        //     const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
+        //         name: allProductsData[productIndex].name,
+        //         price: allProductsData[productIndex].price,
+        //         description: allProductsData[productIndex].description,
+        //         discount: allProductsData[productIndex].discount,
+        //         category: allProductsData[productIndex].category,
+        //     });
+        //     const result = await res.data;
+        //     setIsWaitStatus(false);
+        //     if (result === "Updating New Product Process It Successfuly ...") {
+        //         setSuccessMsg(result);
+        //         let successTimeout = setTimeout(() => {
+        //             setSuccessMsg("");
+        //             clearTimeout(successTimeout);
+        //         }, 1500);
+        //     }
+        // }
+        // catch (err) {
+        //     console.log(err.response.data);
+        //     setIsWaitStatus(false);
+        //     setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+        //     let errorTimeout = setTimeout(() => {
+        //         setErrorMsg("");
+        //         clearTimeout(errorTimeout);
+        //     }, 1500);
+        // }
     }
     const deleteProduct = async (productId) => {
         setIsWaitStatus(true);
@@ -129,7 +141,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const addingNewImagesToProductGallery = async () => {
         try {
             let formData = new FormData();
-            for(let productGalleryImage of newProductGalleryImages) {
+            for (let productGalleryImage of newProductGalleryImages) {
                 formData.append("productGalleryImage", productGalleryImage);
             }
             setIsAddingNewImagesToProductGallery(true);
@@ -226,7 +238,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                     Hi, Mr Asfour In Your Update / Delete Products Page
                 </h1>
                 {allProductsData.length > 0 ? <div className="products-box w-100">
-                    <table className="products-table mb-4 managment-table bg-white w-100">
+                    <table className="products-table mb-4 managment-table bg-white">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -291,12 +303,56 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                             type="number"
                                             placeholder="Enter New Discount Price"
                                             defaultValue={product.discount}
-                                            className="p-2 form-control"
+                                            className="p-2 form-control mb-4"
                                             onChange={(e) => changeProductData(index, "discount", e.target.valueAsNumber)}
                                         ></input>
+                                        <div className="limited-period-box border border-2 p-3 border-dark">
+                                            <div className={`form-check pb-2 ${isShowPeriodFields && "border-bottom border-dark mb-4"}`}>
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    id="defaultCheck1"
+                                                    onChange={(e) => e.target.checked ? setIsShowPeriodFields(true) : setIsShowPeriodFields(false)}
+                                                />
+                                                <label className="form-check-label fw-bold" htmlFor="defaultCheck1">
+                                                    For Limited Period
+                                                </label>
+                                            </div>
+                                            {isShowPeriodFields && <div className="period-box">
+                                                <h6 className="fw-bold">Start Period</h6>
+                                                <input
+                                                    type="datetime-local"
+                                                    className="form-control mb-4 border border-dark"
+                                                    onChange={(e) => changeProductData(index, "discountPeriod", { ...allProductsData[index].discountPeriod, startPeriod: e.target.value })}
+                                                />
+                                                <h6 className="fw-bold">End Period</h6>
+                                                <input
+                                                    type="datetime-local"
+                                                    className="form-control border border-dark"
+                                                    onChange={(e) => changeProductData(index, "discountPeriod", { ...allProductsData[index].discountPeriod, endPeriod: e.target.value })}
+                                                />
+                                            </div>}
+                                        </div>
                                     </td>
                                     <td className="product-image-cell">
-                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image !!" width="100" height="100" />
+                                        <img
+                                            src={`${process.env.BASE_API_URL}/${product.imagePath}`}
+                                            alt="Product Image !!"
+                                            width="100"
+                                            height="100"
+                                            className="d-block mx-auto mb-4"
+                                        />
+                                        <input
+                                            type="file"
+                                            className="form-control d-block mx-auto mb-3"
+                                            onChange={(e) => changeProductData(index, "image", e.target.files[0])}
+                                        />
+                                        <button
+                                            className="btn btn-success d-block mx-auto w-50"
+                                            onClick={() => updateProductImage(index)}
+                                        >
+                                            Change
+                                        </button>
                                     </td>
                                     <td className="update-cell">
                                         {!isWaitStatus && !errorMsg && !successMsg && <>
