@@ -8,7 +8,7 @@ import productImageTest from "../../public/images/productImageTest.jpg";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
@@ -16,6 +16,7 @@ import { IoIosArrowForward, IoEarth } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
 export default function Home() {
     const [userId, setUserId] = useState("");
@@ -35,6 +36,7 @@ export default function Home() {
     const [productIndex, setProductIndex] = useState(-1);
     const [productQuantity, setProductQuantity] = useState(1);
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
+    const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
     const router = useRouter();
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
@@ -186,6 +188,25 @@ export default function Home() {
         }
         setProductAddingId("");
     }
+
+    const getRatingStars = () => {
+        let starsIconsArray = [
+            <FaRegStar className="me-2 star-icon" />,
+            <FaRegStar className="me-2 star-icon" />,
+            <FaRegStar className="me-2 star-icon" />,
+            <FaRegStar className="me-2 star-icon" />,
+            <FaRegStar />
+        ];
+        return (
+            <div className="rating-box mb-4">
+                <span className="me-3">Your rating *</span>
+                {starsIconsArray.map((starIcon, starIndex) => <Fragment key={starIndex}>
+                    {starIcon}
+                </Fragment>)}
+            </div>
+        );
+    }
+
     return (
         <div className="home">
             <Head>
@@ -307,11 +328,67 @@ export default function Home() {
                         </div>
                         <div className="product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 me-3">
                             <div className="col-md-6 text-center">
-                                <h6 className="p-2">Description</h6>
+                                <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6 className="p-2">Referrals (0)</h6>
+                                <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
                             </div>
+                        </div>
+                        {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2 me-3">
+                            <h6 className="mb-3 fw-bold">Description</h6>
+                            <p className="description-content">{allProductsData[productIndex].description}</p>
+                        </div>}
+                        {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <h6 className="mb-3 fw-bold">Referrals</h6>
+                                    <h6 className="">There are no reviews yet !!</h6>
+                                </div>
+                                <div className="col-md-6">
+                                    <h5 className="mb-4">Be the first to review "{allProductsData[productIndex].name}"</h5>
+                                    <h6>your e-mail address will not be published. Required fields are marked *</h6>
+                                    {getRatingStars()}
+                                    <form className="referral-form mb-4">
+                                        <textarea
+                                            className="p-2 form-control mb-4"
+                                            placeholder="Your Referral *"
+                                        ></textarea>
+                                        <div className="row mb-4">
+                                            <div className="col-md-6">
+                                                <input
+                                                    type="text"
+                                                    className="form-control p-2"
+                                                    placeholder="Name *"
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <input
+                                                    type="text"
+                                                    className="form-control p-2"
+                                                    placeholder="Email *"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="save-your-details-box mb-3">
+                                            <input
+                                                type="checkbox"
+                                                className="me-2"
+                                            />
+                                            <span>Save my name, email, and website in this browser for the next time I comment.</span>
+                                        </div>
+                                        <button
+                                            className="send-referral-btn p-3 d-block w-100"
+                                            type="submit"
+                                            onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
+                                        >
+                                            Send
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>}
+                        <div className="related-products-box">
+                            <h5 className="mb-4 fw-bold">Related Products</h5>
                         </div>
                         <Footer />
                     </div>
@@ -409,26 +486,6 @@ export default function Home() {
                             ))}
                         </div>
                     </section>
-                    {/* <h2 className="section-name text-center text-white mb-4" id="latest-added-products">Recently added products</h2>
-          <section className="latest-added-products mb-5 bg-white p-3">
-            <div className="row">
-              {allProductsData.length > 0 && getLastSevenProducts().map((product) => (
-                <div className="col-md-3" key={product._id}>
-                  <div className="product-details p-3 text-center">
-                    <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
-                    <div className="details">
-                      <h4 className="product-name">{product.name}</h4>
-                      <h4>{product.price} $</h4>
-                      <div className="product-managment-buttons-box">
-                        <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                        <button className="add-to-cart-btn p-2">Add To Cart</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section> */}
                     <section className="best-group mb-5 p-3 text-white">
                         <h2 className="section-name text-center mb-4">Best Group</h2>
                         <div className="row">
@@ -447,66 +504,6 @@ export default function Home() {
                             </div>
                         </div>
                     </section>
-                    {/* <h2 className="section-name text-center text-white mb-4" id="best-seller">Best Seller</h2>
-          <section className="best-seller mb-5 bg-white p-3">
-            <div className="row">
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <div className="product-managment-buttons-box">
-                      <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                      <button className="add-to-cart-btn p-2">Add To Cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <div className="product-managment-buttons-box">
-                      <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                      <AiFillEye className="product-managment-icon me-2" />
-                      <button className="add-to-cart-btn p-2">Add To Cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <div className="product-managment-buttons-box">
-                      <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                      <AiFillEye className="product-managment-icon me-2" />
-                      <button className="add-to-cart-btn p-2">Add To Cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="product-details p-3 text-center">
-                  <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                  <div className="details">
-                    <h4 className="product-name">Product Name</h4>
-                    <h4>Price: $</h4>
-                    <div className="product-managment-buttons-box">
-                      <BsFillSuitHeartFill className="product-managment-icon me-2" />
-                      <AiFillEye className="product-managment-icon me-2" />
-                      <button className="add-to-cart-btn p-2">Add To Cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section> */}
                 </div>
                 <Footer />
             </div>

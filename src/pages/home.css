@@ -44,7 +44,7 @@
 }
 
 .home .overlay .content .product-details-box {
-  height: 450px;
+  height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -104,6 +104,40 @@
 .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .select-product-quantity-box .select-product-quantity-icon:hover {
   background-color: #FFF;
   color: #000;
+}
+
+.home .overlay .content .product-details-box .product-description-and-referrals h6 {
+  cursor: pointer;
+}
+
+.home .overlay .content .product-details-box .product-description-and-referrals h6:hover {
+  color: var(--main-color-two);
+}
+
+.home .overlay .content .product-details-box .product-description-and-referrals h6.selected {
+  color: var(--main-color-two);
+  border: 1px solid var(--main-color-two);
+  font-weight: bold;
+}
+
+.home .overlay .content .product-details-box .product-description-and-referrals .product-referrals .rating-box .star-icon {
+  cursor: pointer;
+}
+
+.home .overlay .content .product-details-box .referral-form textarea {
+  height: 100px;
+  resize: none;
+}
+
+.home .overlay .content .product-details-box .referral-form .send-referral-btn {
+  border-top-right-radius: 20px;
+  border: 5px solid #FFF;
+  background-color: var(--main-color-two);
+}
+
+.home .overlay .content .product-details-box .referral-form .send-referral-btn:hover {
+  background-color: transparent;
+  color: #FFF;
 }
 
 .home .links-and-logo {

@@ -41,7 +41,7 @@
                 }
             }
             .product-details-box{
-                height: 450px;
+                height: 400px;
                 overflow-y: scroll;
                 overflow-x: hidden;
                 .product-images-box{
@@ -94,6 +94,41 @@
                                     color: #000;
                                 }
                             }
+                        }
+                    }
+                }
+                .product-description-and-referrals{
+                    h6{
+                        cursor: pointer;
+                        &:hover{
+                            color: var(--main-color-two);
+                        }
+                        &.selected{
+                            color: var(--main-color-two);
+                            border: 1px solid var(--main-color-two);
+                            font-weight: bold;
+                        }
+                    }
+                    .product-referrals{
+                        .rating-box{
+                            .star-icon{
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+                .referral-form{
+                    textarea{
+                        height: 100px;
+                        resize: none;
+                    }
+                    .send-referral-btn{
+                        border-top-right-radius: 20px;
+                        border: 5px solid #FFF;
+                        background-color: var(--main-color-two);
+                        &:hover{
+                            background-color: transparent;
+                            color: #FFF;
                         }
                     }
                 }
