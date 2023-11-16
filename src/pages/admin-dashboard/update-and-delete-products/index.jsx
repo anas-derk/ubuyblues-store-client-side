@@ -47,36 +47,38 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             console.log(err);
         }
     }
-    const updateProduct = async (productIndex) => {
+    const updateProductData = async (productIndex) => {
         setIsWaitStatus(true);
         console.log(allProductsData[productIndex])
-        // try {
-        //     const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
-        //         name: allProductsData[productIndex].name,
-        //         price: allProductsData[productIndex].price,
-        //         description: allProductsData[productIndex].description,
-        //         discount: allProductsData[productIndex].discount,
-        //         category: allProductsData[productIndex].category,
-        //     });
-        //     const result = await res.data;
-        //     setIsWaitStatus(false);
-        //     if (result === "Updating New Product Process It Successfuly ...") {
-        //         setSuccessMsg(result);
-        //         let successTimeout = setTimeout(() => {
-        //             setSuccessMsg("");
-        //             clearTimeout(successTimeout);
-        //         }, 1500);
-        //     }
-        // }
-        // catch (err) {
-        //     console.log(err.response.data);
-        //     setIsWaitStatus(false);
-        //     setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-        //     let errorTimeout = setTimeout(() => {
-        //         setErrorMsg("");
-        //         clearTimeout(errorTimeout);
-        //     }, 1500);
-        // }
+        try {
+            const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
+                name: allProductsData[productIndex].name,
+                price: allProductsData[productIndex].price,
+                description: allProductsData[productIndex].description,
+                discount: allProductsData[productIndex].discount,
+                category: allProductsData[productIndex].category,
+                startDiscountPeriod: allProductsData[productIndex].startDiscountPeriod,
+                endDiscountPeriod: allProductsData[productIndex].endDiscountPeriod,
+            });
+            const result = await res.data;
+            setIsWaitStatus(false);
+            if (result === "Updating New Product Process It Successfuly ...") {
+                setSuccessMsg(result);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
+            }
+        }
+        catch (err) {
+            console.log(err.response.data);
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
     }
     const deleteProduct = async (productId) => {
         setIsWaitStatus(true);
@@ -323,13 +325,15 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                                 <input
                                                     type="datetime-local"
                                                     className="form-control mb-4 border border-dark"
-                                                    onChange={(e) => changeProductData(index, "discountPeriod", { ...allProductsData[index].discountPeriod, startPeriod: e.target.value })}
+                                                    onChange={(e) => changeProductData(index, "startDiscountPeriod", e.target.value)}
+                                                    defaultValue={product.startDiscountPeriod}
                                                 />
                                                 <h6 className="fw-bold">End Period</h6>
                                                 <input
                                                     type="datetime-local"
                                                     className="form-control border border-dark"
-                                                    onChange={(e) => changeProductData(index, "discountPeriod", { ...allProductsData[index].discountPeriod, endPeriod: e.target.value })}
+                                                    onChange={(e) => changeProductData(index, "endDiscountPeriod", e.target.value)}
+                                                    defaultValue={product.endDiscountPeriod}
                                                 />
                                             </div>}
                                         </div>
@@ -363,7 +367,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                             <hr />
                                             <button
                                                 className="btn btn-success d-block mb-3 mx-auto"
-                                                onClick={() => updateProduct(index)}
+                                                onClick={() => updateProductData(index)}
                                             >Update</button>
                                             <hr />
                                             <button
