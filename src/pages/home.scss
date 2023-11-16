@@ -182,9 +182,20 @@
     }
     .some-of-products{
         .product-details{
+            position: relative;
             background-color: var(--main-color-two);
             height: 500px;
             overflow-y: auto;
+            .discount-timer-box{
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                width: 200px;
+                background-color: #0F0;
+                font-size: 20px;
+                border: 3px solid #000;
+                font-weight: bold;
+            }
             img{
                 width: 100%;
                 height: 300px;

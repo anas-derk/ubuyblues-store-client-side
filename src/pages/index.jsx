@@ -207,6 +207,18 @@ export default function Home() {
         );
     }
 
+    const isItStillDiscountForProduct = (startDiscountPeriod, endDiscountPeriod) => {
+        const dateAndTimeNow = new Date(Date.now());
+        const startDiscountDateAndTime = new Date(startDiscountPeriod);
+        if (dateAndTimeNow > startDiscountDateAndTime) {
+            const endDiscountDateAndTime = new Date(endDiscountPeriod);
+            return endDiscountDateAndTime - dateAndTimeNow > 0;
+        }
+        return false;
+        // if (dateAndTimeNow)
+        // console.log(new Date(startDiscountDateAndTime.getTime() - endDiscountDateAndTime.getTime()));
+    }
+
     return (
         <div className="home">
             <Head>
@@ -445,6 +457,7 @@ export default function Home() {
                             {allProductsData.length > 0 && getLastSevenProducts().map((product, index) => (
                                 <div className="col-md-3" key={product._id}>
                                     <div className="product-details p-3 text-center">
+                                        {isItStillDiscountForProduct(product.startDiscountPeriod, product.endDiscountPeriod) && <div className="discount-timer-box">Discount</div>}
                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
                                         <div className="details">
                                             <h4 className="product-name">{product.name}</h4>
