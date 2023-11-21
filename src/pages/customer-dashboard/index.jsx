@@ -48,7 +48,7 @@ export default function CustomerDashboard() {
                             </div>
                             <div className="col-md-9">
                                 <div className="customer-info-and-managment-account-links-for-customer">
-                                    <h1 className="h5 welcome-msg fw-bold mb-4">
+                                    <h1 className="welcome-msg fw-bold mb-4">
                                         <span className="me-2">Hello {userInfo.email} ( not {userInfo.email} ?)</span>
                                         <button className="logout-btn managment-link" onClick={userLogout}>Log out</button>
                                     </h1>

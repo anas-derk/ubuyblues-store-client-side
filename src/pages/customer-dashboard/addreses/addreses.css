@@ -1,8 +1,9 @@
-.customer-addreses .address-name-and-editing-link {
+.customer-addreses .address-editing-link-box {
   border: 2px dotted #FFF;
+  font-size: 14px;
 }
 
-.customer-addreses .address-name-and-editing-link .editing-link {
+.customer-addreses .address-editing-link-box .editing-link {
   background: none;
   border: none;
   color: var(--main-color-two);

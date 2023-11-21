@@ -99,7 +99,7 @@ export default function CustomerWishList() {
                                                             width="100"
                                                             height="100"
                                                         />
-                                                        <h5>{favoriteProduct.name}</h5>
+                                                        <h6>{favoriteProduct.name}</h6>
                                                     </td>
                                                     <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
                                                     <td>Stock Status</td>

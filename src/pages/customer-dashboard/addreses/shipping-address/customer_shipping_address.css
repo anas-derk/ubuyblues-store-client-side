@@ -2,6 +2,11 @@
   height: 500px;
   overflow-y: auto;
   color: #FFF;
+  font-size: 13px;
+}
+
+.customer-shipping-address .edit-customer-shipping-address-form h6 {
+  font-size: 14px;
 }
 
 .customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link {

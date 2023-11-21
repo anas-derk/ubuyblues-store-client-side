@@ -43,13 +43,13 @@ export default function CustomerAddreses() {
                             <div className="col-md-9">
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <div className="address-name-and-editing-link d-flex justify-content-between p-3">
+                                        <div className="address-editing-link-box d-flex justify-content-between p-3">
                                             <span className="text-white">Billing Address</span>
                                             <Link href="/customer-dashboard/addreses/billing-address" className="editing-link">Edit</Link>
                                         </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <div className="address-name-and-editing-link d-flex justify-content-between p-3">
+                                        <div className="address-editing-link-box d-flex justify-content-between p-3">
                                             <span className="text-white">Shipping Address</span>
                                             <Link href="/customer-dashboard/addreses/shipping-address" className="editing-link">Edit</Link>
                                         </div>

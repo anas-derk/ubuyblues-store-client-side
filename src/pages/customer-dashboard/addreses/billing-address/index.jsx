@@ -52,7 +52,7 @@ export default function CustomerBillingAddress() {
                                                 <h6>First Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Enter New First Name Here"
                                                 />
                                             </div>
@@ -60,7 +60,7 @@ export default function CustomerBillingAddress() {
                                                 <h6>Last Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Enter Last Name Here"
                                                 />
                                             </div>
@@ -70,7 +70,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Company Name (Optional)</h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Company Name Here"
                                         />
                                     </section>
@@ -78,7 +78,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Country / Area Here"
                                         />
                                     </section>
@@ -86,7 +86,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Street Addres <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Street Address"
                                         />
                                     </section>
@@ -94,7 +94,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Street Address / Neighborhood <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Street Address / Neighborhood"
                                         />
                                     </section>
@@ -102,7 +102,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Apartment Number, Ward, Unit, Etc . ( Optional )</h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
                                         />
                                     </section>
@@ -110,7 +110,7 @@ export default function CustomerBillingAddress() {
                                         <h6>City <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
                                         />
                                     </section>
@@ -118,7 +118,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Postal Code / Zip <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Postal Code / Zip"
                                         />
                                     </section>
@@ -126,7 +126,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Phone Number"
                                         />
                                     </section>
@@ -134,7 +134,7 @@ export default function CustomerBillingAddress() {
                                         <h6>Email <span className="text-danger">*</span></h6>
                                         <input
                                             type="email"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Email"
                                         />
                                     </section>
