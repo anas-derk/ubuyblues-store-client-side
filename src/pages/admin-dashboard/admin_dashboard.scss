@@ -2,10 +2,13 @@
     background-color: #FFF;
     .page-content{
         position: absolute;
-        left: 300px;
+        left: 250px;
         top: 0;
-        width: calc(100% - 300px);
+        width: calc(100% - 250px);
         min-height: 100vh;
         background-color: #EEE;
+        h1{
+            font-size: 30px;
+        }
     }
 }

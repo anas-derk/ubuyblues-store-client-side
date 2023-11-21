@@ -15,16 +15,16 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
     return (
         <aside className="admin-dashboard-side-bar pt-3">
             <Link href="/admin-dashboard" className="d-block text-center mb-3">
-                <img src={Logo.src} alt="logo" width="100" height="100" className="logo" />
+                <img src={Logo.src} alt="logo" width="80" height="80" className="logo" />
             </Link>
-            <button className="btn btn-danger d-block mx-auto w-50" onClick={adminLogout}>
+            <button className="btn btn-danger d-block mx-auto w-50 logout-btn" onClick={adminLogout}>
                 <MdOutlineLogout className="me-2" />
                 <span>Logout</span>
             </button>
             <hr className="mb-0" />
             <ul className="managment-items-list">
                 <li
-                    className={`managment-item p-3 ${activeLinks === "products-managment" ? "active" : ""}`}
+                    className={`managment-item ps-3 p-2 ${activeLinks === "products-managment" ? "active" : ""}`}
                     onClick={() => activeLinks ? setActiveLinks("") : setActiveLinks("products-managment")}
                 >
                     <MdProductionQuantityLimits className="me-2" />
@@ -35,7 +35,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                     </button>
                 </li>
                 {activeLinks === "products-managment" && <ul className="links-list">
-                    <li className={`link-item p-3 ${activeChildLink === "add-new-product" ? "active" : ""}`}>
+                    <li className={`link-item ps-3 p-2 ${activeChildLink === "add-new-product" ? "active" : ""}`}>
                         <Link
                             href={{
                                 pathname: "/admin-dashboard/add-new-product",
@@ -49,7 +49,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                             <span>Add New</span>
                         </Link>
                     </li>
-                    <li className={`link-item p-3 ${activeChildLink === "update-and-delete-products" ? "active" : ""}`}>
+                    <li className={`link-item ps-3 p-2 ${activeChildLink === "update-and-delete-products" ? "active" : ""}`}>
                         <Link
                             href={{
                                 pathname: "/admin-dashboard/update-and-delete-products",
@@ -65,7 +65,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                     </li>
                 </ul>}
                 <li
-                    className={`managment-item p-3 ${activeLinks === "categories-managment" ? "active" : ""}`}
+                    className={`managment-item ps-3 p-2 ${activeLinks === "categories-managment" ? "active" : ""}`}
                     onClick={() => activeLinks ? setActiveLinks("") : setActiveLinks("categories-managment")}
                 >
                     <MdProductionQuantityLimits className="me-2" />
@@ -76,7 +76,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                     </button>
                 </li>
                 {activeLinks === "categories-managment" && <ul className="links-list">
-                    <li className={`link-item p-3 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
+                    <li className={`link-item ps-3 p-2 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
                         <Link
                             href={{
                                 pathname: "/admin-dashboard/add-new-category",
@@ -90,7 +90,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                             <span>Add New</span>
                         </Link>
                     </li>
-                    <li className={`link-item p-3 ${activeChildLink === "update-and-delete-categories" ? "active" : ""}`}>
+                    <li className={`link-item ps-3 p-2 ${activeChildLink === "update-and-delete-categories" ? "active" : ""}`}>
                         <Link
                             href={{
                                 pathname: "/admin-dashboard/update-and-delete-categories",

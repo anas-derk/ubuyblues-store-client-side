@@ -1,5 +1,5 @@
 .admin-dashboard-side-bar {
-  width: 300px;
+  width: 250px;
   border-right: 1px solid #CCC;
   position: fixed;
   left: 0;
@@ -8,9 +8,12 @@
   background-color: #FFF;
 }
 
+.admin-dashboard-side-bar .logout-btn {
+  font-size: 13px;
+}
+
 .admin-dashboard-side-bar .managment-items-list .managment-item {
   cursor: pointer;
-  font-size: 18px;
   transition: 0.3s;
 }
 
@@ -33,7 +36,7 @@
 }
 
 .admin-dashboard-side-bar .managment-items-list .managment-item .managment-button {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .admin-dashboard-side-bar .managment-items-list .links-list {
@@ -54,5 +57,5 @@
 
 .admin-dashboard-side-bar .managment-items-list .links-list .link-item .managment-link {
   color: #000;
-  font-size: 18px;
+  font-size: 14px;
 }
