@@ -12,8 +12,8 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 75%;
-            height: 75%;
+            width: 80%;
+            height: 80%;
             background-color: #CCC;
             .close-overlay-icon{
                 position: absolute;
@@ -47,10 +47,10 @@
             }
         }
     }
-    // .products-box {
-    //     overflow: auto;
-    //     .products-table{
-    //         width: 140%;
-    //     } 
-    // }
+    .products-box {
+        overflow: auto;
+        .products-table{
+            width: 140%;
+        } 
+    }
 }

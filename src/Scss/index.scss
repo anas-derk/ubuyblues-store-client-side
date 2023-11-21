@@ -23,18 +23,29 @@ a{
     text-decoration: none;
 }
 
-input, textarea{
+input, textarea, select{
     background: transparent;
     border: 1px solid #FFF;
     border-radius: 3px;
     color: #FFF;
     width: 100%;
+    font-size: 13px !important;
     &::placeholder{
         color: #FFF;
     }
     &:focus{
         outline: none;
         border-color: #00F;
+    }
+}
+
+.global-button{
+    font-size: 13px;
+}
+
+table{
+    th, td{
+        font-size: 14px;
     }
 }
 

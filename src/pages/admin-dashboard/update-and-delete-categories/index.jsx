@@ -105,17 +105,17 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
                                     <td className="update-cell">
                                         {!isWaitStatus && !errorMsg && !successMsg && <>
                                             <button
-                                                className="btn btn-success d-block mb-3 mx-auto"
+                                                className="btn btn-success d-block mb-3 mx-auto global-button"
                                                 onClick={() => updateCategory(index)}
                                             >Update</button>
                                             <hr />
                                             <button
-                                                className="btn btn-danger"
+                                                className="btn btn-danger global-button"
                                                 onClick={() => deleteCategory(category._id)}
                                             >Delete</button>
                                         </>}
                                         {isWaitStatus && <button
-                                            className="btn btn-info d-block mb-3 mx-auto"
+                                            className="btn btn-info d-block mb-3 mx-auto global-button"
                                         >Please Waiting</button>}
                                     </td>
                                 </tr>

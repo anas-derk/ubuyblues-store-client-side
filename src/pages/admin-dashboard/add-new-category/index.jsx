@@ -64,27 +64,27 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
                     />
                     {!isWaitStatus && !successMsg && !errorMsg && <button
                         type="submit"
-                        className="btn btn-success w-50 d-block mx-auto p-2"
+                        className="btn btn-success w-50 d-block mx-auto p-2 global-button"
                     >
                         Add Now
                     </button>}
                     {isWaitStatus && <button
                         type="button"
-                        className="btn btn-danger w-50 d-block mx-auto p-2"
+                        className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
                         disabled
                     >
                         Waiting Add New Category ...
                     </button>}
                     {errorMsg && <button
                         type="button"
-                        className="btn btn-danger w-50 d-block mx-auto p-2"
+                        className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
                         disabled
                     >
                         {errorMsg}
                     </button>}
                     {successMsg && <button
                         type="button"
-                        className="btn btn-success w-75 d-block mx-auto p-2"
+                        className="btn btn-success w-75 d-block mx-auto p-2 global-button"
                         disabled
                     >
                         {successMsg}

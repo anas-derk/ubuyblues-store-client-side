@@ -23,21 +23,30 @@ a {
   text-decoration: none;
 }
 
-input, textarea {
+input, textarea, select {
   background: transparent;
   border: 1px solid #FFF;
   border-radius: 3px;
   color: #FFF;
   width: 100%;
+  font-size: 13px !important;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder, textarea::placeholder, select::placeholder {
   color: #FFF;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: #00F;
+}
+
+.global-button {
+  font-size: 13px;
+}
+
+table th, table td {
+  font-size: 14px;
 }
 
 .password-field-box, .email-field-box, .confirm-password-field-box {

@@ -185,7 +185,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                             />
                                         </td>
                                         <td>
-                                            {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
+                                            {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50 global-button" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
                                             <hr />
                                             <input
                                                 type="file"
@@ -193,13 +193,13 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                                 onChange={(e) => setNewProductGalleryImageFile(e.target.files[0])}
                                             />
                                             {!newProductGalleryImageFile && !isUpdatingProductGalleryImage && !isDeleteProductGalleryImage && <button
-                                                className="btn btn-success d-block mx-auto w-50"
+                                                className="btn btn-success d-block mx-auto w-50 global-button"
                                                 disabled
                                             >
                                                 Change
                                             </button>}
                                             {newProductGalleryImageFile && !isUpdatingProductGalleryImage && !isDeleteProductGalleryImage && <button
-                                                className="btn btn-success d-block mx-auto w-50"
+                                                className="btn btn-success d-block mx-auto w-50 global-button"
                                                 onClick={() => changeProductGalleryImage(index)}
                                             >
                                                 Change
@@ -219,13 +219,13 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                             onChange={(e) => setNewProductGalleryImages(e.target.files)}
                         />
                         {newProductGalleryImages.length === 0 && !isAddingNewImagesToProductGallery && <button
-                            className="btn btn-success d-block mx-auto w-50"
+                            className="btn btn-success d-block mx-auto w-50 global-button"
                             disabled
                         >
                             Add New Images
                         </button>}
                         {newProductGalleryImages.length > 0 && !isAddingNewImagesToProductGallery && <button
-                            className="btn btn-success d-block mx-auto w-50"
+                            className="btn btn-success d-block mx-auto w-50 global-button"
                             onClick={() => addingNewImagesToProductGallery()}
                         >
                             Add New Images
@@ -352,7 +352,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                             onChange={(e) => changeProductData(index, "image", e.target.files[0])}
                                         />
                                         <button
-                                            className="btn btn-success d-block mx-auto w-50"
+                                            className="btn btn-success d-block mx-auto w-50 global-button"
                                             onClick={() => updateProductImage(index)}
                                         >
                                             Change
@@ -361,22 +361,22 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                     <td className="update-cell">
                                         {!isWaitStatus && !errorMsg && !successMsg && <>
                                             <button
-                                                className="btn btn-success d-block mb-3 mx-auto"
+                                                className="btn btn-success d-block mb-3 mx-auto global-button"
                                                 onClick={() => setProductIndex(index)}
                                             >Show Gallery</button>
                                             <hr />
                                             <button
-                                                className="btn btn-success d-block mb-3 mx-auto"
+                                                className="btn btn-success d-block mb-3 mx-auto global-button"
                                                 onClick={() => updateProductData(index)}
                                             >Update</button>
                                             <hr />
                                             <button
-                                                className="btn btn-danger"
+                                                className="btn btn-danger global-button"
                                                 onClick={() => deleteProduct(product._id)}
                                             >Delete</button>
                                         </>}
                                         {isWaitStatus && <button
-                                            className="btn btn-info d-block mb-3 mx-auto"
+                                            className="btn btn-info d-block mb-3 mx-auto global-button"
                                         >Please Waiting</button>}
                                     </td>
                                 </tr>
