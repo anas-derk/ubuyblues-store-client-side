@@ -1,5 +1,6 @@
 .customer-dashboard-side-bar {
   border-radius: 5px;
+  font-size: 13px;
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item:hover {
@@ -8,9 +9,9 @@
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .managment-customer-account-link .customer-account-managment-link-icon {
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .managment-customer-account-link .customer-dashboard-link-name {
-  font-size: 15px;
+  font-size: 13px;
 }

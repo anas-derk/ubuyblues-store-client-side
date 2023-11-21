@@ -23,6 +23,23 @@ a {
   text-decoration: none;
 }
 
+input, textarea {
+  background: transparent;
+  border: 1px solid #FFF;
+  border-radius: 3px;
+  color: #FFF;
+  width: 100%;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #FFF;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #00F;
+}
+
 .password-field-box, .email-field-box, .confirm-password-field-box {
   position: relative;
 }

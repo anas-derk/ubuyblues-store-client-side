@@ -52,16 +52,18 @@ export default function CustomerAccountDetails() {
                                                 <h6>First Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Enter New First Name Here"
+                                                    defaultValue={userInfo.first_name}
                                                 />
                                             </div>
                                             <div className="col-md-6">
                                                 <h6>Last Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Enter Last Name Here"
+                                                    defaultValue={userInfo.last_name}
                                                 />
                                             </div>
                                         </div>
@@ -70,8 +72,9 @@ export default function CustomerAccountDetails() {
                                         <h6>Preview Name <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Preview Name Here"
+                                            defaultValue={userInfo.preview_name}
                                         />
                                         <h6 className="note mt-2">This way your name will be displayed in the accounts section and in reviews</h6>
                                     </section>
@@ -79,8 +82,9 @@ export default function CustomerAccountDetails() {
                                         <h6>Email <span className="text-danger">*</span></h6>
                                         <input
                                             type="email"
-                                            className="form form-control"
+                                            className="p-2"
                                             placeholder="Please Enter New Email Here"
+                                            defaultValue={userInfo.email}
                                         />
                                         <h6 className="note mt-2">This way your name will be displayed in the accounts section and in reviews</h6>
                                     </section>
@@ -90,7 +94,7 @@ export default function CustomerAccountDetails() {
                                                 <h6>Current password (leave the field blank if you do not want to change it)</h6>
                                                 <input
                                                     type="password"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Enter Current Password Here"
                                                 />
                                             </section>
@@ -98,7 +102,7 @@ export default function CustomerAccountDetails() {
                                                 <h6>New password (leave the field blank if you do not want to change it)</h6>
                                                 <input
                                                     type="password"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Enter New Here"
                                                 />
                                             </section>
@@ -106,7 +110,7 @@ export default function CustomerAccountDetails() {
                                                 <h6>New password (leave the field blank if you do not want to change it)</h6>
                                                 <input
                                                     type="password"
-                                                    className="form form-control"
+                                                    className="p-2"
                                                     placeholder="Please Re-Enter New Password Here"
                                                 />
                                             </section>
