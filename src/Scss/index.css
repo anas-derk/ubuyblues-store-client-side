@@ -49,19 +49,34 @@ table th, table td {
   font-size: 14px;
 }
 
-.password-field-box, .email-field-box, .confirm-password-field-box {
+.password-field-box,
+.email-field-box,
+.confirm-password-field-box,
+.current-password-field-box,
+.new-password-field-box,
+.confirm-new-password-field-box {
   position: relative;
 }
 
-.password-field-box .icon-box, .email-field-box .icon-box, .confirm-password-field-box .icon-box {
+.password-field-box .icon-box,
+.email-field-box .icon-box,
+.confirm-password-field-box .icon-box,
+.current-password-field-box .icon-box,
+.new-password-field-box .icon-box,
+.confirm-new-password-field-box .icon-box {
   position: absolute;
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.password-field-box .icon-box .icon, .email-field-box .icon-box .icon, .confirm-password-field-box .icon-box .icon {
-  font-size: 30px;
+.password-field-box .icon-box .icon,
+.email-field-box .icon-box .icon,
+.confirm-password-field-box .icon-box .icon,
+.current-password-field-box .icon-box .icon,
+.new-password-field-box .icon-box .icon,
+.confirm-new-password-field-box .icon-box .icon {
+  font-size: 22px;
   cursor: pointer;
 }
 
@@ -165,4 +180,8 @@ table th, table td {
 .navigate-to-up-button:hover {
   background-color: #000;
   color: #FFF;
+}
+
+.form-field-error-box {
+  border-radius: 3px;
 }

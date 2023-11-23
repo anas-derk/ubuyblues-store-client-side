@@ -49,7 +49,12 @@ table{
     }
 }
 
-.password-field-box, .email-field-box, .confirm-password-field-box{
+.password-field-box,
+.email-field-box,
+.confirm-password-field-box,
+.current-password-field-box,
+.new-password-field-box,
+.confirm-new-password-field-box{
     position: relative;
     .icon-box{
         position: absolute;
@@ -57,7 +62,7 @@ table{
         top: 50%;
         transform: translateY(-50%);
         .icon{
-            font-size: 30px;
+            font-size: 22px;
             cursor: pointer;
         }
     }
@@ -153,4 +158,8 @@ table{
         background-color: #000;
         color: #FFF;
     }
+}
+
+.form-field-error-box{
+    border-radius: 3px;
 }

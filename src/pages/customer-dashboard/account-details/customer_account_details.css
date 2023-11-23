@@ -9,6 +9,18 @@
   font-size: 14px;
 }
 
+.customer-account-details .edit-customer-account-details-form .form-errors-box {
+  border-radius: 5px;
+}
+
+.customer-account-details .edit-customer-account-details-form .form-errors-box .alert-icon-box .alert-icon {
+  font-size: 20px;
+}
+
+.customer-account-details .edit-customer-account-details-form .form-errors-box .errors-list .error-item {
+  font-size: 15px;
+}
+
 .customer-account-details .edit-customer-account-details-form .change-password fieldset {
   border: 1px dashed #FFF;
 }

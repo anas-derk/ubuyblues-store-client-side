@@ -7,6 +7,19 @@
         h6{
             font-size: 14px;
         }
+        .form-errors-box{
+            border-radius: 5px;
+            .alert-icon-box{
+                .alert-icon{
+                    font-size: 20px;
+                }
+            }
+            .errors-list{
+                .error-item{
+                    font-size: 15px;
+                }
+            }
+        }
         .change-password{
             fieldset{
                 border: 1px dashed #FFF;
