@@ -119,33 +119,35 @@ export default function CustomerBillingAddress() {
             e.preventDefault();
             const errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
-            console.log(errorsObject)
             if (Object.keys(errorsObject).length == 0) {
-                // setIsWaitStatus(true);
-                // const res = await Axios.put(`${process.env.BASE_API_URL}/users/update-user-info/${userInfo._id}`, {
-                //     billing_address: {
-
-                //     }
-                // });
-                // const result = await res.data;
-                // setIsWaitStatus(false);
-                // if (result === "Updating User Info Process Has Been Successfuly ...") {
-                //     setSuccessMsg(result);
-                //     let successTimeout = setTimeout(() => {
-                //         setSuccessMsg("");
-                //         clearTimeout(successTimeout);
-                //     }, 2000);
-                // } else if (result === "Sorry, This Password Is Uncorrect !!") {
-                //     setErrorMsg(result);
-                //     let errorTimeout = setTimeout(() => {
-                //         setErrorMsg("");
-                //         clearTimeout(errorTimeout);
-                //     }, 2000);
-                // }
+                setIsWaitStatus(true);
+                const res = await Axios.put(`${process.env.BASE_API_URL}/users/update-user-info/${userInfo._id}`, {
+                    billing_address: userInfo.billing_address,
+                });
+                const result = await res.data;
+                setIsWaitStatus(false);
+                if (result === "Updating User Info Process Has Been Successfuly ...") {
+                    setSuccessMsg(result);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 2000);
+                } else if (result === "Sorry, This Password Is Uncorrect !!") {
+                    setErrorMsg(result);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 2000);
+                }
             }
         }
         catch (err) {
-            console.log(err);
+            setIsWaitStatus(false);
+            setErrorMsg(result);
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
         }
     }
     return (
@@ -172,7 +174,7 @@ export default function CustomerBillingAddress() {
                                                     className={`p-2 ${formValidationErrors.first_name ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New First Name Here"
                                                     defaultValue={userInfo.billing_address.first_name}
-                                                    onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() }})}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() } })}
                                                 />
                                                 {formValidationErrors.first_name && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -186,7 +188,7 @@ export default function CustomerBillingAddress() {
                                                     className={`p-2 ${formValidationErrors.last_name ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter Last Name Here"
                                                     defaultValue={userInfo.billing_address.last_name}
-                                                    onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() }})}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() } })}
                                                 />
                                                 {formValidationErrors.last_name && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -202,7 +204,7 @@ export default function CustomerBillingAddress() {
                                             className="p-2"
                                             placeholder="Please Enter New Company Name Here"
                                             defaultValue={userInfo.billing_address.company_name}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, company_name: e.target.value.trim() }})}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, company_name: e.target.value.trim() } })}
                                         />
                                     </section>
                                     <section className="country mb-4">
@@ -212,7 +214,7 @@ export default function CustomerBillingAddress() {
                                             className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Country / Area Here"
                                             defaultValue={userInfo.billing_address.country}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() }})}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } })}
                                         />
                                         {formValidationErrors.country && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -226,7 +228,7 @@ export default function CustomerBillingAddress() {
                                             className={`p-2 ${formValidationErrors.street_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Street Address / Neighborhood"
                                             defaultValue={userInfo.billing_address.street_address}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() }})}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() } })}
                                         />
                                         {formValidationErrors.street_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -236,11 +238,11 @@ export default function CustomerBillingAddress() {
                                     <section className="apartment-number mb-4">
                                         <h6>Apartment Number, Ward, Unit, Etc . ( Optional )</h6>
                                         <input
-                                            type="text"
+                                            type="number"
                                             className="p-2"
                                             placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
-                                            defaultValue={userInfo.billing_address.apartment_number}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value.trim() }})}
+                                            defaultValue={userInfo.billing_address.apartment_number.toString()}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value } })}
                                         />
                                     </section>
                                     <section className="city-number mb-4">
@@ -250,7 +252,7 @@ export default function CustomerBillingAddress() {
                                             className={`p-2 ${formValidationErrors.city ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New City Name"
                                             defaultValue={userInfo.billing_address.city}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() }})}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() } })}
                                         />
                                         {formValidationErrors.city && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -263,8 +265,8 @@ export default function CustomerBillingAddress() {
                                             type="number"
                                             className={`p-2 ${formValidationErrors.postal_code ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Postal Code / Zip"
-                                            defaultValue={userInfo.billing_address.postal_code}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value }})}
+                                            defaultValue={userInfo.billing_address.postal_code.toString()}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } })}
                                         />
                                         {formValidationErrors.postal_code && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -277,8 +279,8 @@ export default function CustomerBillingAddress() {
                                             type="number"
                                             className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Phone Number"
-                                            defaultValue={userInfo.billing_address.phone_number}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value }})}
+                                            defaultValue={userInfo.billing_address.phone_number.toString()}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } })}
                                         />
                                         {formValidationErrors.phone_number && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -292,7 +294,7 @@ export default function CustomerBillingAddress() {
                                             className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Email"
                                             defaultValue={userInfo.billing_address.email}
-                                            onChange={(e) => setUserInfo({...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() }})}
+                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() } })}
                                         />
                                         {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
