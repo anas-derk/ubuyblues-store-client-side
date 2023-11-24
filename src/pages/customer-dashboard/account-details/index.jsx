@@ -162,7 +162,12 @@ export default function CustomerAccountDetails() {
             }
         }
         catch (err) {
-            console.log(err);
+            setIsWaitStatus(false);
+            setErrorMsg(result);
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
         }
     }
     return (
