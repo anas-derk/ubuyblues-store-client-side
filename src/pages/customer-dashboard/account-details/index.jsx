@@ -26,6 +26,9 @@ export default function CustomerAccountDetails() {
     const [isVisibleNewPassword, setIsVisibleNewPassword] = useState(false);
     const [isVisibleConfirmNewPassword, setIsVisibleConfirmNewPassword] = useState(false);
     const [formValidationErrors, setFormValidationErrors] = useState({});
+    const [isWaitStatus, setIsWaitStatus] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
     const router = useRouter();
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
@@ -127,33 +130,6 @@ export default function CustomerAccountDetails() {
     const updateUserInfo = async (e) => {
         try {
             e.preventDefault();
-            // if (currentPassword) {
-            //     if (!newPassword && !confirmNewPassword) {
-            //         setError("not_found_new_password_and_new_confirm_password", {
-            //             type: "manual",
-            //             message: "Please Enter New Password And Confirm New Password !!",
-            //         });
-            //         console.log("1")
-            //         return;
-            //     } else if (newPassword !== confirmNewPassword) {
-            //         setError("match_new_password_and_confirm_it", {
-            //             type: "manual",
-            //             message: "Sorry, There Is No Match Between New Password And Confirm New Password !!",
-            //         });
-            //         return;
-            //     } else {
-            //         console.log("aa")
-            //     };
-            // } else {
-            //     if (newPassword || confirmNewPassword) {
-            //         setError("current_password", {
-            //             type: "manual",
-            //             message: "Sorry, Please Enter Current Password !!",
-            //         });
-            //         console.log("3")
-            //         return;
-            //     }
-            // }
             const errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
@@ -166,15 +142,23 @@ export default function CustomerAccountDetails() {
                 if (currentPassword && newPassword && confirmNewPassword) {
                     newUserInfo = { ...newUserInfo, password: currentPassword, newPassword: newPassword };
                 }
-                console.log(newUserInfo);
-                // const res = await Axios.put(`${process.env.BASE_API_URL}/users/update-user-info/${userInfo._id}`, {
-                //     email: userInfo.email,
-                //     first_name: userInfo.first_name,
-                //     last_name: userInfo.last_name,
-                //     preview_name: userInfo.preview_name,
-                // });
-                // const result = await res.data;
-                // console.log(result);
+                setIsWaitStatus(true);
+                const res = await Axios.put(`${process.env.BASE_API_URL}/users/update-user-info/${userInfo._id}`, newUserInfo);
+                const result = await res.data;
+                setIsWaitStatus(false);
+                if (result === "Updating User Info Process Has Been Successfuly ...") {
+                    setSuccessMsg(result);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 2000);
+                } else if (result === "Sorry, This Password Is Uncorrect !!") {
+                    setErrorMsg(result);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 2000);
+                }
             }
         }
         catch (err) {
@@ -318,7 +302,30 @@ export default function CustomerAccountDetails() {
                                             </section>
                                         </fieldset>
                                     </section>
-                                    <button type="submit" className="btn btn-danger d-block mx-auto">Save Changes</button>
+                                    {!isWaitStatus && !successMsg && !errorMsg && <button
+                                        type="submit"
+                                        className="btn btn-success d-block mx-auto"
+                                    >
+                                        Save Changes
+                                    </button>}
+                                    {isWaitStatus && <button
+                                        className="btn btn-success d-block mx-auto"
+                                        disabled
+                                    >
+                                        Saving ...
+                                    </button>}
+                                    {errorMsg && <button
+                                        className="btn btn-danger d-block mx-auto"
+                                        disabled
+                                    >
+                                        { errorMsg }
+                                    </button>}
+                                    {successMsg && <button
+                                        className="btn btn-success d-block mx-auto"
+                                        disabled
+                                    >
+                                        { successMsg }
+                                    </button>}
                                 </form>
                             </div>
                         </div>
