@@ -6,7 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
 import validations from "../../../../public/global_functions/validations";
-import Axios from "axios";
+import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 
 export default function AdminLogin() {
@@ -30,7 +30,7 @@ export default function AdminLogin() {
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-admin-user-id");
         if (userId) {
-            Axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
+            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
@@ -75,7 +75,7 @@ export default function AdminLogin() {
         if (Object.keys(errorsObject).length == 0) {
             setIsLoginingStatus(true);
             try {
-                const res = await Axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
+                const res = await axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
                 const data = await res.data;
                 if (typeof data === "string") {
                     setIsLoginingStatus(false);

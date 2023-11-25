@@ -2,7 +2,7 @@ import Head from "next/head";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 
 export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     const [allCategories, setAllCategories] = useState([]);
@@ -19,7 +19,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
     useEffect(() => {
-        Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+        axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
             .then((res) => {
                 setAllCategories(res.data);
             })
@@ -39,7 +39,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
         }
         try {
             setIsWaitStatus(true);
-            const res = await Axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData);
+            const res = await axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData);
             const result = await res.data;
             setIsWaitStatus(false);
             if (result === "Adding New Product Process It Successfuly ...") {

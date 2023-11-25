@@ -2,16 +2,30 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import { useEffect, useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import axios from "axios";
 
 export default function AccountVerification() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+    const sendTheCodeToUserEmail = async() => {
+        try{
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=anas.derk2023@gmail.com`);
+            const result = await res.data;
+            console.log(result);
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
     useEffect(() => {
         setIsLoadingPage(false);
     }, []);
+    const checkAccountVerificationCode = (e) => {
+        e.preventDefault();
+    }
     return (
         <div className="account-verification">
             <Head>
-                <title>Asfour Store - User Auth</title>
+                <title>Asfour Store - Account Verification</title>
             </Head>
             {!isLoadingPage && <>
                 <Header />
@@ -27,43 +41,60 @@ export default function AccountVerification() {
                             <FaLongArrowAltRight className="me-2" />
                             <span className="text-danger fw-bold">Enter code *</span>
                         </h6>
-                        <div className="code-write-box d-flex mb-4">
+                        <form className="code-write-form d-flex mb-4" onSubmit={checkAccountVerificationCode}>
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
                             <input
                                 type="number"
                                 className="form-control p-3"
+                                required
+                                min="0"
                             />
-                        </div>
+                            <input type="submit" hidden />
+                        </form>
                         <div className="email-sent-manager-box">
                             <span>Didn't get your email? </span>
-                            <button className="btn btn-danger me-2">Resend The Code</button>
+                            <button className="btn btn-danger me-2" onClick={sendTheCodeToUserEmail}>Resend The Code</button>
                             <span className="me-2">Or</span>
                             <button className="btn btn-danger">Update Your Email Address</button>
                         </div>

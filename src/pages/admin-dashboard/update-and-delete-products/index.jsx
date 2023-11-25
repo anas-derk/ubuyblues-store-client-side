@@ -2,7 +2,7 @@ import Head from "next/head";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { GrFormClose } from "react-icons/gr";
 
 export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
@@ -20,10 +20,10 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const [isAddingNewImagesToProductGallery, setIsAddingNewImagesToProductGallery] = useState(false);
     const [isShowPeriodFields, setIsShowPeriodFields] = useState(false);
     useEffect(() => {
-        Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
+        axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then((res) => {
                 setAllProductsData(res.data);
-                Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+                axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
                     .then((res) => {
                         setAllCategories(res.data);
                     })
@@ -40,7 +40,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         try{
             let formData = new FormData();
             formData.append("productImage", allProductsData[productIndex].image);
-            const res = await Axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsData[productIndex]._id}`, formData);
+            const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsData[productIndex]._id}`, formData);
             const result = await res.data;
         }
         catch(err) {
@@ -51,7 +51,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         setIsWaitStatus(true);
         console.log(allProductsData[productIndex])
         try {
-            const res = await Axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
+            const res = await axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
                 name: allProductsData[productIndex].name,
                 price: allProductsData[productIndex].price,
                 description: allProductsData[productIndex].description,
@@ -83,7 +83,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const deleteProduct = async (productId) => {
         setIsWaitStatus(true);
         try {
-            const res = await Axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
             const result = await res.data;
             setIsWaitStatus(false);
             if (result === "Deleting Product Process It Successfuly ...") {
@@ -109,7 +109,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
         try {
             setIsDeleteProductGalleryImage(true);
             setProductGalleryImageIndex(productGalleryImageIndex);
-            const res = await Axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsData[productIndex]._id}?galleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsData[productIndex]._id}?galleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`);
             await res.data;
             setIsDeleteProductGalleryImage(false);
             setProductGalleryImageIndex(-1);
@@ -128,7 +128,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             formData.append("productGalleryImage", newProductGalleryImageFile);
             setIsUpdatingProductGalleryImage(true);
             setProductGalleryImageIndex(productGalleryImageIndex);
-            const res = await Axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsData[productIndex]._id}?oldGalleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData);
+            const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsData[productIndex]._id}?oldGalleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData);
             const newGalleryImagePath = await res.data;
             setIsUpdatingProductGalleryImage(false);
             setProductGalleryImageIndex(-1);
@@ -147,7 +147,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                 formData.append("productGalleryImage", productGalleryImage);
             }
             setIsAddingNewImagesToProductGallery(true);
-            const res = await Axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsData[productIndex]._id}`, formData);
+            const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsData[productIndex]._id}`, formData);
             const newGalleryImagePaths = await res.data;
             allProductsData[productIndex].galleryImagesPaths = allProductsData[productIndex].galleryImagesPaths.concat(newGalleryImagePaths);
             setIsAddingNewImagesToProductGallery(false);

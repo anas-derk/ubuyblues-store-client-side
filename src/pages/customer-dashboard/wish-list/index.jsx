@@ -2,7 +2,7 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
 import { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { BsTrash, BsClock } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
@@ -21,12 +21,12 @@ export default function CustomerWishList() {
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
-            Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
             .then(async (res) => {
                 const result = res.data;
                 if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                     setUserId(userId);
-                    const res1 = await Axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
+                    const res1 = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
                     setFavoriteProductsListForUser(await res1.data);
                     setIsLoadingPage(false);
                 } else {
@@ -42,7 +42,7 @@ export default function CustomerWishList() {
         try {
             setDeletingFavoriteProductIndex(favoriteProductIndex);
             setIsDeletingFavoriteProduct(true);
-            const res = await Axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${favoriteProductsListForUser[favoriteProductIndex]._id}`)
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${favoriteProductsListForUser[favoriteProductIndex]._id}`)
             const result = await res.data;
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);

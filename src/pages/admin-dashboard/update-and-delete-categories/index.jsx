@@ -2,7 +2,7 @@ import Head from "next/head";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 
 export default function UpdateAndDeleteCategories({ activeParentLink, activeChildLink }) {
     const [allCategories, setAllCategories] = useState([]);
@@ -10,7 +10,7 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
     const [errorMsg, setErrorMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState(false);
     useEffect(() => {
-        Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+        axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
             .then((res) => {
                 setAllCategories(res.data);
             })
@@ -24,7 +24,7 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
     const updateCategory = async (categoryIndex) => {
         setIsWaitStatus(true);
         try {
-            const res = await Axios.put(`${process.env.BASE_API_URL}/categories/${allCategories[categoryIndex]._id}`, {
+            const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategories[categoryIndex]._id}`, {
                 newCategoryName: allCategories[categoryIndex].name,
             });
             const result = await res.data;
@@ -50,7 +50,7 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
     const deleteCategory = async (categoryId) => {
         setIsWaitStatus(true);
         try {
-            const res = await Axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`);
             const result = await res.data;
             setIsWaitStatus(false);
             if (result === "Deleting Categories Process It Successfuly ...") {

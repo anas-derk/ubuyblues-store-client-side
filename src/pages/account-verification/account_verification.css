@@ -10,11 +10,11 @@
   background-color: #FFF;
 }
 
-.account-verification .page-content .verification .code-write-box {
+.account-verification .page-content .verification .code-write-form {
   gap: 10px;
 }
 
-.account-verification .page-content .verification .code-write-box input {
+.account-verification .page-content .verification .code-write-form input {
   font-size: 20px !important;
   border-color: var(--main-color-one) !important;
 }

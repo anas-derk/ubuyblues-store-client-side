@@ -2,7 +2,7 @@ import Head from "next/head";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 
 export default function AddNewCategory({ activeParentLink, activeChildLink }) {
     const [categoryName, setCategoryName] = useState("");
@@ -13,7 +13,7 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
         e.preventDefault();
         try {
             setIsWaitStatus(true);
-            const res = await Axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
                 categoryName,
             });
             const result = await res.data;

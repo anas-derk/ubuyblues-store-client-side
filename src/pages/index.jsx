@@ -9,7 +9,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
 import { Fragment, useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
 import { IoIosArrowForward, IoEarth } from "react-icons/io";
@@ -42,14 +42,14 @@ export default function Home() {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userId = localStorage.getItem("asfour-store-user-id");
         setUserId(userId);
-        Axios.get(`${process.env.BASE_API_URL}/products/all-products`)
+        axios.get(`${process.env.BASE_API_URL}/products/all-products`)
             .then(async (res) => {
                 setAllProductsData(res.data);
-                const res1 = await Axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
+                const res1 = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
                 const result1 = await res1.data;
                 setAllCategories(result1);
                 if (userId) {
-                    const res2 = await Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
+                    const res2 = await axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
                     const result2 = await res2.data;
                     setUserInfo(result2);
                     setFavoriteProductsListForUser(result2.favorite_products_list);
@@ -112,7 +112,7 @@ export default function Home() {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsData[productIndex]._id);
-            const res = await Axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
             const result = await res.data;
             if (result === "Ok !!, Adding New Favorite Product To This User Is Successfuly !!") {
                 let tempFavoriteProductsForUser = favoriteProductsListForUser;
@@ -131,7 +131,7 @@ export default function Home() {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsData[productIndex]._id);
-            const res = await Axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
             const result = await res.data;
             if (result === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favorite_product) => favorite_product._id != allProductsData[productIndex]._id));
