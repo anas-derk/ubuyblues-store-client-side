@@ -161,11 +161,11 @@ export default function UserLogin() {
                     setSuccessMsg(result);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
+                        router.push(`/account-verification?email=${emailForSignup}`);
                         clearTimeout(successTimeout);
                     }, 5000);
                 }
             } catch (err) {
-                console.log(err);
                 setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");

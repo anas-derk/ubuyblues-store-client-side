@@ -88,32 +88,33 @@ table{
     width: 50px;
     height: 165px;
     position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translate(-50% , 0);
+        width: 16px;
+        height: 16px;
+        background: #FF3D00;
+        border-radius: 50%;
+        animation: bounce 2s linear infinite;
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        height: 48px;
+        width: 48px;
+        background: #fff;
+        border-radius: 4px;
+        animation: rotate 2s linear infinite;
+    }
 }
-.loader::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translate(-50% , 0);
-    width: 16px;
-    height: 16px;
-    background: #FF3D00;
-    border-radius: 50%;
-    animation: bounce 2s linear infinite;
-}
-.loader::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    height: 48px;
-    width: 48px;
-    background: #fff;
-    border-radius: 4px;
-    animation: rotate 2s linear infinite;
-}
+
 @keyframes bounce {
     0% , 50% , 100%{
         transform: translate(-50%, 0px);
