@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import axios from "axios";
 import { useRouter } from "next/router";
+import LoaderPage from "@/components/LoaderPage";
 
 export default function AccountVerification({ email }) {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -108,7 +109,7 @@ export default function AccountVerification({ email }) {
             <Head>
                 <title>Asfour Store - Account Verification</title>
             </Head>
-            {!isLoadingPage && <>
+            {!isLoadingPage ? <>
                 <Header />
                 <div className="page-content">
                     <h1 className="welcome-msg border-bottom pb-3 mb-5 text-center text-white">Welcome To You In Account Verification Page</h1>
@@ -175,7 +176,7 @@ export default function AccountVerification({ email }) {
                         </div>
                     </section>
                 </div>
-            </>}
+            </>: <LoaderPage />}
         </div>
     );
 }
