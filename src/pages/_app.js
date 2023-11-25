@@ -16,6 +16,7 @@ import "../pages/customer-dashboard/addreses/billing-address/customer_billing_ad
 import "../pages/customer-dashboard/addreses/shipping-address/customer_shipping_address.css";
 import "../pages/404/404.css";
 import "../pages/admin-dashboard/update-and-delete-products/update_and_delete_products.css";
+import "../pages/account-verification/account_verification.css";
 
 export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />
