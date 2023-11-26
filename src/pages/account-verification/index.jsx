@@ -18,9 +18,10 @@ export default function AccountVerification({ email }) {
     const [successMsg, setSuccessMsg] = useState("");
     const router = useRouter();
     useEffect(() => {
-        sendTheCodeToUserEmail()
-            .then(() => setIsLoadingPage(false))
-            .catch((err) => console.log(err));
+        setIsLoadingPage(false)
+        // sendTheCodeToUserEmail()
+        //     .then(() => setIsLoadingPage(false))
+        //     .catch((err) => console.log(err));
     }, []);
     const sendTheCodeToUserEmail = async () => {
         try {
@@ -88,6 +89,15 @@ export default function AccountVerification({ email }) {
             checkAccountVerificationCode(event);
         }
     }
+    const handlePasteVerificationCode = (word) => {
+        if (word.length > 0) {
+            for(let i = 0; i < 4; i++) {
+                const currentCharacterInputField = document.getElementById(`field${i + 1}`);
+                currentCharacterInputField.value = word[i];
+                handleWritePartOfVerificationCode(word[i], i);
+            }
+        }
+    }
     const handleTimeCounter = () => {
         let secondsTemp = 59, minutesTemp = 1;
         let timeCounter = setInterval(() => {
@@ -151,6 +161,7 @@ export default function AccountVerification({ email }) {
                                             maxLength="1"
                                             id={el}
                                             onChange={(e) => handleWritePartOfVerificationCode(e.target.value, index)}
+                                            onPaste={(e) => handlePasteVerificationCode(e.clipboardData.getData("text"))}
                                         />
                                     ))
                             }
