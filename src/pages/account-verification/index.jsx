@@ -79,12 +79,12 @@ export default function AccountVerification({ email }) {
     }
     const handleWritePartOfVerificationCode = (character, inputIndex) => {
         accountVerificationCodeCharactersList[inputIndex] = character;
-        if (inputIndex < 7) {
+        if (inputIndex < 3) {
             const nextCodeCharacterInputField = document.getElementById(`field${inputIndex + 2}`);
             if (nextCodeCharacterInputField.value.length === 0) {
                 nextCodeCharacterInputField.focus();
             }
-        } else if (inputIndex === 7 || !accountVerificationCodeCharactersList.includes("")) {
+        } else if (inputIndex === 3 || !accountVerificationCodeCharactersList.includes("")) {
             checkAccountVerificationCode(event);
         }
     }
@@ -140,7 +140,7 @@ export default function AccountVerification({ email }) {
                         </h6>
                         <form className="code-write-form d-flex mb-4" onSubmit={checkAccountVerificationCode}>
                             {
-                                ["field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"]
+                                ["field1", "field2", "field3", "field4"]
                                     .map((el, index) => (
                                         <input
                                             key={index}
@@ -171,8 +171,6 @@ export default function AccountVerification({ email }) {
                             >
                                 Resending The Code ...
                             </button>}
-                            <span className="me-2">Or</span>
-                            <button className="btn btn-danger">Update Your Email Address</button>
                         </div>
                     </section>
                 </div>
