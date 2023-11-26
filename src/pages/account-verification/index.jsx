@@ -18,10 +18,9 @@ export default function AccountVerification({ email }) {
     const [successMsg, setSuccessMsg] = useState("");
     const router = useRouter();
     useEffect(() => {
-        setIsLoadingPage(false)
-        // sendTheCodeToUserEmail()
-        //     .then(() => setIsLoadingPage(false))
-        //     .catch((err) => console.log(err));
+        sendTheCodeToUserEmail()
+            .then(() => setIsLoadingPage(false))
+            .catch((err) => console.log(err));
     }, []);
     const sendTheCodeToUserEmail = async () => {
         try {
