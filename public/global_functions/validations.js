@@ -11,7 +11,7 @@ function isImage(file) {
 
 // تعريف دالة للتحقق من كلمة السر هل صالحة أم لا
 function isValidPassword(password) {
-    return password.length >= 8;
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(pass);
 }
 
 // تعريف دالة للتحقق من رقم الموبايل هو رقم صالح أم لا ( رقم سوري أم لا )

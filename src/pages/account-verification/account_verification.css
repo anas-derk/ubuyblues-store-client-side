@@ -72,3 +72,24 @@
 .account-verification .page-content .verification .email-sent-manager-box button {
   font-size: 14px;
 }
+
+.account-verification .page-content .error-msg-on-loading {
+  min-height: calc(100vh - 144px);
+}
+
+.account-verification .page-content .error-msg-on-loading .error-box {
+  width: 75%;
+  background-color: var(--main-color-two);
+  border-left: 10px solid;
+  border-right: 10px solid;
+}
+
+.account-verification .page-content .error-msg-on-loading .error-box .error-icon {
+  font-size: 75px;
+  color: #F00;
+}
+
+.account-verification .page-content .error-msg-on-loading .error-box .error-msg {
+  font-size: 30px;
+  font-weight: bold;
+}

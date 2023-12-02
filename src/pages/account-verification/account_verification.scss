@@ -57,5 +57,24 @@
                 border-bottom: 1px solid var(--main-color-one);
             }
         }
+        .error-msg-on-loading{
+            min-height: calc(100vh - 144px);
+            .error-box{
+                width: 75%;
+                background-color: var(--main-color-two);
+                border: {
+                    left: 10px solid;
+                    right: 10px solid;
+                };
+                .error-icon{
+                    font-size: 75px;
+                    color: #F00;
+                }
+                .error-msg{
+                    font-size: 30px;
+                    font-weight: bold;
+                }
+            }
+        }
     }
 }

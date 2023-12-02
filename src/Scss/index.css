@@ -95,13 +95,13 @@ table th, table td {
   height: 100vh;
 }
 
-.loader {
+.loader-page {
   width: 50px;
   height: 165px;
   position: relative;
 }
 
-.loader::before {
+.loader-page::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -114,7 +114,7 @@ table th, table td {
   animation: bounce 2s linear infinite;
 }
 
-.loader::after {
+.loader-page::after {
   content: '';
   position: absolute;
   left: 0;

@@ -9,7 +9,7 @@ import validations from "../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 
-export default function UserLogin() {
+export default function UserAuth() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -138,6 +138,9 @@ export default function UserLogin() {
                     isRequired: {
                         msg: "Sorry, This Field Can't Be Empty !!",
                     },
+                    isValidPassword: {
+                        msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                    },
                 },
             },
         ]);
@@ -232,7 +235,7 @@ export default function UserLogin() {
                                                 <span className="me-2">Signup</span>
                                                 <FiLogIn />
                                             </button>}
-                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
+                                            {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">Wait Signup ...</span>
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
