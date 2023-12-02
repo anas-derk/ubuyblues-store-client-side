@@ -12,33 +12,66 @@
                     border-bottom: 2px dashed #FFF;
                 }
             }
-            .update-product-quantity-cell{
-                .update-product-quantity{
-                    border: 1px solid #FFF;
-                    width: fit-content;
-                    .update-product-icon{
-                        cursor: pointer;
-                        font-size: 22px;
-                        height: 25px;
-                        border-radius: 2px;
-                        &:hover{
-                            background-color: #FFF;
-                            color: #000;
-                        }
+        }
+        .user-products-table-for-mobiles-and-tablets{
+            th, td{
+                border: 1px solid;
+                padding: 15px;
+            }
+            th{
+                width: 25%;
+            }
+            td{
+                text-align: center;
+            }
+        }
+        .update-product-quantity-cell{
+            .update-product-quantity{
+                border: 1px solid #FFF;
+                width: fit-content;
+                .update-product-icon{
+                    cursor: pointer;
+                    font-size: 22px;
+                    height: 25px;
+                    border-radius: 2px;
+                    &:hover{
+                        background-color: #FFF;
+                        color: #000;
                     }
                 }
             }
-            .delete-product-cell{
-                .trash-icon{
-                    cursor: pointer;
-                    font-size: 22px;
-                }
+        }
+        .delete-product-cell{
+            .trash-icon{
+                cursor: pointer;
+                font-size: 22px;
+            }
+        }
+        .cart-total-btn-box{
+            position: fixed;
+            right: 0;
+            bottom: 30px;
+            width: fit-content;
+            background-color: var(--main-color-two);
+            border-radius: 3px;
+            color: #000;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 3px solid #FFF;
+            &:hover{
+                background-color: #000;
+                color: #FFF;
             }
         }
     }
     .order-total{
         .total{
             border-bottom: 2px dashed #FFF;
+            @media (max-width: 767px) {
+                gap: 15px;
+            }
         }
         .checkout-link{
             background-color: var(--main-color-two);
@@ -49,6 +82,15 @@
                 background-color: var(--main-color-one);
                 color: #FFF;
             }
+        }
+        @media (max-width: 767px) {
+            text-align: center !important;
+            font-size: 14px;
+        }
+    }
+    .not-found-any-products-for-user-in-cart{
+        .sorry-icon{
+            font-size: 70px;
         }
     }
 }

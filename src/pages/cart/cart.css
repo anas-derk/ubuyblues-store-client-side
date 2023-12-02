@@ -10,30 +10,69 @@
   border-bottom: 2px dashed #FFF;
 }
 
-.cart .products .user-products-table .update-product-quantity-cell .update-product-quantity {
+.cart .products .user-products-table-for-mobiles-and-tablets th, .cart .products .user-products-table-for-mobiles-and-tablets td {
+  border: 1px solid;
+  padding: 15px;
+}
+
+.cart .products .user-products-table-for-mobiles-and-tablets th {
+  width: 25%;
+}
+
+.cart .products .user-products-table-for-mobiles-and-tablets td {
+  text-align: center;
+}
+
+.cart .products .update-product-quantity-cell .update-product-quantity {
   border: 1px solid #FFF;
   width: fit-content;
 }
 
-.cart .products .user-products-table .update-product-quantity-cell .update-product-quantity .update-product-icon {
+.cart .products .update-product-quantity-cell .update-product-quantity .update-product-icon {
   cursor: pointer;
   font-size: 22px;
   height: 25px;
   border-radius: 2px;
 }
 
-.cart .products .user-products-table .update-product-quantity-cell .update-product-quantity .update-product-icon:hover {
+.cart .products .update-product-quantity-cell .update-product-quantity .update-product-icon:hover {
   background-color: #FFF;
   color: #000;
 }
 
-.cart .products .user-products-table .delete-product-cell .trash-icon {
+.cart .products .delete-product-cell .trash-icon {
   cursor: pointer;
   font-size: 22px;
 }
 
+.cart .products .cart-total-btn-box {
+  position: fixed;
+  right: 0;
+  bottom: 30px;
+  width: fit-content;
+  background-color: var(--main-color-two);
+  border-radius: 3px;
+  color: #000;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border: 3px solid #FFF;
+}
+
+.cart .products .cart-total-btn-box:hover {
+  background-color: #000;
+  color: #FFF;
+}
+
 .cart .order-total .total {
   border-bottom: 2px dashed #FFF;
+}
+
+@media (max-width: 767px) {
+  .cart .order-total .total {
+    gap: 15px;
+  }
 }
 
 .cart .order-total .checkout-link {
@@ -46,4 +85,15 @@
 .cart .order-total .checkout-link:hover {
   background-color: var(--main-color-one);
   color: #FFF;
+}
+
+@media (max-width: 767px) {
+  .cart .order-total {
+    text-align: center !important;
+    font-size: 14px;
+  }
+}
+
+.cart .not-found-any-products-for-user-in-cart .sorry-icon {
+  font-size: 70px;
 }

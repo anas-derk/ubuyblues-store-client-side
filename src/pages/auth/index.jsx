@@ -202,26 +202,26 @@ export default function UserLogin() {
                         <section className="authentication">
                             <div className="row">
                                 {appearedAuthPartName === "sign-up" && <div className="col-md-12">
-                                    <div className="signup-section ps-5">
+                                    <div className="signup-section">
                                         <h3 className="part-name mb-4">Create New Account</h3>
                                         <form className="user-signup-form mb-3" onSubmit={userSignup}>
                                             <div className="email-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder="Please Enter Your Email"
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["emailForSignup"] ? "border-danger mb-2" : "mb-5"}`}
+                                                    className={`form-control p-3 border-2 ${formValidationErrors["emailForSignup"] ? "border-danger mb-3" : "mb-5"}`}
                                                     onChange={(e) => setEmailForSignup(e.target.value.trim())}
                                                 />
                                                 <div className='icon-box text-dark'>
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
-                                            {formValidationErrors["emailForSignup"] && <p className='error-msg text-danger'>{formValidationErrors["emailForSignup"]}</p>}
+                                            {formValidationErrors["emailForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["emailForSignup"]}</p>}
                                             <div className="password-field-box">
                                                 <input
                                                     type={isVisiblePasswordForSignup ? "text" : "password"}
                                                     placeholder="Please Enter Your Password"
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["passwordForSignup"] ? "border-danger mb-2" : "mb-5"}`}
+                                                    className={`form-control p-3 border-2 ${formValidationErrors["passwordForSignup"] ? "border-danger mb-3" : "mb-5"}`}
                                                     onChange={(e) => setPasswordForSignup(e.target.value.trim())}
                                                 />
                                                 <div className='icon-box text-dark'>
@@ -229,38 +229,38 @@ export default function UserLogin() {
                                                     {isVisiblePasswordForSignup && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
                                                 </div>
                                             </div>
-                                            {formValidationErrors["passwordForSignup"] && <p className='error-msg text-danger'>{formValidationErrors["passwordForSignup"]}</p>}
+                                            {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForSignup"]}</p>}
                                             {!isLoginingStatus && !errMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 <span className="me-2">Signup</span>
                                                 <FiLogIn />
                                             </button>}
-                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4">
+                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">Wait Signup ...</span>
                                             </button>}
                                         </form>
                                     </div>
                                 </div>}
                                 {appearedAuthPartName === "login" && <div className="col-md-12">
-                                    <div className="login-section ps-5">
+                                    <div className="login-section">
                                         <h3 className="part-name mb-4">Login</h3>
                                         <form className="user-login-form mb-3" onSubmit={userLogin}>
                                             <div className="email-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder="Please Enter Your Email"
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["emailForLogin"] ? "border-danger mb-2" : "mb-5"}`}
+                                                    className={`form-control p-3 border-2 ${formValidationErrors["emailForLogin"] ? "border-danger mb-4" : "mb-5"}`}
                                                     onChange={(e) => setEmailForLogin(e.target.value.trim())}
                                                 />
                                                 <div className='icon-box text-dark'>
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
-                                            {formValidationErrors["emailForLogin"] && <p className='error-msg text-danger'>{formValidationErrors["emailForLogin"]}</p>}
+                                            {formValidationErrors["emailForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["emailForLogin"]}</p>}
                                             <div className="password-field-box">
                                                 <input
                                                     type={isVisiblePasswordForLogin ? "text" : "password"}
                                                     placeholder="Please Enter Your Password"
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["passwordForLogin"] ? "border-danger mb-2" : "mb-5"}`}
+                                                    className={`form-control p-3 border-2 ${formValidationErrors["passwordForLogin"] ? "border-danger mb-4" : "mb-5"}`}
                                                     onChange={(e) => setPasswordForLogin(e.target.value.trim())}
                                                 />
                                                 <div className='icon-box text-dark'>
@@ -268,12 +268,12 @@ export default function UserLogin() {
                                                     {isVisiblePasswordForLogin && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
                                                 </div>
                                             </div>
-                                            {formValidationErrors["passwordForLogin"] && <p className='error-msg text-danger'>{formValidationErrors["passwordForLogin"]}</p>}
+                                            {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForLogin"]}</p>}
                                             {!isLoginingStatus && !errMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 <span className="me-2">Login</span>
                                                 <FiLogIn />
                                             </button>}
-                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4">
+                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">Wait Loging ...</span>
                                             </button>}
                                         </form>

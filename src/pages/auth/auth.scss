@@ -13,6 +13,15 @@
             &:hover{
                 background-color: #b3aeae;
             }
+            @media (max-width: 576px) {
+                font-size: 18px !important;
+                &.display-login-btn {
+                    border-bottom: 1px solid #CCC;
+                }
+            }
+        }
+        @media (max-width: 576px) {
+            grid-template-columns: auto;
         }
     }
     .authentication{
