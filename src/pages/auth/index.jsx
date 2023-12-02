@@ -158,12 +158,11 @@ export default function UserLogin() {
                         clearTimeout(errorTimeout);
                     }, 2000);
                 } else {
-                    setSuccessMsg(result);
+                    setSuccessMsg(`${result}, Please Wait To Navigate To Verification Page !!`);
                     let successTimeout = setTimeout(() => {
-                        setSuccessMsg("");
                         router.push(`/account-verification?email=${emailForSignup}`);
                         clearTimeout(successTimeout);
-                    }, 5000);
+                    }, 6000);
                 }
             } catch (err) {
                 setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
@@ -184,7 +183,6 @@ export default function UserLogin() {
                 <Header />
                 <div className="page-content text-white p-4 text-center">
                     <div className="container-fluid">
-                        {(errMsg || successMsg) && <p className={`result-auth-msg text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
                         <section className="auth-part-display-control mb-5">
                             <h4
                                 className="m-0 display-login-btn display-btn p-3"
@@ -196,7 +194,7 @@ export default function UserLogin() {
                                 className="m-0 display-signup-btn display-btn p-3"
                                 onClick={() => setAppearedAuthPartName("sign-up")}
                             >
-                                Sigup
+                                Sign-up
                             </h4>
                         </section>
                         <section className="authentication">
@@ -230,13 +228,14 @@ export default function UserLogin() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForSignup"]}</p>}
-                                            {!isLoginingStatus && !errMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 <span className="me-2">Signup</span>
                                                 <FiLogIn />
                                             </button>}
                                             {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">Wait Signup ...</span>
                                             </button>}
+                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
                                         </form>
                                     </div>
                                 </div>}
@@ -276,6 +275,7 @@ export default function UserLogin() {
                                             {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">Wait Loging ...</span>
                                             </button>}
+                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
                                         </form>
                                     </div>
                                 </div>}
