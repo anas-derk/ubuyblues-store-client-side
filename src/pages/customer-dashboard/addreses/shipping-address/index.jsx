@@ -10,7 +10,7 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function CustomerBillingAddress() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
-    const [userInfo, setUserInfo] = useState(true);
+    const [userInfo, setUserInfo] = useState("");
     const [formValidationErrors, setFormValidationErrors] = useState({});
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");

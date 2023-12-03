@@ -41,6 +41,11 @@ input:focus, textarea:focus, select:focus {
   border-color: #00F;
 }
 
+textarea {
+  height: 120px;
+  resize: none;
+}
+
 .global-button {
   font-size: 13px;
 }

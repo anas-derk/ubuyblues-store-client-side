@@ -39,6 +39,11 @@ input, textarea, select{
     }
 }
 
+textarea{
+    height: 120px;
+    resize: none;
+}
+
 .global-button{
     font-size: 13px;
 }

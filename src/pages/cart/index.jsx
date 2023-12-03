@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { BsTrash } from "react-icons/bs";
