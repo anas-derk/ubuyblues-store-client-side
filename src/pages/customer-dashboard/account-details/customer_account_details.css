@@ -23,6 +23,13 @@
 
 .customer-account-details .edit-customer-account-details-form .change-password fieldset {
   border: 1px dashed #FFF;
+  padding: 20px;
+}
+
+@media (max-width: 576px) {
+  .customer-account-details .edit-customer-account-details-form .change-password fieldset {
+    padding: 15px;
+  }
 }
 
 .customer-account-details .edit-customer-account-details-form .change-password fieldset legend {

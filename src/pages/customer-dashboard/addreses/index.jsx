@@ -28,7 +28,7 @@ export default function CustomerAddreses() {
         }
     }, []);
     return (
-        <div className="customer-addreses">
+        <div className="customer-addreses customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Addreses</title>
             </Head>
@@ -37,10 +37,10 @@ export default function CustomerAddreses() {
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-md-9">
+                            <div className="col-xl-9">
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="address-editing-link-box d-flex justify-content-between p-3">

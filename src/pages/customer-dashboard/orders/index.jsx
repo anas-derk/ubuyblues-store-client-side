@@ -30,7 +30,7 @@ export default function CustomerOrders() {
         }
     }, []);
     return (
-        <div className="customer-orders">
+        <div className="customer-orders-managment customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Orders</title>
             </Head>
@@ -39,10 +39,10 @@ export default function CustomerOrders() {
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-md-9">
+                            <div className="col-xl-9">
                                 <div className="customer-orders">
                                     <h1 className="h5 text-white">
                                         <span className="me-2">No order has been made yet.</span>

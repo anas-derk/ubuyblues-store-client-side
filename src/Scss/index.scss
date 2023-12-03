@@ -66,6 +66,11 @@ table{
             cursor: pointer;
         }
     }
+    &.error-in-field{
+        .icon-box{
+            transform: translateY(-80%);
+        }
+    }
 }
 
 .managment-table{
@@ -163,4 +168,22 @@ table{
 
 .form-field-error-box{
     border-radius: 3px;
+}
+
+.customer-dashboard{
+    .page-content{
+        .container-fluid{
+            > .row{
+                @media (max-width: 1199px) {
+                    row-gap: 40px;
+                    padding-bottom: 40px;
+                }
+                .row{
+                    @media (max-width: 1199px) {
+                        row-gap: 20px;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -43,10 +43,10 @@ export default function CustomerDashboard() {
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-md-9">
+                            <div className="col-xl-9">
                                 <div className="customer-info-and-managment-account-links-for-customer">
                                     <h1 className="welcome-msg fw-bold mb-4">
                                         <span className="me-2">Hello {userInfo.email} ( not {userInfo.email} ?)</span>

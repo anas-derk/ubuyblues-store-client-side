@@ -1,0 +1,13 @@
+.customer-orders-managment{
+    .customer-orders{
+        h1{
+            @media (max-width: 576px) {
+                text-align: center  ;
+                span{
+                    display: block;
+                    margin-bottom: 15px;
+                }
+            }
+        }
+    }
+}

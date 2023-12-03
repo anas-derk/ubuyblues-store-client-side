@@ -171,7 +171,7 @@ export default function CustomerAccountDetails() {
         }
     }
     return (
-        <div className="customer-account-details">
+        <div className="customer-account-details customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Account Details</title>
             </Head>
@@ -180,10 +180,10 @@ export default function CustomerAccountDetails() {
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-md-9">
+                            <div className="col-xl-9">
                                 <form className="edit-customer-account-details-form p-4" onSubmit={updateUserInfo}>
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
@@ -247,13 +247,12 @@ export default function CustomerAccountDetails() {
                                         </p>}
                                     </section>
                                     <section className="change-password mb-4">
-                                        <fieldset className="p-4">
+                                        <fieldset>
                                             <section className="current-password mb-3">
                                                 <h6>Current password (leave the field blank if you do not want to change it)</h6>
-                                                <div className="current-password-field-box">
+                                                <div className={`current-password-field-box ${formValidationErrors.currentPassword ? "error-in-field" : ""}`}>
                                                     <input
                                                         type={isVisibleCurrentPassword ? "text" : "password"}
-                                                        placeholder="Please Enter Current Password Here"
                                                         className={`p-2 ${formValidationErrors.currentPassword ? "border-3 border-danger mb-3" : ""}`}
                                                         onChange={(e) => setCurrentPassword(e.target.value.trim())}
                                                     />
@@ -269,10 +268,9 @@ export default function CustomerAccountDetails() {
                                             </section>
                                             <section className="new-password mb-3">
                                                 <h6>New password (leave the field blank if you do not want to change it)</h6>
-                                                <div className="new-password-field-box">
+                                                <div className={`new-password-field-box ${formValidationErrors.newPassword ? "error-in-field" : ""}`}>
                                                     <input
                                                         type={isVisibleNewPassword ? "text" : "password"}
-                                                        placeholder="Please Enter New Password Here"
                                                         className={`p-2 ${formValidationErrors.newPassword ? "border-3 border-danger mb-3" : ""}`}
                                                         onChange={(e) => setNewPassword(e.target.value.trim())}
                                                     />
@@ -288,10 +286,9 @@ export default function CustomerAccountDetails() {
                                             </section>
                                             <section className="confirm-new-password mb-3">
                                                 <h6>Confirm New password (leave the field blank if you do not want to change it)</h6>
-                                                <div className="confirm-new-password-field-box">
+                                                <div className={`confirm-new-password-field-box ${formValidationErrors.confirmNewPassword ? "error-in-field" : ""}`}>
                                                     <input
                                                         type={isVisibleConfirmNewPassword ? "text" : "password"}
-                                                        placeholder="Please Enter New Password Here"
                                                         className={`p-2 ${formValidationErrors.confirmNewPassword ? "border-3 border-danger mb-3" : ""}`}
                                                         onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
                                                     />

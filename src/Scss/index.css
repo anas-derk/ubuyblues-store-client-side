@@ -80,6 +80,15 @@ table th, table td {
   cursor: pointer;
 }
 
+.password-field-box.error-in-field .icon-box,
+.email-field-box.error-in-field .icon-box,
+.confirm-password-field-box.error-in-field .icon-box,
+.current-password-field-box.error-in-field .icon-box,
+.new-password-field-box.error-in-field .icon-box,
+.confirm-new-password-field-box.error-in-field .icon-box {
+  transform: translateY(-80%);
+}
+
 .managment-table td, .managment-table th {
   border: 1px solid;
   padding: 15px;
@@ -184,4 +193,17 @@ table th, table td {
 
 .form-field-error-box {
   border-radius: 3px;
+}
+
+@media (max-width: 1199px) {
+  .customer-dashboard .page-content .container-fluid > .row {
+    row-gap: 40px;
+    padding-bottom: 40px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .customer-dashboard .page-content .container-fluid > .row .row {
+    row-gap: 20px;
+  }
 }

@@ -65,7 +65,7 @@ export default function CustomerWishList() {
         }
     }
     return (
-        <div className="customer-wish-list">
+        <div className="customer-wish-list customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Wish List</title>
             </Head>
@@ -74,10 +74,10 @@ export default function CustomerWishList() {
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row align-items-center">
-                            <div className="col-md-3">
+                            <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-md-9">
+                            <div className="col-xl-9">
                                 {favoriteProductsListForUser.length > 0 ? <section className="favorite-products-list-for-user text-center">
                                     <table className="favorite-products-table-for-user w-100">
                                         <thead>

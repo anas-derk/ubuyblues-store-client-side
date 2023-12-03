@@ -152,7 +152,7 @@ export default function CustomerBillingAddress() {
         }
     }
     return (
-        <div className="customer-shipping-address">
+        <div className="customer-shipping-address customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Shipping Address</title>
             </Head>
@@ -161,10 +161,10 @@ export default function CustomerBillingAddress() {
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-md-9">
+                            <div className="col-xl-9">
                                 <form className="edit-customer-shipping-address-form p-4" onSubmit={updateShippingAddressInfoForUser}>
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
