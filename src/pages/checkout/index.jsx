@@ -3,9 +3,16 @@ import Header from "@/components/Header";
 import validations from "../../../public/global_functions/validations";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
+import Link from "next/link";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+    const [allProductsData, setAllProductsData] = useState([]);
+    const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
+        totalPriceBeforeDiscount: 0,
+        totalDiscount: 0,
+        totalPriceAfterDiscount: 0,
+    });
     const [userInfo, setUserInfo] = useState("");
     const [requestNotes, setRequestNotes] = useState("");
     const [isShippingToOtherAddress, setIsShippingToOtherAddress] = useState(false);
@@ -21,14 +28,62 @@ export default function Checkout() {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserInfo(result);
+                        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+                        if (Array.isArray(allProductsData)) {
+                            if (allProductsData.length > 0) {
+                                const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
+                                const totalDiscount = calcTotalOrderDiscount(allProductsData);
+                                const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
+                                setPricesDetailsSummary({
+                                    totalPriceBeforeDiscount,
+                                    totalDiscount,
+                                    totalPriceAfterDiscount,
+                                });
+                                setAllProductsData(allProductsData);
+                            }
+                        }
                         setIsLoadingPage(false);
                     }
                 })
                 .catch((err) => console.log(err));
         } else {
+            let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+            if (Array.isArray(allProductsData)) {
+                if (allProductsData.length > 0) {
+                    const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
+                    const totalDiscount = calcTotalOrderDiscount(allProductsData);
+                    const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
+                    setPricesDetailsSummary({
+                        totalPriceBeforeDiscount,
+                        totalDiscount,
+                        totalPriceAfterDiscount,
+                    });
+                    setAllProductsData(allProductsData);
+                }
+            }
             setIsLoadingPage(false);
         }
     }, []);
+    const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
+        let tempTotalPriceBeforeDiscount = 0;
+        allProductsData.forEach((product) => {
+            tempTotalPriceBeforeDiscount += product.price * product.quantity;
+        });
+        return tempTotalPriceBeforeDiscount;
+    }
+    const calcTotalOrderDiscount = (allProductsData) => {
+        let tempTotalDiscount = 0;
+        allProductsData.forEach((product) => {
+            tempTotalDiscount += product.discount * product.quantity;
+        });
+        return tempTotalDiscount;
+    }
+    const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
+        return totalPriceBeforeDiscount - totalDiscount;
+    }
+    const confirmRequest = () => {
+
+    }
     return (
         <div className="checkout">
             <Head>
@@ -39,7 +94,7 @@ export default function Checkout() {
                 <div className="page-content text-white p-4">
                     <div className="container-fluid">
                         <h1 className="h3 mb-4 fw-bold">Payment</h1>
-                        <div className="row">
+                        <div className="row align-items-center">
                             <div className="col-xl-6">
                                 <h6 className="mb-4 fw-bold">Billing Details</h6>
                                 <form className="edit-customer-billing-address-form" onSubmit={(e) => e.preventDefault()}>
@@ -337,7 +392,58 @@ export default function Checkout() {
                                 ></textarea>
                             </div>
                             <div className="col-xl-6">
-
+                                <section className="order-total border border-3 p-4 ps-5 pe-5 text-start" id="order-total">
+                                    <h5 className="fw-bold mb-5 text-center">Your Request</h5>
+                                    <div className="row total pb-3 mb-5">
+                                        <div className="col-md-9 fw-bold p-0">
+                                            Product
+                                        </div>
+                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                            Sum
+                                        </div>
+                                    </div>
+                                    {allProductsData.map((product, productIndex) => (
+                                        <div className="row total pb-3 mb-5">
+                                            <div className="col-md-9 fw-bold p-0">
+                                                ( {product.name} ) x {product.quantity}
+                                            </div>
+                                            <div className="col-md-3 fw-bold p-0 text-md-end">
+                                                {product.price * product.quantity} $
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <div className="row total-price-before-discount total pb-3 mb-5">
+                                        <div className="col-md-9 fw-bold p-0">
+                                            Total Price Before Discount
+                                        </div>
+                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                            {pricesDetailsSummary.totalPriceBeforeDiscount} $
+                                        </div>
+                                    </div>
+                                    <div className="row total-price-discount total pb-3 mb-5">
+                                        <div className="col-md-9 fw-bold p-0">
+                                            Total Discount
+                                        </div>
+                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                            {pricesDetailsSummary.totalDiscount} $
+                                        </div>
+                                    </div>
+                                    <div className="row total-price-after-discount total pb-3 mb-5">
+                                        <div className="col-md-9 fw-bold p-0">
+                                            Total Price After Discount
+                                        </div>
+                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                            {pricesDetailsSummary.totalPriceAfterDiscount} $
+                                        </div>
+                                    </div>
+                                    
+                                    <button
+                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                        onClick={confirmRequest}
+                                    >
+                                        Confirm Request
+                                    </button>
+                                </section>
                             </div>
                         </div>
                     </div>

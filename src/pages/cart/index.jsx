@@ -241,7 +241,7 @@ export default function Cart() {
                                         {pricesDetailsSummary.totalPriceAfterDiscount} $
                                     </div>
                                 </div>
-                                <Link href="/checkout" className="checkout-link p-3 w-100 d-block text-center fw-bold">Go To Checkout</Link>
+                                <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">Go To Checkout</Link>
                             </section>
                         </div>
                     </div> : <section className="not-found-any-products-for-user-in-cart text-center">

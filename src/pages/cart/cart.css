@@ -65,35 +65,6 @@
   color: #FFF;
 }
 
-.cart .order-total .total {
-  border-bottom: 2px dashed #FFF;
-}
-
-@media (max-width: 767px) {
-  .cart .order-total .total {
-    gap: 15px;
-  }
-}
-
-.cart .order-total .checkout-link {
-  background-color: var(--main-color-two);
-  color: #000;
-  border: 5px solid #FFF;
-  border-top-left-radius: 20px;
-}
-
-.cart .order-total .checkout-link:hover {
-  background-color: var(--main-color-one);
-  color: #FFF;
-}
-
-@media (max-width: 767px) {
-  .cart .order-total {
-    text-align: center !important;
-    font-size: 14px;
-  }
-}
-
 .cart .not-found-any-products-for-user-in-cart .sorry-icon {
   font-size: 70px;
 }

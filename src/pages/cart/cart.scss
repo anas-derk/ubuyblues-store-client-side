@@ -66,28 +66,6 @@
             }
         }
     }
-    .order-total{
-        .total{
-            border-bottom: 2px dashed #FFF;
-            @media (max-width: 767px) {
-                gap: 15px;
-            }
-        }
-        .checkout-link{
-            background-color: var(--main-color-two);
-            color: #000;
-            border: 5px solid #FFF;
-            border-top-left-radius: 20px;
-            &:hover{
-                background-color: var(--main-color-one);
-                color: #FFF;
-            }
-        }
-        @media (max-width: 767px) {
-            text-align: center !important;
-            font-size: 14px;
-        }
-    }
     .not-found-any-products-for-user-in-cart{
         .sorry-icon{
             font-size: 70px;

@@ -212,3 +212,35 @@ table th, table td {
     row-gap: 20px;
   }
 }
+
+.order-total {
+  font-size: 14px;
+}
+
+.order-total .total {
+  border-bottom: 2px dashed #FFF;
+}
+
+@media (max-width: 767px) {
+  .order-total .total {
+    gap: 15px;
+  }
+}
+
+.order-total .checkout-link {
+  background-color: var(--main-color-two);
+  color: #000;
+  border: 5px solid #FFF;
+  border-top-left-radius: 20px;
+}
+
+.order-total .checkout-link:hover {
+  background-color: var(--main-color-one);
+  color: #FFF;
+}
+
+@media (max-width: 767px) {
+  .order-total {
+    text-align: center !important;
+  }
+}
