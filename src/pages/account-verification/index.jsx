@@ -141,75 +141,78 @@ export default function AccountVerification({ email }) {
             {!isLoadingPage ? <>
                 <Header />
                 <div className="page-content">
-                    {!errorMsgOnLoading ? <>
-                        <h1 className="welcome-msg border-bottom pb-3 mb-5 text-center text-white">Welcome To You In Account Verification Page</h1>
-                        <section className="verification p-4">
-                            {errorMsg && <p className="alert alert-danger">{errorMsg}</p>}
-                            {successMsg && <p className="alert alert-success">{successMsg}</p>}
-                            {isWaitCheckingStatus && <div className="overlay d-flex align-items-center justify-content-center flex-column text-white">
-                                <span className="check-loader mb-4"></span>
-                                <h6>Checking ....</h6>
-                            </div>}
-                            <div className="row">
-                                <div className="col-md-5">
-                                    <h6 className="mb-3 fw-bold">You're almost done!</h6>
+                    <div className="container-fluid pb-5">
+                        {!errorMsgOnLoading ? <>
+                            <h1 className="welcome-msg border-bottom pb-3 mb-5 text-center text-white">Welcome To You In Account Verification Page</h1>
+                            <section className="verification p-4">
+                                {errorMsg && <p className="alert alert-danger">{errorMsg}</p>}
+                                {successMsg && <p className="alert alert-success">{successMsg}</p>}
+                                {isWaitCheckingStatus && <div className="overlay d-flex align-items-center justify-content-center flex-column text-white">
+                                    <span className="check-loader mb-4"></span>
+                                    <h6>Checking ....</h6>
+                                </div>}
+                                <div className="row">
+                                    <div className="col-md-5">
+                                        <h6 className="mb-3 fw-bold">You're almost done!</h6>
+                                    </div>
+                                    <div className="col-md-7 text-xl-end">
+                                        <h6 className="mb-3 fw-bold">
+                                            You can redial the message after
+                                        </h6>
+                                        <h6 className="mb-3 fw-bold">{minutes} : {seconds}</h6>
+                                    </div>
                                 </div>
-                                <div className="col-md-7 text-end">
-                                    <h6 className="mb-3 fw-bold">
-                                        You can redial the message after {minutes} : {seconds}
-                                    </h6>
+                                <h6 className="mb-3 fw-bold">
+                                    <span className="me-2">We sent a launch code to</span>
+                                    <span className="text-danger email-box">{email}</span>
+                                </h6>
+                                <h6 className="mb-3 fw-bold">
+                                    <FaLongArrowAltRight className="me-2" />
+                                    <span className="text-danger fw-bold">Enter code *</span>
+                                </h6>
+                                <form className="code-write-form d-flex mb-4" onSubmit={checkAccountVerificationCode}>
+                                    {
+                                        ["field1", "field2", "field3", "field4"]
+                                            .map((el, index) => (
+                                                <input
+                                                    key={index}
+                                                    type="text"
+                                                    className="form-control p-3 text-center"
+                                                    required
+                                                    min="0"
+                                                    maxLength="1"
+                                                    id={el}
+                                                    onChange={(e) => handleWritePartOfVerificationCode(e.target.value, index)}
+                                                    onPaste={(e) => handlePasteVerificationCode(e.clipboardData.getData("text"))}
+                                                />
+                                            ))
+                                    }
+                                    <input type="submit" hidden />
+                                </form>
+                                <div className="email-sent-manager-box pb-3">
+                                    <span>Didn't get your email? </span>
+                                    {!isWaitResendTheCode && !errorMsg && <button
+                                        className="btn btn-danger me-2"
+                                        onClick={sendTheCodeToUserEmail}
+                                        disabled={seconds == 0 && minutes == 0 ? false : true}
+                                    >
+                                        Resend The Code
+                                    </button>}
+                                    {isWaitResendTheCode && <button
+                                        className="btn btn-danger me-2"
+                                        disabled
+                                    >
+                                        Resending The Code ...
+                                    </button>}
                                 </div>
-                            </div>
-                            <h6 className="mb-3 fw-bold">
-                                <span className="me-2">We sent a launch code to</span>
-                                <span className="text-danger email-box">{email}</span>
-                            </h6>
-                            <h6 className="mb-3 fw-bold">
-                                <FaLongArrowAltRight className="me-2" />
-                                <span className="text-danger fw-bold">Enter code *</span>
-                            </h6>
-                            <form className="code-write-form d-flex mb-4" onSubmit={checkAccountVerificationCode}>
-                                {
-                                    ["field1", "field2", "field3", "field4"]
-                                        .map((el, index) => (
-                                            <input
-                                                key={index}
-                                                type="text"
-                                                className="form-control p-3 text-center"
-                                                required
-                                                min="0"
-                                                maxLength="1"
-                                                id={el}
-                                                onChange={(e) => handleWritePartOfVerificationCode(e.target.value, index)}
-                                                onPaste={(e) => handlePasteVerificationCode(e.clipboardData.getData("text"))}
-                                            />
-                                        ))
-                                }
-                                <input type="submit" hidden />
-                            </form>
-                            <div className="email-sent-manager-box pb-3">
-                                <span>Didn't get your email? </span>
-                                {!isWaitResendTheCode && !errorMsg && <button
-                                    className="btn btn-danger me-2"
-                                    onClick={sendTheCodeToUserEmail}
-                                    disabled={seconds == 0 && minutes == 0 ? false : true}
-                                >
-                                    Resend The Code
-                                </button>}
-                                {isWaitResendTheCode && <button
-                                    className="btn btn-danger me-2"
-                                    disabled
-                                >
-                                    Resending The Code ...
-                                </button>}
-                            </div>
-                        </section>
-                    </> : <section className="error-msg-on-loading d-flex justify-content-center align-items-center flex-column">
-                        <main className="error-box p-4 text-center">
-                            <MdOutlineErrorOutline className="error-icon mb-4" />
-                            <p className="error-msg">{ errorMsgOnLoading }</p>
-                        </main>
-                    </section>}
+                            </section>
+                        </> : <section className="error-msg-on-loading d-flex justify-content-center align-items-center flex-column">
+                            <main className="error-box p-4 text-center">
+                                <MdOutlineErrorOutline className="error-icon mb-4" />
+                                <p className="error-msg">{errorMsgOnLoading}</p>
+                            </main>
+                        </section>}
+                    </div>
                 </div>
             </> : <LoaderPage />}
         </div>

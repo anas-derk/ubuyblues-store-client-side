@@ -3,6 +3,9 @@
         .welcome-msg{
             width: fit-content;
             margin: 0 auto;
+            @media (max-width: 991px) {
+                font-size: 25px;
+            }
         }
         .verification{
             width: 50%;
@@ -10,6 +13,10 @@
             border-radius: 5px;
             background-color: #FFF;
             position: relative;
+            @media (max-width: 1199px) {
+                width: 90%;
+                text-align: center;
+            }
             .overlay{
                 position: absolute;
                 left: 0;
@@ -66,13 +73,22 @@
                     left: 10px solid;
                     right: 10px solid;
                 };
+                @media (max-width: 767px) {
+                    width: 90%;
+                }
                 .error-icon{
                     font-size: 75px;
                     color: #F00;
+                    @media (max-width: 767px) {
+                        font-size: 60px;
+                    }
                 }
                 .error-msg{
                     font-size: 30px;
                     font-weight: bold;
+                    @media (max-width: 767px) {
+                        font-size: 20px;
+                    }
                 }
             }
         }

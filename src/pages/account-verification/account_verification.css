@@ -3,12 +3,25 @@
   margin: 0 auto;
 }
 
+@media (max-width: 991px) {
+  .account-verification .page-content .welcome-msg {
+    font-size: 25px;
+  }
+}
+
 .account-verification .page-content .verification {
   width: 50%;
   margin: 0 auto;
   border-radius: 5px;
   background-color: #FFF;
   position: relative;
+}
+
+@media (max-width: 1199px) {
+  .account-verification .page-content .verification {
+    width: 90%;
+    text-align: center;
+  }
 }
 
 .account-verification .page-content .verification .overlay {
@@ -84,12 +97,30 @@
   border-right: 10px solid;
 }
 
+@media (max-width: 767px) {
+  .account-verification .page-content .error-msg-on-loading .error-box {
+    width: 90%;
+  }
+}
+
 .account-verification .page-content .error-msg-on-loading .error-box .error-icon {
   font-size: 75px;
   color: #F00;
 }
 
+@media (max-width: 767px) {
+  .account-verification .page-content .error-msg-on-loading .error-box .error-icon {
+    font-size: 60px;
+  }
+}
+
 .account-verification .page-content .error-msg-on-loading .error-box .error-msg {
   font-size: 30px;
   font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .account-verification .page-content .error-msg-on-loading .error-box .error-msg {
+    font-size: 20px;
+  }
 }
