@@ -86,6 +86,13 @@
   font-size: 14px;
 }
 
+@media (max-width: 470px) {
+  .account-verification .page-content .verification .email-sent-manager-box span {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
 .account-verification .page-content .error-msg-on-loading {
   min-height: calc(100vh - 144px);
 }

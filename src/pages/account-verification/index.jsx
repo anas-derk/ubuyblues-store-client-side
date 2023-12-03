@@ -190,7 +190,7 @@ export default function AccountVerification({ email }) {
                                     <input type="submit" hidden />
                                 </form>
                                 <div className="email-sent-manager-box pb-3">
-                                    <span>Didn't get your email? </span>
+                                    <span className="fw-bold">Didn't get your email? </span>
                                     {!isWaitResendTheCode && !errorMsg && <button
                                         className="btn btn-danger me-2"
                                         onClick={sendTheCodeToUserEmail}
