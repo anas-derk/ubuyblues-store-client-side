@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import validations from "../../../public/global_functions/validations";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
-import Link from "next/link";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -81,8 +80,171 @@ export default function Checkout() {
     const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
         return totalPriceBeforeDiscount - totalDiscount;
     }
+    const validateFormFields = () => {
+        let errorsObject = validations.inputValuesValidation([
+            {
+                name: "first_name_for_billing_address",
+                value: userInfo.billing_address.first_name,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, First Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "last_name_for_billing_address",
+                value: userInfo.billing_address.last_name,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "country_for_billing_address",
+                value: userInfo.billing_address.country,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "street_address_for_billing_address",
+                value: userInfo.billing_address.street_address,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "city_for_billing_address",
+                value: userInfo.billing_address.city,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "postal_code_for_billing_address",
+                value: userInfo.billing_address.postal_code,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "phone_number_for_billing_address",
+                value: userInfo.billing_address.phone_number,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            },
+            {
+                name: "email_for_billing_address",
+                value: userInfo.billing_address.email,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Email Field Can't Be Empty !!",
+                    },
+                    isEmail: {
+                        msg: "Sorry, Invalid Email !!",
+                    },
+                },
+            },
+            isShippingToOtherAddress ? {
+                name: "first_name_for_shipping_address",
+                value: userInfo.shipping_address.first_name,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, First Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "last_name_for_shipping_address",
+                value: userInfo.shipping_address.last_name,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "country_for_shipping_address",
+                value: userInfo.shipping_address.country,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "street_address_for_shipping_address",
+                value: userInfo.shipping_address.street_address,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "city_for_shipping_address",
+                value: userInfo.shipping_address.city,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "postal_code_for_shipping_address",
+                value: userInfo.shipping_address.postal_code,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "phone_number_for_shipping_address",
+                value: userInfo.shipping_address.phone_number,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                },
+            } : null,
+            isShippingToOtherAddress ? {
+                name: "email_for_shipping_address",
+                value: userInfo.shipping_address.email,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, Email Field Can't Be Empty !!",
+                    },
+                    isEmail: {
+                        msg: "Sorry, Invalid Email !!",
+                    },
+                },
+            } : null,
+        ]);
+        return errorsObject;
+    }
     const confirmRequest = () => {
-
+        try {
+            const errorsObject = validateFormFields();
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
     return (
         <div className="checkout">
@@ -104,28 +266,28 @@ export default function Checkout() {
                                                 <h6>First Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.first_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.first_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New First Name Here"
                                                     defaultValue={userInfo ? userInfo.billing_address.first_name : ""}
                                                     onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.first_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.first_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.first_name}</span>
+                                                    <span>{formValidationErrors.first_name_for_billing_address}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
                                                 <h6>Last Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.last_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.last_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter Last Name Here"
                                                     defaultValue={userInfo ? userInfo.billing_address.last_name : ""}
                                                     onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.last_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.last_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.last_name}</span>
+                                                    <span>{formValidationErrors.last_name_for_billing_address}</span>
                                                 </p>}
                                             </div>
                                         </div>
@@ -144,28 +306,28 @@ export default function Checkout() {
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Country / Area Here"
                                             defaultValue={userInfo ? userInfo.billing_address.country : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.country && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.country_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.country}</span>
+                                            <span>{formValidationErrors.country_for_billing_address}</span>
                                         </p>}
                                     </section>
                                     <section className="street-address mb-4">
                                         <h6>Street Addres / Neighborhood <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.street_address ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.street_address_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Street Address / Neighborhood"
                                             defaultValue={userInfo ? userInfo.billing_address.street_address : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.street_address && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.street_address_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.street_address}</span>
+                                            <span>{formValidationErrors.street_address_for_billing_address}</span>
                                         </p>}
                                     </section>
                                     <section className="apartment-number mb-4">
@@ -182,56 +344,56 @@ export default function Checkout() {
                                         <h6>City <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.city ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.city_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New City Name"
                                             defaultValue={userInfo ? userInfo.billing_address.city : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.city && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.city_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.city}</span>
+                                            <span>{formValidationErrors.city_for_billing_address}</span>
                                         </p>}
                                     </section>
                                     <section className="postal-code-number mb-4">
                                         <h6>Postal Code / Zip <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
-                                            className={`p-2 ${formValidationErrors.postal_code ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Postal Code / Zip"
                                             defaultValue={userInfo ? userInfo.billing_address.postal_code.toString() : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } })}
                                         />
-                                        {formValidationErrors.postal_code && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.postal_code_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.postal_code}</span>
+                                            <span>{formValidationErrors.postal_code_for_billing_address}</span>
                                         </p>}
                                     </section>
                                     <section className="phone-number mb-4">
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
-                                            className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Phone Number"
                                             defaultValue={userInfo ? userInfo.billing_address.phone_number.toString() : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } })}
                                         />
-                                        {formValidationErrors.phone_number && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.phone_number_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.phone_number}</span>
+                                            <span>{formValidationErrors.phone_number_for_billing_address}</span>
                                         </p>}
                                     </section>
                                     <section className="email mb-4">
                                         <h6>Email <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.email_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Email"
                                             defaultValue={userInfo ? userInfo.billing_address.email : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.email_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.email}</span>
+                                            <span>{formValidationErrors.email_for_billing_address}</span>
                                         </p>}
                                     </section>
                                 </form>
@@ -242,7 +404,7 @@ export default function Checkout() {
                                         id="flexCheckDefault"
                                         onChange={(e) => setIsShippingToOtherAddress(e.target.checked)}
                                     />
-                                    <label className="form-check-label" for="flexCheckDefault">
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
                                         Do You Want To Ship To A Different Address ?
                                     </label>
                                 </div>
@@ -253,28 +415,28 @@ export default function Checkout() {
                                                 <h6>First Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.first_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.first_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New First Name Here"
                                                     defaultValue={userInfo ? userInfo.shipping_address.first_name : ""}
                                                     onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, first_name: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.first_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.first_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.first_name}</span>
+                                                    <span>{formValidationErrors.first_name_for_shipping_address}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
                                                 <h6>Last Name <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.last_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.last_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter Last Name Here"
                                                     defaultValue={userInfo ? userInfo.shipping_address.last_name : ""}
                                                     onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, last_name: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.last_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.last_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.last_name}</span>
+                                                    <span>{formValidationErrors.last_name_for_shipping_address}</span>
                                                 </p>}
                                             </div>
                                         </div>
@@ -293,28 +455,28 @@ export default function Checkout() {
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Country / Area Here"
                                             defaultValue={userInfo ? userInfo.shipping_address.country : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, country: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.country && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.country_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.country}</span>
+                                            <span>{formValidationErrors.country_for_shipping_address}</span>
                                         </p>}
                                     </section>
                                     <section className="street-address mb-4">
                                         <h6>Street Addres / Neighborhood <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.street_address ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.street_address_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Street Address / Neighborhood"
                                             defaultValue={userInfo ? userInfo.shipping_address.street_address : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, street_address: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.street_address && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.street_address_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.street_address}</span>
+                                            <span>{formValidationErrors.street_address_for_shipping_address}</span>
                                         </p>}
                                     </section>
                                     <section className="apartment-number mb-4">
@@ -331,56 +493,56 @@ export default function Checkout() {
                                         <h6>City <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.city ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.city_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New City Name"
                                             defaultValue={userInfo ? userInfo.shipping_address.city : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, city: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.city && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.city_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.city}</span>
+                                            <span>{formValidationErrors.city_for_shipping_address}</span>
                                         </p>}
                                     </section>
                                     <section className="postal-code-number mb-4">
                                         <h6>Postal Code / Zip <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
-                                            className={`p-2 ${formValidationErrors.postal_code ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.postal_code_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Postal Code / Zip"
                                             defaultValue={userInfo ? userInfo.shipping_address.postal_code.toString() : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, postal_code: e.target.value } })}
                                         />
-                                        {formValidationErrors.postal_code && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.postal_code_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.postal_code}</span>
+                                            <span>{formValidationErrors.postal_code_for_shipping_address}</span>
                                         </p>}
                                     </section>
                                     <section className="phone-number mb-4">
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
-                                            className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Phone Number"
                                             defaultValue={userInfo ? userInfo.shipping_address.phone_number.toString() : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } })}
                                         />
-                                        {formValidationErrors.phone_number && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.phone_number_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.phone_number}</span>
+                                            <span>{formValidationErrors.phone_number_for_shipping_address}</span>
                                         </p>}
                                     </section>
                                     <section className="email mb-4">
                                         <h6>Email <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.email_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Email"
                                             defaultValue={userInfo ? userInfo.shipping_address.email : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, email: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.email_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.email}</span>
+                                            <span>{formValidationErrors.email_for_shipping_address}</span>
                                         </p>}
                                     </section>
                                 </form>}
@@ -403,7 +565,7 @@ export default function Checkout() {
                                         </div>
                                     </div>
                                     {allProductsData.map((product, productIndex) => (
-                                        <div className="row total pb-3 mb-5">
+                                        <div className="row total pb-3 mb-5" key={productIndex}>
                                             <div className="col-md-9 fw-bold p-0">
                                                 ( {product.name} ) x {product.quantity}
                                             </div>
@@ -436,13 +598,30 @@ export default function Checkout() {
                                             {pricesDetailsSummary.totalPriceAfterDiscount} $
                                         </div>
                                     </div>
-                                    
-                                    <button
+                                    {!isWaitStatus && !successMsg && !errorMsg && <button
                                         className="checkout-link p-2 w-100 d-block text-center fw-bold"
                                         onClick={confirmRequest}
                                     >
                                         Confirm Request
-                                    </button>
+                                    </button>}
+                                    {isWaitStatus && <button
+                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                        disabled
+                                    >
+                                        Waiting ...
+                                    </button>}
+                                    {errorMsg && <button
+                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                        disabled
+                                    >
+                                        {errorMsg}
+                                    </button>}
+                                    {successMsg && <button
+                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                        disabled
+                                    >
+                                        {successMsg}
+                                    </button>}
                                 </section>
                             </div>
                         </div>
