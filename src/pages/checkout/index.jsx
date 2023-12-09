@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import UPaymentsImage from "@/../public/images/UPayments.webp";
 import PayPalImage from "@/../public/images/PayPal.webp";
+import axios from "axios";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -87,7 +89,7 @@ export default function Checkout() {
         let errorsObject = validations.inputValuesValidation([
             {
                 name: "first_name_for_billing_address",
-                value: userInfo.billing_address.first_name,
+                value: userInfo ? userInfo.billing_address.first_name : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, First Name Field Can't Be Empty !!",
@@ -96,7 +98,7 @@ export default function Checkout() {
             },
             {
                 name: "last_name_for_billing_address",
-                value: userInfo.billing_address.last_name,
+                value: userInfo ? userInfo.billing_address.last_name : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -105,7 +107,7 @@ export default function Checkout() {
             },
             {
                 name: "country_for_billing_address",
-                value: userInfo.billing_address.country,
+                value: userInfo ? userInfo.billing_address.country : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -114,7 +116,7 @@ export default function Checkout() {
             },
             {
                 name: "street_address_for_billing_address",
-                value: userInfo.billing_address.street_address,
+                value: userInfo ? userInfo.billing_address.street_address : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -123,7 +125,7 @@ export default function Checkout() {
             },
             {
                 name: "city_for_billing_address",
-                value: userInfo.billing_address.city,
+                value: userInfo ? userInfo.billing_address.city : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -132,7 +134,7 @@ export default function Checkout() {
             },
             {
                 name: "postal_code_for_billing_address",
-                value: userInfo.billing_address.postal_code,
+                value: userInfo ? userInfo.billing_address.postal_code : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -141,7 +143,7 @@ export default function Checkout() {
             },
             {
                 name: "phone_number_for_billing_address",
-                value: userInfo.billing_address.phone_number,
+                value: userInfo ? userInfo.billing_address.phone_number : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -150,7 +152,7 @@ export default function Checkout() {
             },
             {
                 name: "email_for_billing_address",
-                value: userInfo.billing_address.email,
+                value: userInfo ? userInfo.billing_address.email : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Email Field Can't Be Empty !!",
@@ -162,7 +164,7 @@ export default function Checkout() {
             },
             isShippingToOtherAddress ? {
                 name: "first_name_for_shipping_address",
-                value: userInfo.shipping_address.first_name,
+                value: userInfo ? userInfo.shipping_address.first_name : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, First Name Field Can't Be Empty !!",
@@ -171,7 +173,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "last_name_for_shipping_address",
-                value: userInfo.shipping_address.last_name,
+                value: userInfo ? userInfo.shipping_address.last_name : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -180,7 +182,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "country_for_shipping_address",
-                value: userInfo.shipping_address.country,
+                value: userInfo ? userInfo.shipping_address.country : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -189,7 +191,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "street_address_for_shipping_address",
-                value: userInfo.shipping_address.street_address,
+                value: userInfo ? userInfo.shipping_address.street_address : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -198,7 +200,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "city_for_shipping_address",
-                value: userInfo.shipping_address.city,
+                value: userInfo ? userInfo.shipping_address.city : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -207,7 +209,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "postal_code_for_shipping_address",
-                value: userInfo.shipping_address.postal_code,
+                value: userInfo ? userInfo.shipping_address.postal_code : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -216,7 +218,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "phone_number_for_shipping_address",
-                value: userInfo.shipping_address.phone_number,
+                value: userInfo ? userInfo.shipping_address.phone_number : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -225,7 +227,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "email_for_shipping_address",
-                value: userInfo.shipping_address.email,
+                value: userInfo ? userInfo.shipping_address.email : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Email Field Can't Be Empty !!",
@@ -245,9 +247,9 @@ export default function Checkout() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
                 if (paymentMethod === "upayments") {
-
+                    console.log(userInfo);
                 } else {
-                    
+
                 }
             }
         } catch (err) {
@@ -344,7 +346,7 @@ export default function Checkout() {
                                             type="number"
                                             className="p-2"
                                             placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
-                                            defaultValue={userInfo ? userInfo.billing_address.apartment_number.toString() : ""}
+                                            defaultValue={userInfo ? userInfo.billing_address.apartment_number : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value } })}
                                         />
                                     </section>
@@ -368,7 +370,7 @@ export default function Checkout() {
                                             type="number"
                                             className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Postal Code / Zip"
-                                            defaultValue={userInfo ? userInfo.billing_address.postal_code.toString() : ""}
+                                            defaultValue={userInfo ? userInfo.billing_address.postal_code : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } })}
                                         />
                                         {formValidationErrors.postal_code_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
@@ -382,7 +384,7 @@ export default function Checkout() {
                                             type="number"
                                             className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Phone Number"
-                                            defaultValue={userInfo ? userInfo.billing_address.phone_number.toString() : ""}
+                                            defaultValue={userInfo ? userInfo.billing_address.phone_number : ""}
                                             onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } })}
                                         />
                                         {formValidationErrors.phone_number_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
