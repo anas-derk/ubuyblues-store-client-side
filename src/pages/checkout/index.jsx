@@ -250,8 +250,13 @@ export default function Checkout() {
                 if (paymentMethod === "upayments") {
                     let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`);
                     let result = await res.data;
-                    res = await axios.post(`${process.env.BASE_API_URL}/orders/payment`, {
-                        products: allProductsData,
+                    res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
+                        products: allProductsData.map((product) => ({
+                            name: product.name,
+                            description: product.description,
+                            price: product.price - product.discount,
+                            quantity: product.quantity,
+                        })),
                         order: {
                             id: result.orderId,
                             reference: result.orderNumber,
@@ -266,16 +271,29 @@ export default function Checkout() {
                             email: userInfo.billing_address.email,
                             mobile: userInfo.billing_address.phone_number,
                         },
-                        returnUrl:  `http://localhost:3000/confirmation?orderId=${result.orderId}`,
-                        cancelUrl: `http://localhost:3000/confirmation?orderId=${result.orderId}`,
-                        notificationUrl: "http://localhost:3000",
-                    })
+                        returnUrl: `http://localhost:3000/confirmation?orderId=${result.orderId}`,
+                        cancelUrl: `http://localhost:3000/error?orderId=${result.orderId}`,
+                        notificationUrl: `${process.env.BASE_API_URL}/orders/update-order/${result.orderId}`,
+                    });
+                    result = await res.data;
+                    console.log(result);
+                    setIsWaitStatus(false);
+                    setSuccessMsg("Please Wait While Redirect To Payment Page ...");
+                    let paymentSuccessTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(paymentSuccessTimeout);
+                    }, 3000);
                 } else {
 
                 }
             }
         } catch (err) {
-            console.log(err);
+            setIsWaitStatus(false);
+            setErrorMsg("Someting Went Wrong, Please Repeate The Process !!");
+            let paymentErrorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(paymentErrorTimeout);
+            }, 3000);
         }
     }
     return (
