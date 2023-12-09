@@ -7,6 +7,7 @@ import UPaymentsImage from "@/../public/images/UPayments.webp";
 import PayPalImage from "@/../public/images/PayPal.webp";
 import axios from "axios";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import { v4 as generateUniqueID } from "uuid";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -240,14 +241,35 @@ export default function Checkout() {
         ]);
         return errorsObject;
     }
-    const confirmRequest = () => {
+    const confirmRequest = async () => {
         try {
             const errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
                 if (paymentMethod === "upayments") {
-                    console.log(userInfo);
+                    let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`);
+                    let result = await res.data;
+                    res = await axios.post(`${process.env.BASE_API_URL}/orders/payment`, {
+                        products: allProductsData,
+                        order: {
+                            id: result.orderId,
+                            reference: result.orderNumber,
+                            description: "Purchase order received for Logitech K380 Keyboard",
+                            currency: "KWD",
+                            amount: pricesDetailsSummary.totalPriceAfterDiscount,
+                        },
+                        language: "en",
+                        customer: {
+                            uniqueId: generateUniqueID(),
+                            name: `${userInfo.billing_address.first_name} ${userInfo.billing_address.last_name}`,
+                            email: userInfo.billing_address.email,
+                            mobile: userInfo.billing_address.phone_number,
+                        },
+                        returnUrl:  `http://localhost:3000/confirmation?orderId=${result.orderId}`,
+                        cancelUrl: `http://localhost:3000/confirmation?orderId=${result.orderId}`,
+                        notificationUrl: "http://localhost:3000",
+                    })
                 } else {
 
                 }
