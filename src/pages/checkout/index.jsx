@@ -3,6 +3,8 @@ import Header from "@/components/Header";
 import validations from "../../../public/global_functions/validations";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
+import UPaymentsImage from "@/../public/images/UPayments.webp";
+import PayPalImage from "@/../public/images/PayPal.webp";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -19,6 +21,7 @@ export default function Checkout() {
     const [isWaitStatus, setIsWaitStatus] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("upayments");
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -241,6 +244,11 @@ export default function Checkout() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
+                if (paymentMethod === "upayments") {
+
+                } else {
+                    
+                }
             }
         } catch (err) {
             console.log(err);
@@ -590,7 +598,7 @@ export default function Checkout() {
                                             {pricesDetailsSummary.totalDiscount} $
                                         </div>
                                     </div>
-                                    <div className="row total-price-after-discount total pb-3 mb-5">
+                                    <div className="row total-price-after-discount total pb-3 mb-4">
                                         <div className="col-md-9 fw-bold p-0">
                                             Total Price After Discount
                                         </div>
@@ -598,6 +606,41 @@ export default function Checkout() {
                                             {pricesDetailsSummary.totalPriceAfterDiscount} $
                                         </div>
                                     </div>
+                                    {/* Start Payement Method Section */}
+                                    <section className="payment-method mb-4 border border-2 p-3">
+                                        <div className="row align-items-center border-bottom pb-3">
+                                            <div className="col-md-6 text-start">
+                                                <input
+                                                    type="radio"
+                                                    checked
+                                                    id="upayments-radio"
+                                                    className="me-2 radio-input"
+                                                    name="radioGroup"
+                                                    onChange={(e) => setPaymentMethod("upayments")}
+                                                />
+                                                <label htmlFor="#upayments-radio">UPayments</label>
+                                            </div>
+                                            <div className="col-md-6 text-end">
+                                                <img src={UPaymentsImage.src} alt="UPayments Image" />
+                                            </div>
+                                        </div>
+                                        <div className="row align-items-center pt-3">
+                                            <div className="col-md-6 text-start">
+                                                <input
+                                                    type="radio"
+                                                    id="paypal-radio"
+                                                    className="me-2 radio-input"
+                                                    name="radioGroup"
+                                                    onChange={(e) => setPaymentMethod("paypal")}
+                                                />
+                                                <label htmlFor="#upayments-radio">PayPal</label>
+                                            </div>
+                                            <div className="col-md-6 text-end">
+                                                <img src={PayPalImage.src} alt="PayPal Image" />
+                                            </div>
+                                        </div>
+                                    </section>
+                                    {/* End Payement Method Section */}
                                     {!isWaitStatus && !successMsg && !errorMsg && <button
                                         className="checkout-link p-2 w-100 d-block text-center fw-bold"
                                         onClick={confirmRequest}
