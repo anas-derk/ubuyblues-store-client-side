@@ -275,7 +275,7 @@ export default function Checkout() {
                             email: userInfo.billing_address.email,
                             mobile: userInfo.billing_address.phone_number,
                         },
-                        returnUrl: `http://localhost:3000/confirmation`,
+                        returnUrl: `${process.env.WEBSITE_URL}/confirmation`,
                         cancelUrl: `https://error.com`,
                         notificationUrl: `${process.env.BASE_API_URL}/orders/update-order/${result.orderId}`,
                     });

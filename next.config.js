@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   env: {
     BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api3.outcircle2023.com",
+    WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api2.outcircle2023.com",
   },
   async headers() {
     return [
