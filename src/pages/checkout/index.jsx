@@ -8,6 +8,7 @@ import PayPalImage from "@/../public/images/PayPal.webp";
 import axios from "axios";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { v4 as generateUniqueID } from "uuid";
+import { useRouter } from "next/router";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -25,6 +26,7 @@ export default function Checkout() {
     const [successMsg, setSuccessMsg] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("upayments");
+    const router = useRouter();
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -259,12 +261,14 @@ export default function Checkout() {
                         })),
                         order: {
                             id: result.orderId,
-                            reference: result.orderNumber,
                             description: "Purchase order received for Logitech K380 Keyboard",
                             currency: "KWD",
                             amount: pricesDetailsSummary.totalPriceAfterDiscount,
                         },
                         language: "en",
+                        reference: {
+                            id: "202210101202210101"
+                        },
                         customer: {
                             uniqueId: generateUniqueID(),
                             name: `${userInfo.billing_address.first_name} ${userInfo.billing_address.last_name}`,
@@ -276,13 +280,14 @@ export default function Checkout() {
                         notificationUrl: `${process.env.BASE_API_URL}/orders/update-order/${result.orderId}`,
                     });
                     result = await res.data;
-                    console.log(result);
                     setIsWaitStatus(false);
-                    setSuccessMsg("Please Wait While Redirect To Payment Page ...");
-                    let paymentSuccessTimeout = setTimeout(() => {
-                        setSuccessMsg("");
-                        clearTimeout(paymentSuccessTimeout);
-                    }, 3000);
+                    if (result.status && result.message === "Data received successfully") {
+                        setSuccessMsg("Please Wait While Redirect To Payment Page ...");
+                        let paymentSuccessTimeout = setTimeout(() => {
+                            router.push(result.data.link);
+                            clearTimeout(paymentSuccessTimeout);
+                        }, 3000);
+                    }
                 } else {
 
                 }
