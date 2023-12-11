@@ -9,6 +9,7 @@ import axios from "axios";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { v4 as generateUniqueID } from "uuid";
 import { useRouter } from "next/router";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function Checkout() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -249,9 +250,9 @@ export default function Checkout() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
+                let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`);
+                let result = await res.data;
                 if (paymentMethod === "upayments") {
-                    let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`);
-                    let result = await res.data;
                     res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
                         products: allProductsData.map((product) => ({
                             name: product.name,
@@ -659,59 +660,67 @@ export default function Checkout() {
                                             <div className="col-md-6 text-start">
                                                 <input
                                                     type="radio"
-                                                    checked
+                                                    checked={paymentMethod === "upayments"}
                                                     id="upayments-radio"
                                                     className="me-2 radio-input"
                                                     name="radioGroup"
-                                                    onChange={(e) => setPaymentMethod("upayments")}
+                                                    onClick={() => setPaymentMethod("upayments")}
                                                 />
-                                                <label htmlFor="#upayments-radio">UPayments</label>
+                                                <label htmlFor="upayments-radio" onClick={() => setPaymentMethod("upayments")}>UPayments</label>
                                             </div>
                                             <div className="col-md-6 text-end">
                                                 <img src={UPaymentsImage.src} alt="UPayments Image" />
                                             </div>
+                                            {!isWaitStatus && !successMsg && !errorMsg && paymentMethod === "upayments" && <button
+                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                onClick={confirmRequest}
+                                            >
+                                                Confirm Request
+                                            </button>}
+                                            {isWaitStatus && <button
+                                                className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                                disabled
+                                            >
+                                                Waiting ...
+                                            </button>}
+                                            {errorMsg && <button
+                                                className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                                disabled
+                                            >
+                                                {errorMsg}
+                                            </button>}
+                                            {successMsg && <button
+                                                className="checkout-link p-2 w-100 d-block text-center fw-bold"
+                                                disabled
+                                            >
+                                                {successMsg}
+                                            </button>}
                                         </div>
-                                        <div className="row align-items-center pt-3">
+                                        <div className={`row align-items-center pt-3 ${paymentMethod === "paypal" ? "mb-3" : ""}`}>
                                             <div className="col-md-6 text-start">
                                                 <input
                                                     type="radio"
+                                                    checked={paymentMethod === "paypal"}
                                                     id="paypal-radio"
                                                     className="me-2 radio-input"
                                                     name="radioGroup"
-                                                    onChange={(e) => setPaymentMethod("paypal")}
+                                                    onClick={() => setPaymentMethod("paypal")}
                                                 />
-                                                <label htmlFor="#upayments-radio">PayPal</label>
+                                                <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>PayPal</label>
                                             </div>
                                             <div className="col-md-6 text-end">
                                                 <img src={PayPalImage.src} alt="PayPal Image" />
                                             </div>
                                         </div>
+                                        {paymentMethod === "paypal" && <PayPalScriptProvider options={{
+                                            clientId: "test",
+                                            currency: "USD",
+                                            intent: "capture",
+                                        }}>
+                                            <PayPalButtons style={{ layout: "vertical" }} />
+                                        </PayPalScriptProvider>}
                                     </section>
                                     {/* End Payement Method Section */}
-                                    {!isWaitStatus && !successMsg && !errorMsg && <button
-                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                        onClick={confirmRequest}
-                                    >
-                                        Confirm Request
-                                    </button>}
-                                    {isWaitStatus && <button
-                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                        disabled
-                                    >
-                                        Waiting ...
-                                    </button>}
-                                    {errorMsg && <button
-                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                        disabled
-                                    >
-                                        {errorMsg}
-                                    </button>}
-                                    {successMsg && <button
-                                        className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                        disabled
-                                    >
-                                        {successMsg}
-                                    </button>}
                                 </section>
                             </div>
                         </div>
