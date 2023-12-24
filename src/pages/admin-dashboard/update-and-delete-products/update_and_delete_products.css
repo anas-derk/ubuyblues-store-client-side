@@ -48,11 +48,3 @@
 .update-and-delete-product .overlay .gallery-images-box .add-new-product-images-for-gallery h3 {
   width: fit-content;
 }
-
-.update-and-delete-product .products-box {
-  overflow: auto;
-}
-
-.update-and-delete-product .products-box .products-table {
-  width: 140%;
-}

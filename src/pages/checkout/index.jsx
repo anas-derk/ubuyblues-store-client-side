@@ -252,45 +252,41 @@ export default function Checkout() {
                 setIsWaitStatus(true);
                 let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`);
                 let result = await res.data;
-                if (paymentMethod === "upayments") {
-                    res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
-                        products: allProductsData.map((product) => ({
-                            name: product.name,
-                            description: product.description,
-                            price: product.price - product.discount,
-                            quantity: product.quantity,
-                        })),
-                        order: {
-                            id: result.orderId,
-                            description: "Purchase order received for Logitech K380 Keyboard",
-                            currency: "KWD",
-                            amount: pricesDetailsSummary.totalPriceAfterDiscount,
-                        },
-                        language: "en",
-                        reference: {
-                            id: "202210101202210101"
-                        },
-                        customer: {
-                            uniqueId: generateUniqueID(),
-                            name: `${userInfo.billing_address.first_name} ${userInfo.billing_address.last_name}`,
-                            email: userInfo.billing_address.email,
-                            mobile: userInfo.billing_address.phone_number,
-                        },
-                        returnUrl: `${process.env.WEBSITE_URL}/confirmation`,
-                        cancelUrl: `https://error.com`,
-                        notificationUrl: `${process.env.BASE_API_URL}/orders/update-order/${result.orderId}`,
-                    });
-                    result = await res.data;
-                    setIsWaitStatus(false);
-                    if (result.status && result.message === "Data received successfully") {
-                        setSuccessMsg("Please Wait While Redirect To Payment Page ...");
-                        let paymentSuccessTimeout = setTimeout(() => {
-                            router.push(result.data.link);
-                            clearTimeout(paymentSuccessTimeout);
-                        }, 3000);
-                    }
-                } else {
-
+                res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
+                    products: allProductsData.map((product) => ({
+                        name: product.name,
+                        description: product.description,
+                        price: product.price - product.discount,
+                        quantity: product.quantity,
+                    })),
+                    order: {
+                        id: result.orderId,
+                        description: "Purchase order received for Logitech K380 Keyboard",
+                        currency: "KWD",
+                        amount: pricesDetailsSummary.totalPriceAfterDiscount,
+                    },
+                    language: "en",
+                    reference: {
+                        id: "202210101202210101"
+                    },
+                    customer: {
+                        uniqueId: generateUniqueID(),
+                        name: `${userInfo.billing_address.first_name} ${userInfo.billing_address.last_name}`,
+                        email: userInfo.billing_address.email,
+                        mobile: userInfo.billing_address.phone_number,
+                    },
+                    returnUrl: `${process.env.WEBSITE_URL}/confirmation`,
+                    cancelUrl: `https://error.com`,
+                    notificationUrl: `${process.env.BASE_API_URL}/orders/update-order/${result.orderId}`,
+                });
+                result = await res.data;
+                setIsWaitStatus(false);
+                if (result.status && result.message === "Data received successfully") {
+                    setSuccessMsg("Please Wait While Redirect To Payment Page ...");
+                    let paymentSuccessTimeout = setTimeout(() => {
+                        router.push(result.data.link);
+                        clearTimeout(paymentSuccessTimeout);
+                    }, 3000);
                 }
             }
         } catch (err) {
@@ -301,6 +297,12 @@ export default function Checkout() {
                 clearTimeout(paymentErrorTimeout);
             }, 3000);
         }
+    }
+    const createPayPalOrder = async () => {
+        // console.log("aa");
+    }
+    const approveOnPayPalOrder = async () => {
+
     }
     return (
         <div className="checkout">
@@ -664,7 +666,7 @@ export default function Checkout() {
                                                     id="upayments-radio"
                                                     className="me-2 radio-input"
                                                     name="radioGroup"
-                                                    onClick={() => setPaymentMethod("upayments")}
+                                                    onChange={() => setPaymentMethod("upayments")}
                                                 />
                                                 <label htmlFor="upayments-radio" onClick={() => setPaymentMethod("upayments")}>UPayments</label>
                                             </div>
@@ -704,7 +706,7 @@ export default function Checkout() {
                                                     id="paypal-radio"
                                                     className="me-2 radio-input"
                                                     name="radioGroup"
-                                                    onClick={() => setPaymentMethod("paypal")}
+                                                    onChange={() => setPaymentMethod("paypal")}
                                                 />
                                                 <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>PayPal</label>
                                             </div>
@@ -717,7 +719,9 @@ export default function Checkout() {
                                             currency: "USD",
                                             intent: "capture",
                                         }}>
-                                            <PayPalButtons style={{ layout: "vertical" }} />
+                                            <PayPalButtons
+                                                style={{ layout: "vertical" }}
+                                            />
                                         </PayPalScriptProvider>}
                                     </section>
                                     {/* End Payement Method Section */}

@@ -75,7 +75,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         <span>Categories</span>
                     </button>
                 </li>
-                {activeLinks === "categories-managment" && <ul className="links-list">
+                {activeLinks === "orders-managment" && <ul className="links-list">
                     <li className={`link-item ps-3 p-2 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
                         <Link
                             href={{
@@ -105,6 +105,20 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         </Link>
                     </li>
                 </ul>}
+                <li
+                    className={`managment-item ps-3 p-2 ${activeLinks === "orders-managment" ? "active" : ""}`}
+                >
+                    <MdProductionQuantityLimits className="me-2" />
+                    <Link
+                        href={{
+                            pathname: "/admin-dashboard/orders-managment",
+                            query: {
+                                activeParentLink: "orders-managment",
+                            }
+                        }}
+                        className="managment-button btn p-0"
+                    >Orders Managment</Link>
+                </li>
             </ul>
         </aside>
     );
