@@ -220,10 +220,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                         key={i}
                         className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
                         onClick={async () => {
-                            setIsFilteringOrdersStatus(true);
-                            setAllOrdersInsideThePage(await getAllOrdersInsideThePage(i, pageSize));
+                            setAllProductsInsideThePage(await getAllProductsInsideThePage(i, pageSize));
                             setCurrentPage(i);
-                            setIsFilteringOrdersStatus(false);
                         }}
                     >
                         {i}
@@ -240,10 +238,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                     key={totalPagesCount}
                     className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
                     onClick={async () => {
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
                         setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
                     }}
                 >
                     {totalPagesCount}
@@ -266,10 +262,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                     className="navigate-to-specific-page-form w-25"
                     onSubmit={async (e) => {
                         e.preventDefault();
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
                         setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
                     }}
                 >
                     <input
