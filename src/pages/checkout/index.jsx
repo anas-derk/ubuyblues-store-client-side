@@ -298,11 +298,19 @@ export default function Checkout() {
             }, 3000);
         }
     }
-    const createPayPalOrder = async () => {
-        // console.log("aa");
+    const createPayPalOrder = async (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: "10.00",
+                    }
+                }
+            ]
+        });
     }
     const approveOnPayPalOrder = async () => {
-
+        console.log("aa");
     }
     return (
         <div className="checkout">
@@ -714,13 +722,17 @@ export default function Checkout() {
                                                 <img src={PayPalImage.src} alt="PayPal Image" />
                                             </div>
                                         </div>
-                                        {paymentMethod === "paypal" && <PayPalScriptProvider options={{
-                                            clientId: "test",
-                                            currency: "USD",
-                                            intent: "capture",
-                                        }}>
+                                        {paymentMethod === "paypal" && <PayPalScriptProvider
+                                            options={{
+                                                clientId: "test",
+                                                currency: "USD",
+                                                intent: "capture",
+                                            }}
+                                        >
                                             <PayPalButtons
                                                 style={{ layout: "vertical" }}
+                                                createOrder={createPayPalOrder}
+                                                onApprove={approveOnPayPalOrder}
                                             />
                                         </PayPalScriptProvider>}
                                     </section>
