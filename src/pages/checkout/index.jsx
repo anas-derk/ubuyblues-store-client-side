@@ -27,6 +27,7 @@ export default function Checkout() {
     const [successMsg, setSuccessMsg] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("upayments");
+    const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
     const router = useRouter();
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
@@ -298,6 +299,13 @@ export default function Checkout() {
             }, 3000);
         }
     }
+    const handleSelectPaypalPayment = () => {
+        const errorsObject = validateFormFields();
+        setFormValidationErrors(errorsObject);
+        if (Object.keys(errorsObject).length == 0) {
+            setIsDisplayPaypalPaymentButtons(true);
+        }
+    }
     const createPayPalOrder = async (data, actions) => {
         return actions.order.create({
             purchase_units: [
@@ -335,7 +343,7 @@ export default function Checkout() {
                                                     className={`p-2 ${formValidationErrors.first_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New First Name Here"
                                                     defaultValue={userInfo ? userInfo.billing_address.first_name : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() } })}
+                                                    onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                 />
                                                 {formValidationErrors.first_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -349,7 +357,7 @@ export default function Checkout() {
                                                     className={`p-2 ${formValidationErrors.last_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter Last Name Here"
                                                     defaultValue={userInfo ? userInfo.billing_address.last_name : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() } })}
+                                                    onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                 />
                                                 {formValidationErrors.last_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -365,7 +373,7 @@ export default function Checkout() {
                                             className="p-2"
                                             placeholder="Please Enter New Company Name Here"
                                             defaultValue={userInfo ? userInfo.billing_address.company_name : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, company_name: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, company_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="country mb-4">
@@ -375,7 +383,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Country / Area Here"
                                             defaultValue={userInfo ? userInfo.billing_address.country : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.country_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -389,7 +397,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.street_address_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Street Address / Neighborhood"
                                             defaultValue={userInfo ? userInfo.billing_address.street_address : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.street_address_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -403,7 +411,7 @@ export default function Checkout() {
                                             className="p-2"
                                             placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
                                             defaultValue={userInfo ? userInfo.billing_address.apartment_number : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="city-number mb-4">
@@ -413,7 +421,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.city_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New City Name"
                                             defaultValue={userInfo ? userInfo.billing_address.city : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.city_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -427,7 +435,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Postal Code / Zip"
                                             defaultValue={userInfo ? userInfo.billing_address.postal_code : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.postal_code_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -441,7 +449,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Phone Number"
                                             defaultValue={userInfo ? userInfo.billing_address.phone_number : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.phone_number_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -455,7 +463,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.email_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Email"
                                             defaultValue={userInfo ? userInfo.billing_address.email : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.email_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -468,7 +476,7 @@ export default function Checkout() {
                                         className="form-check-input"
                                         type="checkbox"
                                         id="flexCheckDefault"
-                                        onChange={(e) => setIsShippingToOtherAddress(e.target.checked)}
+                                        onChange={(e) => { setIsShippingToOtherAddress(e.target.checked); setIsDisplayPaypalPaymentButtons(false); }}
                                     />
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
                                         Do You Want To Ship To A Different Address ?
@@ -484,7 +492,7 @@ export default function Checkout() {
                                                     className={`p-2 ${formValidationErrors.first_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New First Name Here"
                                                     defaultValue={userInfo ? userInfo.shipping_address.first_name : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, first_name: e.target.value.trim() } })}
+                                                    onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, first_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
                                                 {formValidationErrors.first_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -498,7 +506,7 @@ export default function Checkout() {
                                                     className={`p-2 ${formValidationErrors.last_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter Last Name Here"
                                                     defaultValue={userInfo ? userInfo.shipping_address.last_name : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, last_name: e.target.value.trim() } })}
+                                                    onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, last_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
                                                 {formValidationErrors.last_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -514,7 +522,7 @@ export default function Checkout() {
                                             className="p-2"
                                             placeholder="Please Enter New Company Name Here"
                                             defaultValue={userInfo ? userInfo.shipping_address.company_name : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, company_name: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, company_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="country mb-4">
@@ -524,7 +532,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Country / Area Here"
                                             defaultValue={userInfo ? userInfo.shipping_address.country : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, country: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, country: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.country_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -538,7 +546,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.street_address_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Street Address / Neighborhood"
                                             defaultValue={userInfo ? userInfo.shipping_address.street_address : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, street_address: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, street_address: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.street_address_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -552,7 +560,7 @@ export default function Checkout() {
                                             className="p-2"
                                             placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
                                             defaultValue={userInfo ? userInfo.shipping_address.apartment_number.toString() : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, apartment_number: e.target.value } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="city-number mb-4">
@@ -562,7 +570,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.city_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New City Name"
                                             defaultValue={userInfo ? userInfo.shipping_address.city : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, city: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.city_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -576,7 +584,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.postal_code_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Postal Code / Zip"
                                             defaultValue={userInfo ? userInfo.shipping_address.postal_code.toString() : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, postal_code: e.target.value } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, postal_code: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.postal_code_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -590,7 +598,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Phone Number"
                                             defaultValue={userInfo ? userInfo.shipping_address.phone_number.toString() : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.phone_number_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -604,7 +612,7 @@ export default function Checkout() {
                                             className={`p-2 ${formValidationErrors.email_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder="Please Enter New Email"
                                             defaultValue={userInfo ? userInfo.shipping_address.email : ""}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, email: e.target.value.trim() } })}
+                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.email_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -722,7 +730,7 @@ export default function Checkout() {
                                                 <img src={PayPalImage.src} alt="PayPal Image" />
                                             </div>
                                         </div>
-                                        {paymentMethod === "paypal" && <PayPalScriptProvider
+                                        {paymentMethod === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
                                             options={{
                                                 clientId: "test",
                                                 currency: "USD",
@@ -735,6 +743,12 @@ export default function Checkout() {
                                                 onApprove={approveOnPayPalOrder}
                                             />
                                         </PayPalScriptProvider>}
+                                        {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button
+                                            className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                            onClick={handleSelectPaypalPayment}
+                                        >
+                                            Confirm Request
+                                        </button>}
                                     </section>
                                     {/* End Payement Method Section */}
                                 </section>
