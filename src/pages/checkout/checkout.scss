@@ -1,4 +1,26 @@
 .checkout{
+    .page-content{
+        .container-fluid{
+            > .row{
+                @media (max-width: 991px) {
+                    gap: 30px;
+                }
+                > div:last-of-type{
+                    position: sticky;
+                    top: 20px;
+                }
+                .first-and-last-name{
+                    .row{
+                        > div:first-of-type{
+                            @media (max-width: 767px) {
+                                margin-bottom: 1.5rem;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     .radio-input{
         width: fit-content;
     }

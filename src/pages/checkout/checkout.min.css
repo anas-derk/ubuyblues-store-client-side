@@ -1,1 +1,1 @@
-.checkout .radio-input{width:fit-content}
+@media (max-width: 991px){.checkout .page-content .container-fluid>.row{gap:30px}}.checkout .page-content .container-fluid>.row>div:last-of-type{position:sticky;top:20px}@media (max-width: 767px){.checkout .page-content .container-fluid>.row .first-and-last-name .row>div:first-of-type{margin-bottom:1.5rem}}.checkout .radio-input{width:fit-content}
