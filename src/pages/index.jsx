@@ -19,25 +19,45 @@ import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar, FaStar } from "react-icons/fa";
 
 export default function Home() {
+
     const [userId, setUserId] = useState("");
+
     const [userInfo, setUserInfo] = useState("");
+
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
+
     const [allProductsData, setAllProductsData] = useState([]);
+
     const [allCategories, setAllCategories] = useState([]);
+
     const [productAddingId, setProductAddingId] = useState("");
+
     const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
+
     const [isSuccessAddToCart, setIsSuccessAddToCart] = useState(false);
+
     const [errorInAddToCart, setErrorInAddToCart] = useState("");
+
     const [favoriteProductAddingId, setFavoriteProductAddingId] = useState("");
+
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
+
     const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
+    
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
+    
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
+    
     const [productIndex, setProductIndex] = useState(-1);
+    
     const [productQuantity, setProductQuantity] = useState(1);
+    
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
+    
     const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
+    
     const router = useRouter();
+    
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userId = localStorage.getItem("asfour-store-user-id");

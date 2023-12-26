@@ -12,23 +12,37 @@ import { useRouter } from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function Checkout() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
     const [allProductsData, setAllProductsData] = useState([]);
+
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
         totalPriceBeforeDiscount: 0,
         totalDiscount: 0,
         totalPriceAfterDiscount: 0,
     });
+
     const [userInfo, setUserInfo] = useState("");
+
     const [requestNotes, setRequestNotes] = useState("");
+
     const [isShippingToOtherAddress, setIsShippingToOtherAddress] = useState(false);
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
     const [isWaitStatus, setIsWaitStatus] = useState(false);
+
     const [successMsg, setSuccessMsg] = useState("");
+
     const [errorMsg, setErrorMsg] = useState("");
+
     const [paymentMethod, setPaymentMethod] = useState("upayments");
+
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
+
     const router = useRouter();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -73,6 +87,7 @@ export default function Checkout() {
             setIsLoadingPage(false);
         }
     }, []);
+
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
         allProductsData.forEach((product) => {
@@ -80,6 +95,7 @@ export default function Checkout() {
         });
         return tempTotalPriceBeforeDiscount;
     }
+
     const calcTotalOrderDiscount = (allProductsData) => {
         let tempTotalDiscount = 0;
         allProductsData.forEach((product) => {
@@ -87,9 +103,11 @@ export default function Checkout() {
         });
         return tempTotalDiscount;
     }
+
     const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
         return totalPriceBeforeDiscount - totalDiscount;
     }
+
     const validateFormFields = () => {
         let errorsObject = validations.inputValuesValidation([
             {
@@ -245,13 +263,50 @@ export default function Checkout() {
         ]);
         return errorsObject;
     }
+
     const confirmRequest = async () => {
         try {
             const errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`);
+                let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, {
+                    order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
+                    checkout_status: "incomplete",
+                    billing_address: {
+                        first_name: userInfo.billing_address.first_name,
+                        last_name: userInfo.billing_address.last_name,
+                        company_name: userInfo.billing_address.company_name,
+                        country: userInfo.billing_address.country,
+                        street_address: userInfo.billing_address.street_address,
+                        apartment_number: userInfo.billing_address.apartment_number,
+                        city: userInfo.billing_address.city,
+                        postal_code: userInfo.billing_address.postal_code,
+                        phone: userInfo.billing_address.phone_number,
+                        email: userInfo.billing_address.email,
+                    },
+                    shipping_address: {
+                        first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
+                        last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
+                        company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
+                        country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
+                        street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
+                        apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
+                        city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
+                        postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
+                        phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
+                        email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
+                    },
+                    order_products: allProductsData.map((product) => ({
+                        name: product.name,
+                        unit_price: product.price,
+                        discount: product.discount,
+                        total_amount: product.price * product.quantity,
+                        quantity: product.quantity,
+                        image_path: product.imagePath,
+                    })),
+                    requestNotes,
+                });
                 let result = await res.data;
                 res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
                     products: allProductsData.map((product) => ({
@@ -263,7 +318,7 @@ export default function Checkout() {
                     order: {
                         id: result.orderId,
                         description: "Purchase order received for Logitech K380 Keyboard",
-                        currency: "KWD",
+                        currency: "USD",
                         amount: pricesDetailsSummary.totalPriceAfterDiscount,
                     },
                     language: "en",
@@ -278,7 +333,7 @@ export default function Checkout() {
                     },
                     returnUrl: `${process.env.WEBSITE_URL}/confirmation`,
                     cancelUrl: `https://error.com`,
-                    notificationUrl: `${process.env.BASE_API_URL}/orders/update-order/${result.orderId}`,
+                    notificationUrl: `${process.env.BASE_API_URL}/orders/update-upayments-order/${result.orderId}`,
                 });
                 result = await res.data;
                 setIsWaitStatus(false);
@@ -299,6 +354,7 @@ export default function Checkout() {
             }, 3000);
         }
     }
+
     const handleSelectPaypalPayment = () => {
         const errorsObject = validateFormFields();
         setFormValidationErrors(errorsObject);
@@ -306,6 +362,7 @@ export default function Checkout() {
             setIsDisplayPaypalPaymentButtons(true);
         }
     }
+
     const createPayPalOrder = async (data, actions) => {
         return actions.order.create({
             purchase_units: [
@@ -317,9 +374,16 @@ export default function Checkout() {
             ]
         });
     }
+
     const approveOnPayPalOrder = async () => {
-        console.log("aa");
+        try{
+            const res = await axios.post(`${process.env.BASE_API_URL}/orders/`)
+        }
+        catch(err) {
+            throw Error(err);
+        }
     }
+
     return (
         <div className="checkout">
             <Head>
