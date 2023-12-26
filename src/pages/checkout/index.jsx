@@ -41,6 +41,8 @@ export default function Checkout() {
 
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
 
+    const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
+
     const router = useRouter();
 
     useEffect(() => {
@@ -264,13 +266,24 @@ export default function Checkout() {
         return errorsObject;
     }
 
+    const createNewOrder = async (orderDetails) => {
+        try {
+            let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
+            let result = await res.data;
+            return result;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
     const confirmRequest = async () => {
         try {
             const errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, {
+                let result = await createNewOrder({
                     order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
                     checkout_status: "incomplete",
                     billing_address: {
@@ -307,7 +320,6 @@ export default function Checkout() {
                     })),
                     requestNotes,
                 });
-                let result = await res.data;
                 res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
                     products: allProductsData.map((product) => ({
                         name: product.name,
@@ -368,7 +380,7 @@ export default function Checkout() {
             purchase_units: [
                 {
                     amount: {
-                        value: "10.00",
+                        value: pricesDetailsSummary.totalPriceAfterDiscount,
                     }
                 }
             ]
@@ -376,10 +388,49 @@ export default function Checkout() {
     }
 
     const approveOnPayPalOrder = async () => {
-        try{
-            const res = await axios.post(`${process.env.BASE_API_URL}/orders/`)
+        try {
+            setIsWaitApproveOnPayPalOrder(true);
+            const result = await createNewOrder({
+                order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
+                checkout_status: "checkout_successful",
+                billing_address: {
+                    first_name: userInfo.billing_address.first_name,
+                    last_name: userInfo.billing_address.last_name,
+                    company_name: userInfo.billing_address.company_name,
+                    country: userInfo.billing_address.country,
+                    street_address: userInfo.billing_address.street_address,
+                    apartment_number: userInfo.billing_address.apartment_number,
+                    city: userInfo.billing_address.city,
+                    postal_code: userInfo.billing_address.postal_code,
+                    phone: userInfo.billing_address.phone_number,
+                    email: userInfo.billing_address.email,
+                },
+                shipping_address: {
+                    first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
+                    last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
+                    company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
+                    country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
+                    street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
+                    apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
+                    city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
+                    postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
+                    phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
+                    email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
+                },
+                order_products: allProductsData.map((product) => ({
+                    name: product.name,
+                    unit_price: product.price,
+                    discount: product.discount,
+                    total_amount: product.price * product.quantity,
+                    quantity: product.quantity,
+                    image_path: product.imagePath,
+                })),
+                requestNotes,
+            });
+            router.push(`/confirmation?orderId=${result.orderId}`);
         }
-        catch(err) {
+        catch (err) {
+            setIsWaitApproveOnPayPalOrder(false);
             throw Error(err);
         }
     }
@@ -390,6 +441,10 @@ export default function Checkout() {
                 <title>Asfour Store - Checkout</title>
             </Head>
             {!isLoadingPage ? <>
+                {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">
+                    <span class="loader mb-4"></span>
+                    <p>Please Wait ...</p>
+                </div>}
                 <Header />
                 <div className="page-content text-white p-4">
                     <div className="container-fluid">
