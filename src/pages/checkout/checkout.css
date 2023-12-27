@@ -15,6 +15,15 @@
   }
 }
 
-.checkout .radio-input {
+@media (max-width: 767px) {
+  .checkout .page-content .container-fluid .payment-methods .row {
+    gap: 10px;
+  }
+  .checkout .page-content .container-fluid .payment-methods .row .checkout-link {
+    width: 90% !important;
+  }
+}
+
+.checkout .page-content .radio-input {
   width: fit-content;
 }

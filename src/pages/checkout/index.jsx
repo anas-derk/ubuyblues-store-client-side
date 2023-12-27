@@ -277,7 +277,7 @@ export default function Checkout() {
         }
     }
 
-    const confirmRequest = async () => {
+    const handleSelectUPaymentsPayment = async () => {
         try {
             const errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
@@ -747,7 +747,7 @@ export default function Checkout() {
                                 ></textarea>
                             </div>
                             <div className="col-xl-6">
-                                <section className="order-total border border-3 p-4 ps-5 pe-5 text-start" id="order-total">
+                                <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-start" id="order-total">
                                     <h5 className="fw-bold mb-5 text-center">Your Request</h5>
                                     <div className="row total pb-3 mb-5">
                                         <div className="col-md-9 fw-bold p-0">
@@ -791,8 +791,8 @@ export default function Checkout() {
                                             {pricesDetailsSummary.totalPriceAfterDiscount} $
                                         </div>
                                     </div>
-                                    {/* Start Payement Method Section */}
-                                    <section className="payment-method mb-4 border border-2 p-3">
+                                    {/* Start Payement Methods Section */}
+                                    <section className="payment-methods mb-4 border border-2 p-3">
                                         <div className="row align-items-center border-bottom pb-3">
                                             <div className="col-md-6 text-start">
                                                 <input
@@ -805,12 +805,12 @@ export default function Checkout() {
                                                 />
                                                 <label htmlFor="upayments-radio" onClick={() => setPaymentMethod("upayments")}>UPayments</label>
                                             </div>
-                                            <div className="col-md-6 text-end">
+                                            <div className="col-md-6 text-md-end">
                                                 <img src={UPaymentsImage.src} alt="UPayments Image" />
                                             </div>
                                             {!isWaitStatus && !successMsg && !errorMsg && paymentMethod === "upayments" && <button
                                                 className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={confirmRequest}
+                                                onClick={handleSelectUPaymentsPayment}
                                             >
                                                 Confirm Request
                                             </button>}
@@ -845,7 +845,7 @@ export default function Checkout() {
                                                 />
                                                 <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>PayPal</label>
                                             </div>
-                                            <div className="col-md-6 text-end">
+                                            <div className="col-md-6 text-md-end">
                                                 <img src={PayPalImage.src} alt="PayPal Image" />
                                             </div>
                                         </div>
@@ -869,7 +869,7 @@ export default function Checkout() {
                                             Confirm Request
                                         </button>}
                                     </section>
-                                    {/* End Payement Method Section */}
+                                    {/* End Payement Methods Section */}
                                 </section>
                             </div>
                         </div>

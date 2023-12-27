@@ -19,9 +19,19 @@
                     }
                 }
             }
+            .payment-methods{
+                .row{
+                    @media (max-width: 767px) {
+                        gap: 10px;
+                        .checkout-link{
+                            width: 90% !important;
+                        }
+                    }
+                }
+            }
         }
-    }
-    .radio-input{
-        width: fit-content;
+        .radio-input{
+            width: fit-content;
+        }
     }
 }
