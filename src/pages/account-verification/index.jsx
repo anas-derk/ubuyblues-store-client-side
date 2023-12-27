@@ -9,29 +9,42 @@ import validations from "../../../public/global_functions/validations";
 import { MdOutlineErrorOutline } from "react-icons/md";
 
 export default function AccountVerification({ email }) {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
     const [accountVerificationCodeCharactersList, setAccountVerificationCodeCharactersList] = useState([]);
+
     const [minutes, setMinutes] = useState(1);
+
     const [seconds, setSeconds] = useState(59);
+
     const [accountVerificationCode, setAccountVerificationCode] = useState("");
+
     const [isWaitCheckingStatus, setIsWaitCheckingStatus] = useState(false);
+
     const [isWaitResendTheCode, setIsWaitResendTheCode] = useState(false);
+
     const [errorMsg, setErrorMsg] = useState("");
+
     const [successMsg, setSuccessMsg] = useState("");
+
     const [errorMsgOnLoading, setErrorMsgOnLoading] = useState("");
+
     const router = useRouter();
+
     useEffect(() => {
         if (validations.isEmail(email)) {
             sendTheCodeToUserEmail()
                 .then(() => setIsLoadingPage(false))
-                .catch((err) => {
-                    setErrorMsgOnLoading(err);
+                .catch(() => {
+                    setIsLoadingPage(false);
                 });
         } else {
             setErrorMsgOnLoading("Sorry, Invalid Email Address !!");
             setIsLoadingPage(false);
         }
     }, []);
+
     const sendTheCodeToUserEmail = async () => {
         try {
             setIsWaitResendTheCode(true);
@@ -55,7 +68,7 @@ export default function AccountVerification({ email }) {
                     setErrorMsgOnLoading(result);
                 }
             } else if (errorMsg === "Network Error") {
-                setErrorMsgOnLoading(result);
+                setErrorMsgOnLoading(errorMsg);
             } else {
                 setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorMsgTimeout = setTimeout(() => {
@@ -65,11 +78,11 @@ export default function AccountVerification({ email }) {
             }
         }
     }
+
     const checkAccountVerificationCode = async (e) => {
         try {
             e.preventDefault();
             setIsWaitCheckingStatus(true);
-            console.log(accountVerificationCodeCharactersList.join(""), accountVerificationCode)
             if (accountVerificationCodeCharactersList.join("") === accountVerificationCode) {
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}`);
                 const result = await res.data;
@@ -97,6 +110,7 @@ export default function AccountVerification({ email }) {
             }, 2000);
         }
     }
+
     const handleWritePartOfVerificationCode = (character, inputIndex) => {
         accountVerificationCodeCharactersList[inputIndex] = character;
         if (inputIndex < 3) {
@@ -108,6 +122,7 @@ export default function AccountVerification({ email }) {
             checkAccountVerificationCode(event);
         }
     }
+
     const handlePasteVerificationCode = (word) => {
         if (word.length > 0) {
             for (let i = 0; i < 4; i++) {
@@ -117,6 +132,7 @@ export default function AccountVerification({ email }) {
             }
         }
     }
+
     const handleTimeCounter = () => {
         let secondsTemp = 59, minutesTemp = 1;
         let timeCounter = setInterval(() => {
@@ -133,6 +149,7 @@ export default function AccountVerification({ email }) {
             }
         }, 1000);
     }
+    
     return (
         <div className="account-verification">
             <Head>

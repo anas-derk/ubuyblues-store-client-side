@@ -91,18 +91,19 @@ export default function UserAuth() {
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`);
                 const result = await res.data;
                 setIsLoginingStatus(false);
-                if (typeof result === "string") {
+                if (result === "Sorry, Email Or Password Incorrect !!") {
                     setErrorMsg(result);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
                     }, 5000);
                 } else {
-                    localStorage.setItem("asfour-store-user-id", result._id);
-                    router.push("/");
+                    if (result.isVerified) {
+                        localStorage.setItem("asfour-store-user-id", result._id);
+                        router.push("/");
+                    } else router.push(`/account-verification?email=${result.email}`);
                 }
             } catch (err) {
-                console.log(err);
                 setIsLoginingStatus(false);
                 setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
                 let errorTimeout = setTimeout(() => {

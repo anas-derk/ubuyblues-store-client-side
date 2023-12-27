@@ -98,7 +98,7 @@
 }
 
 .account-verification .page-content .error-msg-on-loading .error-box {
-  width: 75%;
+  width: 80%;
   background-color: var(--main-color-two);
   border-left: 10px solid;
   border-right: 10px solid;
