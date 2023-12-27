@@ -104,9 +104,9 @@ export default function OrderDetails() {
                 <AdminDashboardSideBar />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Content Section */}
-                <section className="page-content d-flex justify-content-center align-items-center flex-column text-center">
+                <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-4 pb-4">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Orders Details</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Orders Details Page</h1>
                         {orderDetails.checkout_status === "checkout_successful" ? <div className="order-details-box p-3 data-box">
                             <table className="order-data-table mb-5 data-table managment-table">
                                 <thead>
