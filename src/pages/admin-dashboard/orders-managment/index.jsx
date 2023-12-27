@@ -450,7 +450,15 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                                     >
                                                         Sorry, Error In Process
                                                     </button>}
-                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <Link href={`/dashboard/admin/admin-panel/orders-managment/${order._id}`} className="btn btn-success d-block mx-auto mb-4 global-button">Show Details</Link>}
+                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <Link
+                                                        href={{
+                                                            pathname: `/admin-dashboard/orders-managment/${order._id}`,
+                                                            // query: {
+                                                            //     activeParentLink: "orders-managment",
+                                                            // }
+                                                        }}
+                                                        className="btn btn-success d-block mx-auto mb-4 global-button"
+                                                    >Show Details</Link>}
                                                     {!order.isReturned && (order.checkout_status === "AUTHORIZED" || order.checkout_status === "CAPTURED") && <button className="btn btn-danger d-block mx-auto mb-3 global-button" onClick={() => addOrderAsReturned(order._id)}>Add As Returned</button>}
                                                 </td>
                                             </tr>
