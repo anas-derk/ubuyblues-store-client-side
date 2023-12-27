@@ -51,6 +51,10 @@ textarea{
 table{
     th, td{
         font-size: 14px;
+        border: 1px solid;
+        padding: 10px;
+        text-align: center;
+        background-color: #FFF;
     }
 }
 
@@ -226,6 +230,7 @@ table{
     background: rgba($color: #000, $alpha: 0.7);
     z-index: 2;
 }
+
 .loader {
     width: 48px;
     height: 48px;
@@ -236,6 +241,7 @@ table{
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
 }
+
 @keyframes rotation {
     0% {
         transform: rotate(0deg);
@@ -267,6 +273,7 @@ table{
         height: 12px;
     }
 }
+
 @keyframes rotate {
     0% , 50% , 100%{ transform: rotate(0deg)}
     25% { transform: rotate(90deg)}

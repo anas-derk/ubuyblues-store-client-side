@@ -386,8 +386,6 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                         <tr>
                                             <th>Order Number</th>
                                             <th>Order Id</th>
-                                            <th>Klarna Order Id</th>
-                                            <th>Klarna Reference</th>
                                             <th>Checkout Status</th>
                                             <th>Status</th>
                                             <th>Order Total Amount</th>
@@ -400,8 +398,6 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                             <tr key={order._id}>
                                                 <td>{order.orderNumber}</td>
                                                 <td>{order._id}</td>
-                                                <td>{order.klarnaOrderId}</td>
-                                                <td>{order.klarnaReference}</td>
                                                 <td>{order.checkout_status}</td>
                                                 <td>
                                                     <h6 className="fw-bold">{order.status}</h6>

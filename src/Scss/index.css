@@ -52,6 +52,10 @@ textarea {
 
 table th, table td {
   font-size: 14px;
+  border: 1px solid;
+  padding: 10px;
+  text-align: center;
+  background-color: #FFF;
 }
 
 .password-field-box,
