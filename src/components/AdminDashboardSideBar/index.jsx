@@ -6,12 +6,16 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 
 export default function AdminDashboardSideBar({ activeParentLink, activeChildLink }) {
+
     const [activeLinks, setActiveLinks] = useState(activeParentLink);
+
     const router = useRouter();
+    
     const adminLogout = () => {
         localStorage.removeItem("asfour-store-admin-user-id");
         router.push("/admin-dashboard/login");
     }
+    
     return (
         <aside className="admin-dashboard-side-bar pt-3">
             <Link href="/admin-dashboard" className="d-block text-center mb-3">

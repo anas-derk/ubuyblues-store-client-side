@@ -7,16 +7,21 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 
 export default function Header() {
+
     const [userId, setUserId] = useState("");
+
     const router = useRouter();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         setUserId(userId);
     }, []);
+
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");
         router.push("/auth");
     }
+    
     return (
         <header className="global-header">
             <div className="container-fluid text-end">

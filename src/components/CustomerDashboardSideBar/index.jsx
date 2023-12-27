@@ -7,11 +7,14 @@ import { MdOutlineFavoriteBorder, MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 
 export default function CustomerDashboardSideBar() {
+
     const router = useRouter();
+
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");
         router.push("/auth");
     }
+    
     return (
         <aside className="customer-dashboard-side-bar bg-white">
             <ul className="managment-customer-account-link-list">
