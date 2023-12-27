@@ -79,6 +79,36 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         <span>Categories</span>
                     </button>
                 </li>
+                {activeLinks === "categories-managment" && <ul className="links-list">
+                    <li className={`link-item ps-3 p-2 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
+                        <Link
+                            href={{
+                                pathname: "/admin-dashboard/add-new-category",
+                                query: {
+                                    activeParentLink: "categories-managment",
+                                    activeChildLink: "add-new-category"
+                                }
+                            }}
+                            className="managment-link p-0"
+                        >
+                            <span>Add New</span>
+                        </Link>
+                    </li>
+                    <li className={`link-item ps-3 p-2 ${activeChildLink === "update-and-delete-categories" ? "active" : ""}`}>
+                        <Link
+                            href={{
+                                pathname: "/admin-dashboard/update-and-delete-categories",
+                                query: {
+                                    activeParentLink: "products-managment",
+                                    activeChildLink: "update-and-delete-categories"
+                                }
+                            }}
+                            className="managment-link p-0"
+                        >
+                            <span>Update / Delete</span>
+                        </Link>
+                    </li>
+                </ul>}
                 {activeLinks === "orders-managment" && <ul className="links-list">
                     <li className={`link-item ps-3 p-2 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
                         <Link

@@ -50,14 +50,6 @@ textarea {
   font-size: 13px;
 }
 
-table th, table td {
-  font-size: 14px;
-  border: 1px solid;
-  padding: 10px;
-  text-align: center;
-  background-color: #FFF;
-}
-
 .password-field-box,
 .email-field-box,
 .confirm-password-field-box,
@@ -98,15 +90,28 @@ table th, table td {
   transform: translateY(-80%);
 }
 
+.managment-table {
+  background-color: #FFF;
+}
+
 .managment-table td, .managment-table th {
   border: 1px solid;
   padding: 15px;
   text-align: center;
+  font-size: 13px;
 }
 
 .managment-table textarea {
   resize: none;
   height: 150px;
+}
+
+.managment-table h6 {
+  font-size: 13px;
+}
+
+.filters h6 {
+  font-size: 13px;
 }
 
 .loading-box {

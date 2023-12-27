@@ -305,7 +305,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                             <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                                 <h5 className="section-name fw-bold text-center">Filters: </h5>
                                 <hr />
-                                <div className="row">
+                                <div className="row mb-4">
                                     <div className="col-md-4 d-flex align-items-center">
                                         <h6 className="me-2 mb-0 fw-bold text-center">Order Number</h6>
                                         <input
@@ -327,15 +327,6 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                         />
                                     </div>
                                     <div className="col-md-4 d-flex align-items-center">
-                                        <h6 className="me-2 mb-0 fw-bold text-center">Klarna Reference</h6>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Pleae Enter Reference"
-                                            onChange={(e) => setFilters({ ...filters, klarnaReference: e.target.value.trim() })}
-                                        />
-                                    </div>
-                                    <div className="col-md-4 d-flex align-items-center">
                                         <h6 className="me-2 mb-0 fw-bold text-center">Status</h6>
                                         <select
                                             className="select-order-status form-select"
@@ -348,7 +339,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                             <option value="completed">Completed</option>
                                         </select>
                                     </div>
-                                    <div className="col-md-4 d-flex align-items-center mt-4">
+                                    <div className="col-md-6 d-flex align-items-center mt-4">
                                         <h6 className="me-2 mb-0 fw-bold text-center">Customer Name</h6>
                                         <input
                                             type="text"
@@ -357,7 +348,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                             onChange={(e) => setFilters({ ...filters, customerName: e.target.value.trim() })}
                                         />
                                     </div>
-                                    <div className="col-md-4 d-flex align-items-center mt-4">
+                                    <div className="col-md-6 d-flex align-items-center mt-4">
                                         <h6 className="me-2 mb-0 fw-bold text-center">Customer Email</h6>
                                         <input
                                             type="email"
@@ -366,22 +357,22 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                             onChange={(e) => setFilters({ ...filters, email: e.target.value.trim() })}
                                         />
                                     </div>
-                                    {!isFilteringOrdersStatus && <button
-                                        className="btn btn-success d-block w-25 mx-auto mt-2"
-                                        onClick={() => filterOrders()}
-                                    >
-                                        Filter
-                                    </button>}
-                                    {isFilteringOrdersStatus && <button
-                                        className="btn btn-success d-block w-25 mx-auto mt-2"
-                                        disabled
-                                    >
-                                        Filtering ...
-                                    </button>}
                                 </div>
+                                {!isFilteringOrdersStatus && <button
+                                    className="btn btn-success d-block w-25 mx-auto mt-2"
+                                    onClick={() => filterOrders()}
+                                >
+                                    Filter
+                                </button>}
+                                {isFilteringOrdersStatus && <button
+                                    className="btn btn-success d-block w-25 mx-auto mt-2"
+                                    disabled
+                                >
+                                    Filtering ...
+                                </button>}
                             </section>
                             {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
-                                <table className="orders-data-table mb-4 data-table">
+                                <table className="orders-data-table mb-4 data-table managment-table">
                                     <thead>
                                         <tr>
                                             <th>Order Number</th>
@@ -424,43 +415,43 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                                 <td>{getDateFormated(order.added_date)}</td>
                                                 <td>
                                                     {!isUpdatingStatus && !isDeletingStatus && orderIndex !== selectedOrderIndex && <button
-                                                        className="btn btn-info d-block mx-auto mb-3"
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
                                                         onClick={() => updateOrderData(orderIndex)}
                                                     >
                                                         Update
                                                     </button>}
                                                     {isUpdatingStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-info d-block mx-auto mb-3"
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Updating ...
                                                     </button>}
                                                     {isSuccessStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-success d-block mx-auto mb-3"
+                                                        className="btn btn-success d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Success
                                                     </button>}
                                                     {!isUpdatingStatus && !isDeletingStatus && orderIndex !== selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         onClick={() => deleteOrder(orderIndex)}
                                                     >
                                                         Delete
                                                     </button>}
                                                     {isDeletingStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Deleting ...
                                                     </button>}
                                                     {isErrorStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Sorry, Error In Process
                                                     </button>}
-                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <Link href={`/dashboard/admin/admin-panel/orders-managment/${order._id}`} className="btn btn-success d-block mx-auto mb-4">Show Details</Link>}
-                                                    {!order.isReturned && (order.checkout_status === "AUTHORIZED" || order.checkout_status === "CAPTURED") && <button className="btn btn-danger d-block mx-auto mb-3" onClick={() => addOrderAsReturned(order._id)}>Add As Returned</button>}
+                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <Link href={`/dashboard/admin/admin-panel/orders-managment/${order._id}`} className="btn btn-success d-block mx-auto mb-4 global-button">Show Details</Link>}
+                                                    {!order.isReturned && (order.checkout_status === "AUTHORIZED" || order.checkout_status === "CAPTURED") && <button className="btn btn-danger d-block mx-auto mb-3 global-button" onClick={() => addOrderAsReturned(order._id)}>Add As Returned</button>}
                                                 </td>
                                             </tr>
                                         ))}
