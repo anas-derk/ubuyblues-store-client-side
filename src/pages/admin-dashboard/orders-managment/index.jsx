@@ -232,7 +232,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
         setIsUpdatingStatus(true);
         setSelectedOrderIndex(orderIndex);
         try {
-            const res = await axios.put(`${process.env.BASE_API_URL}/orders/update-order/${allOrdersInsideThePage[orderIndex]._id}`, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/orders/update-order/${allOrdersInsideThePage[orderIndex]._id}`, {
                 order_amount: allOrdersInsideThePage[orderIndex].order_amount,
                 status: allOrdersInsideThePage[orderIndex].status,
             });
