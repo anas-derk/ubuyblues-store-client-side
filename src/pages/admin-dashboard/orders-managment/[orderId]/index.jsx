@@ -107,8 +107,8 @@ export default function OrderDetails() {
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Orders Details</h1>
-                        {Array.isArray(orderDetails.order_lines) && orderDetails.order_lines.length > 0 ? <div className="order-details-box p-3 data-box">
-                            <table className="order-data-table mb-5 data-table">
+                        {orderDetails.checkout_status === "checkout_successful" ? <div className="order-details-box p-3 data-box">
+                            <table className="order-data-table mb-5 data-table managment-table">
                                 <thead>
                                     <tr>
                                         <th>Reference / Product Id</th>
@@ -121,9 +121,9 @@ export default function OrderDetails() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {orderDetails.order_lines.map((orderProduct, orderProductIndex) => (
-                                        <tr key={orderProduct.reference}>
-                                            <td>{orderProduct.reference}</td>
+                                    {orderDetails.order_products.map((orderProduct, orderProductIndex) => (
+                                        <tr key={orderProduct._id}>
+                                            <td>{orderProduct._id}</td>
                                             <td>
                                                 <input
                                                     type="number"
@@ -158,7 +158,7 @@ export default function OrderDetails() {
                                             </td>
                                             <td>
                                                 <img
-                                                    src={orderProduct.image_url}
+                                                    src={`${process.env.BASE_API_URL}/${orderProduct.image_path}`}
                                                     alt="product Image !!"
                                                     width="100"
                                                     height="100"
