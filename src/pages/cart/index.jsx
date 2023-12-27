@@ -7,16 +7,17 @@ import Link from "next/link";
 import { PiSmileySad } from "react-icons/pi";
 
 export default function Cart() {
+
     const [allProductsData, setAllProductsData] = useState([]);
+    
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
         totalPriceBeforeDiscount: 0,
         totalDiscount: 0,
         totalPriceAfterDiscount: 0,
     });
-    const [errMsg, setErrorMsg] = useState("");
-    const [successMsg, setSuccessMsg] = useState("");
-    const [isWaitStatus, setIsWaitStatus] = useState(false);
+
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
     useEffect(() => {
         let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
         if (Array.isArray(allProductsData)) {
@@ -45,6 +46,7 @@ export default function Cart() {
             }
         }
     }, []);
+
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
         allProductsData.forEach((product) => {
@@ -52,6 +54,7 @@ export default function Cart() {
         });
         return tempTotalPriceBeforeDiscount;
     }
+
     const calcTotalOrderDiscount = (allProductsData) => {
         let tempTotalDiscount = 0;
         allProductsData.forEach((product) => {
@@ -59,9 +62,11 @@ export default function Cart() {
         });
         return tempTotalDiscount;
     }
+
     const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
         return totalPriceBeforeDiscount - totalDiscount;
     }
+
     const updateProductQuantity = (allProductsData, productId, operation) => {
         switch (operation) {
             case "increase-product-quantity": {
@@ -87,6 +92,7 @@ export default function Cart() {
             }
         }
     }
+
     const calcTotalPrices = (allProductsData) => {
         const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
         const totalDiscount = calcTotalOrderDiscount(allProductsData);
@@ -97,15 +103,18 @@ export default function Cart() {
             totalPriceAfterDiscount,
         });
     }
+
     const deleteProduct = (productId) => {
         const newProductsData = allProductsData.filter((product) => product.id != productId);
         updateCartInLocalStorage(newProductsData);
         calcTotalPrices(newProductsData);
         setAllProductsData(newProductsData);
     }
+
     const updateCartInLocalStorage = (newProductsData) => {
         localStorage.setItem("asfour-store-user-cart", JSON.stringify(newProductsData));
     }
+
     return (
         <div className="cart d-flex flex-column justify-content-center">
             <Head>
@@ -114,7 +123,6 @@ export default function Cart() {
             <Header />
             <div className="page-content text-white p-4 text-center">
                 <div className="container-fluid">
-                    {(errMsg || successMsg) && <p className={`result-update-cart-msg text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
                     {allProductsData.length > 0 ? <div className="row align-items-center">
                         <div className="col-xl-8">
                             {windowInnerWidth > 991 && <section className="products w-100">
