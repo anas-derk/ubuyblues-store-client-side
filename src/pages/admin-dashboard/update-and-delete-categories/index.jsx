@@ -49,7 +49,6 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
             }
         }
         catch (err) {
-            console.log(err.response.data);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {

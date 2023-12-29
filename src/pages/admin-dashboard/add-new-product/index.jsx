@@ -51,7 +51,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
             }
         }
         catch (err) {
-            console.log(err.response.data);
+            setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
