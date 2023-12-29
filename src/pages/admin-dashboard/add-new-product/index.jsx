@@ -70,7 +70,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                     <PiHandWavingThin className="me-2" />
                     Hi, Mr Asfour In Your Add New Product Page
                 </h1>
-                <form className="add-new-product-form w-50" onSubmit={(e) => addNewProduct(e, productData)}>
+                {allCategories.length > 0 ? <form className="add-new-product-form w-50" onSubmit={(e) => addNewProduct(e, productData)}>
                     <input
                         type="text"
                         className="form-control product-name-field p-2 mb-4"
@@ -154,7 +154,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                     >
                         {successMsg}
                     </button>}
-                </form>
+                </form> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Categories !!</p>}
             </div>
         </div>
     );

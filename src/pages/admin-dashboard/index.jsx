@@ -2,7 +2,7 @@ import Head from "next/head";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 
@@ -12,7 +12,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-admin-user-id");
         if (userId) {
-            Axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
+            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
                     if (result === "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
