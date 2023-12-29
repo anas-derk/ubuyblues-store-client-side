@@ -441,7 +441,7 @@ export default function Home() {
                         </Link>
                     </div>
                     <div className="logo-box m-0 d-flex align-items-center justify-content-center">
-                        <BsFillCartPlusFill className="logo-icon" style={{ fontSize: 100 }} />
+                        <BsFillCartPlusFill className="logo-icon" />
                     </div>
                 </section>
                 <div className="container-fluid">
@@ -477,7 +477,7 @@ export default function Home() {
                     <section className="some-of-products mb-5">
                         <div className="row">
                             {allProductsData.length > 0 && getLastSevenProducts().map((product, index) => (
-                                <div className="col-md-3" key={product._id}>
+                                <div className="col-md-4" key={product._id}>
                                     <div className="product-details p-3 text-center">
                                         {isItStillDiscountForProduct(product.startDiscountPeriod, product.endDiscountPeriod) && <div className="discount-timer-box">Discount</div>}
                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
@@ -519,24 +519,6 @@ export default function Home() {
                                     </div>
                                 </div>
                             ))}
-                        </div>
-                    </section>
-                    <section className="best-group mb-5 p-3 text-white">
-                        <h2 className="section-name text-center mb-4">Best Group</h2>
-                        <div className="row">
-                            <div className="col-md-3">
-                                <div className="product-details p-3 text-center">
-                                    <img src={productImageTest.src} alt="product image !!" className="mb-3" />
-                                    <div className="details">
-                                        <h4 className="product-name">Product Name</h4>
-                                        <h4>Price: $</h4>
-                                        {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2">Add To Cart</button>}
-                                        {isWaitAddToCart && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
-                                        {errorInAddToCart && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
-                                        {isSuccessAddToCart && <button className="success-to-cart-btn p-2 btn-success" disabled>Display Your Cart</button>}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </section>
                 </div>
