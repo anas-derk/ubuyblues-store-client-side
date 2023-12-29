@@ -21,7 +21,7 @@ export default function Header() {
         localStorage.removeItem("asfour-store-user-id");
         router.push("/auth");
     }
-    
+
     return (
         <header className="global-header">
             <div className="container-fluid text-end">
@@ -34,11 +34,15 @@ export default function Header() {
                             <BsPersonVcard className="home-icon global-header-icon me-5" />
                         </Link>
                     </>}
-                    <AiOutlineHome className="home-icon global-header-icon" />
+                    <Link href="/">
+                        <AiOutlineHome className="home-icon global-header-icon" />
+                    </Link>
                 </div>
                 <div className="languages-and-others-stores p-3">
                     <IoEarth className="earth-icon global-header-icon me-5" />
-                    <AiOutlineHome className="home-icon global-header-icon" />
+                    <Link href="/">
+                        <AiOutlineHome className="home-icon global-header-icon" />
+                    </Link>
                 </div>
             </div>
         </header>
