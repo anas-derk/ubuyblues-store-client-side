@@ -4,7 +4,6 @@ import Link from "next/link";
 import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
-import productImageTest from "../../public/images/productImageTest.jpg";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
@@ -12,11 +11,11 @@ import { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
-import { IoIosArrowForward, IoEarth } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
-import { FaRegStar, FaStar } from "react-icons/fa";
+import { FaRegStar } from "react-icons/fa";
 
 export default function Home() {
 
