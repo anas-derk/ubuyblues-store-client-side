@@ -9,5 +9,11 @@ footer .asfour-logo-for-footer {
 }
 
 footer .link-btn {
-  font-size: 20px;
+  font-size: 16px;
+}
+
+@media (max-width: 767px) {
+  footer .row {
+    gap: 30px;
+  }
 }

@@ -171,6 +171,13 @@
             }
         }
     }
+    .products-display-managment{
+        .row{
+            @media (max-width: 767px) {
+                gap: 30px;
+            }
+        }
+    }
     .search{
         .search-icon{
             background-color: #FFF;
@@ -214,6 +221,11 @@
         }
     }
     .categories{
+        .row{
+            @media (max-width: 767px) {
+                gap: 30px;
+            }
+        }
         border-radius: 15px;
         .category-details{
             background-color: var(--main-color-two);

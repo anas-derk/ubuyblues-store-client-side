@@ -43,21 +43,21 @@ export default function Home() {
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
 
     const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
-    
+
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
-    
+
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
-    
+
     const [productIndex, setProductIndex] = useState(-1);
-    
+
     const [productQuantity, setProductQuantity] = useState(1);
-    
+
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
-    
+
     const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
-    
+
     const router = useRouter();
-    
+
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userId = localStorage.getItem("asfour-store-user-id");
@@ -445,25 +445,27 @@ export default function Home() {
                     </div>
                 </section>
                 <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-md-3">
-                            <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
-                        </div>
-                        <div className="col-md-9">
-                            <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
-                                <Link href="#categories" className="display-product-link me-5 text-center">
-                                    <BiSolidCategory className="icon mb-2" />
-                                    <h5 className="link-name">Category</h5>
-                                </Link>
-                                <Link href="#latest-added-products" className="display-product-link me-5 text-center">
-                                    <BiSolidCategory className="icon mb-2" />
-                                    <h5 className="link-name">Last Added</h5>
-                                </Link>
-                                <Link href="#best-seller" className="display-product-link me-5 text-center">
-                                    <BiSolidCategory className="icon mb-2" />
-                                    <h5 className="link-name">Best</h5>
-                                </Link>
-                            </section>
+                    <div className="products-display-managment">
+                        <div className="row">
+                            <div className="col-md-3">
+                                <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
+                            </div>
+                            <div className="col-md-9">
+                                <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
+                                    <Link href="#categories" className="display-product-link me-5 text-center">
+                                        <BiSolidCategory className="icon mb-2" />
+                                        <h5 className="link-name">Category</h5>
+                                    </Link>
+                                    <Link href="#latest-added-products" className="display-product-link me-5 text-center">
+                                        <BiSolidCategory className="icon mb-2" />
+                                        <h5 className="link-name">Last Added</h5>
+                                    </Link>
+                                    <Link href="#best-seller" className="display-product-link me-5 text-center">
+                                        <BiSolidCategory className="icon mb-2" />
+                                        <h5 className="link-name">Best</h5>
+                                    </Link>
+                                </section>
+                            </div>
                         </div>
                     </div>
                     <section className="search mb-5 text-end">

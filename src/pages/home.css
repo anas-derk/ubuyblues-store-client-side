@@ -181,6 +181,12 @@
   font-size: 70px;
 }
 
+@media (max-width: 767px) {
+  .home .products-display-managment .row {
+    gap: 30px;
+  }
+}
+
 .home .search .search-icon {
   background-color: #FFF;
   width: 50px;
@@ -225,6 +231,12 @@
 
 .home .categories {
   border-radius: 15px;
+}
+
+@media (max-width: 767px) {
+  .home .categories .row {
+    gap: 30px;
+  }
 }
 
 .home .categories .category-details {
