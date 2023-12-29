@@ -154,7 +154,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                     >
                         {successMsg}
                     </button>}
-                </form> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Categories !!</p>}
+                </form> : <p className="alert alert-danger w-75 mx-auto">Sorry, Not Found Any Products !!, Please Enter At Least One Category ...</p>}
             </div>
         </div>
     );

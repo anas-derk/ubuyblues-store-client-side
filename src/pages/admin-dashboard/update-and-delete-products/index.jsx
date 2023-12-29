@@ -507,7 +507,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                             </tbody>
                         </table>
                         {totalPagesCount > 0 && paginationBar()}
-                    </div> : <p className="alert alert-danger w-75 mx-auto">Sorry, Not Found Any Products !!, Please Enter At Least One Category ...</p>}
+                    </div> : <p className="alert alert-danger w-75 mx-auto">Sorry, Not Found Any Products !!</p>}
                 </div>
             </> : <LoaderPage />}
         </div>
