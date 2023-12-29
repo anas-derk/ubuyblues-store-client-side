@@ -62,7 +62,7 @@ export default function Home() {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userId = localStorage.getItem("asfour-store-user-id");
         setUserId(userId);
-        axios.get(`${process.env.BASE_API_URL}/products/all-products`)
+        axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=1&pageSize=5`)
             .then(async (res) => {
                 setAllProductsData(res.data);
                 const res1 = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);

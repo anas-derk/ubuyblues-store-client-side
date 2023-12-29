@@ -172,7 +172,7 @@ export default function Cart() {
                                     </tbody>
                                 </table>
                             </section>}
-                            {windowInnerWidth < 991 && <section className="products w-100">
+                            {windowInnerWidth <= 991 && <section className="products w-100">
                                 <a href="#order-total" className="cart-total-btn-box">
                                     Go To Cart Totals
                                 </a>
