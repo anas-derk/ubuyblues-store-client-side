@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Logo from "../../../../public/images/Logo-ASFOUR-White-footer.png";
+import Logo from "../../../../public/images/UbuyBlues_Logo_merged_White.png";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";

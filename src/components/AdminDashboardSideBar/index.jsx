@@ -1,4 +1,4 @@
-import Logo from "../../../public/images/Logo-ASFOUR-White-footer.png";
+import Logo from "../../../public/images/UbuyBlues_Logo_merged_White.png";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import Link from "next/link";
 import { useState } from "react";
