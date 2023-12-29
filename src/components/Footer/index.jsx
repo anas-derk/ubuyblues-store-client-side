@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AsfourLogoForFooter from "../../../public/images/Logo-ASFOUR-White-footer.png";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_White.png";
 
 export default function Footer() {
     return (
@@ -7,7 +7,7 @@ export default function Footer() {
             <div className="container-fluid">
                 <div className="row align-items-center">
                     <div className="col-md-4">
-                        <img src={AsfourLogoForFooter.src} alt="asfour logo for footer" className="asfour-logo-for-footer" />
+                        <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="asfour-logo-for-footer" />
                     </div>
                     <div className="col-md-4">
                         <Link href="/" className="text-dark d-block link-btn mb-2 fw-bold">About Us</Link>

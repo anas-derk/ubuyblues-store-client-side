@@ -144,12 +144,20 @@
   position: relative;
   border-top: 4px solid var(--main-color-two);
   border-bottom: 4px solid var(--main-color-two);
-  margin-bottom: 100px;
+  margin-bottom: 120px;
+}
+
+.home .links-and-logo .links-box {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 30px;
+  justify-content: center;
+  gap: 20px;
 }
 
 @media (max-width: 1199px) {
   .home .links-and-logo .links-box {
-    text-align: end;
+    justify-content: end;
   }
 }
 
@@ -162,16 +170,29 @@
   color: var(--main-color-two);
 }
 
+@media (max-width: 380px) {
+  .home .links-and-logo .link-icon {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 767px) {
+  .home .links-and-logo .link-icon {
+    font-size: 40px;
+  }
+}
+
 .home .links-and-logo .logo-box {
   position: absolute;
-  width: 250px;
-  height: 250px;
+  width: 272px;
+  height: 272px;
   left: 10%;
   top: 50%;
-  transform: translateY(-50%);
-  border-radius: 50%;
-  background-color: #FFF;
-  border: 4px solid var(--main-color-two);
+  transform: translateY(calc(-50% + 5px));
+  background-image: url("../../public/images/logoCircle.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 @media (max-width: 767px) {
@@ -181,8 +202,10 @@
   }
 }
 
-.home .links-and-logo .logo-box .logo-icon {
-  font-size: 100px;
+@media (max-width: 380px) {
+  .home .links-and-logo .logo-box {
+    left: 5%;
+  }
 }
 
 .home .navigate-link-for-display-products {

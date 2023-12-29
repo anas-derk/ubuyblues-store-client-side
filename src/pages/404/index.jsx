@@ -1,5 +1,5 @@
 import Head from "next/head";
-import AsfourLogo from "../../../public/images/Logo-ASFOUR-White-footer.png";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_White.png";
 import { BiError } from "react-icons/bi";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ export default function PageNotFound() {
                 <title>Asfour Store - Page Not Found</title>
             </Head>
             <div className="page-content p-4 text-center">
-                <img src={AsfourLogo.src} alt="asfour logo !" className="mb-4 d-block mx-auto" />
+                <img src={ubuybluesLogo.src} alt="asfour logo !" className="mb-4 d-block mx-auto" />
                 <BiError className="error-404-icon" />
                 <h1 className="mb-3">Sorry,</h1>
                 <h2 className="mb-3">this page could not be found.</h2>

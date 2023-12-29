@@ -16,6 +16,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
+import logoWithWhiteCircle from "../../public/images/logoCircle.png";
 
 export default function Home() {
 
@@ -100,7 +101,7 @@ export default function Home() {
         } else if (navigateOrientation === "down") {
             window.scrollTo({
                 behavior: "smooth",
-                top: window.innerHeight,
+                top: document.querySelector("footer").offsetTop,
                 left: 0,
             });
         }
@@ -427,21 +428,19 @@ export default function Home() {
             </div>}
             {/* End Overlay */}
             <div className="page-content">
-                <section className="links-and-logo bg-white pt-3 pb-3 text-center">
-                    <div className="links-box">
+                <section className="links-and-logo bg-white">
+                    <div className="links-box d-flex">
                         <Link href="/">
-                            <FaShoppingCart className="cart-icon link-icon me-5" />
+                            <FaShoppingCart className="cart-icon link-icon" />
                         </Link>
                         <Link href="/customer-dashboard/wish-list">
-                            <BsFillSuitHeartFill className="cart-icon link-icon me-5" />
+                            <BsFillSuitHeartFill className="cart-icon link-icon" />
                         </Link>
                         <Link href="/cart">
-                            <BsFillCartPlusFill className="cart-icon link-icon me-5" />
+                            <BsFillCartPlusFill className="cart-icon link-icon" />
                         </Link>
                     </div>
-                    <div className="logo-box m-0 d-flex align-items-center justify-content-center">
-                        <BsFillCartPlusFill className="logo-icon" />
-                    </div>
+                    <div className="logo-box m-0 d-flex align-items-center justify-content-center"></div>
                 </section>
                 <div className="container-fluid">
                     <div className="products-display-managment">
