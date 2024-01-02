@@ -40,7 +40,7 @@ export default function CustomerAddreses() {
     return (
         <div className="customer-addreses customer-dashboard">
             <Head>
-                <title>Asfour Store - Customer Addreses</title>
+                <title>Ubuyblues Store - Customer Addreses</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

@@ -297,7 +297,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
     return (
         <div className="orders-managment admin-dashboard">
             <Head>
-                <title>Tavlorify Store - Orders Managment</title>
+                <title>Ubuyblues Store - Orders Managment</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}

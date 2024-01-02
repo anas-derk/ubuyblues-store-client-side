@@ -36,7 +36,7 @@ export default function AdminDashboard() {
     return (
         <div className="main admin-dashboard">
             <Head>
-                <title>Asfour Store - Admin Dashboard</title>
+                <title>Ubuyblues Store - Admin Dashboard</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar />

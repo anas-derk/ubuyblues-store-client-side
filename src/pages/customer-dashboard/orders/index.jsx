@@ -43,7 +43,7 @@ export default function CustomerOrders() {
     return (
         <div className="customer-orders-managment customer-dashboard">
             <Head>
-                <title>Asfour Store - Customer Orders</title>
+                <title>Ubuyblues Store - Customer Orders</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

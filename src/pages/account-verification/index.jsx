@@ -153,7 +153,7 @@ export default function AccountVerification({ email }) {
     return (
         <div className="account-verification">
             <Head>
-                <title>Asfour Store - Account Verification</title>
+                <title>Ubuyblues Store - Account Verification</title>
             </Head>
             {!isLoadingPage ? <>
                 <Header />

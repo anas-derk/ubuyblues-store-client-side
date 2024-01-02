@@ -122,7 +122,7 @@ export default function Cart() {
     return (
         <div className="cart d-flex flex-column justify-content-center">
             <Head>
-                <title>Asfour Store - User Cart</title>
+                <title>Ubuyblues Store - User Cart</title>
             </Head>
             {!isLoadingPage && <>
                 <Header />

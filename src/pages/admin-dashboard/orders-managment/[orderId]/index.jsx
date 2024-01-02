@@ -97,7 +97,7 @@ export default function OrderDetails() {
     return (
         <div className="order-details admin-dashboard">
             <Head>
-                <title>Tavlorify Store - Order Details</title>
+                <title>Ubuyblues Store - Order Details</title>
             </Head>
             {!isLoadingPage ? <>
                 {/* Start Admin Dashboard Side Bar */}

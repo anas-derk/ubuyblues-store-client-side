@@ -80,7 +80,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
     return (
         <div className="add-new-product admin-dashboard">
             <Head>
-                <title>Asfour Store - Add New Product</title>
+                <title>Ubuyblues Store - Add New Product</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />

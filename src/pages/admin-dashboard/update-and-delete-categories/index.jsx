@@ -92,7 +92,7 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
     return (
         <div className="update-and-delete-category admin-dashboard">
             <Head>
-                <title>Asfour Store - Update / Delete Categories</title>
+                <title>Ubuyblues Store - Update / Delete Categories</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />

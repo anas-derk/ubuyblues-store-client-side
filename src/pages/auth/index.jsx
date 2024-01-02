@@ -187,7 +187,7 @@ export default function UserAuth() {
     return (
         <div className="auth d-flex flex-column justify-content-center">
             <Head>
-                <title>Asfour Store - User Auth</title>
+                <title>Ubuyblues Store - User Auth</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

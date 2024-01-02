@@ -45,7 +45,7 @@ export default function CustomerDashboard() {
     return (
         <div className="customer-dashboard">
             <Head>
-                <title>Asfour Store - Customer Dashboard</title>
+                <title>Ubuyblues Store - Customer Dashboard</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

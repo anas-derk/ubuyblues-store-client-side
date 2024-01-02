@@ -87,7 +87,7 @@ export default function CustomerWishList() {
     return (
         <div className="customer-wish-list customer-dashboard">
             <Head>
-                <title>Asfour Store - Customer Wish List</title>
+                <title>Ubuyblues Store - Customer Wish List</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

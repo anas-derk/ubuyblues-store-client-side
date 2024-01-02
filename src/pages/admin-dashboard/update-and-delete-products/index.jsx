@@ -288,7 +288,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     return (
         <div className="update-and-delete-product admin-dashboard">
             <Head>
-                <title>Asfour Store - Update / Delete Products</title>
+                <title>Ubuyblues Store - Update / Delete Products</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />

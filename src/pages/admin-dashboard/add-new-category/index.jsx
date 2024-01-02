@@ -79,7 +79,7 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
     return (
         <div className="add-new-cateogry admin-dashboard">
             <Head>
-                <title>Asfour Store - Add New Category</title>
+                <title>Ubuyblues Store - Add New Category</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />

@@ -444,7 +444,7 @@ export default function Checkout() {
     return (
         <div className="checkout">
             <Head>
-                <title>Asfour Store - Checkout</title>
+                <title>Ubuyblues Store - Checkout</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">

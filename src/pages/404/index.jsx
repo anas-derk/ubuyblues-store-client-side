@@ -7,7 +7,7 @@ export default function PageNotFound() {
     return (
         <div className="page-not-found d-flex align-items-center justify-content-center flex-column">
             <Head>
-                <title>Asfour Store - Page Not Found</title>
+                <title>Ubuyblues Store - Page Not Found</title>
             </Head>
             <div className="page-content p-4 text-center">
                 <img src={ubuybluesLogo.src} alt="asfour logo !" className="mb-4 d-block mx-auto" />

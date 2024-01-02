@@ -242,7 +242,7 @@ export default function Home() {
     return (
         <div className="home">
             <Head>
-                <title>Asfour Store - Home</title>
+                <title>Ubuyblues Store - Home</title>
             </Head>
             <Header />
             <div className="navigate-to-up-button">

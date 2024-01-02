@@ -16,7 +16,7 @@ export default function Confirmation() {
     return (
         <div className="confirmation">
             <Head>
-                <title>Asfour Store - Confirmation</title>
+                <title>Ubuyblues Store - Confirmation</title>
             </Head>
             {!isLoadingPage && <>
                 <Header />
