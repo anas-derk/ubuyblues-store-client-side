@@ -5,6 +5,7 @@ import { HiMinus, HiPlus } from "react-icons/hi";
 import { BsTrash } from "react-icons/bs";
 import Link from "next/link";
 import { PiSmileySad } from "react-icons/pi";
+import LoaderPage from "@/components/LoaderPage";
 
 export default function Cart() {
 
