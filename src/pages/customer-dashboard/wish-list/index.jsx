@@ -8,10 +8,13 @@ import { FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import { PiSmileySad } from "react-icons/pi";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function CustomerWishList() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -46,7 +49,10 @@ export default function CustomerWishList() {
                         });
                     } else router.push("/auth");
                 })
-                .catch((err) => console.log(err));
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
         } else {
             router.push("/auth");
         }
@@ -83,7 +89,7 @@ export default function CustomerWishList() {
             <Head>
                 <title>Asfour Store - Customer Wish List</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
@@ -173,7 +179,9 @@ export default function CustomerWishList() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

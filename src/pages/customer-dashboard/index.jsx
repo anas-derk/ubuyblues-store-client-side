@@ -6,11 +6,18 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function CustomerDashboard() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     const [userInfo, setUserInfo] = useState(true);
+
     const router = useRouter();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -29,16 +36,18 @@ export default function CustomerDashboard() {
             router.push("/auth");
         }
     }, []);
+
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");
         router.push("/auth");
     }
+
     return (
         <div className="customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Dashboard</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
@@ -65,7 +74,9 @@ export default function CustomerDashboard() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     )
 }

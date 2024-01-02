@@ -4,10 +4,13 @@ import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function UpdateAndDeleteCategories({ activeParentLink, activeChildLink }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [allCategories, setAllCategories] = useState([]);
 
@@ -23,7 +26,10 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
                 setAllCategories(res.data);
                 setIsLoadingPage(false);
             })
-            .catch(err => console.log(err));
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
     }, []);
 
     const changeCategoryName = (categoryIndex, newValue) => {
@@ -88,7 +94,7 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
             <Head>
                 <title>Asfour Store - Update / Delete Categories</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-4">
@@ -137,7 +143,9 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
                         </table>
                     </div> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Categories !!</p>}
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

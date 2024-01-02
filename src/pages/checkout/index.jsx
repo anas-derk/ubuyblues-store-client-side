@@ -10,10 +10,13 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 import { v4 as generateUniqueID } from "uuid";
 import { useRouter } from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function Checkout() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [allProductsData, setAllProductsData] = useState([]);
 
@@ -70,7 +73,10 @@ export default function Checkout() {
                         setIsLoadingPage(false);
                     }
                 })
-                .catch((err) => console.log(err));
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
         } else {
             let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
             if (Array.isArray(allProductsData)) {
@@ -440,7 +446,7 @@ export default function Checkout() {
             <Head>
                 <title>Asfour Store - Checkout</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">
                     <span class="loader mb-4"></span>
                     <p>Please Wait ...</p>
@@ -875,7 +881,9 @@ export default function Checkout() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

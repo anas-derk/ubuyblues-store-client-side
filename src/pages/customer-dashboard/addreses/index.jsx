@@ -6,10 +6,16 @@ import { useRouter } from "next/router";
 import Axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function CustomerAddreses() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     const router = useRouter();
+    
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -22,17 +28,21 @@ export default function CustomerAddreses() {
                         router.push("/auth");
                     }
                 })
-                .catch((err) => console.log(err));
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
         } else {
             router.push("/auth");
         }
     }, []);
+
     return (
         <div className="customer-addreses customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Addreses</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
@@ -59,7 +69,9 @@ export default function CustomerAddreses() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

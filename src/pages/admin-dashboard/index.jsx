@@ -5,10 +5,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function AdminDashboard() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     const router = useRouter();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-admin-user-id");
         if (userId) {
@@ -26,12 +32,13 @@ export default function AdminDashboard() {
             router.push("/admin-dashboard/login");
         }
     }, []);
+
     return (
         <div className="main admin-dashboard">
             <Head>
                 <title>Asfour Store - Admin Dashboard</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar />
             <div className="page-content d-flex justify-content-center align-items-center">
                 <h1 className="fw-bold w-fit pb-2">
@@ -39,7 +46,9 @@ export default function AdminDashboard() {
                     Hi, Mr Asfour In Your Admin Dashboard Page
                 </h1>
             </div>
-            </>: <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

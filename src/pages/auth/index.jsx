@@ -8,10 +8,13 @@ import { FiLogIn } from "react-icons/fi";
 import validations from "../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function UserAuth() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [appearedAuthPartName, setAppearedAuthPartName] = useState("login");
 
@@ -50,6 +53,9 @@ export default function UserAuth() {
                     } else {
                         setIsLoadingPage(false);
                     }
+                }).catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
             setIsLoadingPage(false);
@@ -183,7 +189,7 @@ export default function UserAuth() {
             <Head>
                 <title>Asfour Store - User Auth</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content text-white p-4 text-center">
                     <div className="container-fluid">
@@ -287,7 +293,9 @@ export default function UserAuth() {
                         </section>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

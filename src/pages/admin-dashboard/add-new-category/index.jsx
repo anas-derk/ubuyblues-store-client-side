@@ -5,10 +5,15 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function AddNewCategory({ activeParentLink, activeChildLink }) {
+
     const [categoryName, setCategoryName] = useState("");
+
     const [isWaitStatus, setIsWaitStatus] = useState(false);
+
     const [errorMsg, setErrorMsg] = useState("");
+
     const [successMsg, setSuccessMsg] = useState("");
+
     const addNewCategory = async (e, categoryName) => {
         e.preventDefault();
         try {
@@ -43,6 +48,7 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
             }, 1500);
         }
     }
+    
     return (
         <div className="add-new-cateogry admin-dashboard">
             <Head>

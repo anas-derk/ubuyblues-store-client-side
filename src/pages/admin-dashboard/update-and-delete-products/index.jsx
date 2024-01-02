@@ -5,10 +5,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { GrFormClose } from "react-icons/gr";
 import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
@@ -55,6 +58,9 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                     setAllCategories(await res.data);
                 }
                 setIsLoadingPage(false);
+            }).catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
             });
     }, []);
 
@@ -284,7 +290,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             <Head>
                 <title>Asfour Store - Update / Delete Products</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
                 {productIndex > -1 && <div className="overlay">
                     <div className="gallery-images-box d-flex flex-column align-items-center justify-content-center p-4">
@@ -509,7 +515,9 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                         {totalPagesCount > 0 && paginationBar()}
                     </div> : <p className="alert alert-danger w-75 mx-auto">Sorry, Not Found Any Products !!</p>}
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

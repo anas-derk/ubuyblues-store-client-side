@@ -4,10 +4,15 @@ import LoaderPage from "@/components/LoaderPage";
 import { useState, useEffect } from "react";
 
 export default function Confirmation() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     useEffect(() => {
         setIsLoadingPage(false);
     }, []);
+
     return (
         <div className="confirmation">
             <Head>
@@ -21,5 +26,5 @@ export default function Confirmation() {
                 </div>
             </>}
         </div>
-    )
+    );
 }

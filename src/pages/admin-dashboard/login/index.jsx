@@ -8,10 +8,13 @@ import { FiLogIn } from "react-icons/fi";
 import validations from "../../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function AdminLogin() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [email, setEmail] = useState("");
 
@@ -39,6 +42,9 @@ export default function AdminLogin() {
                         localStorage.removeItem("asfour-store-admin-user-id");
                         setIsLoadingPage(false);
                     }
+                }).catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
             setIsLoadingPage(false);
@@ -99,7 +105,7 @@ export default function AdminLogin() {
             <Head>
                 <title>Asfour Store - Admin Dashboard Login</title>
             </Head>
-            {!isLoadingPage ? <div className="page-content text-center w-50 mx-auto">
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <div className="page-content text-center w-50 mx-auto">
                 <div className="container p-4">
                     <img src={Logo.src} alt="logo" width="250" height="200" className="mb-5" />
                     <form className="admin-login-form mb-3" onSubmit={adminLogin}>
@@ -141,7 +147,9 @@ export default function AdminLogin() {
                         </button>}
                     </form>
                 </div>
-            </div> : <LoaderPage />}
+            </div>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

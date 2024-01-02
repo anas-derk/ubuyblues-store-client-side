@@ -7,15 +7,26 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import validations from "../../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function CustomerBillingAddress() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     const [userInfo, setUserInfo] = useState("");
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
     const [isWaitStatus, setIsWaitStatus] = useState(false);
+
     const [successMsg, setSuccessMsg] = useState("");
+
     const [errorMsg, setErrorMsg] = useState("");
+
     const router = useRouter();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -29,11 +40,15 @@ export default function CustomerBillingAddress() {
                         router.push("/auth");
                     }
                 })
-                .catch((err) => console.log(err));
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
         } else {
             router.push("/auth");
         }
     }, []);
+
     const validateFormFields = () => {
         let errorsObject = validations.inputValuesValidation([
             {
@@ -114,6 +129,7 @@ export default function CustomerBillingAddress() {
         ]);
         return errorsObject;
     }
+
     const updateShippingAddressInfoForUser = async (e) => {
         try {
             e.preventDefault();
@@ -151,12 +167,13 @@ export default function CustomerBillingAddress() {
             }, 2000);
         }
     }
+
     return (
         <div className="customer-shipping-address customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Shipping Address</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
@@ -331,7 +348,9 @@ export default function CustomerBillingAddress() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

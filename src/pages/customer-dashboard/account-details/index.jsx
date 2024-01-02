@@ -8,9 +8,14 @@ import LoaderPage from "@/components/LoaderPage";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import validations from "../../../../public/global_functions/validations";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function CustomerAccountDetails() {
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     const [userInfo, setUserInfo] = useState({
         email: "",
         password: "",
@@ -19,17 +24,29 @@ export default function CustomerAccountDetails() {
         preview_name: "",
         favorite_products_list: [],
     });
+
     const [currentPassword, setCurrentPassword] = useState("");
+
     const [newPassword, setNewPassword] = useState("");
+
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
     const [isVisibleCurrentPassword, setIsVisibleCurrentPassword] = useState(false);
+
     const [isVisibleNewPassword, setIsVisibleNewPassword] = useState(false);
+
     const [isVisibleConfirmNewPassword, setIsVisibleConfirmNewPassword] = useState(false);
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
     const [isWaitStatus, setIsWaitStatus] = useState(false);
+
     const [successMsg, setSuccessMsg] = useState("");
+
     const [errorMsg, setErrorMsg] = useState("");
+
     const router = useRouter();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
@@ -43,11 +60,15 @@ export default function CustomerAccountDetails() {
                         router.push("/auth");
                     }
                 })
-                .catch((err) => console.log(err));
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
         } else {
             router.push("/auth");
         }
     }, []);
+    
     const validateFormFields = () => {
         let errorsObject = validations.inputValuesValidation([
             {
@@ -127,6 +148,7 @@ export default function CustomerAccountDetails() {
         ]);
         return errorsObject;
     }
+
     const updateUserInfo = async (e) => {
         try {
             e.preventDefault();
@@ -170,12 +192,13 @@ export default function CustomerAccountDetails() {
             }, 2000);
         }
     }
+
     return (
         <div className="customer-account-details customer-dashboard">
             <Head>
                 <title>Asfour Store - Customer Account Details</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content d-flex align-items-center">
                     <div className="container-fluid">
@@ -333,7 +356,9 @@ export default function CustomerAccountDetails() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }
