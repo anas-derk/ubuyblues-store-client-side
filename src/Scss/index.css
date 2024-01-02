@@ -120,39 +120,18 @@ textarea {
 
 .loading-box {
   height: 100vh;
+  background-color: var(--main-color-one);
 }
 
-.loader-page {
-  width: 50px;
-  height: 165px;
-  position: relative;
-}
-
-.loader-page::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translate(-50%, 0);
-  width: 16px;
-  height: 16px;
-  background: #FF3D00;
-  border-radius: 50%;
-  animation: bounce 2s linear infinite;
-}
-
-.loader-page::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  height: 48px;
+.loader, .loader-page {
   width: 48px;
-  background: #fff;
-  border-radius: 4px;
-  animation: rotate 2s linear infinite;
+  height: 48px;
+  border: 5px solid #FFF;
+  border-bottom-color: #FF3D00;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 
 .navigate-to-up-button {
@@ -260,17 +239,6 @@ textarea {
   min-height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   z-index: 2;
-}
-
-.loader {
-  width: 48px;
-  height: 48px;
-  border: 5px solid #FFF;
-  border-bottom-color: #FF3D00;
-  border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
 }
 
 @keyframes rotation {
