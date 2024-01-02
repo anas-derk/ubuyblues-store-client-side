@@ -16,9 +16,9 @@ export default function AdminDashboard() {
     const router = useRouter();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-admin-user-id");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
+        const adminId = localStorage.getItem("asfour-store-admin-user-id");
+        if (adminId) {
+            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${adminId}`)
                 .then((res) => {
                     const result = res.data;
                     if (result === "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {

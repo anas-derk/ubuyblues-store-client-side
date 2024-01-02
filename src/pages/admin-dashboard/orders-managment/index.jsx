@@ -48,9 +48,9 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
     const pageSize = 5;
 
     useEffect(() => {
-        const adminId = localStorage.getItem("tavlorify-store-admin-id");
+        const adminId = localStorage.getItem("asfour-store-admin-user-id");
         if (!adminId) {
-            router.push("/dashboard/admin/login");
+            router.push("/admin-dashboard/login");
         } else {
             getOrdersCount()
                 .then(async (result) => {

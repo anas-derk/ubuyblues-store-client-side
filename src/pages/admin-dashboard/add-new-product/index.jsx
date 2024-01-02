@@ -36,7 +36,7 @@ export default function AddNewProduct({ activeParentLink, activeChildLink }) {
                 setAllCategories(res.data);
                 setIsLoadingPage(false);
             })
-            .catch(err => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
