@@ -28,6 +28,8 @@ export default function Home() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
     const [userId, setUserId] = useState("");
 
     const [userInfo, setUserInfo] = useState("");
@@ -95,6 +97,10 @@ export default function Home() {
                         setUserInfo(result2);
                         setFavoriteProductsListForUser(result2.favorite_products_list);
                     }
+                    setWindowInnerWidth(window.innerWidth);
+                    window.addEventListener("resize", function () {
+                        setWindowInnerWidth(this.innerWidth);
+                    });
                     setIsLoadingPage(false);
                 }
             })
@@ -405,28 +411,37 @@ export default function Home() {
                                     </h6>
                                 </div>
                                 <div className="col-md-6">
-                                    <div className="navigate-links p-3 text-end">
-                                        <Link href="/" className="navigate-link me-5">
-                                            <AiOutlineHome className="home-icon overlay-header-icon" />
-                                        </Link>
-                                        {!userId ? <Link href="/auth" className="navigate-link me-5">
-                                            <BsFillPersonFill className="auth-icon overlay-header-icon" />
-                                        </Link> : <>
-                                            <Link href="#" className="navigate-link me-5" onClick={userLogout}>
-                                                <MdOutlineLogout className="logout-icon overlay-header-icon" />
+                                    <ul className="navigate-links-list d-flex p-3 justify-content-center">
+                                        <li className="navigate-links-item">
+                                            <Link href="/" className="navigate-link">
+                                                <AiOutlineHome className="home-icon overlay-header-icon" />
                                             </Link>
-                                            <Link href="/customer-dashboard" className="navigate-link">
-                                                <BsPersonVcard className="user-account-icon overlay-header-icon" />
+                                        </li>
+                                        {!userId && <li className="navigate-links-item">
+                                            <Link href="/auth" className="navigate-link">
+                                                <BsFillPersonFill className="auth-icon overlay-header-icon" />
                                             </Link>
+                                        </li>}
+                                        {userId && <>
+                                            <li className="navigate-links-item">
+                                                <Link href="#" className="navigate-link" onClick={userLogout}>
+                                                    <MdOutlineLogout className="logout-icon overlay-header-icon" />
+                                                </Link>
+                                            </li>
+                                            <li className="navigate-links-item">
+                                                <Link href="/customer-dashboard" className="navigate-link">
+                                                    <BsPersonVcard className="user-account-icon overlay-header-icon" />
+                                                </Link>
+                                            </li>
                                         </>}
-                                    </div>
+                                    </ul>
                                 </div>
                             </div>
                         </header>
-                        <div className="product-details-box">
+                        <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
                             <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <div className="product-images-box">
+                                <div className="col-lg-6">
+                                    <div className="product-images-box mb-4">
                                         <div className="main-product-image-box mb-3">
                                             <Slider
                                                 dots={false}
@@ -456,28 +471,28 @@ export default function Home() {
                                             </Slider>
                                         </div>
                                         <div className="row">
-                                            <div className="col-md-3">
+                                            <div className="col-sm-3 text-center">
                                                 <div
-                                                    className={`product-image-box ${productGalleryImageIndex === -1 ? "selection" : ""}`}
+                                                    className="product-image-box"
                                                     onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
                                                 >
                                                     <img
                                                         src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
-                                                        className="w-100 product-gallery-image"
+                                                        className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
                                                     />
                                                 </div>
                                             </div>
                                             {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
                                                 <div
-                                                    className="col-md-3"
+                                                    className="col-sm-3 text-center"
                                                     key={pathIndex}
                                                     onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
                                                 >
-                                                    <div className={`gallery-image-box ${productGalleryImageIndex === pathIndex ? "selection" : ""}`} onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                    <div className="gallery-image-box" onClick={() => setProductGalleryImageIndex(pathIndex)}>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${path}`}
                                                             alt="product image !!"
-                                                            className="w-100 h-100"
+                                                            className={`${productGalleryImageIndex === pathIndex ? "selection" : ""}`}
                                                         />
                                                     </div>
                                                 </div>
@@ -485,7 +500,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-lg-6">
                                     <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
                                         <h2 className="product-name fw-bold mb-4">{allProductsInsideThePage[productIndex].name}</h2>
                                         <h5 className={`product-price ${allProductsInsideThePage[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsInsideThePage[productIndex].price} $</h5>
@@ -500,7 +515,7 @@ export default function Home() {
                                             className="product-managment-icon mb-3"
                                             onClick={() => addProductToFavoriteUserProducts(productIndex, userId)}
                                         />}
-                                        <div className="add-to-cart row align-items-center me-3 mb-4">
+                                        <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
                                             <div className="add-to-cart-managment-btns-box col-md-8">
                                                 {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
                                                 {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
@@ -524,11 +539,11 @@ export default function Home() {
                                     </h5>
                                 </div>
                             </div>
-                            <div className="product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 me-3">
-                                <div className="col-md-6 text-center">
+                            <div className={`product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
+                                <div className="col-lg-6 text-center">
                                     <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
                                 </div>
-                                <div className="col-md-6 text-center">
+                                <div className="col-lg-6 text-center">
                                     <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
                                 </div>
                             </div>
@@ -538,20 +553,20 @@ export default function Home() {
                             </div>}
                             {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
                                 <div className="row">
-                                    <div className="col-md-6">
-                                        <h6 className="mb-3 fw-bold">Referrals</h6>
-                                        <h6 className="">There are no reviews yet !!</h6>
+                                    <div className="col-lg-6">
+                                        <h6 className="mb-4 fw-bold">Referrals</h6>
+                                        <h6 className="mb-4">There are no reviews yet !!</h6>
                                     </div>
-                                    <div className="col-md-6">
-                                        <h5 className="mb-4">Be the first to review "{allProductsInsideThePage[productIndex].name}"</h5>
-                                        <h6>your e-mail address will not be published. Required fields are marked *</h6>
+                                    <div className="col-lg-6">
+                                        <h6 className="mb-4">Be the first to review "{allProductsInsideThePage[productIndex].name}"</h6>
+                                        <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
                                         {getRatingStars()}
                                         <form className="referral-form mb-4">
                                             <textarea
                                                 className="p-2 mb-4"
                                                 placeholder="Your Referral *"
                                             ></textarea>
-                                            <div className="row mb-4">
+                                            <div className="row mb-4 name-and-email-box">
                                                 <div className="col-md-6">
                                                     <input
                                                         type="text"

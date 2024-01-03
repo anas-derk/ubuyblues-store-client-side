@@ -34,11 +34,21 @@
   border-bottom: 1px solid;
 }
 
-.home .overlay .content .overlay-header .navigate-links .navigate-link:hover {
+@media (max-width: 767px) {
+  .home .overlay .content .overlay-header {
+    text-align: center;
+  }
+}
+
+.home .overlay .content .overlay-header .navigate-links-list {
+  gap: 50px;
+}
+
+.home .overlay .content .overlay-header .navigate-links-list .navigate-link:hover {
   color: var(--main-color-two);
 }
 
-.home .overlay .content .overlay-header .navigate-links .navigate-link .overlay-header-icon {
+.home .overlay .content .overlay-header .navigate-links-list .navigate-link .overlay-header-icon {
   font-size: 40px;
   cursor: pointer;
 }
@@ -49,8 +59,20 @@
   overflow-x: hidden;
 }
 
+@media (max-width: 767px) {
+  .home .overlay .content .product-details-box {
+    height: 330px;
+  }
+}
+
 .home .overlay .content .product-details-box .product-images-box .main-product-image-box {
   height: 370px;
+}
+
+@media (max-width: 767px) {
+  .home .overlay .content .product-details-box .product-images-box .main-product-image-box {
+    height: 330px;
+  }
 }
 
 .home .overlay .content .product-details-box .product-images-box .main-product-image-box .slick-slider {
@@ -59,6 +81,12 @@
 
 .home .overlay .content .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-list .slick-slide div {
   height: 370px;
+}
+
+@media (max-width: 767px) {
+  .home .overlay .content .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-list .slick-slide div {
+    height: 330px;
+  }
 }
 
 .home .overlay .content .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-arrow {
@@ -73,34 +101,35 @@
   left: 20px;
 }
 
-.home .overlay .content .product-details-box .product-images-box .product-image-box {
+.home .overlay .content .product-details-box .product-images-box .product-image-box img, .home .overlay .content .product-details-box .product-images-box .gallery-image-box img {
   cursor: pointer;
-}
-
-.home .overlay .content .product-details-box .product-images-box .product-image-box.selection {
-  border: 3px solid #000;
-}
-
-.home .overlay .content .product-details-box .product-images-box .product-image-box img {
+  width: 92px;
   height: 92px;
 }
 
-.home .overlay .content .product-details-box .product-images-box .gallery-image-box {
-  cursor: pointer;
-  height: 100px;
-}
-
-.home .overlay .content .product-details-box .product-images-box .gallery-image-box:hover {
+.home .overlay .content .product-details-box .product-images-box .product-image-box img:hover, .home .overlay .content .product-details-box .product-images-box .gallery-image-box img:hover {
   border: 3px solid #000;
 }
 
-.home .overlay .content .product-details-box .product-images-box .gallery-image-box.selection {
+.home .overlay .content .product-details-box .product-images-box .product-image-box img.selection, .home .overlay .content .product-details-box .product-images-box .gallery-image-box img.selection {
   border: 3px solid #000;
+}
+
+@media (max-width: 991px) {
+  .home .overlay .content .product-details-box .product-price-and-quantity {
+    text-align: center;
+  }
 }
 
 .home .overlay .content .product-details-box .add-to-wish-list-or-cart .product-managment-icon {
   cursor: pointer;
   font-size: 25px;
+}
+
+@media (max-width: 767px) {
+  .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart {
+    row-gap: 30px;
+  }
 }
 
 .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .add-to-cart-btn, .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .wait-to-cart-btn, .home .overlay .content .product-details-box .add-to-wish-list-or-cart .add-to-cart .add-to-cart-managment-btns-box .error-to-cart-btn {
@@ -148,6 +177,12 @@
   cursor: pointer;
 }
 
+@media (max-width: 767px) {
+  .home .overlay .content .product-details-box .note {
+    line-height: 2;
+  }
+}
+
 .home .overlay .content .product-details-box .referral-form textarea {
   height: 100px;
   resize: none;
@@ -162,6 +197,12 @@
 .home .overlay .content .product-details-box .referral-form .send-referral-btn:hover {
   background-color: transparent;
   color: #FFF;
+}
+
+@media (max-width: 767px) {
+  .home .overlay .content .product-details-box .referral-form .name-and-email-box {
+    gap: 30px;
+  }
 }
 
 .home .links-and-logo {

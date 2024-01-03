@@ -27,8 +27,12 @@
                 padding: 5px;
             }
             .overlay-header{
+                @media (max-width: 767px) {
+                    text-align: center;
+                }
                 border-bottom: 1px solid;
-                .navigate-links{
+                .navigate-links-list{
+                    gap: 50px;
                     .navigate-link{
                         &:hover{
                             color: var(--main-color-two);
@@ -42,17 +46,26 @@
             }
             .product-details-box{
                 height: 370px;
+                @media (max-width: 767px) {
+                    height: 330px;
+                }
                 overflow-y: auto;
                 overflow-x: hidden;
                 .product-images-box{
                     .main-product-image-box{
                         height: 370px;
+                        @media (max-width: 767px) {
+                            height: 330px;
+                        }
                         .slick-slider{
                             height: inherit;
                             .slick-list{
                                 .slick-slide{
                                     div{
                                         height: 370px;
+                                        @media (max-width: 767px) {
+                                            height: 330px;
+                                        }
                                     }
                                 }
                             }
@@ -67,24 +80,23 @@
                             }
                         }
                     }
-                    .product-image-box{
-                        cursor: pointer;
-                        &.selection {
-                            border: 3px solid #000;
-                        }
+                    .product-image-box, .gallery-image-box{
                         img{
+                            cursor: pointer;
+                            width: 92px;
                             height: 92px;
+                            &:hover{
+                                border: 3px solid #000;
+                            }
+                            &.selection {
+                                border: 3px solid #000;
+                            }
                         }
                     }
-                    .gallery-image-box{
-                        cursor: pointer;
-                        height: 100px;
-                        &:hover{
-                            border: 3px solid #000;
-                        }
-                        &.selection {
-                            border: 3px solid #000;
-                        }
+                }
+                .product-price-and-quantity{
+                    @media (max-width: 991px) {
+                        text-align: center;
                     }
                 }
                 .add-to-wish-list-or-cart{
@@ -93,6 +105,9 @@
                         font-size: 25px;
                     }
                     .add-to-cart{
+                        @media (max-width: 767px) {
+                            row-gap: 30px;
+                        }
                         .add-to-cart-managment-btns-box{
                             .add-to-cart-btn, .wait-to-cart-btn, .error-to-cart-btn{
                                 border-top-right-radius: 20px;
@@ -139,6 +154,11 @@
                         }
                     }
                 }
+                .note{
+                    @media (max-width: 767px) {
+                        line-height: 2;
+                    }
+                }
                 .referral-form{
                     textarea{
                         height: 100px;
@@ -151,6 +171,11 @@
                         &:hover{
                             background-color: transparent;
                             color: #FFF;
+                        }
+                    }
+                    .name-and-email-box{
+                        @media (max-width: 767px) {
+                            gap: 30px;
                         }
                     }
                 }
