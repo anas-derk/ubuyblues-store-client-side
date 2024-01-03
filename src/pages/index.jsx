@@ -435,7 +435,7 @@ export default function Home() {
                                                 >
                                                     <img
                                                         src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
-                                                        className="w-100 h-100 product-gallery-image"
+                                                        className="w-100 product-gallery-image"
                                                     />
                                                 </div>
                                             </div>
@@ -470,9 +470,9 @@ export default function Home() {
                                         />}
                                         <div className="add-to-cart row align-items-center me-3 mb-4">
                                             <div className="add-to-cart-managment-btns-box col-md-8">
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-3 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                                {isWaitAddToCart && <button className="wait-to-cart-btn p-3 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && <button className="error-to-cart-btn p-3 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                                                {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
+                                                {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
                                                 {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
                                             </div>
                                             <div className="select-product-quantity-box p-3 col-md-4">
@@ -511,7 +511,7 @@ export default function Home() {
                                         <h6 className="">There are no reviews yet !!</h6>
                                     </div>
                                     <div className="col-md-6">
-                                        <h5 className="mb-4">Be the first to review "{allProductsData[productIndex].name}"</h5>
+                                        <h5 className="mb-4">Be the first to review "{allProductsInsideThePage[productIndex].name}"</h5>
                                         <h6>your e-mail address will not be published. Required fields are marked *</h6>
                                         {getRatingStars()}
                                         <form className="referral-form mb-4">

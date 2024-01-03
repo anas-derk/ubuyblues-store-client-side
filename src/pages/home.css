@@ -61,6 +61,10 @@
   border: 3px solid #000;
 }
 
+.home .overlay .content .product-details-box .product-images-box .product-image-box img {
+  height: 92px;
+}
+
 .home .overlay .content .product-details-box .product-images-box .gallery-image-box {
   cursor: pointer;
   height: 100px;
