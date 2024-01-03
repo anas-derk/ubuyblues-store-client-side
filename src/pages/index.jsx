@@ -19,6 +19,7 @@ import { FaRegStar } from "react-icons/fa";
 import logoWithWhiteCircle from "../../public/images/logoCircle.png";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
+import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 
 export default function Home() {
 
@@ -32,7 +33,7 @@ export default function Home() {
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
-    const [isGetProductsStatus, setIsGetProductsStatus] = useState([]);
+    const [isGetProductsStatus, setIsGetProductsStatus] = useState(false);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
@@ -306,10 +307,10 @@ export default function Home() {
                         key={i}
                         className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
                         onClick={async () => {
-                            setIsFilteringOrdersStatus(true);
-                            setAllOrdersInsideThePage(await getAllOrdersInsideThePage(i, pageSize));
+                            setIsGetProductsStatus(true);
+                            setAllProductsInsideThePage(await getAllProductsInsideThePage(i, pageSize));
                             setCurrentPage(i);
-                            setIsFilteringOrdersStatus(false);
+                            setIsGetProductsStatus(false);
                         }}
                     >
                         {i}
@@ -326,10 +327,10 @@ export default function Home() {
                     key={totalPagesCount}
                     className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
                     onClick={async () => {
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+                        setIsGetProductsStatus(true);
+                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
                         setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
+                        setIsGetProductsStatus(false);
                     }}
                 >
                     {totalPagesCount}
@@ -352,10 +353,10 @@ export default function Home() {
                     className="navigate-to-specific-page-form w-25"
                     onSubmit={async (e) => {
                         e.preventDefault();
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+                        setIsGetProductsStatus(true);
+                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
                         setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
+                        setIsGetProductsStatus(false);
                     }}
                 >
                     <input
@@ -654,18 +655,33 @@ export default function Home() {
                         </section>
                         <section className="last-added-products mb-5">
                             <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
-                            <div className="row products-box bg-white p-3">
-                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, productIndex) => (
+                            <div className="row products-box bg-white pt-4 pb-4">
+                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-md-3" key={product._id}>
-                                        <div className="product-details text-center">
-                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
-                                            <h4 className="product-name">{product.name}</h4>
+                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" />
+                                        <div className="product-details p-3 text-center">
+                                            <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>
                                             <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
                                             {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
+                                            <div className="product-managment-buttons-box">
+                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
+                                                    className="product-managment-icon me-2"
+                                                    onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
+                                                /> : <BsSuitHeart
+                                                    className="product-managment-icon me-2"
+                                                    onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                                                />}
+                                                <AiOutlineEye className="me-2 eye-icon product-managment-icon" onClick={() => setProductIndex(index)} />
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
+                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
+                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
+                                {totalPagesCount > 0 && !isGetProductsStatus && paginationBar()}
                             </div>
                         </section>
                     </div>
