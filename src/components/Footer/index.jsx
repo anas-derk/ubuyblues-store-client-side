@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_White.png";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 
 export default function Footer() {
     return (
