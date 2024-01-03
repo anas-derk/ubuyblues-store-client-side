@@ -44,13 +44,13 @@
 }
 
 .home .overlay .content .product-details-box {
-  height: 400px;
-  overflow-y: scroll;
+  height: 330px;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
 .home .overlay .content .product-details-box .product-images-box .main-product-image-box {
-  height: 400px;
+  height: 330px;
 }
 
 .home .overlay .content .product-details-box .product-images-box .product-image-box {

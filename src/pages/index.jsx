@@ -392,9 +392,9 @@ export default function Home() {
                                     <h6 className="product-name-and-category">
                                         <span className="me-2">Main</span>
                                         <IoIosArrowForward className="me-2" />
-                                        <span className="me-2 product-category-name">{allProductsData[productIndex].category}</span>
+                                        <span className="me-2 product-category-name">{allProductsInsideThePage[productIndex].category}</span>
                                         <IoIosArrowForward className="me-2" />
-                                        <span className="product-name">{allProductsData[productIndex].name}</span>
+                                        <span className="product-name">{allProductsInsideThePage[productIndex].name}</span>
                                     </h6>
                                 </div>
                                 <div className="col-md-6">
@@ -422,7 +422,7 @@ export default function Home() {
                                     <div className="product-images-box">
                                         <div className="main-product-image-box mb-3">
                                             <img
-                                                src={productGalleryImageIndex < 0 ? `${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}` : `${process.env.BASE_API_URL}/${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`}
+                                                src={productGalleryImageIndex < 0 ? `${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}` : `${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`}
                                                 alt="product image !!"
                                                 className="w-100 product-image h-100"
                                             />
@@ -434,12 +434,12 @@ export default function Home() {
                                                     onClick={() => setProductGalleryImageIndex(-1)}
                                                 >
                                                     <img
-                                                        src={`${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}`}
+                                                        src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
                                                         className="w-100 h-100 product-gallery-image"
                                                     />
                                                 </div>
                                             </div>
-                                            {allProductsData[productIndex].galleryImagesPaths.map((path, pathIndex) => (
+                                            {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
                                                 <div className="col-md-3" key={pathIndex} onClick={() => setProductGalleryImageIndex(pathIndex)}>
                                                     <div className={`gallery-image-box ${productGalleryImageIndex === pathIndex ? "selection" : ""}`} onClick={() => setProductGalleryImageIndex(pathIndex)}>
                                                         <img
@@ -455,13 +455,13 @@ export default function Home() {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                        <h2 className="product-name fw-bold mb-4">{allProductsData[productIndex].name}</h2>
-                                        <h5 className={`product-price ${allProductsData[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsData[productIndex].price} $</h5>
-                                        {allProductsData[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsData[productIndex].price - allProductsData[productIndex].discount} $</h4>}
+                                        <h2 className="product-name fw-bold mb-4">{allProductsInsideThePage[productIndex].name}</h2>
+                                        <h5 className={`product-price ${allProductsInsideThePage[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsInsideThePage[productIndex].price} $</h5>
+                                        {allProductsInsideThePage[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsInsideThePage[productIndex].price - allProductsInsideThePage[productIndex].discount} $</h4>}
                                         <h5 className="product-quantity">1 Product Available In Store</h5>
                                     </div>
                                     <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
-                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsData[productIndex]._id) ? <BsFillSuitHeartFill
+                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsInsideThePage[productIndex]._id) ? <BsFillSuitHeartFill
                                             className="product-managment-icon mb-3"
                                             onClick={() => deleteProductFromFavoriteUserProducts(productIndex, userId)}
                                         /> : <BsSuitHeart
@@ -488,7 +488,7 @@ export default function Home() {
                                     </div>
                                     <h5 className="product-category-name">
                                         <span className="fw-bold">Category: </span>
-                                        <span>{allProductsData[productIndex].category}</span>
+                                        <span>{allProductsInsideThePage[productIndex].category}</span>
                                     </h5>
                                 </div>
                             </div>
@@ -502,7 +502,7 @@ export default function Home() {
                             </div>
                             {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2 me-3">
                                 <h6 className="mb-3 fw-bold">Description</h6>
-                                <p className="description-content">{allProductsData[productIndex].description}</p>
+                                <p className="description-content">{allProductsInsideThePage[productIndex].description}</p>
                             </div>}
                             {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
                                 <div className="row">

@@ -41,12 +41,12 @@
                 }
             }
             .product-details-box{
-                height: 400px;
-                overflow-y: scroll;
+                height: 330px;
+                overflow-y: auto;
                 overflow-x: hidden;
                 .product-images-box{
                     .main-product-image-box{
-                        height: 400px;
+                        height: 330px;
                     }
                     .product-image-box{
                         cursor: pointer;
