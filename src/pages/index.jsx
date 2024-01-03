@@ -17,8 +17,14 @@ import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import logoWithWhiteCircle from "../../public/images/logoCircle.png";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import LoaderPage from "@/components/LoaderPage";
 
 export default function Home() {
+
+    const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [userId, setUserId] = useState("");
 
@@ -74,8 +80,12 @@ export default function Home() {
                     setUserInfo(result2);
                     setFavoriteProductsListForUser(result2.favorite_products_list);
                 }
+                setIsLoadingPage(false);
             })
-            .catch(err => console.log(err));
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
     }, []);
 
     const userLogout = () => {
@@ -244,284 +254,288 @@ export default function Home() {
             <Head>
                 <title>Ubuyblues Store - Home</title>
             </Head>
-            <Header />
-            <div className="navigate-to-up-button">
-                {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
-                {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
-            </div>
-            {productIndex > -1 && <div className="overlay">
-                <div className="content p-4 text-white">
-                    <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
-                    <header className="overlay-header mb-4">
-                        <div className="row align-items-center">
-                            <div className="col-md-6">
-                                <h6 className="product-name-and-category">
-                                    <span className="me-2">Main</span>
-                                    <IoIosArrowForward className="me-2" />
-                                    <span className="me-2 product-category-name">{allProductsData[productIndex].category}</span>
-                                    <IoIosArrowForward className="me-2" />
-                                    <span className="product-name">{allProductsData[productIndex].name}</span>
-                                </h6>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="navigate-links p-3 text-end">
-                                    <Link href="/" className="navigate-link me-5">
-                                        <AiOutlineHome className="home-icon overlay-header-icon" />
-                                    </Link>
-                                    {!userId ? <Link href="/auth" className="navigate-link me-5">
-                                        <BsFillPersonFill className="auth-icon overlay-header-icon" />
-                                    </Link> : <>
-                                        <Link href="#" className="navigate-link me-5" onClick={userLogout}>
-                                            <MdOutlineLogout className="logout-icon overlay-header-icon" />
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+                <Header />
+                <div className="navigate-to-up-button">
+                    {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
+                    {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
+                </div>
+                {productIndex > -1 && <div className="overlay">
+                    <div className="content p-4 text-white">
+                        <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
+                        <header className="overlay-header mb-4">
+                            <div className="row align-items-center">
+                                <div className="col-md-6">
+                                    <h6 className="product-name-and-category">
+                                        <span className="me-2">Main</span>
+                                        <IoIosArrowForward className="me-2" />
+                                        <span className="me-2 product-category-name">{allProductsData[productIndex].category}</span>
+                                        <IoIosArrowForward className="me-2" />
+                                        <span className="product-name">{allProductsData[productIndex].name}</span>
+                                    </h6>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="navigate-links p-3 text-end">
+                                        <Link href="/" className="navigate-link me-5">
+                                            <AiOutlineHome className="home-icon overlay-header-icon" />
                                         </Link>
-                                        <Link href="/customer-dashboard" className="navigate-link">
-                                            <BsPersonVcard className="user-account-icon overlay-header-icon" />
-                                        </Link>
-                                    </>}
+                                        {!userId ? <Link href="/auth" className="navigate-link me-5">
+                                            <BsFillPersonFill className="auth-icon overlay-header-icon" />
+                                        </Link> : <>
+                                            <Link href="#" className="navigate-link me-5" onClick={userLogout}>
+                                                <MdOutlineLogout className="logout-icon overlay-header-icon" />
+                                            </Link>
+                                            <Link href="/customer-dashboard" className="navigate-link">
+                                                <BsPersonVcard className="user-account-icon overlay-header-icon" />
+                                            </Link>
+                                        </>}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </header>
-                    <div className="product-details-box">
-                        <div className="row mb-3">
-                            <div className="col-md-6">
-                                <div className="product-images-box">
-                                    <div className="main-product-image-box mb-3">
-                                        <img
-                                            src={productGalleryImageIndex < 0 ? `${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}` : `${process.env.BASE_API_URL}/${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`}
-                                            alt="product image !!"
-                                            className="w-100 product-image h-100"
-                                        />
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-md-3">
-                                            <div
-                                                className={`product-image-box ${productGalleryImageIndex === -1 ? "selection" : ""}`}
-                                                onClick={() => setProductGalleryImageIndex(-1)}
-                                            >
-                                                <img
-                                                    src={`${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}`}
-                                                    className="w-100 h-100 product-gallery-image"
-                                                />
-                                            </div>
+                        </header>
+                        <div className="product-details-box">
+                            <div className="row mb-3">
+                                <div className="col-md-6">
+                                    <div className="product-images-box">
+                                        <div className="main-product-image-box mb-3">
+                                            <img
+                                                src={productGalleryImageIndex < 0 ? `${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}` : `${process.env.BASE_API_URL}/${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`}
+                                                alt="product image !!"
+                                                className="w-100 product-image h-100"
+                                            />
                                         </div>
-                                        {allProductsData[productIndex].galleryImagesPaths.map((path, pathIndex) => (
-                                            <div className="col-md-3" key={pathIndex} onClick={() => setProductGalleryImageIndex(pathIndex)}>
-                                                <div className={`gallery-image-box ${productGalleryImageIndex === pathIndex ? "selection" : ""}`} onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                        <div className="row">
+                                            <div className="col-md-3">
+                                                <div
+                                                    className={`product-image-box ${productGalleryImageIndex === -1 ? "selection" : ""}`}
+                                                    onClick={() => setProductGalleryImageIndex(-1)}
+                                                >
                                                     <img
-                                                        src={`${process.env.BASE_API_URL}/${path}`}
-                                                        alt="product image !!"
-                                                        className="w-100 h-100"
+                                                        src={`${process.env.BASE_API_URL}/${allProductsData[productIndex].imagePath}`}
+                                                        className="w-100 h-100 product-gallery-image"
                                                     />
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                    <h2 className="product-name fw-bold mb-4">{allProductsData[productIndex].name}</h2>
-                                    <h5 className={`product-price ${allProductsData[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsData[productIndex].price} $</h5>
-                                    {allProductsData[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsData[productIndex].price - allProductsData[productIndex].discount} $</h4>}
-                                    <h5 className="product-quantity">1 Product Available In Store</h5>
-                                </div>
-                                <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
-                                    {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsData[productIndex]._id) ? <BsFillSuitHeartFill
-                                        className="product-managment-icon mb-3"
-                                        onClick={() => deleteProductFromFavoriteUserProducts(productIndex, userId)}
-                                    /> : <BsSuitHeart
-                                        className="product-managment-icon mb-3"
-                                        onClick={() => addProductToFavoriteUserProducts(productIndex, userId)}
-                                    />}
-                                    <div className="add-to-cart row align-items-center me-3 mb-4">
-                                        <div className="add-to-cart-managment-btns-box col-md-8">
-                                            {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-3 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                            {isWaitAddToCart && <button className="wait-to-cart-btn p-3 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
-                                            {errorInAddToCart && <button className="error-to-cart-btn p-3 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
-                                            {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
-                                        </div>
-                                        <div className="select-product-quantity-box p-3 col-md-4">
-                                            <HiMinus className="select-product-quantity-icon"
-                                                onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
-                                            />
-                                            <span className="ms-3 me-3">{productQuantity}</span>
-                                            <HiPlus className="select-product-quantity-icon"
-                                                onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity + 1)}
-                                            />
+                                            {allProductsData[productIndex].galleryImagesPaths.map((path, pathIndex) => (
+                                                <div className="col-md-3" key={pathIndex} onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                    <div className={`gallery-image-box ${productGalleryImageIndex === pathIndex ? "selection" : ""}`} onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                        <img
+                                                            src={`${process.env.BASE_API_URL}/${path}`}
+                                                            alt="product image !!"
+                                                            className="w-100 h-100"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
-                                <h5 className="product-category-name">
-                                    <span className="fw-bold">Category: </span>
-                                    <span>{allProductsData[productIndex].category}</span>
-                                </h5>
+                                <div className="col-md-6">
+                                    <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
+                                        <h2 className="product-name fw-bold mb-4">{allProductsData[productIndex].name}</h2>
+                                        <h5 className={`product-price ${allProductsData[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsData[productIndex].price} $</h5>
+                                        {allProductsData[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsData[productIndex].price - allProductsData[productIndex].discount} $</h4>}
+                                        <h5 className="product-quantity">1 Product Available In Store</h5>
+                                    </div>
+                                    <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
+                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsData[productIndex]._id) ? <BsFillSuitHeartFill
+                                            className="product-managment-icon mb-3"
+                                            onClick={() => deleteProductFromFavoriteUserProducts(productIndex, userId)}
+                                        /> : <BsSuitHeart
+                                            className="product-managment-icon mb-3"
+                                            onClick={() => addProductToFavoriteUserProducts(productIndex, userId)}
+                                        />}
+                                        <div className="add-to-cart row align-items-center me-3 mb-4">
+                                            <div className="add-to-cart-managment-btns-box col-md-8">
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-3 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                                                {isWaitAddToCart && <button className="wait-to-cart-btn p-3 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
+                                                {errorInAddToCart && <button className="error-to-cart-btn p-3 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
+                                                {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
+                                            </div>
+                                            <div className="select-product-quantity-box p-3 col-md-4">
+                                                <HiMinus className="select-product-quantity-icon"
+                                                    onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
+                                                />
+                                                <span className="ms-3 me-3">{productQuantity}</span>
+                                                <HiPlus className="select-product-quantity-icon"
+                                                    onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity + 1)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 className="product-category-name">
+                                        <span className="fw-bold">Category: </span>
+                                        <span>{allProductsData[productIndex].category}</span>
+                                    </h5>
+                                </div>
                             </div>
+                            <div className="product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 me-3">
+                                <div className="col-md-6 text-center">
+                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
+                                </div>
+                                <div className="col-md-6 text-center">
+                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
+                                </div>
+                            </div>
+                            {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2 me-3">
+                                <h6 className="mb-3 fw-bold">Description</h6>
+                                <p className="description-content">{allProductsData[productIndex].description}</p>
+                            </div>}
+                            {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h6 className="mb-3 fw-bold">Referrals</h6>
+                                        <h6 className="">There are no reviews yet !!</h6>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h5 className="mb-4">Be the first to review "{allProductsData[productIndex].name}"</h5>
+                                        <h6>your e-mail address will not be published. Required fields are marked *</h6>
+                                        {getRatingStars()}
+                                        <form className="referral-form mb-4">
+                                            <textarea
+                                                className="p-2 form-control mb-4"
+                                                placeholder="Your Referral *"
+                                            ></textarea>
+                                            <div className="row mb-4">
+                                                <div className="col-md-6">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control p-2"
+                                                        placeholder="Name *"
+                                                    />
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control p-2"
+                                                        placeholder="Email *"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="save-your-details-box mb-3">
+                                                <input
+                                                    type="checkbox"
+                                                    className="me-2"
+                                                />
+                                                <span>Save my name, email, and website in this browser for the next time I comment.</span>
+                                            </div>
+                                            <button
+                                                className="send-referral-btn p-3 d-block w-100"
+                                                type="submit"
+                                                onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
+                                            >
+                                                Send
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>}
+                            <div className="related-products-box">
+                                <h5 className="mb-4 fw-bold">Related Products</h5>
+                            </div>
+                            <Footer />
                         </div>
-                        <div className="product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 me-3">
-                            <div className="col-md-6 text-center">
-                                <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
-                            </div>
-                            <div className="col-md-6 text-center">
-                                <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
-                            </div>
+                    </div>
+                </div>}
+                {/* End Overlay */}
+                <div className="page-content">
+                    <section className="links-and-logo bg-white">
+                        <div className="links-box d-flex">
+                            <Link href="/">
+                                <FaShoppingCart className="cart-icon link-icon" />
+                            </Link>
+                            <Link href="/customer-dashboard/wish-list">
+                                <BsFillSuitHeartFill className="cart-icon link-icon" />
+                            </Link>
+                            <Link href="/cart">
+                                <BsFillCartPlusFill className="cart-icon link-icon" />
+                            </Link>
                         </div>
-                        {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2 me-3">
-                            <h6 className="mb-3 fw-bold">Description</h6>
-                            <p className="description-content">{allProductsData[productIndex].description}</p>
-                        </div>}
-                        {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
+                        <div className="logo-box m-0 d-flex align-items-center justify-content-center"></div>
+                    </section>
+                    <div className="container-fluid">
+                        <div className="products-display-managment">
                             <div className="row">
-                                <div className="col-md-6">
-                                    <h6 className="mb-3 fw-bold">Referrals</h6>
-                                    <h6 className="">There are no reviews yet !!</h6>
+                                <div className="col-md-3">
+                                    <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
                                 </div>
-                                <div className="col-md-6">
-                                    <h5 className="mb-4">Be the first to review "{allProductsData[productIndex].name}"</h5>
-                                    <h6>your e-mail address will not be published. Required fields are marked *</h6>
-                                    {getRatingStars()}
-                                    <form className="referral-form mb-4">
-                                        <textarea
-                                            className="p-2 form-control mb-4"
-                                            placeholder="Your Referral *"
-                                        ></textarea>
-                                        <div className="row mb-4">
-                                            <div className="col-md-6">
-                                                <input
-                                                    type="text"
-                                                    className="form-control p-2"
-                                                    placeholder="Name *"
-                                                />
-                                            </div>
-                                            <div className="col-md-6">
-                                                <input
-                                                    type="text"
-                                                    className="form-control p-2"
-                                                    placeholder="Email *"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="save-your-details-box mb-3">
-                                            <input
-                                                type="checkbox"
-                                                className="me-2"
-                                            />
-                                            <span>Save my name, email, and website in this browser for the next time I comment.</span>
-                                        </div>
-                                        <button
-                                            className="send-referral-btn p-3 d-block w-100"
-                                            type="submit"
-                                            onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
-                                        >
-                                            Send
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>}
-                        <div className="related-products-box">
-                            <h5 className="mb-4 fw-bold">Related Products</h5>
-                        </div>
-                        <Footer />
-                    </div>
-                </div>
-            </div>}
-            {/* End Overlay */}
-            <div className="page-content">
-                <section className="links-and-logo bg-white">
-                    <div className="links-box d-flex">
-                        <Link href="/">
-                            <FaShoppingCart className="cart-icon link-icon" />
-                        </Link>
-                        <Link href="/customer-dashboard/wish-list">
-                            <BsFillSuitHeartFill className="cart-icon link-icon" />
-                        </Link>
-                        <Link href="/cart">
-                            <BsFillCartPlusFill className="cart-icon link-icon" />
-                        </Link>
-                    </div>
-                    <div className="logo-box m-0 d-flex align-items-center justify-content-center"></div>
-                </section>
-                <div className="container-fluid">
-                    <div className="products-display-managment">
-                        <div className="row">
-                            <div className="col-md-3">
-                                <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
-                            </div>
-                            <div className="col-md-9">
-                                <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
-                                    <Link href="#categories" className="display-product-link me-5 text-center">
-                                        <BiSolidCategory className="icon mb-2" />
-                                        <h5 className="link-name">Category</h5>
-                                    </Link>
-                                    <Link href="#latest-added-products" className="display-product-link me-5 text-center">
-                                        <BiSolidCategory className="icon mb-2" />
-                                        <h5 className="link-name">Last Added</h5>
-                                    </Link>
-                                    <Link href="#best-seller" className="display-product-link me-5 text-center">
-                                        <BiSolidCategory className="icon mb-2" />
-                                        <h5 className="link-name">Best</h5>
-                                    </Link>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
-                    <section className="search mb-5 text-end">
-                        <BiSearchAlt className="search-icon p-2" />
-                    </section>
-                    <section className="ads mb-5">
-                        <h1 className="text-white text-center">At Asfour we offer many great products for you</h1>
-                    </section>
-                    <section className="some-of-products mb-5">
-                        <div className="row">
-                            {allProductsData.length > 0 && getLastSevenProducts().map((product, index) => (
-                                <div className="col-md-4" key={product._id}>
-                                    <div className="product-details p-3 text-center">
-                                        {isItStillDiscountForProduct(product.startDiscountPeriod, product.endDiscountPeriod) && <div className="discount-timer-box">Discount</div>}
-                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
-                                        <div className="details">
-                                            <h4 className="product-name">{product.name}</h4>
-                                            <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
-                                            {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
-                                            <div className="product-managment-buttons-box">
-                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
-                                                    className="product-managment-icon me-2"
-                                                    onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
-                                                /> : <BsSuitHeart
-                                                    className="product-managment-icon me-2"
-                                                    onClick={() => addProductToFavoriteUserProducts(index, userId)}
-                                                />}
-                                                <AiOutlineEye className="me-2 eye-icon product-managment-icon" onClick={() => setProductIndex(index)} />
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
-                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                    <section className="categories mb-5" id="categories">
-                        <h2 className="section-name text-center mb-4 text-white">Categories</h2>
-                        <div className="row">
-                            {allCategories.map((category) => (
-                                <div className="col-md-3" key={category._id}>
-                                    <div className="category-details p-3">
-                                        <Link href={`/categories/${category._id}`} className="product-by-category-link text-dark">
-                                            <h5 className="cateogory-name mb-3">{category.name}</h5>
-                                            <MdKeyboardArrowRight className="forward-arrow-icon" />
+                                <div className="col-md-9">
+                                    <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
+                                        <Link href="#categories" className="display-product-link me-5 text-center">
+                                            <BiSolidCategory className="icon mb-2" />
+                                            <h5 className="link-name">Category</h5>
                                         </Link>
-                                    </div>
+                                        <Link href="#latest-added-products" className="display-product-link me-5 text-center">
+                                            <BiSolidCategory className="icon mb-2" />
+                                            <h5 className="link-name">Last Added</h5>
+                                        </Link>
+                                        <Link href="#best-seller" className="display-product-link me-5 text-center">
+                                            <BiSolidCategory className="icon mb-2" />
+                                            <h5 className="link-name">Best</h5>
+                                        </Link>
+                                    </section>
                                 </div>
-                            ))}
+                            </div>
                         </div>
-                    </section>
+                        <section className="search mb-5 text-end">
+                            <BiSearchAlt className="search-icon p-2" />
+                        </section>
+                        <section className="ads mb-5">
+                            <h1 className="text-white text-center">At Asfour we offer many great products for you</h1>
+                        </section>
+                        <section className="some-of-products mb-5">
+                            <div className="row">
+                                {allProductsData.length > 0 && getLastSevenProducts().map((product, index) => (
+                                    <div className="col-md-3" key={product._id}>
+                                        <div className="product-details p-3 text-center">
+                                            {isItStillDiscountForProduct(product.startDiscountPeriod, product.endDiscountPeriod) && <div className="discount-timer-box">Discount</div>}
+                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
+                                            <div className="details">
+                                                <h4 className="product-name">{product.name}</h4>
+                                                <h5 className="product-category">{product.category}</h5>
+                                                <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
+                                                {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
+                                                <div className="product-managment-buttons-box">
+                                                    {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
+                                                        className="product-managment-icon me-2"
+                                                        onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
+                                                    /> : <BsSuitHeart
+                                                        className="product-managment-icon me-2"
+                                                        onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                                                    />}
+                                                    <AiOutlineEye className="me-2 eye-icon product-managment-icon" onClick={() => setProductIndex(index)} />
+                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                                                    {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
+                                                    {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
+                                                    {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                        <section className="categories mb-5" id="categories">
+                            <h2 className="section-name text-center mb-4 text-white">Categories</h2>
+                            <div className="row">
+                                {allCategories.map((category) => (
+                                    <div className="col-md-3" key={category._id}>
+                                        <div className="category-details p-3">
+                                            <Link href={`/categories/${category._id}`} className="product-by-category-link text-dark">
+                                                <h5 className="cateogory-name mb-3">{category.name}</h5>
+                                                <MdKeyboardArrowRight className="forward-arrow-icon" />
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+                    <Footer />
                 </div>
-                <Footer />
-            </div>
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }
