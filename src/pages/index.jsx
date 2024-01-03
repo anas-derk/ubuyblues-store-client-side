@@ -7,7 +7,7 @@ import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
@@ -20,6 +20,7 @@ import logoWithWhiteCircle from "../../public/images/logoCircle.png";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
+import Slider from "react-slick";
 
 export default function Home() {
 
@@ -72,6 +73,8 @@ export default function Home() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [pageNumber, setPageNumber] = useState(0);
+
+    const sliderRef = useRef();
 
     const pageSize = 8;
 
@@ -372,6 +375,10 @@ export default function Home() {
         );
     }
 
+    const goToSlide = (slideIndex) => {
+        sliderRef.current.slickGoTo(slideIndex);
+    }
+
     return (
         <div className="home">
             <Head>
@@ -421,17 +428,38 @@ export default function Home() {
                                 <div className="col-md-6">
                                     <div className="product-images-box">
                                         <div className="main-product-image-box mb-3">
-                                            <img
-                                                src={productGalleryImageIndex < 0 ? `${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}` : `${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`}
-                                                alt="product image !!"
-                                                className="w-100 product-image h-100"
-                                            />
+                                            <Slider
+                                                dots={false}
+                                                infinite={true}
+                                                speed={500}
+                                                slidesToShow={1}
+                                                slidesToScroll={1}
+                                                ref={sliderRef}
+                                                afterChange={(slideIndex) => setProductGalleryImageIndex(slideIndex - 1)}
+                                            >
+                                                <div>
+                                                    <img
+                                                        src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
+                                                        alt="product image !!"
+                                                        className="w-100 h-100 product-image"
+                                                    />
+                                                </div>
+                                                {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
+                                                    <div key={pathIndex}>
+                                                        <img
+                                                            src={`${process.env.BASE_API_URL}/${path}`}
+                                                            alt="product image !!"
+                                                            className="w-100 h-100 product-image"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </Slider>
                                         </div>
                                         <div className="row">
                                             <div className="col-md-3">
                                                 <div
                                                     className={`product-image-box ${productGalleryImageIndex === -1 ? "selection" : ""}`}
-                                                    onClick={() => setProductGalleryImageIndex(-1)}
+                                                    onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
                                                 >
                                                     <img
                                                         src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
@@ -440,7 +468,11 @@ export default function Home() {
                                                 </div>
                                             </div>
                                             {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
-                                                <div className="col-md-3" key={pathIndex} onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                <div
+                                                    className="col-md-3"
+                                                    key={pathIndex}
+                                                    onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
+                                                >
                                                     <div className={`gallery-image-box ${productGalleryImageIndex === pathIndex ? "selection" : ""}`} onClick={() => setProductGalleryImageIndex(pathIndex)}>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${path}`}
@@ -516,34 +548,39 @@ export default function Home() {
                                         {getRatingStars()}
                                         <form className="referral-form mb-4">
                                             <textarea
-                                                className="p-2 form-control mb-4"
+                                                className="p-2 mb-4"
                                                 placeholder="Your Referral *"
                                             ></textarea>
                                             <div className="row mb-4">
                                                 <div className="col-md-6">
                                                     <input
                                                         type="text"
-                                                        className="form-control p-2"
+                                                        className="p-2"
                                                         placeholder="Name *"
                                                     />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <input
                                                         type="text"
-                                                        className="form-control p-2"
+                                                        className="p-2"
                                                         placeholder="Email *"
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="save-your-details-box mb-3">
-                                                <input
-                                                    type="checkbox"
-                                                    className="me-2"
-                                                />
-                                                <span>Save my name, email, and website in this browser for the next time I comment.</span>
+                                            <div className="save-your-details-box mb-3 row">
+                                                <div className="col-md-1">
+                                                    <input
+                                                        type="checkbox"
+                                                        className=""
+                                                        id="save-your-details-checkbox"
+                                                    />
+                                                </div>
+                                                <div className="col-md-11">
+                                                    <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
+                                                </div>
                                             </div>
                                             <button
-                                                className="send-referral-btn p-3 d-block w-100"
+                                                className="send-referral-btn p-2 d-block w-100"
                                                 type="submit"
                                                 onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
                                             >
@@ -690,6 +727,6 @@ export default function Home() {
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
-        </div>
+        </div >
     );
 }

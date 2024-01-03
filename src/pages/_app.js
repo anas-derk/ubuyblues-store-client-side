@@ -19,6 +19,8 @@ import "../pages/404/404.css";
 import "../pages/admin-dashboard/update-and-delete-products/update_and_delete_products.css";
 import "../pages/account-verification/account_verification.css";
 import "../pages/checkout/checkout.css";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />

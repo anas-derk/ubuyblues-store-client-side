@@ -37,7 +37,7 @@ a {
   background-color: var(--main-color-three);
 }
 
-input, textarea, select {
+input, textarea, select, .checkbox {
   background: transparent;
   border: 1px solid #FFF;
   border-radius: 3px;
@@ -46,11 +46,11 @@ input, textarea, select {
   font-size: 13px !important;
 }
 
-input::placeholder, textarea::placeholder, select::placeholder {
+input::placeholder, textarea::placeholder, select::placeholder, .checkbox::placeholder {
   color: #FFF;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus, textarea:focus, select:focus, .checkbox:focus {
   outline: none;
   border-color: #00F;
 }
