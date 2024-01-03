@@ -213,7 +213,7 @@
             cursor: pointer;
         }
     }
-    .some-of-products{
+    .some-of-products, .last-added-products{
         .row{
             @media (max-width: 991px) {
                 gap: 30px;

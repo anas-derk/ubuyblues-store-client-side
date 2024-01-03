@@ -32,7 +32,9 @@ export default function Home() {
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
-    const [allProductsData, setAllProductsData] = useState([]);
+    const [isGetProductsStatus, setIsGetProductsStatus] = useState([]);
+
+    const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
     const [allCategories, setAllCategories] = useState([]);
 
@@ -64,23 +66,33 @@ export default function Home() {
 
     const router = useRouter();
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [totalPagesCount, setTotalPagesCount] = useState(0);
+
+    const [pageNumber, setPageNumber] = useState(0);
+
+    const pageSize = 8;
+
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userId = localStorage.getItem("asfour-store-user-id");
         setUserId(userId);
-        axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=1&pageSize=5`)
-            .then(async (res) => {
-                setAllProductsData(res.data);
-                const res1 = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
-                const result1 = await res1.data;
-                setAllCategories(result1);
-                if (userId) {
-                    const res2 = await axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
-                    const result2 = await res2.data;
-                    setUserInfo(result2);
-                    setFavoriteProductsListForUser(result2.favorite_products_list);
+        getProductsCount()
+            .then(async (result) => {
+                if (result > 0) {
+                    setAllProductsInsideThePage(await getAllProductsInsideThePage(1, pageSize));
+                    setTotalPagesCount(Math.ceil(result / pageSize));
+                    let res1 = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
+                    setAllCategories(await res1.data);
+                    if (userId) {
+                        res1 = await axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
+                        const result2 = await res1.data;
+                        setUserInfo(result2);
+                        setFavoriteProductsListForUser(result2.favorite_products_list);
+                    }
+                    setIsLoadingPage(false);
                 }
-                setIsLoadingPage(false);
             })
             .catch(() => {
                 setIsLoadingPage(false);
@@ -119,13 +131,13 @@ export default function Home() {
 
     const getLastSevenProducts = () => {
         let lastSevenProducts = [];
-        if (allProductsData.length >= 7) {
+        if (allProductsInsideThePage.length >= 7) {
             for (let i = 0; i < 2; i++) {
-                lastSevenProducts.push(allProductsData[i]);
+                lastSevenProducts.push(allProductsInsideThePage[i]);
             }
         } else {
-            for (let i = 0; i < allProductsData.length; i++) {
-                lastSevenProducts.push(allProductsData[i]);
+            for (let i = 0; i < allProductsInsideThePage.length; i++) {
+                lastSevenProducts.push(allProductsInsideThePage[i]);
             }
         }
         return lastSevenProducts;
@@ -247,6 +259,116 @@ export default function Home() {
         return false;
         // if (dateAndTimeNow)
         // console.log(new Date(startDiscountDateAndTime.getTime() - endDiscountDateAndTime.getTime()));
+    }
+
+    const getProductsCount = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllProductsInsideThePage = async (pageNumber, pageSize) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getPreviousPage = async () => {
+        setIsGetProductsStatus(true);
+        const newCurrentPage = currentPage - 1;
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsGetProductsStatus(false);
+    }
+
+    const getNextPage = async () => {
+        setIsGetProductsStatus(true);
+        const newCurrentPage = currentPage + 1;
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsGetProductsStatus(false);
+    }
+
+    const paginationBar = () => {
+        const paginationButtons = [];
+        for (let i = 1; i <= totalPagesCount; i++) {
+            if (i < 11) {
+                paginationButtons.push(
+                    <button
+                        key={i}
+                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
+                        onClick={async () => {
+                            setIsFilteringOrdersStatus(true);
+                            setAllOrdersInsideThePage(await getAllOrdersInsideThePage(i, pageSize));
+                            setCurrentPage(i);
+                            setIsFilteringOrdersStatus(false);
+                        }}
+                    >
+                        {i}
+                    </button>
+                );
+            }
+        }
+        if (totalPagesCount > 10) {
+            paginationButtons.push(
+                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
+            );
+            paginationButtons.push(
+                <button
+                    key={totalPagesCount}
+                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
+                    onClick={async () => {
+                        setIsFilteringOrdersStatus(true);
+                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+                        setCurrentPage(pageNumber);
+                        setIsFilteringOrdersStatus(false);
+                    }}
+                >
+                    {totalPagesCount}
+                </button>
+            );
+        }
+        return (
+            <section className="pagination d-flex justify-content-center align-items-center">
+                {currentPage !== 1 && <BsArrowLeftSquare
+                    className="previous-page-icon pagination-icon"
+                    onClick={getPreviousPage}
+                />}
+                {paginationButtons}
+                {currentPage !== totalPagesCount && <BsArrowRightSquare
+                    className="next-page-icon pagination-icon me-3"
+                    onClick={getNextPage}
+                />}
+                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
+                <form
+                    className="navigate-to-specific-page-form w-25"
+                    onSubmit={async (e) => {
+                        e.preventDefault();
+                        setIsFilteringOrdersStatus(true);
+                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+                        setCurrentPage(pageNumber);
+                        setIsFilteringOrdersStatus(false);
+                    }}
+                >
+                    <input
+                        type="number"
+                        className="form-control p-1 ps-2 page-number-input"
+                        placeholder="Enter Page Number"
+                        min="1"
+                        max={totalPagesCount}
+                        onChange={(e) => setPageNumber(e.target.valueAsNumber)}
+                    />
+                </form>
+            </section>
+        );
     }
 
     return (
@@ -480,12 +602,12 @@ export default function Home() {
                         <section className="search mb-5 text-end">
                             <BiSearchAlt className="search-icon p-2" />
                         </section>
-                        <section className="ads mb-5">
+                        {/* <section className="ads mb-5">
                             <h1 className="text-white text-center">At Asfour we offer many great products for you</h1>
                         </section>
                         <section className="some-of-products mb-5">
                             <div className="row">
-                                {allProductsData.length > 0 && getLastSevenProducts().map((product, index) => (
+                                {allProductsInsideThePage.length > 0 && getLastSevenProducts().map((product, index) => (
                                     <div className="col-md-3" key={product._id}>
                                         <div className="product-details p-3 text-center">
                                             {isItStillDiscountForProduct(product.startDiscountPeriod, product.endDiscountPeriod) && <div className="discount-timer-box">Discount</div>}
@@ -514,7 +636,7 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                        </section>
+                        </section> */}
                         <section className="categories mb-5" id="categories">
                             <h2 className="section-name text-center mb-4 text-white">Categories</h2>
                             <div className="row">
@@ -530,8 +652,24 @@ export default function Home() {
                                 ))}
                             </div>
                         </section>
+                        <section className="last-added-products mb-5">
+                            <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
+                            <div className="row products-box bg-white p-3">
+                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, productIndex) => (
+                                    <div className="col-md-3" key={product._id}>
+                                        <div className="product-details text-center">
+                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
+                                            <h4 className="product-name">{product.name}</h4>
+                                            <h5 className="product-category">{product.category}</h5>
+                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
+                                            {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
                     </div>
-                    <Footer />
+                    {/* <Footer /> */}
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

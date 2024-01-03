@@ -37,7 +37,6 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
     const [filters, setFilters] = useState({
         orderNumber: -1,
         orderId: "",
-        klarnaReference: "",
         status: "",
         customerName: "",
         email: "",
