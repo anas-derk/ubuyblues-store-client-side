@@ -238,7 +238,7 @@ export default function UserAuth() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForSignup"]}</p>}
-                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                            {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 <span className="me-2">Signup</span>
                                                 <FiLogIn />
                                             </button>}
@@ -278,12 +278,12 @@ export default function UserAuth() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForLogin"]}</p>}
-                                            {!isLoginingStatus && !errMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 <span className="me-2">Login</span>
                                                 <FiLogIn />
                                             </button>}
                                             {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
-                                                <span className="me-2">Wait Loging ...</span>
+                                                <span className="me-2">Wait Logining ...</span>
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
                                         </form>
