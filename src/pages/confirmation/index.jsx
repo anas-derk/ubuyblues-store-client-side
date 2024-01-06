@@ -4,6 +4,8 @@ import LoaderPage from "@/components/LoaderPage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.webp";
+import { FaRegSmileWink } from "react-icons/fa";
 
 export default function Confirmation({ orderId }) {
 
@@ -108,7 +110,7 @@ export default function Confirmation({ orderId }) {
                                 {pricesDetailsSummary.totalDiscount} $
                             </div>
                         </div>
-                        <div className="row total-price-after-discount total pb-3 mb-4">
+                        <div className="row total-price-after-discount total pb-3 mb-5">
                             <div className="col-md-3 fw-bold p-0">
                                 Total Price After Discount
                             </div>
@@ -116,6 +118,18 @@ export default function Confirmation({ orderId }) {
                                 {orderDetails.order_amount} $
                             </div>
                         </div>
+                        <div className="thanks-icon-box mb-4">
+                            <FaRegSmileWink className="thanks-icon" style={{ fontSize: "70px" }} />
+                        </div>
+                        <h4 className="mb-4">
+                            Thanks For Purchase From Ubuyblues Store
+                        </h4>
+                        <img
+                            src={ubuybluesLogo.src}
+                            alt="Ubuyblues Logo"
+                            width="150"
+                            height="150"
+                        />
                     </section>
                 </div>
             </>}
