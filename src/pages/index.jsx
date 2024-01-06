@@ -163,12 +163,12 @@ export default function Home() {
     const addProductToFavoriteUserProducts = async (productIndex, userId) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            setFavoriteProductAddingId(allProductsData[productIndex]._id);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
+            setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
             const result = await res.data;
             if (result === "Ok !!, Adding New Favorite Product To This User Is Successfuly !!") {
                 let tempFavoriteProductsForUser = favoriteProductsListForUser;
-                tempFavoriteProductsForUser.push(allProductsData[productIndex]);
+                tempFavoriteProductsForUser.push(allProductsInsideThePage[productIndex]);
                 setFavoriteProductsListForUser(tempFavoriteProductsForUser);
                 setIsWaitAddProductToFavoriteUserProductsList(false);
                 setFavoriteProductAddingId("");
@@ -182,11 +182,11 @@ export default function Home() {
     const deleteProductFromFavoriteUserProducts = async (productIndex, userId) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            setFavoriteProductAddingId(allProductsData[productIndex]._id);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsData[productIndex]._id}`);
+            setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
             const result = await res.data;
             if (result === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
-                setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favorite_product) => favorite_product._id != allProductsData[productIndex]._id));
+                setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favorite_product) => favorite_product._id != allProductsInsideThePage[productIndex]._id));
                 setIsWaitAddProductToFavoriteUserProductsList(false);
                 setFavoriteProductAddingId("");
             }
