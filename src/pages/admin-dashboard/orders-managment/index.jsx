@@ -273,12 +273,10 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
             let successTimeout = setTimeout(async () => {
                 setIsSuccessStatus(false);
                 setSelectedOrderIndex(-1);
-                if (totalPagesCount > 1) {
-                    setIsFilteringOrdersStatus(true);
-                    setAllOrdersInsideThePage(await getAllOrdersInsideThePage(1, pageSize));
-                    setCurrentPage(1);
-                    setIsFilteringOrdersStatus(false);
-                } else setAllOrdersInsideThePage(allOrdersInsideThePage.filter((order) => order._id !== allOrdersInsideThePage[orderIndex]._id));
+                setIsFilteringOrdersStatus(true);
+                setAllOrdersInsideThePage(await getAllOrdersInsideThePage(1, pageSize));
+                setCurrentPage(1);
+                setIsFilteringOrdersStatus(false);
                 clearTimeout(successTimeout);
             }, 3000);
         }
@@ -419,14 +417,14 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                                 </td>
                                                 <td>{getDateFormated(order.added_date)}</td>
                                                 <td>
-                                                    {!isUpdatingStatus && !isDeletingStatus && orderIndex !== selectedOrderIndex && <button
-                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                    {!isUpdatingStatus && !isDeletingStatus && !order.isDeleted && orderIndex !== selectedOrderIndex && <button
+                                                        className="btn btn-info d-block mx-auto mb-3"
                                                         onClick={() => updateOrderData(orderIndex)}
                                                     >
                                                         Update
                                                     </button>}
                                                     {isUpdatingStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                        className="btn btn-info d-block mx-auto mb-3"
                                                         disabled
                                                     >
                                                         Updating ...
@@ -437,20 +435,26 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                                     >
                                                         Success
                                                     </button>}
-                                                    {!isUpdatingStatus && !isDeletingStatus && orderIndex !== selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    {!isUpdatingStatus && !isDeletingStatus && !order.isDeleted && orderIndex !== selectedOrderIndex && <button
+                                                        className="btn btn-danger d-block mx-auto mb-3"
                                                         onClick={() => deleteOrder(orderIndex)}
                                                     >
                                                         Delete
                                                     </button>}
-                                                    {isDeletingStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    {isDeletingStatus && !order.isDeleted && orderIndex === selectedOrderIndex && <button
+                                                        className="btn btn-danger d-block mx-auto mb-3"
                                                         disabled
                                                     >
                                                         Deleting ...
                                                     </button>}
+                                                    {order.isDeleted && <button
+                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        disabled
+                                                    >
+                                                        Deleted Successful
+                                                    </button>}
                                                     {isErrorStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                        className="btn btn-danger d-block mx-auto mb-3"
                                                         disabled
                                                     >
                                                         Sorry, Error In Process
@@ -458,9 +462,9 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                                     {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <Link
                                                         href={{
                                                             pathname: `/admin-dashboard/orders-managment/${order._id}`,
-                                                            // query: {
-                                                            //     activeParentLink: "orders-managment",
-                                                            // }
+                                                            query: {
+                                                                activeParentLink: "orders-managment",
+                                                            }
                                                         }}
                                                         className="btn btn-success d-block mx-auto mb-4 global-button"
                                                     >Show Details</Link>}
