@@ -1,4 +1,4 @@
-import Logo from "../../../public/images/UbuyBlues_Logo_merged_White.png";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.webp";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import Link from "next/link";
 import { useState } from "react";
@@ -19,7 +19,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
     return (
         <aside className="admin-dashboard-side-bar pt-3">
             <Link href="/admin-dashboard" className="d-block text-center mb-3">
-                <img src={Logo.src} alt="logo" width="80" height="80" className="logo" />
+                <img src={ubuybluesLogo.src} alt="logo" width="80" height="80" className="logo" />
             </Link>
             <button className="btn btn-danger d-block mx-auto w-50 logout-btn" onClick={adminLogout}>
                 <MdOutlineLogout className="me-2" />
