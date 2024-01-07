@@ -69,10 +69,10 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                                 </tr>
                             </thead>
                             <tbody>
-                                {allSections.map((sectionName, index) => (
-                                    <tr key={sectionName}>
+                                {allSections.map((section, index) => (
+                                    <tr key={section._id}>
                                         <td className="section-name-cell">
-                                            {sectionName}
+                                            {section.sectionName}
                                         </td>
                                         <td className="select-section-status-cell">
                                             <div className="form-check pb-2">
