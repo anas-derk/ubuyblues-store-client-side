@@ -10,12 +10,12 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
     const [activeLinks, setActiveLinks] = useState(activeParentLink);
 
     const router = useRouter();
-    
+
     const adminLogout = () => {
         localStorage.removeItem("asfour-store-admin-user-id");
         router.push("/admin-dashboard/login");
     }
-    
+
     return (
         <aside className="admin-dashboard-side-bar pt-3">
             <Link href="/admin-dashboard" className="d-block text-center mb-3">
@@ -109,36 +109,6 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         </Link>
                     </li>
                 </ul>}
-                {activeLinks === "orders-managment" && <ul className="links-list">
-                    <li className={`link-item ps-3 p-2 ${activeChildLink === "add-new-category" ? "active" : ""}`}>
-                        <Link
-                            href={{
-                                pathname: "/admin-dashboard/add-new-category",
-                                query: {
-                                    activeParentLink: "categories-managment",
-                                    activeChildLink: "add-new-category"
-                                }
-                            }}
-                            className="managment-link p-0"
-                        >
-                            <span>Add New</span>
-                        </Link>
-                    </li>
-                    <li className={`link-item ps-3 p-2 ${activeChildLink === "update-and-delete-categories" ? "active" : ""}`}>
-                        <Link
-                            href={{
-                                pathname: "/admin-dashboard/update-and-delete-categories",
-                                query: {
-                                    activeParentLink: "categories-managment",
-                                    activeChildLink: "update-and-delete-categories"
-                                }
-                            }}
-                            className="managment-link p-0"
-                        >
-                            <span>Update / Delete</span>
-                        </Link>
-                    </li>
-                </ul>}
                 <li
                     className={`managment-item ps-3 p-2 ${activeLinks === "orders-managment" ? "active" : ""}`}
                 >
@@ -148,6 +118,7 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                             pathname: "/admin-dashboard/orders-managment",
                             query: {
                                 activeParentLink: "orders-managment",
+                                activeChildLink: "orders-managment",
                             }
                         }}
                         className="managment-button btn p-0"
@@ -194,6 +165,21 @@ export default function AdminDashboardSideBar({ activeParentLink, activeChildLin
                         </Link>
                     </li>
                 </ul>}
+                <li
+                    className={`managment-item ps-3 p-2 ${activeLinks === "show-and-hide-sections-managment" ? "active" : ""}`}
+                >
+                    <MdProductionQuantityLimits className="me-2" />
+                    <Link
+                        href={{
+                            pathname: "/admin-dashboard/show-and-hide-sections-managment",
+                            query: {
+                                activeParentLink: "show-and-hide-sections-managment",
+                                activeChildLink: "show-and-hide-sections-managment",
+                            }
+                        }}
+                        className="managment-button btn p-0"
+                    >Show / Hide Sections</Link>
+                </li>
             </ul>
         </aside>
     );

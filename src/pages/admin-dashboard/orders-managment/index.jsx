@@ -490,3 +490,12 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
         </div>
     );
 }
+
+export const getServerSideProps = async ({ query }) => {
+    return {
+        props: {
+            activeParentLink: query.activeParentLink,
+            activeChildLink: query.activeChildLink,
+        }
+    }
+}
