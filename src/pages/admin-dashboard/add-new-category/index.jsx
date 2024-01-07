@@ -43,8 +43,8 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
     }, []);
 
     const addNewCategory = async (e, categoryName) => {
-        e.preventDefault();
         try {
+            e.preventDefault();
             setIsWaitStatus(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
                 categoryName,
@@ -58,7 +58,6 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
                     clearTimeout(successTimeout);
                 }, 1500);
             } else {
-                setIsWaitStatus(false);
                 setErrorMsg(result);
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
@@ -67,7 +66,6 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
             }
         }
         catch (err) {
-            console.log(err.response.data);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {

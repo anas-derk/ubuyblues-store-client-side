@@ -12,7 +12,7 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [allSections, setAllSections] = useState(["brands", "whatsapp button"]);
+    const [allSections, setAllSections] = useState();
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
@@ -44,8 +44,32 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
         }
     }, []);
 
-    const changeSectionsStatus = () => {
+    const handleSelectAppearedSectionStatus = (sectionIndex, sectionStatus) => {
+        allSections[sectionIndex].isAppeared = sectionStatus;
+    }
 
+    const changeSectionsStatus = async () => {
+        try {
+            setIsWaitStatus(true);
+            const res = await axios.put(`${process.env.BASE_API_URL}/appeared-sections/update-sections-status`, {
+                sectionsStatus: allSections.map((section) => ({ _id: section._id, isAppeared: section.isAppeared })),
+            });
+            const result = await res.data;
+            setIsWaitStatus(false);
+            setSuccessMsg(result);
+            let successTimeout = setTimeout(() => {
+                setSuccessMsg("");
+                clearTimeout(successTimeout);
+            }, 1500);
+        }
+        catch (err) {
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
     }
 
     return (
@@ -78,8 +102,10 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                                             <div className="form-check pb-2">
                                                 <input
                                                     type="checkbox"
+                                                    defaultChecked={section.isAppeared}
                                                     className="checkbox-input"
                                                     id={`checkbox${index + 1}`}
+                                                    onChange={(e) => handleSelectAppearedSectionStatus(index, e.target.checked)}
                                                 />
                                                 <label className="form-check-label fw-bold" htmlFor={`checkbox${index + 1}`}>
                                                     Show / Hide
@@ -93,17 +119,20 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                                         {!isWaitStatus && !errorMsg && !successMsg &&
                                             <button
                                                 className="btn btn-success d-block mx-auto global-button"
-                                                onClick={() => changeSectionsStatus(index)}
+                                                onClick={() => changeSectionsStatus()}
                                             >Change Sections Status</button>
                                         }
                                         {isWaitStatus && <button
                                             className="btn btn-warning d-block mx-auto global-button"
+                                            disabled
                                         >Please Waiting</button>}
                                         {successMsg && <button
                                             className="btn btn-success d-block mx-auto global-button"
+                                            disabled
                                         >{successMsg}</button>}
                                         {errorMsg && <button
-                                            className="btn btn-success d-block mx-auto global-button"
+                                            className="btn btn-danger d-block mx-auto global-button"
+                                            disabled
                                         >{errorMsg}</button>}
                                     </td>
                                 </tr>
