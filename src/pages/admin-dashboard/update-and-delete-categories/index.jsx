@@ -136,6 +136,12 @@ export default function UpdateAndDeleteCategories({ activeParentLink, activeChil
                                             {isWaitStatus && <button
                                                 className="btn btn-info d-block mb-3 mx-auto global-button"
                                             >Please Waiting</button>}
+                                            {successMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                            >{successMsg}</button>}
+                                            {errorMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                            >{errorMsg}</button>}
                                         </td>
                                     </tr>
                                 ))}

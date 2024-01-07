@@ -7,10 +7,18 @@ import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
 
 export default function ShowAndHideSections({ activeParentLink, activeChildLink }) {
-    
+
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [allSections, setAllSections] = useState(["brands", "whatsapp button"]);
+
+    const [isWaitStatus, setIsWaitStatus] = useState(false);
+
+    const [errorMsg, setErrorMsg] = useState(false);
+
+    const [successMsg, setSuccessMsg] = useState(false);
 
     useEffect(() => {
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
@@ -34,6 +42,10 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
         }
     }, []);
 
+    const changeSectionsStatus = () => {
+
+    }
+
     return (
         <div className="show-and-hide-sections admin-dashboard">
             <Head>
@@ -41,11 +53,52 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In Your Add Show And Hide Sections Page
                     </h1>
+                    <div className="sections-box w-100">
+                        <table className="sections-table mb-4 managment-table bg-white w-100">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Show Or Hide</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {allSections.map((sectionName, index) => (
+                                    <tr key={sectionName}>
+                                        <td className="section-name-cell">
+                                            {sectionName}
+                                        </td>
+                                        <td className="select-section-status-cell">
+
+                                        </td>
+                                    </tr>
+                                ))}
+                                <tr>
+                                    <td colSpan={2}>
+                                        {!isWaitStatus && !errorMsg && !successMsg &&
+                                            <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                onClick={() => changeSectionsStatus(index)}
+                                            >Change Sections Status</button>
+                                        }
+                                        {isWaitStatus && <button
+                                            className="btn btn-warning d-block mx-auto global-button"
+                                        >Please Waiting</button>}
+                                        {successMsg && <button
+                                            className="btn btn-success d-block mx-auto global-button"
+                                        >{ successMsg }</button>}
+                                        {errorMsg && <button
+                                            className="btn btn-success d-block mx-auto global-button"
+                                        >{ errorMsg }</button>}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
