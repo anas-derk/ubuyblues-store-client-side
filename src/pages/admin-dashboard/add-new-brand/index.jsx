@@ -6,13 +6,15 @@ import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 
-export default function AddNewCategory({ activeParentLink, activeChildLink }) {
+export default function AddNewBrand({ activeParentLink, activeChildLink }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [categoryName, setCategoryName] = useState("");
+    const [brandImage, setBrandImage] = useState("");
+
+    const [brandTitle, setBrandTitle] = useState("");
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
@@ -42,16 +44,17 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
         }
     }, []);
 
-    const addNewCategory = async (e, categoryName) => {
-        e.preventDefault();
+    const addNewBrand = async (e, brandTitle) => {
         try {
+            e.preventDefault();
+            let formData = new FormData();
+            formData.append("brandImg", brandImage);
+            formData.append("title", brandTitle);
             setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
-                categoryName,
-            });
+            const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData);
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Adding New Category Process It Successfuly ...") {
+            if (result === "Adding New Brand Process Has Been Successfuly ...") {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
@@ -67,7 +70,6 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
             }
         }
         catch (err) {
-            console.log(err.response.data);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -78,24 +80,32 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
     }
 
     return (
-        <div className="add-new-cateogry admin-dashboard">
+        <div className="add-new-brand admin-dashboard">
             <Head>
-                <title>Ubuyblues Store - Add New Category</title>
+                <title>Ubuyblues Store - Add New Brand</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Add New Category Page
+                        Hi, Mr Asfour In Your Add New Brand Page
                     </h1>
-                    <form className="add-new-category-form w-50" onSubmit={(e) => addNewCategory(e, categoryName)}>
+                    <form className="add-new-category-form w-50" onSubmit={(e) => addNewBrand(e, brandTitle)}>
+                        <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
+                        <input
+                            type="file"
+                            className="form-control brand-image-field p-2 mb-4"
+                            placeholder="Please Enter Brand Image"
+                            required
+                            onChange={(e) => setBrandImage(e.target.files[0])}
+                        />
                         <input
                             type="text"
                             className="form-control product-name-field p-2 mb-4"
-                            placeholder="Please Enter Category Name"
+                            placeholder="Please Enter Brand Title"
                             required
-                            onChange={(e) => setCategoryName(e.target.value)}
+                            onChange={(e) => setBrandTitle(e.target.value)}
                         />
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
@@ -108,7 +118,7 @@ export default function AddNewCategory({ activeParentLink, activeChildLink }) {
                             className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
                             disabled
                         >
-                            Waiting Add New Category ...
+                            Waiting Add New Brand ...
                         </button>}
                         {errorMsg && <button
                             type="button"
