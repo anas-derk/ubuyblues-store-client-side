@@ -24,12 +24,14 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
         if (adminId) {
             axios.get(`${process.env.BASE_API_URL}/admins/user-info/${adminId}`)
-                .then((res) => {
+                .then(async (res) => {
                     const result = res.data;
                     if (result === "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         localStorage.removeItem("asfour-store-admin-user-id");
                         router.push("/admin-dashboard/login");
                     } else {
+                        const res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
+                        setAllSections(await res1.data);
                         setIsLoadingPage(false);
                     }
                 })
@@ -59,7 +61,7 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                         Hi, Mr Asfour In Your Add Show And Hide Sections Page
                     </h1>
                     <div className="sections-box w-100">
-                        <table className="sections-table mb-4 managment-table bg-white w-100">
+                        {allSections.length > 0 ? <table className="sections-table mb-4 managment-table bg-white w-100">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -73,7 +75,16 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                                             {sectionName}
                                         </td>
                                         <td className="select-section-status-cell">
-
+                                            <div className="form-check pb-2">
+                                                <input
+                                                    type="checkbox"
+                                                    className="checkbox-input"
+                                                    id={`checkbox${index + 1}`}
+                                                />
+                                                <label className="form-check-label fw-bold" htmlFor={`checkbox${index + 1}`}>
+                                                    Show / Hide
+                                                </label>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -90,14 +101,14 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                                         >Please Waiting</button>}
                                         {successMsg && <button
                                             className="btn btn-success d-block mx-auto global-button"
-                                        >{ successMsg }</button>}
+                                        >{successMsg}</button>}
                                         {errorMsg && <button
                                             className="btn btn-success d-block mx-auto global-button"
-                                        >{ errorMsg }</button>}
+                                        >{errorMsg}</button>}
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table> : <p className="alert alert-danger">Sorry, Can't Find Any Sections For Display Or Hide !!</p>}
                     </div>
                 </div>
             </>}
