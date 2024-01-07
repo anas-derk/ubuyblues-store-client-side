@@ -21,6 +21,8 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Slider from "react-slick";
+import { PiShareFatLight } from "react-icons/pi";
+import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
 
 export default function Home() {
 
@@ -75,6 +77,8 @@ export default function Home() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [pageNumber, setPageNumber] = useState(0);
+
+    const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const sliderRef = useRef();
 
@@ -396,6 +400,7 @@ export default function Home() {
                     {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
+                {/* Start Overlay */}
                 {productIndex > -1 && <div className="overlay">
                     <div className="content p-4 text-white">
                         <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
@@ -613,6 +618,36 @@ export default function Home() {
                     </div>
                 </div>}
                 {/* End Overlay */}
+                {/* Start Share Options Box */}
+                {isDisplayShareOptionsBox && <div className="share-options-box">
+                    <div className="share-icons-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
+                        <GrFormClose className="close-share-options-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
+                        <h2 className="mb-3 pb-3 border-bottom border-white">Share Your Favorite Product With Your Friends</h2>
+                        <div className="row">
+                            <div className="col-md-3">
+                                <WhatsappShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                                    <WhatsappIcon size={45} round />
+                                </WhatsappShareButton>
+                            </div>
+                            <div className="col-md-3">
+                                <FacebookShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                                    <FacebookIcon size={45} round />
+                                </FacebookShareButton>
+                            </div>
+                            <div className="col-md-3">
+                                <FacebookMessengerShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                                    <FacebookMessengerIcon size={45} round />
+                                </FacebookMessengerShareButton>
+                            </div>
+                            <div className="col-md-3">
+                                <TelegramShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                                    <TelegramIcon size={45} round />
+                                </TelegramShareButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+                {/* End Share Options Box */}
                 <div className="page-content">
                     <section className="links-and-logo bg-white">
                         <div className="links-box d-flex">
@@ -655,41 +690,6 @@ export default function Home() {
                         <section className="search mb-5 text-end">
                             <BiSearchAlt className="search-icon p-2" />
                         </section>
-                        {/* <section className="ads mb-5">
-                            <h1 className="text-white text-center">At Asfour we offer many great products for you</h1>
-                        </section>
-                        <section className="some-of-products mb-5">
-                            <div className="row">
-                                {allProductsInsideThePage.length > 0 && getLastSevenProducts().map((product, index) => (
-                                    <div className="col-md-3" key={product._id}>
-                                        <div className="product-details p-3 text-center">
-                                            {isItStillDiscountForProduct(product.startDiscountPeriod, product.endDiscountPeriod) && <div className="discount-timer-box">Discount</div>}
-                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" className="mb-3" />
-                                            <div className="details">
-                                                <h4 className="product-name">{product.name}</h4>
-                                                <h5 className="product-category">{product.category}</h5>
-                                                <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
-                                                {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
-                                                <div className="product-managment-buttons-box">
-                                                    {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
-                                                        className="product-managment-icon me-2"
-                                                        onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
-                                                    /> : <BsSuitHeart
-                                                        className="product-managment-icon me-2"
-                                                        onClick={() => addProductToFavoriteUserProducts(index, userId)}
-                                                    />}
-                                                    <AiOutlineEye className="me-2 eye-icon product-managment-icon" onClick={() => setProductIndex(index)} />
-                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                                    {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
-                                                    {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
-                                                    {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section> */}
                         <section className="categories mb-5" id="categories">
                             <h2 className="section-name text-center mb-4 text-white">Categories</h2>
                             <div className="row">
@@ -717,6 +717,11 @@ export default function Home() {
                                             <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
                                             {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
                                             <div className="product-managment-buttons-box">
+                                                <PiShareFatLight
+                                                    className="product-managment-icon me-2"
+                                                    onClick={() => setIsDisplayShareOptionsBox(true)}
+                                                />
+
                                                 {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
                                                     className="product-managment-icon me-2"
                                                     onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
