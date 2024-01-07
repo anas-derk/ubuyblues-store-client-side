@@ -92,7 +92,7 @@ export default function AddNewBrand({ activeParentLink, activeChildLink }) {
                         Hi, Mr Asfour In Your Add New Brand Page
                     </h1>
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewBrand(e, brandTitle)}>
-                        <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
+                        <h6 className="mb-3 fw-bold">Please Select Brand Image</h6>
                         <input
                             type="file"
                             className="form-control brand-image-field p-2 mb-4"
