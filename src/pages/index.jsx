@@ -80,6 +80,10 @@ export default function Home() {
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
+    const [appearedSections, setAppearedSections] = useState([]);
+
+    const [allBrands, setAllBrands] = useState([]);
+
     const sliderRef = useRef();
 
     const pageSize = 8;
@@ -100,6 +104,18 @@ export default function Home() {
                         const result2 = await res1.data;
                         setUserInfo(result2);
                         setFavoriteProductsListForUser(result2.favorite_products_list);
+                    }
+                    res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
+                    let result2 = await res1.data;
+                    const appearedSectionsLength = result2.length;
+                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.sectionName) : []);
+                    if (appearedSectionsLength > 0) {
+                        for (let i = 0; i < appearedSectionsLength; i++) {
+                            if (result2[i].sectionName === "brands" && result2[i].isAppeared) {
+                                res1 = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands`);
+                                setAllBrands(await res1.data);
+                            }
+                        }
                     }
                     setWindowInnerWidth(window.innerWidth);
                     window.addEventListener("resize", function () {
@@ -741,6 +757,36 @@ export default function Home() {
                                 {totalPagesCount > 0 && !isGetProductsStatus && paginationBar()}
                             </div>
                         </section>
+                        {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
+                            <h2 className="section-name text-center mb-5 text-white">Brands</h2>
+                            <div className="container-fluid">
+                                <Slider
+                                    dots={true}
+                                    arrows={false}
+                                    infinite={true}
+                                    speed={500}
+                                    slidesToShow={1}
+                                    slidesToScroll={1}
+                                >
+                                    {allBrands.map((brand, brandIndex) => (
+                                        <div className="brand-box mb-4" key={brand._id}>
+                                            <div className="brand-image-box mb-4">
+                                                <a
+                                                    href="https://google.com"
+                                                    target="_blank"
+                                                >
+                                                    <img
+                                                        src={`${process.env.BASE_API_URL}/${brand.imagePath}`}
+                                                        alt={`${brand.title} Brand Image`}
+                                                    />
+                                                </a>
+                                            </div>
+                                            <h2 className="text-white text-center">{brand.title}</h2>
+                                        </div>
+                                    ))}
+                                </Slider>
+                            </div>
+                        </section>}
                     </div>
                     <Footer />
                 </div>
