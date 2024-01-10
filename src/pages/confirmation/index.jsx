@@ -66,7 +66,7 @@ export default function Confirmation({ orderId }) {
                         <h5 className="fw-bold mb-4 text-center">Your Request</h5>
                         <div className="order-id-and-number border border-white border-2 p-4 mb-5">
                             <h5 className="mb-4 text-center">Order Id: { orderDetails._id }</h5>
-                            <h5 className="mb-0 text-center">Order Id: { orderDetails.orderNumber }</h5>
+                            <h5 className="mb-0 text-center">Order Number: { orderDetails.orderNumber }</h5>
                         </div>
                         <h5 className="mb-5 text-center border border-white border-2 p-4">Order Details</h5>
                         <div className="row total pb-3 mb-5">
