@@ -273,6 +273,7 @@ export default function Checkout() {
     }
 
     const createNewOrder = async (orderDetails) => {
+        console.log(orderDetails);
         try {
             let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
             return await res.data;
@@ -393,6 +394,7 @@ export default function Checkout() {
     }
 
     const approveOnPayPalOrder = async () => {
+        console.log(userInfo);
         try {
             setIsWaitApproveOnPayPalOrder(true);
             const result = await createNewOrder({
