@@ -275,8 +275,7 @@ export default function Checkout() {
     const createNewOrder = async (orderDetails) => {
         try {
             let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
-            let result = await res.data;
-            return result;
+            return await res.data;
         }
         catch (err) {
             throw Error(err);
@@ -397,6 +396,7 @@ export default function Checkout() {
         try {
             setIsWaitApproveOnPayPalOrder(true);
             const result = await createNewOrder({
+                customerUserId: userInfo ? userInfo._id : "",
                 order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
                 checkout_status: "checkout_successful",
                 billing_address: {

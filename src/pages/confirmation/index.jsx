@@ -63,7 +63,12 @@ export default function Confirmation({ orderId }) {
                 <div className="page-content text-white p-4">
                     <h1 className="welcome-msg text-center mb-5">Welcome To You In Payment Confirmation Page</h1>
                     <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
-                        <h5 className="fw-bold mb-5 text-center">Your Request</h5>
+                        <h5 className="fw-bold mb-4 text-center">Your Request</h5>
+                        <div className="order-id-and-number border border-white border-2 p-4 mb-5">
+                            <h5 className="mb-4 text-center">Order Id: { orderDetails._id }</h5>
+                            <h5 className="mb-0 text-center">Order Id: { orderDetails.orderNumber }</h5>
+                        </div>
+                        <h5 className="mb-5 text-center border border-white border-2 p-4">Order Details</h5>
                         <div className="row total pb-3 mb-5">
                             <div className="col-md-3 fw-bold p-0">
                                 Product Name And Quantity
