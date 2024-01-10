@@ -23,6 +23,7 @@ import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Slider from "react-slick";
 import { PiShareFatLight } from "react-icons/pi";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
+import { FaEnvelope, FaTimes, FaWhatsapp } from "react-icons/fa";
 
 export default function Home() {
 
@@ -70,8 +71,6 @@ export default function Home() {
 
     const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
 
-    const router = useRouter();
-
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
@@ -83,6 +82,10 @@ export default function Home() {
     const [appearedSections, setAppearedSections] = useState([]);
 
     const [allBrands, setAllBrands] = useState([]);
+
+    const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
+
+    const router = useRouter();
 
     const sliderRef = useRef();
 
@@ -787,6 +790,17 @@ export default function Home() {
                                 </Slider>
                             </div>
                         </section>}
+                        {/* Start Contact Icons Box */}
+                        {appearedSections.includes("whatsapp button") && <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
+                            <ul className="contact-icons-list">
+                                {isDisplayContactIcons && <li className="contact-icon-item mb-3">
+                                    <a href="https://wa.me/96566817628?text=welcome" target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
+                                </li>}
+                                {!isDisplayContactIcons && <li className="contact-icon-item"><FaEnvelope className="contact-icon" /></li>}
+                                {isDisplayContactIcons && <li className="contact-icon-item"><FaTimes className="close-icon" /></li>}
+                            </ul>
+                        </div>}
+                        {/* End Contact Icons Box */}
                     </div>
                     <Footer />
                 </div>

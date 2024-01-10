@@ -196,6 +196,26 @@
             }
         }
     }
+    .contact-icons-box{
+        position: fixed;
+        left: 30px;
+        bottom: 30px;
+        cursor: pointer;
+        .contact-icons-list{
+            .contact-icon-item{
+                width: 60px;
+                height: 60px;
+                text-align: center;
+                line-height: 60px;
+                border-radius: 50%;
+                background-color: var(--main-color-two);
+            }
+        }
+        .contact-icon, .close-icon, .whatsapp-icon{
+            font-size: 35px;
+            color: #000;
+        }
+    }
     .links-and-logo{
         position: relative;
         border: {
