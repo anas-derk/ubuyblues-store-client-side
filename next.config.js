@@ -2,18 +2,22 @@
 const nextConfig = {
   reactStrictMode: false,
   env: {
-    BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
-    WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api.ubuyblues.com",
+    // BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
+    // WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api.ubuyblues.com",
+    BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api3.outcircle2023.com",
+    WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api3.outcircle2023.com",
   },
   async headers() {
     return [
       {
-        source: process.env.NODE_ENV === "development" ? "//localhost:5200/(.*)" : "//api.ubuyblues.com/(.*)",
+        // source: process.env.NODE_ENV === "development" ? "//localhost:5200/(.*)" : "//api.ubuyblues.com/(.*)",
+        source: process.env.NODE_ENV === "development" ? "//localhost:5200/(.*)" : "//api3.outcircle2023.com/(.*)",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
+            // value: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
+            value: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api2.outcircle2023.com",
           },
           {
             key: "Access-Control-Allow-Methods",
