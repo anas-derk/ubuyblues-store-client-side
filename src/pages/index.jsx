@@ -4,7 +4,7 @@ import Link from "next/link";
 import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -24,6 +24,7 @@ import Slider from "react-slick";
 import { PiShareFatLight } from "react-icons/pi";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
 import { FaEnvelope, FaTimes, FaWhatsapp } from "react-icons/fa";
+import { MdOutlineContactPhone } from "react-icons/md";
 
 export default function Home() {
 
@@ -111,7 +112,7 @@ export default function Home() {
                     res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
                     let result2 = await res1.data;
                     const appearedSectionsLength = result2.length;
-                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName: "" ) : []);
+                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
                     if (appearedSectionsLength > 0) {
                         for (let i = 0; i < appearedSectionsLength; i++) {
                             if (result2[i].sectionName === "brands" && result2[i].isAppeared) {
@@ -791,15 +792,18 @@ export default function Home() {
                             </div>
                         </section>}
                         {/* Start Contact Icons Box */}
-                        {appearedSections.includes("whatsapp button") && <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
+                        <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
                                 {isDisplayContactIcons && <li className="contact-icon-item mb-3">
+                                    <a href="mailto:info@asfourintlco.com" target="_blank"><MdOutlineMail className="mail-icon" /></a>
+                                </li>}
+                                {isDisplayContactIcons && appearedSections.includes("whatsapp button") && <li className="contact-icon-item mb-3">
                                     <a href="https://wa.me/96566817628?text=welcome" target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
                                 </li>}
-                                {!isDisplayContactIcons && <li className="contact-icon-item"><FaEnvelope className="contact-icon" /></li>}
+                                {!isDisplayContactIcons && <li className="contact-icon-item"><MdOutlineContactPhone className="contact-icon" /></li>}
                                 {isDisplayContactIcons && <li className="contact-icon-item"><FaTimes className="close-icon" /></li>}
                             </ul>
-                        </div>}
+                        </div>
                         {/* End Contact Icons Box */}
                     </div>
                     <Footer />

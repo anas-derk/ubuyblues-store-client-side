@@ -231,7 +231,7 @@
   background-color: var(--main-color-two);
 }
 
-.home .contact-icons-box .contact-icon, .home .contact-icons-box .close-icon, .home .contact-icons-box .whatsapp-icon {
+.home .contact-icons-box .contact-icon, .home .contact-icons-box .close-icon, .home .contact-icons-box .whatsapp-icon, .home .contact-icons-box .mail-icon {
   font-size: 35px;
   color: #000;
 }
