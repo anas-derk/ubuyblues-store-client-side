@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function OrderDetails() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [orderDetails, setOrderDetails] = useState({});
 
@@ -34,7 +37,10 @@ export default function OrderDetails() {
                         setOrderDetails(result);
                         setIsLoadingPage(false);
                     })
-                    .catch(err => console.log(err));
+                    .catch(() => {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(false);
+                    });
             }
         }
     }, [orderId]);
@@ -99,7 +105,7 @@ export default function OrderDetails() {
             <Head>
                 <title>Ubuyblues Store - Order Details</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
                 <AdminDashboardSideBar />
                 {/* Start Admin Dashboard Side Bar */}
@@ -230,7 +236,9 @@ export default function OrderDetails() {
                     </div>
                 </section>
                 {/* End Content Section */}
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

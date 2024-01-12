@@ -194,7 +194,7 @@ export default function CustomerOrders() {
                             <div className="col-xl-9">
                                 <div className="customer-orders">
                                     {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus ? <section className="orders-data-box p-3 data-box">
-                                        <table className="orders-data-table mb-4 data-table managment-table w-100">
+                                        <table className="orders-data-table customer-table mb-4 w-100">
                                             <thead>
                                                 <tr>
                                                     <th>Order Number</th>
@@ -206,7 +206,7 @@ export default function CustomerOrders() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {allOrdersInsideThePage.map((order, orderIndex) => (
+                                                {allOrdersInsideThePage.map((order) => (
                                                     <tr key={order._id}>
                                                         <td>{order.orderNumber}</td>
                                                         <td>{order.checkout_status}</td>
@@ -220,7 +220,7 @@ export default function CustomerOrders() {
                                                         <td>
                                                             <Link
                                                                 href={{
-                                                                    pathname: `/admin-dashboard/orders-managment/${order._id}`,
+                                                                    pathname: `/customer-dashboard/orders/${order._id}`,
                                                                     query: {
                                                                         activeParentLink: "orders-managment",
                                                                     }
@@ -237,6 +237,7 @@ export default function CustomerOrders() {
                                         <Link href="/" className="btn btn-danger">Browse Products</Link>
                                     </h1>}
                                 </div>
+                                {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()}
                             </div>
                         </div>
                     </div>

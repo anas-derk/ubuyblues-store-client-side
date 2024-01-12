@@ -86,14 +86,17 @@ textarea{
     }
 }
 
-.managment-table{
-    background-color: #FFF;
+.managment-table, .customer-table{
     td, th{
         border: 1px solid;
         padding: 15px;
         text-align: center;
         font-size: 13px;
     }
+}
+
+.managment-table{
+    background-color: #FFF;
     textarea{
         resize: none;
         height: 150px;
@@ -101,6 +104,10 @@ textarea{
     h6{
         font-size: 13px;
     }
+}
+
+.customer-table{
+    color: #FFF;
 }
 
 .order-details{

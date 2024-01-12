@@ -104,15 +104,15 @@ textarea {
   transform: translateY(-80%);
 }
 
-.managment-table {
-  background-color: #FFF;
-}
-
-.managment-table td, .managment-table th {
+.managment-table td, .managment-table th, .customer-table td, .customer-table th {
   border: 1px solid;
   padding: 15px;
   text-align: center;
   font-size: 13px;
+}
+
+.managment-table {
+  background-color: #FFF;
 }
 
 .managment-table textarea {
@@ -122,6 +122,10 @@ textarea {
 
 .managment-table h6 {
   font-size: 13px;
+}
+
+.customer-table {
+  color: #FFF;
 }
 
 .order-details .customer-info p {
