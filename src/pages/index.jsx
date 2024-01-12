@@ -111,7 +111,7 @@ export default function Home() {
                     res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
                     let result2 = await res1.data;
                     const appearedSectionsLength = result2.length;
-                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.sectionName) : []);
+                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName: "" ) : []);
                     if (appearedSectionsLength > 0) {
                         for (let i = 0; i < appearedSectionsLength; i++) {
                             if (result2[i].sectionName === "brands" && result2[i].isAppeared) {
@@ -771,7 +771,7 @@ export default function Home() {
                                     slidesToShow={1}
                                     slidesToScroll={1}
                                 >
-                                    {allBrands.map((brand, brandIndex) => (
+                                    {allBrands.map((brand) => (
                                         <div className="brand-box mb-4" key={brand._id}>
                                             <div className="brand-image-box mb-4">
                                                 <a
