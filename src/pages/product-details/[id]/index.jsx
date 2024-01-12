@@ -16,7 +16,6 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
-import logoWithWhiteCircle from "../../public/images/logoCircle.png";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
@@ -26,7 +25,7 @@ import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, F
 import { FaEnvelope, FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
 
-export default function Home() {
+export default function ProductDetails() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -730,9 +729,7 @@ export default function Home() {
                             <div className="row products-box bg-white pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-md-3" key={product._id}>
-                                        <a href={`/product-details/${product._id}`} target="_blank">
-                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" />
-                                        </a>
+                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" />
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>
