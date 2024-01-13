@@ -334,15 +334,15 @@ export default function Checkout() {
                     },
                     shipping_address: {
                         first_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
-                        last_name: userInfo && isShippingToOtherAddress ? userInfo.billing_address.last_name : userInfo.billing_address.last_name,
-                        company_name: userInfo && isShippingToOtherAddress ? userInfo.billing_address.company_name : userInfo.billing_address.company_name,
-                        country: userInfo && isShippingToOtherAddress ? userInfo.billing_address.country : userInfo.billing_address.country,
-                        street_address: userInfo && isShippingToOtherAddress ? userInfo.billing_address.street_address : userInfo.billing_address.street_address,
-                        apartment_number: userInfo && isShippingToOtherAddress ? userInfo.billing_address.apartment_number : userInfo.billing_address.apartment_number,
-                        city: userInfo && isShippingToOtherAddress ? userInfo.billing_address.city : userInfo.billing_address.city,
-                        postal_code: userInfo && isShippingToOtherAddress ? userInfo.billing_address.postal_code : userInfo.billing_address.postal_code,
-                        phone_number: userInfo && isShippingToOtherAddress ? userInfo.billing_address.phone_number : userInfo.billing_address.phone_number,
-                        email: userInfo && isShippingToOtherAddress ? userInfo.billing_address.email : userInfo.billing_address.email,
+                        last_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
+                        company_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
+                        country: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
+                        street_address: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
+                        apartment_number: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
+                        city: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
+                        postal_code: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
+                        phone_number: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
+                        email: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
                     },
                 }));
             } else {
@@ -482,7 +482,7 @@ export default function Checkout() {
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
                                         >
-                                            <option value={countries["KW"].name} hidden>Kuwait</option>
+                                            <option value={countries[getCountryCode(userInfo.billing_address.country)].name} hidden>{ userInfo.billing_address.country }</option>
                                             {countryList.map((country) => (
                                                 <option key={country.name} value={country.name}>
                                                     {country.name}
@@ -554,8 +554,8 @@ export default function Checkout() {
                                                     type="text"
                                                     className="p-2 text-center"
                                                     disabled
-                                                    defaultValue={userInfo ? ("+" + countries[getCountryCode(userInfo.billing_address.country)].phone) : "00965"}
-                                                    value={"+" + countries[getCountryCode(userInfo.billing_address.country)].phone}
+                                                    defaultValue={userInfo ? ("00" + countries[getCountryCode(userInfo.billing_address.country)].phone) : "00965"}
+                                                    value={"00" + countries[getCountryCode(userInfo.billing_address.country)].phone}
                                                 />
                                             </div>
                                             <div className="col-md-10">
@@ -656,13 +656,20 @@ export default function Checkout() {
                                     </section>
                                     <section className="country mb-4">
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
-                                        <input
-                                            type="text"
+                                        <select
                                             className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Country / Area Here"
-                                            defaultValue={userInfo ? userInfo.shipping_address.country : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, country: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
-                                        />
+                                            style={{
+                                                backgroundColor: "var(--main-color-one)",
+                                            }}
+                                        >
+                                            <option value={countries[getCountryCode(userInfo.shipping_address.country)].name} hidden>{ userInfo.shipping_address.country }</option>
+                                            {countryList.map((country) => (
+                                                <option key={country.name} value={country.name}>
+                                                    {country.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                         {formValidationErrors.country_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{formValidationErrors.country_for_shipping_address}</span>
@@ -722,13 +729,26 @@ export default function Checkout() {
                                     </section>
                                     <section className="phone-number mb-4">
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
-                                        <input
-                                            type="number"
-                                            className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Phone Number"
-                                            defaultValue={userInfo ? userInfo.shipping_address.phone_number.toString() : ""}
-                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
-                                        />
+                                        <div className="row">
+                                            <div className="col-md-2">
+                                                <input
+                                                    type="text"
+                                                    className="p-2 text-center"
+                                                    disabled
+                                                    defaultValue={userInfo ? ("00" + countries[getCountryCode(userInfo.shipping_address.country)].phone) : "00965"}
+                                                    value={"00" + countries[getCountryCode(userInfo.shipping_address.country)].phone}
+                                                />
+                                            </div>
+                                            <div className="col-md-10">
+                                                <input
+                                                    type="text"
+                                                    className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
+                                                    placeholder="Please Enter New Phone Number"
+                                                    defaultValue={userInfo ? userInfo.shipping_address.phone_number : ""}
+                                                    onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                />
+                                            </div>
+                                        </div>
                                         {formValidationErrors.phone_number_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{formValidationErrors.phone_number_for_shipping_address}</span>
