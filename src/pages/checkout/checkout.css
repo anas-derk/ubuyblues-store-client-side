@@ -27,3 +27,7 @@
 .checkout .page-content .radio-input {
   width: fit-content;
 }
+
+.checkout .page-content .icon {
+  font-size: 50px;
+}

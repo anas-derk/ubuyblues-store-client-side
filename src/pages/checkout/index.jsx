@@ -3,16 +3,14 @@ import Header from "@/components/Header";
 import validations from "../../../public/global_functions/validations";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
-import UPaymentsImage from "@/../public/images/UPayments.webp";
 import PayPalImage from "@/../public/images/PayPal.webp";
 import axios from "axios";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import { v4 as generateUniqueID } from "uuid";
 import { useRouter } from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from 'countries-list';
-import { isValidPhoneNumber }  from 'libphonenumber-js';
+import { FaCcPaypal } from "react-icons/fa";
 
 export default function Checkout() {
 
@@ -42,7 +40,7 @@ export default function Checkout() {
 
     const [errorMsg, setErrorMsg] = useState("");
 
-    const [paymentMethod, setPaymentMethod] = useState("upayments");
+    const [paymentMethod, setPaymentMethod] = useState("paypal");
 
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
 
@@ -286,96 +284,6 @@ export default function Checkout() {
         }
         catch (err) {
             throw Error(err);
-        }
-    }
-
-    const handleSelectUPaymentsPayment = async () => {
-        try {
-            const errorsObject = validateFormFields();
-            setFormValidationErrors(errorsObject);
-            if (Object.keys(errorsObject).length == 0) {
-                setIsWaitStatus(true);
-                let result = await createNewOrder({
-                    order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
-                    checkout_status: "incomplete",
-                    billing_address: {
-                        first_name: userInfo.billing_address.first_name,
-                        last_name: userInfo.billing_address.last_name,
-                        company_name: userInfo.billing_address.company_name,
-                        country: userInfo.billing_address.country,
-                        street_address: userInfo.billing_address.street_address,
-                        apartment_number: userInfo.billing_address.apartment_number,
-                        city: userInfo.billing_address.city,
-                        postal_code: userInfo.billing_address.postal_code,
-                        phone: userInfo.billing_address.phone_number,
-                        email: userInfo.billing_address.email,
-                    },
-                    shipping_address: {
-                        first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
-                        last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
-                        company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
-                        country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
-                        street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
-                        apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
-                        city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
-                        postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
-                        phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
-                        email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
-                    },
-                    order_products: allProductsData.map((product) => ({
-                        name: product.name,
-                        unit_price: product.price,
-                        discount: product.discount,
-                        total_amount: product.price * product.quantity,
-                        quantity: product.quantity,
-                        image_path: product.imagePath,
-                    })),
-                    requestNotes,
-                });
-                res = await axios.post(`${process.env.BASE_API_URL}/orders/send-order-to-upayments`, {
-                    products: allProductsData.map((product) => ({
-                        name: product.name,
-                        description: product.description,
-                        price: product.price - product.discount,
-                        quantity: product.quantity,
-                    })),
-                    order: {
-                        id: result.orderId,
-                        description: "Purchase order received for Logitech K380 Keyboard",
-                        currency: "USD",
-                        amount: pricesDetailsSummary.totalPriceAfterDiscount,
-                    },
-                    language: "en",
-                    reference: {
-                        id: "202210101202210101"
-                    },
-                    customer: {
-                        uniqueId: generateUniqueID(),
-                        name: `${userInfo.billing_address.first_name} ${userInfo.billing_address.last_name}`,
-                        email: userInfo.billing_address.email,
-                        mobile: userInfo.billing_address.phone_number,
-                    },
-                    returnUrl: `${process.env.WEBSITE_URL}/confirmation`,
-                    cancelUrl: `https://error.com`,
-                    notificationUrl: `${process.env.BASE_API_URL}/orders/update-upayments-order/${result.orderId}`,
-                });
-                result = await res.data;
-                setIsWaitStatus(false);
-                if (result.status && result.message === "Data received successfully") {
-                    setSuccessMsg("Please Wait While Redirect To Payment Page ...");
-                    let paymentSuccessTimeout = setTimeout(() => {
-                        router.push(result.data.link);
-                        clearTimeout(paymentSuccessTimeout);
-                    }, 3000);
-                }
-            }
-        } catch (err) {
-            setIsWaitStatus(false);
-            setErrorMsg("Someting Went Wrong, Please Repeate The Process !!");
-            let paymentErrorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(paymentErrorTimeout);
-            }, 3000);
         }
     }
 
@@ -814,46 +722,6 @@ export default function Checkout() {
                                     </div>
                                     {/* Start Payement Methods Section */}
                                     <section className="payment-methods mb-4 border border-2 p-3">
-                                        <div className="row align-items-center border-bottom pb-3">
-                                            <div className="col-md-6 text-start">
-                                                <input
-                                                    type="radio"
-                                                    checked={paymentMethod === "upayments"}
-                                                    id="upayments-radio"
-                                                    className="me-2 radio-input"
-                                                    name="radioGroup"
-                                                    onChange={() => setPaymentMethod("upayments")}
-                                                />
-                                                <label htmlFor="upayments-radio" onClick={() => setPaymentMethod("upayments")}>UPayments</label>
-                                            </div>
-                                            <div className="col-md-6 text-md-end">
-                                                <img src={UPaymentsImage.src} alt="UPayments Image" />
-                                            </div>
-                                            {!isWaitStatus && !successMsg && !errorMsg && paymentMethod === "upayments" && <button
-                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={handleSelectUPaymentsPayment}
-                                            >
-                                                Confirm Request
-                                            </button>}
-                                            {isWaitStatus && <button
-                                                className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                                disabled
-                                            >
-                                                Waiting ...
-                                            </button>}
-                                            {errorMsg && <button
-                                                className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                                disabled
-                                            >
-                                                {errorMsg}
-                                            </button>}
-                                            {successMsg && <button
-                                                className="checkout-link p-2 w-100 d-block text-center fw-bold"
-                                                disabled
-                                            >
-                                                {successMsg}
-                                            </button>}
-                                        </div>
                                         <div className={`row align-items-center pt-3 ${paymentMethod === "paypal" ? "mb-3" : ""}`}>
                                             <div className="col-md-6 text-start">
                                                 <input
@@ -867,7 +735,7 @@ export default function Checkout() {
                                                 <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>PayPal</label>
                                             </div>
                                             <div className="col-md-6 text-md-end">
-                                                <img src={PayPalImage.src} alt="PayPal Image" />
+                                                <FaCcPaypal className="icon paypal-icon" />
                                             </div>
                                         </div>
                                         {paymentMethod === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider

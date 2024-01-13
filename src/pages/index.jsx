@@ -800,7 +800,7 @@ export default function Home() {
                                     <a href="mailto:info@asfourintlco.com" target="_blank"><MdOutlineMail className="mail-icon" /></a>
                                 </li>}
                                 {isDisplayContactIcons && appearedSections.includes("whatsapp button") && <li className="contact-icon-item mb-3">
-                                    <a href="https://wa.me/96566817628?text=welcome" target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
+                                    <a href="https://wa.me/96560048235?text=welcome" target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
                                 </li>}
                                 {!isDisplayContactIcons && <li className="contact-icon-item"><MdOutlineContactPhone className="contact-icon" /></li>}
                                 {isDisplayContactIcons && <li className="contact-icon-item"><FaTimes className="close-icon" /></li>}
