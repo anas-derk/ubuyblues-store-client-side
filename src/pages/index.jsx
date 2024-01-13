@@ -163,20 +163,6 @@ export default function Home() {
         }
     }
 
-    const getLastSevenProducts = () => {
-        let lastSevenProducts = [];
-        if (allProductsInsideThePage.length >= 7) {
-            for (let i = 0; i < 2; i++) {
-                lastSevenProducts.push(allProductsInsideThePage[i]);
-            }
-        } else {
-            for (let i = 0; i < allProductsInsideThePage.length; i++) {
-                lastSevenProducts.push(allProductsInsideThePage[i]);
-            }
-        }
-        return lastSevenProducts;
-    }
-
     const isFavoriteProductForUser = (favorite_products_list, productId) => {
         for (let i = 0; i < favorite_products_list.length; i++) {
             if (favorite_products_list[i]._id === productId) return true;
@@ -736,8 +722,8 @@ export default function Home() {
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
-                                            {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
+                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h5>
+                                            {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} KWD</h4>}
                                             <div className="product-managment-buttons-box">
                                                 <PiShareFatLight
                                                     className="product-managment-icon me-2"

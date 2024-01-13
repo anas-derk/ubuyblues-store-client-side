@@ -39,6 +39,8 @@ export default function Checkout() {
 
     const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
 
+    const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
+
     const countryList = Object.values(countries);
 
     const router = useRouter();
@@ -76,6 +78,7 @@ export default function Checkout() {
             const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
             if (userAddresses) {
                 setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
+                setIsSavePaymentInfo(true);
             } else {
                 setUserInfo({
                     billing_address: {
@@ -315,6 +318,36 @@ export default function Checkout() {
         const errorsObject = validateFormFields();
         setFormValidationErrors(errorsObject);
         if (Object.keys(errorsObject).length == 0) {
+            if (isSavePaymentInfo) {
+                localStorage.setItem("asfour-store-user-addresses", JSON.stringify({
+                    billing_address: {
+                        first_name: userInfo ? userInfo.billing_address.first_name : "",
+                        last_name: userInfo ? userInfo.billing_address.last_name : "",
+                        company_name: userInfo ? userInfo.billing_address.company_name : "",
+                        country: userInfo.billing_address.country,
+                        street_address: userInfo ? userInfo.billing_address.street_address : "",
+                        apartment_number: userInfo.billing_address.apartment_number,
+                        city: userInfo ? userInfo.billing_address.city : "",
+                        postal_code: userInfo.billing_address.postal_code,
+                        phone_number: userInfo.billing_address.phone_number,
+                        email: userInfo ? userInfo.billing_address.email : "",
+                    },
+                    shipping_address: {
+                        first_name: userInfo ? userInfo.shipping_address.first_name : "",
+                        last_name: userInfo ? userInfo.shipping_address.last_name : "",
+                        company_name: userInfo ? userInfo.shipping_address.company_name : "",
+                        country: userInfo.shipping_address.country,
+                        street_address: userInfo ? userInfo.shipping_address.street_address : "",
+                        apartment_number: userInfo.shipping_address.apartment_number,
+                        city: userInfo ? userInfo.shipping_address.city : "",
+                        postal_code: userInfo.shipping_address.postal_code,
+                        phone_number: userInfo.shipping_address.phone_number,
+                        email: userInfo ? userInfo.shipping_address.email : "",
+                    },
+                }));
+            } else {
+                localStorage.removeItem("asfour-store-user-addresses");
+            }
             setIsDisplayPaypalPaymentButtons(true);
         }
     }
@@ -393,7 +426,7 @@ export default function Checkout() {
                 <Header />
                 <div className="page-content text-white p-4">
                     <div className="container-fluid">
-                        <h1 className="h3 mb-4 fw-bold">Payment</h1>
+                        <h1 className="h3 mb-4 fw-bold text-center">Welcome To You In Checkout Page</h1>
                         <div className="row align-items-center">
                             <div className="col-xl-6">
                                 <h6 className="mb-4 fw-bold">Billing Details</h6>
@@ -555,6 +588,18 @@ export default function Checkout() {
                                         </p>}
                                     </section>
                                 </form>
+                                {!userInfo._id && <div className="form-check mb-3">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        defaultChecked={isSavePaymentInfo}
+                                        id="flexCheckDefault"
+                                        onChange={(e) => setIsSavePaymentInfo(e.target.checked)}
+                                    />
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                        Do You Want To Save Payment Information ?
+                                    </label>
+                                </div>}
                                 <div className="form-check mb-3">
                                     <input
                                         className="form-check-input"
@@ -728,7 +773,7 @@ export default function Checkout() {
                                                 ( {product.name} ) x {product.quantity}
                                             </div>
                                             <div className="col-md-3 fw-bold p-0 text-md-end">
-                                                {product.price * product.quantity} $
+                                                {product.price * product.quantity} KWD
                                             </div>
                                         </div>
                                     ))}
@@ -737,7 +782,7 @@ export default function Checkout() {
                                             Total Price Before Discount
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceBeforeDiscount} $
+                                            {pricesDetailsSummary.totalPriceBeforeDiscount} KWD
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
@@ -745,7 +790,7 @@ export default function Checkout() {
                                             Total Discount
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalDiscount} $
+                                            {pricesDetailsSummary.totalDiscount} KWD
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-4">
@@ -753,7 +798,7 @@ export default function Checkout() {
                                             Total Price After Discount
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceAfterDiscount} $
+                                            {pricesDetailsSummary.totalPriceAfterDiscount} KWD
                                         </div>
                                     </div>
                                     {/* Start Payement Methods Section */}

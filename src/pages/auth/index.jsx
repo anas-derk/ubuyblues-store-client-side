@@ -96,8 +96,8 @@ export default function UserAuth() {
             try {
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`);
                 const result = await res.data;
-                setIsLoginingStatus(false);
                 if (result === "Sorry, Email Or Password Incorrect !!") {
+                    setIsLoginingStatus(false);
                     setErrorMsg(result);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");

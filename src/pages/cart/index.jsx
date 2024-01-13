@@ -150,8 +150,8 @@ export default function Cart() {
                                                             </div>
                                                             <div className="col-lg-8">
                                                                 <h5 className="product-name mb-3">{product.name}</h5>
-                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h6>
-                                                                {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} $</h6>}
+                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h6>
+                                                                {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} KWD</h6>}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -167,7 +167,7 @@ export default function Cart() {
                                                         </div>
                                                     </td>
                                                     <td className="subtotal-cell">
-                                                        {product.price * product.quantity} $
+                                                        {product.price * product.quantity} KWD
                                                     </td>
                                                     <td className="delete-product-cell">
                                                         <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
@@ -191,8 +191,8 @@ export default function Cart() {
                                                         <td className="product-cell">
                                                             <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
                                                             <h5 className="product-name mb-3">{product.name}</h5>
-                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h6>
-                                                            {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} $</h6>}
+                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h6>
+                                                            {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} KWD</h6>}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -212,7 +212,7 @@ export default function Cart() {
                                                     <tr>
                                                         <th>Subtotal</th>
                                                         <td className="subtotal-cell">
-                                                            {product.price * product.quantity} $
+                                                            {product.price * product.quantity} KWD
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -235,7 +235,7 @@ export default function Cart() {
                                             Total Price Before Discount
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceBeforeDiscount} $
+                                            {pricesDetailsSummary.totalPriceBeforeDiscount} KWD
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
@@ -243,7 +243,7 @@ export default function Cart() {
                                             Total Discount
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalDiscount} $
+                                            {pricesDetailsSummary.totalDiscount} KWD
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-5">
@@ -251,7 +251,7 @@ export default function Cart() {
                                             Total Price After Discount
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceAfterDiscount} $
+                                            {pricesDetailsSummary.totalPriceAfterDiscount} KWD
                                         </div>
                                     </div>
                                     <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">Go To Checkout</Link>
