@@ -26,6 +26,12 @@ export default function CustomerOrders() {
 
     const [pageNumber, setPageNumber] = useState(0);
 
+    const [filters, setFilters] = useState({
+        orderNumber: -1,
+        orderId: "",
+        status: "",
+    });
+
     const router = useRouter();
 
     const pageSize = 5;
@@ -102,6 +108,35 @@ export default function CustomerOrders() {
         setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize));
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
+    }
+
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
+        if (filters.status) filteringString += `status=${filters.status}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
+    const filterOrders = async () => {
+        try {
+            setIsFilteringOrdersStatus(true);
+            const filteringString = getFilteringString(filters);
+            const result = await getOrdersCount(filteringString);
+            if (result > 0) {
+                const result1 = await getAllOrdersInsideThePage(1, pageSize, filteringString);
+                setAllOrdersInsideThePage(result1);
+                setTotalPagesCount(Math.ceil(result / pageSize));
+                setIsFilteringOrdersStatus(false);
+            } else {
+                setAllOrdersInsideThePage([]);
+                setTotalPagesCount(0);
+                setIsFilteringOrdersStatus(false);
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     const paginationBar = () => {
@@ -193,7 +228,49 @@ export default function CustomerOrders() {
                             </div>
                             <div className="col-xl-9">
                                 <div className="customer-orders">
-                                    {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus ? <section className="orders-data-box p-3 data-box">
+                                    <section className="filters mb-3 border-3 border-white p-3 text-start text-white">
+                                        <h5 className="section-name fw-bold text-center">Filters: </h5>
+                                        <hr />
+                                        <div className="row mb-4">
+                                            <div className="col-md-6 d-flex align-items-center">
+                                                <h6 className="me-2 mb-0 fw-bold text-center">Order Number</h6>
+                                                <input
+                                                    type="number"
+                                                    className="p-2"
+                                                    placeholder="Pleae Enter Order Number"
+                                                    min="1"
+                                                    max={allOrdersInsideThePage.length}
+                                                    onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber })}
+                                                />
+                                            </div>
+                                            <div className="col-md-6 d-flex align-items-center">
+                                                <h6 className="me-2 mb-0 fw-bold text-center">Status</h6>
+                                                <select
+                                                    className="select-order-status p-2"
+                                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                                                >
+                                                    <option value="" hidden>Pleae Enter Status</option>
+                                                    <option value="">All</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="shipping">Shipping</option>
+                                                    <option value="completed">Completed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {!isFilteringOrdersStatus && <button
+                                            className="btn btn-success d-block w-25 mx-auto mt-2"
+                                            onClick={() => filterOrders()}
+                                        >
+                                            Filter
+                                        </button>}
+                                        {isFilteringOrdersStatus && <button
+                                            className="btn btn-success d-block w-25 mx-auto mt-2"
+                                            disabled
+                                        >
+                                            Filtering ...
+                                        </button>}
+                                    </section>
+                                    {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
                                         <table className="orders-data-table customer-table mb-4 w-100">
                                             <thead>
                                                 <tr>
@@ -232,12 +309,13 @@ export default function CustomerOrders() {
                                                 ))}
                                             </tbody>
                                         </table>
-                                    </section> : <h1 className="h5 text-white">
-                                        <span className="me-2">No order has been made yet.</span>
-                                        <Link href="/" className="btn btn-danger">Browse Products</Link>
-                                    </h1>}
+                                    </section>}
+                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
+                                    {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                                        <span className="loader-table-data"></span>
+                                    </div>}
                                 </div>
-                                {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()}
+                                {/* {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()} */}
                             </div>
                         </div>
                     </div>

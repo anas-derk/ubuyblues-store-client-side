@@ -189,7 +189,6 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
         let filteringString = "";
         if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
         if (filters.orderId) filteringString += `_id=${filters.orderId}&`;
-        if (filters.klarnaReference) filteringString += `klarnaReference=${filters.klarnaReference}&`;
         if (filters.status) filteringString += `status=${filters.status}&`;
         if (filters.customerName) filteringString += `customerName=${filters.customerName}&`;
         if (filters.email) filteringString += `email=${filters.email}&`;
