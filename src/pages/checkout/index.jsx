@@ -372,7 +372,7 @@ export default function Checkout() {
             purchase_units: [
                 {
                     amount: {
-                        value: pricesDetailsSummary.totalPriceAfterDiscount,
+                        value: pricesDetailsSummary.totalPriceAfterDiscount * 3.25,
                     }
                 }
             ]
