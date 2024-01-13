@@ -10,6 +10,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from 'countries-list';
 import { FaCcPaypal } from "react-icons/fa";
+import { parsePhoneNumber } from "libphonenumber-js";
 
 export default function Checkout() {
 
@@ -90,7 +91,7 @@ export default function Checkout() {
                         apartment_number: 1,
                         city: "",
                         postal_code: 1,
-                        phone_number: "60048235",
+                        phone_number: "0096560048235",
                         email: "",
                     },
                     shipping_address: {
@@ -102,7 +103,7 @@ export default function Checkout() {
                         apartment_number: 1,
                         city: "",
                         postal_code: 1,
-                        phone_number: "60048235",
+                        phone_number: "0096560048235",
                         email: "",
                     },
                 });
@@ -124,6 +125,15 @@ export default function Checkout() {
             setIsLoadingPage(false);
         }
     }, []);
+
+    const getPhoneNumberFromString = (text, country) => {
+        try {
+            return parsePhoneNumber(text, country).nationalNumber;
+        }
+        catch (err) {
+            return "";
+        }
+    }
 
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
@@ -203,14 +213,15 @@ export default function Checkout() {
             },
             {
                 name: "phone_number_for_billing_address",
-                value: `00${countries[getCountryCode(userInfo.billing_address.country)].phone}${userInfo.billing_address.phone_number}`,
+                value: userInfo.billing_address.phone_number,
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
                     },
                     isValidMobilePhone: {
                         msg: "Sorry, Invalid Mobile Phone !!",
-                    }
+                        countryCode: getCountryCode(userInfo.billing_address.country),
+                    },
                 },
             },
             {
@@ -281,10 +292,14 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "phone_number_for_shipping_address",
-                value: `+${countries[getCountryCode(userInfo.billing_address.country)].phone}${userInfo.billing_address.phone_number}`,
+                value: userInfo.shipping_address.phone_number,
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                    isValidMobilePhone: {
+                        msg: "Sorry, Invalid Mobile Phone !!",
+                        countryCode: getCountryCode(userInfo.shipping_address.country),
                     },
                 },
             } : null,
@@ -477,12 +492,23 @@ export default function Checkout() {
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
                                         <select
                                             className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                            onChange={(e) => {
+                                                const countryCode = getCountryCode(e.target.value);
+                                                setUserInfo({
+                                                    ...userInfo,
+                                                    billing_address: {
+                                                        ...userInfo.billing_address,
+                                                        country: e.target.value,
+                                                        phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billing_address.phone_number, countryCode),
+                                                    },
+                                                });
+                                                setIsDisplayPaypalPaymentButtons(false);
+                                            }}
                                             style={{
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
                                         >
-                                            <option value={countries[getCountryCode(userInfo.billing_address.country)].name} hidden>{ userInfo.billing_address.country }</option>
+                                            <option value={countries[getCountryCode(userInfo.billing_address.country)].name} hidden>{userInfo.billing_address.country}</option>
                                             {countryList.map((country) => (
                                                 <option key={country.name} value={country.name}>
                                                     {country.name}
@@ -554,7 +580,6 @@ export default function Checkout() {
                                                     type="text"
                                                     className="p-2 text-center"
                                                     disabled
-                                                    defaultValue={userInfo ? ("00" + countries[getCountryCode(userInfo.billing_address.country)].phone) : "00965"}
                                                     value={"00" + countries[getCountryCode(userInfo.billing_address.country)].phone}
                                                 />
                                             </div>
@@ -563,7 +588,7 @@ export default function Checkout() {
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New Phone Number"
-                                                    defaultValue={userInfo ? userInfo.billing_address.phone_number : ""}
+                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billing_address.phone_number, getCountryCode(userInfo.billing_address.country)) : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
                                             </div>
@@ -658,12 +683,23 @@ export default function Checkout() {
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
                                         <select
                                             className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, country: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                            onChange={(e) => {
+                                                const countryCode = getCountryCode(e.target.value);
+                                                setUserInfo({
+                                                    ...userInfo,
+                                                    shipping_address: {
+                                                        ...userInfo.shipping_address,
+                                                        country: e.target.value,
+                                                        phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shipping_address.phone_number, countryCode),
+                                                    },
+                                                });
+                                                setIsDisplayPaypalPaymentButtons(false);
+                                            }}
                                             style={{
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
                                         >
-                                            <option value={countries[getCountryCode(userInfo.shipping_address.country)].name} hidden>{ userInfo.shipping_address.country }</option>
+                                            <option value={countries[getCountryCode(userInfo.shipping_address.country)].name} hidden>{userInfo.shipping_address.country}</option>
                                             {countryList.map((country) => (
                                                 <option key={country.name} value={country.name}>
                                                     {country.name}
@@ -735,7 +771,6 @@ export default function Checkout() {
                                                     type="text"
                                                     className="p-2 text-center"
                                                     disabled
-                                                    defaultValue={userInfo ? ("00" + countries[getCountryCode(userInfo.shipping_address.country)].phone) : "00965"}
                                                     value={"00" + countries[getCountryCode(userInfo.shipping_address.country)].phone}
                                                 />
                                             </div>
@@ -744,7 +779,7 @@ export default function Checkout() {
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder="Please Enter New Phone Number"
-                                                    defaultValue={userInfo ? userInfo.shipping_address.phone_number : ""}
+                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shipping_address.phone_number, getCountryCode(userInfo.shipping_address.country)) : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
                                             </div>
