@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import validations from "../../../public/global_functions/validations";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
-import PayPalImage from "@/../public/images/PayPal.webp";
 import axios from "axios";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { useRouter } from "next/router";
@@ -34,12 +33,6 @@ export default function Checkout() {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
-    const [isWaitStatus, setIsWaitStatus] = useState(false);
-
-    const [successMsg, setSuccessMsg] = useState("");
-
-    const [errorMsg, setErrorMsg] = useState("");
-
     const [paymentMethod, setPaymentMethod] = useState("paypal");
 
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
@@ -54,11 +47,11 @@ export default function Checkout() {
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then((res) => {
+                .then(async (res) => {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserInfo(result);
-                        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+                        const allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
                         if (Array.isArray(allProductsData)) {
                             if (allProductsData.length > 0) {
                                 const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
@@ -80,7 +73,38 @@ export default function Checkout() {
                     setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
-            let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+            const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
+            if (userAddresses) {
+                setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
+            } else {
+                setUserInfo({
+                    billing_address: {
+                        first_name: "",
+                        last_name: "",
+                        company_name: "",
+                        country: "Kuwait",
+                        street_address: "",
+                        apartment_number: 1,
+                        city: "",
+                        postal_code: 1,
+                        phone_number: "60048235",
+                        email: "",
+                    },
+                    shipping_address: {
+                        first_name: "",
+                        last_name: "",
+                        company_name: "",
+                        country: "Kuwait",
+                        street_address: "",
+                        apartment_number: 1,
+                        city: "",
+                        postal_code: 1,
+                        phone_number: "60048235",
+                        email: "",
+                    },
+                });
+            }
+            const allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
             if (Array.isArray(allProductsData)) {
                 if (allProductsData.length > 0) {
                     const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
@@ -425,9 +449,9 @@ export default function Checkout() {
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
                                         >
-                                            <option value={countries["US"].name} hidden>United States</option>
+                                            <option value={countries["KW"].name} hidden>Kuwait</option>
                                             {countryList.map((country) => (
-                                                country.name !== "United States" && <option key={country.name} value={country.name}>
+                                                <option key={country.name} value={country.name}>
                                                     {country.name}
                                                 </option>
                                             ))}
@@ -491,14 +515,26 @@ export default function Checkout() {
                                     </section>
                                     <section className="phone-number mb-4">
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
-                                        {userInfo.billing_address.country ? <span>+ {countries[getCountryCode(userInfo.billing_address.country)].phone}</span> : <span>+ 1</span>}
-                                        <input
-                                            type="number"
-                                            className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Phone Number"
-                                            defaultValue={userInfo ? userInfo.billing_address.phone_number : ""}
-                                            onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
-                                        />
+                                        <div className="row">
+                                            <div className="col-md-2">
+                                                <input
+                                                    type="text"
+                                                    className="p-2 text-center"
+                                                    disabled
+                                                    defaultValue={userInfo ? ("+" + countries[getCountryCode(userInfo.billing_address.country)].phone) : "00965"}
+                                                    value={"+" + countries[getCountryCode(userInfo.billing_address.country)].phone}
+                                                />
+                                            </div>
+                                            <div className="col-md-10">
+                                                <input
+                                                    type="text"
+                                                    className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
+                                                    placeholder="Please Enter New Phone Number"
+                                                    defaultValue={userInfo ? userInfo.billing_address.phone_number : ""}
+                                                    onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                />
+                                            </div>
+                                        </div>
                                         {formValidationErrors.phone_number_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{formValidationErrors.phone_number_for_billing_address}</span>

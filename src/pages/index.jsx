@@ -23,7 +23,7 @@ import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Slider from "react-slick";
 import { PiShareFatLight } from "react-icons/pi";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
-import { FaEnvelope, FaTimes, FaWhatsapp } from "react-icons/fa";
+import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
 
 export default function Home() {
