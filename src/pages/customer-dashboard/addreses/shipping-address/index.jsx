@@ -8,6 +8,8 @@ import LoaderPage from "@/components/LoaderPage";
 import validations from "../../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { countries, getCountryCode } from 'countries-list';
+import { parsePhoneNumber } from "libphonenumber-js";
 
 export default function CustomerBillingAddress() {
 
@@ -24,6 +26,8 @@ export default function CustomerBillingAddress() {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
+
+    const countryList = Object.values(countries);
 
     const router = useRouter();
 
@@ -48,6 +52,15 @@ export default function CustomerBillingAddress() {
             router.push("/auth");
         }
     }, []);
+
+    const getPhoneNumberFromString = (text, country) => {
+        try {
+            return parsePhoneNumber(text, country).nationalNumber;
+        }
+        catch (err) {
+            return "";
+        }
+    }
 
     const validateFormFields = () => {
         let errorsObject = validations.inputValuesValidation([
@@ -111,6 +124,10 @@ export default function CustomerBillingAddress() {
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
+                    },
+                    isValidMobilePhone: {
+                        msg: "Sorry, Invalid Mobile Phone !!",
+                        countryCode: getCountryCode(userInfo.shipping_address.country),
                     },
                 },
             },
@@ -227,13 +244,30 @@ export default function CustomerBillingAddress() {
                                     </section>
                                     <section className="country mb-4">
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
-                                        <input
-                                            type="text"
+                                        <select
                                             className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Country / Area Here"
-                                            defaultValue={userInfo.shipping_address.country}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, country: e.target.value.trim() } })}
-                                        />
+                                            onChange={(e) => {
+                                                const countryCode = getCountryCode(e.target.value);
+                                                setUserInfo({
+                                                    ...userInfo,
+                                                    shipping_address: {
+                                                        ...userInfo.shipping_address,
+                                                        country: e.target.value,
+                                                        phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shipping_address.phone_number, countryCode),
+                                                    },
+                                                })
+                                            }}
+                                            style={{
+                                                backgroundColor: "var(--main-color-one)",
+                                            }}
+                                        >
+                                            <option value={countries[getCountryCode(userInfo.shipping_address.country)].name} hidden>{userInfo.shipping_address.country}</option>
+                                            {countryList.map((country) => (
+                                                <option key={country.name} value={country.name}>
+                                                    {country.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                         {formValidationErrors.country && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{formValidationErrors.country}</span>
@@ -293,13 +327,25 @@ export default function CustomerBillingAddress() {
                                     </section>
                                     <section className="phone-number mb-4">
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
-                                        <input
-                                            type="number"
-                                            className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Phone Number"
-                                            defaultValue={userInfo.shipping_address.phone_number.toString()}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } })}
-                                        />
+                                        <div className="row">
+                                            <div className="col-md-2">
+                                                <input
+                                                    type="text"
+                                                    className="p-2 text-center"
+                                                    disabled
+                                                    value={"00" + countries[getCountryCode(userInfo.shipping_address.country)].phone}
+                                                />
+                                            </div>
+                                            <div className="col-md-10">
+                                                <input
+                                                    type="text"
+                                                    className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
+                                                    placeholder="Please Enter New Phone Number"
+                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shipping_address.phone_number, getCountryCode(userInfo.shipping_address.country)) : ""}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: "00" + countries[getCountryCode(userInfo.shipping_address.country)].phone + e.target.value } })}
+                                                />
+                                            </div>
+                                        </div>
                                         {formValidationErrors.phone_number && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{formValidationErrors.phone_number}</span>
