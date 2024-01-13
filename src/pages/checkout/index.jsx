@@ -203,7 +203,7 @@ export default function Checkout() {
             },
             {
                 name: "phone_number_for_billing_address",
-                value: `+${countries[getCountryCode(userInfo.billing_address.country)].phone}${userInfo.billing_address.phone_number}`,
+                value: `00${countries[getCountryCode(userInfo.billing_address.country)].phone}${userInfo.billing_address.phone_number}`,
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
