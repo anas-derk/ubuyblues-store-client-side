@@ -17,8 +17,8 @@ function isValidPassword(password) {
 }
 
 // تعريف دالة للتحقق من رقم الموبايل هو رقم صالح أم لا ( رقم سوري أم لا )
-function isValidMobilePhone(mobilePhone) {
-    return isValidPhoneNumber(mobilePhone, "SY");
+function isValidMobilePhone(mobilePhone, countryCode) {
+    return isValidPhoneNumber(mobilePhone, countryCode);
 }
 
 // تعريف دالة للتحقق من قيم المدخلات
@@ -69,7 +69,7 @@ function inputValuesValidation(inputs) {
             // التحقق من كون القاعدة داخل كائن القواعد موجودة 
             if (typeof inputRules.isValidMobilePhone !== "undefined") {
                 // التحقق من أنّ القاعدة محققة ، وفي حالة لم تكن محققة فإننا نضيف الخطأ إلى مصفوفة الأخطاء
-                if (!isValidMobilePhone(input.value)) {
+                if (!isValidMobilePhone(input.value, inputRules.isValidMobilePhone.countryCode)) {
                     errorsObject[input.name] = inputRules.isValidMobilePhone.msg;
                     // في حالة وجود خطأ نقوم بتجاهل كل التعليمات اللاحقة داخل التكرار الحالي للحلقة والانتقال إلى التكرار التالي
                     continue;

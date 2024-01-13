@@ -127,6 +127,7 @@ export default function CustomerBillingAddress() {
                     },
                     isValidMobilePhone: {
                         msg: "Sorry, Invalid Mobile Phone !!",
+                        countryCode: getCountryCode(userInfo.billing_address.country),
                     }
                 },
             },
@@ -150,6 +151,7 @@ export default function CustomerBillingAddress() {
         try {
             e.preventDefault();
             const errorsObject = validateFormFields();
+            console.log(errorsObject);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
@@ -244,7 +246,16 @@ export default function CustomerBillingAddress() {
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
                                         <select
                                             className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
-                                            onChange={(e) => setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } })}
+                                            onChange={(e) => {
+                                                const countryCode = getCountryCode(e.target.value);
+                                                setUserInfo({ ...userInfo,
+                                                    billing_address: {
+                                                        ...userInfo.billing_address,
+                                                        country: e.target.value,
+                                                        phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billing_address.phone_number, countryCode),
+                                                    },
+                                                })
+                                            }}
                                             style={{
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
@@ -321,7 +332,6 @@ export default function CustomerBillingAddress() {
                                                     type="text"
                                                     className="p-2 text-center"
                                                     disabled
-                                                    defaultValue={userInfo ? ("00" + countries[getCountryCode(userInfo.billing_address.country)].phone) : "00965"}
                                                     value={"00" + countries[getCountryCode(userInfo.billing_address.country)].phone}
                                                 />
                                             </div>
