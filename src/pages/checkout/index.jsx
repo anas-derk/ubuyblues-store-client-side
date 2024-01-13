@@ -11,6 +11,8 @@ import { v4 as generateUniqueID } from "uuid";
 import { useRouter } from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { countries, getCountryCode } from 'countries-list';
+import { isValidPhoneNumber }  from 'libphonenumber-js';
 
 export default function Checkout() {
 
@@ -45,6 +47,8 @@ export default function Checkout() {
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
 
     const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
+
+    const countryList = Object.values(countries);
 
     const router = useRouter();
 
@@ -174,11 +178,14 @@ export default function Checkout() {
             },
             {
                 name: "phone_number_for_billing_address",
-                value: userInfo ? userInfo.billing_address.phone_number : "",
+                value: `+${countries[getCountryCode(userInfo.billing_address.country)].phone}${userInfo.billing_address.phone_number}`,
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
                     },
+                    isValidMobilePhone: {
+                        msg: "Sorry, Invalid Mobile Phone !!",
+                    }
                 },
             },
             {
@@ -249,7 +256,7 @@ export default function Checkout() {
             } : null,
             isShippingToOtherAddress ? {
                 name: "phone_number_for_shipping_address",
-                value: userInfo ? userInfo.shipping_address.phone_number : "",
+                value: `+${countries[getCountryCode(userInfo.billing_address.country)].phone}${userInfo.billing_address.phone_number}`,
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -503,13 +510,20 @@ export default function Checkout() {
                                     </section>
                                     <section className="country mb-4">
                                         <h6>Country / Area <span className="text-danger">*</span></h6>
-                                        <input
-                                            type="text"
+                                        <select
                                             className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Country / Area Here"
-                                            defaultValue={userInfo ? userInfo.billing_address.country : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, country: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
-                                        />
+                                            style={{
+                                                backgroundColor: "var(--main-color-one)",
+                                            }}
+                                        >
+                                            <option value={countries["US"].name} hidden>United States</option>
+                                            {countryList.map((country) => (
+                                                country.name !== "United States" && <option key={country.name} value={country.name}>
+                                                    {country.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                         {formValidationErrors.country_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{formValidationErrors.country_for_billing_address}</span>
@@ -569,6 +583,7 @@ export default function Checkout() {
                                     </section>
                                     <section className="phone-number mb-4">
                                         <h6>Phone Number <span className="text-danger">*</span></h6>
+                                        {userInfo.billing_address.country ? <span>+ {countries[getCountryCode(userInfo.billing_address.country)].phone}</span> : <span>+ 1</span>}
                                         <input
                                             type="number"
                                             className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}

@@ -1,3 +1,5 @@
+import { isValidPhoneNumber }  from 'libphonenumber-js';
+
 // تعريف دالة للتحقق من الإيميل هل صالح أم لا
 function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
@@ -16,8 +18,7 @@ function isValidPassword(password) {
 
 // تعريف دالة للتحقق من رقم الموبايل هو رقم صالح أم لا ( رقم سوري أم لا )
 function isValidMobilePhone(mobilePhone) {
-    const mobilePhoneRegex = /^(093|099|098|094|095|096)\d{7}$/;
-    return mobilePhoneRegex.test(mobilePhone);
+    return isValidPhoneNumber(mobilePhone, "SY");
 }
 
 // تعريف دالة للتحقق من قيم المدخلات
