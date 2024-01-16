@@ -10,5 +10,17 @@ export default NextAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
     ],
+    callbacks: {
+        async signIn({ user }) {
+            return "/";
+        }
+    },
     secret: randomBytes(32).toString('hex'),
+    session: {
+        strategy: "jwt",
+    },
+    pages: {
+        signIn: "/auth",
+        signOut: "/",
+    },
 });
