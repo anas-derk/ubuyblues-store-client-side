@@ -34,6 +34,28 @@
   animation: displayAuthPartAnimation 2s ease-in-out 0s 1 forwards;
 }
 
+.auth .authentication .external-auth-sites-list {
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.auth .authentication .external-auth-sites-list li {
+  border: 1px solid #FFF;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.auth .authentication .external-auth-sites-list li:hover {
+  color: var(--main-color-two);
+}
+
+.auth .authentication .external-auth-sites-list li .external-auth-site-icon {
+  font-size: 20px;
+}
+
 @keyframes displayAuthPartAnimation {
   0% {
     opacity: 0;

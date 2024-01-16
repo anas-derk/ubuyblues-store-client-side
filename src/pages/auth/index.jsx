@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
+import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import validations from "../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { signIn } from "next-auth/react";
 
 export default function UserAuth() {
 
@@ -286,6 +288,18 @@ export default function UserAuth() {
                                                 <span className="me-2">Wait Logining ...</span>
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
+                                            <h6 className="fw-bold mb-4">Or Sign In With</h6>
+                                            <ul className="external-auth-sites-list">
+                                                <li className="external-auth-site-item" onClick={() => signIn("google")}>
+                                                    <FaGoogle className="external-auth-site-icon" />
+                                                </li>
+                                                <li className="external-auth-site-item">
+                                                    <FaFacebook className="external-auth-site-icon" />
+                                                </li>
+                                                <li className="external-auth-site-item">
+                                                    <FaApple className="external-auth-site-icon" />
+                                                </li>
+                                            </ul>
                                         </form>
                                     </div>
                                 </div>}

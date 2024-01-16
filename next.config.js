@@ -4,6 +4,8 @@ const nextConfig = {
   env: {
     BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
     WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api.ubuyblues.com",
+    GOOGLE_CLIENT_ID: "300211308964-97saflbd4i2ra8sjki4ambufvf7f4s17.apps.googleusercontent.com",
+    GOOGLE_CLIENT_SECRET: "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",
   },
   async headers() {
     return [

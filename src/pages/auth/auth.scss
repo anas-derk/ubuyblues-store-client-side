@@ -28,6 +28,24 @@
         .signup-section, .login-section{
             animation: displayAuthPartAnimation 2s ease-in-out 0s 1 forwards;
         }
+        .external-auth-sites-list{
+            width: fit-content;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            li{
+                border: 1px solid #FFF;
+                padding: 10px 15px;
+                cursor: pointer;
+                &:hover{
+                    color: var(--main-color-two);
+                }
+                .external-auth-site-icon{
+                    font-size: 20px;
+                }
+            }
+        }
     }
 }
 
