@@ -4,8 +4,8 @@ const nextConfig = {
   env: {
     BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
     WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://api.ubuyblues.com",
-    GOOGLE_CLIENT_ID: "74230791081-llmrn4a7ma0lg1jcaq08t9rn4uc9vpfd.apps.googleusercontent.com",
-    GOOGLE_CLIENT_SECRET: "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",
+    GOOGLE_CLIENT_ID: "817318940780-is4da323qtglofv52o6lnbr6e57ic6vv.apps.googleusercontent.com",
+    GOOGLE_CLIENT_SECRET: "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",
     NEXTAUTH_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
   },
   async headers() {
