@@ -18,14 +18,6 @@ export default function Header() {
 
     const { i18n } = useTranslation();
 
-    const handleChangeMode = () => {
-        const newLightMode = lightMode == "sunny" ? "dark" : "sunny";
-        setLightMode(newLightMode);
-        let rootElement = document.documentElement;
-        rootElement.style.setProperty("--main-color-one", newLightMode === "sunny" ? "#6A017A" : "#000");
-        localStorage.setItem("asfour-store-light-mode", newLightMode);
-    }
-
     const router = useRouter();
 
     useEffect(() => {
@@ -38,6 +30,14 @@ export default function Header() {
             rootElement.style.setProperty("--main-color-one", tempLightMode === "sunny" ? "#6A017A" : "#000");
         }
     }, []);
+
+    const handleChangeMode = () => {
+        const newLightMode = lightMode == "sunny" ? "dark" : "sunny";
+        setLightMode(newLightMode);
+        let rootElement = document.documentElement;
+        rootElement.style.setProperty("--main-color-one", newLightMode === "sunny" ? "#6A017A" : "#000");
+        localStorage.setItem("asfour-store-light-mode", newLightMode);
+    }
 
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");
