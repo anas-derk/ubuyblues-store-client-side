@@ -11,6 +11,7 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { signIn } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 
 export default function UserAuth() {
 
@@ -42,9 +43,14 @@ export default function UserAuth() {
 
     const [isVisiblePasswordForSignup, setIsVisiblePasswordForSignup] = useState(false);
 
+    const { t } = useTranslation();
+
     const router = useRouter();
 
     useEffect(() => {
+        console.log(t("welcome", {
+            lng: "ar",
+        }))
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
