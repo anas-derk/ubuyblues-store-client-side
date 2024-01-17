@@ -6,6 +6,7 @@ import { IoEarth } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { MdOutlineDarkMode, MdOutlineWbSunny } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
 
@@ -14,6 +15,8 @@ export default function Header() {
     const [lightMode, setLightMode] = useState("sunny");
     
     const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
+
+    const { i18n } = useTranslation();
 
     const handleChangeMode = () => {
         const newLightMode = lightMode == "sunny" ? "dark" : "sunny";
@@ -39,6 +42,10 @@ export default function Header() {
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");
         router.push("/auth");
+    }
+
+    const handleChangeLanguage = (language) => {
+        i18n.changeLanguage(language);
     }
 
     return (
@@ -73,8 +80,18 @@ export default function Header() {
                             onClick={() => setIsDisplayLanguagesList(value => !value)}
                         />
                         {isDisplayLanguagesList && <ul className="languages-list">
-                            <li className="language-item p-2 text-center fw-bold border-bottom border-dark">English</li>
-                            <li className="language-item p-2 text-center fw-bold border-bottom border-dark">Arabic</li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("en")}
+                            >
+                                English
+                            </li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("ar")}
+                            >
+                                Arabic
+                            </li>
                         </ul>}
                     </div>
                     <Link href="/">

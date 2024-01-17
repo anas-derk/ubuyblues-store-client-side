@@ -48,9 +48,6 @@ export default function UserAuth() {
     const router = useRouter();
 
     useEffect(() => {
-        console.log(t("welcome", {
-            lng: "ar",
-        }))
         const userId = localStorage.getItem("asfour-store-user-id");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
@@ -206,7 +203,7 @@ export default function UserAuth() {
                                 className="m-0 display-login-btn display-btn p-3"
                                 onClick={() => setAppearedAuthPartName("login")}
                             >
-                                Login
+                                {t("login")}
                             </h4>
                             <h4
                                 className="m-0 display-signup-btn display-btn p-3"
