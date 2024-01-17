@@ -6,12 +6,14 @@ i18next.use(initReactI18next).init({
     resources: {
         en: {
             translation: {
-                "login" : "login"
+                "login" : "login",
+                "sign-up": "sign-up",
             },
         },
         ar: {
             translation: {
-                "login": "تسجيل الدخول"
+                "login": "تسجيل الدخول",
+                "sign-up": "إنشاء حساب",
             },
         },
     },

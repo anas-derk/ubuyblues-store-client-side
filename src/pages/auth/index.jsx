@@ -209,7 +209,7 @@ export default function UserAuth() {
                                 className="m-0 display-signup-btn display-btn p-3"
                                 onClick={() => setAppearedAuthPartName("sign-up")}
                             >
-                                Sign-up
+                                {t("sign-up")}
                             </h4>
                         </section>
                         <section className="authentication">

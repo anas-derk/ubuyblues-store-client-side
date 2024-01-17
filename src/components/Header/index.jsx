@@ -46,6 +46,8 @@ export default function Header() {
 
     const handleChangeLanguage = (language) => {
         i18n.changeLanguage(language);
+        document.body.dir = language === "en" ? "ltr" : "rtl";
+        document.body.lang = language;
     }
 
     return (

@@ -1,7 +1,3 @@
-*{
-    font-family: 'Montserrat', sans-serif;
-}
-
 :root{
     --main-color-one: #6A017A;
     --main-color-two: #00ffe1;
@@ -10,6 +6,12 @@
 
 body{
     background-color: var(--main-color-one);
+    &[lang="en"] {
+        font-family: 'Montserrat', sans-serif;
+    }
+    &[lang="ar"] {
+        font-family: 'Cairo', sans-serif;
+    }
 }
 
 ul{
