@@ -12,6 +12,8 @@ export default function Header() {
     const [userId, setUserId] = useState("");
 
     const [lightMode, setLightMode] = useState("sunny");
+    
+    const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
 
     const handleChangeMode = () => {
         const newLightMode = lightMode == "sunny" ? "dark" : "sunny";
@@ -65,7 +67,16 @@ export default function Header() {
                             className="sunny-icon global-header-icon me-5"
                             onClick={handleChangeMode}
                         />}
-                    <IoEarth className="earth-icon global-header-icon me-5" />
+                    <div className="select-language-box d-inline-block">
+                        <IoEarth
+                            className="earth-icon global-header-icon me-5"
+                            onClick={() => setIsDisplayLanguagesList(value => !value)}
+                        />
+                        {isDisplayLanguagesList && <ul className="languages-list">
+                            <li className="language-item p-2 text-center fw-bold border-bottom border-dark">English</li>
+                            <li className="language-item p-2 text-center fw-bold border-bottom border-dark">Arabic</li>
+                        </ul>}
+                    </div>
                     <Link href="/">
                         <AiOutlineHome className="home-icon global-header-icon" />
                     </Link>
