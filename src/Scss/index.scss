@@ -8,9 +8,11 @@ body{
     background-color: var(--main-color-one);
     &[lang="en"] {
         font-family: 'Montserrat', sans-serif;
+        direction: ltr;
     }
     &[lang="ar"] {
         font-family: 'Cairo', sans-serif;
+        direction: rtl;
     }
 }
 

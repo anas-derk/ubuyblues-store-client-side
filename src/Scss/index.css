@@ -10,10 +10,12 @@ body {
 
 body[lang="en"] {
   font-family: 'Montserrat', sans-serif;
+  direction: ltr;
 }
 
 body[lang="ar"] {
   font-family: 'Cairo', sans-serif;
+  direction: rtl;
 }
 
 ul {

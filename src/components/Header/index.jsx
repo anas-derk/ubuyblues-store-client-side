@@ -16,7 +16,7 @@ export default function Header() {
     
     const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
 
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
 
     const router = useRouter();
 
@@ -46,7 +46,6 @@ export default function Header() {
 
     const handleChangeLanguage = (language) => {
         i18n.changeLanguage(language);
-        document.body.dir = language === "en" ? "ltr" : "rtl";
         document.body.lang = language;
     }
 
@@ -86,13 +85,13 @@ export default function Header() {
                                 className="language-item p-2 text-center fw-bold border-bottom border-dark"
                                 onClick={() => handleChangeLanguage("en")}
                             >
-                                English
+                                { t("English") }
                             </li>
                             <li
                                 className="language-item p-2 text-center fw-bold border-bottom border-dark"
                                 onClick={() => handleChangeLanguage("ar")}
                             >
-                                Arabic
+                                { t("Arabic") }
                             </li>
                         </ul>}
                     </div>
