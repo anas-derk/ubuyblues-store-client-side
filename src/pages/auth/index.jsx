@@ -296,9 +296,9 @@ export default function UserAuth() {
                                                 <li className="external-auth-site-item" onClick={() => signIn("facebook")}>
                                                     <FaFacebook className="external-auth-site-icon" />
                                                 </li>
-                                                <li className="external-auth-site-item">
+                                                {/* <li className="external-auth-site-item">
                                                     <FaApple className="external-auth-site-icon" />
-                                                </li>
+                                                </li> */}
                                             </ul>
                                         </form>
                                     </div>
