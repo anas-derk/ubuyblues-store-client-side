@@ -216,7 +216,7 @@ export default function UserAuth() {
                             <div className="row">
                                 {appearedAuthPartName === "sign-up" && <div className="col-md-12">
                                     <div className="signup-section">
-                                        <h3 className="part-name mb-4">{ t("Create New Account") }</h3>
+                                        <h3 className="part-name mb-4">{t("Create New Account")}</h3>
                                         <form className="user-signup-form mb-3" onSubmit={userSignup}>
                                             <div className="email-field-box">
                                                 <input
@@ -229,7 +229,7 @@ export default function UserAuth() {
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
-                                            {formValidationErrors["emailForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["emailForSignup"]}</p>}
+                                            {formValidationErrors["emailForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["emailForSignup"])}</p>}
                                             <div className="password-field-box">
                                                 <input
                                                     type={isVisiblePasswordForSignup ? "text" : "password"}
@@ -248,9 +248,18 @@ export default function UserAuth() {
                                                 <FiLogIn />
                                             </button>}
                                             {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
-                                                <span className="me-2">{ t("Wait Signup") } ...</span>
+                                                <span className="me-2">{t("Wait Signup")} ...</span>
                                             </button>}
-                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
+                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
+                                            <h6 className="fw-bold mb-4">{t("Or Sign Up With")}</h6>
+                                            <ul className="external-auth-sites-list">
+                                                <li className="external-auth-site-item" onClick={() => signIn("google")}>
+                                                    <FaGoogle className="external-auth-site-icon" />
+                                                </li>
+                                                <li className="external-auth-site-item" onClick={() => signIn("facebook")}>
+                                                    <FaFacebook className="external-auth-site-icon" />
+                                                </li>
+                                            </ul>
                                         </form>
                                     </div>
                                 </div>}
@@ -269,7 +278,7 @@ export default function UserAuth() {
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
-                                            {formValidationErrors["emailForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["emailForLogin"]}</p>}
+                                            {formValidationErrors["emailForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["emailForLogin"])}</p>}
                                             <div className="password-field-box">
                                                 <input
                                                     type={isVisiblePasswordForLogin ? "text" : "password"}
@@ -282,16 +291,16 @@ export default function UserAuth() {
                                                     {isVisiblePasswordForLogin && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
                                                 </div>
                                             </div>
-                                            {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForLogin"]}</p>}
+                                            {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForLogin"])}</p>}
                                             {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 <span className="me-2">{t("login")}</span>
                                                 <FiLogIn />
                                             </button>}
                                             {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
-                                                <span className="me-2">{ t("Wait Logining") } ...</span>
+                                                <span className="me-2">{t("Wait Logining")} ...</span>
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
-                                            <h6 className="fw-bold mb-4">{ t("Or Sign In With") }</h6>
+                                            <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item" onClick={() => signIn("google")}>
                                                     <FaGoogle className="external-auth-site-icon" />
