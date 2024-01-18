@@ -242,7 +242,7 @@ export default function UserAuth() {
                                                     {isVisiblePasswordForSignup && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
                                                 </div>
                                             </div>
-                                            {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForSignup"]}</p>}
+                                            {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForSignup"])}</p>}
                                             {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("sign-up")}</span>
