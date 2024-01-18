@@ -75,7 +75,12 @@ textarea{
     position: relative;
     .icon-box{
         position: absolute;
-        right: 15px;
+        &.ar-language-mode{
+            left: 15px;
+        }
+        &.other-languages-mode{
+            right: 15px;
+        }
         top: 50%;
         transform: translateY(-50%);
         .icon{

@@ -43,7 +43,7 @@ export default function UserAuth() {
 
     const [isVisiblePasswordForSignup, setIsVisiblePasswordForSignup] = useState(false);
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const router = useRouter();
 
@@ -274,7 +274,7 @@ export default function UserAuth() {
                                                     className={`form-control p-3 border-2 ${formValidationErrors["emailForLogin"] ? "border-danger mb-4" : "mb-5"}`}
                                                     onChange={(e) => setEmailForLogin(e.target.value.trim())}
                                                 />
-                                                <div className='icon-box text-dark'>
+                                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
@@ -286,20 +286,21 @@ export default function UserAuth() {
                                                     className={`form-control p-3 border-2 ${formValidationErrors["passwordForLogin"] ? "border-danger mb-4" : "mb-5"}`}
                                                     onChange={(e) => setPasswordForLogin(e.target.value.trim())}
                                                 />
-                                                <div className='icon-box text-dark'>
+                                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
                                                     {!isVisiblePasswordForLogin && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
                                                     {isVisiblePasswordForLogin && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForLogin"])}</p>}
                                             {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                                {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("login")}</span>
-                                                <FiLogIn />
+                                                {i18n.language !== "ar" && <FiLogIn />}
                                             </button>}
                                             {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">{t("Wait Logining")} ...</span>
                                             </button>}
-                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{errMsg || successMsg}</p>}
+                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item" onClick={() => signIn("google")}>

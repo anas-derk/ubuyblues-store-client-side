@@ -86,9 +86,26 @@ textarea {
 .new-password-field-box .icon-box,
 .confirm-new-password-field-box .icon-box {
   position: absolute;
-  right: 15px;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.password-field-box .icon-box.ar-language-mode,
+.email-field-box .icon-box.ar-language-mode,
+.confirm-password-field-box .icon-box.ar-language-mode,
+.current-password-field-box .icon-box.ar-language-mode,
+.new-password-field-box .icon-box.ar-language-mode,
+.confirm-new-password-field-box .icon-box.ar-language-mode {
+  left: 15px;
+}
+
+.password-field-box .icon-box.other-languages-mode,
+.email-field-box .icon-box.other-languages-mode,
+.confirm-password-field-box .icon-box.other-languages-mode,
+.current-password-field-box .icon-box.other-languages-mode,
+.new-password-field-box .icon-box.other-languages-mode,
+.confirm-new-password-field-box .icon-box.other-languages-mode {
+  right: 15px;
 }
 
 .password-field-box .icon-box .icon,
