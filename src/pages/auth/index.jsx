@@ -225,7 +225,7 @@ export default function UserAuth() {
                                                     className={`form-control p-3 border-2 ${formValidationErrors["emailForSignup"] ? "border-danger mb-3" : "mb-5"}`}
                                                     onChange={(e) => setEmailForSignup(e.target.value.trim())}
                                                 />
-                                                <div className='icon-box text-dark'>
+                                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
@@ -237,15 +237,16 @@ export default function UserAuth() {
                                                     className={`form-control p-3 border-2 ${formValidationErrors["passwordForSignup"] ? "border-danger mb-3" : "mb-5"}`}
                                                     onChange={(e) => setPasswordForSignup(e.target.value.trim())}
                                                 />
-                                                <div className='icon-box text-dark'>
+                                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
                                                     {!isVisiblePasswordForSignup && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
                                                     {isVisiblePasswordForSignup && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{formValidationErrors["passwordForSignup"]}</p>}
                                             {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                                {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("sign-up")}</span>
-                                                <FiLogIn />
+                                                {i18n.language !== "ar" && <FiLogIn />}
                                             </button>}
                                             {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
                                                 <span className="me-2">{t("Wait Signup")} ...</span>
