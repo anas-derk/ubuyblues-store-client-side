@@ -57,16 +57,16 @@ export default function UserAuth() {
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         router.push("/");
                     } else {
-                        handleSelectUserLanguage(userLanguage);
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
                 }).catch(() => {
-                    handleSelectUserLanguage(userLanguage);
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
-            handleSelectUserLanguage(userLanguage);
+            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             setIsLoadingPage(false);
         }
     }, []);

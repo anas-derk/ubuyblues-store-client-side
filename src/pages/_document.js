@@ -18,7 +18,7 @@ export default function Document() {
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="/images/UbuyBlues_Logo_merged_Purple.webp" />
       </Head>
-      <body lang="en">
+      <body lang="en" dir="ltr">
         <Main />
         <NextScript />
       </body>
