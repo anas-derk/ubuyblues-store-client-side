@@ -49,6 +49,7 @@ export default function UserAuth() {
 
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then((res) => {
@@ -56,16 +57,24 @@ export default function UserAuth() {
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         router.push("/");
                     } else {
+                        handleSelectUserLanguage(userLanguage);
                         setIsLoadingPage(false);
                     }
                 }).catch(() => {
+                    handleSelectUserLanguage(userLanguage);
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
+            handleSelectUserLanguage(userLanguage);
             setIsLoadingPage(false);
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const userLogin = async (e) => {
         e.preventDefault();
