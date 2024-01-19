@@ -23,18 +23,21 @@ export default function CustomerDashboard() {
 
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserInfo(result);
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         router.push("/auth");
                     }
                 })
                 .catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
@@ -42,6 +45,11 @@ export default function CustomerDashboard() {
             router.push("/auth");
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");

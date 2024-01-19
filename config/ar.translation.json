@@ -29,5 +29,22 @@
     "shipping and billing addresses": "عناوين الفاتورة والشحن",
     "edit your password and account details": "تعديل كلمة السر الخاصة بك  وتفاصيل الحساب",
     "and": "و",
-    ",": "،"
+    ",": "،",
+    "Filters": "التصفيات",
+    "Order Number": "رقم الطلب",
+    "Pleae Enter Order Number": "الرجاء إدخال رقم الطلب",
+    "Status": "الحالة",
+    "Pleae Enter Status": "الرجاء إدخال الحالة",
+    "All": "الكل",
+    "Pending": "الانتظار",
+    "Shipping": "الشحن",
+    "Completed":  "الاكتمال",
+    "Filter": "تصفية",
+    "Filtering": "جاري التصفية",
+    "Checkout Status": "حالة التحقق",
+    "Order Total Amount": "المبلغ الإجمالي للطلب",
+    "Added Date": "تاريخ الإضافة",
+    "Action": "العملية",
+    "Show Details": "عرض التفاصيل",
+    "Sorry, Can't Find Any Orders": "عذراً ، لا يوجد أي طلب حالياً"
 }

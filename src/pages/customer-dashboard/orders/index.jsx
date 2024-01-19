@@ -7,6 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerOrders() {
 
@@ -33,11 +34,14 @@ export default function CustomerOrders() {
     });
 
     const router = useRouter();
+    
+    const { i18n, t } = useTranslation();
 
     const pageSize = 5;
 
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then(async (res) => {
@@ -50,13 +54,14 @@ export default function CustomerOrders() {
                             setAllOrdersInsideThePage(result3);
                             setTotalPagesCount(Math.ceil(result / pageSize));
                         }
-                        setIsLoadingPage(false);
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         router.push("/auth");
                     }
                 })
                 .catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
@@ -64,6 +69,11 @@ export default function CustomerOrders() {
             router.push("/auth");
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const getOrdersCount = async (filters) => {
         try {
@@ -229,31 +239,31 @@ export default function CustomerOrders() {
                             <div className="col-xl-9">
                                 <div className="customer-orders">
                                     <section className="filters mb-3 border-3 border-white p-3 text-start text-white">
-                                        <h5 className="section-name fw-bold text-center">Filters: </h5>
+                                        <h5 className="section-name fw-bold text-center">{t("Filters")} : </h5>
                                         <hr />
                                         <div className="row mb-4">
                                             <div className="col-md-6 d-flex align-items-center">
-                                                <h6 className="me-2 mb-0 fw-bold text-center">Order Number</h6>
+                                                <h6 className="me-2 mb-0 fw-bold text-center">{t("Order Number")}</h6>
                                                 <input
                                                     type="number"
                                                     className="p-2"
-                                                    placeholder="Pleae Enter Order Number"
+                                                    placeholder={t("Pleae Enter Order Number")}
                                                     min="1"
                                                     max={allOrdersInsideThePage.length}
                                                     onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber })}
                                                 />
                                             </div>
                                             <div className="col-md-6 d-flex align-items-center">
-                                                <h6 className="me-2 mb-0 fw-bold text-center">Status</h6>
+                                                <h6 className="me-2 mb-0 fw-bold text-center"></h6>
                                                 <select
                                                     className="select-order-status p-2"
                                                     onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                                                 >
-                                                    <option value="" hidden>Pleae Enter Status</option>
-                                                    <option value="">All</option>
-                                                    <option value="pending">Pending</option>
-                                                    <option value="shipping">Shipping</option>
-                                                    <option value="completed">Completed</option>
+                                                    <option value="" hidden>{t("Pleae Enter Status")}</option>
+                                                    <option value="">{t("All")}</option>
+                                                    <option value="pending">{t("Pending")}</option>
+                                                    <option value="shipping">{t("Shipping")}</option>
+                                                    <option value="completed">{t("Completed")}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -261,25 +271,25 @@ export default function CustomerOrders() {
                                             className="btn btn-success d-block w-25 mx-auto mt-2"
                                             onClick={() => filterOrders()}
                                         >
-                                            Filter
+                                            {t("Filter")}
                                         </button>}
                                         {isFilteringOrdersStatus && <button
                                             className="btn btn-success d-block w-25 mx-auto mt-2"
                                             disabled
                                         >
-                                            Filtering ...
+                                            {t("Filtering")} ...
                                         </button>}
                                     </section>
                                     {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
                                         <table className="orders-data-table customer-table mb-4 w-100">
                                             <thead>
                                                 <tr>
-                                                    <th>Order Number</th>
-                                                    <th>Checkout Status</th>
-                                                    <th>Status</th>
-                                                    <th>Order Total Amount</th>
-                                                    <th>Added Date</th>
-                                                    <th>Action</th>
+                                                    <th>{t("Order Number")}</th>
+                                                    <th>{t("Checkout Status")}</th>
+                                                    <th>{t("Status")}</th>
+                                                    <th>{t("Order Total Amount")}</th>
+                                                    <th>{t("Added Date")}</th>
+                                                    <th>{t("Action")}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -303,19 +313,19 @@ export default function CustomerOrders() {
                                                                     }
                                                                 }}
                                                                 className="btn btn-success d-block mx-auto mb-4 global-button"
-                                                            >Show Details</Link>
+                                                            >{t("Show Details")}</Link>
                                                         </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </section>}
-                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
+                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">{t("Sorry, Can't Find Any Orders")} !!</p>}
                                     {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                         <span className="loader-table-data"></span>
                                     </div>}
                                 </div>
-                                {/* {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()} */}
+                                {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()}
                             </div>
                         </div>
                     </div>
