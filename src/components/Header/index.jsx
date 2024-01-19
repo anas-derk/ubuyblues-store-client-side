@@ -13,7 +13,7 @@ export default function Header() {
     const [userId, setUserId] = useState("");
 
     const [lightMode, setLightMode] = useState("sunny");
-    
+
     const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
 
     const { i18n, t } = useTranslation();
@@ -54,6 +54,9 @@ export default function Header() {
         <header className="global-header">
             <div className="container-fluid text-end">
                 <div className="navigate-icons p-3">
+                    {i18n.language === "ar" && <Link href="/">
+                        <AiOutlineHome className="home-icon global-header-icon" />
+                    </Link>}
                     {!userId ? <Link href="/auth">
                         <BsFillPersonFill className="home-icon global-header-icon me-5" />
                     </Link> : <>
@@ -62,21 +65,15 @@ export default function Header() {
                             <BsPersonVcard className="home-icon global-header-icon me-5" />
                         </Link>
                     </>}
-                    <Link href="/">
+                    {i18n.language !== "ar" && <Link href="/">
                         <AiOutlineHome className="home-icon global-header-icon" />
-                    </Link>
+                    </Link>}
                 </div>
                 <div className="languages-and-others-stores p-3">
-                    {lightMode == "sunny" ?
-                        <MdOutlineDarkMode
-                            className="dark-mode-icon global-header-icon me-5"
-                            onClick={handleChangeMode}
-                        /> :
-                        <MdOutlineWbSunny
-                            className="sunny-icon global-header-icon me-5"
-                            onClick={handleChangeMode}
-                        />}
-                    <div className="select-language-box d-inline-block">
+                    {i18n.language === "ar" && <Link href="/">
+                        <AiOutlineHome className="home-icon global-header-icon" />
+                    </Link>}
+                    {i18n.language === "ar" && <div className="select-language-box d-inline-block">
                         <IoEarth
                             className="earth-icon global-header-icon me-5"
                             onClick={() => setIsDisplayLanguagesList(value => !value)}
@@ -86,19 +83,48 @@ export default function Header() {
                                 className="language-item p-2 text-center fw-bold border-bottom border-dark"
                                 onClick={() => handleChangeLanguage("en")}
                             >
-                                { t("English") }
+                                {t("English")}
                             </li>
                             <li
                                 className="language-item p-2 text-center fw-bold border-bottom border-dark"
                                 onClick={() => handleChangeLanguage("ar")}
                             >
-                                { t("Arabic") }
+                                {t("Arabic")}
                             </li>
                         </ul>}
-                    </div>
-                    <Link href="/">
+                    </div>}
+                    {lightMode == "sunny" ?
+                        <MdOutlineDarkMode
+                            className="dark-mode-icon global-header-icon me-5"
+                            onClick={handleChangeMode}
+                        /> :
+                        <MdOutlineWbSunny
+                            className="sunny-icon global-header-icon me-5"
+                            onClick={handleChangeMode}
+                        />}
+                    {i18n.language !== "ar" && <div className="select-language-box d-inline-block">
+                        <IoEarth
+                            className="earth-icon global-header-icon me-5"
+                            onClick={() => setIsDisplayLanguagesList(value => !value)}
+                        />
+                        {isDisplayLanguagesList && <ul className="languages-list">
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("en")}
+                            >
+                                {t("English")}
+                            </li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("ar")}
+                            >
+                                {t("Arabic")}
+                            </li>
+                        </ul>}
+                    </div>}
+                    {i18n.language !== "ar" && <Link href="/">
                         <AiOutlineHome className="home-icon global-header-icon" />
-                    </Link>
+                    </Link>}
                 </div>
             </div>
         </header>
