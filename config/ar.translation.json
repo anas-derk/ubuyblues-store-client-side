@@ -15,5 +15,19 @@
     "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter.": "عذراً كلمة السر يجب أن تكون على الأقل 8 محارف ، بحيث تحتوي على الأقل رقم واحد ، حرف واحد ، بالإضافة على الأقل حرف صغير وحرف كبير .",
     "Sorry, Email Or Password Incorrect !!": "عذراً ، الإيميل أو كلمة السر غير صحيحة !!",
     "Sorry, Someting Went Wrong, Please Try Again The Process !!": "عذراً ، هناك خطأ ما حدث ، الرجاء إعادة العملية !!",
-    "Sorry, Can't Create User Because it is Exist !!!": "عذراً ، لا يمكن إنشاء الحساب لأنه موجود !!"
+    "Sorry, Can't Create User Because it is Exist !!!": "عذراً ، لا يمكن إنشاء الحساب لأنه موجود !!",
+    "Dashboard": "لوحة التحكم",
+    "Orders": "الطلبات",
+    "Addresses": "العناوين",
+    "Account Details": "تفاصيل الحساب",
+    "Wish List": "قائمة التمني",
+    "Logout": "تسجيل الخروج",
+    "Hello": "مرحباً",
+    "Log out": "تسجيل الخروج",
+    "From your account dashboard you can view your": "من خلال لوحة تحكم الحساب الخاص بك يمكنك رؤية",
+    "recent orders": "الطلبات السابقة",
+    "shipping and billing addresses": "عناوين الفاتورة والشحن",
+    "edit your password and account details": "تعديل كلمة السر الخاصة بك  وتفاصيل الحساب",
+    "and": "و",
+    ",": "،"
 }

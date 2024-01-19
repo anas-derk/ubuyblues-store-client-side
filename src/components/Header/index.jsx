@@ -60,10 +60,11 @@ export default function Header() {
                     {!userId ? <Link href="/auth">
                         <BsFillPersonFill className="home-icon global-header-icon me-5" />
                     </Link> : <>
-                        <MdOutlineLogout className="logout-icon global-header-icon me-5" onClick={userLogout} />
+                        {i18n.language !== "ar" && <MdOutlineLogout className="logout-icon global-header-icon me-5" onClick={userLogout} />}
                         <Link href="/customer-dashboard">
                             <BsPersonVcard className="home-icon global-header-icon me-5" />
                         </Link>
+                        {i18n.language === "ar" && <MdOutlineLogout className="logout-icon global-header-icon me-5" onClick={userLogout} />}
                     </>}
                     {i18n.language !== "ar" && <Link href="/">
                         <AiOutlineHome className="home-icon global-header-icon" />
