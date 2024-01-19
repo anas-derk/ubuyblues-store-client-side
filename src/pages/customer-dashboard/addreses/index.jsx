@@ -3,10 +3,11 @@ import Header from "@/components/Header";
 import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Axios from "axios";
+import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerAddreses() {
 
@@ -15,20 +16,25 @@ export default function CustomerAddreses() {
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const router = useRouter();
-    
+
+    const { t, i18n } = useTranslation();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
-            Axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         router.push("/auth");
                     }
                 })
                 .catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
@@ -36,6 +42,11 @@ export default function CustomerAddreses() {
             router.push("/auth");
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     return (
         <div className="customer-addreses customer-dashboard">
@@ -54,14 +65,14 @@ export default function CustomerAddreses() {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="address-editing-link-box d-flex justify-content-between p-3">
-                                            <span className="text-white">Billing Address</span>
-                                            <Link href="/customer-dashboard/addreses/billing-address" className="editing-link">Edit</Link>
+                                            <span className="text-white">{t("Billing Address")}</span>
+                                            <Link href="/customer-dashboard/addreses/billing-address" className="editing-link">{t("Edit")}</Link>
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="address-editing-link-box d-flex justify-content-between p-3">
-                                            <span className="text-white">Shipping Address</span>
-                                            <Link href="/customer-dashboard/addreses/shipping-address" className="editing-link">Edit</Link>
+                                            <span className="text-white">{t("Shipping Address")}</span>
+                                            <Link href="/customer-dashboard/addreses/shipping-address" className="editing-link">{t("Edit")}</Link>
                                         </div>
                                     </div>
                                 </div>

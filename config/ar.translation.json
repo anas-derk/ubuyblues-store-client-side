@@ -46,5 +46,8 @@
     "Added Date": "تاريخ الإضافة",
     "Action": "العملية",
     "Show Details": "عرض التفاصيل",
-    "Sorry, Can't Find Any Orders": "عذراً ، لا يوجد أي طلب حالياً"
+    "Sorry, Can't Find Any Orders": "عذراً ، لا يوجد أي طلب حالياً",
+    "Billing Address": "عنوان الفاتورة",
+    "Shipping Address": "عنوان الشحن",
+    "Edit": "تعديل"
 }

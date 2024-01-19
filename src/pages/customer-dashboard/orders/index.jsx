@@ -35,7 +35,7 @@ export default function CustomerOrders() {
 
     const router = useRouter();
     
-    const { i18n, t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const pageSize = 5;
 

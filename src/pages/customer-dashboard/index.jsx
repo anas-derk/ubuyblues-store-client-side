@@ -19,7 +19,7 @@ export default function CustomerDashboard() {
 
     const router = useRouter();
 
-    const { i18n, t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
