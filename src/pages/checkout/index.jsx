@@ -11,6 +11,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from 'countries-list';
 import { FaCcPaypal } from "react-icons/fa";
 import { parsePhoneNumber } from "libphonenumber-js";
+import { useTranslation } from "react-i18next";
 
 export default function Checkout() {
 
@@ -46,8 +47,11 @@ export default function Checkout() {
 
     const router = useRouter();
 
+    const { t, i18n } = useTranslation();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then(async (res) => {
@@ -68,10 +72,12 @@ export default function Checkout() {
                                 setAllProductsData(allProductsData);
                             }
                         }
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
                 })
                 .catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
@@ -122,9 +128,15 @@ export default function Checkout() {
                     setAllProductsData(allProductsData);
                 }
             }
+            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             setIsLoadingPage(false);
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const getPhoneNumberFromString = (text, country) => {
         try {
@@ -436,60 +448,60 @@ export default function Checkout() {
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">
                     <span class="loader mb-4"></span>
-                    <p>Please Wait ...</p>
+                    <p>{t("Please Wait")} ...</p>
                 </div>}
                 <Header />
                 <div className="page-content text-white p-4">
                     <div className="container-fluid">
-                        <h1 className="h3 mb-4 fw-bold text-center">Welcome To You In Checkout Page</h1>
+                        <h1 className="h3 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
                         <div className="row align-items-center">
                             <div className="col-xl-6">
-                                <h6 className="mb-4 fw-bold">Billing Details</h6>
+                                <h6 className="mb-4 fw-bold">{t("Billing Details")}</h6>
                                 <form className="edit-customer-billing-address-form" onSubmit={(e) => e.preventDefault()}>
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <h6>First Name <span className="text-danger">*</span></h6>
+                                                <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.first_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter New First Name Here"
+                                                    placeholder={t("Please Enter First Name Here")}
                                                     defaultValue={userInfo ? userInfo.billing_address.first_name : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                 />
                                                 {formValidationErrors.first_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.first_name_for_billing_address}</span>
+                                                    <span>{t(formValidationErrors.first_name_for_billing_address)}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
-                                                <h6>Last Name <span className="text-danger">*</span></h6>
+                                                <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.last_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter Last Name Here"
+                                                    placeholder={t("Please Enter Last Name Here")}
                                                     defaultValue={userInfo ? userInfo.billing_address.last_name : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                 />
                                                 {formValidationErrors.last_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.last_name_for_billing_address}</span>
+                                                    <span>{t(formValidationErrors.last_name_for_billing_address)}</span>
                                                 </p>}
                                             </div>
                                         </div>
                                     </section>
                                     <section className="company-name mb-4">
-                                        <h6>Company Name (Optional)</h6>
+                                        <h6>{t("Company Name")} ({t("Optional")})</h6>
                                         <input
                                             type="text"
                                             className="p-2"
-                                            placeholder="Please Enter New Company Name Here"
+                                            placeholder={t("Please Enter Company Name Here")}
                                             defaultValue={userInfo ? userInfo.billing_address.company_name : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, company_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="country mb-4">
-                                        <h6>Country / Area <span className="text-danger">*</span></h6>
+                                        <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                         <select
                                             className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                             onChange={(e) => {
@@ -517,63 +529,63 @@ export default function Checkout() {
                                         </select>
                                         {formValidationErrors.country_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.country_for_billing_address}</span>
+                                            <span>{t(formValidationErrors.country_for_billing_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="street-address mb-4">
-                                        <h6>Street Addres / Neighborhood <span className="text-danger">*</span></h6>
+                                        <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.street_address_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Street Address / Neighborhood"
+                                            placeholder={t("Please Enter Street Address / Neighborhood Here")}
                                             defaultValue={userInfo ? userInfo.billing_address.street_address : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.street_address_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.street_address_for_billing_address}</span>
+                                            <span>{t(formValidationErrors.street_address_for_billing_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="apartment-number mb-4">
-                                        <h6>Apartment Number, Ward, Unit, Etc . ( Optional )</h6>
+                                        <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
                                         <input
                                             type="number"
                                             className="p-2"
-                                            placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
+                                            placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
                                             defaultValue={userInfo ? userInfo.billing_address.apartment_number : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="city-number mb-4">
-                                        <h6>City <span className="text-danger">*</span></h6>
+                                        <h6>{t("City")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.city_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New City Name"
+                                            placeholder={t("Please Enter City Name Here")}
                                             defaultValue={userInfo ? userInfo.billing_address.city : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.city_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.city_for_billing_address}</span>
+                                            <span>{t(formValidationErrors.city_for_billing_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="postal-code-number mb-4">
-                                        <h6>Postal Code / Zip <span className="text-danger">*</span></h6>
+                                        <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
                                             className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Postal Code / Zip"
+                                            placeholder={t("Please Enter Postal Code / Zip Here")}
                                             defaultValue={userInfo ? userInfo.billing_address.postal_code : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.postal_code_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.postal_code_for_billing_address}</span>
+                                            <span>{t(formValidationErrors.postal_code_for_billing_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="phone-number mb-4">
-                                        <h6>Phone Number <span className="text-danger">*</span></h6>
+                                        <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
                                         <div className="row">
                                             <div className="col-md-2">
                                                 <input
@@ -587,7 +599,7 @@ export default function Checkout() {
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter New Phone Number"
+                                                    placeholder={t("Please Enter Phone Number")}
                                                     defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billing_address.phone_number, getCountryCode(userInfo.billing_address.country)) : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
@@ -595,21 +607,21 @@ export default function Checkout() {
                                         </div>
                                         {formValidationErrors.phone_number_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.phone_number_for_billing_address}</span>
+                                            <span>{t(formValidationErrors.phone_number_for_billing_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="email mb-4">
-                                        <h6>Email <span className="text-danger">*</span></h6>
+                                        <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.email_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Email"
+                                            placeholder={t("Please Enter Email Here")}
                                             defaultValue={userInfo ? userInfo.billing_address.email : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.email_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.email_for_billing_address}</span>
+                                            <span>{t(formValidationErrors.email_for_billing_address)}</span>
                                         </p>}
                                     </section>
                                 </form>
@@ -622,7 +634,7 @@ export default function Checkout() {
                                         onChange={(e) => setIsSavePaymentInfo(e.target.checked)}
                                     />
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
-                                        Do You Want To Save Payment Information ?
+                                        {t("Do You Want To Save Payment Information ?")}
                                     </label>
                                 </div>}
                                 <div className="form-check mb-3">
@@ -633,54 +645,54 @@ export default function Checkout() {
                                         onChange={(e) => { setIsShippingToOtherAddress(e.target.checked); setIsDisplayPaypalPaymentButtons(false); }}
                                     />
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
-                                        Do You Want To Ship To A Different Address ?
+                                        {t("Do You Want To Ship To A Different Address ?")}
                                     </label>
                                 </div>
                                 {isShippingToOtherAddress && <form className="edit-customer-shipping-address-form" onSubmit={(e) => e.preventDefault()}>
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <h6>First Name <span className="text-danger">*</span></h6>
+                                                <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.first_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter New First Name Here"
+                                                    placeholder={t("Please Enter First Name Here")}
                                                     defaultValue={userInfo ? userInfo.shipping_address.first_name : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, first_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
                                                 {formValidationErrors.first_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.first_name_for_shipping_address}</span>
+                                                    <span>{t(formValidationErrors.first_name_for_shipping_address)}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
-                                                <h6>Last Name <span className="text-danger">*</span></h6>
+                                                <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.last_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter Last Name Here"
+                                                    placeholder={t("Please Enter Last Name Here")}
                                                     defaultValue={userInfo ? userInfo.shipping_address.last_name : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, last_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
                                                 {formValidationErrors.last_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.last_name_for_shipping_address}</span>
+                                                    <span>{t(formValidationErrors.last_name_for_shipping_address)}</span>
                                                 </p>}
                                             </div>
                                         </div>
                                     </section>
                                     <section className="company-name mb-4">
-                                        <h6>Company Name (Optional)</h6>
+                                        <h6>{t("Company Name")} ({t("Optional")})</h6>
                                         <input
                                             type="text"
                                             className="p-2"
-                                            placeholder="Please Enter New Company Name Here"
+                                            placeholder={t("Please Enter Company Name Here")}
                                             defaultValue={userInfo ? userInfo.shipping_address.company_name : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, company_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="country mb-4">
-                                        <h6>Country / Area <span className="text-danger">*</span></h6>
+                                        <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                         <select
                                             className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                             onChange={(e) => {
@@ -712,59 +724,59 @@ export default function Checkout() {
                                         </p>}
                                     </section>
                                     <section className="street-address mb-4">
-                                        <h6>Street Addres / Neighborhood <span className="text-danger">*</span></h6>
+                                        <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.street_address_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Street Address / Neighborhood"
+                                            placeholder={t("Please Enter Street Address / Neighborhood Here")}
                                             defaultValue={userInfo ? userInfo.shipping_address.street_address : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, street_address: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.street_address_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.street_address_for_shipping_address}</span>
+                                            <span>{t(formValidationErrors.street_address_for_shipping_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="apartment-number mb-4">
-                                        <h6>Apartment Number, Ward, Unit, Etc . ( Optional )</h6>
+                                        <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
                                         <input
                                             type="number"
                                             className="p-2"
-                                            placeholder="Please Enter New Apartment Number, Ward, Unit, Etc"
+                                            placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
                                             defaultValue={userInfo ? userInfo.shipping_address.apartment_number.toString() : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                     </section>
                                     <section className="city-number mb-4">
-                                        <h6>City <span className="text-danger">*</span></h6>
+                                        <h6>{t("City")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.city_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New City Name"
+                                            placeholder={t("Please Enter City Name Here")}
                                             defaultValue={userInfo ? userInfo.shipping_address.city : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.city_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.city_for_shipping_address}</span>
+                                            <span>{t(formValidationErrors.city_for_shipping_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="postal-code-number mb-4">
-                                        <h6>Postal Code / Zip <span className="text-danger">*</span></h6>
+                                        <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
                                             className={`p-2 ${formValidationErrors.postal_code_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Postal Code / Zip"
+                                            placeholder="Please Enter Postal Code / Zip Here"
                                             defaultValue={userInfo ? userInfo.shipping_address.postal_code.toString() : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, postal_code: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.postal_code_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.postal_code_for_shipping_address}</span>
+                                            <span>{t(formValidationErrors.postal_code_for_shipping_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="phone-number mb-4">
-                                        <h6>Phone Number <span className="text-danger">*</span></h6>
+                                        <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
                                         <div className="row">
                                             <div className="col-md-2">
                                                 <input
@@ -778,7 +790,7 @@ export default function Checkout() {
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter New Phone Number"
+                                                    placeholder={t("Please Enter Phone Number Here")}
                                                     defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shipping_address.phone_number, getCountryCode(userInfo.shipping_address.country)) : ""}
                                                     onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                 />
@@ -786,40 +798,40 @@ export default function Checkout() {
                                         </div>
                                         {formValidationErrors.phone_number_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.phone_number_for_shipping_address}</span>
+                                            <span>{t(formValidationErrors.phone_number_for_shipping_address)}</span>
                                         </p>}
                                     </section>
                                     <section className="email mb-4">
-                                        <h6>Email <span className="text-danger">*</span></h6>
+                                        <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.email_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Email"
+                                            placeholder={t("Please Enter Email Here")}
                                             defaultValue={userInfo ? userInfo.shipping_address.email : ""}
                                             onChange={(e) => { setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                         />
                                         {formValidationErrors.email_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.email_for_shipping_address}</span>
+                                            <span>{t(formValidationErrors.email_for_shipping_address)}</span>
                                         </p>}
                                     </section>
                                 </form>}
-                                <h6 className="mb-3">Request Notes ( Optional )</h6>
+                                <h6 className="mb-3">{t("Request Notes")} ( {t("Optional")} )</h6>
                                 <textarea
                                     className="p-2"
-                                    placeholder="Notes About Request, Example: Note About Request Delivery"
+                                    placeholder={t("Notes About Request, Example: Note About Request Delivery")}
                                     onChange={(e) => setRequestNotes(e.target.value.trim())}
                                 ></textarea>
                             </div>
                             <div className="col-xl-6">
                                 <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-start" id="order-total">
-                                    <h5 className="fw-bold mb-5 text-center">Your Request</h5>
+                                    <h5 className="fw-bold mb-5 text-center">{t("Your Request")}</h5>
                                     <div className="row total pb-3 mb-5">
                                         <div className="col-md-9 fw-bold p-0">
-                                            Product
+                                            {t("Product")}
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            Sum
+                                            {t("Sum")}
                                         </div>
                                     </div>
                                     {allProductsData.map((product, productIndex) => (
@@ -828,32 +840,32 @@ export default function Checkout() {
                                                 ( {product.name} ) x {product.quantity}
                                             </div>
                                             <div className="col-md-3 fw-bold p-0 text-md-end">
-                                                {product.price * product.quantity} KWD
+                                                {product.price * product.quantity} {t("KWD")}
                                             </div>
                                         </div>
                                     ))}
                                     <div className="row total-price-before-discount total pb-3 mb-5">
                                         <div className="col-md-9 fw-bold p-0">
-                                            Total Price Before Discount
+                                            {t("Total Price Before Discount")}
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceBeforeDiscount} KWD
+                                            {pricesDetailsSummary.totalPriceBeforeDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
                                         <div className="col-md-9 fw-bold p-0">
-                                            Total Discount
+                                            {t("Total Discount")}
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalDiscount} KWD
+                                            {pricesDetailsSummary.totalDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-4">
                                         <div className="col-md-9 fw-bold p-0">
-                                            Total Price After Discount
+                                            {t("Total Price After Discount")}
                                         </div>
                                         <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceAfterDiscount} KWD
+                                            {pricesDetailsSummary.totalPriceAfterDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     {/* Start Payement Methods Section */}
@@ -868,7 +880,7 @@ export default function Checkout() {
                                                     name="radioGroup"
                                                     onChange={() => setPaymentMethod("paypal")}
                                                 />
-                                                <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>PayPal</label>
+                                                <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>{t("PayPal")}</label>
                                             </div>
                                             <div className="col-md-6 text-md-end">
                                                 <FaCcPaypal className="icon paypal-icon" />
@@ -891,7 +903,7 @@ export default function Checkout() {
                                             className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
                                             onClick={handleSelectPaypalPayment}
                                         >
-                                            Confirm Request
+                                            {t("Confirm Request")}
                                         </button>}
                                     </section>
                                     {/* End Payement Methods Section */}
