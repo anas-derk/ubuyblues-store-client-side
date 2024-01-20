@@ -827,44 +827,48 @@ export default function Checkout() {
                                 <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-start" id="order-total">
                                     <h5 className="fw-bold mb-5 text-center">{t("Your Request")}</h5>
                                     <div className="row total pb-3 mb-5">
-                                        <div className="col-md-9 fw-bold p-0">
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                             {t("Product")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                             {t("Sum")}
                                         </div>
                                     </div>
                                     {allProductsData.map((product, productIndex) => (
                                         <div className="row total pb-3 mb-5" key={productIndex}>
-                                            <div className="col-md-9 fw-bold p-0">
-                                                ( {product.name} ) x {product.quantity}
+                                            <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                {i18n.language !== "ar" ? <span>
+                                                    ( {product.name} ) x {product.quantity}
+                                                </span> : <span>
+                                                    ( {product.name} ) {product.quantity} x
+                                                </span>}
                                             </div>
-                                            <div className="col-md-3 fw-bold p-0 text-md-end">
+                                            <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {product.price * product.quantity} {t("KWD")}
                                             </div>
                                         </div>
                                     ))}
                                     <div className="row total-price-before-discount total pb-3 mb-5">
-                                        <div className="col-md-9 fw-bold p-0">
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                             {t("Total Price Before Discount")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                             {pricesDetailsSummary.totalPriceBeforeDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
-                                        <div className="col-md-9 fw-bold p-0">
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                             {t("Total Discount")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                             {pricesDetailsSummary.totalDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-4">
-                                        <div className="col-md-9 fw-bold p-0">
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                             {t("Total Price After Discount")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                             {pricesDetailsSummary.totalPriceAfterDiscount} {t("KWD")}
                                         </div>
                                     </div>
@@ -876,7 +880,7 @@ export default function Checkout() {
                                                     type="radio"
                                                     checked={paymentMethod === "paypal"}
                                                     id="paypal-radio"
-                                                    className="me-2 radio-input"
+                                                    className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                     name="radioGroup"
                                                     onChange={() => setPaymentMethod("paypal")}
                                                 />
