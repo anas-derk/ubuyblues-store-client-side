@@ -6,7 +6,7 @@
 
 body{
     background-color: var(--main-color-one);
-    &[lang="en"] {
+    &[lang="en"], &[lang="tr"], &[lang="de"] {
         font-family: 'Montserrat', sans-serif;
         direction: ltr;
     }

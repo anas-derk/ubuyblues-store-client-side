@@ -45,6 +45,7 @@ export default function Header() {
     }
 
     const handleChangeLanguage = (language) => {
+        console.log(language)
         i18n.changeLanguage(language);
         document.body.lang = language;
         localStorage.setItem("asfour-store-language", language);
@@ -92,6 +93,18 @@ export default function Header() {
                             >
                                 {t("Arabic")}
                             </li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("tr")}
+                            >
+                                {t("Turkey")}
+                            </li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("de")}
+                            >
+                                {t("Germany")}
+                            </li>
                         </ul>}
                     </div>}
                     {lightMode == "sunny" ?
@@ -120,6 +133,18 @@ export default function Header() {
                                 onClick={() => handleChangeLanguage("ar")}
                             >
                                 {t("Arabic")}
+                            </li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("tr")}
+                            >
+                                {t("Turkey")}
+                            </li>
+                            <li
+                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                onClick={() => handleChangeLanguage("de")}
+                            >
+                                {t("Germany")}
                             </li>
                         </ul>}
                     </div>}

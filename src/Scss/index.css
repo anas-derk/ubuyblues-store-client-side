@@ -8,7 +8,7 @@ body {
   background-color: var(--main-color-one);
 }
 
-body[lang="en"] {
+body[lang="en"], body[lang="tr"], body[lang="de"] {
   font-family: 'Montserrat', sans-serif;
   direction: ltr;
 }
