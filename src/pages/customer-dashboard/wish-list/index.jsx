@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerWishList() {
 
@@ -32,8 +33,11 @@ export default function CustomerWishList() {
 
     const router = useRouter();
 
+    const { t, i18n } = useTranslation();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then(async (res) => {
@@ -42,14 +46,16 @@ export default function CustomerWishList() {
                         setUserId(userId);
                         const res1 = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
                         setFavoriteProductsListForUser(await res1.data);
-                        setIsLoadingPage(false);
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
                         });
+                        setIsLoadingPage(false);
                     } else router.push("/auth");
                 })
                 .catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
@@ -57,6 +63,11 @@ export default function CustomerWishList() {
             router.push("/auth");
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const deleteProductFromFavoriteUserProducts = async (userId, favoriteProductIndex) => {
         try {
@@ -102,10 +113,10 @@ export default function CustomerWishList() {
                                     {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table w-100">
                                         <thead>
                                             <tr>
-                                                <th>Product</th>
-                                                <th>Unit Price</th>
-                                                <th>Stock Status</th>
-                                                <th>Action</th>
+                                                <th>{t("Product")}</th>
+                                                <th>{t("Unit Price")}</th>
+                                                <th>{t("Stock Status")}</th>
+                                                <th>{t("Action")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -122,7 +133,7 @@ export default function CustomerWishList() {
                                                         <h6>{favoriteProduct.name}</h6>
                                                     </td>
                                                     <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
-                                                    <td>Stock Status</td>
+                                                    <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && deletingFavoriteProductIndex !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
                                                         {isDeletingFavoriteProduct && deletingFavoriteProductIndex === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
@@ -134,11 +145,11 @@ export default function CustomerWishList() {
                                     </table> : <div className="favorite-products-for-user">
                                         {favoriteProductsListForUser.map((favoriteProduct, favoriteProductIndex) => (
                                             <div className="favorite-product data-box mb-5" key={favoriteProductsListForUser._id}>
-                                                <h4 className="mb-3 text-white">Favorite Product # {favoriteProductIndex + 1}</h4>
+                                                <h4 className="mb-3 text-white">{t("Product")} # {favoriteProductIndex + 1}</h4>
                                                 <table className="favorite-products-table-for-user data-table w-100">
                                                     <tbody>
                                                         <tr>
-                                                            <th>Product</th>
+                                                            <th>{t("Product")}</th>
                                                             <td>
                                                                 <img
                                                                     src={`${process.env.BASE_API_URL}/${favoriteProduct.imagePath}`}
@@ -151,15 +162,15 @@ export default function CustomerWishList() {
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Unit Price</th>
+                                                            <th>{t("Unit Price")}</th>
                                                             <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Stock Status</th>
-                                                            <td>Stock Status</td>
+                                                            <th>{t("Stock Status")}</th>
+                                                            <td>{t("Stock Status")}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Action</th>
+                                                            <th>{t("Action")}</th>
                                                             <td>
                                                                 {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && deletingFavoriteProductIndex !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
                                                                 {isDeletingFavoriteProduct && deletingFavoriteProductIndex === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
@@ -173,7 +184,7 @@ export default function CustomerWishList() {
                                     </div>}
                                 </section> : <section className="not-found-any-favorite-products-for-user text-center">
                                     <PiSmileySad className="sorry-icon mb-5" />
-                                    <h1 className="h4">Sorry, Can't Find Any Favorite Products For You !!</h1>
+                                    <h1 className="h4">{t("Sorry, Can't Find Any Favorite Products For You !!")}</h1>
                                 </section>}
                             </div>
                         </div>

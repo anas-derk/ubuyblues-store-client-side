@@ -88,5 +88,9 @@
     "Current password": "كلمة السر الحالية",
     "leave the field blank if you do not want to change it": "تجاهل هذا الحقل إذا لم تكن ترغب بتغييرها",
     "New password": "كلمة السر الجديدة",
-    "Confirm New password": "تأكيد كلمة السر الجديدة"
+    "Confirm New password": "تأكيد كلمة السر الجديدة",
+    "Product": "المنتج",
+    "Unit Price": "سعر الوحدة",
+    "Stock Status": "حالة المخزن",
+    "Sorry, Can't Find Any Favorite Products For You !!": "عذراً لا يوجد أي منتجات مفضلة لديك حالياً !!"
 }
