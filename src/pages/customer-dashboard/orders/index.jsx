@@ -296,9 +296,9 @@ export default function CustomerOrders() {
                                                 {allOrdersInsideThePage.map((order) => (
                                                     <tr key={order._id}>
                                                         <td>{order.orderNumber}</td>
-                                                        <td>{order.checkout_status}</td>
+                                                        <td>{t(order.checkout_status)}</td>
                                                         <td className="fw-bold">
-                                                            {order.status}
+                                                            {t(order.status)}
                                                         </td>
                                                         <td>
                                                             {order.order_amount}
