@@ -75,8 +75,8 @@
     "Please Enter New Apartment Number, Ward, Unit, Etc Here": "الرجاء إدخال رقم الشقة ، الجناح ، الوحدة ، الخ الجديد / الجديدة هنا",
     "Please Enter Apartment Number, Ward, Unit, Etc Here": "الرجاء إدخال رقم الشقة ، الجناح ، الوحدة ، الخ هنا",
     "City": "المدينة",
-    "Please Enter New City Name Here": "الرجاء إدخال رقم المدينة الجديد هنا",
-    "Please Enter City Name Here": "الرجاء إدخال رقم المدينة هنا",
+    "Please Enter New City Name Here": "الرجاء إدخال اسم المدينة الجديد هنا",
+    "Please Enter City Name Here": "الرجاء إدخال اسم المدينة هنا",
     "Postal Code / Zip": "الرمز البريدي",
     "Please Enter New Postal Code / Zip Here": "الرجاء إدخال الرمز البريدي الجديد هنا",
     "Please Enter Postal Code / Zip Here": "الرجاء إدخال الرمز البريدي هنا",
@@ -139,5 +139,11 @@
     "Sorry, The Email For This User Has Been Verified !!": "عذراً ، هذا البريد الالكتروني قد تمتّ عملية التاكيد له !!",
     "Network Error": "خطأ في الشبكة",
     "Sorry, Someting Went Wrong, Please Repeat The Process !!": "عذراً ، حدث خطأ ما ، الرجاء إعادة المحاولة !!",
-    "Sorry, Invalid Code !!": "عذراً ، الرمز غير صحيح !!"
+    "Welcome To You In Payment Confirmation Page": "مرحباً بك في صفحة تأكيد الدفع الخاصة بك",
+    "Order Id": "رقم معرّف الطلب",
+    "Product Name And Quantity": "اسم المنتج والعدد",
+    "Unit Price Before Discount": "سعر الوحدة قبل الخصم",
+    "Unit Discount": "مبلغ الخصم الإجمالي للوحدة",
+    "$": "دولار أمريكي",
+    "Thanks For Purchase From Ubuyblues Store": "شكراً لك للشراء من متجر يوباي بلوس"
 }
