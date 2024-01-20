@@ -15,6 +15,8 @@ export default function CustomerOrders() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
     const [userInfo, setUserInfo] = useState(true);
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
@@ -34,7 +36,7 @@ export default function CustomerOrders() {
     });
 
     const router = useRouter();
-    
+
     const { t, i18n } = useTranslation();
 
     const pageSize = 5;
@@ -55,6 +57,10 @@ export default function CustomerOrders() {
                             setTotalPagesCount(Math.ceil(result / pageSize));
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setWindowInnerWidth(window.innerWidth);
+                        window.addEventListener("resize", () => {
+                            setWindowInnerWidth(window.innerWidth);
+                        });
                         setIsLoadingPage(false);
                     } else {
                         router.push("/auth");
@@ -242,8 +248,7 @@ export default function CustomerOrders() {
                                         <h5 className="section-name fw-bold text-center">{t("Filters")} : </h5>
                                         <hr />
                                         <div className="row mb-4">
-                                            <div className="col-md-6 d-flex align-items-center">
-                                                <h6 className="me-2 mb-0 fw-bold text-center">{t("Order Number")}</h6>
+                                            <div className="col-xl-6 d-flex align-items-center">
                                                 <input
                                                     type="number"
                                                     className="p-2"
@@ -253,8 +258,7 @@ export default function CustomerOrders() {
                                                     onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber })}
                                                 />
                                             </div>
-                                            <div className="col-md-6 d-flex align-items-center">
-                                                <h6 className="me-2 mb-0 fw-bold text-center"></h6>
+                                            <div className="col-xl-6 d-flex align-items-center">
                                                 <select
                                                     className="select-order-status p-2"
                                                     onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -281,7 +285,7 @@ export default function CustomerOrders() {
                                         </button>}
                                     </section>
                                     {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
-                                        <table className="orders-data-table customer-table mb-4 w-100">
+                                        {windowInnerWidth > 991 ? <table className="orders-data-table customer-table data-table mb-4 w-100">
                                             <thead>
                                                 <tr>
                                                     <th>{t("Order Number")}</th>
@@ -318,7 +322,67 @@ export default function CustomerOrders() {
                                                     </tr>
                                                 ))}
                                             </tbody>
-                                        </table>
+                                        </table> : <div className="orders-for-user">
+                                            {allOrdersInsideThePage.map((order, orderIndex) => (
+                                                <div className="order-data data-box mb-5" key={order._id}>
+                                                    <h4 className="mb-3 text-white">Order Details # {orderIndex + 1}</h4>
+                                                    <table className="order-data-table-for-user data-table w-100">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>{t("Order Number")}</th>
+                                                                <td>
+                                                                    {order.orderNumber}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{t("Checkout Status")}</th>
+                                                                <td>
+                                                                    {order.checkout_status}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{t("Status")}</th>
+                                                                <td>
+                                                                    {t(order.status)}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{t("Order Total Amount")}</th>
+                                                                <td>
+                                                                    {t(order.order_amount)}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{t("Added Date")}</th>
+                                                                <td>
+                                                                    {t(order.added_date)}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{t("Added Date")}</th>
+                                                                <td>
+                                                                    {t("Action")}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{t("Action")}</th>
+                                                                <td>
+                                                                    <Link
+                                                                        href={{
+                                                                            pathname: `/customer-dashboard/orders/${order._id}`,
+                                                                            query: {
+                                                                                activeParentLink: "orders-managment",
+                                                                            }
+                                                                        }}
+                                                                        className="btn btn-success d-block mx-auto mb-4 global-button"
+                                                                    >{t("Show Details")}</Link>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            ))}
+                                        </div>}
                                     </section>}
                                     {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">{t("Sorry, Can't Find Any Orders")} !!</p>}
                                     {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">

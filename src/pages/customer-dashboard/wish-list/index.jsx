@@ -98,8 +98,8 @@ export default function CustomerWishList() {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {favoriteProductsListForUser.length > 0 ? <section className="favorite-products-list-for-user text-center">
-                                    {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user w-100">
+                                {favoriteProductsListForUser.length > 0 ? <section className="favorite-products-list-for-user data-box text-center">
+                                    {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table w-100">
                                         <thead>
                                             <tr>
                                                 <th>Product</th>
@@ -133,9 +133,9 @@ export default function CustomerWishList() {
                                         </tbody>
                                     </table> : <div className="favorite-products-for-user">
                                         {favoriteProductsListForUser.map((favoriteProduct, favoriteProductIndex) => (
-                                            <div className="favorite-product mb-5" key={favoriteProductIndex}>
+                                            <div className="favorite-product data-box mb-5" key={favoriteProductsListForUser._id}>
                                                 <h4 className="mb-3 text-white">Favorite Product # {favoriteProductIndex + 1}</h4>
-                                                <table className="favorite-products-table-for-user w-100">
+                                                <table className="favorite-products-table-for-user data-table w-100">
                                                     <tbody>
                                                         <tr>
                                                             <th>Product</th>
