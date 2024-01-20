@@ -92,5 +92,15 @@
     "Product": "المنتج",
     "Unit Price": "سعر الوحدة",
     "Stock Status": "حالة المخزن",
-    "Sorry, Can't Find Any Favorite Products For You !!": "عذراً لا يوجد أي منتجات مفضلة لديك حالياً !!"
+    "Sorry, Can't Find Any Favorite Products For You !!": "عذراً لا يوجد أي منتجات مفضلة لديك حالياً !!",
+    "Quantity": "العدد",
+    "Subtotal": "المبلغ الإجمالي الجزئي",
+    "KWD": "دينار كويتي",
+    "Go To Cart Totals": "الانتقال إلى الملخص",
+    "Cart Totals": "الملخص",
+    "Total Price Before Discount": "المبلغ الإحمالي قبل الخصم",
+    "Total Discount": "المبلغ الإجمالي للخصم",
+    "Total Price After Discount": "المبلغ الإجمالي بعد الخصم",
+    "Go To Checkout": "الانتقال إلى صفحة التحقق",
+    "Sorry, Can't Find Any Products For You In Cart !!": "عذراً ، لا يوجد أي منتجات في سلة الشراء الخاصة بك !!"
 }

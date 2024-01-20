@@ -6,6 +6,7 @@ import { BsTrash } from "react-icons/bs";
 import Link from "next/link";
 import { PiSmileySad } from "react-icons/pi";
 import LoaderPage from "@/components/LoaderPage";
+import { useTranslation } from "react-i18next";
 
 export default function Cart() {
 
@@ -21,8 +22,11 @@ export default function Cart() {
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
+    const { t, i18n } = useTranslation();
+
     useEffect(() => {
         let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (Array.isArray(allProductsData)) {
             if (allProductsData.length > 0) {
                 const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
@@ -48,8 +52,14 @@ export default function Cart() {
                 });
             }
         }
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         setIsLoadingPage(false);
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
@@ -131,13 +141,13 @@ export default function Cart() {
                         {allProductsData.length > 0 ? <div className="row align-items-center">
                             <div className="col-xl-8">
                                 {windowInnerWidth > 991 && <section className="products w-100">
-                                    <table className="user-products-table mb-4 w-100 text-start">
+                                    <table className="user-products-table mb-4 w-100">
                                         <thead>
                                             <tr>
-                                                <th>Product</th>
-                                                <th>Quantity</th>
-                                                <th>Subtotal</th>
-                                                <th>Process</th>
+                                                <th>{t("Product")}</th>
+                                                <th>{t("Quantity")}</th>
+                                                <th>{t("Subtotal")}</th>
+                                                <th>{t("Action")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -150,8 +160,8 @@ export default function Cart() {
                                                             </div>
                                                             <div className="col-lg-8">
                                                                 <h5 className="product-name mb-3">{product.name}</h5>
-                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h6>
-                                                                {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} KWD</h6>}
+                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} {t("KWD")}</h6>
+                                                                {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount}  {t("KWD")}</h6>}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -167,7 +177,7 @@ export default function Cart() {
                                                         </div>
                                                     </td>
                                                     <td className="subtotal-cell">
-                                                        {product.price * product.quantity} KWD
+                                                        {product.price * product.quantity} {t("KWD")}
                                                     </td>
                                                     <td className="delete-product-cell">
                                                         <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
@@ -179,24 +189,24 @@ export default function Cart() {
                                 </section>}
                                 {windowInnerWidth <= 991 && <section className="products w-100">
                                     <a href="#order-total" className="cart-total-btn-box">
-                                        Go To Cart Totals
+                                        {t("Go To Cart Totals")}
                                     </a>
                                     {allProductsData.map((product, index) => (
                                         <div className="product mb-4" key={index}>
-                                            <h4 className="mb-3">Product # {index + 1}</h4>
+                                            <h4 className="mb-3">{t("Product")} # {index + 1}</h4>
                                             <table className="user-products-table-for-mobiles-and-tablets w-100">
                                                 <tbody>
                                                     <tr>
-                                                        <th>Product</th>
+                                                        <th>{t("Product")}</th>
                                                         <td className="product-cell">
                                                             <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
                                                             <h5 className="product-name mb-3">{product.name}</h5>
-                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h6>
-                                                            {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} KWD</h6>}
+                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} {t("KWD")}</h6>
+                                                            {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} {t("KWD")}</h6>}
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Quantity</th>
+                                                        <th>{t("Quantity")}</th>
                                                         <td className="update-product-quantity-cell">
                                                             <div className="update-product-quantity p-3 w-100">
                                                                 <HiMinus className="update-product-icon"
@@ -210,13 +220,13 @@ export default function Cart() {
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Subtotal</th>
+                                                        <th>{t("Subtotal")}</th>
                                                         <td className="subtotal-cell">
-                                                            {product.price * product.quantity} KWD
+                                                            {product.price * product.quantity} {t("KWD")}
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Process</th>
+                                                        <th>{t("Action")}</th>
                                                         <td className="delete-product-cell">
                                                             <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
                                                         </td>
@@ -229,37 +239,37 @@ export default function Cart() {
                             </div>
                             <div className="col-xl-4">
                                 <section className="order-total border border-3 p-4 ps-5 pe-5 text-start" id="order-total">
-                                    <h5 className="fw-bold mb-5 text-center">Cart Totals</h5>
+                                    <h5 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h5>
                                     <div className="row total-price-before-discount total pb-3 mb-5">
-                                        <div className="col-md-9 fw-bold p-0">
-                                            Total Price Before Discount
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                            {t("Total Price Before Discount")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceBeforeDiscount} KWD
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                            {pricesDetailsSummary.totalPriceBeforeDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
-                                        <div className="col-md-9 fw-bold p-0">
-                                            Total Discount
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                            {t("Total Discount")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalDiscount} KWD
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                            {pricesDetailsSummary.totalDiscount} {t("KWD")}
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-5">
-                                        <div className="col-md-9 fw-bold p-0">
-                                            Total Price After Discount
+                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                            {t("Total Price After Discount")}
                                         </div>
-                                        <div className="col-md-3 fw-bold p-0 text-md-end">
-                                            {pricesDetailsSummary.totalPriceAfterDiscount} KWD
+                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                            {pricesDetailsSummary.totalPriceAfterDiscount} {t("KWD")}
                                         </div>
                                     </div>
-                                    <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">Go To Checkout</Link>
+                                    <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
                                 </section>
                             </div>
                         </div> : <section className="not-found-any-products-for-user-in-cart text-center">
                             <PiSmileySad className="sorry-icon mb-5" />
-                            <h1 className="h4">Sorry, Can't Find Any Products For You In Cart !!</h1>
+                            <h1 className="h4">{t("Sorry, Can't Find Any Products For You In Cart !!")}</h1>
                         </section>}
                     </div>
                 </div>
