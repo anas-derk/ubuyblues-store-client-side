@@ -322,10 +322,10 @@ export default function CustomerOrders() {
                                                     </tr>
                                                 ))}
                                             </tbody>
-                                        </table> : <div className="orders-for-user">
+                                        </table> : <div className="orders-for-user text-center">
                                             {allOrdersInsideThePage.map((order, orderIndex) => (
                                                 <div className="order-data data-box mb-5" key={order._id}>
-                                                    <h4 className="mb-3 text-white">Order Details # {orderIndex + 1}</h4>
+                                                    <h4 className="mb-3 text-white">{t("Order Details")} # {orderIndex + 1}</h4>
                                                     <table className="order-data-table-for-user data-table w-100">
                                                         <tbody>
                                                             <tr>
@@ -337,7 +337,7 @@ export default function CustomerOrders() {
                                                             <tr>
                                                                 <th>{t("Checkout Status")}</th>
                                                                 <td>
-                                                                    {order.checkout_status}
+                                                                    {t(order.checkout_status)}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -349,19 +349,13 @@ export default function CustomerOrders() {
                                                             <tr>
                                                                 <th>{t("Order Total Amount")}</th>
                                                                 <td>
-                                                                    {t(order.order_amount)}
+                                                                    {order.order_amount}
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <th>{t("Added Date")}</th>
                                                                 <td>
-                                                                    {t(order.added_date)}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>{t("Added Date")}</th>
-                                                                <td>
-                                                                    {t("Action")}
+                                                                    {getDateFormated(order.added_date)}
                                                                 </td>
                                                             </tr>
                                                             <tr>
