@@ -9,6 +9,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import validations from "../../../../public/global_functions/validations";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerAccountDetails() {
 
@@ -47,20 +48,25 @@ export default function CustomerAccountDetails() {
 
     const router = useRouter();
 
+    const { t, i18n } = useTranslation();
+
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
+        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userId) {
             axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                 .then((res) => {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserInfo(result);
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         router.push("/auth");
                     }
                 })
                 .catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
@@ -68,6 +74,11 @@ export default function CustomerAccountDetails() {
             router.push("/auth");
         }
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
     
     const validateFormFields = () => {
         let errorsObject = validations.inputValuesValidation([
@@ -76,7 +87,7 @@ export default function CustomerAccountDetails() {
                 value: userInfo.first_name,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, First Name Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                 },
             },
@@ -85,7 +96,7 @@ export default function CustomerAccountDetails() {
                 value: userInfo.last_name,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                 },
             },
@@ -94,7 +105,7 @@ export default function CustomerAccountDetails() {
                 value: userInfo.preview_name,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Preview Name Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                 },
             },
@@ -103,7 +114,7 @@ export default function CustomerAccountDetails() {
                 value: userInfo.email,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Email Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                     isEmail: {
                         msg: "Sorry, Invalid Email !!",
@@ -115,7 +126,7 @@ export default function CustomerAccountDetails() {
                 value: currentPassword,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Current Password Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                 }
             } : null,
@@ -124,7 +135,7 @@ export default function CustomerAccountDetails() {
                 value: newPassword,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, New Password Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                     isMatch: {
                         value: confirmNewPassword,
@@ -137,7 +148,7 @@ export default function CustomerAccountDetails() {
                 value: confirmNewPassword,
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Confirm New Password Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                     isMatch: {
                         value: newPassword,
@@ -211,68 +222,68 @@ export default function CustomerAccountDetails() {
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <h6>First Name <span className="text-danger">*</span></h6>
+                                                <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.first_name ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter New First Name Here"
+                                                    placeholder={t("Please Enter New First Name Here")}
                                                     defaultValue={userInfo.first_name}
                                                     onChange={(e) => setUserInfo({ ...userInfo, first_name: e.target.value.trim() })}
                                                 />
                                                 {formValidationErrors.first_name && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.first_name}</span>
+                                                    <span>{t(formValidationErrors.first_name)}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
-                                                <h6>Last Name <span className="text-danger">*</span></h6>
+                                                <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.last_name ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder="Please Enter Last Name Here"
+                                                    placeholder={t("Please Enter New Last Name Here")}
                                                     defaultValue={userInfo.last_name}
                                                     onChange={(e) => setUserInfo({ ...userInfo, last_name: e.target.value.trim() })}
                                                 />
                                                 {formValidationErrors.last_name && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.last_name}</span>
+                                                    <span>{t(formValidationErrors.last_name)}</span>
                                                 </p>}
                                             </div>
                                         </div>
                                     </section>
                                     <section className="preview-name mb-4">
-                                        <h6>Preview Name <span className="text-danger">*</span></h6>
+                                        <h6>{t("Preview Name")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.preview_name ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Preview Name Here"
+                                            placeholder={t("Please Enter New Preview Name Here")}
                                             defaultValue={userInfo.preview_name}
                                             onChange={(e) => setUserInfo({ ...userInfo, preview_name: e.target.value.trim() })}
                                         />
                                         {formValidationErrors.preview_name && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.preview_name}</span>
+                                            <span>{t(formValidationErrors.preview_name)}</span>
                                         </p>}
-                                        <h6 className="note mt-2">This way your name will be displayed in the accounts section and in reviews</h6>
+                                        <h6 className="note mt-2">{t("This way your name will be displayed in the accounts section and in reviews")}</h6>
                                     </section>
                                     <section className="email mb-4">
-                                        <h6>Email <span className="text-danger">*</span></h6>
+                                        <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder="Please Enter New Email Here"
+                                            placeholder={t("Please Enter New Email Here")}
                                             defaultValue={userInfo.email}
                                             onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value.trim() })}
                                         />
                                         {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{formValidationErrors.email}</span>
+                                            <span>{t(formValidationErrors.email)}</span>
                                         </p>}
                                     </section>
                                     <section className="change-password mb-4">
                                         <fieldset>
                                             <section className="current-password mb-3">
-                                                <h6>Current password (leave the field blank if you do not want to change it)</h6>
+                                                <h6>{t("Current password")} ({t("leave the field blank if you do not want to change it")})</h6>
                                                 <div className={`current-password-field-box ${formValidationErrors.currentPassword ? "error-in-field" : ""}`}>
                                                     <input
                                                         type={isVisibleCurrentPassword ? "text" : "password"}
@@ -286,11 +297,11 @@ export default function CustomerAccountDetails() {
                                                 </div>
                                                 {formValidationErrors.currentPassword && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.currentPassword}</span>
+                                                    <span>{t(formValidationErrors.currentPassword)}</span>
                                                 </p>}
                                             </section>
                                             <section className="new-password mb-3">
-                                                <h6>New password (leave the field blank if you do not want to change it)</h6>
+                                                <h6>{t("New password")} ({t("leave the field blank if you do not want to change it")})</h6>
                                                 <div className={`new-password-field-box ${formValidationErrors.newPassword ? "error-in-field" : ""}`}>
                                                     <input
                                                         type={isVisibleNewPassword ? "text" : "password"}
@@ -304,11 +315,11 @@ export default function CustomerAccountDetails() {
                                                 </div>
                                                 {formValidationErrors.newPassword && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.newPassword}</span>
+                                                    <span>{t(formValidationErrors.newPassword)}</span>
                                                 </p>}
                                             </section>
                                             <section className="confirm-new-password mb-3">
-                                                <h6>Confirm New password (leave the field blank if you do not want to change it)</h6>
+                                                <h6>{t("Confirm New password")} ({t("leave the field blank if you do not want to change it")})</h6>
                                                 <div className={`confirm-new-password-field-box ${formValidationErrors.confirmNewPassword ? "error-in-field" : ""}`}>
                                                     <input
                                                         type={isVisibleConfirmNewPassword ? "text" : "password"}
@@ -322,7 +333,7 @@ export default function CustomerAccountDetails() {
                                                 </div>
                                                 {formValidationErrors.confirmNewPassword && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors.confirmNewPassword}</span>
+                                                    <span>{t(formValidationErrors.confirmNewPassword)}</span>
                                                 </p>}
                                             </section>
                                         </fieldset>
@@ -331,25 +342,25 @@ export default function CustomerAccountDetails() {
                                         type="submit"
                                         className="btn btn-success d-block mx-auto"
                                     >
-                                        Save Changes
+                                        {t("Save Changes")}
                                     </button>}
                                     {isWaitStatus && <button
                                         className="btn btn-success d-block mx-auto"
                                         disabled
                                     >
-                                        Saving ...
+                                        {t("Saving")} ...
                                     </button>}
                                     {errorMsg && <button
                                         className="btn btn-danger d-block mx-auto"
                                         disabled
                                     >
-                                        { errorMsg }
+                                        { t(errorMsg) }
                                     </button>}
                                     {successMsg && <button
                                         className="btn btn-success d-block mx-auto"
                                         disabled
                                     >
-                                        { successMsg }
+                                        { t(successMsg) }
                                     </button>}
                                 </form>
                             </div>

@@ -289,7 +289,7 @@ export default function CustomerBillingAddress() {
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.street_address ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder={t("Please Enter New Street Address / Neighborhood")}
+                                            placeholder={t("Please Enter New Street Address / Neighborhood Here")}
                                             defaultValue={userInfo.shipping_address.street_address}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, street_address: e.target.value.trim() } })}
                                         />
@@ -303,7 +303,7 @@ export default function CustomerBillingAddress() {
                                         <input
                                             type="number"
                                             className="p-2"
-                                            placeholder={t("Please Enter New Apartment Number, Ward, Unit, Etc")}
+                                            placeholder={t("Please Enter New Apartment Number, Ward, Unit, Etc Here")}
                                             defaultValue={userInfo.shipping_address.apartment_number.toString()}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, apartment_number: e.target.value } })}
                                         />
@@ -313,7 +313,7 @@ export default function CustomerBillingAddress() {
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.city ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder={t("Please Enter New City Name")}
+                                            placeholder={t("Please Enter New City Name Here")}
                                             defaultValue={userInfo.shipping_address.city}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, city: e.target.value.trim() } })}
                                         />
@@ -327,7 +327,7 @@ export default function CustomerBillingAddress() {
                                         <input
                                             type="number"
                                             className={`p-2 ${formValidationErrors.postal_code ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder={t("Please Enter New Postal Code / Zip")}
+                                            placeholder={t("Please Enter New Postal Code / Zip Here")}
                                             defaultValue={userInfo.shipping_address.postal_code.toString()}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, postal_code: e.target.value } })}
                                         />
@@ -351,7 +351,7 @@ export default function CustomerBillingAddress() {
                                                 <input
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
-                                                    placeholder={t("Please Enter New Phone Number")}
+                                                    placeholder={t("Please Enter New Phone Number Here")}
                                                     defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shipping_address.phone_number, getCountryCode(userInfo.shipping_address.country)) : ""}
                                                     onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: "00" + countries[getCountryCode(userInfo.shipping_address.country)].phone + e.target.value } })}
                                                 />
@@ -367,7 +367,7 @@ export default function CustomerBillingAddress() {
                                         <input
                                             type="text"
                                             className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
-                                            placeholder={t("Please Enter New Email")}
+                                            placeholder={t("Please Enter New Email Here")}
                                             defaultValue={userInfo.shipping_address.email}
                                             onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, email: e.target.value.trim() } })}
                                         />
