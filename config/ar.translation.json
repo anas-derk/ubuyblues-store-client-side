@@ -153,5 +153,11 @@
     "Something went wrong.": "حدث خطأ ما",
     "The page you were looking for could not be found. Please check the URL": "الصفحة التي تبحث عنها قد تكون غير موجودة. الرجاء التحقق من الرابط",
     "Or Go To Home Page": "أو الانتقال للصفحة الرئيسية",
-    "Sorry, Something Went Wrong, Please Try Again !": "عذراً ، حدث خطأ ما ، الرجاء إعادة المحاولة مرة أخرى !"
+    "Sorry, Something Went Wrong, Please Try Again !": "عذراً ، حدث خطأ ما ، الرجاء إعادة المحاولة مرة أخرى !",
+    "Product Id": "رقم معرّف المنتج",
+    "Name": "الاسم",
+    "Total": "المبلغ الإجمالي",
+    "Image": "الصورة",
+    "Apartment Number": "رقم الشقة",
+    "Sorry, This Order Is Not Found !!": "عذراً ، هذا الطلب غير موجود !!"
 }

@@ -6,6 +6,7 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { useTranslation } from "react-i18next";
 
 export default function OrderDetails() {
 
@@ -19,9 +20,12 @@ export default function OrderDetails() {
 
     const { orderId } = router.query;
 
+    const { t, i18n } = useTranslation();
+
     useEffect(() => {
         if (orderId) {
             const userId = localStorage.getItem("asfour-store-user-id");
+            const userLanguage = localStorage.getItem("asfour-store-language");
             if (userId) {
                 axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
                     .then(async (res) => {
@@ -33,16 +37,19 @@ export default function OrderDetails() {
                             router.push("/auth");
                         }
                     })
-                    .catch((err) => {
-                        console.log(err);
+                    .catch(() => {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     });
-            } else {
-                router.push("/auth");
-            }
+            } else router.push("/auth");
+            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         }
     }, [orderId]);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const getOrderDetails = async (orderId) => {
         try {
@@ -72,12 +79,12 @@ export default function OrderDetails() {
                                     <table className="order-data-table customer-table mb-5 w-100">
                                         <thead>
                                             <tr>
-                                                <th>Reference / Product Id</th>
-                                                <th>Quantity</th>
-                                                <th>Name</th>
-                                                <th>Unit Price</th>
-                                                <th>Total</th>
-                                                <th>Image</th>
+                                                <th>{t("Product Id")}</th>
+                                                <th>{t("Quantity")}</th>
+                                                <th>{t("Name")}</th>
+                                                <th>{t("Unit Price")}</th>
+                                                <th>{t("Total")}</th>
+                                                <th>{t("Image")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -111,36 +118,36 @@ export default function OrderDetails() {
                                     <section className="customer-info text-white">
                                         <div className="row">
                                             <div className="col-md-6 border border-1 border-white">
-                                                <div className="billing-address-box text-start p-3">
-                                                    <h6 className="fw-bold">Billing Address</h6>
+                                                <div className="billing-address-box p-3">
+                                                    <h6 className="fw-bold">{t("Billing Address")}</h6>
                                                     <hr />
-                                                    <p className="city fw-bold info">City: {orderDetails.billing_address.city}</p>
-                                                    <p className="email fw-bold info">Email: {orderDetails.billing_address.email}</p>
-                                                    <p className="name fw-bold info">Name: {orderDetails.billing_address.first_name}</p>
-                                                    <p className="family-name fw-bold info">Family Name: {orderDetails.billing_address.last_name}</p>
-                                                    <p className="phone fw-bold info">Phone: {orderDetails.billing_address.phone}</p>
-                                                    <p className="postal-code fw-bold info">Postal Code: {orderDetails.billing_address.postal_code}</p>
-                                                    <p className="street-address fw-bold info">Street Address: {orderDetails.billing_address.street_address}</p>
-                                                    <p className="apartment-number fw-bold info">Apartment Number: {orderDetails.billing_address.apartment_number}</p>
+                                                    <p className="city fw-bold info">{t("City")}: {orderDetails.billing_address.city}</p>
+                                                    <p className="email fw-bold info">{t("Email")}: {orderDetails.billing_address.email}</p>
+                                                    <p className="name fw-bold info">{t("Name")}: {orderDetails.billing_address.first_name}</p>
+                                                    <p className="family-name fw-bold info">{t("Last Name")}: {orderDetails.billing_address.last_name}</p>
+                                                    <p className="phone fw-bold info">{t("Phone Number")}: {orderDetails.billing_address.phone}</p>
+                                                    <p className="postal-code fw-bold info">{t("Postal Code")}: {orderDetails.billing_address.postal_code}</p>
+                                                    <p className="street-address fw-bold info">{t("Street Address")}: {orderDetails.billing_address.street_address}</p>
+                                                    <p className="apartment-number fw-bold info">{t("Apartment Number")}: {orderDetails.billing_address.apartment_number}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 border border-1 border-white">
-                                                <div className="shipping-address-box text-start p-3">
-                                                    <h6 className="fw-bold">Shipping Address</h6>
+                                                <div className="shipping-address-box p-3">
+                                                    <h6 className="fw-bold">{t("Shipping Address")}</h6>
                                                     <hr />
-                                                    <p className="city fw-bold info">City: {orderDetails.shipping_address.city}</p>
-                                                    <p className="email fw-bold info">Email: {orderDetails.shipping_address.email}</p>
-                                                    <p className="name fw-bold info">Name: {orderDetails.shipping_address.first_name}</p>
-                                                    <p className="family-name fw-bold info">Family Name: {orderDetails.shipping_address.last_name}</p>
-                                                    <p className="phone fw-bold info">Phone: {orderDetails.shipping_address.phone}</p>
-                                                    <p className="postal-code fw-bold info">Postal Code: {orderDetails.shipping_address.postal_code}</p>
-                                                    <p className="street-address fw-bold info">Street Address: {orderDetails.shipping_address.street_address}</p>
-                                                    <p className="apartment-number fw-bold info">Apartment Number: {orderDetails.shipping_address.apartment_number}</p>
+                                                    <p className="city fw-bold info">{t("City")}: {orderDetails.shipping_address.city}</p>
+                                                    <p className="email fw-bold info">{t("Email")}: {orderDetails.shipping_address.email}</p>
+                                                    <p className="name fw-bold info">{t("Name")}: {orderDetails.shipping_address.first_name}</p>
+                                                    <p className="family-name fw-bold info">{t("Last Name")}: {orderDetails.shipping_address.last_name}</p>
+                                                    <p className="phone fw-bold info">{t("Phone Number")}: {orderDetails.shipping_address.phone}</p>
+                                                    <p className="postal-code fw-bold info">{t("Postal Code")}: {orderDetails.shipping_address.postal_code}</p>
+                                                    <p className="street-address fw-bold info">{t("Street Address")}: {orderDetails.shipping_address.street_address}</p>
+                                                    <p className="apartment-number fw-bold info">{t("Apartment Number")}: {orderDetails.shipping_address.apartment_number}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </section>
-                                </div> : <p className="alert alert-danger order-not-found-error">Sorry, This Order Is Not Found !!</p>}
+                                </div> : <p className="alert alert-danger order-not-found-error">{t("Sorry, This Order Is Not Found !!")}</p>}
                             </div>
                         </div>
                     </div>

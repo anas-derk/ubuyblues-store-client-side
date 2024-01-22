@@ -153,5 +153,11 @@
     "Something went wrong.": "Etwas ist schief gelaufen",
     "The page you were looking for could not be found. Please check the URL": "Die Seite, die Sie suchen, konnte nicht gefunden werden. Bitte überprüfen Sie die URL",
     "Or Go To Home Page": "Oder gehen Sie zur Startseite",
-    "Sorry, Something Went Wrong, Please Try Again !": "Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut!"
+    "Sorry, Something Went Wrong, Please Try Again !": "Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut!",
+    "Product Id": "Produkt-ID",
+    "Name": "Name",
+    "Total": "Gesamt",
+    "Image": "Bild",
+    "Apartment Number": "Wohnungsnummer",
+    "Sorry, This Order Is Not Found !!": "Entschuldigung, diese Bestellung wurde nicht gefunden!!"
 }
