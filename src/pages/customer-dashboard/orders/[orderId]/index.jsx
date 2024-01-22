@@ -14,6 +14,8 @@ export default function OrderDetails() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
     const [orderDetails, setOrderDetails] = useState({});
 
     const router = useRouter();
@@ -32,10 +34,12 @@ export default function OrderDetails() {
                         const result = res.data;
                         if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                             setOrderDetails(await getOrderDetails(orderId));
+                            setWindowInnerWidth(window.innerWidth);
+                            window.addEventListener("resize", () => {
+                                setWindowInnerWidth(window.innerWidth);
+                            });
                             setIsLoadingPage(false);
-                        } else {
-                            router.push("/auth");
-                        }
+                        } else router.push("/auth");
                     })
                     .catch(() => {
                         setIsLoadingPage(false);
@@ -62,7 +66,7 @@ export default function OrderDetails() {
     }
 
     return (
-        <div className="order-details">
+        <div className="order-details customer-dashboard">
             <Head>
                 <title>Ubuyblues Store - Order Details</title>
             </Head>
@@ -76,7 +80,7 @@ export default function OrderDetails() {
                             </div>
                             <div className="col-xl-9">
                                 {orderDetails.checkout_status === "checkout_successful" ? <div className="order-details-box p-3 data-box">
-                                    <table className="order-data-table customer-table mb-5 w-100">
+                                    {windowInnerWidth > 991 ? <table className="order-data-table customer-table mb-5 w-100">
                                         <thead>
                                             <tr>
                                                 <th>{t("Product Id")}</th>
@@ -114,7 +118,48 @@ export default function OrderDetails() {
                                                 </tr>
                                             ))}
                                         </tbody>
-                                    </table>
+                                    </table> : <div className="order-products-for-user text-center">
+                                        {orderDetails.order_products.map((orderProduct, productIndex) => (
+                                            <div className="order-product-box" key={orderProduct._id}>
+                                                <h4 className="mb-3 text-white">{t("Product Details")} # {productIndex + 1}</h4>
+                                                <table className="order-data-table customer-table mb-5 w-100">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>{t("Product Id")}</th>
+                                                            <td>{orderProduct._id}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{t("Quantity")}</th>
+                                                            <td>{orderProduct.quantity}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{t("Name")}</th>
+                                                            <td>{orderProduct.name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{t("Unit Price")}</th>
+                                                            <td>{orderProduct.unit_price}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{t("Total")}</th>
+                                                            <td>{orderProduct.total_amount}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{t("Image")}</th>
+                                                            <td>
+                                                                <img
+                                                                    src={`${process.env.BASE_API_URL}/${orderProduct.image_path}`}
+                                                                    alt="product Image !!"
+                                                                    width="100"
+                                                                    height="100"
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ))}
+                                    </div>}
                                     <section className="customer-info text-white">
                                         <div className="row">
                                             <div className="col-md-6 border border-1 border-white">

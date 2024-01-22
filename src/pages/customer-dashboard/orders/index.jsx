@@ -62,9 +62,7 @@ export default function CustomerOrders() {
                             setWindowInnerWidth(window.innerWidth);
                         });
                         setIsLoadingPage(false);
-                    } else {
-                        router.push("/auth");
-                    }
+                    } else router.push("/auth");
                 })
                 .catch(() => {
                     handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");

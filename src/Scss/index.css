@@ -207,7 +207,7 @@ textarea {
 
 @media (max-width: 1199px) {
   .customer-dashboard .page-content .container-fluid > .row .row {
-    row-gap: 20px;
+    row-gap: 40px;
   }
 }
 
