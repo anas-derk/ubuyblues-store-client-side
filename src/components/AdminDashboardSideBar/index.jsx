@@ -1,4 +1,4 @@
-import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.webp";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import Link from "next/link";
 import { useState } from "react";

@@ -4,7 +4,7 @@ import LoaderPage from "@/components/LoaderPage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.webp";
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
