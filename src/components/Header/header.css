@@ -16,6 +16,7 @@
   position: absolute;
   top: 120%;
   right: 0;
+  z-index: 1;
   background-color: var(--main-color-two);
   width: 150px;
 }
