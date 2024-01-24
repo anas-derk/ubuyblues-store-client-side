@@ -40,7 +40,7 @@ a {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: var(--main-color-three);
+  background-color: var(--main-color-two);
 }
 
 input, textarea, select, .checkbox {

@@ -685,10 +685,6 @@ export default function Home() {
                                             <BiSolidCategory className="icon mb-2" />
                                             <h5 className="link-name">Last Added</h5>
                                         </Link>
-                                        <Link href="#best-seller" className="display-product-link me-5 text-center">
-                                            <BiSolidCategory className="icon mb-2" />
-                                            <h5 className="link-name">Best</h5>
-                                        </Link>
                                     </section>
                                 </div>
                             </div>
@@ -711,7 +707,7 @@ export default function Home() {
                                 ))}
                             </div>
                         </section>
-                        <section className="last-added-products mb-5">
+                        <section className="last-added-products mb-5" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
                             <div className="row products-box bg-white pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
