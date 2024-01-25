@@ -216,7 +216,7 @@ textarea{
         background: #DDD;
         font-size: 14px;
         &.selection{
-            background-color: #dc3545;
+            background-color: var(--main-color-one);
             color: #FFF;
         }
     }

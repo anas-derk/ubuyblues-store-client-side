@@ -380,25 +380,6 @@ export default function Home() {
                     onClick={getNextPage}
                 />}
                 <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
-                <form
-                    className="navigate-to-specific-page-form w-25"
-                    onSubmit={async (e) => {
-                        e.preventDefault();
-                        setIsGetProductsStatus(true);
-                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsGetProductsStatus(false);
-                    }}
-                >
-                    <input
-                        type="number"
-                        className="form-control p-1 ps-2 page-number-input"
-                        placeholder="Enter Page Number"
-                        min="1"
-                        max={totalPagesCount}
-                        onChange={(e) => setPageNumber(e.target.valueAsNumber)}
-                    />
-                </form>
             </section>
         );
     }

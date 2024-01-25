@@ -250,7 +250,7 @@ textarea {
 }
 
 .pagination .pagination-button.selection {
-  background-color: #dc3545;
+  background-color: var(--main-color-one);
   color: #FFF;
 }
 
