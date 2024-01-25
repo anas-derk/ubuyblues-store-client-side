@@ -741,7 +741,7 @@ export default function Home() {
                             <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
                             <div className="row products-box bg-white pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
-                                    <div className="col-md-3" key={product._id}>
+                                    <div className="col-sm-6 col-md-4 col-xl-3" key={product._id}>
                                         <a href={`/product-details/${product._id}`} target="_blank">
                                             <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" />
                                         </a>
