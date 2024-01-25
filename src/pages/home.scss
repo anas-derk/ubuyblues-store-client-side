@@ -223,6 +223,9 @@
             bottom: 4px solid var(--main-color-two);
         };
         margin-bottom: 120px;
+        @media (max-width: 576px) {
+            margin-top: 70px;
+        }
         .links-box{
             padding: {
                 top: 15px;
@@ -231,7 +234,12 @@
             };
             justify-content: center;
             gap: 20px;
-            @media (max-width: 1199px) {
+            @media (max-width: 576px) {
+                justify-content: center;
+                align-items: end;
+                height: 112px;
+            }
+            @media (min-width: 577px) and (max-width: 1199px) {
                 justify-content: end;
             }
         }
@@ -241,10 +249,7 @@
             &:hover{
                 color: var(--main-color-two);
             }
-            @media (max-width: 380px) {
-                font-size: 30px;
-            }
-            @media (min-width: 381px) and (max-width: 767px) {
+            @media (max-width: 767px) {
                 font-size: 40px;
             }
         }
@@ -264,8 +269,12 @@
                 width: 150px;
                 height: 150px;
             }
-            @media (max-width: 380px) {
-                left: 5%;
+            @media (max-width: 576px) {
+                width: 100px;
+                height: 100px;
+                left: 50%;
+                top: calc(-100% + 105px);
+                transform: translate(-50%, -50%);
             }
         }
     }
