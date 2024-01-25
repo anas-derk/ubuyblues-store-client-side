@@ -29,20 +29,6 @@ a {
   text-decoration: none;
 }
 
-::-webkit-scrollbar {
-  width: 15px;
-  height: 15px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #EEE;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: var(--main-color-two);
-}
-
 input, textarea, select, .checkbox {
   background: transparent;
   border: 1px solid #FFF;
