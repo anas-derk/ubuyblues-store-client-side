@@ -16,7 +16,6 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
-import logoWithWhiteCircle from "../../public/images/logoCircle.png";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
@@ -25,6 +24,8 @@ import { PiShareFatLight } from "react-icons/pi";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
 import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
+import { IoEarth } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
 
@@ -86,7 +87,11 @@ export default function Home() {
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
+    const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
+
     const router = useRouter();
+
+    const { i18n, t } = useTranslation();
 
     const sliderRef = useRef();
 
@@ -96,6 +101,8 @@ export default function Home() {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userId = localStorage.getItem("asfour-store-user-id");
         setUserId(userId);
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getProductsCount()
             .then(async (result) => {
                 if (result > 0) {
@@ -133,6 +140,11 @@ export default function Home() {
                 setIsErrorMsgOnLoadingThePage(true);
             });
     }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
 
     const userLogout = () => {
         localStorage.removeItem("asfour-store-user-id");
@@ -444,6 +456,38 @@ export default function Home() {
                                                     <BsPersonVcard className="user-account-icon overlay-header-icon" />
                                                 </Link>
                                             </li>
+                                            {<li className="select-language-box navigate-links-item">
+                                                <IoEarth
+                                                    className="earth-icon overlay-header-icon me-5"
+                                                    onClick={() => setIsDisplayLanguagesList(value => !value)}
+                                                />
+                                                {isDisplayLanguagesList && <ul className="languages-list">
+                                                    <li
+                                                        className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                                        onClick={() => handleChangeLanguage("en")}
+                                                    >
+                                                        {t("English")}
+                                                    </li>
+                                                    <li
+                                                        className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                                        onClick={() => handleChangeLanguage("ar")}
+                                                    >
+                                                        {t("Arabic")}
+                                                    </li>
+                                                    <li
+                                                        className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                                        onClick={() => handleChangeLanguage("tr")}
+                                                    >
+                                                        {t("Turkey")}
+                                                    </li>
+                                                    <li
+                                                        className="language-item p-2 text-center fw-bold border-bottom border-dark"
+                                                        onClick={() => handleChangeLanguage("de")}
+                                                    >
+                                                        {t("Germany")}
+                                                    </li>
+                                                </ul>}
+                                            </li>}
                                         </>}
                                     </ul>
                                 </div>

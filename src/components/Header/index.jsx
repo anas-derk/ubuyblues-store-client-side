@@ -15,10 +15,10 @@ export default function Header() {
     const [lightMode, setLightMode] = useState("sunny");
 
     const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
+    
+    const router = useRouter();
 
     const { i18n, t } = useTranslation();
-
-    const router = useRouter();
 
     useEffect(() => {
         const userId = localStorage.getItem("asfour-store-user-id");
@@ -45,7 +45,6 @@ export default function Header() {
     }
 
     const handleChangeLanguage = (language) => {
-        console.log(language)
         i18n.changeLanguage(language);
         document.body.lang = language;
         localStorage.setItem("asfour-store-language", language);

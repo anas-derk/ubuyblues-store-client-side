@@ -290,6 +290,23 @@ textarea {
   width: 40px;
 }
 
+.select-language-box {
+  position: relative;
+}
+
+.select-language-box .languages-list {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  z-index: 1;
+  background-color: var(--main-color-two);
+  width: 150px;
+}
+
+.select-language-box .languages-list .language-item {
+  cursor: pointer;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

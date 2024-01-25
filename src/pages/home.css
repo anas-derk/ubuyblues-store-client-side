@@ -58,7 +58,7 @@
   color: var(--main-color-two);
 }
 
-.home .overlay .content .overlay-header .navigate-links-list .navigate-link .overlay-header-icon {
+.home .overlay .content .overlay-header .navigate-links-list .overlay-header-icon {
   font-size: 40px;
   cursor: pointer;
 }

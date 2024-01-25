@@ -7,18 +7,4 @@
             color: var(--main-color-two);
         }
     }
-    .select-language-box{
-        position: relative;
-        .languages-list{
-            position: absolute;
-            top: 120%;
-            right: 0;
-            z-index: 1;
-            background-color: var(--main-color-two);
-            width: 150px;
-            .language-item{
-                cursor: pointer;
-            }
-        }
-    }
 }
