@@ -383,10 +383,8 @@
   border-radius: 15px;
 }
 
-@media (max-width: 767px) {
-  .home .categories .row {
-    gap: 30px;
-  }
+.home .categories .row {
+  row-gap: 30px;
 }
 
 .home .categories .category-details {

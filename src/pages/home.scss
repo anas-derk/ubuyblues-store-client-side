@@ -344,9 +344,7 @@
     }
     .categories{
         .row{
-            @media (max-width: 767px) {
-                gap: 30px;
-            }
+            row-gap: 30px;
         }
         border-radius: 15px;
         .category-details{
