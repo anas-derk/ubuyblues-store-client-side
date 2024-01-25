@@ -246,6 +246,7 @@
 @media (max-width: 576px) {
   .home .links-and-logo {
     margin-top: 70px;
+    margin-bottom: 50px;
   }
 }
 
@@ -320,6 +321,7 @@
 .home .navigate-link-for-display-products {
   border-radius: 15px;
   border: 5p solid var(--main-color-three);
+  gap: 40px;
 }
 
 .home .navigate-link-for-display-products .display-product-link {
@@ -328,6 +330,15 @@
 
 .home .navigate-link-for-display-products .display-product-link .icon {
   font-size: 70px;
+}
+
+@media (max-width: 576px) {
+  .home .navigate-link-for-display-products .display-product-link .icon {
+    font-size: 50px;
+  }
+  .home .navigate-link-for-display-products .display-product-link .link-name {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 767px) {

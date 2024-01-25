@@ -701,12 +701,12 @@ export default function Home() {
                                     <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
                                 </div>
                                 <div className="col-md-9">
-                                    <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
-                                        <Link href="#categories" className="display-product-link me-5 text-center">
+                                    <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5 flex-wrap">
+                                        <Link href="#categories" className="display-product-link text-center">
                                             <BiSolidCategory className="icon mb-2" />
                                             <h5 className="link-name">Category</h5>
                                         </Link>
-                                        <Link href="#latest-added-products" className="display-product-link me-5 text-center">
+                                        <Link href="#latest-added-products" className="display-product-link text-center">
                                             <BiSolidCategory className="icon mb-2" />
                                             <h5 className="link-name">Last Added</h5>
                                         </Link>

@@ -224,7 +224,10 @@
         };
         margin-bottom: 120px;
         @media (max-width: 576px) {
-            margin-top: 70px;
+            margin: {
+                top: 70px;
+                bottom: 50px;
+            }
         }
         .links-box{
             padding: {
@@ -281,10 +284,19 @@
     .navigate-link-for-display-products{
         border-radius: 15px;
         border: 5p solid var(--main-color-three);
+        gap: 40px;
         .display-product-link{
             color: var(--main-color-one);
             .icon{
                 font-size: 70px;
+            }
+            @media (max-width: 576px) {
+                .icon{
+                    font-size: 50px;
+                }
+                .link-name{
+                    font-size: 18px;
+                }
             }
         }
     }
