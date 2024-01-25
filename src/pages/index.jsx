@@ -458,7 +458,7 @@ export default function Home() {
                                             </li>
                                             {<li className="select-language-box navigate-links-item">
                                                 <IoEarth
-                                                    className="earth-icon overlay-header-icon me-5"
+                                                    className="earth-icon overlay-header-icon"
                                                     onClick={() => setIsDisplayLanguagesList(value => !value)}
                                                 />
                                                 {isDisplayLanguagesList && <ul className="languages-list">
