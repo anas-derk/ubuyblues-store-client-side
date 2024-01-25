@@ -141,6 +141,11 @@ export default function Home() {
             });
     }, []);
 
+    const handleChangeLanguage = (language) => {
+        handleSelectUserLanguage(language);
+        localStorage.setItem("asfour-store-language", language);
+    }
+
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
