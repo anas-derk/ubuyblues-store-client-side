@@ -374,7 +374,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
                                 </button>}
                             </section>
                             {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
-                                <table className="orders-data-table mb-4 data-table managment-table">
+                                <table className="orders-data-table mb-4 managment-table bg-white w-100">
                                     <thead>
                                         <tr>
                                             <th>Order Number</th>
