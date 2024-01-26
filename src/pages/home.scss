@@ -316,10 +316,12 @@
             cursor: pointer;
         }
     }
-    .some-of-products, .last-added-products{
-        img{
+    .last-added-products{
+        .product-link{
+            display: block;
             width: 100%;
             height: 300px;
+            background-size: cover;
         }
         .product-details{
             position: relative;
