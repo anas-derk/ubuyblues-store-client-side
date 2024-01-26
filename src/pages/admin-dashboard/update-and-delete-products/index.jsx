@@ -86,9 +86,9 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     }
 
     const changeProductData = (productIndex, fieldName, newValue) => {
-        let productsDataTemp = allProductsData;
+        let productsDataTemp = allProductsInsideThePage;
         productsDataTemp[productIndex][fieldName] = newValue;
-        setAllProductsData(productsDataTemp);
+        setAllProductsInsideThePage(productsDataTemp);
     }
 
     const updateProductImage = async (productIndex) => {
@@ -305,7 +305,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {allProductsData[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
+                                    {allProductsInsideThePage[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
                                         <tr key={index}>
                                             <td>
                                                 <img
