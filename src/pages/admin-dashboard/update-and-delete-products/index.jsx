@@ -94,8 +94,8 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const updateProductImage = async (productIndex) => {
         try {
             let formData = new FormData();
-            formData.append("productImage", allProductsData[productIndex].image);
-            const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsData[productIndex]._id}`, formData);
+            formData.append("productImage", allProductsInsideThePage[productIndex].image);
+            const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData);
             const result = await res.data;
         }
         catch (err) {
@@ -106,14 +106,14 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
     const updateProductData = async (productIndex) => {
         setIsWaitStatus(true);
         try {
-            const res = await axios.put(`${process.env.BASE_API_URL}/products/${allProductsData[productIndex]._id}`, {
-                name: allProductsData[productIndex].name,
-                price: allProductsData[productIndex].price,
-                description: allProductsData[productIndex].description,
-                discount: allProductsData[productIndex].discount,
-                category: allProductsData[productIndex].category,
-                startDiscountPeriod: allProductsData[productIndex].startDiscountPeriod,
-                endDiscountPeriod: allProductsData[productIndex].endDiscountPeriod,
+            const res = await axios.put(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}`, {
+                name: allProductsInsideThePage[productIndex].name,
+                price: allProductsInsideThePage[productIndex].price,
+                description: allProductsInsideThePage[productIndex].description,
+                discount: allProductsInsideThePage[productIndex].discount,
+                category: allProductsInsideThePage[productIndex].category,
+                startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
+                endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
             });
             const result = await res.data;
             setIsWaitStatus(false);
@@ -126,7 +126,6 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             }
         }
         catch (err) {
-            console.log(err.response.data);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -206,9 +205,9 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                 formData.append("productGalleryImage", productGalleryImage);
             }
             setIsAddingNewImagesToProductGallery(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsData[productIndex]._id}`, formData);
+            const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData);
             const newGalleryImagePaths = await res.data;
-            allProductsData[productIndex].galleryImagesPaths = allProductsData[productIndex].galleryImagesPaths.concat(newGalleryImagePaths);
+            allProductsInsideThePage[productIndex].galleryImagesPaths = allProductsInsideThePage[productIndex].galleryImagesPaths.concat(newGalleryImagePaths);
             setIsAddingNewImagesToProductGallery(false);
         }
         catch (err) {
@@ -494,10 +493,10 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                                     onClick={() => setProductIndex(index)}
                                                 >Show Gallery</button>
                                                 <hr />
-                                                <button
+                                                {!isWaitStatus && !errorMsg && !successMsg && <button
                                                     className="btn btn-success d-block mb-3 mx-auto global-button"
                                                     onClick={() => updateProductData(index)}
-                                                >Update</button>
+                                                >Update</button>}
                                                 <hr />
                                                 <button
                                                     className="btn btn-danger global-button"
