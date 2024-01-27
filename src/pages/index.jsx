@@ -274,11 +274,11 @@ export default function Home() {
             <FaRegStar className="me-2 star-icon" />,
             <FaRegStar className="me-2 star-icon" />,
             <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar />
+            <FaRegStar className="me-2" />
         ];
         return (
             <div className="rating-box mb-4">
-                <span className="me-3">Your rating *</span>
+                <span className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`}>{t("Your rating")} *</span>
                 {starsIconsArray.map((starIcon, starIndex) => <Fragment key={starIndex}>
                     {starIcon}
                 </Fragment>)}
@@ -384,7 +384,7 @@ export default function Home() {
                     className="next-page-icon pagination-icon me-3"
                     onClick={getNextPage}
                 />}
-                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
+                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>
             </section>
         );
     }
@@ -412,7 +412,7 @@ export default function Home() {
                             <div className="row align-items-center">
                                 <div className="col-md-6">
                                     <h6 className="product-name-and-category">
-                                        <span className="me-2">Main</span>
+                                        <span className="me-2">{t("Main")}</span>
                                         <IoIosArrowForward className="me-2" />
                                         <span className="me-2 product-category-name">{allProductsInsideThePage[productIndex].category}</span>
                                         <IoIosArrowForward className="me-2" />
@@ -479,7 +479,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </header>
-                        <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
+                        <div className={`product-details-box ${i18n.language !== "ar" ? "pe-5" : "ps-5"} ${windowInnerWidth < 991 ? "p-3" : ""}`}>
                             <div className="row mb-3">
                                 <div className="col-lg-6">
                                     <div className="product-images-box mb-4">
@@ -548,13 +548,13 @@ export default function Home() {
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
-                                    <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
+                                    <div className="product-price-and-quantity mb-4 border-bottom border-2">
                                         <h2 className="product-name fw-bold mb-4">{allProductsInsideThePage[productIndex].name}</h2>
-                                        <h5 className={`product-price ${allProductsInsideThePage[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsInsideThePage[productIndex].price} $</h5>
-                                        {allProductsInsideThePage[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsInsideThePage[productIndex].price - allProductsInsideThePage[productIndex].discount} $</h4>}
-                                        <h5 className="product-quantity">1 Product Available In Store</h5>
+                                        <h5 className={`product-price ${allProductsInsideThePage[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsInsideThePage[productIndex].price} {t("KWD")}</h5>
+                                        {allProductsInsideThePage[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsInsideThePage[productIndex].price - allProductsInsideThePage[productIndex].discount} {t("KWD")}</h4>}
+                                        <h5 className="product-quantity">1 {t("Product Available In Store")}</h5>
                                     </div>
-                                    <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
+                                    <div className="add-to-wish-list-or-cart text-center border-bottom border-2 mb-3">
                                         {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsInsideThePage[productIndex]._id) ? <BsFillSuitHeartFill
                                             className="product-managment-icon mb-3"
                                             onClick={() => deleteProductFromFavoriteUserProducts(productIndex, userId)}
@@ -562,12 +562,12 @@ export default function Home() {
                                             className="product-managment-icon mb-3"
                                             onClick={() => addProductToFavoriteUserProducts(productIndex, userId)}
                                         />}
-                                        <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
+                                        <div className="add-to-cart row align-items-center mb-4">
                                             <div className="add-to-cart-managment-btns-box col-md-8">
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                                {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
-                                                {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
+                                                {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>{t("Waiting In Add To Cart")} ...</button>}
+                                                {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
+                                                {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>{t("Display Your Cart")}</Link>}
                                             </div>
                                             <div className="select-product-quantity-box p-3 col-md-4">
                                                 <HiMinus className="select-product-quantity-icon"
@@ -581,51 +581,51 @@ export default function Home() {
                                         </div>
                                     </div>
                                     <h5 className="product-category-name">
-                                        <span className="fw-bold">Category: </span>
+                                        <span className="fw-bold">{t("Category")}: </span>
                                         <span>{allProductsInsideThePage[productIndex].category}</span>
                                     </h5>
                                 </div>
                             </div>
                             <div className={`product-description-and-referrals row justify-content-center border-bottom border-2 border-white mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
                                 <div className="col-lg-6 text-center">
-                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
+                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>{t("Description")}</h6>
                                 </div>
                                 <div className="col-lg-6 text-center">
-                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
+                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>{t("Referrals")} (0)</h6>
                                 </div>
                             </div>
                             {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2 me-3">
-                                <h6 className="mb-3 fw-bold">Description</h6>
+                                <h6 className="mb-3 fw-bold">{t("Description")}</h6>
                                 <p className="description-content">{allProductsInsideThePage[productIndex].description}</p>
                             </div>}
                             {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
                                 <div className="row">
                                     <div className="col-lg-6">
-                                        <h6 className="mb-4 fw-bold">Referrals</h6>
-                                        <h6 className="mb-4">There are no reviews yet !!</h6>
+                                        <h6 className="mb-4 fw-bold">{t("Referrals")}</h6>
+                                        <h6 className="mb-4">{t("There are no reviews yet")} !!</h6>
                                     </div>
                                     <div className="col-lg-6">
-                                        <h6 className="mb-4">Be the first to review "{allProductsInsideThePage[productIndex].name}"</h6>
-                                        <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
+                                        <h6 className="mb-4">{t("Be the first to review")} "{allProductsInsideThePage[productIndex].name}"</h6>
+                                        <h6 className="mb-4 note">{t("your e-mail address will not be published. Required fields are marked")} *</h6>
                                         {getRatingStars()}
                                         <form className="referral-form mb-4">
                                             <textarea
                                                 className="p-2 mb-4"
-                                                placeholder="Your Referral *"
+                                                placeholder={`${t("Your Referal")} *`}
                                             ></textarea>
                                             <div className="row mb-4 name-and-email-box">
                                                 <div className="col-md-6">
                                                     <input
                                                         type="text"
                                                         className="p-2"
-                                                        placeholder="Name *"
+                                                        placeholder={`${t("Name")} *`}
                                                     />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <input
                                                         type="text"
                                                         className="p-2"
-                                                        placeholder="Email *"
+                                                        placeholder={`${t("Email")} *`}
                                                     />
                                                 </div>
                                             </div>
@@ -638,7 +638,7 @@ export default function Home() {
                                                     />
                                                 </div>
                                                 <div className="col-md-11">
-                                                    <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
+                                                    <label htmlFor="save-your-details-checkbox">{t("Save my name, email, and referal in this browser for the next time I comment")} .</label>
                                                 </div>
                                             </div>
                                             <button
@@ -646,14 +646,14 @@ export default function Home() {
                                                 type="submit"
                                                 onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
                                             >
-                                                Send
+                                                {t("Send")}
                                             </button>
                                         </form>
                                     </div>
                                 </div>
                             </div>}
                             <div className="related-products-box">
-                                <h5 className="mb-4 fw-bold">Related Products</h5>
+                                <h5 className="mb-4 fw-bold">{t("Related Products")}</h5>
                             </div>
                             <Footer />
                         </div>
@@ -664,7 +664,7 @@ export default function Home() {
                 {isDisplayShareOptionsBox && <div className="share-options-box">
                     <div className="share-icons-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
                         <GrFormClose className="close-share-options-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
-                        <h2 className="mb-3 pb-3 border-bottom border-white">Share Your Favorite Product With Your Friends</h2>
+                        <h2 className="mb-3 pb-3 border-bottom border-white">{t("Share Your Favorite Product With Your Friends")}</h2>
                         <div className="row">
                             <div className="col-md-3">
                                 <WhatsappShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
@@ -709,17 +709,17 @@ export default function Home() {
                         <div className="products-display-managment">
                             <div className="row">
                                 <div className="col-md-3">
-                                    <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
+                                    <aside className="side-bar bg-white p-3 fw-bold">{t("Sale Products")}</aside>
                                 </div>
                                 <div className="col-md-9">
                                     <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5 flex-wrap">
                                         <Link href="#categories" className="display-product-link text-center">
                                             <BiSolidCategory className="icon mb-2" />
-                                            <h5 className="link-name">Category</h5>
+                                            <h5 className="link-name">{t("Categories")}</h5>
                                         </Link>
                                         <Link href="#latest-added-products" className="display-product-link text-center">
                                             <BiSolidCategory className="icon mb-2" />
-                                            <h5 className="link-name">Last Added</h5>
+                                            <h5 className="link-name">{t("Last Added")}</h5>
                                         </Link>
                                     </section>
                                 </div>
@@ -729,7 +729,7 @@ export default function Home() {
                             <BiSearchAlt className="search-icon p-2" />
                         </section>
                         <section className="categories mb-5" id="categories">
-                            <h2 className="section-name text-center mb-4 text-white">Categories</h2>
+                            <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
                             <div className="row">
                                 {allCategories.map((category) => (
                                     <div className="col-md-3" key={category._id}>
@@ -744,7 +744,7 @@ export default function Home() {
                             </div>
                         </section>
                         <section className="last-added-products mb-5" id="latest-added-products">
-                            <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
+                            <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <div className="row products-box bg-white pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-sm-6 col-md-4 col-xl-3" key={product._id}>
@@ -773,10 +773,10 @@ export default function Home() {
                                                     onClick={() => addProductToFavoriteUserProducts(index, userId)}
                                                 />}
                                                 <AiOutlineEye className="me-2 eye-icon product-managment-icon" onClick={() => setProductIndex(index)} />
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
-                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2 me-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
+                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
+                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
+                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>{t("Display Your Cart")}</Link>}
                                             </div>
                                         </div>
                                     </div>
@@ -785,7 +785,7 @@ export default function Home() {
                             </div>
                         </section>
                         {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
-                            <h2 className="section-name text-center mb-5 text-white">Brands</h2>
+                            <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
                             <div className="container-fluid">
                                 <Slider
                                     dots={true}
