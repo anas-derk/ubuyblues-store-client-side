@@ -493,20 +493,26 @@ export default function Home() {
                                                 ref={sliderRef}
                                                 afterChange={(slideIndex) => setProductGalleryImageIndex(slideIndex - 1)}
                                             >
-                                                <div>
-                                                    <img
-                                                        src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
-                                                        alt="product image !!"
-                                                        className="w-100 h-100 product-image"
-                                                    />
+                                                <div className="image-box">
+                                                    <div
+                                                        style={{
+                                                            backgroundImage: `url(${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath})`,
+                                                            backgroundSize: "cover",
+                                                            backgroundRepeat: "no-repeat",
+                                                            backgroundPosition: "center",
+                                                        }}
+                                                    ></div>
                                                 </div>
                                                 {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
-                                                    <div key={pathIndex}>
-                                                        <img
-                                                            src={`${process.env.BASE_API_URL}/${path}`}
-                                                            alt="product image !!"
-                                                            className="w-100 h-100 product-image"
-                                                        />
+                                                    <div className="image-box"  key={pathIndex}>
+                                                        <div
+                                                            style={{
+                                                                backgroundImage: `url(${process.env.BASE_API_URL}/${path})`,
+                                                                backgroundSize: "cover",
+                                                                backgroundRepeat: "no-repeat",
+                                                                backgroundPosition: "center",
+                                                            }}
+                                                        ></div>
                                                     </div>
                                                 ))}
                                             </Slider>

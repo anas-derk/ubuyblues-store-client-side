@@ -111,6 +111,12 @@
   left: 20px;
 }
 
+@media (max-width: 576px) {
+  .home .overlay .content .product-details-box .product-images-box .row {
+    gap: 30px;
+  }
+}
+
 .home .overlay .content .product-details-box .product-images-box .product-image-box img, .home .overlay .content .product-details-box .product-images-box .gallery-image-box img {
   cursor: pointer;
   width: 92px;

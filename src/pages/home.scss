@@ -94,6 +94,11 @@
                             }
                         }
                     }
+                    .row{
+                        @media (max-width: 576px) {
+                            gap: 30px;
+                        }
+                    }
                     .product-image-box, .gallery-image-box{
                         img{
                             cursor: pointer;
