@@ -1,8 +1,3 @@
-.customer-wish-list .favorite-products-list-for-user {
-  overflow-y: auto;
-  height: 450px;
-}
-
 .customer-wish-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon {
   font-size: 20px;
   cursor: pointer;
