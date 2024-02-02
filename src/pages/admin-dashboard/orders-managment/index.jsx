@@ -1,14 +1,14 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import axios from "axios";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Link from "next/link";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import AdminPanelHeader from "@/components/AdminPanelHeader";
 
-export default function OrdersManagment({ activeParentLink, activeChildLink }) {
+export default function OrdersManagment() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -297,7 +297,7 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
-                <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
+                <AdminPanelHeader />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-3 pb-3">
@@ -488,13 +488,4 @@ export default function OrdersManagment({ activeParentLink, activeChildLink }) {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
-}
-
-export const getServerSideProps = async ({ query }) => {
-    return {
-        props: {
-            activeParentLink: query.activeParentLink,
-            activeChildLink: query.activeChildLink,
-        }
-    }
 }

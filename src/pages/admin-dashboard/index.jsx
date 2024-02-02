@@ -1,11 +1,11 @@
 import Head from "next/head";
-import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import AdminPanelHeader from "@/components/AdminPanelHeader";
 
 export default function AdminDashboard() {
 
@@ -27,6 +27,10 @@ export default function AdminDashboard() {
                     } else {
                         setIsLoadingPage(false);
                     }
+                })
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
             router.push("/admin-dashboard/login");
@@ -39,13 +43,13 @@ export default function AdminDashboard() {
                 <title>Ubuyblues Store - Admin Dashboard</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminDashboardSideBar />
-            <div className="page-content d-flex justify-content-center align-items-center">
-                <h1 className="fw-bold w-fit pb-2">
-                    <PiHandWavingThin className="me-2" />
-                    Hi, Mr Asfour In Your Admin Dashboard Page
-                </h1>
-            </div>
+                <AdminPanelHeader />
+                <div className="page-content d-flex justify-content-center align-items-center">
+                    <h1 className="fw-bold w-fit pb-2">
+                        <PiHandWavingThin className="me-2" />
+                        Welcome To You In Your Admin Dashboard Page
+                    </h1>
+                </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}

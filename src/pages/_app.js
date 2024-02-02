@@ -3,7 +3,7 @@ import "@/components/Header/header.css";
 import "./home.css";
 import "../components/Footer/footer.css";
 import "../pages/admin-dashboard/login/login.css";
-import "../components/AdminDashboardSideBar/admin_dashboard_side_bar.css";
+import "../components/AdminPanelHeader/admin_panel_header.css";
 import "../pages/admin-dashboard/admin_dashboard.css";
 import "../pages/auth/auth.css";
 import "../pages/cart/cart.css";

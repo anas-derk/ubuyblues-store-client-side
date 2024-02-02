@@ -1,13 +1,14 @@
 import Head from "next/head";
-import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { GrFormClose } from "react-icons/gr";
+import { BsArrowRightSquare } from "react-icons/bs";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import AdminPanelHeader from "@/components/AdminPanelHeader";
 
-export default function UpdateAndDeleteProducts({ activeParentLink, activeChildLink }) {
+export default function UpdateAndDeleteProducts() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -290,7 +291,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                 <title>Ubuyblues Store - Update / Delete Products</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
+                <AdminPanelHeader />
                 {productIndex > -1 && <div className="overlay">
                     <div className="gallery-images-box d-flex flex-column align-items-center justify-content-center p-4">
                         <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
@@ -511,7 +512,7 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
                                 ))}
                             </tbody>
                         </table>
-                        {totalPagesCount > 0 && paginationBar()}
+                        {/* {totalPagesCount > 0 && paginationBar()} */}
                     </div> : <p className="alert alert-danger w-75 mx-auto">Sorry, Not Found Any Products !!</p>}
                 </div>
             </>}
@@ -519,13 +520,4 @@ export default function UpdateAndDeleteProducts({ activeParentLink, activeChildL
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
-}
-
-export const getServerSideProps = async ({ query }) => {
-    return {
-        props: {
-            activeParentLink: query.activeParentLink,
-            activeChildLink: query.activeChildLink,
-        }
-    }
 }

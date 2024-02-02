@@ -1,12 +1,12 @@
 import Head from "next/head";
-import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
+import AdminPanelHeader from "@/components/AdminPanelHeader";
 
-export default function AddNewBrand({ activeParentLink, activeChildLink }) {
+export default function AddNewBrand() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -85,7 +85,7 @@ export default function AddNewBrand({ activeParentLink, activeChildLink }) {
                 <title>Ubuyblues Store - Add New Brand</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
+                <AdminPanelHeader />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
@@ -141,13 +141,4 @@ export default function AddNewBrand({ activeParentLink, activeChildLink }) {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
-}
-
-export const getServerSideProps = async ({ query }) => {
-    return {
-        props: {
-            activeParentLink: query.activeParentLink,
-            activeChildLink: query.activeChildLink,
-        }
-    }
 }

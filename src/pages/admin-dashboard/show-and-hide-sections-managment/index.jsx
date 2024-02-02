@@ -1,12 +1,12 @@
 import Head from "next/head";
-import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useState, useEffect } from "react";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
+import AdminPanelHeader from "@/components/AdminPanelHeader";
 
-export default function ShowAndHideSections({ activeParentLink, activeChildLink }) {
+export default function ShowAndHideSections() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -78,7 +78,7 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
                 <title>Ubuyblues Store - Show And Hide Sections</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminDashboardSideBar activeParentLink={activeParentLink} activeChildLink={activeChildLink} />
+                <AdminPanelHeader />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
@@ -145,13 +145,4 @@ export default function ShowAndHideSections({ activeParentLink, activeChildLink 
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
-}
-
-export const getServerSideProps = async ({ query }) => {
-    return {
-        props: {
-            activeParentLink: query.activeParentLink,
-            activeChildLink: query.activeChildLink,
-        }
-    }
 }
