@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import AdminDashboardSideBar from "@/components/AdminDashboardSideBar";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import AdminPanelHeader from "@/components/AdminPanelHeader";
 
 export default function OrderDetails() {
 
@@ -107,7 +107,7 @@ export default function OrderDetails() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
-                <AdminDashboardSideBar />
+                <AdminPanelHeader />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-4 pb-4">
