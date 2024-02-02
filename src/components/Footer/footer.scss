@@ -6,7 +6,10 @@ footer{
         max-height: 100%;
     }
     .link-btn{
-        font-size: 16px;
+        font-size: 13px;
+    }
+    .title{
+        width: fit-content;
     }
     .row{
         @media (max-width: 767px) {

@@ -9,7 +9,11 @@ footer .asfour-logo-for-footer {
 }
 
 footer .link-btn {
-  font-size: 16px;
+  font-size: 13px;
+}
+
+footer .title {
+  width: fit-content;
 }
 
 @media (max-width: 767px) {
