@@ -114,7 +114,7 @@ export default function OrderDetails() {
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Orders Details Page</h1>
                         {orderDetails.checkout_status === "checkout_successful" ? <div className="order-details-box p-3 data-box">
-                            <table className="order-data-table mb-5 data-table managment-table">
+                            <table className="order-data-table mb-5 managment-table w-100">
                                 <thead>
                                     <tr>
                                         <th>Reference / Product Id</th>
