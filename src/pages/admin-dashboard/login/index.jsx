@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Logo from "../../../../public/images/UbuyBlues_Logo_merged_White.png";
+import ubuybluesLogo from "../../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
@@ -107,7 +107,7 @@ export default function AdminLogin() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <div className="page-content text-center w-50 mx-auto">
                 <div className="container p-4">
-                    <img src={Logo.src} alt="logo" width="250" height="200" className="mb-5" />
+                    <img src={ubuybluesLogo.src} alt="logo" width="200" height="200" className="mb-5" />
                     <form className="admin-login-form mb-3" onSubmit={adminLogin}>
                         <div className="email-field-box">
                             <input
@@ -116,7 +116,7 @@ export default function AdminLogin() {
                                 className={`form-control p-3 border-2 ${formValidationErrors["email"] ? "border-danger mb-2" : "mb-4"}`}
                                 onChange={(e) => setEmail(e.target.value.trim())}
                             />
-                            <div className='icon-box'>
+                            <div className='icon-box other-languages-mode'>
                                 <BiSolidUser className="icon" />
                             </div>
                         </div>
@@ -128,7 +128,7 @@ export default function AdminLogin() {
                                 className={`form-control p-3 border-2 ${formValidationErrors["password"] ? "border-danger mb-2" : "mb-4"}`}
                                 onChange={(e) => setPassword(e.target.value.trim())}
                             />
-                            <div className='icon-box'>
+                            <div className='icon-box other-languages-mode'>
                                 {!isVisiblePassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
                                 {isVisiblePassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
                             </div>
