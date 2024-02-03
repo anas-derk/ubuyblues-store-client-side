@@ -1,21 +1,73 @@
 import Head from "next/head";
 import Header from "@/components/Header";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
+import LoaderPage from "@/components/LoaderPage";
 
-export default function ReturnAndRefundPolicy() {
+export default function PolicesTermsAndConditions() {
+
+    const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        setIsLoadingPage(false);
+    }, []);
+
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
+
     return (
-        <div className="return-and-refund-policy">
+        <div className="return-and-refund-policy caption-page">
             <Head>
                 <title>Ubuyblues Store - Return And Refund Policy</title>
             </Head>
-            <Header />
-            <div className="page-content text-white p-4">
-                <div className="container-fluid">
-                    <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">Return And Refund Policy Page</h1>
-                    <div className="content">
-                        
+            {!isLoadingPage ? <>
+                <Header />
+                <div className="page-content text-white p-4">
+                    <div className="container-fluid">
+                        <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Return & Refund Policy")}</h1>
+                        <div className="content">
+                            <p className="mb-3">{t("You have 15 days from the date of delivery to request a return or replacement")} .</p>
+                            <p className="mb-3">{t("If you have received damaged or incorrect products, please contact customer service for assistance as soon as possible")} .</p>
+                            <p className="mb-3">{t("If you have received damaged or incorrect products, please contact customer service for assistance as soon as possible")} .</p>
+                            <ol>
+                                <li className="mb-3">{t("Exchange one item for another is allowed")} .</li>
+                                <li className="mb-3">{t("Returned products must be unused, and the original packaging must be retained, We do not accept returns of used or damaged items")} .</li>
+                                <li className="mb-3">{t("Products with non-returnable tags and free gifts are not eligible for return or exchange")} .</li>
+                            </ol>
+                            <h6 className="fw-bold border-bottom border-2 pb-2 w-fit">{t("Note")} :</h6>
+                            <ol>
+                                <li className="mb-3">{t("We do not accept products that have been returned without a prior return request")} .</li>
+                                <li className="mb-3">{t("Please ensure the accuracy of the return request and the products before shipping them. We will not be responsible for returns of items not purchased from our site")} .</li>
+                                <li className="mb-3">{t("If the quantity of the products to be returned does not match the actual returned quantity, the courier may refuse to accept the products")} .</li>
+                                <li className="mb-3">{t("Please do not send the return parcel to the address on the received package, as it is not our return address. This will affect the processing of the return")} .</li>
+                                <li className="mb-3">{t("If a cancellation of an online payment order is requested before shipping, we will complete the refund process within 5 business days. A 5% deduction from the refunded amount will be applied to cover payment processing fees charged by the payment company")} .</li>
+                                <li className="mb-3">{t("Orders paid online will be refunded within 5 business days due to stock depletion, damage, or deviation from the confirmed sample, without processing fees. The refund will be transferred via the original payment method")} .</li>
+                                <li className="mb-3">{t("In case of illegal conflicts with regular payments, certain fees will be imposed according to the severity of the situation")} .</li>
+                                <li className="mb-3">{t("14SERCEGILLER reserves the right to the final interpretation")} .</li>
+                            </ol>
+                            Email: <a href="mailto:info@asfourintlco.com" className="text-white border-bottom border-2 pb-2 mb-3 d-block w-fit">info@asfourintlco.com</a>
+                            <p className="mb-3">{t("If you have a return or replacement request, please follow the steps below, and we will assist you with sincerity")}</p>
+                            <ol>
+                                <li className="mb-3">{t("If you wish to return your order, please send the return request to info@asfourintlco.com via email. Provide information about the returned items, reasons for the return, and photos of the original packaging")} .</li>
+                                <li className="mb-3">{t("14SERCEGILLER reserves the right to the final interpretation")} .</li>
+                            </ol>
+                            <p className="mb-3">{t("After verification, our service team will inform you of the refund amount and the next steps. (Refund amount = Value of returned items - Return shipping fees)")} .</p>
+                            <p className="mb-3">{t("Note: If the review is unsuccessful, the employee will inform you of the reasons via email. If you wish to submit the return request again, please provide evidence to us via email. Our team will process your request within 5 business days")} .</p>
+                            <p className="mb-3">{t("Any new features or tools added to the current store shall also be subject to the terms of service. You can review the most current version of the terms of service at any time on this page. We reserve the right to update, change, or replace any part of these terms of service by posting updates and/or changes to our website. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website following the posting of any changes constitutes acceptance of those changes")} .</p>
+                            <p className="mb-3">{t("By agreeing to these terms of service, you acknowledge that you are at least the age of majority in your country of residence")} .</p>
+                            <p className="mb-3">{t("You may not use our products for any illegal or unauthorized purpose, and you must not, in the use of the service, violate any laws in your jurisdiction (including, but not limited to, copyright laws)")} .</p>
+                            <p className="mb-3">{t("You must not transmit any worms or viruses or any code of a destructive nature")} .</p>
+                            <p className="mb-3">{t("Violation of any of the terms will result in immediate termination of your services")} .</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </> : <LoaderPage />}
         </div>
     );
 }
