@@ -270,8 +270,10 @@ textarea{
 
 .caption-page{
     .content{
-        p{
-            font-size: 20px;
+        ul{
+            list-style: square inside;
+        }
+        li, p{
             line-height: 2;
         }
     }

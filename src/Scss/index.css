@@ -297,8 +297,11 @@ textarea {
   cursor: pointer;
 }
 
-.caption-page .content p {
-  font-size: 20px;
+.caption-page .content ul {
+  list-style: square inside;
+}
+
+.caption-page .content li, .caption-page .content p {
   line-height: 2;
 }
 
