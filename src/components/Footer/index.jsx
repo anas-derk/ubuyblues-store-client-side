@@ -43,22 +43,22 @@ export default function Footer() {
                             <li className="link-item fw-bold mb-3">
                                 {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
                                 {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
-                                <Link href="/" className="text-dark link-btn">{t("About Us").toUpperCase()}</Link>
+                                <Link href="/about-us" className="text-dark link-btn">{t("About Us").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
                                 {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
-                                <Link href="/" className="text-dark link-btn">{t("Contact Us").toUpperCase()}</Link>
+                                <Link href="/contact-us" className="text-dark link-btn">{t("Contact Us").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
                                 {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
-                                <Link href="/" className="text-dark link-btn">{t("Polices-Terms & Conditions").toUpperCase()}</Link>
+                                <Link href="/polices-terms-and-conditions" className="text-dark link-btn">{t("Polices-Terms & Conditions").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold">
                                 {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
                                 {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
-                                <Link href="/" className="text-dark link-btn">{t("Return & Refund Policy").toUpperCase()}</Link>
+                                <Link href="/return-and-refund-policy" className="text-dark link-btn">{t("Return & Refund Policy").toUpperCase()}</Link>
                             </li>
                         </ul>
                     </div>

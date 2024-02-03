@@ -52,6 +52,10 @@ textarea {
   resize: none;
 }
 
+.w-fit {
+  width: fit-content;
+}
+
 .global-button {
   font-size: 13px;
 }
