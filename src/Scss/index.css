@@ -297,6 +297,11 @@ textarea {
   cursor: pointer;
 }
 
+.caption-page .content p {
+  font-size: 20px;
+  line-height: 2;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
