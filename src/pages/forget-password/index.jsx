@@ -23,6 +23,8 @@ export default function ForgetPassword() {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
+    const [isDisplayResetPasswordForm, setIsDisplayResetPasswordForm] = useState(false);
+
     const { t, i18n } = useTranslation();
 
     const router = useRouter();
@@ -78,8 +80,7 @@ export default function ForgetPassword() {
                     }, 5000);
                 } else {
                     if (result.isVerified) {
-                        localStorage.setItem("asfour-store-user-id", result._id);
-                        router.push("/");
+                        setIsDisplayResetPasswordForm(true);
                     } else router.push(`/account-verification?email=${email}`);
                 }
             }
@@ -104,7 +105,7 @@ export default function ForgetPassword() {
                 <div className="page-content text-white p-4 text-center">
                     <div className="container-fluid">
                         <h1 className="h3 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
-                        <form className="user-forget-form mb-3" onSubmit={forgetPassword}>
+                        {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>
                             <div className="email-field-box">
                                 <input
                                     type="text"
@@ -126,7 +127,7 @@ export default function ForgetPassword() {
                                 <span className="me-2">{t("Wait Checking")} ...</span>
                             </button>}
                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
-                        </form>
+                        </form>}
                     </div>
                 </div>
             </>}
