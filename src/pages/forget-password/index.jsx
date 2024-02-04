@@ -249,7 +249,7 @@ export default function ForgetPassword() {
                             {formValidationErrors["newPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["newPassword"])}</p>}
                             <div className="confirm-new-password-field-box">
                                 <input
-                                    type={isVisibleNewPassword ? "text" : "password"}
+                                    type={isVisibleConfirmNewPassword ? "text" : "password"}
                                     placeholder={t("Please Enter New Password")}
                                     className={`form-control p-3 border-2 ${formValidationErrors["confirmNewPassword"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
