@@ -7,6 +7,8 @@ import LoaderPage from "@/components/LoaderPage";
 import validations from "../../../public/global_functions/validations";
 import { BiSolidUser } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { FaCode } from "react-icons/fa";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 
 export default function ForgetPassword() {
@@ -14,6 +16,8 @@ export default function ForgetPassword() {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+
+    const [isResetingPasswordStatus, setIsResetingPasswordStatus] = useState(false);
 
     const [email, setEmail] = useState("");
 
@@ -24,6 +28,20 @@ export default function ForgetPassword() {
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const [isDisplayResetPasswordForm, setIsDisplayResetPasswordForm] = useState(false);
+
+    const [code, setCode] = useState("");
+
+    const [userId, setUserId] = useState("");
+
+    const [typedUserCode, setTypedUser] = useState(false);
+
+    const [newPassword, setNewPassword] = useState("");
+
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+    const [isVisibleNewPassword, setIsVisibleNewPassword] = useState(false);
+
+    const [isVisibleConfirmNewPassword, setIsVisibleConfirmNewPassword] = useState(false);
 
     const { t, i18n } = useTranslation();
 
@@ -80,6 +98,8 @@ export default function ForgetPassword() {
                     }, 5000);
                 } else {
                     if (result.isVerified) {
+                        setCode(result.code);
+                        setUserId(result._id);
                         setIsDisplayResetPasswordForm(true);
                     } else router.push(`/account-verification?email=${email}`);
                 }
@@ -87,6 +107,79 @@ export default function ForgetPassword() {
         }
         catch (err) {
             setIsCheckingStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 5000);
+        }
+    }
+
+    const resetPassword = async (e) => {
+        try {
+            e.preventDefault();
+            setFormValidationErrors({});
+            setErrorMsg("");
+            setSuccessMsg("");
+            let errorsObject = validations.inputValuesValidation([
+                {
+                    name: "typedUserCode",
+                    value: typedUserCode,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isMatch: {
+                            value: code,
+                            msg: "Sorry, This Code Is Not Valid !!",
+                        },
+                    },
+                },
+                {
+                    name: "newPassword",
+                    value: newPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
+                    },
+                },
+                {
+                    name: "confirmNewPassword",
+                    value: confirmNewPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
+                        isMatch: {
+                            value: confirmNewPassword,
+                            msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsResetingPasswordStatus(true);
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password/${userId}?newPassword=${newPassword}`);
+                const result = await res.data;
+                if(result === "Reseting Password Process Has Been Successfully !!") {
+                    setSuccessMsg(`${result}, Please Wait To Navigate To Login Page !!`);
+                    let successTimeout = setTimeout(() => {
+                        router.push(`/auth`);
+                        clearTimeout(successTimeout);
+                    }, 6000);
+                }
+            }
+        }
+        catch (err) {
+            setIsResetingPasswordStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
@@ -128,10 +221,59 @@ export default function ForgetPassword() {
                             </button>}
                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                         </form>}
+                        {isDisplayResetPasswordForm && <form className="user-reset-form mb-3" onSubmit={resetPassword}>
+                            <div className="code-field-box">
+                                <input
+                                    type="text"
+                                    placeholder={t("Please Enter The Code")}
+                                    className={`form-control p-3 border-2 ${formValidationErrors["typedUserCode"] ? "border-danger mb-3" : "mb-5"}`}
+                                    onChange={(e) => setTypedUser(e.target.value.trim())}
+                                />
+                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                    <FaCode className="icon" />
+                                </div>
+                            </div>
+                            {formValidationErrors["typedUserCode"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["typedUserCode"])}</p>}
+                            <div className="new-password-field-box">
+                                <input
+                                    type={isVisibleNewPassword ? "text" : "password"}
+                                    placeholder={t("Please Enter New Password")}
+                                    className={`form-control p-3 border-2 ${formValidationErrors["newPassword"] ? "border-danger mb-3" : "mb-5"}`}
+                                    onChange={(e) => setNewPassword(e.target.value.trim())}
+                                />
+                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                    {!isVisibleNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
+                                    {isVisibleNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
+                                </div>
+                            </div>
+                            {formValidationErrors["newPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["newPassword"])}</p>}
+                            <div className="confirm-new-password-field-box">
+                                <input
+                                    type={isVisibleNewPassword ? "text" : "password"}
+                                    placeholder={t("Please Enter New Password")}
+                                    className={`form-control p-3 border-2 ${formValidationErrors["confirmNewPassword"] ? "border-danger mb-3" : "mb-5"}`}
+                                    onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
+                                />
+                                <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                    {!isVisibleConfirmNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
+                                    {isVisibleConfirmNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
+                                </div>
+                            </div>
+                            {formValidationErrors["confirmNewPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["confirmNewPassword"])}</p>}
+                            {!isResetingPasswordStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                {i18n.language === "ar" && <RiLockPasswordLine />}
+                                <span className="me-2">{t("Reset Password")}</span>
+                                {i18n.language !== "ar" && <RiLockPasswordLine />}
+                            </button>}
+                            {isResetingPasswordStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
+                                <span className="me-2">{t("Wait Reseting")} ...</span>
+                            </button>}
+                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
+                        </form>}
                     </div>
                 </div>
             </>}
             {isLoadingPage && <LoaderPage />}
         </div>
-    )
+    );
 }

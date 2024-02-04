@@ -65,7 +65,9 @@ textarea {
 .confirm-password-field-box,
 .current-password-field-box,
 .new-password-field-box,
-.confirm-new-password-field-box {
+.confirm-new-password-field-box,
+.code-field-box,
+.new-password-field-box {
   position: relative;
 }
 
@@ -74,7 +76,9 @@ textarea {
 .confirm-password-field-box .icon-box,
 .current-password-field-box .icon-box,
 .new-password-field-box .icon-box,
-.confirm-new-password-field-box .icon-box {
+.confirm-new-password-field-box .icon-box,
+.code-field-box .icon-box,
+.new-password-field-box .icon-box {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -85,7 +89,9 @@ textarea {
 .confirm-password-field-box .icon-box.ar-language-mode,
 .current-password-field-box .icon-box.ar-language-mode,
 .new-password-field-box .icon-box.ar-language-mode,
-.confirm-new-password-field-box .icon-box.ar-language-mode {
+.confirm-new-password-field-box .icon-box.ar-language-mode,
+.code-field-box .icon-box.ar-language-mode,
+.new-password-field-box .icon-box.ar-language-mode {
   left: 15px;
 }
 
@@ -94,7 +100,9 @@ textarea {
 .confirm-password-field-box .icon-box.other-languages-mode,
 .current-password-field-box .icon-box.other-languages-mode,
 .new-password-field-box .icon-box.other-languages-mode,
-.confirm-new-password-field-box .icon-box.other-languages-mode {
+.confirm-new-password-field-box .icon-box.other-languages-mode,
+.code-field-box .icon-box.other-languages-mode,
+.new-password-field-box .icon-box.other-languages-mode {
   right: 15px;
 }
 
@@ -103,7 +111,9 @@ textarea {
 .confirm-password-field-box .icon-box .icon,
 .current-password-field-box .icon-box .icon,
 .new-password-field-box .icon-box .icon,
-.confirm-new-password-field-box .icon-box .icon {
+.confirm-new-password-field-box .icon-box .icon,
+.code-field-box .icon-box .icon,
+.new-password-field-box .icon-box .icon {
   font-size: 22px;
   cursor: pointer;
 }
@@ -113,7 +123,9 @@ textarea {
 .confirm-password-field-box.error-in-field .icon-box,
 .current-password-field-box.error-in-field .icon-box,
 .new-password-field-box.error-in-field .icon-box,
-.confirm-new-password-field-box.error-in-field .icon-box {
+.confirm-new-password-field-box.error-in-field .icon-box,
+.code-field-box.error-in-field .icon-box,
+.new-password-field-box.error-in-field .icon-box {
   transform: translateY(-80%);
 }
 
