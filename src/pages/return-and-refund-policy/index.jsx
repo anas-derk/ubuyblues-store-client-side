@@ -34,7 +34,6 @@ export default function PolicesTermsAndConditions() {
                         <div className="content">
                             <p className="mb-3">{t("You have 15 days from the date of delivery to request a return or replacement")} .</p>
                             <p className="mb-3">{t("If you have received damaged or incorrect products, please contact customer service for assistance as soon as possible")} .</p>
-                            <p className="mb-3">{t("If you have received damaged or incorrect products, please contact customer service for assistance as soon as possible")} .</p>
                             <ol>
                                 <li className="mb-3">{t("Exchange one item for another is allowed")} .</li>
                                 <li className="mb-3">{t("Returned products must be unused, and the original packaging must be retained, We do not accept returns of used or damaged items")} .</li>
