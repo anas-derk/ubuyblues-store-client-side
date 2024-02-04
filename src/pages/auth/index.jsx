@@ -78,37 +78,37 @@ export default function UserAuth() {
     }
 
     const userLogin = async (e) => {
-        e.preventDefault();
-        setFormValidationErrors({});
-        setErrorMsg("");
-        setSuccessMsg("");
-        let errorsObject = validations.inputValuesValidation([
-            {
-                name: "emailForLogin",
-                value: emailForLogin,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, This Email Is Not Valid !!",
-                    }
-                },
-            },
-            {
-                name: "passwordForLogin",
-                value: passwordForLogin,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
+        try {
+            e.preventDefault();
+            setFormValidationErrors({});
+            setErrorMsg("");
+            setSuccessMsg("");
+            let errorsObject = validations.inputValuesValidation([
+                {
+                    name: "emailForLogin",
+                    value: emailForLogin,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, This Email Is Not Valid !!",
+                        }
                     },
                 },
-            },
-        ]);
-        setFormValidationErrors(errorsObject);
-        if (Object.keys(errorsObject).length == 0) {
-            setIsLoginingStatus(true);
-            try {
+                {
+                    name: "passwordForLogin",
+                    value: passwordForLogin,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsLoginingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`);
                 const result = await res.data;
                 if (result === "Sorry, Email Or Password Incorrect !!") {
@@ -124,14 +124,15 @@ export default function UserAuth() {
                         router.push("/");
                     } else router.push(`/account-verification?email=${result.email}`);
                 }
-            } catch (err) {
-                setIsLoginingStatus(false);
-                setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorTimeout);
-                }, 5000);
             }
+        }
+        catch (err) {
+            setIsLoginingStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 5000);
         }
     }
 
