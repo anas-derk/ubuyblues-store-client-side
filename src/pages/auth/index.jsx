@@ -12,6 +12,7 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { signIn } from "next-auth/react";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 export default function UserAuth() {
 
@@ -321,6 +322,7 @@ export default function UserAuth() {
                                                 </li>
                                             </ul>
                                         </form>
+                                        <Link href="/forget-password" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
                                     </div>
                                 </div>}
                             </div>
