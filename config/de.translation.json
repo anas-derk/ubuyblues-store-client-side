@@ -355,5 +355,17 @@
     "Changes to the Privacy Notice": "Änderungen an der Datenschutzerklärung",
     "The last modification: (February 15, 2024)": "Die letzte Änderung: (15. Februar 2024)",
     "Contact us": "Kontaktiere uns",
-    "If you have any comments or inquiries regarding our terms or privacy policy, you can contact us by sending an email or calling customer service at the following address": "Wenn Sie Anmerkungen oder Anfragen zu unseren Bedingungen oder Datenschutzrichtlinien haben, können Sie uns per E-Mail kontaktieren oder den Kundenservice unter der folgenden Adresse anrufen"
+    "If you have any comments or inquiries regarding our terms or privacy policy, you can contact us by sending an email or calling customer service at the following address": "Wenn Sie Anmerkungen oder Anfragen zu unseren Bedingungen oder Datenschutzrichtlinien haben, können Sie uns per E-Mail kontaktieren oder den Kundenservice unter der folgenden Adresse anrufen",
+    "forget password": "Passwort vergessen",
+    "Welcome To You In Forget Password Page": "Willkommen auf der Passwort vergessen Seite",
+    "Forget Password": "Passwort vergessen",
+    "Wait Checking": "Warten auf Überprüfung",
+    "Please Enter The Code Here": "Bitte geben Sie den Code ein",
+    "Please Enter New Password Here": "Bitte geben Sie hier das neue Passwort ein",
+    "Please Enter Confirm New Password Here": "Bitte bestätigen Sie hier das neue Passwort",
+    "Reset Password": "Passwort zurücksetzen",
+    "Wait Reseting": "Warten auf das Zurücksetzen",
+    "Sorry, This Email Is Not Exist !!": "Entschuldigung, diese E-Mail existiert nicht!",
+    "Sorry, This Code Is Not Valid !!": "Entschuldigung, dieser Code ist ungültig!",
+    "Reseting Password Process Has Been Successfully !!, Please Wait To Navigate To Login Page !!": "Der Passwortrücksetzungsprozess wurde erfolgreich abgeschlossen! Bitte warten Sie, um zur Anmeldeseite zu gelangen!"
 }

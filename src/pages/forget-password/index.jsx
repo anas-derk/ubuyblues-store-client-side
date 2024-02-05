@@ -225,7 +225,7 @@ export default function ForgetPassword() {
                             <div className="code-field-box">
                                 <input
                                     type="text"
-                                    placeholder={t("Please Enter The Code")}
+                                    placeholder={t("Please Enter The Code Here")}
                                     className={`form-control p-3 border-2 ${formValidationErrors["typedUserCode"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setTypedUser(e.target.value.trim())}
                                 />
@@ -237,7 +237,7 @@ export default function ForgetPassword() {
                             <div className="new-password-field-box">
                                 <input
                                     type={isVisibleNewPassword ? "text" : "password"}
-                                    placeholder={t("Please Enter New Password")}
+                                    placeholder={t("Please Enter New Password Here")}
                                     className={`form-control p-3 border-2 ${formValidationErrors["newPassword"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setNewPassword(e.target.value.trim())}
                                 />
@@ -250,7 +250,7 @@ export default function ForgetPassword() {
                             <div className="confirm-new-password-field-box">
                                 <input
                                     type={isVisibleConfirmNewPassword ? "text" : "password"}
-                                    placeholder={t("Please Enter New Password")}
+                                    placeholder={t("Please Enter Confirm New Password Here")}
                                     className={`form-control p-3 border-2 ${formValidationErrors["confirmNewPassword"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
                                 />

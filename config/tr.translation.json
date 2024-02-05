@@ -356,5 +356,17 @@
     "Changes to the Privacy Notice": "Gizlilik Bildiriminde Değişiklikler",
     "The last modification: (February 15, 2024)": "Son değişiklik: (15 Şubat 2024)",
     "Contact us": "Bizimle İletişime Geçin",
-    "If you have any comments or inquiries regarding our terms or privacy policy, you can contact us by sending an email or calling customer service at the following address": "Şartlarımız veya gizlilik politikamızla ilgili herhangi bir yorumunuz veya sorunuz varsa, bize bir e-posta göndererek veya aşağıdaki adresten müşteri hizmetlerini arayarak bize ulaşabilirsiniz"
+    "If you have any comments or inquiries regarding our terms or privacy policy, you can contact us by sending an email or calling customer service at the following address": "Şartlarımız veya gizlilik politikamızla ilgili herhangi bir yorumunuz veya sorunuz varsa, bize bir e-posta göndererek veya aşağıdaki adresten müşteri hizmetlerini arayarak bize ulaşabilirsiniz",
+    "forget password": "Parolayı unut",
+    "Welcome To You In Forget Password Page": "Parolayı Unuttun Sayfasına Hoş Geldiniz",
+    "Forget Password": "Parolayı unut",
+    "Wait Checking": "Kontrol Ediliyor, Bekle",
+    "Please Enter The Code Here": "Lütfen kodu girin",
+    "Please Enter New Password Here": "Lütfen buraya yeni şifreyi girin",
+    "Please Enter Confirm New Password Here": "Lütfen buraya yeni şifreyi onaylayın",
+    "Reset Password": "Şifreyi Sıfırla",
+    "Wait Reseting": "Sıfırlanıyor, Bekleyin",
+    "Sorry, This Email Is Not Exist !!": "Üzgünüz, bu kod geçerli değil!",
+    "Sorry, This Code Is Not Valid !!": "Üzgünüz, bu kod geçerli değil!",
+    "Reseting Password Process Has Been Successfully !!, Please Wait To Navigate To Login Page !!":  "Şifre sıfırlama işlemi başarıyla tamamlandı! Lütfen giriş sayfasına yönlendirilmeyi bekleyin!"
 }
