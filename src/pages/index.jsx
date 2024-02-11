@@ -51,7 +51,11 @@ export default function Home() {
 
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
 
+    const [isWaitDeleteProductToFavoriteUserProductsList, setIsWaitDeleteProductToFavoriteUserProductsList] = useState(false);
+
     const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
+    
+    const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
 
@@ -119,19 +123,9 @@ export default function Home() {
             });
     }, []);
 
-    const handleChangeLanguage = (language) => {
-        handleSelectUserLanguage(language);
-        localStorage.setItem("asfour-store-language", language);
-    }
-
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
-    }
-
-    const userLogout = () => {
-        localStorage.removeItem("asfour-store-user-id");
-        router.push("/auth");
     }
 
     const handleScrollToUpAndDown = (window) => {
@@ -176,28 +170,40 @@ export default function Home() {
                 tempFavoriteProductsForUser.push(allProductsInsideThePage[productIndex]);
                 setFavoriteProductsListForUser(tempFavoriteProductsForUser);
                 setIsWaitAddProductToFavoriteUserProductsList(false);
-                setFavoriteProductAddingId("");
+                setIsSuccessAddProductToFavoriteUserProductsList(true);
+                let successAddToCartTimeout = setTimeout(() => {
+                    setIsSuccessAddProductToFavoriteUserProductsList(false);
+                    setFavoriteProductAddingId("");
+                    clearTimeout(successAddToCartTimeout);
+                }, 3000);
             }
         }
         catch (err) {
-            console.log(err);
+            setIsWaitAddProductToFavoriteUserProductsList(false);
+            setFavoriteProductAddingId("");
         }
     }
 
     const deleteProductFromFavoriteUserProducts = async (productIndex, userId) => {
         try {
-            setIsWaitAddProductToFavoriteUserProductsList(true);
+            setIsWaitDeleteProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
             const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
             const result = await res.data;
-            if (result === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
-                setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favorite_product) => favorite_product._id != allProductsInsideThePage[productIndex]._id));
-                setIsWaitAddProductToFavoriteUserProductsList(false);
-                setFavoriteProductAddingId("");
+            if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
+                setFavoriteProductsListForUser(result.newFavoriteProductsList);
+                setIsWaitDeleteProductToFavoriteUserProductsList(false);
+                setIsSuccessDeleteProductToFavoriteUserProductsList(true);
+                let successDeleteToCartTimeout = setTimeout(() => {
+                    setIsSuccessDeleteProductToFavoriteUserProductsList(false);
+                    setFavoriteProductAddingId("");
+                    clearTimeout(successDeleteToCartTimeout);
+                }, 3000);
             }
         }
         catch (err) {
-            console.log(err);
+            setIsWaitDeleteProductToFavoriteUserProductsList(false);
+            setFavoriteProductAddingId("");
         }
     }
 
@@ -245,36 +251,6 @@ export default function Home() {
                 clearTimeout(successAddToCartTimeout);
             }, 3000);
         }
-    }
-
-    const getRatingStars = () => {
-        let starsIconsArray = [
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2" />
-        ];
-        return (
-            <div className="rating-box mb-4">
-                <span className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`}>{t("Your rating")} *</span>
-                {starsIconsArray.map((starIcon, starIndex) => <Fragment key={starIndex}>
-                    {starIcon}
-                </Fragment>)}
-            </div>
-        );
-    }
-
-    const isItStillDiscountForProduct = (startDiscountPeriod, endDiscountPeriod) => {
-        const dateAndTimeNow = new Date(Date.now());
-        const startDiscountDateAndTime = new Date(startDiscountPeriod);
-        if (dateAndTimeNow > startDiscountDateAndTime) {
-            const endDiscountDateAndTime = new Date(endDiscountPeriod);
-            return endDiscountDateAndTime - dateAndTimeNow > 0;
-        }
-        return false;
-        // if (dateAndTimeNow)
-        // console.log(new Date(startDiscountDateAndTime.getTime() - endDiscountDateAndTime.getTime()));
     }
 
     const getProductsCount = async () => {
@@ -480,16 +456,21 @@ export default function Home() {
                                                     className="product-managment-icon d-block mb-2"
                                                     onClick={() => setIsDisplayShareOptionsBox(true)}
                                                 />
-                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
-                                                    className="product-managment-icon"
-                                                    onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
-                                                /> : <BsSuitHeart
-                                                    className="product-managment-icon"
-                                                    onClick={() => addProductToFavoriteUserProducts(index, userId)}
-                                                />}
+                                                {!isWaitAddProductToFavoriteUserProductsList && !isWaitDeleteProductToFavoriteUserProductsList && product._id !== favoriteProductAddingId && <>
+                                                    {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
+                                                        className="product-managment-icon"
+                                                        onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
+                                                    /> :
+                                                        <BsSuitHeart
+                                                            className="product-managment-icon"
+                                                            onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                                                        />}
+                                                </>}
+                                                {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <BsClock className="product-managment-icon" />}
+                                                {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <FaCheck className="product-managment-icon" />}
                                             </div>
                                             <div className={`add-to-cart-button-box ${product._id == productAddingId ? "displaying" : ""}`}>
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
+                                                {!isWaitAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
                                                 {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
                                                 {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
                                                 {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
