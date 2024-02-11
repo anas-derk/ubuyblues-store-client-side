@@ -1,20 +1,13 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
-import { FaShoppingCart } from "react-icons/fa";
-import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
 import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
-import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
 import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
-import { IoIosArrowForward } from "react-icons/io";
-import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
-import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
@@ -24,16 +17,15 @@ import { PiShareFatLight } from "react-icons/pi";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
 import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
-import { IoEarth } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
+import { FaCheck } from 'react-icons/fa';
 
 export default function Home() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
-
-    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [userId, setUserId] = useState("");
 
@@ -65,14 +57,6 @@ export default function Home() {
 
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
-    const [productIndex, setProductIndex] = useState(-1);
-
-    const [productQuantity, setProductQuantity] = useState(1);
-
-    const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
-
-    const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
-
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
@@ -86,8 +70,6 @@ export default function Home() {
     const [allBrands, setAllBrands] = useState([]);
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
-
-    const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
 
     const router = useRouter();
 
@@ -128,10 +110,6 @@ export default function Home() {
                             }
                         }
                     }
-                    setWindowInnerWidth(window.innerWidth);
-                    window.addEventListener("resize", function () {
-                        setWindowInnerWidth(this.innerWidth);
-                    });
                     setIsLoadingPage(false);
                 }
             })
@@ -243,8 +221,9 @@ export default function Home() {
             setIsSuccessAddToCart(true);
             let successAddToCartTimeout = setTimeout(() => {
                 setIsSuccessAddToCart(false);
+                setProductAddingId("");
                 clearTimeout(successAddToCartTimeout);
-            }, 1500);
+            }, 3000);
         } else {
             let allProductsData = [];
             allProductsData.push({
@@ -262,10 +241,10 @@ export default function Home() {
             setIsSuccessAddToCart(true);
             let successAddToCartTimeout = setTimeout(() => {
                 setIsSuccessAddToCart(false);
+                setProductAddingId("");
                 clearTimeout(successAddToCartTimeout);
-            }, 1500);
+            }, 3000);
         }
-        setProductAddingId("");
     }
 
     const getRatingStars = () => {
@@ -394,13 +373,12 @@ export default function Home() {
     }
 
     return (
-        <div className="home">
+        <div className="home pt-5">
             <Head>
                 <title>Ubuyblues Store - Home</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                aaaa
                 <div className="navigate-to-up-button">
                     {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
@@ -496,7 +474,7 @@ export default function Home() {
                                                 backgroundImage: `url(${process.env.BASE_API_URL}/${product.imagePath})`
                                             }}
                                         >
-                                            <a className="product-overlay" href={`/product-details/${product._id}`}></a>
+                                            <a className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></a>
                                             <div className="product-managment-buttons p-2">
                                                 <PiShareFatLight
                                                     className="product-managment-icon d-block mb-2"
@@ -510,11 +488,14 @@ export default function Home() {
                                                     onClick={() => addProductToFavoriteUserProducts(index, userId)}
                                                 />}
                                             </div>
-                                            <div className="add-to-cart-button-box">
+                                            <div className={`add-to-cart-button-box ${product._id == productAddingId ? "displaying" : ""}`}>
                                                 {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
-                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
-                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
+                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
+                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
+                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                                                    <FaCheck className="me-2" />
+                                                    <span>{t("Go To Cart Page")}</span>
+                                                </Link>}
                                             </div>
                                         </div>
                                         <div className="product-details p-3 text-center">

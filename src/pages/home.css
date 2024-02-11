@@ -302,6 +302,10 @@
   transition: .3s;
 }
 
+.home .last-added-products .product-managment-box .product-overlay.displaying {
+  opacity: 1;
+}
+
 .home .last-added-products .product-managment-box .product-managment-buttons {
   position: absolute;
   right: 8px;
@@ -321,6 +325,10 @@
   left: 0;
   width: 100%;
   opacity: 0;
+}
+
+.home .last-added-products .product-managment-box .add-to-cart-button-box.displaying {
+  opacity: 1;
 }
 
 .home .last-added-products .product-managment-box .add-to-cart-button-box .cart-btn {

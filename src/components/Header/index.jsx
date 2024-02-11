@@ -57,7 +57,7 @@ export default function Header() {
 
     return (
         <header className="global-header">
-            <Navbar expand="lg" className="bg-body-tertiary bg-white">
+            <Navbar expand="lg" className="bg-body-tertiary bg-white" fixed="top">
                 <Container fluid>
                     <Navbar.Brand href="/admin-dashboard" as={Link}>
                         <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="ubuyblues-logo" width="75" height="75" />
