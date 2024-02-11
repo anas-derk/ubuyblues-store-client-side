@@ -245,88 +245,6 @@
   color: #000;
 }
 
-.home .links-and-logo {
-  position: relative;
-  border-top: 4px solid var(--main-color-two);
-  border-bottom: 4px solid var(--main-color-two);
-  margin-bottom: 120px;
-}
-
-@media (max-width: 576px) {
-  .home .links-and-logo {
-    margin-top: 70px;
-    margin-bottom: 50px;
-  }
-}
-
-.home .links-and-logo .links-box {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-right: 30px;
-  justify-content: center;
-  gap: 20px;
-}
-
-@media (max-width: 576px) {
-  .home .links-and-logo .links-box {
-    justify-content: center;
-    align-items: end;
-    height: 112px;
-  }
-}
-
-@media (min-width: 577px) and (max-width: 1199px) {
-  .home .links-and-logo .links-box {
-    justify-content: end;
-  }
-}
-
-.home .links-and-logo .link-icon {
-  font-size: 60px;
-  color: var(--main-color-one);
-}
-
-.home .links-and-logo .link-icon:hover {
-  color: var(--main-color-two);
-}
-
-@media (max-width: 767px) {
-  .home .links-and-logo .link-icon {
-    font-size: 40px;
-  }
-}
-
-.home .links-and-logo .logo-box {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  left: 10%;
-  top: 50%;
-  border: 5px solid var(--main-color-two);
-  transform: translateY(-50%);
-  background-image: url("../../public/images/UbuyBlues_Logo_merged_White.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
-@media (max-width: 767px) {
-  .home .links-and-logo .logo-box {
-    width: 150px;
-    height: 150px;
-  }
-}
-
-@media (max-width: 576px) {
-  .home .links-and-logo .logo-box {
-    width: 100px;
-    height: 100px;
-    left: 50%;
-    top: calc(-100% + 105px);
-    transform: translate(-50%, -50%);
-  }
-}
-
 .home .navigate-link-for-display-products {
   border-radius: 15px;
   border: 5p solid var(--main-color-three);
@@ -367,13 +285,25 @@
 .home .last-added-products .product-link {
   display: block;
   width: 100%;
-  height: 300px;
+  height: 400px;
   background-size: cover;
 }
 
 .home .last-added-products .product-details {
   position: relative;
   background-color: var(--main-color-two);
+}
+
+.home .last-added-products .product-details .product-name {
+  font-size: 19px;
+}
+
+.home .last-added-products .product-details .product-category {
+  font-size: 18px;
+}
+
+.home .last-added-products .product-details .product-price, .home .last-added-products .product-details .product-price-after-discount {
+  font-size: 17px;
 }
 
 .home .last-added-products .product-details .product-image-box {

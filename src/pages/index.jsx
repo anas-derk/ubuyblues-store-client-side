@@ -484,6 +484,30 @@ export default function Home() {
                             </div>
                         </section>
                         {/* End Categories Section */}
+                        {/* Start Last Added Products */}
+                        <section className="last-added-products mb-5" id="latest-added-products">
+                            <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
+                            <div className="row products-box pt-4 pb-4">
+                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
+                                    <div className="col-sm-6 col-md-4 col-xl-4" key={product._id}>
+                                        <a
+                                            href={`/product-details/${product._id}`} target="_blank" className="product-link"
+                                            style={{
+                                                backgroundImage: `url(${process.env.BASE_API_URL}/${product.imagePath})`
+                                            }}
+                                        ></a>
+                                        <div className="product-details p-3 text-center">
+                                            <h4 className="product-name fw-bold">{product.name}</h4>
+                                            <h5 className="product-category">{product.category}</h5>
+                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h5>
+                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{product.price - product.discount} KWD</h4>}
+                                        </div>
+                                    </div>
+                                ))}
+                                {/* {totalPagesCount > 0 && !isGetProductsStatus && paginationBar()} */}
+                            </div>
+                        </section>
+                        {/* End Last Added Products */}
                         {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
                             <h2 className="section-name text-center mb-5 text-white">Brands</h2>
                             <div className="container-fluid">
