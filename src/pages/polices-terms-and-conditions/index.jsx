@@ -22,7 +22,7 @@ export default function PolicesTermsAndConditions() {
     }
 
     return (
-        <div className="privacy-policy-and-conditions caption-page">
+        <div className="privacy-policy-and-conditions caption-page page">
             <Head>
                 <title>Ubuyblues Store - Polices Terms And Conditions</title>
             </Head>

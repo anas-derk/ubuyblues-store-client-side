@@ -441,7 +441,7 @@ export default function Checkout() {
     }
 
     return (
-        <div className="checkout">
+        <div className="checkout page">
             <Head>
                 <title>Ubuyblues Store - Checkout</title>
             </Head>

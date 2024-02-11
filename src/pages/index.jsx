@@ -373,7 +373,7 @@ export default function Home() {
     }
 
     return (
-        <div className="home pt-5">
+        <div className="home page">
             <Head>
                 <title>Ubuyblues Store - Home</title>
             </Head>
@@ -494,7 +494,7 @@ export default function Home() {
                                                 {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
                                                 {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
                                                     <FaCheck className="me-2" />
-                                                    <span>{t("Go To Cart Page")}</span>
+                                                    <span>{t("Click To Go To Cart Page")}</span>
                                                 </Link>}
                                             </div>
                                         </div>

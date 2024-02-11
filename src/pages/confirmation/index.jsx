@@ -64,7 +64,7 @@ export default function Confirmation({ orderId }) {
     }
 
     return (
-        <div className="confirmation">
+        <div className="confirmation page">
             <Head>
                 <title>Ubuyblues Store - Confirmation</title>
             </Head>

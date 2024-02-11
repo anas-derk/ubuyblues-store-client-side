@@ -130,7 +130,7 @@ export default function Cart() {
     }
 
     return (
-        <div className="cart d-flex flex-column justify-content-center">
+        <div className="cart d-flex flex-column justify-content-center page">
             <Head>
                 <title>Ubuyblues Store - User Cart</title>
             </Head>

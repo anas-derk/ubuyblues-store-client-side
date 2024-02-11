@@ -189,7 +189,7 @@ export default function ForgetPassword() {
     }
 
     return (
-        <div className="forget-password">
+        <div className="forget-password page">
             <Head>
                 <title>Ubuyblues Store - Forget Password</title>
             </Head>

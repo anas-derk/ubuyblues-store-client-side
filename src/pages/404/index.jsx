@@ -23,7 +23,7 @@ export default function PageNotFound() {
     }
 
     return (
-        <div className="page-not-found pb-5">
+        <div className="page-not-found pb-5 page">
             <Head>
                 <title>Ubuyblues Store - Page Not Found</title>
             </Head>

@@ -22,7 +22,7 @@ export default function PolicesTermsAndConditions() {
     }
 
     return (
-        <div className="return-and-refund-policy caption-page">
+        <div className="return-and-refund-policy caption-page page">
             <Head>
                 <title>Ubuyblues Store - Return And Refund Policy</title>
             </Head>

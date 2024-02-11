@@ -409,7 +409,7 @@ export default function ProductDetails() {
     }
 
     return (
-        <div className="home">
+        <div className="home page">
             <Head>
                 <title>Ubuyblues Store - Home</title>
             </Head>

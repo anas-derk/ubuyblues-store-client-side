@@ -161,7 +161,7 @@ export default function AccountVerification({ email }) {
     }
     
     return (
-        <div className="account-verification">
+        <div className="account-verification page">
             <Head>
                 <title>Ubuyblues Store - Account Verification</title>
             </Head>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AiOutlineHome } from "react-icons/ai";
-import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
+import { BsFillSuitHeartFill, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { MdOutlineDarkMode, MdOutlineWbSunny } from "react-icons/md";
@@ -69,10 +69,10 @@ export default function Header() {
                                 <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Home")}
                             </Nav.Link>
-                            <Nav.Link href="/auth" as={Link}>
+                            {!userId && <Nav.Link href="/auth" as={Link}>
                                 <BsFillPersonFill className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Login / Register")}
-                            </Nav.Link>
+                            </Nav.Link>}
                             <NavDropdown title={t("Languages")} id="products-nav-dropdown">
                                 <NavDropdown.Item onClick={() => handleChangeLanguage("ar")}>{t("Arabic")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
@@ -97,10 +97,15 @@ export default function Header() {
                                     className="sunny-icon global-header-icon ms-2 me-2"
                                     onClick={handleChangeMode}
                                 />}
-                            <button className="btn btn-danger logout-btn" onClick={userLogout}>
-                                <MdOutlineLogout className={i18n.language !== "ar" ? "me-2" : "ms-2"} />
-                                <span>{t("Logout")}</span>
-                            </button>
+                            {userId && <>
+                                <Nav.Link href="/customer-dashboard" as={Link}>
+                                    <BsPersonVcard className="user-icon link-icon" />
+                                </Nav.Link>
+                                <button className="btn btn-danger logout-btn" onClick={userLogout}>
+                                    <MdOutlineLogout className={i18n.language !== "ar" ? "me-2" : "ms-2"} />
+                                    <span>{t("Logout")}</span>
+                                </button>
+                            </>}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

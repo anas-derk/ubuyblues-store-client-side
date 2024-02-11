@@ -57,7 +57,7 @@ export default function CustomerDashboard() {
     }
 
     return (
-        <div className="customer-dashboard">
+        <div className="customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Dashboard</title>
             </Head>
