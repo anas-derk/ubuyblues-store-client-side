@@ -468,7 +468,7 @@ export default function Home() {
                         </div>}
                         {/* End Share Options Box */}
                         {/* Start Categories Section */}
-                        <section className="categories mb-5" id="categories">
+                        <section className="categories mb-5 pb-5" id="categories">
                             <h2 className="section-name text-center mb-4 text-white">Categories</h2>
                             <div className="row">
                                 {allCategories.map((category) => (
@@ -485,7 +485,7 @@ export default function Home() {
                         </section>
                         {/* End Categories Section */}
                         {/* Start Last Added Products */}
-                        <section className="last-added-products mb-5" id="latest-added-products">
+                        <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
@@ -497,6 +497,9 @@ export default function Home() {
                                             }}
                                         >
                                             <a className="product-overlay" href={`/product-details/${product._id}`}></a>
+                                            <div className="product-managment-buttons">
+
+                                            </div>
                                         </div>
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
