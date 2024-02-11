@@ -1,9 +1,17 @@
-.global-header .global-header-icon {
-  color: #FFF;
-  font-size: 40px;
-  cursor: pointer;
+.global-header .navbar .navbar-nav {
+  align-items: center;
 }
 
-.global-header .global-header-icon:hover {
-  color: var(--main-color-two);
+.global-header .navbar .navbar-nav .nav-link {
+  color: #000;
+  transition: 0.5s;
+}
+
+.global-header .navbar .navbar-nav .nav-link:hover {
+  background-color: #CCC;
+}
+
+.global-header .navbar .navbar-nav .global-header-icon {
+  font-size: 20px;
+  cursor: pointer;
 }

@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AiOutlineHome } from "react-icons/ai";
-import { BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
-import { IoEarth } from "react-icons/io5";
+import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { MdOutlineDarkMode, MdOutlineWbSunny } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Header() {
 
@@ -15,7 +20,7 @@ export default function Header() {
     const [lightMode, setLightMode] = useState("sunny");
 
     const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
-    
+
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
@@ -52,106 +57,54 @@ export default function Header() {
 
     return (
         <header className="global-header">
-            <div className="container-fluid text-end">
-                <div className="navigate-icons p-3">
-                    {i18n.language === "ar" && <Link href="/">
-                        <AiOutlineHome className="home-icon global-header-icon" />
-                    </Link>}
-                    {!userId ? <Link href="/auth">
-                        <BsFillPersonFill className="home-icon global-header-icon me-5" />
-                    </Link> : <>
-                        {i18n.language !== "ar" && <MdOutlineLogout className="logout-icon global-header-icon me-5" onClick={userLogout} />}
-                        <Link href="/customer-dashboard">
-                            <BsPersonVcard className="home-icon global-header-icon me-5" />
-                        </Link>
-                        {i18n.language === "ar" && <MdOutlineLogout className="logout-icon global-header-icon me-5" onClick={userLogout} />}
-                    </>}
-                    {i18n.language !== "ar" && <Link href="/">
-                        <AiOutlineHome className="home-icon global-header-icon" />
-                    </Link>}
-                </div>
-                <div className="languages-and-others-stores p-3">
-                    {i18n.language === "ar" && <Link href="/">
-                        <AiOutlineHome className="home-icon global-header-icon" />
-                    </Link>}
-                    {i18n.language === "ar" && <div className="select-language-box d-inline-block">
-                        <IoEarth
-                            className="earth-icon global-header-icon me-5"
-                            onClick={() => setIsDisplayLanguagesList(value => !value)}
-                        />
-                        {isDisplayLanguagesList && <ul className="languages-list">
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("en")}
-                            >
-                                {t("English")}
-                            </li>
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("ar")}
-                            >
-                                {t("Arabic")}
-                            </li>
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("tr")}
-                            >
-                                {t("Turkey")}
-                            </li>
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("de")}
-                            >
-                                {t("Germany")}
-                            </li>
-                        </ul>}
-                    </div>}
-                    {lightMode == "sunny" ?
-                        <MdOutlineDarkMode
-                            className="dark-mode-icon global-header-icon me-5"
-                            onClick={handleChangeMode}
-                        /> :
-                        <MdOutlineWbSunny
-                            className="sunny-icon global-header-icon me-5"
-                            onClick={handleChangeMode}
-                        />}
-                    {i18n.language !== "ar" && <div className="select-language-box d-inline-block">
-                        <IoEarth
-                            className="earth-icon global-header-icon me-5"
-                            onClick={() => setIsDisplayLanguagesList(value => !value)}
-                        />
-                        {isDisplayLanguagesList && <ul className="languages-list">
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("en")}
-                            >
-                                {t("English")}
-                            </li>
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("ar")}
-                            >
-                                {t("Arabic")}
-                            </li>
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("tr")}
-                            >
-                                {t("Turkey")}
-                            </li>
-                            <li
-                                className="language-item p-2 text-center fw-bold border-bottom border-dark"
-                                onClick={() => handleChangeLanguage("de")}
-                            >
-                                {t("Germany")}
-                            </li>
-                        </ul>}
-                    </div>}
-                    {i18n.language !== "ar" && <Link href="/">
-                        <AiOutlineHome className="home-icon global-header-icon" />
-                    </Link>}
-                </div>
-            </div>
+            <Navbar expand="lg" className="bg-body-tertiary bg-white">
+                <Container fluid>
+                    <Navbar.Brand href="/admin-dashboard" as={Link}>
+                        <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="ubuyblues-logo" width="75" height="75" />
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+                        <Nav>
+                            <Nav.Link href="/" as={Link}>
+                                <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Home")}
+                            </Nav.Link>
+                            <Nav.Link href="/auth" as={Link}>
+                                <BsFillPersonFill className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Login / Register")}
+                            </Nav.Link>
+                            <NavDropdown title={t("Languages")} id="products-nav-dropdown">
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("ar")}>{t("Arabic")}</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("en")}>{t("English")}</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("tr")}>{t("Turkey")}</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("de")}>{t("Germany")}</NavDropdown.Item>
+                            </NavDropdown>
+                            <Nav.Link href="/cart" as={Link}>
+                                <FaShoppingCart className="cart-icon link-icon" />
+                            </Nav.Link>
+                            <Nav.Link href="/customer-dashboard/wish-list" as={Link}>
+                                <BsFillSuitHeartFill className="cart-icon link-icon" />
+                            </Nav.Link>
+                            {lightMode == "sunny" ?
+                                <MdOutlineDarkMode
+                                    className="dark-mode-icon global-header-icon ms-2 me-2"
+                                    onClick={handleChangeMode}
+                                /> :
+                                <MdOutlineWbSunny
+                                    className="sunny-icon global-header-icon ms-2 me-2"
+                                    onClick={handleChangeMode}
+                                />}
+                            <button className="btn btn-danger logout-btn" onClick={userLogout}>
+                                <MdOutlineLogout className={i18n.language !== "ar" ? "me-2" : "ms-2"} />
+                                <span>{t("Logout")}</span>
+                            </button>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
         </header>
     );
 }
