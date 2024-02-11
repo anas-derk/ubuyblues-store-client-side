@@ -278,6 +278,10 @@
   border-bottom: 2px solid var(--main-color-two);
 }
 
+.home .last-added-products .row {
+  row-gap: 30px;
+}
+
 .home .last-added-products .product-managment-box {
   position: relative;
   cursor: pointer;
@@ -305,6 +309,10 @@
   background-color: #FFF;
   border-radius: 10px;
   opacity: 0;
+}
+
+.home .last-added-products .product-managment-box .product-managment-buttons .product-managment-icon {
+  font-size: 20px;
 }
 
 .home .last-added-products .product-managment-box .add-to-cart-button-box {
@@ -370,10 +378,6 @@
 .home .last-added-products .product-details .product-managment-buttons-box .product-managment-icon {
   cursor: pointer;
   font-size: 20px;
-}
-
-.home .last-added-products .row {
-  row-gap: 30px;
 }
 
 .home .categories {

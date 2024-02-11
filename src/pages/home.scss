@@ -252,6 +252,9 @@
     }
     .last-added-products{
         border-bottom: 2px solid var(--main-color-two);
+        .row{
+            row-gap: 30px;
+        }
         .product-managment-box{
             position: relative;
             cursor: pointer;
@@ -276,6 +279,9 @@
                 background-color: #FFF;
                 border-radius: 10px;
                 opacity: 0;
+                .product-managment-icon{
+                    font-size: 20px;
+                }
             }
             .add-to-cart-button-box{
                 position: absolute;
@@ -335,11 +341,6 @@
                     font-size: 20px;
                 }
             }
-        }
-    }
-    .last-added-products{
-        .row{
-            row-gap: 30px;
         }
     }
     .categories{
