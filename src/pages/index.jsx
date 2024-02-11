@@ -490,12 +490,14 @@ export default function Home() {
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-sm-6 col-md-4 col-xl-4" key={product._id}>
-                                        <a
-                                            href={`/product-details/${product._id}`} target="_blank" className="product-link"
+                                        <div
+                                            className="product-managment-box"
                                             style={{
                                                 backgroundImage: `url(${process.env.BASE_API_URL}/${product.imagePath})`
                                             }}
-                                        ></a>
+                                        >
+                                            <a className="product-overlay" href={`/product-details/${product._id}`}></a>
+                                        </div>
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>

@@ -282,11 +282,20 @@
   cursor: pointer;
 }
 
-.home .last-added-products .product-link {
-  display: block;
-  width: 100%;
+.home .last-added-products .product-managment-box {
+  position: relative;
+  cursor: pointer;
   height: 400px;
   background-size: cover;
+}
+
+.home .last-added-products .product-managment-box .product-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .home .last-added-products .product-details {
