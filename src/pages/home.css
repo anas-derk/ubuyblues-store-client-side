@@ -274,15 +274,17 @@
   }
 }
 
+.home .last-added-products {
+  border-bottom: 2px solid var(--main-color-two);
+}
+
 .home .last-added-products .product-managment-box {
   position: relative;
   cursor: pointer;
   height: 450px;
   background-size: cover;
-}
-
-.home .last-added-products .product-managment-box:hover .product-overlay {
-  opacity: 1;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
 }
 
 .home .last-added-products .product-managment-box .product-overlay {
@@ -291,14 +293,44 @@
   top: 0;
   width: 100%;
   height: inherit;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   opacity: 0;
   transition: .3s;
 }
 
+.home .last-added-products .product-managment-box .product-managment-buttons {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background-color: #FFF;
+  border-radius: 10px;
+  opacity: 0;
+}
+
+.home .last-added-products .product-managment-box .add-to-cart-button-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+}
+
+.home .last-added-products .product-managment-box .add-to-cart-button-box .cart-btn {
+  width: 100%;
+  background-color: var(--main-color-two);
+  border: none;
+  font-weight: bold;
+}
+
+.home .last-added-products .product-managment-box:hover .product-overlay, .home .last-added-products .product-managment-box:hover .product-managment-buttons, .home .last-added-products .product-managment-box:hover .add-to-cart-button-box {
+  opacity: 1;
+}
+
 .home .last-added-products .product-details {
   position: relative;
-  background-color: var(--main-color-two);
+  background-color: #FFF;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 .home .last-added-products .product-details .product-name {
@@ -373,10 +405,6 @@
 .home .categories .category-details .forward-arrow-icon:hover {
   background-color: var(--main-color-one);
   color: #FFF;
-}
-
-.home .last-added-products {
-  border-bottom: 2px solid var(--main-color-two);
 }
 
 .home .brands .slick-slider .slick-prev {

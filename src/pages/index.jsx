@@ -489,7 +489,7 @@ export default function Home() {
                             <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
-                                    <div className="col-sm-6 col-md-4 col-xl-4" key={product._id}>
+                                    <div className="col-sm-6 col-md-4 col-xl-4 product" key={product._id}>
                                         <div
                                             className="product-managment-box"
                                             style={{
@@ -497,8 +497,24 @@ export default function Home() {
                                             }}
                                         >
                                             <a className="product-overlay" href={`/product-details/${product._id}`}></a>
-                                            <div className="product-managment-buttons">
-
+                                            <div className="product-managment-buttons p-2">
+                                                <PiShareFatLight
+                                                    className="product-managment-icon d-block mb-2"
+                                                    onClick={() => setIsDisplayShareOptionsBox(true)}
+                                                />
+                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
+                                                    className="product-managment-icon"
+                                                    onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
+                                                /> : <BsSuitHeart
+                                                    className="product-managment-icon"
+                                                    onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                                                />}
+                                            </div>
+                                            <div className="add-to-cart-button-box">
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
+                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
+                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
                                             </div>
                                         </div>
                                         <div className="product-details p-3 text-center">

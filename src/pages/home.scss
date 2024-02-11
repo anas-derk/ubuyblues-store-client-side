@@ -251,30 +251,56 @@
         }
     }
     .last-added-products{
+        border-bottom: 2px solid var(--main-color-two);
         .product-managment-box{
             position: relative;
             cursor: pointer;
             height: 450px;
             background-size: cover;
-            &:hover{
-                .product-overlay{
-                    opacity: 1;
-                }
-            }
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
             .product-overlay{
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
                 height: inherit;
-                background-color: rgba($color: #000000, $alpha: 0.4);
+                background-color: rgba($color: #000000, $alpha: 0.6);
                 opacity: 0;
                 transition: .3s;
+            }
+            .product-managment-buttons{
+                position: absolute;
+                right: 8px;
+                top: 8px;
+                background-color: #FFF;
+                border-radius: 10px;
+                opacity: 0;
+            }
+            .add-to-cart-button-box{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                opacity: 0;
+                .cart-btn{
+                    width: 100%;
+                    background-color: var(--main-color-two);
+                    border: none;
+                    font-weight: bold;
+                }
+            }
+            &:hover{
+                .product-overlay, .product-managment-buttons, .add-to-cart-button-box{
+                    opacity: 1;
+                }
             }
         }
         .product-details{
             position: relative;
-            background-color: var(--main-color-two);
+            background-color: #FFF;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
             .product-name{
                 font-size: 19px;
             }
@@ -340,9 +366,6 @@
                 }
             }
         }
-    }
-    .last-added-products{
-        border-bottom: 2px solid var(--main-color-two);
     }
     .brands{
         .slick-slider{
