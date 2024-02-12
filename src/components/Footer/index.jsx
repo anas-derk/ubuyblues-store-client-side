@@ -70,11 +70,11 @@ export default function Footer() {
                         <ul className="links-list">
                             <li className="link-item fw-bold mb-3">
                                 <IoLogoFacebook className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="/" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
+                                <Link href="https://www.facebook.com/profile.php?id=61555678003785&mibextid=ZbWKwL" target="_blank" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <MdEmail className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="/" className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
+                                <Link href="mailto:info@asfourintlco.com" className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
                             </li>
                         </ul>
                     </div>

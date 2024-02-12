@@ -19,8 +19,6 @@ export default function Header() {
 
     const [lightMode, setLightMode] = useState("sunny");
 
-    const [isDisplayLanguagesList, setIsDisplayLanguagesList] = useState(false);
-
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
@@ -59,7 +57,7 @@ export default function Header() {
         <header className="global-header">
             <Navbar expand="lg" className="bg-body-tertiary bg-white" fixed="top">
                 <Container fluid>
-                    <Navbar.Brand href="/admin-dashboard" as={Link}>
+                    <Navbar.Brand href="/" as={Link}>
                         <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="ubuyblues-logo" width="75" height="75" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
