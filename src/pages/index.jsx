@@ -59,8 +59,6 @@ export default function Home() {
 
     const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
-    const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
-
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -404,39 +402,9 @@ export default function Home() {
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
-                        {/* Start Share Options Box */}
-                        {isDisplayShareOptionsBox && <div className="share-options-box">
-                            <div className="share-icons-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
-                                <GrFormClose className="close-share-options-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
-                                <h2 className="mb-3 pb-3 border-bottom border-white">Share Your Favorite Product With Your Friends</h2>
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <WhatsappShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                            <WhatsappIcon size={45} round />
-                                        </WhatsappShareButton>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <FacebookShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                            <FacebookIcon size={45} round />
-                                        </FacebookShareButton>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <FacebookMessengerShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                            <FacebookMessengerIcon size={45} round />
-                                        </FacebookMessengerShareButton>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <TelegramShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                            <TelegramIcon size={45} round />
-                                        </TelegramShareButton>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>}
-                        {/* End Share Options Box */}
                         {/* Start Categories Section */}
                         <section className="categories mb-5 pb-5" id="categories">
-                            <h2 className="section-name text-center mb-4 text-white">Categories</h2>
+                            <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
                             <div className="row">
                                 {allCategories.map((category) => (
                                     <div className="col-md-3" key={category._id}>
@@ -453,7 +421,7 @@ export default function Home() {
                         {/* End Categories Section */}
                         {/* Start Last Added Products */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
+                            <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-sm-6 col-md-4 col-xl-4 product" key={product._id}>
@@ -495,8 +463,8 @@ export default function Home() {
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} KWD</h5>
-                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{product.price - product.discount} KWD</h4>}
+                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} {t("KWD")}</h5>
+                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{product.price - product.discount} {t("KWD")}</h4>}
                                         </div>
                                     </div>
                                 ))}
@@ -505,7 +473,7 @@ export default function Home() {
                         </section>
                         {/* End Last Added Products */}
                         {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
-                            <h2 className="section-name text-center mb-5 text-white">Brands</h2>
+                            <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
                             <div className="container-fluid">
                                 <Slider
                                     dots={true}
