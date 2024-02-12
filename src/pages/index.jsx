@@ -27,6 +27,8 @@ export default function Home() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
     const [userId, setUserId] = useState("");
 
     const [userInfo, setUserInfo] = useState("");
@@ -54,7 +56,7 @@ export default function Home() {
     const [isWaitDeleteProductToFavoriteUserProductsList, setIsWaitDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
-    
+
     const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
@@ -114,6 +116,10 @@ export default function Home() {
                             }
                         }
                     }
+                    setWindowInnerWidth(window.innerWidth);
+                    window.addEventListener("resize", function () {
+                        setWindowInnerWidth(this.innerWidth);
+                    });
                     setIsLoadingPage(false);
                 }
             })
@@ -251,6 +257,13 @@ export default function Home() {
                 clearTimeout(successAddToCartTimeout);
             }, 3000);
         }
+    }
+
+    const getAppearedSlidesCount = (windowInnerWidth, count) => {
+        if (windowInnerWidth < 767) return 1;
+        if (windowInnerWidth >= 767 && windowInnerWidth < 1199 && count >= 2) return 2;
+        if (windowInnerWidth >= 1199 && count >= 3) return 3;
+        return count;
     }
 
     const getProductsCount = async () => {
@@ -497,10 +510,10 @@ export default function Home() {
                                 <Slider
                                     dots={true}
                                     arrows={false}
-                                    infinite={true}
+                                    infinite={false}
                                     speed={500}
-                                    slidesToShow={1}
-                                    slidesToScroll={1}
+                                    slidesToShow={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
+                                    slidesToScroll={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
                                 >
                                     {allBrands.map((brand) => (
                                         <div className="brand-box mb-4" key={brand._id}>
