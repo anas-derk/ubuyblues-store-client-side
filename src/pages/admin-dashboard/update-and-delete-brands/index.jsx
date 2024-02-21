@@ -42,7 +42,7 @@ export default function UpdateAndDeleteStores({ activeParentLink, activeChildLin
         setIsWaitStatus(true);
         try {
             const res = await axios.put(`${process.env.BASE_API_URL}/brands/${allBrands[brandIndex]._id}`, {
-                newBrandTitle: allBrands[brandIndex].name,
+                newBrandTitle: allBrands[brandIndex].title,
             });
             const result = await res.data;
             setIsWaitStatus(false);
@@ -70,10 +70,11 @@ export default function UpdateAndDeleteStores({ activeParentLink, activeChildLin
             const res = await axios.delete(`${process.env.BASE_API_URL}/brands/${brandId}`);
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Deleting Brand Process Has Been Successfuly ...") {
-                setSuccessMsg(result);
+            if (!result.isError) {
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    setAllBrands(result.newBrandsList);
                     clearTimeout(successTimeout);
                 }, 1500);
             }
@@ -136,6 +137,14 @@ export default function UpdateAndDeleteStores({ activeParentLink, activeChildLin
                                             {isWaitStatus && <button
                                                 className="btn btn-info d-block mb-3 mx-auto global-button"
                                             >Please Waiting</button>}
+                                            {successMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                disabled
+                                            >{successMsg}</button>}
+                                            {errorMsg && <button
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
+                                            >{errorMsg}</button>}
                                         </td>
                                     </tr>
                                 ))}

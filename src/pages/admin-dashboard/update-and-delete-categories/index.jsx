@@ -69,7 +69,6 @@ export default function UpdateAndDeleteCategories() {
         try {
             const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`);
             const result = await res.data;
-            console.log(result);
             setIsWaitStatus(false);
             if (!result.isError) {
                 setSuccessMsg(result.msg);
@@ -142,7 +141,8 @@ export default function UpdateAndDeleteCategories() {
                                                 disabled
                                             >{successMsg}</button>}
                                             {errorMsg && <button
-                                                className="btn btn-success d-block mx-auto global-button"
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
                                             >{errorMsg}</button>}
                                         </td>
                                     </tr>

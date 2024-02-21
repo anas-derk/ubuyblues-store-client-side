@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { PiHandWavingThin } from "react-icons/pi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
@@ -21,6 +21,8 @@ export default function AddNewBrand() {
     const [errorMsg, setErrorMsg] = useState("");
 
     const [successMsg, setSuccessMsg] = useState("");
+
+    const fileElementRef = useRef();
 
     useEffect(() => {
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
@@ -58,6 +60,9 @@ export default function AddNewBrand() {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    setBrandImage("");
+                    setBrandTitle("");
+                    fileElementRef.current.value = "";
                     clearTimeout(successTimeout);
                 }, 1500);
             } else {
@@ -99,6 +104,8 @@ export default function AddNewBrand() {
                             placeholder="Please Enter Brand Image"
                             required
                             onChange={(e) => setBrandImage(e.target.files[0])}
+                            ref={fileElementRef}
+                            value={fileElementRef.current?.value}
                         />
                         <input
                             type="text"
@@ -106,6 +113,7 @@ export default function AddNewBrand() {
                             placeholder="Please Enter Brand Title"
                             required
                             onChange={(e) => setBrandTitle(e.target.value)}
+                            value={brandTitle}
                         />
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
