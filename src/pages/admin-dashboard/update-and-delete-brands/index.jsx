@@ -6,7 +6,7 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 
-export default function UpdateAndDeleteStores({ activeParentLink, activeChildLink }) {
+export default function UpdateAndDeleteStores() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
