@@ -69,17 +69,18 @@ export default function UpdateAndDeleteCategories() {
         try {
             const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`);
             const result = await res.data;
+            console.log(result);
             setIsWaitStatus(false);
-            if (result === "Deleting Categories Process It Successfuly ...") {
-                setSuccessMsg(result);
+            if (!result.isError) {
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    setAllCategories(result.newCategoiesList);
                     clearTimeout(successTimeout);
                 }, 1500);
             }
         }
         catch (err) {
-            console.log(err.response.data);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
