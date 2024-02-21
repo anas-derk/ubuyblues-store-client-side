@@ -138,6 +138,7 @@ export default function UpdateAndDeleteCategories() {
                                             >Please Waiting</button>}
                                             {successMsg && <button
                                                 className="btn btn-success d-block mx-auto global-button"
+                                                disabled
                                             >{successMsg}</button>}
                                             {errorMsg && <button
                                                 className="btn btn-success d-block mx-auto global-button"
