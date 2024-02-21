@@ -55,12 +55,14 @@ export default function AddNewCategory() {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    setCategoryName("");
                     clearTimeout(successTimeout);
                 }, 1500);
             } else {
                 setErrorMsg(result);
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
+                    setCategoryName("");
                     clearTimeout(errorTimeout);
                 }, 1500);
             }
@@ -94,6 +96,7 @@ export default function AddNewCategory() {
                             placeholder="Please Enter Category Name"
                             required
                             onChange={(e) => setCategoryName(e.target.value)}
+                            value={categoryName}
                         />
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
