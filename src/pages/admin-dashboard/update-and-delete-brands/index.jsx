@@ -32,10 +32,21 @@ export default function UpdateAndDeleteStores() {
             });
     }, []);
 
-    const changeBrandTitle = (brandIndex, newValue) => {
-        let brandsInfoTemp = allBrands;
-        brandsInfoTemp[brandIndex].name = newValue;
-        setAllBrands(brandsInfoTemp);
+    const changeBrandData = (brandIndex, fieldName, newValue) => {
+        let brandsDataTemp = allBrands;
+        brandsDataTemp[brandIndex][fieldName] = newValue;
+        setAllBrands(brandsDataTemp);
+    }
+
+    const updateBrandImage = async (brandIndex) => {
+        try {
+            let formData = new FormData();
+            formData.append("brandImage", allBrands[brandIndex].image);
+            await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrands[brandIndex]._id}`, formData);
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     const updateBrandInfo = async (brandIndex) => {
@@ -107,7 +118,8 @@ export default function UpdateAndDeleteStores() {
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Process</th>
+                                    <th>Image</th>
+                                    <th>Processes</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,8 +131,28 @@ export default function UpdateAndDeleteStores() {
                                                 placeholder="Enter New Brand Title"
                                                 defaultValue={brand.title}
                                                 className="p-2 form-control"
-                                                onChange={(e) => changeBrandTitle(index, e.target.value.trim())}
+                                                onChange={(e) => changeBrandData(index, "title", e.target.value.trim())}
                                             ></input>
+                                        </td>
+                                        <td className="brand-image-cell">
+                                            <img
+                                                src={`${process.env.BASE_API_URL}/${brand.imagePath}`}
+                                                alt={`${brand.title} Brand Image !!`}
+                                                width="100"
+                                                height="100"
+                                                className="d-block mx-auto mb-4"
+                                            />
+                                            <input
+                                                type="file"
+                                                className="form-control d-block mx-auto mb-3"
+                                                onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
+                                            />
+                                            <button
+                                                className="btn btn-success d-block mx-auto w-50 global-button"
+                                                onClick={() => updateBrandImage(index)}
+                                            >
+                                                Change
+                                            </button>
                                         </td>
                                         <td className="update-cell">
                                             {!isWaitStatus && !errorMsg && !successMsg && <>

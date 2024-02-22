@@ -132,8 +132,7 @@ export default function UpdateAndDeleteProducts() {
         try {
             let formData = new FormData();
             formData.append("productImage", allProductsInsideThePage[productIndex].image);
-            const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData);
-            const result = await res.data;
+            await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData);
         }
         catch (err) {
             console.log(err);
@@ -376,7 +375,7 @@ export default function UpdateAndDeleteProducts() {
                                     <th>Category</th>
                                     <th>Discount</th>
                                     <th>Image</th>
-                                    <th>Process</th>
+                                    <th>Processes</th>
                                 </tr>
                             </thead>
                             <tbody>
