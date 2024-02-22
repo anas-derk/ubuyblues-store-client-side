@@ -340,8 +340,8 @@ export default function UpdateAndDeleteProducts() {
                             <div className="col-md-12 d-flex align-items-center">
                                 <h6 className="me-2 mb-0 fw-bold text-center">Category</h6>
                                 <select
-                                    className="select-order-status form-select"
-                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                                    className="select-product-category form-select"
+                                    onChange={(e) => setFilters({ ...filters, category: e.target.value })}
                                 >
                                     <option value="" hidden>Pleae Select Category</option>
                                     <option value="">All</option>
