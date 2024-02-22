@@ -118,7 +118,7 @@ export default function UpdateAndDeleteProducts() {
             });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Updating New Product Process It Successfuly ...") {
+            if (result === "Updating Product Process Has Been Successfuly ...") {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
@@ -494,10 +494,10 @@ export default function UpdateAndDeleteProducts() {
                                                     onClick={() => setProductIndex(index)}
                                                 >Show Gallery</button>
                                                 <hr />
-                                                {!isWaitStatus && !errorMsg && !successMsg && <button
+                                                <button
                                                     className="btn btn-success d-block mb-3 mx-auto global-button"
                                                     onClick={() => updateProductData(index)}
-                                                >Update</button>}
+                                                >Update</button>
                                                 <hr />
                                                 <button
                                                     className="btn btn-danger global-button"
@@ -507,6 +507,14 @@ export default function UpdateAndDeleteProducts() {
                                             {isWaitStatus && <button
                                                 className="btn btn-info d-block mb-3 mx-auto global-button"
                                             >Please Waiting</button>}
+                                            {successMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                disabled
+                                            >{successMsg}</button>}
+                                            {errorMsg && <button
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
+                                            >{errorMsg}</button>}
                                         </td>
                                     </tr>
                                 ))}
