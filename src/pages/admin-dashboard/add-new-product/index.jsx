@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { PiHandWavingThin } from "react-icons/pi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -19,7 +19,7 @@ export default function AddNewProduct() {
         price: "",
         description: "",
         category: "",
-        discount: 0,
+        discount: "",
         image: null,
         galleryImages: [],
     });
@@ -29,6 +29,10 @@ export default function AddNewProduct() {
     const [errorMsg, setErrorMsg] = useState("");
 
     const [successMsg, setSuccessMsg] = useState("");
+
+    const productImageFileElementRef = useRef();
+
+    const productGalleryImagesFilesElementRef = useRef();
 
     useEffect(() => {
         axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
@@ -63,6 +67,17 @@ export default function AddNewProduct() {
                 setSuccessMsg(result);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    setProductData({
+                        name: "",
+                        price: "",
+                        description: "",
+                        category: productData.category,
+                        discount: "",
+                        image: null,
+                        galleryImages: [],
+                    });
+                    productImageFileElementRef.current.value = "";
+                    productGalleryImagesFilesElementRef.current.value = "";
                     clearTimeout(successTimeout);
                 }, 1500);
             }
@@ -96,6 +111,7 @@ export default function AddNewProduct() {
                             placeholder="Please Enter Product Name"
                             required
                             onChange={(e) => setProductData({ ...productData, name: e.target.value })}
+                            value={productData.name}
                         />
                         <input
                             type="number"
@@ -103,6 +119,7 @@ export default function AddNewProduct() {
                             placeholder="Please Enter Product Price"
                             required
                             onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber })}
+                            value={productData.price}
                         />
                         <input
                             type="text"
@@ -110,6 +127,7 @@ export default function AddNewProduct() {
                             placeholder="Please Enter Product Description"
                             required
                             onChange={(e) => setProductData({ ...productData, description: e.target.value })}
+                            value={productData.description}
                         />
                         <select
                             className="category-select form-select mb-4"
@@ -128,6 +146,7 @@ export default function AddNewProduct() {
                             required
                             min="0"
                             onChange={(e) => setProductData({ ...productData, discount: e.target.valueAsNumber })}
+                            value={productData.discount}
                         />
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
                         <input
@@ -136,6 +155,8 @@ export default function AddNewProduct() {
                             placeholder="Please Enter Product Image"
                             required
                             onChange={(e) => setProductData({ ...productData, image: e.target.files[0] })}
+                            ref={productImageFileElementRef}
+                            value={productImageFileElementRef.current?.value}
                         />
                         <h6 className="mb-3 fw-bold">Please Select Product Gallery Images</h6>
                         <input
@@ -145,6 +166,8 @@ export default function AddNewProduct() {
                             required
                             multiple
                             onChange={(e) => setProductData({ ...productData, galleryImages: e.target.files })}
+                            value={productGalleryImagesFilesElementRef.current?.value}
+                            ref={productGalleryImagesFilesElementRef}
                         />
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
@@ -168,7 +191,7 @@ export default function AddNewProduct() {
                         </button>}
                         {successMsg && <button
                             type="button"
-                            className="btn btn-success w-75 d-block mx-auto p-2"
+                            className="btn btn-success w-75 d-block mx-auto p-2 global-button"
                             disabled
                         >
                             {successMsg}
