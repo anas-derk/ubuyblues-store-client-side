@@ -142,17 +142,16 @@ export default function UpdateAndDeleteProducts() {
             const res = await axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Deleting Product Process It Successfuly ...") {
-                setSuccessMsg(result);
+            if (!result.isError) {
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
-                    setAllProductsData(allProductsData.filter((product) => product._id !== productId));
+                    setAllProductsInsideThePage(allProductsInsideThePage.filter((product) => product._id !== productId));
                     clearTimeout(successTimeout);
                 }, 1500);
             }
         }
         catch (err) {
-            console.log(err);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
