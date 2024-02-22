@@ -104,8 +104,10 @@ export default function UpdateAndDeleteProducts() {
             setIsFilteringProductsStatus(true);
             let filteringString = getFilteringString(filters);
             const result = await getProductsCount(filteringString);
+            console.log(result);
             if (result > 0) {
                 const result1 = await getAllProductsInsideThePage(1, pageSize, filteringString);
+            console.log(result1);
                 setAllProductsInsideThePage(result1);
                 setTotalPagesCount(Math.ceil(result / pageSize));
                 setIsFilteringProductsStatus(false);
@@ -346,7 +348,7 @@ export default function UpdateAndDeleteProducts() {
                                     <option value="" hidden>Pleae Select Category</option>
                                     <option value="">All</option>
                                     {allCategories.map((category) => (
-                                        <option value={category._id}>{category.name}</option>
+                                        <option value={category.name} key={category._id}>{category.name}</option>
                                     ))}
                                 </select>
                             </div>
