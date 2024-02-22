@@ -16,6 +16,8 @@ export default function UpdateAndDeleteProducts() {
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
+    const [isFilteringProductsStatus, setIsFilteringProductsStatus] = useState(false);
+
     const [allCategories, setAllCategories] = useState([]);
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
@@ -46,6 +48,10 @@ export default function UpdateAndDeleteProducts() {
 
     const [pageNumber, setPageNumber] = useState(0);
 
+    const [filters, setFilters] = useState({
+        category: "",
+    });
+
     const pageSize = 5;
 
     useEffect(() => {
@@ -65,9 +71,9 @@ export default function UpdateAndDeleteProducts() {
             });
     }, []);
 
-    const getProductsCount = async () => {
+    const getProductsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`);
             const result = await res.data;
             return result;
         }
@@ -76,13 +82,41 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
-    const getAllProductsInsideThePage = async (pageNumber, pageSize) => {
+    const getAllProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
             return await res.data;
         }
         catch (err) {
             throw Error(err);
+        }
+    }
+
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.category) filteringString += `category=${filters.category}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
+    const filterProductsByCategory = async () => {
+        try {
+            setIsFilteringProductsStatus(true);
+            let filteringString = getFilteringString(filters);
+            const result = await getProductsCount(filteringString);
+            if (result > 0) {
+                const result1 = await getAllProductsInsideThePage(1, pageSize, filteringString);
+                setAllProductsInsideThePage(result1);
+                setTotalPagesCount(Math.ceil(result / pageSize));
+                setIsFilteringProductsStatus(false);
+            } else {
+                setAllProductsInsideThePage([]);
+                setTotalPagesCount(0);
+                setIsFilteringProductsStatus(false);
+            }
+        }
+        catch (err) {
+            console.log(err);
         }
     }
 
@@ -216,74 +250,6 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
-    const paginationBar = () => {
-        const paginationButtons = [];
-        for (let i = 1; i <= totalPagesCount; i++) {
-            if (i < 11) {
-                paginationButtons.push(
-                    <button
-                        key={i}
-                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
-                        onClick={async () => {
-                            setAllProductsInsideThePage(await getAllProductsInsideThePage(i, pageSize));
-                            setCurrentPage(i);
-                        }}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        if (totalPagesCount > 10) {
-            paginationButtons.push(
-                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
-            );
-            paginationButtons.push(
-                <button
-                    key={totalPagesCount}
-                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => {
-                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                    }}
-                >
-                    {totalPagesCount}
-                </button>
-            );
-        }
-        return (
-            <section className="pagination d-flex justify-content-center align-items-center">
-                {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon"
-                    onClick={getPreviousPage}
-                />}
-                {paginationButtons}
-                {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className="next-page-icon pagination-icon me-3"
-                    onClick={getNextPage}
-                />}
-                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
-                <form
-                    className="navigate-to-specific-page-form w-25"
-                    onSubmit={async (e) => {
-                        e.preventDefault();
-                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                    }}
-                >
-                    <input
-                        type="number"
-                        className="form-control p-1 ps-2 page-number-input"
-                        placeholder="Enter Page Number"
-                        min="1"
-                        max={totalPagesCount}
-                        onChange={(e) => setPageNumber(e.target.valueAsNumber)}
-                    />
-                </form>
-            </section>
-        );
-    }
-
     return (
         <div className="update-and-delete-product admin-dashboard">
             <Head>
@@ -367,7 +333,38 @@ export default function UpdateAndDeleteProducts() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In Your Update / Delete Products Page
                     </h1>
-                    {allProductsInsideThePage.length > 0 ? <div className="products-box w-100">
+                    <section className="filters mb-3 bg-white border-3 border-info p-3 text-start w-100">
+                        <h5 className="section-name fw-bold text-center">Filters: </h5>
+                        <hr />
+                        <div className="row mb-4">
+                            <div className="col-md-12 d-flex align-items-center">
+                                <h6 className="me-2 mb-0 fw-bold text-center">Category</h6>
+                                <select
+                                    className="select-order-status form-select"
+                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                                >
+                                    <option value="" hidden>Pleae Select Category</option>
+                                    <option value="">All</option>
+                                    {allCategories.map((category) => (
+                                        <option value={category._id}>{category.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        {!isFilteringProductsStatus && <button
+                            className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
+                            onClick={() => filterProductsByCategory()}
+                        >
+                            Filter
+                        </button>}
+                        {isFilteringProductsStatus && <button
+                            className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
+                            disabled
+                        >
+                            Filtering ...
+                        </button>}
+                    </section>
+                    {allProductsInsideThePage.length > 0 && !isFilteringProductsStatus && <div className="products-box w-100">
                         <table className="products-table mb-4 managment-table bg-white">
                             <thead>
                                 <tr>
@@ -519,8 +516,11 @@ export default function UpdateAndDeleteProducts() {
                                 ))}
                             </tbody>
                         </table>
-                        {/* {totalPagesCount > 0 && paginationBar()} */}
-                    </div> : <p className="alert alert-danger w-75 mx-auto">Sorry, Not Found Any Products !!</p>}
+                    </div>}
+                    {allProductsInsideThePage.length === 0 && !isFilteringProductsStatus && <p className="alert alert-danger">Sorry, Can't Find Any Products !!</p>}
+                    {isFilteringProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                        <span className="loader-table-data"></span>
+                    </div>}
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

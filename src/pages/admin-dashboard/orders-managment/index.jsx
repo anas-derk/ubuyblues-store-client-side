@@ -361,13 +361,13 @@ export default function OrdersManagment() {
                                     </div>
                                 </div>
                                 {!isFilteringOrdersStatus && <button
-                                    className="btn btn-success d-block w-25 mx-auto mt-2"
+                                    className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
                                     onClick={() => filterOrders()}
                                 >
                                     Filter
                                 </button>}
                                 {isFilteringOrdersStatus && <button
-                                    className="btn btn-success d-block w-25 mx-auto mt-2"
+                                    className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
                                     disabled
                                 >
                                     Filtering ...
@@ -417,13 +417,13 @@ export default function OrdersManagment() {
                                                 <td>{getDateFormated(order.added_date)}</td>
                                                 <td>
                                                     {!isUpdatingStatus && !isDeletingStatus && !order.isDeleted && orderIndex !== selectedOrderIndex && <button
-                                                        className="btn btn-info d-block mx-auto mb-3"
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
                                                         onClick={() => updateOrderData(orderIndex)}
                                                     >
                                                         Update
                                                     </button>}
                                                     {isUpdatingStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-info d-block mx-auto mb-3"
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Updating ...
@@ -435,25 +435,25 @@ export default function OrdersManagment() {
                                                         Success
                                                     </button>}
                                                     {!isUpdatingStatus && !isDeletingStatus && !order.isDeleted && orderIndex !== selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         onClick={() => deleteOrder(orderIndex)}
                                                     >
                                                         Delete
                                                     </button>}
                                                     {isDeletingStatus && !order.isDeleted && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Deleting ...
                                                     </button>}
                                                     {order.isDeleted && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Deleted Successful
                                                     </button>}
                                                     {isErrorStatus && orderIndex === selectedOrderIndex && <button
-                                                        className="btn btn-danger d-block mx-auto mb-3"
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
                                                         Sorry, Error In Process
