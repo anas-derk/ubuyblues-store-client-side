@@ -144,7 +144,6 @@ export default function AddNewProduct() {
                             className="form-control product-price-discount-field p-2 mb-4"
                             placeholder="Please Enter Discount"
                             required
-                            min="0"
                             onChange={(e) => setProductData({ ...productData, discount: e.target.valueAsNumber })}
                             value={productData.discount}
                         />
