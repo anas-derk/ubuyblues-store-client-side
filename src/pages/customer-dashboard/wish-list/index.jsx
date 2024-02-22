@@ -96,7 +96,7 @@ export default function CustomerWishList() {
     }
 
     return (
-        <div className="customer-wish-list customer-dashboard">
+        <div className="customer-wish-list customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Wish List</title>
             </Head>

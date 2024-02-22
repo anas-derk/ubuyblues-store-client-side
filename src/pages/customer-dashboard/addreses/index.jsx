@@ -49,7 +49,7 @@ export default function CustomerAddreses() {
     }
 
     return (
-        <div className="customer-addreses customer-dashboard">
+        <div className="customer-addreses customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Addreses</title>
             </Head>

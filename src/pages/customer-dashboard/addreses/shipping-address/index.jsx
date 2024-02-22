@@ -197,7 +197,7 @@ export default function CustomerBillingAddress() {
     }
 
     return (
-        <div className="customer-shipping-address customer-dashboard">
+        <div className="customer-shipping-address customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Shipping Address</title>
             </Head>

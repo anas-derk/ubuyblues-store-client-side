@@ -228,7 +228,7 @@ export default function CustomerOrders() {
     }
 
     return (
-        <div className="customer-orders-managment customer-dashboard">
+        <div className="customer-orders-managment customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Orders</title>
             </Head>

@@ -205,7 +205,7 @@ export default function CustomerAccountDetails() {
     }
 
     return (
-        <div className="customer-account-details customer-dashboard">
+        <div className="customer-account-details customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Account Details</title>
             </Head>
