@@ -249,32 +249,32 @@ textarea {
   }
 }
 
-.pagination .current-page-number-and-count-of-pages {
+.pagination-bar .current-page-number-and-count-of-pages {
   font-size: 14px;
 }
 
-.pagination .pagination-icon {
+.pagination-bar .pagination-icon {
   font-size: 25px;
   cursor: pointer;
 }
 
-.pagination .pagination-icon:hover {
+.pagination-bar .pagination-icon:hover {
   background-color: #dc3545;
   color: #FFF;
   font-size: 25px;
 }
 
-.pagination .pagination-button {
+.pagination-bar .pagination-button {
   background: #DDD;
   font-size: 14px;
 }
 
-.pagination .pagination-button.selection {
+.pagination-bar .pagination-button.selection {
   background-color: var(--main-color-one);
   color: #FFF;
 }
 
-.pagination .navigate-to-specific-page-form .page-number-input {
+.pagination-bar .navigate-to-specific-page-form .page-number-input {
   font-size: 14px;
 }
 

@@ -2,11 +2,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Link from "next/link";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function OrdersManagment() {
 
@@ -32,8 +32,6 @@ export default function OrdersManagment() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
-    const [pageNumber, setPageNumber] = useState(0);
-
     const [filters, setFilters] = useState({
         orderNumber: -1,
         orderId: "",
@@ -44,7 +42,7 @@ export default function OrdersManagment() {
 
     const router = useRouter();
 
-    const pageSize = 5;
+    const pageSize = 1;
 
     useEffect(() => {
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
@@ -82,7 +80,7 @@ export default function OrdersManagment() {
             return await res.data;
         }
         catch (err) {
-            throw Error(err);
+            console.log(err)
         }
     }
 
@@ -111,78 +109,11 @@ export default function OrdersManagment() {
         setIsFilteringOrdersStatus(false);
     }
 
-    const paginationBar = () => {
-        const paginationButtons = [];
-        for (let i = 1; i <= totalPagesCount; i++) {
-            if (i < 11) {
-                paginationButtons.push(
-                    <button
-                        key={i}
-                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
-                        onClick={async () => {
-                            setIsFilteringOrdersStatus(true);
-                            setAllOrdersInsideThePage(await getAllOrdersInsideThePage(i, pageSize));
-                            setCurrentPage(i);
-                            setIsFilteringOrdersStatus(false);
-                        }}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        if (totalPagesCount > 10) {
-            paginationButtons.push(
-                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
-            );
-            paginationButtons.push(
-                <button
-                    key={totalPagesCount}
-                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => {
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
-                    }}
-                >
-                    {totalPagesCount}
-                </button>
-            );
-        }
-        return (
-            <section className="pagination d-flex justify-content-center align-items-center">
-                {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon"
-                    onClick={getPreviousPage}
-                />}
-                {paginationButtons}
-                {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className="next-page-icon pagination-icon me-3"
-                    onClick={getNextPage}
-                />}
-                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
-                <form
-                    className="navigate-to-specific-page-form w-25"
-                    onSubmit={async (e) => {
-                        e.preventDefault();
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
-                    }}
-                >
-                    <input
-                        type="number"
-                        className="form-control p-1 ps-2 page-number-input"
-                        placeholder="Enter Page Number"
-                        min="1"
-                        max={totalPagesCount}
-                        onChange={(e) => setPageNumber(e.target.valueAsNumber)}
-                    />
-                </form>
-            </section>
-        );
+    const getSpecificPage = async (pageNumber) => {
+        setIsFilteringOrdersStatus(true);
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+        setCurrentPage(pageNumber);
+        setIsFilteringOrdersStatus(false);
     }
 
     const getFilteringString = (filters) => {
@@ -474,7 +405,15 @@ export default function OrdersManagment() {
                                 <span className="loader-table-data"></span>
                             </div>}
                         </div>
-                        {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()}
+                        {totalPagesCount > 0 && !isFilteringOrdersStatus &&
+                            <PaginationBar
+                                totalPagesCount={totalPagesCount}
+                                currentPage={currentPage}
+                                getPreviousPage={getPreviousPage}
+                                getNextPage={getNextPage}
+                                getSpecificPage={getSpecificPage}
+                            />
+                        }
                     </div>
                 </section>
                 {/* End Content Section */}
