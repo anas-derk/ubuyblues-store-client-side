@@ -118,7 +118,6 @@ export default function UpdateAndDeleteCategories() {
             }
         }
         catch (err) {
-            console.log(err);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -136,9 +135,20 @@ export default function UpdateAndDeleteCategories() {
             setIsWaitStatus(false);
             if (!result.isError) {
                 setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(() => {
+                let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
-                    setAllCategories(result.newCategoiesList);
+                    setIsWaitGetCategoriesStatus(true);
+                    setCurrentPage(1);
+                    const result = await getCategoriesCount();
+                    if (result > 0) {
+                        const result1 = await getAllCategoriesInsideThePage(1, pageSize);
+                        setAllCategoriesInsideThePage(result1);
+                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    } else {
+                        setAllCategoriesInsideThePage([]);
+                        setTotalPagesCount(0);
+                    }
+                    setIsWaitGetCategoriesStatus(false);
                     clearTimeout(successTimeout);
                 }, 1500);
             }

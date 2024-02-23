@@ -146,15 +146,25 @@ export default function UpdateAndDeleteStores() {
             setIsWaitStatus(false);
             if (!result.isError) {
                 setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(() => {
+                let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
-                    setAllBrands(result.newBrandsList);
+                    setIsWaitGetBrandsStatus(true);
+                    setCurrentPage(1);
+                    const result = await getBrandsCount();
+                    if (result > 0) {
+                        const result1 = await getAllBrandsInsideThePage(1, pageSize);
+                        setAllBrandsInsideThePage(result1);
+                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    } else {
+                        setAllBrandsInsideThePage([]);
+                        setTotalPagesCount(0);
+                    }
+                    setIsWaitGetBrandsStatus(false);
                     clearTimeout(successTimeout);
                 }, 1500);
             }
         }
         catch (err) {
-            console.log(err);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
