@@ -5,6 +5,8 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import { useRouter } from "next/router";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function UpdateAndDeleteStores() {
 
@@ -12,7 +14,9 @@ export default function UpdateAndDeleteStores() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [allBrands, setAllBrands] = useState([]);
+    const [isWaitGetBrandsStatus, setIsWaitGetBrandsStatus] = useState(false);
+
+    const [allBrandsInsideThePage, setAllBrandsInsideThePage] = useState([]);
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
@@ -20,17 +24,75 @@ export default function UpdateAndDeleteStores() {
 
     const [successMsg, setSuccessMsg] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [totalPagesCount, setTotalPagesCount] = useState(0);
+
+    const router = useRouter();
+
+    const pageSize = 1;
+
     useEffect(() => {
-        axios.get(`${process.env.BASE_API_URL}/brands/all-brands`)
-            .then((res) => {
-                setAllBrands(res.data);
-                setIsLoadingPage(false);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
+        const adminId = localStorage.getItem("asfour-store-admin-user-id");
+        if (!adminId) {
+            router.push("/admin-dashboard/login");
+        } else {
+            getBrandsCount()
+                .then(async (result) => {
+                    if (result > 0) {
+                        const result1 = await getAllBrandsInsideThePage(1, pageSize);
+                        setAllBrandsInsideThePage(result1);
+                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    }
+                    setIsLoadingPage(false);
+                }).catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
+        }
     }, []);
+
+    const getBrandsCount = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/brands-count`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllBrandsInsideThePage = async (pageNumber, pageSize) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getPreviousPage = async () => {
+        setIsWaitGetBrandsStatus(true);
+        const newCurrentPage = currentPage - 1;
+        setAllBrandsInsideThePage(await getAllBrandsInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetBrandsStatus(false);
+    }
+
+    const getNextPage = async () => {
+        setIsWaitGetBrandsStatus(true);
+        const newCurrentPage = currentPage + 1;
+        setAllBrandsInsideThePage(await getAllBrandsInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetBrandsStatus(false);
+    }
+
+    const getSpecificPage = async (pageNumber) => {
+        setIsWaitGetBrandsStatus(true);
+        setAllBrandsInsideThePage(await getAllBrandsInsideThePage(pageNumber, pageSize));
+        setIsWaitGetBrandsStatus(false);
+    }
 
     const changeBrandData = (brandIndex, fieldName, newValue) => {
         let brandsDataTemp = allBrands;
@@ -113,7 +175,7 @@ export default function UpdateAndDeleteStores() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In Your Update / Delete Brands Page
                     </h1>
-                    {allBrands.length > 0 ? <div className="categories-box w-100">
+                    {allBrandsInsideThePage.length > 0 && !isWaitGetBrandsStatus && <section className="categories-box w-100">
                         <table className="brands-table mb-4 managment-table bg-white w-100">
                             <thead>
                                 <tr>
@@ -123,7 +185,7 @@ export default function UpdateAndDeleteStores() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {allBrands.map((brand, index) => (
+                                {allBrandsInsideThePage.map((brand, index) => (
                                     <tr key={brand._id}>
                                         <td className="brand-title-cell">
                                             <input
@@ -182,7 +244,20 @@ export default function UpdateAndDeleteStores() {
                                 ))}
                             </tbody>
                         </table>
-                    </div> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Brands !!</p>}
+                    </section>}
+                    {allBrandsInsideThePage.length === 0 && !isWaitGetBrandsStatus && <p className="alert alert-danger">Sorry, Can't Find Any Categories !!</p>}
+                    {isWaitGetBrandsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                        <span className="loader-table-data"></span>
+                    </div>}
+                    {totalPagesCount > 0 && !isWaitGetBrandsStatus &&
+                        <PaginationBar
+                            totalPagesCount={totalPagesCount}
+                            currentPage={currentPage}
+                            getPreviousPage={getPreviousPage}
+                            getNextPage={getNextPage}
+                            getSpecificPage={getSpecificPage}
+                        />
+                    }
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

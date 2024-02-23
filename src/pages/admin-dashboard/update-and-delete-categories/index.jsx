@@ -30,7 +30,7 @@ export default function UpdateAndDeleteCategories() {
 
     const router = useRouter();
 
-    const pageSize = 5;
+    const pageSize = 1;
 
     useEffect(() => {
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
@@ -212,7 +212,7 @@ export default function UpdateAndDeleteCategories() {
                             </tbody>
                         </table>
                     </section>}
-                    {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
+                    {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger">Sorry, Can't Find Any Categories !!</p>}
                     {isWaitGetCategoriesStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
