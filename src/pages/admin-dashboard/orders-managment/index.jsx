@@ -80,7 +80,7 @@ export default function OrdersManagment() {
             return await res.data;
         }
         catch (err) {
-            console.log(err)
+            throw Error(err);
         }
     }
 

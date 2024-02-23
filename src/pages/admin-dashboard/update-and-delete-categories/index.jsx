@@ -5,6 +5,8 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import { useRouter } from "next/router";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function UpdateAndDeleteCategories() {
 
@@ -12,7 +14,9 @@ export default function UpdateAndDeleteCategories() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [allCategories, setAllCategories] = useState([]);
+    const [isWaitGetCategoriesStatus, setIsWaitGetCategoriesStatus] = useState(false);
+
+    const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
@@ -20,17 +24,75 @@ export default function UpdateAndDeleteCategories() {
 
     const [successMsg, setSuccessMsg] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [totalPagesCount, setTotalPagesCount] = useState(0);
+
+    const router = useRouter();
+
+    const pageSize = 5;
+
     useEffect(() => {
-        axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
-            .then((res) => {
-                setAllCategories(res.data);
-                setIsLoadingPage(false);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
+        const adminId = localStorage.getItem("asfour-store-admin-user-id");
+        if (!adminId) {
+            router.push("/admin-dashboard/login");
+        } else {
+            getCategoriesCount()
+                .then(async (result) => {
+                    if (result > 0) {
+                        const result1 = await getAllCategoriesInsideThePage(1, pageSize);
+                        setAllCategoriesInsideThePage(result1);
+                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    }
+                    setIsLoadingPage(false);
+                }).catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
+        }
     }, []);
+
+    const getCategoriesCount = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllCategoriesInsideThePage = async (pageNumber, pageSize) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getPreviousPage = async () => {
+        setIsWaitGetCategoriesStatus(true);
+        const newCurrentPage = currentPage - 1;
+        setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetCategoriesStatus(false);
+    }
+
+    const getNextPage = async () => {
+        setIsWaitGetCategoriesStatus(true);
+        const newCurrentPage = currentPage + 1;
+        setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetCategoriesStatus(false);
+    }
+
+    const getSpecificPage = async (pageNumber) => {
+        setIsWaitGetCategoriesStatus(true);
+        setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(pageNumber, pageSize));
+        setIsWaitGetCategoriesStatus(false);
+    }
 
     const changeCategoryName = (categoryIndex, newValue) => {
         let categoriesTemp = allCategories;
@@ -101,7 +163,7 @@ export default function UpdateAndDeleteCategories() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In Your Update / Delete Categories Page
                     </h1>
-                    {allCategories.length > 0 ? <div className="categories-box w-100">
+                    {allCategoriesInsideThePage.length > 0 && !isWaitGetCategoriesStatus && <section className="categories-box w-100">
                         <table className="products-table mb-4 managment-table bg-white w-100">
                             <thead>
                                 <tr>
@@ -110,7 +172,7 @@ export default function UpdateAndDeleteCategories() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {allCategories.map((category, index) => (
+                                {allCategoriesInsideThePage.map((category, index) => (
                                     <tr key={category._id}>
                                         <td className="product-name-cell">
                                             <input
@@ -149,7 +211,20 @@ export default function UpdateAndDeleteCategories() {
                                 ))}
                             </tbody>
                         </table>
-                    </div> : <p className="alert alert-danger w-100 mx-auto">Sorry, Not Found Any Categories !!</p>}
+                    </section>}
+                    {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
+                    {isWaitGetCategoriesStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                        <span className="loader-table-data"></span>
+                    </div>}
+                    {totalPagesCount > 0 && !isWaitGetCategoriesStatus &&
+                        <PaginationBar
+                            totalPagesCount={totalPagesCount}
+                            currentPage={currentPage}
+                            getPreviousPage={getPreviousPage}
+                            getNextPage={getNextPage}
+                            getSpecificPage={getSpecificPage}
+                        />
+                    }
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
