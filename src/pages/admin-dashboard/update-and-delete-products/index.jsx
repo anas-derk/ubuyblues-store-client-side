@@ -56,7 +56,7 @@ export default function UpdateAndDeleteProducts() {
         category: "",
     });
 
-    const pageSize = 5;
+    const pageSize = 10;
 
     useEffect(() => {
         getProductsCount()

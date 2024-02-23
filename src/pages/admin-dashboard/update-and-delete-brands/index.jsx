@@ -36,7 +36,7 @@ export default function UpdateAndDeleteStores() {
 
     const router = useRouter();
 
-    const pageSize = 5;
+    const pageSize = 10;
 
     useEffect(() => {
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
