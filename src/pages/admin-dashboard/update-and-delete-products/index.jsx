@@ -123,12 +123,11 @@ export default function UpdateAndDeleteProducts() {
     const filterProductsByCategory = async () => {
         try {
             setIsFilteringProductsStatus(true);
+            setCurrentPage(1);
             let filteringString = getFilteringString(filters);
             const result = await getProductsCount(filteringString);
-            console.log(result);
             if (result > 0) {
                 const result1 = await getAllProductsInsideThePage(1, pageSize, filteringString);
-                console.log(result1);
                 setAllProductsInsideThePage(result1);
                 setTotalPagesCount(Math.ceil(result / pageSize));
                 setIsFilteringProductsStatus(false);
