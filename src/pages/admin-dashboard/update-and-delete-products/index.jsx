@@ -3,10 +3,10 @@ import { PiHandWavingThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { GrFormClose } from "react-icons/gr";
-import { BsArrowRightSquare } from "react-icons/bs";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function UpdateAndDeleteProducts() {
 
@@ -46,13 +46,11 @@ export default function UpdateAndDeleteProducts() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
-    const [pageNumber, setPageNumber] = useState(0);
-
     const [filters, setFilters] = useState({
         category: "",
     });
 
-    const pageSize = 5;
+    const pageSize = 1;
 
     useEffect(() => {
         getProductsCount()
@@ -92,6 +90,29 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
+    const getPreviousPage = async () => {
+        setIsFilteringProductsStatus(true);
+        const newCurrentPage = currentPage - 1;
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsFilteringProductsStatus(false);
+    }
+
+    const getNextPage = async () => {
+        setIsFilteringProductsStatus(true);
+        const newCurrentPage = currentPage + 1;
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
+        setCurrentPage(newCurrentPage);
+        setIsFilteringProductsStatus(false);
+    }
+
+    const getSpecificPage = async (pageNumber) => {
+        setIsFilteringProductsStatus(true);
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
+        setCurrentPage(pageNumber);
+        setIsFilteringProductsStatus(false);
+    }
+
     const getFilteringString = (filters) => {
         let filteringString = "";
         if (filters.category) filteringString += `category=${filters.category}&`;
@@ -107,7 +128,7 @@ export default function UpdateAndDeleteProducts() {
             console.log(result);
             if (result > 0) {
                 const result1 = await getAllProductsInsideThePage(1, pageSize, filteringString);
-            console.log(result1);
+                console.log(result1);
                 setAllProductsInsideThePage(result1);
                 setTotalPagesCount(Math.ceil(result / pageSize));
                 setIsFilteringProductsStatus(false);
@@ -522,6 +543,15 @@ export default function UpdateAndDeleteProducts() {
                     {isFilteringProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
+                    {totalPagesCount > 0 && !isFilteringProductsStatus &&
+                        <PaginationBar
+                            totalPagesCount={totalPagesCount}
+                            currentPage={currentPage}
+                            getPreviousPage={getPreviousPage}
+                            getNextPage={getNextPage}
+                            getSpecificPage={getSpecificPage}
+                        />
+                    }
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

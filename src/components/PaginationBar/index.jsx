@@ -67,7 +67,7 @@ export default function PaginationBar({ totalPagesCount, currentPage, getPreviou
     }
 
     return (
-        <section className="pagination-bar d-flex justify-content-center align-items-center">
+        <section className="pagination-bar d-flex justify-content-center align-items-center w-100">
             {getPaginationButtons()}
         </section>
     );
