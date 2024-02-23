@@ -20,9 +20,15 @@ export default function UpdateAndDeleteStores() {
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
+    const [isWaitChangeBrandImage, setIsWaitChangeBrandImage] = useState(false);
+
     const [errorMsg, setErrorMsg] = useState(false);
 
+    const [errorChangeBrandImageMsg, setErrorChangeBrandImageMsg] = useState(false);
+
     const [successMsg, setSuccessMsg] = useState(false);
+
+    const [successChangeBrandImageMsg, setSuccessChangeBrandImageMsg] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -96,19 +102,31 @@ export default function UpdateAndDeleteStores() {
     }
 
     const changeBrandData = (brandIndex, fieldName, newValue) => {
-        let brandsDataTemp = allBrands;
+        let brandsDataTemp = allBrandsInsideThePage;
         brandsDataTemp[brandIndex][fieldName] = newValue;
-        setAllBrands(brandsDataTemp);
+        setAllBrandsInsideThePage(brandsDataTemp);
     }
 
     const updateBrandImage = async (brandIndex) => {
         try {
+            setIsWaitChangeBrandImage(true);
             let formData = new FormData();
             formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
             await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData);
+            setIsWaitChangeBrandImage(false);
+            setSuccessChangeBrandImageMsg("Updating Brand Image Has Been Successfully !!");
+            let successTimeout = setTimeout(() => {
+                setSuccessChangeBrandImageMsg("");
+                clearTimeout(successTimeout);
+            }, 1500);
         }
         catch (err) {
-            console.log(err);
+            setIsWaitChangeBrandImage(false);
+            setErrorChangeBrandImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorChangeBrandImageMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -220,12 +238,23 @@ export default function UpdateAndDeleteStores() {
                                                 className="form-control d-block mx-auto mb-3"
                                                 onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
                                             />
-                                            <button
-                                                className="btn btn-success d-block mx-auto w-50 global-button"
-                                                onClick={() => updateBrandImage(index)}
-                                            >
-                                                Change
-                                            </button>
+                                            {!isWaitChangeBrandImage && !errorChangeBrandImageMsg && !successChangeBrandImageMsg &&
+                                                <button
+                                                    className="btn btn-success d-block mb-3 w-50 mx-auto global-button"
+                                                    onClick={() => updateBrandImage(index)}
+                                                >Change</button>
+                                            }
+                                            {isWaitChangeBrandImage && <button
+                                                className="btn btn-info d-block mb-3 mx-auto global-button"
+                                            >Please Waiting</button>}
+                                            {successChangeBrandImageMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                disabled
+                                            >{successChangeBrandImageMsg}</button>}
+                                            {errorChangeBrandImageMsg && <button
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
+                                            >{errorChangeBrandImageMsg}</button>}
                                         </td>
                                         <td className="update-cell">
                                             {!isWaitStatus && !errorMsg && !successMsg && <>
