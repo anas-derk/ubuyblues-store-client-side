@@ -104,8 +104,8 @@ export default function UpdateAndDeleteCategories() {
     const updateCategory = async (categoryIndex) => {
         setIsWaitStatus(true);
         try {
-            const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategories[categoryIndex]._id}`, {
-                newCategoryName: allCategories[categoryIndex].name,
+            const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategoriesInsideThePage[categoryIndex]._id}`, {
+                newCategoryName: allCategoriesInsideThePage[categoryIndex].name,
             });
             const result = await res.data;
             setIsWaitStatus(false);
@@ -118,6 +118,7 @@ export default function UpdateAndDeleteCategories() {
             }
         }
         catch (err) {
+            console.log(err);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {

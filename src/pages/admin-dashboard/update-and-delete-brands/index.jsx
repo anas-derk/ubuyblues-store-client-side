@@ -104,8 +104,8 @@ export default function UpdateAndDeleteStores() {
     const updateBrandImage = async (brandIndex) => {
         try {
             let formData = new FormData();
-            formData.append("brandImage", allBrands[brandIndex].image);
-            await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrands[brandIndex]._id}`, formData);
+            formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
+            await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData);
         }
         catch (err) {
             console.log(err);
@@ -115,8 +115,8 @@ export default function UpdateAndDeleteStores() {
     const updateBrandInfo = async (brandIndex) => {
         setIsWaitStatus(true);
         try {
-            const res = await axios.put(`${process.env.BASE_API_URL}/brands/${allBrands[brandIndex]._id}`, {
-                newBrandTitle: allBrands[brandIndex].title,
+            const res = await axios.put(`${process.env.BASE_API_URL}/brands/${allBrandsInsideThePage[brandIndex]._id}`, {
+                newBrandTitle: allBrandsInsideThePage[brandIndex].title,
             });
             const result = await res.data;
             setIsWaitStatus(false);
