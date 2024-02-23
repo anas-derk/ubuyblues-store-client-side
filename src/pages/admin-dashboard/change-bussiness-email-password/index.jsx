@@ -9,7 +9,7 @@ import validations from "../../../../public/global_functions/validations";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
-export default function UpdateBussinessEmailPassword() {
+export default function ChangeBussinessEmailPassword() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -152,7 +152,7 @@ export default function UpdateBussinessEmailPassword() {
     }
 
     return (
-        <div className="update-bussiness-email-password admin-dashboard">
+        <div className="change-bussiness-email-password admin-dashboard">
             <Head>
                 <title>Ubuyblues Store - Change Bussiness Email Password</title>
             </Head>
@@ -163,7 +163,7 @@ export default function UpdateBussinessEmailPassword() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In  Change Bussiness Email Password Page
                     </h1>
-                    <form className="update-bussiness-email-password-form w-50" onSubmit={changeBussinessEmailPassword}>
+                    <form className="change-bussiness-email-password-form w-50" onSubmit={changeBussinessEmailPassword}>
                         <section className="email mb-4">
                             <input
                                 type="text"

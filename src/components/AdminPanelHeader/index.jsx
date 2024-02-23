@@ -23,6 +23,13 @@ export default function AdminPanelHeader() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
+                            <NavDropdown title="Global" id="brands-nav-dropdown">
+                                <NavDropdown.Item href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="/admin-dashboard/change-bussiness-email-password" as={Link}>
+                                    Change Bussiness Email Password
+                                </NavDropdown.Item>
+                            </NavDropdown>
                             <NavDropdown title="Products" id="products-nav-dropdown">
                                 <NavDropdown.Item href="/admin-dashboard/add-new-product" as={Link}>Add New</NavDropdown.Item>
                                 <NavDropdown.Divider />
@@ -47,8 +54,6 @@ export default function AdminPanelHeader() {
                                     Update / Delete
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</Nav.Link>
-                            <Nav.Link href="/admin-dashboard/change-bussiness-email-password" as={Link}>Change Bussiness Email Password</Nav.Link>
                             <button className="btn btn-danger logout-btn" onClick={adminLogout}>
                                 <MdOutlineLogout className="me-2" />
                                 <span>Logout</span>
