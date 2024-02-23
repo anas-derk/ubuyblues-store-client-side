@@ -93,7 +93,7 @@ export default function UpdateAndDeleteProducts() {
     const getPreviousPage = async () => {
         setIsFilteringProductsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize, filters));
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
         setCurrentPage(newCurrentPage);
         setIsFilteringProductsStatus(false);
     }
@@ -101,14 +101,14 @@ export default function UpdateAndDeleteProducts() {
     const getNextPage = async () => {
         setIsFilteringProductsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize, filters));
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
         setCurrentPage(newCurrentPage);
         setIsFilteringProductsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringProductsStatus(true);
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize, filters));
+        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
         setCurrentPage(pageNumber);
         setIsFilteringProductsStatus(false);
     }
