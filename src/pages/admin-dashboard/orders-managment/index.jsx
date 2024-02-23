@@ -96,7 +96,7 @@ export default function OrdersManagment() {
     const getPreviousPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize));
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
@@ -104,14 +104,14 @@ export default function OrdersManagment() {
     const getNextPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize));
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringOrdersStatus(true);
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
         setCurrentPage(pageNumber);
         setIsFilteringOrdersStatus(false);
     }
@@ -130,6 +130,7 @@ export default function OrdersManagment() {
     const filterOrders = async () => {
         try {
             setIsFilteringOrdersStatus(true);
+            setCurrentPage(1);
             let filteringString = getFilteringString(filters);
             const result = await getOrdersCount(filteringString);
             if (result > 0) {
