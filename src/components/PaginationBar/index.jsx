@@ -28,7 +28,7 @@ export default function PaginationBar({ totalPagesCount, currentPage, getPreviou
                 <button
                     key={totalPagesCount}
                     className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => await getSpecificPage(i)}
+                    onClick={async () => await getSpecificPage(totalPagesCount)}
                 >
                     {totalPagesCount}
                 </button>

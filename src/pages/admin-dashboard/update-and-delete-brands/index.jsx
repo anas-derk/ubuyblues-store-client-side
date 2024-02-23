@@ -89,8 +89,9 @@ export default function UpdateAndDeleteStores() {
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsWaitGetBrandsStatus(true);
+        setIsWaitGetBrandsStatus(true)
         setAllBrandsInsideThePage(await getAllBrandsInsideThePage(pageNumber, pageSize));
+        setCurrentPage(pageNumber);
         setIsWaitGetBrandsStatus(false);
     }
 

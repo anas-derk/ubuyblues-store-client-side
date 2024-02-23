@@ -91,6 +91,7 @@ export default function UpdateAndDeleteCategories() {
     const getSpecificPage = async (pageNumber) => {
         setIsWaitGetCategoriesStatus(true);
         setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(pageNumber, pageSize));
+        setCurrentPage(pageNumber);
         setIsWaitGetCategoriesStatus(false);
     }
 
