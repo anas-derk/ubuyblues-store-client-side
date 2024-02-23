@@ -30,7 +30,7 @@ export default function UpdateAndDeleteCategories() {
 
     const router = useRouter();
 
-    const pageSize = 1;
+    const pageSize = 5;
 
     useEffect(() => {
         const adminId = localStorage.getItem("asfour-store-admin-user-id");
