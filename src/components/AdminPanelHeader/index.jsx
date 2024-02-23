@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router.js";
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 export default function AdminPanelHeader() {
 
@@ -48,6 +48,7 @@ export default function AdminPanelHeader() {
                                 </NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</Nav.Link>
+                            <Nav.Link href="/admin-dashboard/change-bussiness-email-password" as={Link}>Change Bussiness Email Password</Nav.Link>
                             <button className="btn btn-danger logout-btn" onClick={adminLogout}>
                                 <MdOutlineLogout className="me-2" />
                                 <span>Logout</span>
