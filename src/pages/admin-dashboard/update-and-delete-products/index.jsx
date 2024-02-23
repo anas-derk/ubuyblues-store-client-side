@@ -22,9 +22,15 @@ export default function UpdateAndDeleteProducts() {
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
+    const [isWaitChangeProductImage, setIsWaitChangeProductImage] = useState(false);
+
     const [errorMsg, setErrorMsg] = useState(false);
 
+    const [errorChangeProductImageMsg, setErrorChangeProductImageMsg] = useState(false);
+
     const [successMsg, setSuccessMsg] = useState(false);
+
+    const [successChangeProductImageMsg, setSuccessChangeProductImageMsg] = useState(false);
 
     const [productIndex, setProductIndex] = useState(-1);
 
@@ -150,12 +156,25 @@ export default function UpdateAndDeleteProducts() {
 
     const updateProductImage = async (productIndex) => {
         try {
+            setIsWaitChangeProductImage(true);
             let formData = new FormData();
             formData.append("productImage", allProductsInsideThePage[productIndex].image);
             await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData);
+            setIsWaitChangeProductImage(false);
+            setSuccessChangeProductImageMsg("Updating Product Image Has Been Successfully !!");
+            let successTimeout = setTimeout(() => {
+                setSuccessChangeProductImageMsg("");
+                clearTimeout(successTimeout);
+            }, 1500);
         }
         catch (err) {
             console.log(err);
+            setIsWaitChangeProductImage(false);
+            setErrorChangeProductImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorChangeProductImageMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -199,9 +218,20 @@ export default function UpdateAndDeleteProducts() {
             setIsWaitStatus(false);
             if (!result.isError) {
                 setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(() => {
+                let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
-                    setAllProductsInsideThePage(allProductsInsideThePage.filter((product) => product._id !== productId));
+                    setIsFilteringProductsStatus(true);
+                    setCurrentPage(1);
+                    const result = await getProductsCount();
+                    if (result > 0) {
+                        const result1 = await getAllProductsInsideThePage(1, pageSize);
+                        setAllProductsInsideThePage(result1);
+                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    } else {
+                        setAllProductsInsideThePage([]);
+                        setTotalPagesCount(0);
+                    }
+                    setIsFilteringProductsStatus(false);
                     clearTimeout(successTimeout);
                 }, 1500);
             }
@@ -497,12 +527,23 @@ export default function UpdateAndDeleteProducts() {
                                                 className="form-control d-block mx-auto mb-3"
                                                 onChange={(e) => changeProductData(index, "image", e.target.files[0])}
                                             />
-                                            <button
-                                                className="btn btn-success d-block mx-auto w-50 global-button"
-                                                onClick={() => updateProductImage(index)}
-                                            >
-                                                Change
-                                            </button>
+                                            {!isWaitChangeProductImage && !errorChangeProductImageMsg && !successChangeProductImageMsg &&
+                                                <button
+                                                    className="btn btn-success d-block mb-3 w-50 mx-auto global-button"
+                                                    onClick={() => updateProductImage(index)}
+                                                >Change</button>
+                                            }
+                                            {isWaitChangeProductImage && <button
+                                                className="btn btn-info d-block mb-3 mx-auto global-button"
+                                            >Please Waiting</button>}
+                                            {successChangeProductImageMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                disabled
+                                            >{successChangeProductImageMsg}</button>}
+                                            {errorChangeProductImageMsg && <button
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
+                                            >{errorChangeProductImageMsg}</button>}
                                         </td>
                                         <td className="update-cell">
                                             {!isWaitStatus && !errorMsg && !successMsg && <>
