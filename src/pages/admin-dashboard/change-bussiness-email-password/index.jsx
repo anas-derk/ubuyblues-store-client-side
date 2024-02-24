@@ -168,7 +168,7 @@ export default function ChangeBussinessEmailPassword() {
                             <input
                                 type="text"
                                 className={`p-2 form-control ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
-                                placeholder="Please Enter New Email Here"
+                                placeholder="Please Enter Bussiness Email Here"
                                 onChange={(e) => setEmail(e.target.value.trim())}
                                 value={email}
                             />
