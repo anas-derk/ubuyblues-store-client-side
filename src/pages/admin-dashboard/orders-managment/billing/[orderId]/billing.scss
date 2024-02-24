@@ -1,0 +1,13 @@
+.billing{
+    @media print {
+        padding-top: 0;
+    }
+    .global-header{
+        @media print {
+            display: none;
+        }
+    }
+    .total{
+        border-bottom-color: #000;
+    }
+}

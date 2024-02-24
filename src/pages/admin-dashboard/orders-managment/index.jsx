@@ -149,17 +149,6 @@ export default function OrdersManagment() {
         }
     }
 
-    const addOrderAsReturned = async (orderId) => {
-        try {
-            const res = await axios.post(`${process.env.BASE_API_URL}/returned-orders/create-new-order/${orderId}`);
-            const result = await res.data;
-            console.log(result);
-        }
-        catch (err) {
-            console.log(err.response.data);
-        }
-    }
-
     const changeOrderData = (productIndex, fieldName, newValue) => {
         allOrdersInsideThePage[productIndex][fieldName] = newValue;
     }
@@ -390,11 +379,16 @@ export default function OrdersManagment() {
                                                     >
                                                         Sorry, Error In Process
                                                     </button>}
-                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <Link
-                                                        href={`/admin-dashboard/orders-managment/${order._id}`}
-                                                        className="btn btn-success d-block mx-auto mb-4 global-button"
-                                                    >Show Details</Link>}
-                                                    {!order.isReturned && (order.checkout_status === "AUTHORIZED" || order.checkout_status === "CAPTURED") && <button className="btn btn-danger d-block mx-auto mb-3 global-button" onClick={() => addOrderAsReturned(order._id)}>Add As Returned</button>}
+                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
+                                                        <Link
+                                                            href={`/admin-dashboard/orders-managment/${order._id}`}
+                                                            className="btn btn-success d-block mx-auto mb-4 global-button"
+                                                        >Show Details</Link>
+                                                        <Link
+                                                            href={`/admin-dashboard/orders-managment/billing/${order._id}`}
+                                                            className="btn btn-success d-block mx-auto mb-4 global-button"
+                                                        >Show Billing</Link>
+                                                    </>}
                                                 </td>
                                             </tr>
                                         ))}
