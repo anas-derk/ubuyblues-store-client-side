@@ -119,7 +119,7 @@ export default function ChangeBussinessEmailPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/admins/change-bussiness-email-password?email=${email}&password=${currentPassword}&newPassord=${newPassword}`);
+                const res = await axios.put(`${process.env.BASE_API_URL}/admins/change-bussiness-email-password?email=${email}&password=${currentPassword}&newPassword=${newPassword}`);
                 const result = await res.data;
                 setIsWaitStatus(false);
                 if (result === "Changing Bussiness Email Password Process Has Been Successfuly ...") {
