@@ -170,6 +170,7 @@ export default function ChangeBussinessEmailPassword() {
                                 className={`p-2 form-control ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
                                 placeholder="Please Enter New Email Here"
                                 onChange={(e) => setEmail(e.target.value.trim())}
+                                value={email}
                             />
                             {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -183,6 +184,7 @@ export default function ChangeBussinessEmailPassword() {
                                     className={`p-2 form-control ${formValidationErrors.currentPassword ? "border-3 border-danger mb-3" : ""}`}
                                     placeholder="Please Enter Current Password"
                                     onChange={(e) => setCurrentPassword(e.target.value.trim())}
+                                    value={currentPassword}
                                 />
                                 <div className="icon-box other-languages-mode">
                                     {!isVisibleCurrentPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleCurrentPassword(value => value = !value)} />}
@@ -201,6 +203,7 @@ export default function ChangeBussinessEmailPassword() {
                                     className={`p-2 form-control ${formValidationErrors.newPassword ? "border-3 border-danger mb-3" : ""}`}
                                     placeholder="Please Enter New Password"
                                     onChange={(e) => setNewPassword(e.target.value.trim())}
+                                    value={newPassword}
                                 />
                                 <div className="icon-box other-languages-mode">
                                     {!isVisibleNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
@@ -219,6 +222,7 @@ export default function ChangeBussinessEmailPassword() {
                                     className={`p-2 form-control ${formValidationErrors.confirmNewPassword ? "border-3 border-danger mb-3" : ""}`}
                                     placeholder="Please Enter Confirm New Password"
                                     onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
+                                    value={confirmNewPassword}
                                 />
                                 <div className="icon-box other-languages-mode">
                                     {!isVisibleConfirmNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
