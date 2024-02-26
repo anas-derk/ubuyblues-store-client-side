@@ -8,6 +8,7 @@ import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function CustomerOrders() {
 
@@ -27,11 +28,9 @@ export default function CustomerOrders() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
-    const [pageNumber, setPageNumber] = useState(0);
-
     const [filters, setFilters] = useState({
         orderNumber: -1,
-        orderId: "",
+        customerId: "",
         status: "",
     });
 
@@ -50,11 +49,12 @@ export default function CustomerOrders() {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserInfo(result);
+                        setFilters({ ...filters, customerId: result._id });
                         const result2 = await getOrdersCount(`customerId=${result._id}`);
                         if (result2 > 0) {
                             const result3 = await getAllOrdersInsideThePage(1, pageSize, `customerId=${result._id}`);
                             setAllOrdersInsideThePage(result3);
-                            setTotalPagesCount(Math.ceil(result / pageSize));
+                            setTotalPagesCount(Math.ceil(result2 / pageSize));
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
@@ -111,7 +111,7 @@ export default function CustomerOrders() {
     const getPreviousPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize));
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
@@ -119,13 +119,21 @@ export default function CustomerOrders() {
     const getNextPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize));
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
         setCurrentPage(newCurrentPage);
+        setIsFilteringOrdersStatus(false);
+    }
+
+    const getSpecificPage = async (pageNumber) => {
+        setIsFilteringOrdersStatus(true);
+        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setCurrentPage(pageNumber);
         setIsFilteringOrdersStatus(false);
     }
 
     const getFilteringString = (filters) => {
         let filteringString = "";
+        if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
         if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
         if (filters.status) filteringString += `status=${filters.status}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
@@ -153,82 +161,8 @@ export default function CustomerOrders() {
         }
     }
 
-    const paginationBar = () => {
-        const paginationButtons = [];
-        for (let i = 1; i <= totalPagesCount; i++) {
-            if (i < 11) {
-                paginationButtons.push(
-                    <button
-                        key={i}
-                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
-                        onClick={async () => {
-                            setIsFilteringOrdersStatus(true);
-                            setAllOrdersInsideThePage(await getAllOrdersInsideThePage(i, pageSize));
-                            setCurrentPage(i);
-                            setIsFilteringOrdersStatus(false);
-                        }}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        if (totalPagesCount > 10) {
-            paginationButtons.push(
-                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
-            );
-            paginationButtons.push(
-                <button
-                    key={totalPagesCount}
-                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => {
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
-                    }}
-                >
-                    {totalPagesCount}
-                </button>
-            );
-        }
-        return (
-            <section className="pagination d-flex justify-content-center align-items-center">
-                {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon"
-                    onClick={getPreviousPage}
-                />}
-                {paginationButtons}
-                {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className="next-page-icon pagination-icon me-3"
-                    onClick={getNextPage}
-                />}
-                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
-                <form
-                    className="navigate-to-specific-page-form w-25"
-                    onSubmit={async (e) => {
-                        e.preventDefault();
-                        setIsFilteringOrdersStatus(true);
-                        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsFilteringOrdersStatus(false);
-                    }}
-                >
-                    <input
-                        type="number"
-                        className="form-control p-1 ps-2 page-number-input"
-                        placeholder="Enter Page Number"
-                        min="1"
-                        max={totalPagesCount}
-                        onChange={(e) => setPageNumber(e.target.valueAsNumber)}
-                    />
-                </form>
-            </section>
-        );
-    }
-
     return (
-        <div className="customer-orders-managment customer-dashboard page">
+        <div className="customer-orders-managment customer-dashboard page pb-4">
             <Head>
                 <title>Ubuyblues Store - Customer Orders</title>
             </Head>
@@ -253,7 +187,7 @@ export default function CustomerOrders() {
                                                     placeholder={t("Pleae Enter Order Number")}
                                                     min="1"
                                                     max={allOrdersInsideThePage.length}
-                                                    onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber })}
+                                                    onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber ? e.target.valueAsNumber : -1 })}
                                                 />
                                             </div>
                                             <div className="col-xl-6 d-flex align-items-center">
@@ -308,14 +242,13 @@ export default function CustomerOrders() {
                                                         <td>{getDateFormated(order.added_date)}</td>
                                                         <td>
                                                             <Link
-                                                                href={{
-                                                                    pathname: `/customer-dashboard/orders/${order._id}`,
-                                                                    query: {
-                                                                        activeParentLink: "orders-managment",
-                                                                    }
-                                                                }}
+                                                                href={`/customer-dashboard/orders/${order._id}`}
                                                                 className="btn btn-success d-block mx-auto mb-4 global-button"
                                                             >{t("Show Details")}</Link>
+                                                            <Link
+                                                                href={`/confirmation?orderId=${order._id}`}
+                                                                className="btn btn-success d-block mx-auto global-button"
+                                                            >{t("Show Billing")}</Link>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -360,14 +293,13 @@ export default function CustomerOrders() {
                                                                 <th>{t("Action")}</th>
                                                                 <td>
                                                                     <Link
-                                                                        href={{
-                                                                            pathname: `/customer-dashboard/orders/${order._id}`,
-                                                                            query: {
-                                                                                activeParentLink: "orders-managment",
-                                                                            }
-                                                                        }}
+                                                                        href={`/customer-dashboard/orders/${order._id}`}
                                                                         className="btn btn-success d-block mx-auto mb-4 global-button"
                                                                     >{t("Show Details")}</Link>
+                                                                    <Link
+                                                                        href={`/confirmation?orderId=${order._id}`}
+                                                                        className="btn btn-success d-block mx-auto global-button"
+                                                                    >{t("Show Billing")}</Link>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -381,7 +313,15 @@ export default function CustomerOrders() {
                                         <span className="loader-table-data"></span>
                                     </div>}
                                 </div>
-                                {totalPagesCount > 0 && !isFilteringOrdersStatus && paginationBar()}
+                                {totalPagesCount > 0 && !isFilteringOrdersStatus &&
+                                    <PaginationBar
+                                        totalPagesCount={totalPagesCount}
+                                        currentPage={currentPage}
+                                        getPreviousPage={getPreviousPage}
+                                        getNextPage={getNextPage}
+                                        getSpecificPage={getSpecificPage}
+                                    />
+                                }
                             </div>
                         </div>
                     </div>

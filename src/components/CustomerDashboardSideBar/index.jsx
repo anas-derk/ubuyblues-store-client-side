@@ -5,6 +5,7 @@ import { HiOutlineHome } from "react-icons/hi";
 import { BsPerson } from "react-icons/bs";
 import { MdOutlineFavoriteBorder, MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
+import { IoWalletOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 export default function CustomerDashboardSideBar() {
@@ -59,6 +60,14 @@ export default function CustomerDashboardSideBar() {
                     <Link href="/customer-dashboard/wish-list" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
                         <MdOutlineFavoriteBorder className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name">{t("Wish List")}</span>
+                    </Link>
+                </li>
+                <li
+                    className="managment-customer-account-link-item"
+                >
+                    <Link href="/customer-dashboard/wish-list" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                        <IoWalletOutline className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
+                        <span className="customer-dashboard-link-name">{t("Wallet")}</span>
                     </Link>
                 </li>
                 <li

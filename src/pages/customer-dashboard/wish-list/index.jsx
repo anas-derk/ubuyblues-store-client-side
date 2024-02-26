@@ -21,7 +21,7 @@ export default function CustomerWishList() {
 
     const [userId, setUserId] = useState("");
 
-    const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
+    const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
 
     const [deletingFavoriteProductIndex, setDeletingFavoriteProductIndex] = useState(-1);
 
@@ -30,6 +30,16 @@ export default function CustomerWishList() {
     const [isSuccessDeletingFavoriteProduct, setIsSuccessDeletingFavoriteProduct] = useState(false);
 
     const [errorMsgOnDeletingFavoriteProduct, setErrorMsgOnDeletingFavoriteProduct] = useState(false);
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [totalPagesCount, setTotalPagesCount] = useState(0);
+
+    const [filters, setFilters] = useState({
+        customerId: "",
+    });
+
+    const pageSize = 10;
 
     const router = useRouter();
 
@@ -44,8 +54,12 @@ export default function CustomerWishList() {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserId(userId);
-                        const res1 = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products/${userId}`)
-                        setFavoriteProductsListForUser(await res1.data);
+                        const result2 = await getFavoriteProductsCount(`customerId=${result._id}`);
+                        if (result2 > 0) {
+                            const result3 = await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result._id}`);
+                            setAllOrdersInsideThePage(result3);
+                            setTotalPagesCount(Math.ceil(result2 / pageSize));
+                        }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
@@ -63,6 +77,56 @@ export default function CustomerWishList() {
             router.push("/auth");
         }
     }, []);
+
+    const getFavoriteProductsCount = async (filters) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?${filters ? filters : ""}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getPreviousPage = async () => {
+        setIsWaitGetFavoriteProductsStatus(true);
+        const newCurrentPage = currentPage - 1;
+        setAllFavoriteProductsInsideThePage(await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetFavoriteProductsStatus(false);
+    }
+
+    const getNextPage = async () => {
+        setIsWaitGetFavoriteProductsStatus(true);
+        const newCurrentPage = currentPage + 1;
+        setAllFavoriteProductsInsideThePage(await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetFavoriteProductsStatus(false);
+    }
+
+    const getSpecificPage = async (pageNumber) => {
+        setIsWaitGetFavoriteProductsStatus(true);
+        setAllFavoriteProductsInsideThePage(await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setCurrentPage(pageNumber);
+        setIsWaitGetFavoriteProductsStatus(false);
+    }
+
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);

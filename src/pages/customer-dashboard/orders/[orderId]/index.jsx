@@ -66,7 +66,7 @@ export default function OrderDetails() {
     }
 
     return (
-        <div className="order-details customer-dashboard">
+        <div className="order-details customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Order Details</title>
             </Head>
