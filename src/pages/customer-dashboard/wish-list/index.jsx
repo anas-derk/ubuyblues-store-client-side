@@ -10,6 +10,7 @@ import LoaderPage from "@/components/LoaderPage";
 import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function CustomerWishList() {
 
@@ -22,6 +23,8 @@ export default function CustomerWishList() {
     const [userId, setUserId] = useState("");
 
     const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
+
+    const [isWaitGetFavoriteProductsStatus, setIsWaitGetFavoriteProductsStatus] = useState(false);
 
     const [deletingFavoriteProductIndex, setDeletingFavoriteProductIndex] = useState(-1);
 
@@ -57,7 +60,7 @@ export default function CustomerWishList() {
                         const result2 = await getFavoriteProductsCount(`customerId=${result._id}`);
                         if (result2 > 0) {
                             const result3 = await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result._id}`);
-                            setAllOrdersInsideThePage(result3);
+                            setAllFavoriteProductsInsideThePage(result3);
                             setTotalPagesCount(Math.ceil(result2 / pageSize));
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -80,7 +83,7 @@ export default function CustomerWishList() {
 
     const getFavoriteProductsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products-count?${filters ? filters : ""}`);
             return await res.data;
         }
         catch (err) {
@@ -90,7 +93,7 @@ export default function CustomerWishList() {
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/users/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
             return await res.data;
         }
         catch (err) {
@@ -173,8 +176,8 @@ export default function CustomerWishList() {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {favoriteProductsListForUser.length > 0 ? <section className="favorite-products-list-for-user data-box text-center">
-                                    {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table w-100">
+                                {allFavoriteProductsInsideThePage.length > 0 && !isWaitGetFavoriteProductsStatus && <section className="favorite-products-list-for-user data-box text-center">
+                                    {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table mb-4 w-100">
                                         <thead>
                                             <tr>
                                                 <th>{t("Product")}</th>
@@ -184,7 +187,7 @@ export default function CustomerWishList() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {favoriteProductsListForUser.map((favoriteProduct, favoriteProductIndex) => (
+                                            {allFavoriteProductsInsideThePage.map((favoriteProduct, favoriteProductIndex) => (
                                                 <tr key={favoriteProduct._id}>
                                                     <td>
                                                         <img
@@ -246,10 +249,23 @@ export default function CustomerWishList() {
                                             </div>
                                         ))}
                                     </div>}
-                                </section> : <section className="not-found-any-favorite-products-for-user text-center">
+                                </section>}
+                                {allFavoriteProductsInsideThePage.length === 0 && !isWaitGetFavoriteProductsStatus && <section className="not-found-any-favorite-products-for-user text-center">
                                     <PiSmileySad className="sorry-icon mb-5" />
                                     <h1 className="h4">{t("Sorry, Can't Find Any Favorite Products For You !!")}</h1>
                                 </section>}
+                                {isWaitGetFavoriteProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                                    <span className="loader-table-data"></span>
+                                </div>}
+                                {totalPagesCount > 0 && !isWaitGetFavoriteProductsStatus &&
+                                    <PaginationBar
+                                        totalPagesCount={totalPagesCount}
+                                        currentPage={currentPage}
+                                        getPreviousPage={getPreviousPage}
+                                        getNextPage={getNextPage}
+                                        getSpecificPage={getSpecificPage}
+                                    />
+                                }
                             </div>
                         </div>
                     </div>
