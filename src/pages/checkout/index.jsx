@@ -384,7 +384,8 @@ export default function Checkout() {
             purchase_units: [
                 {
                     amount: {
-                        value: pricesDetailsSummary.totalPriceAfterDiscount * 3.25,
+                        currency_code: "USD",
+                        value: pricesDetailsSummary.totalPriceAfterDiscount,
                     }
                 }
             ]
@@ -423,6 +424,7 @@ export default function Checkout() {
                     email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
                 },
                 order_products: allProductsData.map((product) => ({
+                    productId: product.id,
                     name: product.name,
                     unit_price: product.price,
                     discount: product.discount,

@@ -8,7 +8,6 @@ import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
 import { useRouter } from "next/router";
-import { FaRegStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
@@ -74,8 +73,6 @@ export default function Home() {
     const [allBrands, setAllBrands] = useState([]);
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
-
-    const router = useRouter();
 
     const { i18n, t } = useTranslation();
 
