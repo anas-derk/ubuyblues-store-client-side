@@ -12,7 +12,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 
-export default function CustomerFavloriteProductsList() {
+export default function CustomerFavoriteProductsList() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
