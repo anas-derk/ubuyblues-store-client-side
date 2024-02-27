@@ -8,7 +8,6 @@ import "../pages/admin-dashboard/admin_dashboard.css";
 import "../pages/auth/auth.css";
 import "../pages/cart/cart.css";
 import "../components/CustomerDashboardSideBar/customer_dashboard_side_bar.css";
-import "../pages/customer-dashboard/favorite-products/favorite_products.css";
 import "../pages/customer-dashboard/customer_dashboard.css";
 import "../pages/customer-dashboard/addreses/addreses.css";
 import "../pages/customer-dashboard/orders/index.css";

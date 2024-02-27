@@ -159,7 +159,7 @@ export default function CustomerWalletProductsList() {
     }
 
     return (
-        <div className="customer-favorite-products-list customer-dashboard page">
+        <div className="customer-wallet-products-list customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Favorite Products List</title>
             </Head>
@@ -172,8 +172,8 @@ export default function CustomerWalletProductsList() {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {allWalletProductsInsideThePage.length > 0 && !isWaitGetWalletProductsStatus && <section className="favorite-products-list-for-user data-box text-center">
-                                    {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table mb-4 w-100">
+                                {allWalletProductsInsideThePage.length > 0 && !isWaitGetWalletProductsStatus && <section className="wallet-products-list-for-user data-box text-center">
+                                    {windowInnerWidth > 991 ? <table className="wallet-products-table-for-user data-table mb-4 w-100">
                                         <thead>
                                             <tr>
                                                 <th>{t("Product")}</th>
@@ -188,8 +188,8 @@ export default function CustomerWalletProductsList() {
                                                     <td>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${favoriteProduct.imagePath}`}
-                                                            alt="favorite product image"
-                                                            className="favorite-product-image d-block mx-auto mb-3"
+                                                            alt="wallet product image"
+                                                            className="wallet-product-image d-block mx-auto mb-3"
                                                             width="100"
                                                             height="100"
                                                         />
@@ -198,26 +198,26 @@ export default function CustomerWalletProductsList() {
                                                     <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromUserProductsWallet(userId, favoriteProductIndex)} />}
-                                                        {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                        {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(userId, favoriteProductIndex)} />}
+                                                        {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                        {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                     </td>
                                                 </tr>
                                             ))}
                                         </tbody>
-                                    </table> : <div className="favorite-products-for-user">
+                                    </table> : <div className="wallet-products-for-user">
                                         {favoriteProductsListForUser.map((favoriteProduct, favoriteProductIndex) => (
-                                            <div className="favorite-product data-box mb-5" key={favoriteProductsListForUser._id}>
+                                            <div className="wallet-product data-box mb-5" key={favoriteProductsListForUser._id}>
                                                 <h4 className="mb-3 text-white">{t("Product")} # {favoriteProductIndex + 1}</h4>
-                                                <table className="favorite-products-table-for-user data-table w-100">
+                                                <table className="wallet-products-table-for-user data-table w-100">
                                                     <tbody>
                                                         <tr>
                                                             <th>{t("Product")}</th>
                                                             <td>
                                                                 <img
                                                                     src={`${process.env.BASE_API_URL}/${favoriteProduct.imagePath}`}
-                                                                    alt="favorite product image"
-                                                                    className="favorite-product-image d-block mx-auto mb-3"
+                                                                    alt="wallet product image"
+                                                                    className="wallet-product-image d-block mx-auto mb-3"
                                                                     width="100"
                                                                     height="100"
                                                                 />
@@ -235,9 +235,9 @@ export default function CustomerWalletProductsList() {
                                                         <tr>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromUserProductsWallet(userId, favoriteProductIndex)} />}
-                                                                {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                                {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(userId, favoriteProductIndex)} />}
+                                                                {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                                {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -246,9 +246,9 @@ export default function CustomerWalletProductsList() {
                                         ))}
                                     </div>}
                                 </section>}
-                                {allWalletProductsInsideThePage.length === 0 && !isWaitGetWalletProductsStatus && <section className="not-found-any-favorite-products-for-user text-center">
+                                {allWalletProductsInsideThePage.length === 0 && !isWaitGetWalletProductsStatus && <section className="not-found-any-wallet-products-for-user text-center">
                                     <PiSmileySad className="sorry-icon mb-5" />
-                                    <h1 className="h4">{t("Sorry, Can't Find Any Favorite Products For You !!")}</h1>
+                                    <h1 className="h4">{t("Sorry, Can't Find Any Previous Products In Your History Wallet !!")}</h1>
                                 </section>}
                                 {isWaitGetWalletProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                     <span className="loader-table-data"></span>
