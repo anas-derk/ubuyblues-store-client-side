@@ -25,7 +25,10 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                    <Link
+                        href="/customer-dashboard"
+                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard" && "active"}`}
+                    >
                         <RxDashboard className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name">{t("Dashboard")}</span>
                     </Link>
@@ -33,7 +36,10 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard/orders" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                    <Link
+                        href="/customer-dashboard/orders"
+                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/orders" && "active"}`}
+                    >
                         <LuShoppingBag className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name">{t("Orders")}</span>
                     </Link>
@@ -41,7 +47,10 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard/addreses" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                    <Link
+                        href="/customer-dashboard/addreses"
+                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/addreses" && "active"}`}
+                    >
                         <HiOutlineHome className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name">{t("Addresses")}</span>
                     </Link>
@@ -49,7 +58,10 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard/account-details" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                    <Link
+                        href="/customer-dashboard/account-details"
+                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/account-details" && "active"}`}
+                    >
                         <BsPerson className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name">{t("Account Details")}</span>
                     </Link>
@@ -57,17 +69,23 @@ export default function CustomerDashboardSideBar() {
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard/wish-list" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                    <Link
+                        href="/customer-dashboard/favorite-products"
+                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/favorite-products" && "active"}`}
+                    >
                         <MdOutlineFavoriteBorder className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Wish List")}</span>
+                        <span className="customer-dashboard-link-name">{t("Favorite Products")}</span>
                     </Link>
                 </li>
                 <li
                     className="managment-customer-account-link-item"
                 >
-                    <Link href="/customer-dashboard/wish-list" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
-                        <IoWalletOutline className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Wallet")}</span>
+                    <Link
+                        href="/customer-dashboard/wallet"
+                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/wallet" && "active"}`}
+                    >
+                        <MdOutlineFavoriteBorder className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
+                        <span className="customer-dashboard-link-name">{t("Wish List")}</span>
                     </Link>
                 </li>
                 <li

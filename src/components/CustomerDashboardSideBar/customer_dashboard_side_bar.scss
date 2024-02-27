@@ -3,7 +3,7 @@
     font-size: 13px;
     .managment-customer-account-link-list{
         .managment-customer-account-link-item{
-            &:hover{
+            &:hover, .active{
                 background-color: var(--main-color-two);
                 border-radius: 5px;
             }

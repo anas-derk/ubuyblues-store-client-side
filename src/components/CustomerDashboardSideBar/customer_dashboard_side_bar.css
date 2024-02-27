@@ -3,7 +3,7 @@
   font-size: 13px;
 }
 
-.customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item:hover {
+.customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item:hover, .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .active {
   background-color: var(--main-color-two);
   border-radius: 5px;
 }

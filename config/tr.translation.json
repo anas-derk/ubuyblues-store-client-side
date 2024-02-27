@@ -369,6 +369,10 @@
     "Sorry, This Email Is Not Exist !!": "Üzgünüz, bu kod geçerli değil!",
     "Sorry, This Code Is Not Valid !!": "Üzgünüz, bu kod geçerli değil!",
     "Reseting Password Process Has Been Successfully !!, Please Wait To Navigate To Login Page !!":  "Şifre sıfırlama işlemi başarıyla tamamlandı! Lütfen giriş sayfasına yönlendirilmeyi bekleyin!",
+    "Home": "Ev",
+    "Login / Register": "Giriş yap / Kayıt ol",
+    "Languages": "Diller",
     "Your Order Billing From Ubuyblues Store": "Ubuyblues Mağazasından Sipariş Faturanız",
-    "Wallet": "cüzdan"
+    "Wallet": "cüzdan",
+    "Favorite Products": "Favori ürünler"
 }
