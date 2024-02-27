@@ -84,7 +84,7 @@ export default function CustomerDashboardSideBar() {
                         href="/customer-dashboard/wallet"
                         className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/wallet" && "active"}`}
                     >
-                        <MdOutlineFavoriteBorder className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
+                        <IoWalletOutline className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name">{t("Wallet")}</span>
                     </Link>
                 </li>

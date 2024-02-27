@@ -1,12 +1,12 @@
-.customer-wish-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon {
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon {
   font-size: 20px;
   cursor: pointer;
 }
 
-.customer-wish-list .not-found-any-favorite-products-for-user {
+.customer-favorite-products-list .not-found-any-favorite-products-for-user {
   color: #FFF;
 }
 
-.customer-wish-list .not-found-any-favorite-products-for-user .sorry-icon {
+.customer-favorite-products-list .not-found-any-favorite-products-for-user .sorry-icon {
   font-size: 100px;
 }

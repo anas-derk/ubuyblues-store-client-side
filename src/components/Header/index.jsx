@@ -83,7 +83,7 @@ export default function Header() {
                             <Nav.Link href="/cart" as={Link}>
                                 <FaShoppingCart className="cart-icon link-icon" />
                             </Nav.Link>
-                            <Nav.Link href="/customer-dashboard/wish-list" as={Link}>
+                            <Nav.Link href="/customer-dashboard/favorite-products" as={Link}>
                                 <BsFillSuitHeartFill className="cart-icon link-icon" />
                             </Nav.Link>
                             {lightMode == "sunny" ?

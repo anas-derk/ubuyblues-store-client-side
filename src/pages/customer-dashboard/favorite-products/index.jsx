@@ -12,7 +12,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 
-export default function CustomerWishList() {
+export default function CustomerFavloriteProductsList() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -25,8 +25,6 @@ export default function CustomerWishList() {
     const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
 
     const [isWaitGetFavoriteProductsStatus, setIsWaitGetFavoriteProductsStatus] = useState(false);
-
-    const [deletingFavoriteProductIndex, setDeletingFavoriteProductIndex] = useState(-1);
 
     const [isDeletingFavoriteProduct, setIsDeletingFavoriteProduct] = useState(false);
 
@@ -57,6 +55,7 @@ export default function CustomerWishList() {
                     const result = res.data;
                     if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
                         setUserId(userId);
+                        setFilters({ ...filters, customerId: result._id });
                         const result2 = await getFavoriteProductsCount(`customerId=${result._id}`);
                         if (result2 > 0) {
                             const result3 = await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result._id}`);
@@ -138,23 +137,20 @@ export default function CustomerWishList() {
 
     const deleteProductFromFavoriteUserProducts = async (userId, favoriteProductIndex) => {
         try {
-            setDeletingFavoriteProductIndex(favoriteProductIndex);
             setIsDeletingFavoriteProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${favoriteProductsListForUser[favoriteProductIndex]._id}`)
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allFavoriteProductsInsideThePage[favoriteProductIndex]._id}`)
             const result = await res.data;
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                setFavoriteProductsListForUser(result.newFavoriteProductsList);
+                setAllFavoriteProductsInsideThePage(result.newFavoriteProductsList);
                 setIsSuccessDeletingFavoriteProduct(false);
-                setDeletingFavoriteProductIndex(-1);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
         catch (err) {
             setIsDeletingFavoriteProduct(false);
             setErrorMsgOnDeletingFavoriteProduct("Sorry, Someting Went Wrong, Please Repeate The Proccess !!");
-            setDeletingFavoriteProductIndex(-1);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
                 setErrorMsgOnDeletingFavoriteProduct("");
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
@@ -163,9 +159,9 @@ export default function CustomerWishList() {
     }
 
     return (
-        <div className="customer-wish-list customer-dashboard page">
+        <div className="customer-favorite-products-list customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Wish List</title>
+                <title>Ubuyblues Store - Customer Favorite Products List</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
@@ -202,9 +198,9 @@ export default function CustomerWishList() {
                                                     <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && deletingFavoriteProductIndex !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
-                                                        {isDeletingFavoriteProduct && deletingFavoriteProductIndex === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                        {!isSuccessDeletingFavoriteProduct && deletingFavoriteProductIndex === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
+                                                        {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                     </td>
                                                 </tr>
                                             ))}
@@ -239,9 +235,9 @@ export default function CustomerWishList() {
                                                         <tr>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && deletingFavoriteProductIndex !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
-                                                                {isDeletingFavoriteProduct && deletingFavoriteProductIndex === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                                {!isSuccessDeletingFavoriteProduct && deletingFavoriteProductIndex === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
+                                                                {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                             </td>
                                                         </tr>
                                                     </tbody>
