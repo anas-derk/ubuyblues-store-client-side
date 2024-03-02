@@ -80,6 +80,11 @@ export default function CustomerFavoriteProductsList() {
         }
     }, []);
 
+    const handleSelectUserLanguage = (userLanguage) => {
+        i18n.changeLanguage(userLanguage);
+        document.body.lang = userLanguage;
+    }
+
     const getFavoriteProductsCount = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products-count?${filters ? filters : ""}`);
@@ -128,11 +133,6 @@ export default function CustomerFavoriteProductsList() {
         if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
-    }
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
     }
 
     const deleteProductFromFavoriteUserProducts = async (userId, favoriteProductIndex) => {
@@ -260,6 +260,8 @@ export default function CustomerFavoriteProductsList() {
                                         getPreviousPage={getPreviousPage}
                                         getNextPage={getNextPage}
                                         getSpecificPage={getSpecificPage}
+                                        paginationButtonTextColor="black"
+                                        paginationButtonBackgroundColor="white"
                                     />
                                 }
                             </div>

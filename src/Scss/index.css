@@ -265,8 +265,10 @@ textarea {
 }
 
 .pagination-bar .pagination-button {
-  background: #DDD;
   font-size: 14px;
+  border-radius: 50%;
+  border: none;
+  font-weight: bold;
 }
 
 .pagination-bar .pagination-button.selection {

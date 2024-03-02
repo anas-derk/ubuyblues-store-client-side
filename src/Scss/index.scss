@@ -223,8 +223,10 @@ textarea{
         }
     }
     .pagination-button{
-        background: #DDD;
         font-size: 14px;
+        border-radius: 50%;
+        border: none;
+        font-weight: bold;
         &.selection{
             background-color: var(--main-color-one);
             color: #FFF;
