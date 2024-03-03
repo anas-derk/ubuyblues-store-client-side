@@ -31,24 +31,25 @@ export default function AdminLogin() {
     const router = useRouter();
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-admin-user-token");
-        if (userToken) {
-            axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
-                headers: {
-                    "Authorization": userToken,
-                },
-            })
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
                 .then(async (res) => {
                     const result = res.data;
                     if (result.error) {
-                        await router.push("/admin-dashboard");
-                    } else {
-                        localStorage.removeItem("asfour-store-admin-user-id");
+                        localStorage.removeItem("asfour-store-admin-user-token");
                         setIsLoadingPage(false);
+                    } else await router.push("/admin-dashboard");
+                })
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
                     }
-                }).catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else setIsLoadingPage(false);
     }, []);
@@ -89,7 +90,6 @@ export default function AdminLogin() {
             try {
                 const res = await axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
                 const result = await res.data;
-                console.log(result)
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);

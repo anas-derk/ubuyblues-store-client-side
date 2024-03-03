@@ -33,23 +33,35 @@ export default function UpdateAndDeleteCategories() {
     const pageSize = 10;
 
     useEffect(() => {
-        const adminId = localStorage.getItem("asfour-store-admin-user-id");
-        if (!adminId) {
-            router.push("/admin-dashboard/login");
-        } else {
-            getCategoriesCount()
-                .then(async (result) => {
-                    if (result > 0) {
-                        const result1 = await getAllCategoriesInsideThePage(1, pageSize);
-                        setAllCategoriesInsideThePage(result1);
-                        setTotalPagesCount(Math.ceil(result / pageSize));
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
+                .then(async (res) => {
+                    let result = res.data;
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    } else {
+                        res = await getCategoriesCount();
+                        if (result > 0) {
+                            const result1 = await getAllCategoriesInsideThePage(1, pageSize);
+                            setAllCategoriesInsideThePage(result1);
+                            setTotalPagesCount(Math.ceil(result / pageSize));
+                        }
+                        setIsLoadingPage(false);
                     }
-                    setIsLoadingPage(false);
-                }).catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                })
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
-        }
+        } else router.push("/admin-dashboard/login");
     }, []);
 
     const getCategoriesCount = async () => {

@@ -21,27 +21,31 @@ export default function ShowAndHideSections() {
     const [successMsg, setSuccessMsg] = useState(false);
 
     useEffect(() => {
-        const adminId = localStorage.getItem("asfour-store-admin-user-id");
-        if (adminId) {
-            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${adminId}`)
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
                 .then(async (res) => {
                     const result = res.data;
-                    if (result === "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        localStorage.removeItem("asfour-store-admin-user-id");
-                        router.push("/admin-dashboard/login");
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
                     } else {
-                        const res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-                        setAllSections(await res1.data);
+                        res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
+                        setAllSections(await res.data);
                         setIsLoadingPage(false);
                     }
                 })
-                .catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
-        } else {
-            router.push("/admin-dashboard/login");
-        }
+        } else router.push("/admin-dashboard/login");
     }, []);
 
     const handleSelectAppearedSectionStatus = (sectionIndex, sectionStatus) => {

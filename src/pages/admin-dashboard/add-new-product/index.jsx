@@ -5,6 +5,7 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import validations from "../../../../public/global_functions/validations";
 
 export default function AddNewProduct() {
 
@@ -35,6 +36,31 @@ export default function AddNewProduct() {
     const productGalleryImagesFilesElementRef = useRef();
 
     useEffect(() => {
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
+                .then(async (res) => {
+                    const result = res.data;
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    } else {
+                        const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
+                        setAllCategories(res.data);
+                        setIsLoadingPage(false);
+                    }
+                })
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else router.push("/admin-dashboard/login");
         axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
             .then((res) => {
                 setAllCategories(res.data);

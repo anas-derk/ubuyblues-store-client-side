@@ -5,6 +5,7 @@ import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import validations from "../../../../public/global_functions/validations";
 
 export default function AddNewBrand() {
 
@@ -25,25 +26,27 @@ export default function AddNewBrand() {
     const fileElementRef = useRef();
 
     useEffect(() => {
-        const adminId = localStorage.getItem("asfour-store-admin-user-id");
-        if (adminId) {
-            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${adminId}`)
-                .then((res) => {
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
+                .then(async (res) => {
                     const result = res.data;
-                    if (result === "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        localStorage.removeItem("asfour-store-admin-user-id");
-                        router.push("/admin-dashboard/login");
-                    } else {
-                        setIsLoadingPage(false);
-                    }
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    } else setIsLoadingPage(false);
                 })
-                .catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
-        } else {
-            router.push("/admin-dashboard/login");
-        }
+        } else router.push("/admin-dashboard/login");
     }, []);
 
     const addNewBrand = async (e, brandTitle) => {

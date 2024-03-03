@@ -59,20 +59,37 @@ export default function UpdateAndDeleteProducts() {
     const pageSize = 10;
 
     useEffect(() => {
-        getProductsCount()
-            .then(async (result) => {
-                if (result > 0) {
-                    const result1 = await getAllProductsInsideThePage(1, pageSize);
-                    setAllProductsInsideThePage(result1);
-                    setTotalPagesCount(Math.ceil(result / pageSize));
-                    const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
-                    setAllCategories(await res.data);
-                }
-                setIsLoadingPage(false);
-            }).catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
+                .then(async (res) => {
+                    let result = res.data;
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    } else {
+                        res = await getProductsCount();
+                        if (result > 0) {
+                            const result1 = await getAllProductsInsideThePage(1, pageSize);
+                            setAllProductsInsideThePage(result1);
+                            setTotalPagesCount(Math.ceil(result / pageSize));
+                            res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
+                            setAllCategories(await res.data);
+                        }
+                        setIsLoadingPage(false);
+                    }
+                })
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else router.push("/admin-dashboard/login");
     }, []);
 
     const getProductsCount = async (filters) => {

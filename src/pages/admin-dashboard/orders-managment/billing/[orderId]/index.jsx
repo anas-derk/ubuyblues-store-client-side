@@ -25,20 +25,35 @@ export default function ShowBilling({ orderId }) {
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`)
-            .then((res) => {
-                const result = res.data;
-                setOrderDetails(result);
-                setPricesDetailsSummary({
-                    totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
-                    totalDiscount: calcTotalOrderDiscount(result.order_products),
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
+                .then(async (res) => {
+                    const result = res.data;
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    } else {
+                        const result = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
+                        setOrderDetails(result);
+                        setPricesDetailsSummary({
+                            totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
+                            totalDiscount: calcTotalOrderDiscount(result.order_products),
+                        });
+                        setIsLoadingPage(false);
+                    }
+                })
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
-                setIsLoadingPage(false);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
+        } else router.push("/admin-dashboard/login");
     }, []);
 
     const handleSelectUserLanguage = (userLanguage) => {

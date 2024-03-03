@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import validations from "../../../public/global_functions/validations";
 
 export default function AdminDashboard() {
 
@@ -18,11 +19,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
-            axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
-                headers: {
-                    "Authorization": adminToken,
-                },
-            })
+            validations.getAdminInfo(adminToken)
                 .then(async (res) => {
                     const result = res.data;
                     if (result.error) {
@@ -30,10 +27,15 @@ export default function AdminDashboard() {
                         await router.push("/admin-dashboard/login");
                     } else setIsLoadingPage(false);
                 })
-                .catch((err) => {
-                    console.log(err.message);
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else router.push("/admin-dashboard/login");
     }, []);

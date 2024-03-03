@@ -10,9 +10,9 @@ export default function AdminPanelHeader() {
 
     const router = useRouter();
 
-    const adminLogout = () => {
-        localStorage.removeItem("asfour-store-admin-user-id");
-        router.push("/admin-dashboard/login");
+    const adminLogout = async () => {
+        localStorage.removeItem("asfour-store-admin-user-token");
+        await router.push("/admin-dashboard/login");
     }
 
     return (

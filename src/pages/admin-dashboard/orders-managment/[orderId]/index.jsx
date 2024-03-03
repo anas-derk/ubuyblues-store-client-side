@@ -27,22 +27,33 @@ export default function OrderDetails() {
     const { orderId } = router.query;
 
     useEffect(() => {
-        const adminId = localStorage.getItem("asfour-store-admin-user-id");
-        if (!adminId) {
-            router.push("/admin-dashboard/login");
-        } else {
-            if (orderId) {
-                getOrderDetails(orderId)
-                    .then((result) => {
-                        setOrderDetails(result);
+        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (adminToken) {
+            validations.getAdminInfo(adminToken)
+                .then(async (res) => {
+                    const result = res.data;
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    } else {
+                        if (orderId) {
+                            const result = await getOrderDetails(orderId);
+                            setOrderDetails(result);
+                            setIsLoadingPage(false);
+                        }
+                    }
+                })
+                .catch(async (err) => {
+                    if (err.response.data?.msg === "jwt expired") {
+                        localStorage.removeItem("asfour-store-admin-user-token");
+                        await router.push("/admin-dashboard/login");
+                    }
+                    else {
                         setIsLoadingPage(false);
-                    })
-                    .catch(() => {
-                        setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(false);
-                    });
-            }
-        }
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else router.push("/admin-dashboard/login");
     }, [orderId]);
 
     const getOrderDetails = async (orderId) => {
