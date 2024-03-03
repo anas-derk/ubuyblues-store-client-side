@@ -31,13 +31,17 @@ export default function AdminLogin() {
     const router = useRouter();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-admin-user-id");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/admins/user-info/${userId}`)
-                .then((res) => {
+        const userToken = localStorage.getItem("asfour-store-admin-user-token");
+        if (userToken) {
+            axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
+                headers: {
+                    "Authorization": userToken,
+                },
+            })
+                .then(async (res) => {
                     const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        router.push("/admin-dashboard");
+                    if (result.error) {
+                        await router.push("/admin-dashboard");
                     } else {
                         localStorage.removeItem("asfour-store-admin-user-id");
                         setIsLoadingPage(false);
@@ -46,15 +50,11 @@ export default function AdminLogin() {
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
-        } else {
-            setIsLoadingPage(false);
-        }
+        } else setIsLoadingPage(false);
     }, []);
 
-    const adminLogin = async (e) => {
-        e.preventDefault();
-        setFormValidationErrors({});
-        let errorsObject = validations.inputValuesValidation([
+    const validateFormFields = () => {
+        return validations.inputValuesValidation([
             {
                 name: "email",
                 value: email,
@@ -77,25 +77,35 @@ export default function AdminLogin() {
                 },
             },
         ]);
+    }
+
+    const adminLogin = async (e) => {
+        e.preventDefault();
+        setFormValidationErrors({});
+        let errorsObject = validateFormFields();
         setFormValidationErrors(errorsObject);
         if (Object.keys(errorsObject).length == 0) {
             setIsLoginingStatus(true);
             try {
                 const res = await axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
-                const data = await res.data;
-                if (typeof data === "string") {
+                const result = await res.data;
+                console.log(result)
+                if (result.error) {
                     setIsLoginingStatus(false);
-                    setErrorMsg(data);
+                    setErrorMsg(result.msg);
                     setTimeout(() => {
                         setErrorMsg("");
-                    }, 2000);
+                    }, 3000);
                 } else {
-                    localStorage.setItem("asfour-store-admin-user-id", data._id);
-                    router.push("/admin-dashboard");
+                    localStorage.setItem("asfour-store-admin-user-token", result.data.token);
+                    await router.push("/admin-dashboard");
                 }
             } catch (err) {
-                console.log(err);
+                setIsLoginingStatus(false);
                 setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+                setTimeout(() => {
+                    setErrorMsg("");
+                }, 3000);
             }
         }
     }
@@ -139,7 +149,7 @@ export default function AdminLogin() {
                             <FiLogIn />
                         </button>}
                         {isLoginingStatus && <button disabled className="btn btn-primary mx-auto d-block mb-4">
-                            <span className="me-2">Wait Loging ...</span>
+                            <span className="me-2">Wait Logining ...</span>
                         </button>}
                         {errMsg && <button disabled className="btn btn-danger mx-auto d-block mb-4">
                             <span className="me-2">{errMsg}</span>

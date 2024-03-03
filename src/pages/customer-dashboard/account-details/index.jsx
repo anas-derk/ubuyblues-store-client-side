@@ -81,7 +81,7 @@ export default function CustomerAccountDetails() {
     }
     
     const validateFormFields = () => {
-        let errorsObject = validations.inputValuesValidation([
+        return validations.inputValuesValidation([
             {
                 name: "first_name",
                 value: userInfo.first_name,
@@ -157,7 +157,6 @@ export default function CustomerAccountDetails() {
                 }
             } : null,
         ]);
-        return errorsObject;
     }
 
     const updateUserInfo = async (e) => {
