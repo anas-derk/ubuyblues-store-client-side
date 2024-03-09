@@ -15,7 +15,7 @@ export default function CustomerDashboardSideBar() {
     const { i18n, t } = useTranslation();
 
     const userLogout = () => {
-        localStorage.removeItem("asfour-store-user-id");
+        localStorage.removeItem("asfour-store-user-token");
         router.push("/auth");
     }
 
