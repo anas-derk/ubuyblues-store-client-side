@@ -33,7 +33,7 @@ export default function AddNewCategory() {
                     } else setIsLoadingPage(false);
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "jwt expired") {
+                    if (err.response.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
