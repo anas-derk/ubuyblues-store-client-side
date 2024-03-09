@@ -152,7 +152,7 @@ async function getAdminInfo(adminToken) {
         return await res.data;
     }
     catch(err) {
-        throw Error(err);
+        throw err;
     }
 }
 

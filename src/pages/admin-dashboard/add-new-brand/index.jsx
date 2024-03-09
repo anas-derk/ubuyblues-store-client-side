@@ -30,6 +30,7 @@ export default function AddNewBrand() {
         if (adminToken) {
             validations.getAdminInfo(adminToken)
                 .then(async (res) => {
+                    console.log(res);
                     const result = res.data;
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");

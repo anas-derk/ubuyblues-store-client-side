@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { PiHandWavingThin } from "react-icons/pi";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -28,9 +27,9 @@ export default function AdminDashboard() {
                     } else setIsLoadingPage(false);
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "jwt expired") {
+                    if (err.response.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
-                        await router.push("/admin-dashboard/login");
+                        setIsLoadingPage(false);
                     }
                     else {
                         setIsLoadingPage(false);

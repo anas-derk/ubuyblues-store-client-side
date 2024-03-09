@@ -35,6 +35,7 @@ export default function AdminLogin() {
         if (adminToken) {
             validations.getAdminInfo(adminToken)
                 .then(async (res) => {
+                    console.log(res);
                     const result = res.data;
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
@@ -42,9 +43,9 @@ export default function AdminLogin() {
                     } else await router.push("/admin-dashboard");
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "jwt expired") {
+                    if (err.response.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
-                        await router.push("/admin-dashboard/login");
+                        setIsLoadingPage(false);
                     }
                     else {
                         setIsLoadingPage(false);
