@@ -13,6 +13,8 @@ export default function AddNewCategory() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [token, setToken] = useState("");
+
     const [categoryName, setCategoryName] = useState("");
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
@@ -20,6 +22,8 @@ export default function AddNewCategory() {
     const [errorMsg, setErrorMsg] = useState("");
 
     const [successMsg, setSuccessMsg] = useState("");
+
+    const [formValidationErrors, setFormValidationErrors] = useState({});
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -30,7 +34,10 @@ export default function AddNewCategory() {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
-                    } else setIsLoadingPage(false);
+                    } else {
+                        setToken(adminToken);
+                        setIsLoadingPage(false);
+                    }
                 })
                 .catch(async (err) => {
                     if (err.response.data?.msg === "Unauthorized Error") {
@@ -45,32 +52,59 @@ export default function AddNewCategory() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
+    const validateFormFields = () => {
+        return validations.inputValuesValidation([
+            {
+                name: "categoryName",
+                value: categoryName,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, This Field Can't Be Empty !!",
+                    },
+                },
+            },
+        ]);
+    }
+
     const addNewCategory = async (e, categoryName) => {
         try {
             e.preventDefault();
-            setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
-                categoryName,
-            });
-            const result = await res.data;
-            setIsWaitStatus(false);
-            if (result === "Adding New Category Process It Successfuly ...") {
-                setSuccessMsg(result);
-                let successTimeout = setTimeout(() => {
-                    setSuccessMsg("");
-                    setCategoryName("");
-                    clearTimeout(successTimeout);
-                }, 1500);
-            } else {
-                setErrorMsg(result);
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    setCategoryName("");
-                    clearTimeout(errorTimeout);
-                }, 1500);
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields();
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
+                    categoryName,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        setCategoryName("");
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                } else {
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        setCategoryName("");
+                        clearTimeout(errorTimeout);
+                    }, 1500);
+                }
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -95,12 +129,12 @@ export default function AddNewCategory() {
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewCategory(e, categoryName)}>
                         <input
                             type="text"
-                            className="form-control product-name-field p-2 mb-4"
+                            className={`form-control p-2 border-2 category-name-field ${formValidationErrors["categoryName"] ? "border-danger mb-2" : "mb-4"}`}
                             placeholder="Please Enter Category Name"
-                            required
                             onChange={(e) => setCategoryName(e.target.value)}
                             value={categoryName}
                         />
+                        {formValidationErrors["categoryName"] && <p className="error-msg text-danger">{formValidationErrors["categoryName"]}</p>}
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
                             className="btn btn-success w-50 d-block mx-auto p-2 global-button"

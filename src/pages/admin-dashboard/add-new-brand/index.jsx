@@ -91,7 +91,6 @@ export default function AddNewBrand() {
             setFormValidationErrors({});
             let errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
-            console.log(errorsObject)
             if (Object.keys(errorsObject).length == 0) {
                 let formData = new FormData();
                 formData.append("brandImg", brandImage);
