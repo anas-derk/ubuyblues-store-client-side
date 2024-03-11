@@ -131,7 +131,7 @@ export default function AdminLogin() {
                                 <BiSolidUser className="icon" />
                             </div>
                         </div>
-                        {formValidationErrors["email"] && <p className='error-msg text-danger'>{formValidationErrors["email"]}</p>}
+                        {formValidationErrors["email"] && <p className="error-msg text-danger">{formValidationErrors["email"]}</p>}
                         <div className="password-field-box">
                             <input
                                 type={isVisiblePassword ? "text" : "password"}
@@ -140,8 +140,8 @@ export default function AdminLogin() {
                                 onChange={(e) => setPassword(e.target.value.trim())}
                             />
                             <div className='icon-box other-languages-mode'>
-                                {!isVisiblePassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
-                                {isVisiblePassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
+                                {!isVisiblePassword && <AiOutlineEye className="eye-icon icon" onClick={() => setIsVisiblePassword(value => value = !value)} />}
+                                {isVisiblePassword && <AiOutlineEyeInvisible className="invisible-eye-icon icon" onClick={() => setIsVisiblePassword(value => value = !value)} />}
                             </div>
                         </div>
                         {formValidationErrors["password"] && <p className='error-msg text-danger'>{formValidationErrors["password"]}</p>}

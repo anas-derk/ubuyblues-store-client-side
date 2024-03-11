@@ -6,6 +6,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../public/global_functions/validations";
+import { useRouter } from "next/router";
 
 export default function AddNewBrand() {
 
@@ -25,7 +26,11 @@ export default function AddNewBrand() {
 
     const [successMsg, setSuccessMsg] = useState("");
 
+    const [formValidationErrors, setFormValidationErrors] = useState({});
+
     const fileElementRef = useRef();
+
+    const router = useRouter();
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -54,39 +59,75 @@ export default function AddNewBrand() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
+    const validateFormFields = () => {
+        return validations.inputValuesValidation([
+            {
+                name: "brandImage",
+                value: brandImage,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, This Field Can't Be Empty !!",
+                    },
+                    isImage: {
+                        msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                    },
+                },
+            },
+            {
+                name: "brandTitle",
+                value: brandTitle,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, This Field Can't Be Empty !!",
+                    },
+                },
+            },
+        ]);
+    }
+
     const addNewBrand = async (e, brandTitle) => {
         try {
             e.preventDefault();
-            let formData = new FormData();
-            formData.append("brandImg", brandImage);
-            formData.append("title", brandTitle);
-            setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
-                headers: {
-                    Authorization: token,
-                }
-            });
-            const result = await res.data;
-            setIsWaitStatus(false);
-            if (!result.error) {
-                setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(() => {
-                    setSuccessMsg("");
-                    setBrandImage("");
-                    setBrandTitle("");
-                    fileElementRef.current.value = "";
-                    clearTimeout(successTimeout);
-                }, 1500);
-            } else {
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields();
+            setFormValidationErrors(errorsObject);
+            console.log(errorsObject)
+            if (Object.keys(errorsObject).length == 0) {
+                let formData = new FormData();
+                formData.append("brandImg", brandImage);
+                formData.append("title", brandTitle);
+                setIsWaitStatus(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
                 setIsWaitStatus(false);
-                setErrorMsg(result.msg);
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorTimeout);
-                }, 1500);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        setBrandImage("");
+                        setBrandTitle("");
+                        fileElementRef.current.value = "";
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                } else {
+                    setIsWaitStatus(false);
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 1500);
+                }
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -112,21 +153,20 @@ export default function AddNewBrand() {
                         <h6 className="mb-3 fw-bold">Please Select Brand Image</h6>
                         <input
                             type="file"
-                            className="form-control brand-image-field p-2 mb-4"
-                            placeholder="Please Enter Brand Image"
-                            required
+                            className={`form-control p-2 border-2 brand-image-field ${formValidationErrors["brandImage"] ? "border-danger mb-2" : "mb-4"}`}
                             onChange={(e) => setBrandImage(e.target.files[0])}
                             ref={fileElementRef}
                             value={fileElementRef.current?.value}
                         />
+                        {formValidationErrors["brandImage"] && <p className="error-msg text-danger">{formValidationErrors["brandImage"]}</p>}
                         <input
                             type="text"
-                            className="form-control product-name-field p-2 mb-4"
+                            className={`form-control p-2 border-2 brand-title-field ${formValidationErrors["brandTitle"] ? "border-danger mb-2" : "mb-4"}`}
                             placeholder="Please Enter Brand Title"
-                            required
                             onChange={(e) => setBrandTitle(e.target.value)}
                             value={brandTitle}
                         />
+                        {formValidationErrors["brandTitle"] && <p className="error-msg text-danger">{formValidationErrors["brandTitle"]}</p>}
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
                             className="btn btn-success w-50 d-block mx-auto p-2 global-button"

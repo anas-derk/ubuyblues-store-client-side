@@ -29,7 +29,7 @@ export default function AdminDashboard() {
                 .catch(async (err) => {
                     if (err.response.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
-                        setIsLoadingPage(false);
+                        await router.push("/admin-dashboard/login");
                     }
                     else {
                         setIsLoadingPage(false);
