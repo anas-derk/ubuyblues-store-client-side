@@ -13,6 +13,8 @@ export default function AddNewBrand() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [token, setToken] = useState("");
+
     const [brandImage, setBrandImage] = useState("");
 
     const [brandTitle, setBrandTitle] = useState("");
@@ -34,7 +36,10 @@ export default function AddNewBrand() {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
-                    } else setIsLoadingPage(false);
+                    } else {
+                        setToken(adminToken);
+                        setIsLoadingPage(false);
+                    }
                 })
                 .catch(async (err) => {
                     if (err.response.data?.msg === "Unauthorized Error") {
@@ -56,11 +61,15 @@ export default function AddNewBrand() {
             formData.append("brandImg", brandImage);
             formData.append("title", brandTitle);
             setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData);
+            const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Adding New Brand Process Has Been Successfuly ...") {
-                setSuccessMsg(result);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
                     setBrandImage("");
@@ -70,7 +79,7 @@ export default function AddNewBrand() {
                 }, 1500);
             } else {
                 setIsWaitStatus(false);
-                setErrorMsg(result);
+                setErrorMsg(result.msg);
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
                     clearTimeout(errorTimeout);
