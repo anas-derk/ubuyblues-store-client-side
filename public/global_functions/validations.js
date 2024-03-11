@@ -34,7 +34,7 @@ function inputValuesValidation(inputs) {
             // التحقق من كون القاعدة داخل كائن القواعد موجودة 
             if (typeof inputRules.isRequired !== "undefined") {
                 // التحقق من أنّ القاعدة محققة ، وفي حالة لم تكن محققة فإننا نضيف الخطأ إلى مصفوفة الأخطاء
-                if (input.value.length === 0) {
+                if ((!input.value && input.value !== 0) || input.value.length === 0) {
                     errorsObject[input.name] = inputRules.isRequired.msg;
                     // في حالة وجود خطأ نقوم بتجاهل كل التعليمات اللاحقة داخل التكرار الحالي للحلقة والانتقال إلى التكرار التالي
                     continue;
