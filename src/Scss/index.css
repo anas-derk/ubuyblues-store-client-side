@@ -336,6 +336,19 @@ textarea {
   font-size: 100px;
 }
 
+.admin-dashboard {
+  background-color: #FFF;
+}
+
+.admin-dashboard .page-content {
+  min-height: 100vh;
+  background-color: #EEE;
+}
+
+.admin-dashboard .page-content h1 {
+  font-size: 30px;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

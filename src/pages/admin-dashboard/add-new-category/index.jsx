@@ -6,6 +6,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../public/global_functions/validations";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function AddNewCategory() {
 
@@ -127,14 +128,19 @@ export default function AddNewCategory() {
                         Hi, Mr Asfour In Your Add New Category Page
                     </h1>
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewCategory(e, categoryName)}>
-                        <input
-                            type="text"
-                            className={`form-control p-2 border-2 category-name-field ${formValidationErrors["categoryName"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Category Name"
-                            onChange={(e) => setCategoryName(e.target.value)}
-                            value={categoryName}
-                        />
-                        {formValidationErrors["categoryName"] && <p className="error-msg text-danger">{formValidationErrors["categoryName"]}</p>}
+                        <section className="category-name mb-4">
+                            <input
+                                type="text"
+                                className={`form-control p-2 border-2 category-name-field ${formValidationErrors["categoryName"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Category Name"
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                value={categoryName}
+                            />
+                            {formValidationErrors["categoryName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["categoryName"]}</span>
+                            </p>}
+                        </section>
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
                             className="btn btn-success w-50 d-block mx-auto p-2 global-button"

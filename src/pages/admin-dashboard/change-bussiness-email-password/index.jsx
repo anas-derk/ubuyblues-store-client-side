@@ -49,6 +49,10 @@ export default function ChangeBussinessEmailPassword() {
                     } else setIsLoadingPage(false);
                 })
                 .catch(async (err) => {
+                    if(err.message === "Network Error") {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                     if (err.response.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");

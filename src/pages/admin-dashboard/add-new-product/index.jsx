@@ -7,6 +7,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../public/global_functions/validations";
 import { useRouter } from "next/router";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function AddNewProduct() {
 
@@ -62,7 +63,7 @@ export default function AddNewProduct() {
                     }
                 })
                 .catch(async (err) => {
-                    if(err.message === "Network Error") {
+                    if (err.message === "Network Error") {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -234,75 +235,111 @@ export default function AddNewProduct() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In Your Add New Product Page
                     </h1>
                     {allCategories.length > 0 ? <form className="add-new-product-form w-50" onSubmit={(e) => addNewProduct(e, productData)}>
-                        <input
-                            type="text"
-                            className={`form-control p-2 border-2 product-name-field ${formValidationErrors["name"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Product Name"
-                            onChange={(e) => setProductData({ ...productData, name: e.target.value })}
-                            value={productData.name}
-                        />
-                        {formValidationErrors["name"] && <p className="error-msg text-danger">{formValidationErrors["name"]}</p>}
-                        <input
-                            type="number"
-                            className={`form-control p-2 border-2 product-price-field ${formValidationErrors["price"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Product Price"
-                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                            value={productData.price}
-                        />
-                        {formValidationErrors["price"] && <p className="error-msg text-danger">{formValidationErrors["price"]}</p>}
-                        <input
-                            type="text"
-                            className={`form-control p-2 border-2 product-description-field ${formValidationErrors["description"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Product Description"
-                            onChange={(e) => setProductData({ ...productData, description: e.target.value })}
-                            value={productData.description}
-                        />
-                        {formValidationErrors["description"] && <p className="error-msg text-danger">{formValidationErrors["description"]}</p>}
-                        <select
-                            className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-2" : "mb-4"}`}
-                            onChange={(e) => setProductData({ ...productData, category: e.target.value })}
-                        >
-                            <option defaultValue="" hidden>Please Select Your Category</option>
-                            {allCategories.map((category) => (
-                                <option value={category.name} key={category._id}>{category.name}</option>
-                            ))}
-                        </select>
-                        {formValidationErrors["category"] && <p className="error-msg text-danger">{formValidationErrors["category"]}</p>}
-                        <input
-                            type="number"
-                            className={`form-control p-2 border-2 product-price-discount-field ${formValidationErrors["discount"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Discount"
-                            onChange={(e) => setProductData({ ...productData, discount: (e.target.valueAsNumber || e.target.valueAsNumber === 0) ? e.target.valueAsNumber : "" })}
-                            value={productData.discount}
-                        />
-                        {formValidationErrors["discount"] && <p className="error-msg text-danger">{formValidationErrors["discount"]}</p>}
+                        <section className="name mb-4">
+                            <input
+                                type="text"
+                                className={`form-control p-2 border-2 product-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Product Name"
+                                onChange={(e) => setProductData({ ...productData, name: e.target.value })}
+                                value={productData.name}
+                            />
+                            {formValidationErrors["name"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["name"]}</span>
+                            </p>}
+                        </section>
+                        <section className="price mb-4">
+                            <input
+                                type="number"
+                                className={`form-control p-2 border-2 product-price-field ${formValidationErrors["price"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Product Price"
+                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                value={productData.price}
+                            />
+                            {formValidationErrors["price"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["price"]}</span>
+                            </p>}
+                        </section>
+                        <section className="description mb-4">
+                            <input
+                                type="text"
+                                className={`form-control p-2 border-2 product-description-field ${formValidationErrors["description"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Product Description"
+                                onChange={(e) => setProductData({ ...productData, description: e.target.value })}
+                                value={productData.description}
+                            />
+                            {formValidationErrors["description"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["description"]}</span>
+                            </p>}
+                        </section>
+                        <section className="category mb-4">
+                            <select
+                                className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
+                                onChange={(e) => setProductData({ ...productData, category: e.target.value })}
+                            >
+                                <option defaultValue="" hidden>Please Select Your Category</option>
+                                {allCategories.map((category) => (
+                                    <option value={category.name} key={category._id}>{category.name}</option>
+                                ))}
+                            </select>
+                            {formValidationErrors["category"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["category"]}</span>
+                            </p>}
+                        </section>
+                        <section className="discount mb-4">
+                            <input
+                                type="number"
+                                className={`form-control p-2 border-2 product-price-discount-field ${formValidationErrors["discount"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Discount"
+                                onChange={(e) => setProductData({ ...productData, discount: (e.target.valueAsNumber || e.target.valueAsNumber === 0) ? e.target.valueAsNumber : "" })}
+                                value={productData.discount}
+                            />
+                            {formValidationErrors["discount"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["discount"]}</span>
+                            </p>}
+                        </section>
+
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
-                        <input
-                            type="file"
-                            className={`form-control p-2 border-2 product-image-field ${formValidationErrors["image"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Product Image"
-                            onChange={(e) => setProductData({ ...productData, image: e.target.files[0] })}
-                            ref={productImageFileElementRef}
-                            value={productImageFileElementRef.current?.value}
-                        />
-                        {formValidationErrors["image"] && <p className="error-msg text-danger">{formValidationErrors["image"]}</p>}
+                        <section className="image mb-4">
+                            <input
+                                type="file"
+                                className={`form-control p-2 border-2 product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Product Image"
+                                onChange={(e) => setProductData({ ...productData, image: e.target.files[0] })}
+                                ref={productImageFileElementRef}
+                                value={productImageFileElementRef.current?.value}
+                            />
+                            {formValidationErrors["image"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["image"]}</span>
+                            </p>}
+                        </section>
                         <h6 className="mb-3 fw-bold">Please Select Product Gallery Images</h6>
-                        <input
-                            type="file"
-                            className={`form-control p-2 border-2 product-galley-images-field ${formValidationErrors["galleryImages"] ? "border-danger mb-2" : "mb-4"}`}
-                            placeholder="Please Enter Product Images Gallery"
-                            multiple
-                            onChange={(e) => setProductData({ ...productData, galleryImages: e.target.files })}
-                            value={productGalleryImagesFilesElementRef.current?.value}
-                            ref={productGalleryImagesFilesElementRef}
-                        />
-                        {formValidationErrors["galleryImages"] && <p className="error-msg text-danger">{formValidationErrors["galleryImages"]}</p>}
+                        <section className="gallery-images mb-4">
+                            <input
+                                type="file"
+                                className={`form-control p-2 border-2 product-galley-images-field ${formValidationErrors["galleryImages"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Product Images Gallery"
+                                multiple
+                                onChange={(e) => setProductData({ ...productData, galleryImages: e.target.files })}
+                                value={productGalleryImagesFilesElementRef.current?.value}
+                                ref={productGalleryImagesFilesElementRef}
+                            />
+                            {formValidationErrors["galleryImages"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["galleryImages"]}</span>
+                            </p>}
+                        </section>
                         {!isWaitStatus && !successMsg && !errorMsg && <button
                             type="submit"
                             className="btn btn-success w-50 d-block mx-auto p-2 global-button"
