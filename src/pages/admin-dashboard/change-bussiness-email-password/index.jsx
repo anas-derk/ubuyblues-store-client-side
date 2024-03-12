@@ -8,12 +8,15 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../public/global_functions/validations";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import { useRouter } from "next/router";
 
 export default function ChangeBussinessEmailPassword() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [email, setEmail] = useState("");
 
@@ -37,6 +40,8 @@ export default function ChangeBussinessEmailPassword() {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
+    const router = useRouter();
+
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
@@ -46,7 +51,10 @@ export default function ChangeBussinessEmailPassword() {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
-                    } else setIsLoadingPage(false);
+                    } else {
+                        setToken(adminToken);
+                        setIsLoadingPage(false);
+                    }
                 })
                 .catch(async (err) => {
                     if(err.message === "Network Error") {
@@ -125,11 +133,15 @@ export default function ChangeBussinessEmailPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/global-passwords/change-bussiness-email-password?email=${email}&password=${currentPassword}&newPassword=${newPassword}`);
+                const res = await axios.put(`${process.env.BASE_API_URL}/global-passwords/change-bussiness-email-password?email=${email}&password=${currentPassword}&newPassword=${newPassword}`, undefined, {
+                    headers: {
+                        Authorization: token,
+                    },
+                });
                 const result = await res.data;
                 setIsWaitStatus(false);
-                if (result === "Changing Global Password Process Has Been Successfully !!") {
-                    setSuccessMsg(result);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
                         setEmail("");
@@ -139,7 +151,7 @@ export default function ChangeBussinessEmailPassword() {
                         clearTimeout(successTimeout);
                     }, 1500);
                 } else {
-                    setErrorMsg(result);
+                    setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
@@ -148,6 +160,10 @@ export default function ChangeBussinessEmailPassword() {
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {

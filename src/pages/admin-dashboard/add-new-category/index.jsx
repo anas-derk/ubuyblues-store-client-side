@@ -7,6 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import { useRouter } from "next/router";
 
 export default function AddNewCategory() {
 
@@ -25,6 +26,8 @@ export default function AddNewCategory() {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const router = useRouter();
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
