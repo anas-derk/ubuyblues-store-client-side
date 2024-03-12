@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { PiHandWavingThin } from "react-icons/pi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -36,6 +36,8 @@ export default function UpdateAndDeleteStores() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
+
+    const fileElementRef = useRef();
 
     const router = useRouter();
 
@@ -133,7 +135,7 @@ export default function UpdateAndDeleteStores() {
                 }
             });
             const result = res.data;
-            if(!result.error) {
+            if (!result.error) {
                 setIsWaitChangeBrandImage(false);
                 setSuccessChangeBrandImageMsg(result.msg);
                 let successTimeout = setTimeout(async () => {
@@ -280,6 +282,9 @@ export default function UpdateAndDeleteStores() {
                                                 type="file"
                                                 className="form-control d-block mx-auto mb-3"
                                                 onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
+                                                accept=".png, .jpg, .webp"
+                                                ref={fileElementRef}
+                                                value={fileElementRef.current?.value}
                                             />
                                             {!isWaitChangeBrandImage && !errorChangeBrandImageMsg && !successChangeBrandImageMsg &&
                                                 <button
