@@ -127,15 +127,28 @@ export default function UpdateAndDeleteStores() {
             setIsWaitChangeBrandImage(true);
             let formData = new FormData();
             formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
-            await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData);
-            setIsWaitChangeBrandImage(false);
-            setSuccessChangeBrandImageMsg("Updating Brand Image Has Been Successfully !!");
-            let successTimeout = setTimeout(() => {
-                setSuccessChangeBrandImageMsg("");
-                clearTimeout(successTimeout);
-            }, 1500);
+            const res = await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            const result = res.data;
+            if(!result.error) {
+                setIsWaitChangeBrandImage(false);
+                setSuccessChangeBrandImageMsg(result.msg);
+                let successTimeout = setTimeout(async () => {
+                    setSuccessChangeBrandImageMsg("");
+                    setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
+                    setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    clearTimeout(successTimeout);
+                }, 1500);
+            }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitChangeBrandImage(false);
             setErrorChangeBrandImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
