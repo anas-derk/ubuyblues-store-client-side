@@ -201,11 +201,16 @@ export default function AddNewProduct() {
                         productGalleryImagesFilesElementRef.current.value = "";
                         clearTimeout(successTimeout);
                     }, 1500);
+                } else {
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 1500);
                 }
             }
         }
         catch (err) {
-            console.log(err);
             if (err.response.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
