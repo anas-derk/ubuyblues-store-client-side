@@ -7,12 +7,15 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
 
 export default function UpdateAndDeleteStores() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [isWaitGetBrandsStatus, setIsWaitGetBrandsStatus] = useState(false);
 
@@ -36,7 +39,7 @@ export default function UpdateAndDeleteStores() {
 
     const router = useRouter();
 
-    const pageSize = 10;
+    const pageSize = 1;
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -48,13 +51,12 @@ export default function UpdateAndDeleteStores() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        res = await getBrandsCount();
-                        result = await res.data;
-                        if (result > 0) {
-                            const result1 = await getAllBrandsInsideThePage(1, pageSize);
-                            setAllBrandsInsideThePage(result1);
-                            setTotalPagesCount(Math.ceil(result / pageSize));
+                        result = await getBrandsCount();
+                        if (result.data > 0) {
+                            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
+                            setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
+                        setToken(adminToken);
                         setIsLoadingPage(false);
                     }
                 })
@@ -94,7 +96,7 @@ export default function UpdateAndDeleteStores() {
     const getPreviousPage = async () => {
         setIsWaitGetBrandsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllBrandsInsideThePage(await getAllBrandsInsideThePage(newCurrentPage, pageSize));
+        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize)).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetBrandsStatus(false);
     }
@@ -102,14 +104,14 @@ export default function UpdateAndDeleteStores() {
     const getNextPage = async () => {
         setIsWaitGetBrandsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllBrandsInsideThePage(await getAllBrandsInsideThePage(newCurrentPage, pageSize));
+        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize)).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetBrandsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsWaitGetBrandsStatus(true)
-        setAllBrandsInsideThePage(await getAllBrandsInsideThePage(pageNumber, pageSize));
+        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(pageNumber, pageSize)).data);
         setCurrentPage(pageNumber);
         setIsWaitGetBrandsStatus(false);
     }
@@ -148,11 +150,15 @@ export default function UpdateAndDeleteStores() {
         try {
             const res = await axios.put(`${process.env.BASE_API_URL}/brands/${allBrandsInsideThePage[brandIndex]._id}`, {
                 newBrandTitle: allBrandsInsideThePage[brandIndex].title,
+            }, {
+                headers: {
+                    Authorization: token,
+                }
             });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Updating Brand Info Process Has Been Successfuly ...") {
-                setSuccessMsg(result);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
                     clearTimeout(successTimeout);
@@ -160,6 +166,10 @@ export default function UpdateAndDeleteStores() {
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -172,20 +182,23 @@ export default function UpdateAndDeleteStores() {
     const deleteBrand = async (brandId) => {
         setIsWaitStatus(true);
         try {
-            const res = await axios.delete(`${process.env.BASE_API_URL}/brands/${brandId}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/brands/${brandId}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (!result.isError) {
+            if (!result.error) {
                 setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
                     setIsWaitGetBrandsStatus(true);
                     setCurrentPage(1);
                     const result = await getBrandsCount();
-                    if (result > 0) {
-                        const result1 = await getAllBrandsInsideThePage(1, pageSize);
-                        setAllBrandsInsideThePage(result1);
-                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    if (result.data > 0) {
+                        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
                     } else {
                         setAllBrandsInsideThePage([]);
                         setTotalPagesCount(0);
@@ -196,6 +209,10 @@ export default function UpdateAndDeleteStores() {
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -217,7 +234,7 @@ export default function UpdateAndDeleteStores() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr Asfour In Your Update / Delete Brands Page
                     </h1>
-                    {allBrandsInsideThePage.length > 0 && !isWaitGetBrandsStatus && <section className="categories-box w-100">
+                    {allBrandsInsideThePage.length > 0 && !isWaitGetBrandsStatus && <section className="brands-box w-100">
                         <table className="brands-table mb-4 managment-table bg-white w-100">
                             <thead>
                                 <tr>
@@ -298,7 +315,7 @@ export default function UpdateAndDeleteStores() {
                             </tbody>
                         </table>
                     </section>}
-                    {allBrandsInsideThePage.length === 0 && !isWaitGetBrandsStatus && <p className="alert alert-danger">Sorry, Can't Find Any Categories !!</p>}
+                    {allBrandsInsideThePage.length === 0 && !isWaitGetBrandsStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Brands !!</p>}
                     {isWaitGetBrandsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}

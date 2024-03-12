@@ -47,8 +47,7 @@ export default function UpdateAndDeleteCategories() {
                     } else {
                         result = await getCategoriesCount();
                         if (result.data > 0) {
-                            const result1 = await getAllCategoriesInsideThePage(1, pageSize);
-                            setAllCategoriesInsideThePage(result1.data);
+                            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
                         setToken(adminToken);
