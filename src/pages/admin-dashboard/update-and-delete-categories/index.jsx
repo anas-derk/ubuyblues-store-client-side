@@ -7,12 +7,15 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
 
 export default function UpdateAndDeleteCategories() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [isWaitGetCategoriesStatus, setIsWaitGetCategoriesStatus] = useState(false);
 
@@ -30,7 +33,7 @@ export default function UpdateAndDeleteCategories() {
 
     const router = useRouter();
 
-    const pageSize = 10;
+    const pageSize = 1;
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -42,12 +45,13 @@ export default function UpdateAndDeleteCategories() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        res = await getCategoriesCount();
-                        if (result > 0) {
+                        result = await getCategoriesCount();
+                        if (result.data > 0) {
                             const result1 = await getAllCategoriesInsideThePage(1, pageSize);
-                            setAllCategoriesInsideThePage(result1);
-                            setTotalPagesCount(Math.ceil(result / pageSize));
+                            setAllCategoriesInsideThePage(result1.data);
+                            setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
+                        setToken(adminToken);
                         setIsLoadingPage(false);
                     }
                 })
@@ -87,7 +91,7 @@ export default function UpdateAndDeleteCategories() {
     const getPreviousPage = async () => {
         setIsWaitGetCategoriesStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(newCurrentPage, pageSize));
+        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetCategoriesStatus(false);
     }
@@ -95,22 +99,22 @@ export default function UpdateAndDeleteCategories() {
     const getNextPage = async () => {
         setIsWaitGetCategoriesStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(newCurrentPage, pageSize));
+        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetCategoriesStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsWaitGetCategoriesStatus(true);
-        setAllCategoriesInsideThePage(await getAllCategoriesInsideThePage(pageNumber, pageSize));
+        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSize)).data);
         setCurrentPage(pageNumber);
         setIsWaitGetCategoriesStatus(false);
     }
 
     const changeCategoryName = (categoryIndex, newValue) => {
-        let categoriesTemp = allCategories;
+        let categoriesTemp = allCategoriesInsideThePage;
         categoriesTemp[categoryIndex].name = newValue;
-        setAllCategories(categoriesTemp);
+        setAllCategoriesInsideThePage(categoriesTemp);
     }
 
     const updateCategory = async (categoryIndex) => {
@@ -118,11 +122,15 @@ export default function UpdateAndDeleteCategories() {
         try {
             const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategoriesInsideThePage[categoryIndex]._id}`, {
                 newCategoryName: allCategoriesInsideThePage[categoryIndex].name,
+            }, {
+                headers: {
+                    Authorization: token,
+                }
             });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (result === "Updating Category Process It Successfuly ...") {
-                setSuccessMsg(result);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
                     clearTimeout(successTimeout);
@@ -130,6 +138,10 @@ export default function UpdateAndDeleteCategories() {
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -142,20 +154,23 @@ export default function UpdateAndDeleteCategories() {
     const deleteCategory = async (categoryId) => {
         setIsWaitStatus(true);
         try {
-            const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
             setIsWaitStatus(false);
-            if (!result.isError) {
+            if (!result.error) {
                 setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
                     setIsWaitGetCategoriesStatus(true);
                     setCurrentPage(1);
                     const result = await getCategoriesCount();
-                    if (result > 0) {
-                        const result1 = await getAllCategoriesInsideThePage(1, pageSize);
-                        setAllCategoriesInsideThePage(result1);
-                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    if (result.data > 0) {
+                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
                     } else {
                         setAllCategoriesInsideThePage([]);
                         setTotalPagesCount(0);
@@ -166,6 +181,10 @@ export default function UpdateAndDeleteCategories() {
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -236,7 +255,7 @@ export default function UpdateAndDeleteCategories() {
                             </tbody>
                         </table>
                     </section>}
-                    {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger">Sorry, Can't Find Any Categories !!</p>}
+                    {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
                     {isWaitGetCategoriesStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
