@@ -5,12 +5,16 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import { useRouter } from "next/router";
+import validations from "../../../../public/global_functions/validations";
 
 export default function ShowAndHideSections() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [allSections, setAllSections] = useState();
 
@@ -20,18 +24,24 @@ export default function ShowAndHideSections() {
 
     const [successMsg, setSuccessMsg] = useState(false);
 
+    const router = useRouter();
+
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
             validations.getAdminInfo(adminToken)
                 .then(async (res) => {
-                    const result = res.data;
+                    let result = res.data;
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
                         res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-                        setAllSections(await res.data);
+                        result = res.data;
+                        if(!result.error) {
+                            setAllSections(result.data);
+                        }
+                        setToken(adminToken);
                         setIsLoadingPage(false);
                     }
                 })
@@ -57,16 +67,26 @@ export default function ShowAndHideSections() {
             setIsWaitStatus(true);
             const res = await axios.put(`${process.env.BASE_API_URL}/appeared-sections/update-sections-status`, {
                 sectionsStatus: allSections.map((section) => ({ _id: section._id, isAppeared: section.isAppeared })),
+            }, {
+                headers: {
+                    Authorization: token,
+                }
             });
             const result = await res.data;
             setIsWaitStatus(false);
-            setSuccessMsg(result);
-            let successTimeout = setTimeout(() => {
-                setSuccessMsg("");
-                clearTimeout(successTimeout);
-            }, 1500);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
+            }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
