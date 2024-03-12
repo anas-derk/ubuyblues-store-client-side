@@ -23,7 +23,7 @@ export default function AddNewProduct() {
         price: "",
         description: "",
         category: "",
-        discount: 0,
+        discount: "",
         image: null,
         galleryImages: [],
     });
@@ -62,7 +62,11 @@ export default function AddNewProduct() {
                     }
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if(err.message === "Network Error") {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                    if (err.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -163,7 +167,6 @@ export default function AddNewProduct() {
             setFormValidationErrors({});
             let errorsObject = validateFormFields();
             setFormValidationErrors(errorsObject);
-            console.log(errorsObject.galleryImages)
             if (Object.keys(errorsObject).length == 0) {
                 let formData = new FormData();
                 formData.append("name", productData.name);
@@ -172,9 +175,7 @@ export default function AddNewProduct() {
                 formData.append("category", productData.category);
                 formData.append("discount", productData.discount);
                 formData.append("productImage", productData.image);
-                for (let galleryImage of productData.galleryImages) {
-                    formData.append("galleryImages", galleryImage);
-                }
+                formData.append("galleryImages", productData.galleryImages[0]);
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData, {
                     headers: {
@@ -210,7 +211,10 @@ export default function AddNewProduct() {
                 return;
             }
             setIsWaitStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            if (err.response.data?.msg === "Sorry, Please Send Valid Discount Value !!") {
+                setErrorMsg(err.response.data.msg);
+            }
+            else setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -243,7 +247,7 @@ export default function AddNewProduct() {
                             type="number"
                             className={`form-control p-2 border-2 product-price-field ${formValidationErrors["price"] ? "border-danger mb-2" : "mb-4"}`}
                             placeholder="Please Enter Product Price"
-                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber })}
+                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
                             value={productData.price}
                         />
                         {formValidationErrors["price"] && <p className="error-msg text-danger">{formValidationErrors["price"]}</p>}
@@ -258,7 +262,6 @@ export default function AddNewProduct() {
                         <select
                             className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-2" : "mb-4"}`}
                             onChange={(e) => setProductData({ ...productData, category: e.target.value })}
-                            required
                         >
                             <option defaultValue="" hidden>Please Select Your Category</option>
                             {allCategories.map((category) => (
@@ -270,7 +273,7 @@ export default function AddNewProduct() {
                             type="number"
                             className={`form-control p-2 border-2 product-price-discount-field ${formValidationErrors["discount"] ? "border-danger mb-2" : "mb-4"}`}
                             placeholder="Please Enter Discount"
-                            onChange={(e) => setProductData({ ...productData, discount: e.target.valueAsNumber })}
+                            onChange={(e) => setProductData({ ...productData, discount: (e.target.valueAsNumber || e.target.valueAsNumber === 0) ? e.target.valueAsNumber : "" })}
                             value={productData.discount}
                         />
                         {formValidationErrors["discount"] && <p className="error-msg text-danger">{formValidationErrors["discount"]}</p>}
