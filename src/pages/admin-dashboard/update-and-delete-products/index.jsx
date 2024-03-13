@@ -61,6 +61,10 @@ export default function UpdateAndDeleteProducts() {
 
     const [isAddingNewImagesToProductGallery, setIsAddingNewImagesToProductGallery] = useState(false);
 
+    const [errorNewImagesToProductGallery, setErrorNewImagesToProductGallery] = useState(false);
+
+    const [successNewImagesToProductGallery, setSuccessNewImagesToProductGallery] = useState(false);
+
     const [isShowPeriodFields, setIsShowPeriodFields] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -510,19 +514,51 @@ export default function UpdateAndDeleteProducts() {
 
     const addingNewImagesToProductGallery = async () => {
         try {
-            let formData = new FormData();
-            for (let productGalleryImage of newProductGalleryImages) {
-                formData.append("productGalleryImage", productGalleryImage);
-            }
-            setIsAddingNewImagesToProductGallery(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData);
-            const newGalleryImagePaths = await res.data;
-            allProductsInsideThePage[productIndex].galleryImagesPaths = allProductsInsideThePage[productIndex].galleryImagesPaths.concat(newGalleryImagePaths);
-            setIsAddingNewImagesToProductGallery(false);
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "newGalleryImages",
+                    value: newProductGalleryImageFiles,
+                    rules: {
+                        isImages: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or Webp Image File !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            console.log(errorsObject);
+            // if (Object.keys(errorsObject).length == 0) {
+            //     setIsAddingNewImagesToProductGallery(true);
+            //     let formData = new FormData();
+            //     for (let productGalleryImage of newProductGalleryImages) {
+            //         formData.append("productGalleryImage", productGalleryImage);
+            //     }
+            //     const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData);
+            //     const result = await res.data;
+            //     setIsAddingNewImagesToProductGallery(false);
+            //     if (!result.error) {
+            //         setIsAddingNewImagesToProductGallery(false);
+            //         setSuccessNewImagesToProductGallery(result.msg);
+            //         let successTimeout = setTimeout(async () => {
+            //             setSuccessNewImagesToProductGallery("");
+            //             allProductsInsideThePage[productIndex].galleryImagesPaths = allProductsInsideThePage[productIndex].galleryImagesPaths.concat(result.data.newGalleryImagePaths);
+            //             clearTimeout(successTimeout);
+            //         }, 1500);
+            //     }
+            // }
         }
         catch (err) {
-            console.log(err);
+            if (err?.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsAddingNewImagesToProductGallery(false);
+            setErrorNewImagesToProductGallery("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorNewImagesToProductGallery("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -623,24 +659,54 @@ export default function UpdateAndDeleteProducts() {
                         {allProductsInsideThePage.length === 0 && !isFilteringProductsStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Products !!</p>}
                         <div className="add-new-product-images-for-gallery w-100">
                             <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-4 mx-auto">Add New Images For Product Gallery Images</h3>
-                            <input
-                                type="file"
-                                className="form-control w-50 d-block mx-auto mb-3"
-                                multiple
-                                onChange={(e) => setNewProductGalleryImages(e.target.files)}
-                            />
-                            {newProductGalleryImages.length === 0 && !isAddingNewImagesToProductGallery && <button
-                                className="btn btn-success d-block mx-auto w-50 global-button"
+                            <section className="product-gallery-images mb-4">
+                                <input
+                                    type="file"
+                                    className={`form-control d-block mx-auto p-2 border-2 brand-image-field ${formValidationErrors["newGalleryImages"] ? "border-danger mb-3" : "mb-4"}`}
+                                    multiple
+                                    onChange={(e) => setNewProductGalleryImages(e.target.files)}
+                                    accept=".png, .jpg, .webp"
+                                />
+                                {formValidationErrors["newGalleryImages"] && index === updatingProductIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                    <span>{formValidationErrors["newGalleryImages"]}</span>
+                                </p>}
+                            </section>
+                            {
+                                newProductGalleryImages.length === 0 &&
+                                !isAddingNewImagesToProductGallery &&
+                                !successNewImagesToProductGallery &&
+                                !errorNewImagesToProductGallery &&
+                                <button
+                                    className="btn btn-success d-block mx-auto w-50 global-button"
+                                    disabled
+                                >
+                                    Add New Images
+                                </button>
+                            }
+                            {
+                                newProductGalleryImages.length > 0 &&
+                                !isAddingNewImagesToProductGallery &&
+                                !successNewImagesToProductGallery &&
+                                !errorNewImagesToProductGallery &&
+                                <button
+                                    className="btn btn-success d-block mx-auto w-50 global-button"
+                                    onClick={addingNewImagesToProductGallery}
+                                >
+                                    Add New Images
+                                </button>
+                            }
+                            {isAddingNewImagesToProductGallery && <button
+                                className="btn btn-info d-block mb-3 mx-auto global-button"
+                            >Please Waiting</button>}
+                            {successNewImagesToProductGallery && <button
+                                className="btn btn-success d-block mx-auto global-button"
                                 disabled
-                            >
-                                Add New Images
-                            </button>}
-                            {newProductGalleryImages.length > 0 && !isAddingNewImagesToProductGallery && <button
-                                className="btn btn-success d-block mx-auto w-50 global-button"
-                                onClick={() => addingNewImagesToProductGallery()}
-                            >
-                                Add New Images
-                            </button>}
+                            >{successNewImagesToProductGallery}</button>}
+                            {errorNewImagesToProductGallery && <button
+                                className="btn btn-danger d-block mx-auto global-button"
+                                disabled
+                            >{errorNewImagesToProductGallery}</button>}
                         </div>
                     </div>
                 </div>}
