@@ -41,21 +41,21 @@ export default function UpdateAndDeleteProducts() {
 
     const [errorChangeProductGalleryImageMsg, setErrorChangeProductGalleryImageMsg] = useState("");
 
+    const [errorDeleteProductGalleryImageMsg, setErrorDeleteProductGalleryImageMsg] = useState("");
+
     const [successMsg, setSuccessMsg] = useState("");
 
     const [successChangeProductImageMsg, setSuccessChangeProductImageMsg] = useState("");
 
     const [successChangeProductGalleryImageMsg, setSuccessChangeProductGalleryImageMsg] = useState("");
 
+    const [successDeleteProductGalleryImageMsg, setSuccessDeleteProductGalleryImageMsg] = useState("");
+
     const [productIndex, setProductIndex] = useState(-1);
 
     const [isDeleteProductGalleryImage, setIsDeleteProductGalleryImage] = useState(false);
 
-    const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
-
     const [newProductGalleryImageFiles, setNewProductGalleryImageFiles] = useState([]);
-
-    const [isUpdatingProductGalleryImage, setIsUpdatingProductGalleryImage] = useState(false);
 
     const [newProductGalleryImages, setNewProductGalleryImages] = useState([]);
 
@@ -254,6 +254,10 @@ export default function UpdateAndDeleteProducts() {
             }
         }
         catch (err) {
+            if (err?.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setUpdatingProductIndex(-1);
             setIsWaitChangeProductImage(false);
             setErrorChangeProductImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
@@ -352,7 +356,7 @@ export default function UpdateAndDeleteProducts() {
             }
         }
         catch (err) {
-            if (err.response.data?.msg === "Unauthorized Error") {
+            if (err?.response.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -412,18 +416,34 @@ export default function UpdateAndDeleteProducts() {
     const deleteImageFromProductImagesGallery = async (productIndex, productGalleryImageIndex) => {
         try {
             setIsDeleteProductGalleryImage(true);
-            setProductGalleryImageIndex(productGalleryImageIndex);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsData[productIndex]._id}?galleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`);
-            await res.data;
-            setIsDeleteProductGalleryImage(false);
-            setProductGalleryImageIndex(-1);
-            const newProductGalleryImagePaths = allProductsData[productIndex].galleryImagesPaths.filter((path) => path !== allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]);
-            allProductsData[productIndex].galleryImagesPaths = newProductGalleryImagePaths;
+            const res = await axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsInsideThePage[productIndex]._id}?galleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            const result = res.data;
+            if (!result.error) {
+                setIsDeleteProductGalleryImage(false);
+                setSuccessDeleteProductGalleryImageMsg(result.msg);
+                let successTimeout = setTimeout(async () => {
+                    setSuccessDeleteProductGalleryImageMsg("");
+                    const newProductGalleryImagePaths = allProductsInsideThePage[productIndex].galleryImagesPaths.filter((path) => path !== allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]);
+                    allProductsInsideThePage[productIndex].galleryImagesPaths = newProductGalleryImagePaths;
+                    clearTimeout(successTimeout);
+                }, 1500);
+            }
         }
         catch (err) {
-            setIsUpdatingProductGalleryImage(false);
-            setProductGalleryImageIndex(-1);
-            console.log(err);
+            if (err?.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsDeleteProductGalleryImage(false);
+            setErrorDeleteProductGalleryImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorDeleteProductGalleryImageMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -478,8 +498,8 @@ export default function UpdateAndDeleteProducts() {
                 await router.push("/admin-dashboard/login");
                 return;
             }
-            setIsUpdatingProductGalleryImage(-1);
-            setIsUpdatingProductGalleryImage(false);
+            setIsWaitChangeProductGalleryImage(false);
+            setUpdatingProductGalleryImageIndex(-1);
             setErrorChangeProductGalleryImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorChangeProductGalleryImageMsg("");
@@ -517,14 +537,14 @@ export default function UpdateAndDeleteProducts() {
                     <div className="gallery-images-box d-flex flex-column align-items-center justify-content-center p-4">
                         <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
                         <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-4">Product Gallery Images</h3>
-                        <div className="gallery-images-table-box w-100 p-3">
+                        {allProductsInsideThePage[productIndex].galleryImagesPaths.length > 0 ? <div className="gallery-images-table-box w-100 p-3">
                             <table className="gallery-images-table managment-table w-100">
                                 <thead>
                                     <tr>
                                         <th>Image</th>
                                         <th>Process</th>
                                     </tr>
-                                </thead> 
+                                </thead>
                                 <tbody>
                                     {allProductsInsideThePage[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
                                         <tr key={index}>
@@ -535,7 +555,26 @@ export default function UpdateAndDeleteProducts() {
                                                 />
                                             </td>
                                             <td>
-                                                {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50 global-button" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
+                                                {
+                                                    !isWaitChangeProductGalleryImage &&
+                                                    !errorChangeProductGalleryImageMsg &&
+                                                    !successChangeProductGalleryImageMsg &&
+                                                    !isDeleteProductGalleryImage &&
+                                                    !errorDeleteProductGalleryImageMsg &&
+                                                    !successDeleteProductGalleryImageMsg &&
+                                                    <button className="btn btn-danger w-50 global-button" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>
+                                                }
+                                                {isDeleteProductGalleryImage && <button
+                                                    className="btn btn-info d-block mb-3 mx-auto global-button"
+                                                >Please Waiting</button>}
+                                                {successDeleteProductGalleryImageMsg && <button
+                                                    className="btn btn-success d-block mx-auto global-button"
+                                                    disabled
+                                                >{successDeleteProductGalleryImageMsg}</button>}
+                                                {errorDeleteProductGalleryImageMsg && <button
+                                                    className="btn btn-danger d-block mx-auto global-button"
+                                                    disabled
+                                                >{errorDeleteProductGalleryImageMsg}</button>}
                                                 <hr />
                                                 <section className="product-gallery-image mb-4">
                                                     <input
@@ -549,12 +588,20 @@ export default function UpdateAndDeleteProducts() {
                                                         <span>{formValidationErrors["galleryImage"]}</span>
                                                     </p>}
                                                 </section>
-                                                {!isWaitChangeProductGalleryImage && !isDeleteProductGalleryImage && !errorChangeProductGalleryImageMsg && !successChangeProductGalleryImageMsg && <button
-                                                    className="btn btn-success d-block mx-auto w-50 global-button"
-                                                    onClick={() => updateProductGalleryImage(index)}
-                                                >
-                                                    Change
-                                                </button>}
+                                                {
+                                                    !isWaitChangeProductGalleryImage &&
+                                                    !errorChangeProductGalleryImageMsg &&
+                                                    !successChangeProductGalleryImageMsg &&
+                                                    !isDeleteProductGalleryImage &&
+                                                    !errorDeleteProductGalleryImageMsg &&
+                                                    !successDeleteProductGalleryImageMsg &&
+                                                    <button
+                                                        className="btn btn-success d-block mx-auto w-50 global-button"
+                                                        onClick={() => updateProductGalleryImage(index)}
+                                                    >
+                                                        Change
+                                                    </button>
+                                                }
                                                 {isWaitChangeProductGalleryImage && <button
                                                     className="btn btn-info d-block mb-3 mx-auto global-button"
                                                 >Please Waiting</button>}
@@ -568,10 +615,12 @@ export default function UpdateAndDeleteProducts() {
                                                 >{errorChangeProductGalleryImageMsg}</button>}
                                             </td>
                                         </tr>
-                                    ))}
+                                    ))
+                                    }
                                 </tbody>
                             </table>
-                        </div>
+                        </div> : <p className="alert alert-danger w-100 border border-2 border-dark">Sorry, There Is No Gallery Images For This Product !!</p>}
+                        {allProductsInsideThePage.length === 0 && !isFilteringProductsStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Products !!</p>}
                         <div className="add-new-product-images-for-gallery w-100">
                             <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-4 mx-auto">Add New Images For Product Gallery Images</h3>
                             <input
