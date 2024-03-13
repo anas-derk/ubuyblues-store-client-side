@@ -247,10 +247,10 @@ export default function UpdateAndDeleteProducts() {
                     let successTimeout = setTimeout(async () => {
                         setSuccessChangeProductImageMsg("");
                         setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
+                        setUpdatingProductIndex(-1);
                         clearTimeout(successTimeout);
                     }, 1500);
                 }
-                setUpdatingProductIndex(-1);
             }
         }
         catch (err) {
@@ -453,24 +453,24 @@ export default function UpdateAndDeleteProducts() {
             setFormValidationErrors(errorsObject);
             setUpdatingProductGalleryImageIndex(productGalleryImageIndex);
             if (Object.keys(errorsObject).length == 0) {
+                setIsWaitChangeProductGalleryImage(true);
                 let formData = new FormData();
                 formData.append("productGalleryImage", newProductGalleryImageFiles[productGalleryImageIndex]);
-                setIsWaitChangeProductGalleryImage(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsInsideThePage[productIndex]._id}?oldGalleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData, {
                     headers: {
                         Authorization: token,
                     }
                 });
                 const result = await res.data;
-                setIsWaitChangeProductGalleryImage(false);
                 if (!result.error) {
+                    setIsWaitChangeProductGalleryImage(false);
                     setSuccessChangeProductGalleryImageMsg(result.msg);
                     let successTimeout = setTimeout(async () => {
                         setSuccessChangeProductGalleryImageMsg("");
+                        setUpdatingProductGalleryImageIndex(-1);
                         clearTimeout(successTimeout);
                     }, 1500);
                 }
-                setUpdatingProductGalleryImageIndex(-1);
             }
         }
         catch (err) {
@@ -524,7 +524,7 @@ export default function UpdateAndDeleteProducts() {
                                         <th>Image</th>
                                         <th>Process</th>
                                     </tr>
-                                </thead>
+                                </thead> 
                                 <tbody>
                                     {allProductsInsideThePage[productIndex].galleryImagesPaths.map((galleryImagePath, index) => (
                                         <tr key={index}>
@@ -549,7 +549,7 @@ export default function UpdateAndDeleteProducts() {
                                                         <span>{formValidationErrors["galleryImage"]}</span>
                                                     </p>}
                                                 </section>
-                                                {!isWaitChangeProductGalleryImage && !isDeleteProductGalleryImage && !errorChangeProductGalleryImageMsg && <button
+                                                {!isWaitChangeProductGalleryImage && !isDeleteProductGalleryImage && !errorChangeProductGalleryImageMsg && !successChangeProductGalleryImageMsg && <button
                                                     className="btn btn-success d-block mx-auto w-50 global-button"
                                                     onClick={() => updateProductGalleryImage(index)}
                                                 >
