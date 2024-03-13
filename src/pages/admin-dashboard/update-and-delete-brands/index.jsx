@@ -24,7 +24,7 @@ export default function UpdateAndDeleteBrands() {
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
-    const [updatedBrandImageIndex, setUpdatedBrandImageIndex] = useState(-1);
+    const [updatedBrandIndex, setUpdatedBrandIndex] = useState(-1);
 
     const [isWaitChangeBrandImage, setIsWaitChangeBrandImage] = useState(false);
 
@@ -78,21 +78,8 @@ export default function UpdateAndDeleteBrands() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = (brandIndex) => {
-        return validations.inputValuesValidation([
-            {
-                name: "image",
-                value: allBrandsInsideThePage[brandIndex].image,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isImage: {
-                        msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
-                    },
-                },
-            },
-        ]);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const getBrandsCount = async () => {
@@ -147,9 +134,22 @@ export default function UpdateAndDeleteBrands() {
     const updateBrandImage = async (brandIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields(brandIndex);
+            let errorsObject = validateFormFields([
+                {
+                    name: "image",
+                    value: allBrandsInsideThePage[brandIndex].image,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+            ]);
             setFormValidationErrors(errorsObject);
-            setUpdatedBrandImageIndex(brandIndex);
+            setUpdatedBrandIndex(brandIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitChangeBrandImage(true);
                 let formData = new FormData();
@@ -169,6 +169,7 @@ export default function UpdateAndDeleteBrands() {
                         clearTimeout(successTimeout);
                     }, 1500);
                 }
+                setUpdatedBrandIndex(-1);
             }
         }
         catch (err) {
@@ -176,7 +177,7 @@ export default function UpdateAndDeleteBrands() {
                 await router.push("/admin-dashboard/login");
                 return;
             }
-            setUpdatedBrandImageIndex(-1);
+            setUpdatedBrandIndex(-1);
             setIsWaitChangeBrandImage(false);
             setErrorChangeBrandImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -187,23 +188,40 @@ export default function UpdateAndDeleteBrands() {
     }
 
     const updateBrandInfo = async (brandIndex) => {
-        setIsWaitStatus(true);
         try {
-            const res = await axios.put(`${process.env.BASE_API_URL}/brands/${allBrandsInsideThePage[brandIndex]._id}`, {
-                newBrandTitle: allBrandsInsideThePage[brandIndex].title,
-            }, {
-                headers: {
-                    Authorization: token,
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "title",
+                    value: allBrandsInsideThePage[brandIndex].title,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            setUpdatedBrandIndex(brandIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+                const res = await axios.put(`${process.env.BASE_API_URL}/brands/${allBrandsInsideThePage[brandIndex]._id}`, {
+                    newBrandTitle: allBrandsInsideThePage[brandIndex].title,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 1500);
                 }
-            });
-            const result = await res.data;
-            setIsWaitStatus(false);
-            if (!result.error) {
-                setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(() => {
-                    setSuccessMsg("");
-                    clearTimeout(successTimeout);
-                }, 1500);
+                setUpdatedBrandIndex(-1);
             }
         }
         catch (err) {
@@ -211,6 +229,7 @@ export default function UpdateAndDeleteBrands() {
                 await router.push("/admin-dashboard/login");
                 return;
             }
+            setUpdatedBrandIndex(-1);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -221,8 +240,8 @@ export default function UpdateAndDeleteBrands() {
     }
 
     const deleteBrand = async (brandId) => {
-        setIsWaitStatus(true);
         try {
+            setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/brands/${brandId}`, {
                 headers: {
                     Authorization: token,
@@ -288,13 +307,19 @@ export default function UpdateAndDeleteBrands() {
                                 {allBrandsInsideThePage.map((brand, index) => (
                                     <tr key={brand._id}>
                                         <td className="brand-title-cell">
-                                            <input
-                                                type="text"
-                                                placeholder="Enter New Brand Title"
-                                                defaultValue={brand.title}
-                                                className="p-2 form-control"
-                                                onChange={(e) => changeBrandData(index, "title", e.target.value.trim())}
-                                            ></input>
+                                            <section className="brand-title mb-4">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter New Brand Title"
+                                                    defaultValue={brand.title}
+                                                    className={`form-control d-block mx-auto p-2 border-2 brand-title-field ${formValidationErrors["title"] && index === updatedBrandIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    onChange={(e) => changeBrandData(index, "title", e.target.value.trim())}
+                                                ></input>
+                                                {formValidationErrors["title"] && index === updatedBrandIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["title"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                         <td className="brand-image-cell">
                                             <img
@@ -307,11 +332,11 @@ export default function UpdateAndDeleteBrands() {
                                             <section className="brand-image mb-4">
                                                 <input
                                                     type="file"
-                                                    className="form-control d-block mx-auto mb-3"
+                                                    className={`form-control d-block mx-auto p-2 border-2 brand-image-field ${formValidationErrors["image"] && index === updatedBrandIndex ? "border-danger mb-3" : "mb-4"}`}
                                                     onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
                                                     accept=".png, .jpg, .webp"
                                                 />
-                                                {formValidationErrors["image"] && index === updatedBrandImageIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                {formValidationErrors["image"] && index === updatedBrandIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{formValidationErrors["image"]}</span>
                                                 </p>}
