@@ -137,6 +137,15 @@ function inputValuesValidation(inputs) {
                     continue;
                 }
             }
+            // التحقق من كون القاعدة داخل كائن القواعد موجودة 
+            if (typeof inputRules.maxNumber !== "undefined") {
+                // التحقق من أنّ القاعدة محققة ، وفي حالة لم تكن محققة فإننا نضيف الخطأ إلى مصفوفة الأخطاء
+                if (Number(input.value) > inputRules.maxNumber.value) {
+                    errorsObject[input.name] = inputRules.maxNumber.msg;
+                    // في حالة وجود خطأ نقوم بتجاهل كل التعليمات اللاحقة داخل التكرار الحالي للحلقة والانتقال إلى التكرار التالي
+                    continue;
+                }
+            }
         }
     }
     return errorsObject;
