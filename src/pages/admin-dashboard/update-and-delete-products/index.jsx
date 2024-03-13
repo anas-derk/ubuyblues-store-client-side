@@ -29,15 +29,23 @@ export default function UpdateAndDeleteProducts() {
 
     const [updatingProductIndex, setUpdatingProductIndex] = useState(-1);
 
+    const [updatingProductGalleryImageIndex, setUpdatingProductGalleryImageIndex] = useState(-1);
+
     const [isWaitChangeProductImage, setIsWaitChangeProductImage] = useState(false);
 
-    const [errorMsg, setErrorMsg] = useState(false);
+    const [isWaitChangeProductGalleryImage, setIsWaitChangeProductGalleryImage] = useState(false);
 
-    const [errorChangeProductImageMsg, setErrorChangeProductImageMsg] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
-    const [successMsg, setSuccessMsg] = useState(false);
+    const [errorChangeProductImageMsg, setErrorChangeProductImageMsg] = useState("");
 
-    const [successChangeProductImageMsg, setSuccessChangeProductImageMsg] = useState(false);
+    const [errorChangeProductGalleryImageMsg, setErrorChangeProductGalleryImageMsg] = useState("");
+
+    const [successMsg, setSuccessMsg] = useState("");
+
+    const [successChangeProductImageMsg, setSuccessChangeProductImageMsg] = useState("");
+
+    const [successChangeProductGalleryImageMsg, setSuccessChangeProductGalleryImageMsg] = useState("");
 
     const [productIndex, setProductIndex] = useState(-1);
 
@@ -45,7 +53,7 @@ export default function UpdateAndDeleteProducts() {
 
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
 
-    const [newProductGalleryImageFile, setNewProductGalleryImageFile] = useState(null);
+    const [newProductGalleryImageFiles, setNewProductGalleryImageFiles] = useState([]);
 
     const [isUpdatingProductGalleryImage, setIsUpdatingProductGalleryImage] = useState(false);
 
@@ -216,7 +224,7 @@ export default function UpdateAndDeleteProducts() {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
                         isImage: {
-                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or Webp Image File !!",
                         },
                     },
                 },
@@ -419,22 +427,64 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
-    const changeProductGalleryImage = async (productGalleryImageIndex) => {
+    const changeProductGalleryImage = (productGalleryImageIndex, newValue) => {
+        let productsGalleryImagesTemp = newProductGalleryImageFiles;
+        productsGalleryImagesTemp[productGalleryImageIndex] = newValue;
+        setNewProductGalleryImageFiles(productsGalleryImagesTemp);
+    }
+
+    const updateProductGalleryImage = async (productGalleryImageIndex) => {
         try {
-            let formData = new FormData();
-            formData.append("productGalleryImage", newProductGalleryImageFile);
-            setIsUpdatingProductGalleryImage(true);
-            setProductGalleryImageIndex(productGalleryImageIndex);
-            const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsData[productIndex]._id}?oldGalleryImagePath=${allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData);
-            const newGalleryImagePath = await res.data;
-            setIsUpdatingProductGalleryImage(false);
-            setProductGalleryImageIndex(-1);
-            allProductsData[productIndex].galleryImagesPaths[productGalleryImageIndex] = newGalleryImagePath;
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "galleryImage",
+                    value: newProductGalleryImageFiles[productGalleryImageIndex],
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or Webp Image File !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            setUpdatingProductGalleryImageIndex(productGalleryImageIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                let formData = new FormData();
+                formData.append("productGalleryImage", newProductGalleryImageFiles[productGalleryImageIndex]);
+                setIsWaitChangeProductGalleryImage(true);
+                const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsInsideThePage[productIndex]._id}?oldGalleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                setIsWaitChangeProductGalleryImage(false);
+                if (!result.error) {
+                    setSuccessChangeProductGalleryImageMsg(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessChangeProductGalleryImageMsg("");
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                }
+                setUpdatingProductGalleryImageIndex(-1);
+            }
         }
         catch (err) {
-            console.log(err);
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsUpdatingProductGalleryImage(-1);
             setIsUpdatingProductGalleryImage(false);
-            setProductGalleryImageIndex(-1);
+            setErrorChangeProductGalleryImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorChangeProductGalleryImageMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -468,7 +518,7 @@ export default function UpdateAndDeleteProducts() {
                         <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
                         <h3 className="fw-bold border-bottom border-2 border-dark pb-2 mb-4">Product Gallery Images</h3>
                         <div className="gallery-images-table-box w-100 p-3">
-                            <table className="gallery-images-table w-100">
+                            <table className="gallery-images-table managment-table w-100">
                                 <thead>
                                     <tr>
                                         <th>Image</th>
@@ -487,23 +537,35 @@ export default function UpdateAndDeleteProducts() {
                                             <td>
                                                 {!isDeleteProductGalleryImage && index !== productGalleryImageIndex && <button className="btn btn-danger w-50 global-button" onClick={() => deleteImageFromProductImagesGallery(productIndex, index)}>Delete</button>}
                                                 <hr />
-                                                <input
-                                                    type="file"
-                                                    className="form-control w-50 d-block mx-auto mb-3"
-                                                    onChange={(e) => setNewProductGalleryImageFile(e.target.files[0])}
-                                                />
-                                                {!newProductGalleryImageFile && !isUpdatingProductGalleryImage && !isDeleteProductGalleryImage && <button
+                                                <section className="product-gallery-image mb-4">
+                                                    <input
+                                                        type="file"
+                                                        className={`form-control d-block mx-auto p-2 border-2 product-gallery-image-field ${formValidationErrors["galleryImage"] && index === updatingProductIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                        onChange={(e) => changeProductGalleryImage(index, e.target.files[0])}
+                                                        accept=".png, .jpg, .webp"
+                                                    />
+                                                    {formValidationErrors["galleryImage"] && index === updatingProductGalleryImageIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                        <span>{formValidationErrors["galleryImage"]}</span>
+                                                    </p>}
+                                                </section>
+                                                {!isWaitChangeProductGalleryImage && !isDeleteProductGalleryImage && !errorChangeProductGalleryImageMsg && <button
                                                     className="btn btn-success d-block mx-auto w-50 global-button"
+                                                    onClick={() => updateProductGalleryImage(index)}
+                                                >
+                                                    Change
+                                                </button>}
+                                                {isWaitChangeProductGalleryImage && <button
+                                                    className="btn btn-info d-block mb-3 mx-auto global-button"
+                                                >Please Waiting</button>}
+                                                {successChangeProductGalleryImageMsg && <button
+                                                    className="btn btn-success d-block mx-auto global-button"
                                                     disabled
-                                                >
-                                                    Change
-                                                </button>}
-                                                {newProductGalleryImageFile && !isUpdatingProductGalleryImage && !isDeleteProductGalleryImage && <button
-                                                    className="btn btn-success d-block mx-auto w-50 global-button"
-                                                    onClick={() => changeProductGalleryImage(index)}
-                                                >
-                                                    Change
-                                                </button>}
+                                                >{successChangeProductGalleryImageMsg}</button>}
+                                                {errorChangeProductGalleryImageMsg && <button
+                                                    className="btn btn-danger d-block mx-auto global-button"
+                                                    disabled
+                                                >{errorChangeProductGalleryImageMsg}</button>}
                                             </td>
                                         </tr>
                                     ))}

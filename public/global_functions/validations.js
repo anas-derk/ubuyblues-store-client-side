@@ -9,7 +9,7 @@ function isEmail(email) {
 // تعريف دالة لمعرفة هل الملف هو صورة أم لا
 function isImage(file) {
     // التحقق من كون نوع الملف هو صورة من امتداد jpg or png 
-    return file.type === "image/png" || file.type === "image/jpeg";
+    return file.type === "image/png" || file.type === "image/jpeg" || file.type === "image/webp";
 }
 
 // تعريف دالة للتحقق من كلمة السر هل صالحة أم لا
