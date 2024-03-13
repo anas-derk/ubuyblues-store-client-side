@@ -8,8 +8,9 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
-export default function UpdateAndDeleteStores() {
+export default function UpdateAndDeleteBrands() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -22,6 +23,8 @@ export default function UpdateAndDeleteStores() {
     const [allBrandsInsideThePage, setAllBrandsInsideThePage] = useState([]);
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
+
+    const [updatedBrandImageIndex, setUpdatedBrandImageIndex] = useState(-1);
 
     const [isWaitChangeBrandImage, setIsWaitChangeBrandImage] = useState(false);
 
@@ -37,11 +40,11 @@ export default function UpdateAndDeleteStores() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
-    const fileElementRef = useRef();
+    const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const router = useRouter();
 
-    const pageSize = 1;
+    const pageSize = 10;
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -74,6 +77,23 @@ export default function UpdateAndDeleteStores() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
+
+    const validateFormFields = (brandIndex) => {
+        return validations.inputValuesValidation([
+            {
+                name: "image",
+                value: allBrandsInsideThePage[brandIndex].image,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, This Field Can't Be Empty !!",
+                    },
+                    isImage: {
+                        msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                    },
+                },
+            },
+        ]);
+    }
 
     const getBrandsCount = async () => {
         try {
@@ -126,24 +146,29 @@ export default function UpdateAndDeleteStores() {
 
     const updateBrandImage = async (brandIndex) => {
         try {
-            setIsWaitChangeBrandImage(true);
-            let formData = new FormData();
-            formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
-            const res = await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
-                headers: {
-                    Authorization: token,
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields(brandIndex);
+            setFormValidationErrors(errorsObject);
+            setUpdatedBrandImageIndex(brandIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitChangeBrandImage(true);
+                let formData = new FormData();
+                formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
+                const res = await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = res.data;
+                if (!result.error) {
+                    setIsWaitChangeBrandImage(false);
+                    setSuccessChangeBrandImageMsg(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessChangeBrandImageMsg("");
+                        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
+                        clearTimeout(successTimeout);
+                    }, 1500);
                 }
-            });
-            const result = res.data;
-            if (!result.error) {
-                setIsWaitChangeBrandImage(false);
-                setSuccessChangeBrandImageMsg(result.msg);
-                let successTimeout = setTimeout(async () => {
-                    setSuccessChangeBrandImageMsg("");
-                    setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
-                    setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    clearTimeout(successTimeout);
-                }, 1500);
             }
         }
         catch (err) {
@@ -151,6 +176,7 @@ export default function UpdateAndDeleteStores() {
                 await router.push("/admin-dashboard/login");
                 return;
             }
+            setUpdatedBrandImageIndex(-1);
             setIsWaitChangeBrandImage(false);
             setErrorChangeBrandImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -278,14 +304,18 @@ export default function UpdateAndDeleteStores() {
                                                 height="100"
                                                 className="d-block mx-auto mb-4"
                                             />
-                                            <input
-                                                type="file"
-                                                className="form-control d-block mx-auto mb-3"
-                                                onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
-                                                accept=".png, .jpg, .webp"
-                                                ref={fileElementRef}
-                                                value={fileElementRef.current?.value}
-                                            />
+                                            <section className="brand-image mb-4">
+                                                <input
+                                                    type="file"
+                                                    className="form-control d-block mx-auto mb-3"
+                                                    onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
+                                                    accept=".png, .jpg, .webp"
+                                                />
+                                                {formValidationErrors["image"] && index === updatedBrandImageIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["image"]}</span>
+                                                </p>}
+                                            </section>
                                             {!isWaitChangeBrandImage && !errorChangeBrandImageMsg && !successChangeBrandImageMsg &&
                                                 <button
                                                     className="btn btn-success d-block mb-3 w-50 mx-auto global-button"
