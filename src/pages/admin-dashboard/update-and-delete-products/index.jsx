@@ -6,13 +6,18 @@ import { GrFormClose } from "react-icons/gr";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function UpdateAndDeleteProducts() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
@@ -56,6 +61,10 @@ export default function UpdateAndDeleteProducts() {
         category: "",
     });
 
+    const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const router = useRouter();
+
     const pageSize = 10;
 
     useEffect(() => {
@@ -68,19 +77,18 @@ export default function UpdateAndDeleteProducts() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        res = await getProductsCount();
-                        if (result > 0) {
-                            const result1 = await getAllProductsInsideThePage(1, pageSize);
-                            setAllProductsInsideThePage(result1);
-                            setTotalPagesCount(Math.ceil(result / pageSize));
-                            res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
-                            setAllCategories(await res.data);
+                        result = await getProductsCount();
+                        if (result.data > 0) {
+                            setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
+                            setTotalPagesCount(Math.ceil(result.data / pageSize));
+                            setAllCategories((await getAllCategories()).data);
                         }
+                        setToken(adminToken);
                         setIsLoadingPage(false);
                     }
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -106,6 +114,16 @@ export default function UpdateAndDeleteProducts() {
     const getAllProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllCategories = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
             return await res.data;
         }
         catch (err) {

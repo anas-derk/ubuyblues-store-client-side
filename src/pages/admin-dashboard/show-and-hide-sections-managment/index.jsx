@@ -46,7 +46,7 @@ export default function ShowAndHideSections() {
                     }
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -83,7 +83,7 @@ export default function ShowAndHideSections() {
             }
         }
         catch (err) {
-            if (err.response.data?.msg === "Unauthorized Error") {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }

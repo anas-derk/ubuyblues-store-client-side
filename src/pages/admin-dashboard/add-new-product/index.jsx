@@ -54,20 +54,16 @@ export default function AddNewProduct() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         setToken(adminToken);
-                        const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
-                        const result = await res.data;
-                        if (!result.error) {
-                            setAllCategories(result.data);
-                        }
+                        setAllCategories((await getAllCategories()).data);
                         setIsLoadingPage(false);
                     }
                 })
                 .catch(async (err) => {
-                    if (err.message === "Network Error") {
+                    if (err?.message === "Network Error") {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
-                    if (err.response?.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -77,16 +73,17 @@ export default function AddNewProduct() {
                     }
                 });
         } else router.push("/admin-dashboard/login");
-        axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
-            .then((res) => {
-                setAllCategories(res.data);
-                setIsLoadingPage(false);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
     }, []);
+
+    const getAllCategories = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
 
     const validateFormFields = () => {
         return validations.inputValuesValidation([

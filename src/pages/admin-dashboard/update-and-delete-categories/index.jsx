@@ -55,7 +55,7 @@ export default function UpdateAndDeleteCategories() {
                     }
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -117,8 +117,8 @@ export default function UpdateAndDeleteCategories() {
     }
 
     const updateCategory = async (categoryIndex) => {
-        setIsWaitStatus(true);
         try {
+            setIsWaitStatus(true);
             const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategoriesInsideThePage[categoryIndex]._id}`, {
                 newCategoryName: allCategoriesInsideThePage[categoryIndex].name,
             }, {
@@ -137,7 +137,7 @@ export default function UpdateAndDeleteCategories() {
             }
         }
         catch (err) {
-            if (err.response.data?.msg === "Unauthorized Error") {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -151,8 +151,8 @@ export default function UpdateAndDeleteCategories() {
     }
 
     const deleteCategory = async (categoryId) => {
-        setIsWaitStatus(true);
         try {
+            setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`, {
                 headers: {
                     Authorization: token,
@@ -180,7 +180,7 @@ export default function UpdateAndDeleteCategories() {
             }
         }
         catch (err) {
-            if (err.response.data?.msg === "Unauthorized Error") {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }

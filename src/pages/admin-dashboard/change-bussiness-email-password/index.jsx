@@ -57,11 +57,11 @@ export default function ChangeBussinessEmailPassword() {
                     }
                 })
                 .catch(async (err) => {
-                    if(err.message === "Network Error") {
+                    if(err?.message === "Network Error") {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -160,7 +160,7 @@ export default function ChangeBussinessEmailPassword() {
             }
         }
         catch (err) {
-            if (err.response.data?.msg === "Unauthorized Error") {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }

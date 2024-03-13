@@ -43,7 +43,7 @@ export default function AdminLogin() {
                     } else await router.push("/admin-dashboard");
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         setIsLoadingPage(false);
                     }
@@ -82,13 +82,13 @@ export default function AdminLogin() {
     }
 
     const adminLogin = async (e) => {
-        e.preventDefault();
-        setFormValidationErrors({});
-        let errorsObject = validateFormFields();
-        setFormValidationErrors(errorsObject);
-        if (Object.keys(errorsObject).length == 0) {
-            setIsLoginingStatus(true);
-            try {
+        try {
+            e.preventDefault();
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields();
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsLoginingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
                 const result = await res.data;
                 if (result.error) {
@@ -101,13 +101,13 @@ export default function AdminLogin() {
                     localStorage.setItem("asfour-store-admin-user-token", result.data.token);
                     await router.push("/admin-dashboard");
                 }
-            } catch (err) {
-                setIsLoginingStatus(false);
-                setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
-                setTimeout(() => {
-                    setErrorMsg("");
-                }, 3000);
             }
+        } catch (err) {
+            setIsLoginingStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            setTimeout(() => {
+                setErrorMsg("");
+            }, 3000);
         }
     }
 
