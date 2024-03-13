@@ -27,6 +27,8 @@ export default function UpdateAndDeleteProducts() {
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
+    const [updatingProductIndex, setUpdatingProductIndex] = useState(-1);
+
     const [isWaitChangeProductImage, setIsWaitChangeProductImage] = useState(false);
 
     const [errorMsg, setErrorMsg] = useState(false);
@@ -65,7 +67,7 @@ export default function UpdateAndDeleteProducts() {
 
     const router = useRouter();
 
-    const pageSize = 10;
+    const pageSize = 2;
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -99,6 +101,10 @@ export default function UpdateAndDeleteProducts() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
+
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
 
     const getProductsCount = async (filters) => {
         try {
@@ -134,7 +140,7 @@ export default function UpdateAndDeleteProducts() {
     const getPreviousPage = async () => {
         setIsFilteringProductsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringProductsStatus(false);
     }
@@ -142,14 +148,14 @@ export default function UpdateAndDeleteProducts() {
     const getNextPage = async () => {
         setIsFilteringProductsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringProductsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringProductsStatus(true);
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsFilteringProductsStatus(false);
     }
@@ -167,10 +173,9 @@ export default function UpdateAndDeleteProducts() {
             setCurrentPage(1);
             let filteringString = getFilteringString(filters);
             const result = await getProductsCount(filteringString);
-            if (result > 0) {
-                const result1 = await getAllProductsInsideThePage(1, pageSize, filteringString);
-                setAllProductsInsideThePage(result1);
-                setTotalPagesCount(Math.ceil(result / pageSize));
+            if (result.data > 0) {
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filteringString)).data);
+                setTotalPagesCount(Math.ceil(result.data / pageSize));
                 setIsFilteringProductsStatus(false);
             } else {
                 setAllProductsInsideThePage([]);
@@ -179,7 +184,17 @@ export default function UpdateAndDeleteProducts() {
             }
         }
         catch (err) {
-            console.log(err);
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsFilteringProductsStatus(false);
+            setCurrentPage(-1);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -191,19 +206,47 @@ export default function UpdateAndDeleteProducts() {
 
     const updateProductImage = async (productIndex) => {
         try {
-            setIsWaitChangeProductImage(true);
-            let formData = new FormData();
-            formData.append("productImage", allProductsInsideThePage[productIndex].image);
-            await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData);
-            setIsWaitChangeProductImage(false);
-            setSuccessChangeProductImageMsg("Updating Product Image Has Been Successfully !!");
-            let successTimeout = setTimeout(() => {
-                setSuccessChangeProductImageMsg("");
-                clearTimeout(successTimeout);
-            }, 1500);
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "image",
+                    value: allProductsInsideThePage[productIndex].image,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            setUpdatingProductIndex(brandIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitChangeProductImage(true);
+                let formData = new FormData();
+                formData.append("productImage", allProductsInsideThePage[productIndex].image);
+                const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = res.data;
+                if (!result.error) {
+                    setIsWaitChangeProductImage(false);
+                    setSuccessChangeProductImageMsg("Updating Product Image Has Been Successfully !!");
+                    let successTimeout = setTimeout(() => {
+                        setSuccessChangeProductImageMsg("");
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                }
+                setUpdatingProductIndex(-1);
+            }
         }
         catch (err) {
             console.log(err);
+            setUpdatingProductIndex(-1);
             setIsWaitChangeProductImage(false);
             setErrorChangeProductImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -214,28 +257,99 @@ export default function UpdateAndDeleteProducts() {
     }
 
     const updateProductData = async (productIndex) => {
-        setIsWaitStatus(true);
         try {
-            const res = await axios.put(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}`, {
-                name: allProductsInsideThePage[productIndex].name,
-                price: allProductsInsideThePage[productIndex].price,
-                description: allProductsInsideThePage[productIndex].description,
-                discount: allProductsInsideThePage[productIndex].discount,
-                category: allProductsInsideThePage[productIndex].category,
-                startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
-                endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
-            });
-            const result = await res.data;
-            setIsWaitStatus(false);
-            if (result === "Updating Product Process Has Been Successfuly ...") {
-                setSuccessMsg(result);
-                let successTimeout = setTimeout(() => {
-                    setSuccessMsg("");
-                    clearTimeout(successTimeout);
-                }, 1500);
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "name",
+                    value: allProductsInsideThePage[productIndex].name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "price",
+                    value: allProductsInsideThePage[productIndex].price,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "description",
+                    value: allProductsInsideThePage[productIndex].description,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "discount",
+                    value: allProductsInsideThePage[productIndex].discount,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "category",
+                    value: allProductsInsideThePage[productIndex].category,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "category",
+                    value: allProductsInsideThePage[productIndex].category,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            setUpdatingProductIndex(productIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+                const res = await axios.put(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}`, {
+                    name: allProductsInsideThePage[productIndex].name,
+                    price: allProductsInsideThePage[productIndex].price,
+                    description: allProductsInsideThePage[productIndex].description,
+                    discount: allProductsInsideThePage[productIndex].discount,
+                    category: allProductsInsideThePage[productIndex].category,
+                    startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
+                    endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                }
+                setUpdatingProductIndex(-1);
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setUpdatingProductIndex(-1);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -246,22 +360,21 @@ export default function UpdateAndDeleteProducts() {
     }
 
     const deleteProduct = async (productId) => {
-        setIsWaitStatus(true);
         try {
+            setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/products/${productId}`);
             const result = await res.data;
             setIsWaitStatus(false);
-            if (!result.isError) {
+            if (!result.error) {
                 setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
                     setIsFilteringProductsStatus(true);
                     setCurrentPage(1);
                     const result = await getProductsCount();
-                    if (result > 0) {
-                        const result1 = await getAllProductsInsideThePage(1, pageSize);
-                        setAllProductsInsideThePage(result1);
-                        setTotalPagesCount(Math.ceil(result / pageSize));
+                    if (result.data > 0) {
+                        setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
                     } else {
                         setAllProductsInsideThePage([]);
                         setTotalPagesCount(0);
@@ -272,6 +385,10 @@ export default function UpdateAndDeleteProducts() {
             }
         }
         catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -614,7 +731,7 @@ export default function UpdateAndDeleteProducts() {
                             </tbody>
                         </table>
                     </div>}
-                    {allProductsInsideThePage.length === 0 && !isFilteringProductsStatus && <p className="alert alert-danger">Sorry, Can't Find Any Products !!</p>}
+                    {allProductsInsideThePage.length === 0 && !isFilteringProductsStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Products !!</p>}
                     {isFilteringProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
