@@ -512,8 +512,9 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
-    const addingNewImagesToProductGallery = async () => {
+    const addingNewImagesToProductGallery = async (newProductGalleryImageFiles) => {
         try {
+            console.log(newProductGalleryImageFiles)
             setFormValidationErrors({});
             let errorsObject = validateFormFields([
                 {
@@ -527,29 +528,32 @@ export default function UpdateAndDeleteProducts() {
                 },
             ]);
             setFormValidationErrors(errorsObject);
-            console.log(errorsObject);
-            // if (Object.keys(errorsObject).length == 0) {
-            //     setIsAddingNewImagesToProductGallery(true);
-            //     let formData = new FormData();
-            //     for (let productGalleryImage of newProductGalleryImages) {
-            //         formData.append("productGalleryImage", productGalleryImage);
-            //     }
-            //     const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData);
-            //     const result = await res.data;
-            //     setIsAddingNewImagesToProductGallery(false);
-            //     if (!result.error) {
-            //         setIsAddingNewImagesToProductGallery(false);
-            //         setSuccessNewImagesToProductGallery(result.msg);
-            //         let successTimeout = setTimeout(async () => {
-            //             setSuccessNewImagesToProductGallery("");
-            //             allProductsInsideThePage[productIndex].galleryImagesPaths = allProductsInsideThePage[productIndex].galleryImagesPaths.concat(result.data.newGalleryImagePaths);
-            //             clearTimeout(successTimeout);
-            //         }, 1500);
-            //     }
-            // }
+            if (Object.keys(errorsObject).length == 0) {
+                setIsAddingNewImagesToProductGallery(true);
+                let formData = new FormData();
+                for (let productGalleryImageFile of newProductGalleryImageFiles) {
+                    formData.append("productGalleryImage", productGalleryImageFile);
+                }
+                const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                setIsAddingNewImagesToProductGallery(false);
+                if (!result.error) {
+                    setIsAddingNewImagesToProductGallery(false);
+                    setSuccessNewImagesToProductGallery(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessNewImagesToProductGallery("");
+                        allProductsInsideThePage[productIndex].galleryImagesPaths = allProductsInsideThePage[productIndex].galleryImagesPaths.concat(result.data.newGalleryImagePaths);
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                }
+            }
         }
         catch (err) {
-            if (err?.response.data?.msg === "Unauthorized Error") {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -664,16 +668,16 @@ export default function UpdateAndDeleteProducts() {
                                     type="file"
                                     className={`form-control d-block mx-auto p-2 border-2 brand-image-field ${formValidationErrors["newGalleryImages"] ? "border-danger mb-3" : "mb-4"}`}
                                     multiple
-                                    onChange={(e) => setNewProductGalleryImages(e.target.files)}
+                                    onChange={(e) => setNewProductGalleryImageFiles(e.target.files)}
                                     accept=".png, .jpg, .webp"
                                 />
-                                {formValidationErrors["newGalleryImages"] && index === updatingProductIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                {formValidationErrors["newGalleryImages"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                     <span>{formValidationErrors["newGalleryImages"]}</span>
                                 </p>}
                             </section>
                             {
-                                newProductGalleryImages.length === 0 &&
+                                newProductGalleryImageFiles.length === 0 &&
                                 !isAddingNewImagesToProductGallery &&
                                 !successNewImagesToProductGallery &&
                                 !errorNewImagesToProductGallery &&
@@ -685,13 +689,13 @@ export default function UpdateAndDeleteProducts() {
                                 </button>
                             }
                             {
-                                newProductGalleryImages.length > 0 &&
+                                newProductGalleryImageFiles.length > 0 &&
                                 !isAddingNewImagesToProductGallery &&
                                 !successNewImagesToProductGallery &&
                                 !errorNewImagesToProductGallery &&
                                 <button
                                     className="btn btn-success d-block mx-auto w-50 global-button"
-                                    onClick={addingNewImagesToProductGallery}
+                                    onClick={() => addingNewImagesToProductGallery(newProductGalleryImageFiles)}
                                 >
                                     Add New Images
                                 </button>
