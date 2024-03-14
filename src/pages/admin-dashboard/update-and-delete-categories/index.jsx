@@ -8,6 +8,7 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function UpdateAndDeleteCategories() {
 
@@ -23,6 +24,8 @@ export default function UpdateAndDeleteCategories() {
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
+    const [updatingCategoryIndex, setUpdatingCategoryIndex] = useState(-1);
+
     const [errorMsg, setErrorMsg] = useState(false);
 
     const [successMsg, setSuccessMsg] = useState(false);
@@ -31,9 +34,11 @@ export default function UpdateAndDeleteCategories() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
+    const [formValidationErrors, setFormValidationErrors] = useState({});
+
     const router = useRouter();
 
-    const pageSize = 1;
+    const pageSize = 10;
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -66,6 +71,10 @@ export default function UpdateAndDeleteCategories() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
+
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
 
     const getCategoriesCount = async () => {
         try {
@@ -118,22 +127,38 @@ export default function UpdateAndDeleteCategories() {
 
     const updateCategory = async (categoryIndex) => {
         try {
-            setIsWaitStatus(true);
-            const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategoriesInsideThePage[categoryIndex]._id}`, {
-                newCategoryName: allCategoriesInsideThePage[categoryIndex].name,
-            }, {
-                headers: {
-                    Authorization: token,
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "categoryName",
+                    value: allCategoriesInsideThePage[categoryIndex].name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            setUpdatingCategoryIndex(categoryIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                const res = await axios.put(`${process.env.BASE_API_URL}/categories/${allCategoriesInsideThePage[categoryIndex]._id}`, {
+                    newCategoryName: allCategoriesInsideThePage[categoryIndex].name,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 1500);
                 }
-            });
-            const result = await res.data;
-            setIsWaitStatus(false);
-            if (!result.error) {
-                setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(() => {
-                    setSuccessMsg("");
-                    clearTimeout(successTimeout);
-                }, 1500);
+                setUpdatingCategoryIndex(-1);
             }
         }
         catch (err) {
@@ -141,6 +166,7 @@ export default function UpdateAndDeleteCategories() {
                 await router.push("/admin-dashboard/login");
                 return;
             }
+            setUpdatingCategoryIndex(-1);
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -216,14 +242,19 @@ export default function UpdateAndDeleteCategories() {
                             <tbody>
                                 {allCategoriesInsideThePage.map((category, index) => (
                                     <tr key={category._id}>
-                                        <td className="product-name-cell">
-                                            <input
-                                                type="text"
-                                                placeholder="Enter New Category Name"
-                                                defaultValue={category.name}
-                                                className="p-2 form-control"
-                                                onChange={(e) => changeCategoryName(index, e.target.value.trim())}
-                                            ></input>
+                                        <td className="category-name-cell">
+                                            <section className="category-name mb-4">
+                                                <input
+                                                    type="text"
+                                                    className={`form-control d-block mx-auto p-2 border-2 brand-title-field ${formValidationErrors["categoryName"] && index === updatingCategoryIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    defaultValue={category.name}
+                                                    onChange={(e) => changeCategoryName(index, e.target.value.trim())}
+                                                ></input>
+                                                {formValidationErrors["categoryName"] && index === updatingCategoryIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["categoryName"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                         <td className="update-cell">
                                             {!isWaitStatus && !errorMsg && !successMsg && <>
