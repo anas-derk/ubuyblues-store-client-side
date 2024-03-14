@@ -7,12 +7,16 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function OrdersManagment() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
 
@@ -40,9 +44,11 @@ export default function OrdersManagment() {
         email: "",
     });
 
+    const [formValidationErrors, setFormValidationErrors] = useState({});
+
     const router = useRouter();
 
-    const pageSize = 10;
+    const pageSize = 3;
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
@@ -55,16 +61,16 @@ export default function OrdersManagment() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         const result = await getOrdersCount();
-                        if (result > 0) {
-                            const result1 = await getAllOrdersInsideThePage(1, pageSize);
-                            setAllOrdersInsideThePage(result1);
-                            setTotalPagesCount(Math.ceil(result / pageSize));
+                        if (result.data > 0) {
+                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                            setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
+                        setToken(adminToken);
                         setIsLoadingPage(false);
                     }
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -75,6 +81,10 @@ export default function OrdersManagment() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
+
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
 
     const getOrdersCount = async (filters) => {
         try {
@@ -108,7 +118,7 @@ export default function OrdersManagment() {
     const getPreviousPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
@@ -116,14 +126,14 @@ export default function OrdersManagment() {
     const getNextPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringOrdersStatus(true);
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsFilteringOrdersStatus(false);
     }
@@ -145,10 +155,9 @@ export default function OrdersManagment() {
             setCurrentPage(1);
             let filteringString = getFilteringString(filters);
             const result = await getOrdersCount(filteringString);
-            if (result > 0) {
-                const result1 = await getAllOrdersInsideThePage(1, pageSize, filteringString);
-                setAllOrdersInsideThePage(result1);
-                setTotalPagesCount(Math.ceil(result / pageSize));
+            if (result.data > 0) {
+                setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
+                setTotalPagesCount(Math.ceil(result.data / pageSize));
                 setIsFilteringOrdersStatus(false);
             } else {
                 setAllOrdersInsideThePage([]);
@@ -157,7 +166,16 @@ export default function OrdersManagment() {
             }
         }
         catch (err) {
-            console.log(err);
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsFilteringOrdersStatus(false);
+            setIsErrorStatus(true);
+            let errorTimeout = setTimeout(() => {
+                setIsErrorStatus(false);
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -166,22 +184,45 @@ export default function OrdersManagment() {
     }
 
     const updateOrderData = async (orderIndex) => {
-        setIsUpdatingStatus(true);
-        setSelectedOrderIndex(orderIndex);
         try {
-            const res = await axios.post(`${process.env.BASE_API_URL}/orders/update-order/${allOrdersInsideThePage[orderIndex]._id}`, {
-                order_amount: allOrdersInsideThePage[orderIndex].order_amount,
-                status: allOrdersInsideThePage[orderIndex].status,
-            });
-            const result = await res.data;
-            if (result === "Updating Order Details Has Been Successfuly !!") {
-                setIsUpdatingStatus(false);
-                setIsSuccessStatus(true);
-                let successTimeout = setTimeout(() => {
-                    setIsSuccessStatus(false);
-                    setSelectedOrderIndex(-1);
-                    clearTimeout(successTimeout);
-                }, 3000);
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "totalAmount",
+                    value: allOrdersInsideThePage[orderIndex].order_amount,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        minNumber: {
+                            value: 0,
+                            msg: "Sorry, Min Number Is: 1 !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            setSelectedOrderIndex(orderIndex);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsUpdatingStatus(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/orders/update-order/${allOrdersInsideThePage[orderIndex]._id}`, {
+                    order_amount: allOrdersInsideThePage[orderIndex].order_amount,
+                    status: allOrdersInsideThePage[orderIndex].status,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                if (!result.error) {
+                    setIsUpdatingStatus(false);
+                    setIsSuccessStatus(true);
+                    let successTimeout = setTimeout(() => {
+                        setIsSuccessStatus(false);
+                        setSelectedOrderIndex(-1);
+                        clearTimeout(successTimeout);
+                    }, 3000);
+                }
             }
         }
         catch (err) {
@@ -199,18 +240,25 @@ export default function OrdersManagment() {
         try {
             setIsDeletingStatus(true);
             setSelectedOrderIndex(orderIndex);
-            await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allOrdersInsideThePage[orderIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allOrdersInsideThePage[orderIndex]._id}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            const result = res.data;
             setIsDeletingStatus(false);
-            setIsSuccessStatus(true);
-            let successTimeout = setTimeout(async () => {
-                setIsSuccessStatus(false);
-                setSelectedOrderIndex(-1);
-                setIsFilteringOrdersStatus(true);
-                setAllOrdersInsideThePage(await getAllOrdersInsideThePage(1, pageSize));
-                setCurrentPage(1);
-                setIsFilteringOrdersStatus(false);
-                clearTimeout(successTimeout);
-            }, 3000);
+            if (!result.error) {
+                setIsSuccessStatus(true);
+                let successTimeout = setTimeout(async () => {
+                    setIsSuccessStatus(false);
+                    setSelectedOrderIndex(-1);
+                    setIsFilteringOrdersStatus(true);
+                    setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                    setCurrentPage(1);
+                    setIsFilteringOrdersStatus(false);
+                    clearTimeout(successTimeout);
+                }, 3000);
+            }
         }
         catch (err) {
             setIsDeletingStatus(false);
@@ -339,17 +387,23 @@ export default function OrdersManagment() {
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input
-                                                        type="number"
-                                                        defaultValue={order.order_amount}
-                                                        className="form-control"
-                                                        placeholder="Pleae Enter Order Amount"
-                                                        onChange={(e) => changeOrderData(orderIndex, "order_amount", e.target.valueAsNumber)}
-                                                    />
+                                                    <section className="order-total-amount mb-4">
+                                                        <input
+                                                            type="number"
+                                                            defaultValue={order.order_amount}
+                                                            className={`form-control d-block mx-auto p-2 border-2 brand-title-field ${formValidationErrors["totalAmount"] && orderIndex === selectedOrderIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                            placeholder="Pleae Enter Order Amount"
+                                                            onChange={(e) => changeOrderData(orderIndex, "order_amount", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                        />
+                                                        {formValidationErrors["totalAmount"] && orderIndex === selectedOrderIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                            <span>{formValidationErrors["totalAmount"]}</span>
+                                                        </p>}
+                                                    </section>
                                                 </td>
                                                 <td>{getDateFormated(order.added_date)}</td>
                                                 <td>
-                                                    {!isUpdatingStatus && !isDeletingStatus && !order.isDeleted && orderIndex !== selectedOrderIndex && <button
+                                                    {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !order.isDeleted && <button
                                                         className="btn btn-info d-block mx-auto mb-3 global-button"
                                                         onClick={() => updateOrderData(orderIndex)}
                                                     >
@@ -367,7 +421,7 @@ export default function OrdersManagment() {
                                                     >
                                                         Success
                                                     </button>}
-                                                    {!isUpdatingStatus && !isDeletingStatus && !order.isDeleted && orderIndex !== selectedOrderIndex && <button
+                                                    {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !order.isDeleted && <button
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         onClick={() => deleteOrder(orderIndex)}
                                                     >
@@ -389,7 +443,7 @@ export default function OrdersManagment() {
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
-                                                        Sorry, Error In Process
+                                                        Sorry, Someting Went Wrong, Please Repeate The Process !!
                                                     </button>}
                                                     {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
                                                         <Link
