@@ -17,13 +17,13 @@ export default function OrderDetails({ orderId }) {
 
     const [orderDetails, setOrderDetails] = useState({});
 
-    const [updatingOrderProductIndex, setUpdatingOrderProductIndex] = useState(-1);
-
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
     const [isDeletingStatus, setIsDeletingStatus] = useState(false);
 
-    const [deletingOrderProductIndex, setDeletingOrderProductIndex] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const [successMsg, setSuccessMsg] = useState("");
 
     const router = useRouter();
 
@@ -77,7 +77,6 @@ export default function OrderDetails({ orderId }) {
     const updateOrderProductData = async (orderProductIndex) => {
         try {
             setIsUpdatingStatus(true);
-            setUpdatingOrderProductIndex(orderProductIndex);
             const res = await axios.put(`${process.env.BASE_API_URL}/orders/products/update-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex]._id}`, {
                 quantity: orderDetails.order_products[orderProductIndex].quantity,
                 name: orderDetails.order_products[orderProductIndex].name,
@@ -90,8 +89,12 @@ export default function OrderDetails({ orderId }) {
             });
             const result = res.data;
             if (!result.error) {
-                setUpdatingOrderProductIndex(-1);
                 setIsUpdatingStatus(false);
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
             }
         }
         catch (err) {
@@ -99,25 +102,40 @@ export default function OrderDetails({ orderId }) {
                 await router.push("/admin-dashboard/login");
                 return;
             }
-            setDeletingOrderProductIndex(-1);
             setIsUpdatingStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
     const deleteProductFromOrder = async (orderProductIndex) => {
-        setIsDeletingStatus(true);
-        setDeletingOrderProductIndex(orderProductIndex);
         try {
+            setIsDeletingStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/orders/products/delete-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex]._id}`);
             const result = await res.data;
             if (result === "Deleting Product From Order Has Been Successfuly !!") {
                 setIsDeletingStatus(false);
-                setDeletingOrderProductIndex(-1);
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsDeletingStatus(false);
-            setDeletingOrderProductIndex(-1);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -192,30 +210,38 @@ export default function OrderDetails({ orderId }) {
                                                 />
                                             </td>
                                             <td>
-                                                {orderProductIndex !== updatingOrderProductIndex && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
                                                     onClick={() => updateOrderProductData(orderProductIndex)}
                                                 >
                                                     Update
                                                 </button>}
-                                                {isUpdatingStatus && orderProductIndex === updatingOrderProductIndex && <button
+                                                {isUpdatingStatus && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Updating ...
                                                 </button>}
-                                                {orderProductIndex !== deletingOrderProductIndex && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     onClick={() => deleteProductFromOrder(orderProductIndex)}
                                                 >
                                                     Delete
                                                 </button>}
-                                                {isDeletingStatus && orderProductIndex === deletingOrderProductIndex && <button
+                                                {isDeletingStatus && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Deleting ...
                                                 </button>}
+                                                {successMsg && <button
+                                                    className="btn btn-success d-block mx-auto global-button"
+                                                    disabled
+                                                >{successMsg}</button>}
+                                                {errorMsg && <button
+                                                    className="btn btn-danger d-block mx-auto global-button"
+                                                    disabled
+                                                >{errorMsg}</button>}
                                             </td>
                                         </tr>
                                     ))}
