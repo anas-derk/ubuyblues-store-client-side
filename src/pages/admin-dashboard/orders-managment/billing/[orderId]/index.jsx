@@ -15,8 +15,6 @@ export default function ShowBilling({ orderId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [orderDetails, setOrderDetails] = useState({});
 
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
@@ -49,7 +47,6 @@ export default function ShowBilling({ orderId }) {
                                     totalDiscount: calcTotalOrderDiscount(result.data.order_products),
                                 });
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     })

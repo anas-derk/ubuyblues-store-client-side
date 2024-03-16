@@ -5,12 +5,15 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
+import validations from "../../../../../public/global_functions/validations";
 
-export default function OrderDetails() {
+export default function OrderDetails({ orderId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [orderDetails, setOrderDetails] = useState({});
 
@@ -24,8 +27,6 @@ export default function OrderDetails() {
 
     const router = useRouter();
 
-    const { orderId } = router.query;
-
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
@@ -36,15 +37,16 @@ export default function OrderDetails() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        if (orderId) {
-                            const result = await getOrderDetails(orderId);
-                            setOrderDetails(result);
+                        const result = await getOrderDetails(orderId);
+                        if (!result.error) {
+                            setOrderDetails(result.data);
+                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
                 })
                 .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     }
@@ -54,12 +56,12 @@ export default function OrderDetails() {
                     }
                 });
         } else router.push("/admin-dashboard/login");
-    }, [orderId]);
+    }, []);
 
     const getOrderDetails = async (orderId) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -73,22 +75,30 @@ export default function OrderDetails() {
     }
 
     const updateOrderProductData = async (orderProductIndex) => {
-        setIsUpdatingStatus(true);
-        setUpdatingOrderProductIndex(orderProductIndex);
         try {
+            setIsUpdatingStatus(true);
+            setUpdatingOrderProductIndex(orderProductIndex);
             const res = await axios.put(`${process.env.BASE_API_URL}/orders/products/update-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex]._id}`, {
                 quantity: orderDetails.order_products[orderProductIndex].quantity,
                 name: orderDetails.order_products[orderProductIndex].name,
                 total_amount: orderDetails.order_products[orderProductIndex].total_amount,
                 unit_price: orderDetails.order_products[orderProductIndex].unit_price,
+            }, {
+                headers: {
+                    Authorization: token,
+                }
             });
-            const result = await res.data;
-            if (result === "Updating Order Details Has Been Successfuly !!") {
+            const result = res.data;
+            if (!result.error) {
                 setUpdatingOrderProductIndex(-1);
                 setIsUpdatingStatus(false);
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setDeletingOrderProductIndex(-1);
             setIsUpdatingStatus(false);
         }
@@ -252,4 +262,22 @@ export default function OrderDetails() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps(context) {
+    const orderId = context.query.orderId;
+    if (!orderId) {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/404",
+            },
+        }
+    } else {
+        return {
+            props: {
+                orderId,
+            },
+        }
+    }
 }
