@@ -6,12 +6,16 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
+import validations from "../../../../../../public/global_functions/validations";
+import { useRouter } from "next/router";
 
 export default function ShowBilling({ orderId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [orderDetails, setOrderDetails] = useState({});
 
@@ -20,41 +24,58 @@ export default function ShowBilling({ orderId }) {
         totalDiscount: 0,
     });
 
+    const router = useRouter();
+
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
-        if (adminToken) {
-            validations.getAdminInfo(adminToken)
-                .then(async (res) => {
-                    const result = res.data;
-                    if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
-                        await router.push("/admin-dashboard/login");
-                    } else {
-                        const result = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
-                        setOrderDetails(result);
-                        setPricesDetailsSummary({
-                            totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
-                            totalDiscount: calcTotalOrderDiscount(result.order_products),
-                        });
-                        setIsLoadingPage(false);
-                    }
-                })
-                .catch(async (err) => {
-                    if (err.response.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
-                        await router.push("/admin-dashboard/login");
-                    }
-                    else {
-                        setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
-                    }
-                });
-        } else router.push("/admin-dashboard/login");
+        if (orderId) {
+            const userLanguage = localStorage.getItem("asfour-store-language");
+            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+            const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+            if (adminToken) {
+                validations.getAdminInfo(adminToken)
+                    .then(async (res) => {
+                        let result = res.data;
+                        if (result.error) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
+                        } else {
+                            result = await getOrderDetails(orderId);
+                            if (!result.error) {
+                                setOrderDetails(result.data);
+                                setPricesDetailsSummary({
+                                    totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.data.order_products),
+                                    totalDiscount: calcTotalOrderDiscount(result.data.order_products),
+                                });
+                            }
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        }
+                    })
+                    .catch(async (err) => {
+                        if (err?.response?.data?.msg === "Unauthorized Error") {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
+                        }
+                        else {
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
+                        }
+                    });
+            } else router.push("/admin-dashboard/login");
+        }
     }, []);
+
+    const getOrderDetails = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);

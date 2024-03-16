@@ -158,6 +158,7 @@ export default function AddNewBrand() {
                                 onChange={(e) => setBrandImage(e.target.files[0])}
                                 ref={fileElementRef}
                                 value={fileElementRef.current?.value}
+                                accept=".png, .jpg, .webp"
                             />
                             {formValidationErrors["brandImage"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
