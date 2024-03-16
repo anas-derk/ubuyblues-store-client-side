@@ -3,14 +3,12 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
 import Footer from "@/components/Footer";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
-import { useRouter } from "next/router";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
-import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Slider from "react-slick";
 import { PiShareFatLight } from "react-icons/pi";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
@@ -19,12 +17,16 @@ import { MdOutlineContactPhone } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
+import validations from "../../public/global_functions/validations";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function Home() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -34,11 +36,13 @@ export default function Home() {
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
+    const [isWaitGetCategoriesStatus, setIsWaitGetCategoriesStatus] = useState(false);
+
     const [isGetProductsStatus, setIsGetProductsStatus] = useState(false);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
-    const [allCategories, setAllCategories] = useState([]);
+    const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
     const [productAddingId, setProductAddingId] = useState("");
 
@@ -62,9 +66,15 @@ export default function Home() {
 
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [totalPagesCount, setTotalPagesCount] = useState(0);
+    const [totalPagesCount, setTotalPagesCount] = useState({
+        forProducts: 0,
+        forCategories: 0,
+    });
 
-    const [pageNumber, setPageNumber] = useState(0);
+    const [pageNumber, setPageNumber] = useState({
+        forProducts: 0,
+        forCategories: 0,
+    });
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
@@ -82,47 +92,115 @@ export default function Home() {
 
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
-        const userId = localStorage.getItem("asfour-store-user-id");
-        setUserId(userId);
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", function () {
+            setWindowInnerWidth(this.innerWidth);
+        });
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        getProductsCount()
-            .then(async (result) => {
-                if (result > 0) {
-                    setAllProductsInsideThePage(await getAllProductsInsideThePage(1, pageSize));
-                    setTotalPagesCount(Math.ceil(result / pageSize));
-                    let res1 = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
-                    setAllCategories(await res1.data);
-                    if (userId) {
-                        res1 = await axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
-                        const result2 = await res1.data;
-                        setUserInfo(result2);
-                        setFavoriteProductsListForUser(result2.favorite_products_list);
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            setToken(userToken);
+            validations.getUserInfo(userToken)
+                .then((result) => {
+                    if (!result.error) {
+                        setUserInfo(result.data);
+                        setFavoriteProductsListForUser(result.data.favorite_products_list);
                     }
-                    res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-                    let result2 = await res1.data;
-                    const appearedSectionsLength = result2.length;
-                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
-                    if (appearedSectionsLength > 0) {
-                        for (let i = 0; i < appearedSectionsLength; i++) {
-                            if (result2[i].sectionName === "brands" && result2[i].isAppeared) {
-                                res1 = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands`);
-                                setAllBrands(await res1.data);
-                            }
-                        }
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
                     }
-                    setWindowInnerWidth(window.innerWidth);
-                    window.addEventListener("resize", function () {
-                        setWindowInnerWidth(this.innerWidth);
-                    });
                     setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
+        }
+        // =============================================================================
+        getCategoriesCount()
+            .then(async (result) => {
+                if (result.data > 0) {
+                    setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
+                    setTotalPagesCount({ ...totalPagesCount, forCategories: Math.ceil(result.data / pageSize) });
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
+        // =============================================================================
+        getProductsCount()
+            .then(async (result) => {
+                if (result.data > 0) {
+                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
+                    setTotalPagesCount({ ...totalPagesCount, forProducts: Math.ceil(result.data / pageSize) });
+                }
+            })
+            .catch((err) => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+        // =============================================================================
+        getAppearedSections()
+            .then(async (result) => {
+                const appearedSectionsLength = result.data.length;
+                setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
+                if (appearedSectionsLength > 0) {
+                    for (let i = 0; i < appearedSectionsLength; i++) {
+                        if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
+                            setAllBrands((await getAllBrands()).data);
+                        }
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+        // ==========================================================================================
+        setIsLoadingPage(false);
     }, []);
+
+    const getCategoriesCount = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllCategoriesInsideThePage = async (pageNumber, pageSize) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAppearedSections = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllBrands = async () => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands`);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -282,78 +360,26 @@ export default function Home() {
     }
 
     const getPreviousPage = async () => {
-        setIsGetProductsStatus(true);
+        setIsWaitGetCategoriesStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
+        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
         setCurrentPage(newCurrentPage);
-        setIsGetProductsStatus(false);
+        setIsWaitGetCategoriesStatus(false);
     }
 
     const getNextPage = async () => {
-        setIsGetProductsStatus(true);
+        setIsWaitGetCategoriesStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
+        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
         setCurrentPage(newCurrentPage);
-        setIsGetProductsStatus(false);
+        setIsWaitGetCategoriesStatus(false);
     }
 
-    const paginationBar = () => {
-        const paginationButtons = [];
-        for (let i = 1; i <= totalPagesCount; i++) {
-            if (i < 11) {
-                paginationButtons.push(
-                    <button
-                        key={i}
-                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
-                        onClick={async () => {
-                            setIsGetProductsStatus(true);
-                            setAllProductsInsideThePage(await getAllProductsInsideThePage(i, pageSize));
-                            setCurrentPage(i);
-                            setIsGetProductsStatus(false);
-                        }}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        if (totalPagesCount > 10) {
-            paginationButtons.push(
-                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
-            );
-            paginationButtons.push(
-                <button
-                    key={totalPagesCount}
-                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => {
-                        setIsGetProductsStatus(true);
-                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsGetProductsStatus(false);
-                    }}
-                >
-                    {totalPagesCount}
-                </button>
-            );
-        }
-        return (
-            <section className="pagination d-flex justify-content-center align-items-center">
-                {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon"
-                    onClick={getPreviousPage}
-                />}
-                {paginationButtons}
-                {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className="next-page-icon pagination-icon me-3"
-                    onClick={getNextPage}
-                />}
-                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>
-            </section>
-        );
-    }
-
-    const goToSlide = (slideIndex) => {
-        sliderRef.current.slickGoTo(slideIndex);
+    const getSpecificPage = async (pageNumber) => {
+        setIsWaitGetCategoriesStatus(true);
+        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSize)).data);
+        setCurrentPage(pageNumber);
+        setIsWaitGetCategoriesStatus(false);
     }
 
     return (
@@ -402,8 +428,12 @@ export default function Home() {
                         {/* Start Categories Section */}
                         <section className="categories mb-5 pb-5" id="categories">
                             <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
+                            {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
+                            {isWaitGetCategoriesStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                                <span className="loader-table-data"></span>
+                            </div>}
                             <div className="row">
-                                {allCategories.map((category) => (
+                                {allCategoriesInsideThePage.map((category) => (
                                     <div className="col-md-3" key={category._id}>
                                         <div className="category-details p-3">
                                             <Link href={`/categories/${category._id}`} className="product-by-category-link text-dark">
@@ -415,6 +445,15 @@ export default function Home() {
                                 ))}
                             </div>
                         </section>
+                        {totalPagesCount.forCategories > 0 && !isWaitGetCategoriesStatus &&
+                            <PaginationBar
+                                totalPagesCount={totalPagesCount.forCategories}
+                                currentPage={currentPage}
+                                getPreviousPage={getPreviousPage}
+                                getNextPage={getNextPage}
+                                getSpecificPage={getSpecificPage}
+                            />
+                        }
                         {/* End Categories Section */}
                         {/* Start Last Added Products */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">

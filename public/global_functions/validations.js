@@ -165,5 +165,19 @@ async function getAdminInfo(adminToken) {
     }
 }
 
+async function getUserInfo(userToken) {
+    try{
+        const res = await axios.get(`${process.env.BASE_API_URL}/users/user-info`, {
+            headers: {
+                "Authorization": userToken,
+            },
+        });
+        return await res.data;
+    }
+    catch(err) {
+        throw err;
+    }
+}
+
 // تصدير الدوال المطلوبة
-export default { isEmail, inputValuesValidation, getAdminInfo };
+export default { isEmail, inputValuesValidation, getAdminInfo, getUserInfo };
