@@ -64,14 +64,12 @@ export default function Home() {
 
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const [totalPagesCount, setTotalPagesCount] = useState({
-        forProducts: 0,
-        forCategories: 0,
+    const [currentPage, setCurrentPage] = useState({
+        forCategories: 1,
+        forProducts: 1,
     });
 
-    const [pageNumber, setPageNumber] = useState({
+    const [totalPagesCount, setTotalPagesCount] = useState({
         forProducts: 0,
         forCategories: 0,
     });
@@ -86,9 +84,7 @@ export default function Home() {
 
     const { i18n, t } = useTranslation();
 
-    const sliderRef = useRef();
-
-    const pageSize = 8;
+    const pageSize = 2;
 
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
@@ -359,27 +355,53 @@ export default function Home() {
         }
     }
 
-    const getPreviousPage = async () => {
-        setIsWaitGetCategoriesStatus(true);
-        const newCurrentPage = currentPage - 1;
-        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
-        setCurrentPage(newCurrentPage);
-        setIsWaitGetCategoriesStatus(false);
+    const getPreviousPage = async (section) => {
+        if (section === "categories") {
+            setIsWaitGetCategoriesStatus(true);
+            const newCurrentPage = currentPage.forCategories - 1;
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
+            setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
+            setIsWaitGetCategoriesStatus(false);
+        }
+        if (section === "products") {
+            setIsGetProductsStatus(true);
+            const newCurrentPage = currentPage.forProducts - 1;
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize)).data);
+            setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+            setIsGetProductsStatus(false);
+        }
     }
 
-    const getNextPage = async () => {
-        setIsWaitGetCategoriesStatus(true);
-        const newCurrentPage = currentPage + 1;
-        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
-        setCurrentPage(newCurrentPage);
-        setIsWaitGetCategoriesStatus(false);
+    const getNextPage = async (section) => {
+        if (section === "categories") {
+            setIsWaitGetCategoriesStatus(true);
+            const newCurrentPage = currentPage.forCategories + 1;
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
+            setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
+            setIsWaitGetCategoriesStatus(false);
+        }
+        if (section === "products") {
+            setIsGetProductsStatus(true);
+            const newCurrentPage = currentPage.forProducts + 1;
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize)).data);
+            setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+            setIsGetProductsStatus(false);
+        }
     }
 
-    const getSpecificPage = async (pageNumber) => {
-        setIsWaitGetCategoriesStatus(true);
-        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSize)).data);
-        setCurrentPage(pageNumber);
-        setIsWaitGetCategoriesStatus(false);
+    const getSpecificPage = async (pageNumber, section) => {
+        if (section === "categories") {
+            setIsWaitGetCategoriesStatus(true);
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSize)).data);
+            setCurrentPage({ ...currentPage, forCategories: pageNumber });
+            setIsWaitGetCategoriesStatus(false);
+        }
+        if (section === "products") {
+            setIsGetProductsStatus(true);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize)).data);
+            setCurrentPage({ ...currentPage, forProducts: pageNumber });
+            setIsGetProductsStatus(false);
+        }
     }
 
     return (
@@ -444,16 +466,17 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
+                            {totalPagesCount.forCategories > 0 && !isWaitGetCategoriesStatus &&
+                                <PaginationBar
+                                    totalPagesCount={totalPagesCount.forCategories}
+                                    currentPage={currentPage.forCategories}
+                                    getPreviousPage={getPreviousPage}
+                                    getNextPage={getNextPage}
+                                    getSpecificPage={getSpecificPage}
+                                    section="categories"
+                                />
+                            }
                         </section>
-                        {totalPagesCount.forCategories > 0 && !isWaitGetCategoriesStatus &&
-                            <PaginationBar
-                                totalPagesCount={totalPagesCount.forCategories}
-                                currentPage={currentPage}
-                                getPreviousPage={getPreviousPage}
-                                getNextPage={getNextPage}
-                                getSpecificPage={getSpecificPage}
-                            />
-                        }
                         {/* End Categories Section */}
                         {/* Start Last Added Products */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
@@ -504,7 +527,17 @@ export default function Home() {
                                         </div>
                                     </div>
                                 ))}
-                                {/* {totalPagesCount > 0 && !isGetProductsStatus && paginationBar()} */}
+                                {totalPagesCount.forProducts > 0 && !isGetProductsStatus &&
+                                    <PaginationBar
+                                        totalPagesCount={totalPagesCount.forProducts}
+                                        currentPage={currentPage.forProducts}
+                                        getPreviousPage={getPreviousPage}
+                                        getNextPage={getNextPage}
+                                        getSpecificPage={getSpecificPage}
+                                        paginationButtonTextColor={"#000"}
+                                        paginationButtonBackgroundColor={"#FFF"}
+                                        section="products"
+                                    />}
                             </div>
                         </section>
                         {/* End Last Added Products */}

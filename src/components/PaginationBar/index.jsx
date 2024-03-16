@@ -9,7 +9,8 @@ export default function PaginationBar({
     getNextPage,
     getSpecificPage,
     paginationButtonTextColor,
-    paginationButtonBackgroundColor
+    paginationButtonBackgroundColor,
+    section
 }) {
 
     const [pageNumber, setPageNumber] = useState(0);
@@ -34,7 +35,7 @@ export default function PaginationBar({
                     <button
                         key={i}
                         className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""}`}
-                        onClick={async () => await getSpecificPage(i)}
+                        onClick={async () => await getSpecificPage(i, section)}
                         style={{
                             color: paginationButtonTextColor,
                             backgroundColor: paginationButtonBackgroundColor,
@@ -53,7 +54,7 @@ export default function PaginationBar({
                 <button
                     key={totalPagesCount}
                     className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => await getSpecificPage(totalPagesCount)}
+                    onClick={async () => await getSpecificPage(totalPagesCount, section)}
                 >
                     {totalPagesCount}
                 </button>
@@ -63,19 +64,19 @@ export default function PaginationBar({
             <>
                 {currentPage !== 1 && <BsArrowLeftSquare
                     className="previous-page-icon pagination-icon"
-                    onClick={async () => await getPreviousPage()}
+                    onClick={async () => await getPreviousPage(section)}
                 />}
                 {paginationButtons}
                 {currentPage !== totalPagesCount && <BsArrowRightSquare
                     className="next-page-icon pagination-icon me-3"
-                    onClick={async () => await getNextPage()}
+                    onClick={async () => await getNextPage(section)}
                 />}
                 <span className={`current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white ${i18n.language !== "ar" ? "me-3" : "ms-3 me-3"}`}>{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>
                 <form
                     className="navigate-to-specific-page-form w-25"
                     onSubmit={async (e) => {
                         e.preventDefault();
-                        await getSpecificPage(pageNumber);
+                        await getSpecificPage(pageNumber, section);
                     }}
                 >
                     <input
