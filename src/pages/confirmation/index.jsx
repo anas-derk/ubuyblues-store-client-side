@@ -24,27 +24,41 @@ export default function Confirmation({ orderId }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`)
-            .then((res) => {
-                const result = res.data;
-                setOrderDetails(result);
-                setPricesDetailsSummary({
-                    totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
-                    totalDiscount: calcTotalOrderDiscount(result.order_products),
+        if (orderId) {
+            const userLanguage = localStorage.getItem("asfour-store-language");
+            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+            getOrderDetails(orderId)
+                .then((res) => {
+                    const result = res.data;
+                    if (!result.error) {
+                        setOrderDetails(result);
+                        setPricesDetailsSummary({
+                            totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
+                            totalDiscount: calcTotalOrderDiscount(result.order_products),
+                        });
+                        setIsLoadingPage(false);
+                    }
+                })
+                .catch(() => {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
                 });
-                setIsLoadingPage(false);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-    }, []);
+        }
+    }, [orderId]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
+    }
+
+    const getOrderDetails = async (orderId) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
+            return await res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
     }
 
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {

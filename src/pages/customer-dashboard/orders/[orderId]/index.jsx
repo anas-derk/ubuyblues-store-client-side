@@ -7,6 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
+import validations from "../../../../../public/global_functions/validations";
 
 export default function OrderDetails() {
 
@@ -26,27 +27,39 @@ export default function OrderDetails() {
 
     useEffect(() => {
         if (orderId) {
-            const userId = localStorage.getItem("asfour-store-user-id");
             const userLanguage = localStorage.getItem("asfour-store-language");
-            if (userId) {
-                axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
+            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+            const userToken = localStorage.getItem("asfour-store-user-token");
+            if (userToken) {
+                validations.getUserInfo(userToken)
                     .then(async (res) => {
-                        const result = res.data;
-                        if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                            setOrderDetails(await getOrderDetails(orderId));
+                        let result = res.data;
+                        if (result.error) {
+                            localStorage.removeItem("asfour-store-user-token");
+                            await router.push("/auth");
+                        } else {
+                            result = await getOrderDetails(orderId);
+                            if (!result.error) {
+                                setOrderDetails(result.data);    
+                            }
                             setWindowInnerWidth(window.innerWidth);
                             window.addEventListener("resize", () => {
                                 setWindowInnerWidth(window.innerWidth);
                             });
                             setIsLoadingPage(false);
-                        } else router.push("/auth");
+                        }
                     })
-                    .catch(() => {
-                        setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                    .catch(async (err) => {
+                        if (err?.response?.data?.msg === "Unauthorized Error") {
+                            localStorage.removeItem("asfour-store-user-token");
+                            await router.push("/auth");
+                        }
+                        else {
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
+                        }
                     });
             } else router.push("/auth");
-            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         }
     }, [orderId]);
 
