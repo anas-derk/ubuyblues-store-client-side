@@ -17,6 +17,8 @@ export default function CustomerAccountDetails() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [token, setToken] = useState("");
+
     const [userInfo, setUserInfo] = useState({
         email: "",
         password: "",
@@ -51,24 +53,30 @@ export default function CustomerAccountDetails() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then((res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        setUserInfo(result);
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
+                        setUserInfo(result.data);
+                        setToken(userToken);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
-                        router.push("/auth");
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
                     }
                 })
-                .catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             router.push("/auth");
@@ -80,89 +88,89 @@ export default function CustomerAccountDetails() {
         document.body.lang = userLanguage;
     }
     
-    const validateFormFields = () => {
-        return validations.inputValuesValidation([
-            {
-                name: "first_name",
-                value: userInfo.first_name,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "last_name",
-                value: userInfo.last_name,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "preview_name",
-                value: userInfo.preview_name,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "email",
-                value: userInfo.email,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, Invalid Email !!",
-                    },
-                },
-            },
-            (newPassword || confirmNewPassword) ? {
-                name: "currentPassword",
-                value: currentPassword,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                }
-            } : null,
-            (currentPassword || confirmNewPassword) ? {
-                name: "newPassword",
-                value: newPassword,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isMatch: {
-                        value: confirmNewPassword,
-                        msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
-                    },
-                }
-            } : null,
-            (currentPassword || newPassword) ? {
-                name: "confirmNewPassword",
-                value: confirmNewPassword,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isMatch: {
-                        value: newPassword,
-                        msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
-                    },
-                }
-            } : null,
-        ]);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const updateUserInfo = async (e) => {
         try {
             e.preventDefault();
-            const errorsObject = validateFormFields();
+            const errorsObject = validateFormFields([
+                {
+                    name: "first_name",
+                    value: userInfo.first_name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "last_name",
+                    value: userInfo.last_name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "preview_name",
+                    value: userInfo.preview_name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "email",
+                    value: userInfo.email,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+                (newPassword || confirmNewPassword) ? {
+                    name: "currentPassword",
+                    value: currentPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    }
+                } : null,
+                (currentPassword || confirmNewPassword) ? {
+                    name: "newPassword",
+                    value: newPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isMatch: {
+                            value: confirmNewPassword,
+                            msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                    }
+                } : null,
+                (currentPassword || newPassword) ? {
+                    name: "confirmNewPassword",
+                    value: confirmNewPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isMatch: {
+                            value: newPassword,
+                            msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                    }
+                } : null,
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 let newUserInfo = {
@@ -175,17 +183,21 @@ export default function CustomerAccountDetails() {
                     newUserInfo = { ...newUserInfo, password: currentPassword, newPassword: newPassword };
                 }
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info/${userInfo._id}`, newUserInfo);
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, newUserInfo, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
                 const result = await res.data;
                 setIsWaitStatus(false);
-                if (result === "Updating User Info Process Has Been Successfuly ...") {
-                    setSuccessMsg(result);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
                         clearTimeout(successTimeout);
                     }, 2000);
-                } else if (result === "Sorry, This Password Is Uncorrect !!") {
-                    setErrorMsg(result);
+                } else {
+                    setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
@@ -194,8 +206,13 @@ export default function CustomerAccountDetails() {
             }
         }
         catch (err) {
+            console.log(err);
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
             setIsWaitStatus(false);
-            setErrorMsg(result);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
