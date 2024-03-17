@@ -48,10 +48,24 @@ export default function ForgetPassword() {
     const router = useRouter();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
+        const userToken = localStorage.getItem("asfour-store-user-token");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            router.push("/");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (res) => {
+                    const result = res.data;
+                    if (!result.error) {
+                        await router.push("/");
+                    } else {
+                        localStorage.removeItem("asfour-store-user-token");
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                    }
+                }).catch(() => {
+                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                });
         } else {
             handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             setIsLoadingPage(false);
@@ -88,20 +102,19 @@ export default function ForgetPassword() {
                 setIsCheckingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}`);
                 const result = await res.data;
-                console.log(result);
-                if (result === "Sorry, This Email Is Not Exist !!") {
+                if (result.error) {
                     setIsCheckingStatus(false);
-                    setErrorMsg(result);
+                    setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
                     }, 5000);
                 } else {
-                    if (result.isVerified) {
-                        setCode(result.code);
+                    if (result.data.isVerified) {
+                        setCode(result.data.code);
                         setUserId(result._id);
                         setIsDisplayResetPasswordForm(true);
-                    } else router.push(`/account-verification?email=${email}`);
+                    } else await router.push(`/account-verification?email=${email}`);
                 }
             }
         }
@@ -169,10 +182,10 @@ export default function ForgetPassword() {
                 setIsResetingPasswordStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password/${userId}?newPassword=${newPassword}`);
                 const result = await res.data;
-                if(result === "Reseting Password Process Has Been Successfully !!") {
-                    setSuccessMsg(`${result}, Please Wait To Navigate To Login Page !!`);
-                    let successTimeout = setTimeout(() => {
-                        router.push(`/auth`);
+                if(!result.error) {
+                    setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
+                    let successTimeout = setTimeout(async () => {
+                        await router.push(`/auth`);
                         clearTimeout(successTimeout);
                     }, 6000);
                 }
