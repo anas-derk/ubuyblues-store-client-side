@@ -28,6 +28,12 @@ export default function Home() {
 
     const [token, setToken] = useState("");
 
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
+
+    const [isGetCategories, setIsGetCategories] = useState(true);
+
+    const [isGetProducts, setIsGetProducts] = useState(true);
+    
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [userId, setUserId] = useState("");
@@ -35,10 +41,6 @@ export default function Home() {
     const [userInfo, setUserInfo] = useState("");
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
-
-    const [isWaitGetCategoriesStatus, setIsWaitGetCategoriesStatus] = useState(false);
-
-    const [isGetProductsStatus, setIsGetProductsStatus] = useState(false);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
@@ -108,8 +110,6 @@ export default function Home() {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-user-token");
                     }
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
                 });
         }
         // =============================================================================
@@ -117,8 +117,9 @@ export default function Home() {
             .then(async (result) => {
                 if (result.data > 0) {
                     setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
-                    setTotalPagesCount({ ...totalPagesCount, forCategories: Math.ceil(result.data / pageSize) });
+                    totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
                 }
+                setIsGetCategories(false);
             })
             .catch((err) => {
                 setIsLoadingPage(false);
@@ -129,8 +130,9 @@ export default function Home() {
             .then(async (result) => {
                 if (result.data > 0) {
                     setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
-                    setTotalPagesCount({ ...totalPagesCount, forProducts: Math.ceil(result.data / pageSize) });
+                    totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                 }
+                setIsGetProducts(false);
             })
             .catch((err) => {
                 setIsLoadingPage(false);
@@ -150,13 +152,17 @@ export default function Home() {
                 }
             })
             .catch((err) => {
-                console.log(err);
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
-        // ==========================================================================================
-        setIsLoadingPage(false);
+        // ========================================================================================== 
     }, []);
+
+    useEffect(() => {
+        if (!isGetCategories, !isGetProducts) {
+            setIsLoadingPage(false);
+        }
+    }, [isGetCategories, isGetProducts]);
 
     const getCategoriesCount = async () => {
         try {
@@ -357,50 +363,50 @@ export default function Home() {
 
     const getPreviousPage = async (section) => {
         if (section === "categories") {
-            setIsWaitGetCategoriesStatus(true);
+            setIsGetCategories(true);
             const newCurrentPage = currentPage.forCategories - 1;
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
             setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
-            setIsWaitGetCategoriesStatus(false);
+            setIsGetCategories(false);
         }
         if (section === "products") {
-            setIsGetProductsStatus(true);
+            setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts - 1;
             setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize)).data);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
-            setIsGetProductsStatus(false);
+            setIsGetProducts(false);
         }
     }
 
     const getNextPage = async (section) => {
         if (section === "categories") {
-            setIsWaitGetCategoriesStatus(true);
+            setIsGetCategories(true);
             const newCurrentPage = currentPage.forCategories + 1;
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
             setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
-            setIsWaitGetCategoriesStatus(false);
+            setIsGetCategories(false);
         }
         if (section === "products") {
-            setIsGetProductsStatus(true);
+            setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts + 1;
             setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize)).data);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
-            setIsGetProductsStatus(false);
+            setIsGetProducts(false);
         }
     }
 
     const getSpecificPage = async (pageNumber, section) => {
         if (section === "categories") {
-            setIsWaitGetCategoriesStatus(true);
+            setIsGetCategories(true);
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSize)).data);
             setCurrentPage({ ...currentPage, forCategories: pageNumber });
-            setIsWaitGetCategoriesStatus(false);
+            setIsGetCategories(false);
         }
         if (section === "products") {
-            setIsGetProductsStatus(true);
+            setIsGetProducts(true);
             setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize)).data);
             setCurrentPage({ ...currentPage, forProducts: pageNumber });
-            setIsGetProductsStatus(false);
+            setIsGetProducts(false);
         }
     }
 
@@ -450,8 +456,8 @@ export default function Home() {
                         {/* Start Categories Section */}
                         <section className="categories mb-5 pb-5" id="categories">
                             <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
-                            {allCategoriesInsideThePage.length === 0 && !isWaitGetCategoriesStatus && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
-                            {isWaitGetCategoriesStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                            {allCategoriesInsideThePage.length === 0 && !isGetCategories && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
+                            {isGetCategories && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                 <span className="loader-table-data"></span>
                             </div>}
                             <div className="row">
@@ -466,7 +472,7 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                            {totalPagesCount.forCategories > 0 && !isWaitGetCategoriesStatus &&
+                            {totalPagesCount.forCategories > 0 && !isGetCategories &&
                                 <PaginationBar
                                     totalPagesCount={totalPagesCount.forCategories}
                                     currentPage={currentPage.forCategories}
@@ -527,7 +533,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 ))}
-                                {totalPagesCount.forProducts > 0 && !isGetProductsStatus &&
+                                {totalPagesCount.forProducts > 0 && !isGetProducts &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forProducts}
                                         currentPage={currentPage.forProducts}
