@@ -206,7 +206,6 @@ export default function CustomerAccountDetails() {
             }
         }
         catch (err) {
-            console.log(err);
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/auth");
                 return;

@@ -18,6 +18,8 @@ export default function CustomerBillingAddress() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [token, setToken] = useState("");
+
     const [userInfo, setUserInfo] = useState("");
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
@@ -35,24 +37,30 @@ export default function CustomerBillingAddress() {
     const countryList = Object.values(countries);
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then((res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        setUserInfo(result);
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
+                        setUserInfo(result.data);
+                        setToken(userToken);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
-                        router.push("/auth");
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
                     }
                 })
-                .catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             router.push("/auth");
@@ -73,111 +81,114 @@ export default function CustomerBillingAddress() {
         }
     }
 
-    const validateFormFields = () => {
-        let errorsObject = validations.inputValuesValidation([
-            {
-                name: "first_name",
-                value: userInfo.billing_address.first_name,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "last_name",
-                value: userInfo.billing_address.last_name,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "country",
-                value: userInfo.billing_address.country,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "street_address",
-                value: userInfo.billing_address.street_address,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "city",
-                value: userInfo.billing_address.city,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "postal_code",
-                value: userInfo.billing_address.postal_code,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "phone_number",
-                value: userInfo.billing_address.phone_number,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isValidMobilePhone: {
-                        msg: "Sorry, Invalid Mobile Phone !!",
-                        countryCode: getCountryCode(userInfo.billing_address.country),
-                    }
-                },
-            },
-            {
-                name: "email",
-                value: userInfo.billing_address.email,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, Invalid Email !!",
-                    },
-                },
-            },
-        ]);
-        return errorsObject;
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const updateBillingAddressInfoForUser = async (e) => {
         try {
             e.preventDefault();
-            const errorsObject = validateFormFields();
+            const errorsObject = validateFormFields([
+                {
+                    name: "first_name",
+                    value: userInfo.billing_address.first_name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "last_name",
+                    value: userInfo.billing_address.last_name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "country",
+                    value: userInfo.billing_address.country,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "street_address",
+                    value: userInfo.billing_address.street_address,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "city",
+                    value: userInfo.billing_address.city,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "postal_code",
+                    value: userInfo.billing_address.postal_code,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "phone_number",
+                    value: userInfo.billing_address.phone_number,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isValidMobilePhone: {
+                            msg: "Sorry, Invalid Mobile Phone !!",
+                            countryCode: getCountryCode(userInfo.billing_address.country),
+                        }
+                    },
+                },
+                {
+                    name: "email",
+                    value: userInfo.billing_address.email,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info/${userInfo._id}`, {
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
                     billing_address: userInfo.billing_address,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
                 });
                 const result = await res.data;
                 setIsWaitStatus(false);
-                if (result === "Updating User Info Process Has Been Successfuly ...") {
-                    setSuccessMsg(result);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
                         clearTimeout(successTimeout);
                     }, 2000);
-                } else if (result === "Sorry, This Password Is Uncorrect !!") {
-                    setErrorMsg(result);
+                } else {
+                    setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
@@ -186,6 +197,10 @@ export default function CustomerBillingAddress() {
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorTimeout = setTimeout(() => {
