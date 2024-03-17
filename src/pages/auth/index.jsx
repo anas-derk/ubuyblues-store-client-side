@@ -123,8 +123,8 @@ export default function UserAuth() {
                         clearTimeout(errorTimeout);
                     }, 5000);
                 } else {
-                    if (result.isVerified) {
-                        localStorage.setItem("asfour-store-user-token", result._id);
+                    if (result.data.isVerified) {
+                        localStorage.setItem("asfour-store-user-token", result.data.token);
                         await router.push("/");
                     } else await router.push(`/account-verification?email=${result.email}`);
                 }
@@ -141,66 +141,67 @@ export default function UserAuth() {
     }
 
     const userSignup = async (e) => {
-        e.preventDefault();
-        setErrorMsg("");
-        setSuccessMsg("");
-        setFormValidationErrors({});
-        let errorsObject = validations.inputValuesValidation([
-            {
-                name: "emailForSignup",
-                value: emailForSignup,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, This Email Is Not Valid !!",
-                    }
-                },
-            },
-            {
-                name: "passwordForSignup",
-                value: passwordForSignup,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isValidPassword: {
-                        msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+        try {
+            e.preventDefault();
+            setErrorMsg("");
+            setSuccessMsg("");
+            setFormValidationErrors({});
+            let errorsObject = validations.inputValuesValidation([
+                {
+                    name: "emailForSignup",
+                    value: emailForSignup,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, This Email Is Not Valid !!",
+                        }
                     },
                 },
-            },
-        ]);
-        setFormValidationErrors(errorsObject);
-        if (Object.keys(errorsObject).length == 0) {
-            setIsSignupStatus(true);
-            try {
+                {
+                    name: "passwordForSignup",
+                    value: passwordForSignup,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsSignupStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/users/create-new-user`, {
                     email: emailForSignup,
                     password: passwordForSignup,
                 });
                 const result = await res.data;
                 setIsSignupStatus(false);
-                if (result === "Sorry, Can't Create User Because it is Exist !!!") {
-                    setErrorMsg(result);
+                if (result.error) {
+                    setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
                     }, 2000);
                 } else {
-                    setSuccessMsg(`${result}, Please Wait To Navigate To Verification Page !!`);
-                    let successTimeout = setTimeout(() => {
-                        router.push(`/account-verification?email=${emailForSignup}`);
+                    setSuccessMsg(`${result.msg}, Please Wait To Navigate To Verification Page !!`);
+                    let successTimeout = setTimeout(async () => {
+                        await router.push(`/account-verification?email=${emailForSignup}`);
                         clearTimeout(successTimeout);
                     }, 6000);
                 }
-            } catch (err) {
-                setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorTimeout);
-                }, 2000);
             }
+        }
+        catch (err) {
+            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
         }
     }
 

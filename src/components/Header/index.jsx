@@ -42,9 +42,9 @@ export default function Header() {
         localStorage.setItem("asfour-store-light-mode", newLightMode);
     }
 
-    const userLogout = () => {
-        localStorage.removeItem("asfour-store-user-id");
-        router.push("/auth");
+    const userLogout = async () => {
+        localStorage.removeItem("asfour-store-user-token");
+        await router.push("/auth");
     }
 
     const handleChangeLanguage = (language) => {
