@@ -460,7 +460,7 @@ export default function Home() {
                             {isGetCategories && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                 <span className="loader-table-data"></span>
                             </div>}
-                            <div className="row">
+                            <div className="row mb-5">
                                 {allCategoriesInsideThePage.map((category) => (
                                     <div className="col-md-3" key={category._id}>
                                         <div className="category-details p-3">
@@ -479,6 +479,8 @@ export default function Home() {
                                     getPreviousPage={getPreviousPage}
                                     getNextPage={getNextPage}
                                     getSpecificPage={getSpecificPage}
+                                    isDisplayCurrentPageNumberAndCountOfPages={false}
+                                    isDisplayNavigateToSpecificPageForm={false}
                                     section="categories"
                                 />
                             }

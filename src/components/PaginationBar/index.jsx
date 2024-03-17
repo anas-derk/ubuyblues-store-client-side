@@ -10,6 +10,8 @@ export default function PaginationBar({
     getSpecificPage,
     paginationButtonTextColor,
     paginationButtonBackgroundColor,
+    isDisplayCurrentPageNumberAndCountOfPages = false,
+    isDisplayNavigateToSpecificPageForm = false,
     section
 }) {
 
@@ -71,8 +73,8 @@ export default function PaginationBar({
                     className="next-page-icon pagination-icon me-3"
                     onClick={async () => await getNextPage(section)}
                 />}
-                <span className={`current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white ${i18n.language !== "ar" ? "me-3" : "ms-3 me-3"}`}>{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>
-                <form
+                {isDisplayCurrentPageNumberAndCountOfPages && <span className={`current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white ${i18n.language !== "ar" ? "me-3" : "ms-3 me-3"}`}>{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>}
+                {isDisplayNavigateToSpecificPageForm && <form
                     className="navigate-to-specific-page-form w-25"
                     onSubmit={async (e) => {
                         e.preventDefault();
@@ -87,7 +89,7 @@ export default function PaginationBar({
                         max={totalPagesCount}
                         onChange={(e) => setPageNumber(e.target.valueAsNumber)}
                     />
-                </form>
+                </form>}
             </>
         );
     }
