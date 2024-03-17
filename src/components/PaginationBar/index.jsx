@@ -10,6 +10,8 @@ export default function PaginationBar({
     getSpecificPage,
     paginationButtonTextColor,
     paginationButtonBackgroundColor,
+    activePaginationButtonColor,
+    activePaginationButtonBackgroundColor,
     isDisplayCurrentPageNumberAndCountOfPages = false,
     isDisplayNavigateToSpecificPageForm = false,
     section
@@ -39,8 +41,8 @@ export default function PaginationBar({
                         className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""}`}
                         onClick={async () => await getSpecificPage(i, section)}
                         style={{
-                            color: paginationButtonTextColor,
-                            backgroundColor: paginationButtonBackgroundColor,
+                            color: currentPage === i ? activePaginationButtonColor : paginationButtonTextColor,
+                            backgroundColor: currentPage === i ? activePaginationButtonBackgroundColor : paginationButtonBackgroundColor,
                         }}
                     >
                         {i}

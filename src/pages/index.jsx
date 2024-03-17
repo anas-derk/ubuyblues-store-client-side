@@ -33,7 +33,7 @@ export default function Home() {
     const [isGetCategories, setIsGetCategories] = useState(true);
 
     const [isGetProducts, setIsGetProducts] = useState(true);
-    
+
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [userId, setUserId] = useState("");
@@ -479,6 +479,10 @@ export default function Home() {
                                     getPreviousPage={getPreviousPage}
                                     getNextPage={getNextPage}
                                     getSpecificPage={getSpecificPage}
+                                    paginationButtonTextColor={"#FFF"}
+                                    paginationButtonBackgroundColor={"transparent"}
+                                    activePaginationButtonColor={"#000"}
+                                    activePaginationButtonBackgroundColor={"#FFF"}
                                     isDisplayCurrentPageNumberAndCountOfPages={false}
                                     isDisplayNavigateToSpecificPageForm={false}
                                     section="categories"
@@ -542,8 +546,10 @@ export default function Home() {
                                         getPreviousPage={getPreviousPage}
                                         getNextPage={getNextPage}
                                         getSpecificPage={getSpecificPage}
-                                        paginationButtonTextColor={"#000"}
-                                        paginationButtonBackgroundColor={"#FFF"}
+                                        paginationButtonTextColor={"#FFF"}
+                                        paginationButtonBackgroundColor={"transparent"}
+                                        activePaginationButtonColor={"#000"}
+                                        activePaginationButtonBackgroundColor={"#FFF"}
                                         section="products"
                                     />}
                             </div>
