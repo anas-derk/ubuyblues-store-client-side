@@ -42,7 +42,7 @@ export default function AccountVerification({ email }) {
             setIsWaitResendTheCode(true);
             sendTheCodeToUserEmail()
                 .then((result) => {
-                    setAccountVerificationCode(result.data.generatedCode);
+                    setAccountVerificationCode(result.data.code);
                     setIsWaitResendTheCode(false);
                     setSuccessMsg(result.msg);
                     handleTimeCounter();
