@@ -49,15 +49,16 @@ export default function UserAuth() {
     const router = useRouter();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
+        const userToken = localStorage.getItem("asfour-store-user-token");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then((res) => {
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (res) => {
                     const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        router.push("/");
+                    if (!result.error) {
+                        await router.push("/");
                     } else {
+                        localStorage.removeItem("asfour-store-user-token");
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
@@ -114,7 +115,7 @@ export default function UserAuth() {
                 setIsLoginingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`);
                 const result = await res.data;
-                if (result === "Sorry, Email Or Password Incorrect !!") {
+                if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result);
                     let errorTimeout = setTimeout(() => {
@@ -123,9 +124,9 @@ export default function UserAuth() {
                     }, 5000);
                 } else {
                     if (result.isVerified) {
-                        localStorage.setItem("asfour-store-user-id", result._id);
-                        router.push("/");
-                    } else router.push(`/account-verification?email=${result.email}`);
+                        localStorage.setItem("asfour-store-user-token", result._id);
+                        await router.push("/");
+                    } else await router.push(`/account-verification?email=${result.email}`);
                 }
             }
         }

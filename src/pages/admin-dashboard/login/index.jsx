@@ -55,37 +55,37 @@ export default function AdminLogin() {
         } else setIsLoadingPage(false);
     }, []);
 
-    const validateFormFields = () => {
-        return validations.inputValuesValidation([
-            {
-                name: "email",
-                value: email,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, This Email Is Not Valid !!",
-                    }
-                },
-            },
-            {
-                name: "password",
-                value: password,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-        ]);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const adminLogin = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields();
+            let errorsObject = validateFormFields([
+                {
+                    name: "email",
+                    value: email,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, This Email Is Not Valid !!",
+                        }
+                    },
+                },
+                {
+                    name: "password",
+                    value: password,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsLoginingStatus(true);

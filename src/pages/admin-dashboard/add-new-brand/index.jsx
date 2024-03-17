@@ -60,37 +60,37 @@ export default function AddNewBrand() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = () => {
-        return validations.inputValuesValidation([
-            {
-                name: "brandImage",
-                value: brandImage,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isImage: {
-                        msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
-                    },
-                },
-            },
-            {
-                name: "brandTitle",
-                value: brandTitle,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-        ]);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const addNewBrand = async (e, brandTitle) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields();
+            let errorsObject = validateFormFields([
+                {
+                    name: "brandImage",
+                    value: brandImage,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+                {
+                    name: "brandTitle",
+                    value: brandTitle,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 let formData = new FormData();

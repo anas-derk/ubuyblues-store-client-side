@@ -56,25 +56,25 @@ export default function AddNewCategory() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = () => {
-        return validations.inputValuesValidation([
-            {
-                name: "categoryName",
-                value: categoryName,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-        ]);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const addNewCategory = async (e, categoryName) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields();
+            let errorsObject = validateFormFields([
+                {
+                    name: "categoryName",
+                    value: categoryName,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);

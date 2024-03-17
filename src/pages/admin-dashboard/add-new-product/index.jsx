@@ -85,85 +85,85 @@ export default function AddNewProduct() {
         }
     }
 
-    const validateFormFields = () => {
-        return validations.inputValuesValidation([
-            {
-                name: "name",
-                value: productData.name,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "price",
-                value: productData.price,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "description",
-                value: productData.description,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "category",
-                value: productData.category,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "discount",
-                value: productData.discount,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-            {
-                name: "image",
-                value: productData.image,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isImage: {
-                        msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
-                    },
-                },
-            },
-            {
-                name: "galleryImages",
-                value: productData.galleryImages,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isImages: {
-                        msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
-                    },
-                },
-            },
-        ]);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const addNewProduct = async (e, productData) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields();
+            let errorsObject = validateFormFields([
+                {
+                    name: "name",
+                    value: productData.name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "price",
+                    value: productData.price,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "description",
+                    value: productData.description,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "category",
+                    value: productData.category,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "discount",
+                    value: productData.discount,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "image",
+                    value: productData.image,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+                {
+                    name: "galleryImages",
+                    value: productData.galleryImages,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImages: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 let formData = new FormData();

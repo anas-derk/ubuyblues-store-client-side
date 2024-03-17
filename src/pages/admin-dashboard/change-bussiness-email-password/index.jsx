@@ -73,63 +73,62 @@ export default function ChangeBussinessEmailPassword() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = () => {
-        let errorsObject = validations.inputValuesValidation([
-            {
-                name: "email",
-                value: email,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, Invalid Email !!",
-                    },
-                },
-            },
-            {
-                name: "currentPassword",
-                value: currentPassword,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                }
-            },
-            {
-                name: "newPassword",
-                value: newPassword,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isMatch: {
-                        value: confirmNewPassword,
-                        msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
-                    },
-                }
-            },
-            {
-                name: "confirmNewPassword",
-                value: confirmNewPassword,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                    isMatch: {
-                        value: newPassword,
-                        msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
-                    },
-                }
-            },
-        ]);
-        return errorsObject;
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);;
     }
 
     const changeBussinessEmailPassword = async (e) => {
         try {
             e.preventDefault();
-            const errorsObject = validateFormFields();
+            const errorsObject = validateFormFields([
+                {
+                    name: "email",
+                    value: email,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+                {
+                    name: "currentPassword",
+                    value: currentPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    }
+                },
+                {
+                    name: "newPassword",
+                    value: newPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isMatch: {
+                            value: confirmNewPassword,
+                            msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                    }
+                },
+                {
+                    name: "confirmNewPassword",
+                    value: confirmNewPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isMatch: {
+                            value: newPassword,
+                            msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                    }
+                },
+            ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
