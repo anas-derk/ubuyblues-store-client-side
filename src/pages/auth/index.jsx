@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
-import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import validations from "../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
@@ -117,7 +117,7 @@ export default function UserAuth() {
                 const result = await res.data;
                 if (result.error) {
                     setIsLoginingStatus(false);
-                    setErrorMsg(result);
+                    setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
                         clearTimeout(errorTimeout);
@@ -272,9 +272,6 @@ export default function UserAuth() {
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item" onClick={() => signIn("google")}>
                                                     <FaGoogle className="external-auth-site-icon" />
-                                                </li>
-                                                <li className="external-auth-site-item" onClick={() => signIn("facebook")}>
-                                                    <FaFacebook className="external-auth-site-icon" />
                                                 </li>
                                             </ul>
                                         </form>

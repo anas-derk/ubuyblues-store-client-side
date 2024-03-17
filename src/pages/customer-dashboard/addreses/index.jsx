@@ -3,11 +3,11 @@ import Header from "@/components/Header";
 import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
+import validations from "../../../../public/global_functions/validations";
 
 export default function CustomerAddreses() {
 
@@ -20,23 +20,28 @@ export default function CustomerAddreses() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then((res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
-                        router.push("/auth");
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
                     }
                 })
-                .catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             router.push("/auth");

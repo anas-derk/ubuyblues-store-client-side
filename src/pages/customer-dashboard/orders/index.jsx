@@ -9,6 +9,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
 
 export default function CustomerOrders() {
 
@@ -23,6 +24,8 @@ export default function CustomerOrders() {
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
 
     const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(false);
+
+    const [errMsg, setErrorMsg] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -41,20 +44,18 @@ export default function CustomerOrders() {
     const pageSize = 5;
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then(async (res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
                         setUserInfo(result);
-                        setFilters({ ...filters, customerId: result._id });
-                        const result2 = await getOrdersCount(`customerId=${result._id}`);
-                        if (result2 > 0) {
-                            const result3 = await getAllOrdersInsideThePage(1, pageSize, `customerId=${result._id}`);
-                            setAllOrdersInsideThePage(result3);
-                            setTotalPagesCount(Math.ceil(result2 / pageSize));
+                        setFilters({ ...filters, customerId: result.data._id });
+                        const result2 = await getOrdersCount(`customerId=${result.data._id}`);
+                        if (result2.data > 0) {
+                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
+                            setTotalPagesCount(Math.ceil(result2.data / pageSize));
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
@@ -62,12 +63,20 @@ export default function CustomerOrders() {
                             setWindowInnerWidth(window.innerWidth);
                         });
                         setIsLoadingPage(false);
-                    } else router.push("/auth");
+                    } else {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    }
                 })
-                .catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             router.push("/auth");
@@ -111,7 +120,7 @@ export default function CustomerOrders() {
     const getPreviousPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
@@ -119,14 +128,14 @@ export default function CustomerOrders() {
     const getNextPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringOrdersStatus(true);
-        setAllOrdersInsideThePage(await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsFilteringOrdersStatus(false);
     }
@@ -145,10 +154,9 @@ export default function CustomerOrders() {
             setIsFilteringOrdersStatus(true);
             const filteringString = getFilteringString(filters);
             const result = await getOrdersCount(filteringString);
-            if (result > 0) {
-                const result1 = await getAllOrdersInsideThePage(1, pageSize, filteringString);
-                setAllOrdersInsideThePage(result1);
-                setTotalPagesCount(Math.ceil(result / pageSize));
+            if (result.data > 0) {
+                setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
+                setTotalPagesCount(Math.ceil(result.data / pageSize));
                 setIsFilteringOrdersStatus(false);
             } else {
                 setAllOrdersInsideThePage([]);
@@ -157,7 +165,16 @@ export default function CustomerOrders() {
             }
         }
         catch (err) {
-            console.log(err);
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
+            setIsFilteringOrdersStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg(false);
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -216,7 +233,7 @@ export default function CustomerOrders() {
                                             {t("Filtering")} ...
                                         </button>}
                                     </section>
-                                    {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
+                                    {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && !errMsg && <section className="orders-data-box p-3 data-box">
                                         {windowInnerWidth > 991 ? <table className="orders-data-table customer-table data-table mb-4 w-100">
                                             <thead>
                                                 <tr>
@@ -308,7 +325,8 @@ export default function CustomerOrders() {
                                             ))}
                                         </div>}
                                     </section>}
-                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">{t("Sorry, Can't Find Any Orders")} !!</p>}
+                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && !errMsg && <p className="alert alert-danger">{t("Sorry, Can't Find Any Orders")} !!</p>}
+                                    {errMsg && <p className="alert alert-danger">{t(errMsg)}</p>}
                                     {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                         <span className="loader-table-data"></span>
                                     </div>}
