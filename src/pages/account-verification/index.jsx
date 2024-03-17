@@ -39,9 +39,36 @@ export default function AccountVerification({ email }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         if (validations.isEmail(email)) {
+            setIsWaitResendTheCode(true);
             sendTheCodeToUserEmail()
-                .then(() => setIsLoadingPage(false))
+                .then((result) => {
+                    setAccountVerificationCode(result.data.generatedCode);
+                    setIsWaitResendTheCode(false);
+                    setSuccessMsg(result.msg);
+                    handleTimeCounter();
+                    let successMsgTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successMsgTimeout);
+                    }, 2000);
+                    setIsLoadingPage(false);
+                })
                 .catch((err) => {
+                    setIsWaitResendTheCode(false);
+                    const errorMsg = err.message;
+                    if (errorMsg === "Request failed with status code 400") {
+                        const result = err.response.data;
+                        if (result.data === "Sorry, The User Is Not Exist !!, Please Enter Another User Email .." || result === "Sorry, The Email For This User Has Been Verified !!") {
+                            setErrorMsgOnLoading(result);
+                        }
+                    } else if (errorMsg === "Network Error") {
+                        setErrorMsgOnLoading(errorMsg);
+                    } else {
+                        setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                        let errorMsgTimeout = setTimeout(() => {
+                            setErrorMsg("");
+                            clearTimeout(errorMsgTimeout);
+                        }, 2000);
+                    }
                     setIsLoadingPage(false);
                 });
         } else {
@@ -57,35 +84,12 @@ export default function AccountVerification({ email }) {
 
     const sendTheCodeToUserEmail = async () => {
         try {
-            setIsWaitResendTheCode(true);
+
             const res = await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}`);
-            const result = await res.data;
-            setAccountVerificationCode(result);
-            setIsWaitResendTheCode(false);
-            setSuccessMsg("Sending Code To Your Email Process Has Been Succssfuly !!");
-            handleTimeCounter();
-            let successMsgTimeout = setTimeout(() => {
-                setSuccessMsg("");
-                clearTimeout(successMsgTimeout);
-            }, 2000);
+            return res.data;
         }
         catch (err) {
-            setIsWaitResendTheCode(false);
-            const errorMsg = err.message;
-            if (errorMsg === "Request failed with status code 400") {
-                const result = err.response.data;
-                if (result === "Sorry, The User Is Not Exist !!, Please Enter Another User Email .." || result === "Sorry, The Email For This User Has Been Verified !!") {
-                    setErrorMsgOnLoading(result);
-                }
-            } else if (errorMsg === "Network Error") {
-                setErrorMsgOnLoading(errorMsg);
-            } else {
-                setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let errorMsgTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorMsgTimeout);
-                }, 2000);
-            }
+            throw err;
         }
     }
 
@@ -159,7 +163,7 @@ export default function AccountVerification({ email }) {
             }
         }, 1000);
     }
-    
+
     return (
         <div className="account-verification page">
             <Head>

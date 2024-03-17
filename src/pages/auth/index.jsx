@@ -126,7 +126,7 @@ export default function UserAuth() {
                     if (result.data.isVerified) {
                         localStorage.setItem("asfour-store-user-token", result.data.token);
                         await router.push("/");
-                    } else await router.push(`/account-verification?email=${result.email}`);
+                    } else await router.push(`/account-verification?email=${emailForLogin}`);
                 }
             }
         }
