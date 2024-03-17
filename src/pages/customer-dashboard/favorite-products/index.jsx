@@ -11,6 +11,7 @@ import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
 
 export default function CustomerFavoriteProductsList() {
 
@@ -18,9 +19,9 @@ export default function CustomerFavoriteProductsList() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+    const [token, setToken] = useState(false);
 
-    const [userId, setUserId] = useState("");
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
 
@@ -47,20 +48,18 @@ export default function CustomerFavoriteProductsList() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then(async (res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        setUserId(userId);
-                        setFilters({ ...filters, customerId: result._id });
-                        const result2 = await getFavoriteProductsCount(`customerId=${result._id}`);
-                        if (result2 > 0) {
-                            const result3 = await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result._id}`);
-                            setAllFavoriteProductsInsideThePage(result3);
-                            setTotalPagesCount(Math.ceil(result2 / pageSize));
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
+                        setToken(userToken);
+                        setFilters({ ...filters, customerId: result.data._id });
+                        const result2 = await getFavoriteProductsCount(`customerId=${result.data._id}`);
+                        if (result2.data > 0) {
+                            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
+                            setTotalPagesCount(Math.ceil(result2.data / pageSize));
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
@@ -68,12 +67,20 @@ export default function CustomerFavoriteProductsList() {
                             setWindowInnerWidth(window.innerWidth);
                         });
                         setIsLoadingPage(false);
-                    } else router.push("/auth");
+                    } else {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    }
                 })
-                .catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             router.push("/auth");
@@ -108,7 +115,7 @@ export default function CustomerFavoriteProductsList() {
     const getPreviousPage = async () => {
         setIsWaitGetFavoriteProductsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllFavoriteProductsInsideThePage(await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetFavoriteProductsStatus(false);
     }
@@ -116,14 +123,14 @@ export default function CustomerFavoriteProductsList() {
     const getNextPage = async () => {
         setIsWaitGetFavoriteProductsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllFavoriteProductsInsideThePage(await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetFavoriteProductsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsWaitGetFavoriteProductsStatus(true);
-        setAllFavoriteProductsInsideThePage(await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsWaitGetFavoriteProductsStatus(false);
     }
@@ -135,20 +142,28 @@ export default function CustomerFavoriteProductsList() {
         return filteringString;
     }
 
-    const deleteProductFromFavoriteUserProducts = async (userId, favoriteProductIndex) => {
+    const deleteProductFromFavoriteUserProducts = async (favoriteProductIndex) => {
         try {
             setIsDeletingFavoriteProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allFavoriteProductsInsideThePage[favoriteProductIndex]._id}`)
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allFavoriteProductsInsideThePage[favoriteProductIndex]._id}`, {
+                headers: {
+                    Authorization: token,
+                }
+            })
             const result = await res.data;
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                setAllFavoriteProductsInsideThePage(result.newFavoriteProductsList);
+                setAllFavoriteProductsInsideThePage(result.data.newFavoriteProductsList);
                 setIsSuccessDeletingFavoriteProduct(false);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
             setIsDeletingFavoriteProduct(false);
             setErrorMsgOnDeletingFavoriteProduct("Sorry, Someting Went Wrong, Please Repeate The Proccess !!");
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
@@ -198,7 +213,7 @@ export default function CustomerFavoriteProductsList() {
                                                     <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
+                                                        {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
                                                         {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                         {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                     </td>
@@ -235,7 +250,7 @@ export default function CustomerFavoriteProductsList() {
                                                         <tr>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(userId, favoriteProductIndex)} />}
+                                                                {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
                                                                 {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                                 {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                             </td>

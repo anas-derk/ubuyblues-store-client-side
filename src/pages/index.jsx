@@ -244,9 +244,13 @@ export default function Home() {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, undefined, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
-            if (result === "Ok !!, Adding New Favorite Product To This User Is Successfuly !!") {
+            if (!result.error) {
                 let tempFavoriteProductsForUser = favoriteProductsListForUser;
                 tempFavoriteProductsForUser.push(allProductsInsideThePage[productIndex]);
                 setFavoriteProductsListForUser(tempFavoriteProductsForUser);
@@ -260,6 +264,10 @@ export default function Home() {
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
             setIsWaitAddProductToFavoriteUserProductsList(false);
             setFavoriteProductAddingId("");
         }
