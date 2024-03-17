@@ -11,6 +11,7 @@ import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
+import validations from "../../../../public/global_functions/validations";
 
 export default function CustomerWalletProductsList() {
 
@@ -18,9 +19,9 @@ export default function CustomerWalletProductsList() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+    const [token, setToken] = useState(false);
 
-    const [userId, setUserId] = useState("");
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [allWalletProductsInsideThePage, setAllWalletProductsInsideThePage] = useState([]);
 
@@ -47,20 +48,18 @@ export default function CustomerWalletProductsList() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then(async (res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        setUserId(userId);
-                        setFilters({ ...filters, customerId: result._id });
-                        const result2 = await getWalletProductsCount(`customerId=${result._id}`);
-                        if (result2 > 0) {
-                            const result3 = await getAllWalletProductsInsideThePage(1, pageSize, `customerId=${result._id}`);
-                            setAllWalletProductsInsideThePage(result3);
-                            setTotalPagesCount(Math.ceil(result2 / pageSize));
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
+                        setToken(userToken);
+                        setFilters({ ...filters, customerId: result.data._id });
+                        const result2 = await getWalletProductsCount(`customerId=${result.data._id}`);
+                        if (result2.data > 0) {
+                            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
+                            setTotalPagesCount(Math.ceil(result2.data / pageSize));
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
@@ -68,12 +67,20 @@ export default function CustomerWalletProductsList() {
                             setWindowInnerWidth(window.innerWidth);
                         });
                         setIsLoadingPage(false);
-                    } else router.push("/auth");
+                    } else {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    }
                 })
-                .catch((err) => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             router.push("/auth");
@@ -103,7 +110,7 @@ export default function CustomerWalletProductsList() {
     const getPreviousPage = async () => {
         setIsWaitGetWalletProductsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllWalletProductsInsideThePage(await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetWalletProductsStatus(false);
     }
@@ -111,14 +118,14 @@ export default function CustomerWalletProductsList() {
     const getNextPage = async () => {
         setIsWaitGetWalletProductsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllWalletProductsInsideThePage(await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters)));
+        setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetWalletProductsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsWaitGetWalletProductsStatus(true);
-        setAllWalletProductsInsideThePage(await getAllWalletProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters)));
+        setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsWaitGetWalletProductsStatus(false);
     }
@@ -135,20 +142,29 @@ export default function CustomerWalletProductsList() {
         document.body.lang = userLanguage;
     }
 
-    const deleteProductFromUserProductsWallet = async (userId, walletProductIndex) => {
+    const deleteProductFromUserProductsWallet = async (walletProductIndex) => {
         try {
             setIsDeletingWalletProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/wallet-product?userId=${userId}&productId=${allWalletProductsInsideThePage[walletProductIndex]._id}`)
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/wallet-product?productId=${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
+                headers: {
+                    Authorization: token,
+                }
+            })
             const result = await res.data;
             setIsDeletingWalletProduct(false);
             setIsSuccessDeletingWalletProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                setAllWalletProductsInsideThePage(result.newFavoriteProductsList);
+                setAllWalletProductsInsideThePage(result.data.newProductsWallet);
                 setIsSuccessDeletingWalletProduct(false);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
         catch (err) {
+            console.log(err);
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
             setIsDeletingWalletProduct(false);
             setErrorMsgOnDeletingFavoriteProduct("Sorry, Someting Went Wrong, Please Repeate The Proccess !!");
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
@@ -198,7 +214,7 @@ export default function CustomerWalletProductsList() {
                                                     <td>{walletProduct.price - walletProduct.discount} $</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(userId, walletProductIndex)} />}
+                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                         {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                     </td>
@@ -206,8 +222,8 @@ export default function CustomerWalletProductsList() {
                                             ))}
                                         </tbody>
                                     </table> : <div className="wallet-products-for-user">
-                                        {walletProductsListForUser.map((walletProduct, walletProductIndex) => (
-                                            <div className="wallet-product data-box mb-5" key={walletProductsListForUser._id}>
+                                        {allWalletProductsInsideThePage.map((walletProduct, walletProductIndex) => (
+                                            <div className="wallet-product data-box mb-5" key={walletProduct.productId}>
                                                 <h4 className="mb-3 text-white">{t("Product")} # {walletProductIndex + 1}</h4>
                                                 <table className="wallet-products-table-for-user data-table w-100">
                                                     <tbody>
@@ -235,7 +251,7 @@ export default function CustomerWalletProductsList() {
                                                         <tr>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(userId, walletProductIndex)} />}
+                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                                 {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                             </td>
