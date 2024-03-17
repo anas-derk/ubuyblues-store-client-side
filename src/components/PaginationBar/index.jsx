@@ -65,12 +65,12 @@ export default function PaginationBar({
         return (
             <>
                 {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon"
+                    className="previous-page-icon pagination-icon me-3"
                     onClick={async () => await getPreviousPage(section)}
                 />}
                 {paginationButtons}
                 {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className="next-page-icon pagination-icon me-3"
+                    className={"next-page-icon pagination-icon me-3"}
                     onClick={async () => await getNextPage(section)}
                 />}
                 {isDisplayCurrentPageNumberAndCountOfPages && <span className={`current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white ${i18n.language !== "ar" ? "me-3" : "ms-3 me-3"}`}>{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>}
