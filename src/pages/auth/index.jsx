@@ -320,9 +320,6 @@ export default function UserAuth() {
                                                 <li className="external-auth-site-item" onClick={() => signIn("google")}>
                                                     <FaGoogle className="external-auth-site-icon" />
                                                 </li>
-                                                <li className="external-auth-site-item" onClick={() => signIn("facebook")}>
-                                                    <FaFacebook className="external-auth-site-icon" />
-                                                </li>
                                             </ul>
                                         </form>
                                         <Link href="/forget-password" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
