@@ -112,7 +112,7 @@ export default function ForgetPassword() {
                 } else {
                     if (result.data.isVerified) {
                         setCode(result.data.code);
-                        setUserId(result._id);
+                        setUserId(result.data._id);
                         setIsDisplayResetPasswordForm(true);
                     } else await router.push(`/account-verification?email=${email}`);
                 }
