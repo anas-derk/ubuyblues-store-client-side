@@ -12,6 +12,7 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function UserAuth() {
 
@@ -319,6 +320,7 @@ export default function UserAuth() {
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
+                                            <GoogleLogin onSuccess={(c) => console.log(c)} onError={(err) => console.log(err)} />
                                             {/* <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item" onClick={() => signIn("google")}>
                                                     <FaGoogle className="external-auth-site-icon" />
