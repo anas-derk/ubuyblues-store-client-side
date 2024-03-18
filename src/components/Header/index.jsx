@@ -42,7 +42,7 @@ export default function Header({ isLoggined, loginingMethod }) {
     const userLogout = async () => {
         if(isLoggined && loginingMethod === "google") {
             signOut({
-                redirect: "/cart",
+                redirect: false,
             });
         } else {
             localStorage.removeItem("asfour-store-user-token");

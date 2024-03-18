@@ -13,12 +13,17 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { signIn } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function UserAuth() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [isLoggined, setIsLoggined] = useState(false);
+
+    const [loginingMethod, setLoginingMethod] = useState("");
 
     const [appearedAuthPartName, setAppearedAuthPartName] = useState("login");
 
@@ -44,9 +49,18 @@ export default function UserAuth() {
 
     const [isVisiblePasswordForSignup, setIsVisiblePasswordForSignup] = useState(false);
 
+    const { status } = useSession();
+
     const { t, i18n } = useTranslation();
 
     const router = useRouter();
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            setIsLoggined(true);
+            setLoginingMethod("google");
+        }
+    }, [status]);
 
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
@@ -211,7 +225,7 @@ export default function UserAuth() {
                 <title>Ubuyblues Store - User Auth</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <Header />
+                <Header isLoggined={isLoggined} loginingMethod={loginingMethod} />
                 <div className="page-content text-white p-4 text-center">
                     <div className="container-fluid">
                         <section className="auth-part-display-control mb-5">

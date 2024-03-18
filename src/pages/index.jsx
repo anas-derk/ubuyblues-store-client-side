@@ -85,13 +85,14 @@ export default function Home() {
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
-    const { status, data } = useSession();
+    const { status } = useSession();
 
     const { i18n, t } = useTranslation();
 
     const pageSize = 8;
 
     useEffect(() => {
+        console.log(status);
         if (status === "authenticated") {
             setIsLoggined(true);
             setLoginingMethod("google");
