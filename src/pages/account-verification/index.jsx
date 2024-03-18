@@ -99,7 +99,7 @@ export default function AccountVerification({ email }) {
             if (accountVerificationCodeCharactersList.join("") === accountVerificationCode) {
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}`);
                 const result = await res.data;
-                localStorage.setItem("asfour-store-user-id", result);
+                localStorage.setItem("asfour-store-user-token", result.data.token);
                 router.push("/");
             }
             else {

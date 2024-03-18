@@ -50,14 +50,13 @@ export default function Checkout() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userId = localStorage.getItem("asfour-store-user-id");
         const userLanguage = localStorage.getItem("asfour-store-language");
-        if (userId) {
-            axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`)
-                .then(async (res) => {
-                    const result = res.data;
-                    if (result !== "Sorry, The User Is Not Exist !!, Please Enter Another User Id ..") {
-                        setUserInfo(result);
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo(userToken)
+                .then(async (result) => {
+                    if (!result.error) {
+                        setUserInfo(result.data);
                         const allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
                         if (Array.isArray(allProductsData)) {
                             if (allProductsData.length > 0) {
@@ -74,12 +73,20 @@ export default function Checkout() {
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
+                    } else {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
                     }
                 })
-                .catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
+                    } else {
+                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
@@ -167,8 +174,22 @@ export default function Checkout() {
         return totalPriceBeforeDiscount - totalDiscount;
     }
 
-    const validateFormFields = () => {
-        let errorsObject = validations.inputValuesValidation([
+    const validateFormFields = (ddd) => {
+        return validations.inputValuesValidation(ddd);
+    }
+
+    const createNewOrder = async (orderDetails) => {
+        try {
+            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const handleSelectPaypalPayment = () => {
+        const errorsObject = validateFormFields([
             {
                 name: "first_name_for_billing_address",
                 value: userInfo ? userInfo.billing_address.first_name : "",
@@ -328,21 +349,6 @@ export default function Checkout() {
                 },
             } : null,
         ]);
-        return errorsObject;
-    }
-
-    const createNewOrder = async (orderDetails) => {
-        try {
-            let res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const handleSelectPaypalPayment = () => {
-        const errorsObject = validateFormFields();
         setFormValidationErrors(errorsObject);
         if (Object.keys(errorsObject).length == 0) {
             if (isSavePaymentInfo) {
