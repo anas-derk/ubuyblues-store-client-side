@@ -28,15 +28,11 @@ export default function Home() {
 
     const [token, setToken] = useState("");
 
-    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
-
     const [isGetCategories, setIsGetCategories] = useState(true);
 
     const [isGetProducts, setIsGetProducts] = useState(true);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
-
-    const [userId, setUserId] = useState("");
 
     const [userInfo, setUserInfo] = useState("");
 
@@ -89,13 +85,6 @@ export default function Home() {
     const pageSize = 8;
 
     useEffect(() => {
-        window.onscroll = function () { handleScrollToUpAndDown(this) };
-        setWindowInnerWidth(window.innerWidth);
-        window.addEventListener("resize", function () {
-            setWindowInnerWidth(this.innerWidth);
-        });
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
             setToken(userToken);
@@ -112,6 +101,16 @@ export default function Home() {
                     }
                 });
         }
+    }, []);
+
+    useEffect(() => {
+        window.onscroll = function () { handleScrollToUpAndDown(this) };
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", function () {
+            setWindowInnerWidth(this.innerWidth);
+        });
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // =============================================================================
         getCategoriesCount()
             .then(async (result) => {
@@ -240,7 +239,7 @@ export default function Home() {
         return false;
     }
 
-    const addProductToFavoriteUserProducts = async (productIndex, userId) => {
+    const addProductToFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
@@ -273,11 +272,11 @@ export default function Home() {
         }
     }
 
-    const deleteProductFromFavoriteUserProducts = async (productIndex, userId) => {
+    const deleteProductFromFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`);
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setFavoriteProductsListForUser(result.newFavoriteProductsList);
@@ -519,11 +518,11 @@ export default function Home() {
                                                 {!isWaitAddProductToFavoriteUserProductsList && !isWaitDeleteProductToFavoriteUserProductsList && product._id !== favoriteProductAddingId && <>
                                                     {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
                                                         className="product-managment-icon"
-                                                        onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
+                                                        onClick={() => deleteProductFromFavoriteUserProducts(index)}
                                                     /> :
                                                         <BsSuitHeart
                                                             className="product-managment-icon"
-                                                            onClick={() => addProductToFavoriteUserProducts(index, userId)}
+                                                            onClick={() => addProductToFavoriteUserProducts(index)}
                                                         />}
                                                 </>}
                                                 {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <BsClock className="product-managment-icon" />}

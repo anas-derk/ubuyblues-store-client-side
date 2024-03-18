@@ -22,7 +22,12 @@ import "../pages/checkout/checkout.css";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import "../../config/i18n";
+import { SessionProvider } from "next-auth/react";
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
+  return (
+    <SessionProvider session={session}>
+      <Component {...pageProps} />
+    </SessionProvider>
+  )
 }
