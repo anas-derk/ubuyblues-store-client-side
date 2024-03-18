@@ -19,7 +19,6 @@ import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import validations from "../../public/global_functions/validations";
 import PaginationBar from "@/components/PaginationBar";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
 
@@ -90,13 +89,6 @@ export default function Home() {
     const { i18n, t } = useTranslation();
 
     const pageSize = 8;
-
-    useEffect(() => {
-        if (status === "authenticated") {
-            setIsLoggined(true);
-            setLoginingMethod("google");
-        }
-    }, [status]);
 
     useEffect(() => { 
         const userToken = localStorage.getItem("asfour-store-user-token");

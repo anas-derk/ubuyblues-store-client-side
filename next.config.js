@@ -4,7 +4,6 @@ const nextConfig = {
   env: {
     BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
     WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
-    secret: "bbf665540f4a77c58a272857d0728e825dd931a11d88f3ff907cb81c0e09341f",
   },
   async headers() {
     return [

@@ -12,7 +12,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
-import { signOut } from "next-auth/react";
 
 export default function Header({ isLoggined, loginingMethod }) {
 
@@ -41,9 +40,7 @@ export default function Header({ isLoggined, loginingMethod }) {
 
     const userLogout = async () => {
         if(isLoggined && loginingMethod === "google") {
-            signOut({
-                redirect: false,
-            });
+            
             await router.push("/auth");
         } else {
             localStorage.removeItem("asfour-store-user-token");

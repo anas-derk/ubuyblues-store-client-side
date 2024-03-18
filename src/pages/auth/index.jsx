@@ -10,10 +10,8 @@ import validations from "../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { signIn } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
 export default function UserAuth() {
 
@@ -49,19 +47,9 @@ export default function UserAuth() {
 
     const [isVisiblePasswordForSignup, setIsVisiblePasswordForSignup] = useState(false);
 
-    const { status } = useSession();
-
     const { t, i18n } = useTranslation();
 
     const router = useRouter();
-
-    useEffect(() => {
-        if (status === "authenticated") {
-            setIsLoggined(true);
-            setLoginingMethod("google");
-            router.push("/");
-        }
-    }, [status]);
 
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
@@ -331,11 +319,11 @@ export default function UserAuth() {
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
-                                            <ul className="external-auth-sites-list">
+                                            {/* <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item" onClick={() => signIn("google")}>
                                                     <FaGoogle className="external-auth-site-icon" />
                                                 </li>
-                                            </ul>
+                                            </ul> */}
                                         </form>
                                         <Link href="/forget-password" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
                                     </div>
