@@ -77,7 +77,7 @@ export default function OrderDetails({ orderId }) {
     const updateOrderProductData = async (orderProductIndex) => {
         try {
             setIsUpdatingStatus(true);
-            const res = await axios.put(`${process.env.BASE_API_URL}/orders/products/update-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex]._id}`, {
+            const res = await axios.put(`${process.env.BASE_API_URL}/orders/products/update-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex].productId}`, {
                 quantity: orderDetails.order_products[orderProductIndex].quantity,
                 name: orderDetails.order_products[orderProductIndex].name,
                 total_amount: orderDetails.order_products[orderProductIndex].total_amount,
@@ -114,13 +114,18 @@ export default function OrderDetails({ orderId }) {
     const deleteProductFromOrder = async (orderProductIndex) => {
         try {
             setIsDeletingStatus(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/products/delete-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/products/delete-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex].productId}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
-            if (result === "Deleting Product From Order Has Been Successfuly !!") {
+            if (!result.error) {
                 setIsDeletingStatus(false);
                 setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(() => {
                     setSuccessMsg("");
+                    orderDetails.order_products = result.data.newOrderProducts;
                     clearTimeout(successTimeout);
                 }, 1500);
             }
@@ -210,7 +215,7 @@ export default function OrderDetails({ orderId }) {
                                                 />
                                             </td>
                                             <td>
-                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && !successMsg && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
                                                     onClick={() => updateOrderProductData(orderProductIndex)}
                                                 >
@@ -222,7 +227,7 @@ export default function OrderDetails({ orderId }) {
                                                 >
                                                     Updating ...
                                                 </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && !successMsg && orderDetails.order_products.length > 1 && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     onClick={() => deleteProductFromOrder(orderProductIndex)}
                                                 >
