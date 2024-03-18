@@ -92,7 +92,6 @@ export default function Home() {
     const pageSize = 8;
 
     useEffect(() => {
-        console.log(status);
         if (status === "authenticated") {
             setIsLoggined(true);
             setLoginingMethod("google");

@@ -59,6 +59,7 @@ export default function UserAuth() {
         if (status === "authenticated") {
             setIsLoggined(true);
             setLoginingMethod("google");
+            router.push("/");
         }
     }, [status]);
 
