@@ -255,6 +255,11 @@
         .row{
             row-gap: 30px;
         }
+        .products-box {
+            .product{
+                min-height: 369px;
+            }
+        }
         .product-managment-box{
             position: relative;
             cursor: pointer;
@@ -313,6 +318,7 @@
             background-color: #FFF;
             border-bottom-right-radius: 8px;
             border-bottom-left-radius: 8px;
+            min-height: 142px;
             .product-name{
                 font-size: 19px;
             }
@@ -321,10 +327,6 @@
             }
             .product-price, .product-price-after-discount{
                 font-size: 17px;
-            }
-            .product-image-box{
-                height: 100px;
-                background-size: cover;
             }
             .discount-timer-box{
                 position: absolute;

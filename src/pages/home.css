@@ -282,6 +282,10 @@
   row-gap: 30px;
 }
 
+.home .last-added-products .products-box .product {
+  min-height: 369px;
+}
+
 .home .last-added-products .product-managment-box {
   position: relative;
   cursor: pointer;
@@ -347,6 +351,7 @@
   background-color: #FFF;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
+  min-height: 142px;
 }
 
 .home .last-added-products .product-details .product-name {
@@ -359,11 +364,6 @@
 
 .home .last-added-products .product-details .product-price, .home .last-added-products .product-details .product-price-after-discount {
   font-size: 17px;
-}
-
-.home .last-added-products .product-details .product-image-box {
-  height: 100px;
-  background-size: cover;
 }
 
 .home .last-added-products .product-details .discount-timer-box {

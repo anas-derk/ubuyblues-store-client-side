@@ -503,7 +503,7 @@ export default function Home() {
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
-                                    <div className="col-sm-6 col-md-4 col-xl-4 product" key={product._id}>
+                                    <div className="col-xs-12 col-md-4 col-xl-4 product" key={product._id}>
                                         <div
                                             className="product-managment-box"
                                             style={{
