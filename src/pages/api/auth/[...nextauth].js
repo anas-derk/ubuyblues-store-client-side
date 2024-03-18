@@ -9,11 +9,12 @@ export default NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ user, credentials, account }) {
-            console.log(account)
+        async signIn() {
             return "/";
         },
-        
+        async session({ session }) {
+            return session;
+        }
     },
     session: {
         strategy: "jwt",
