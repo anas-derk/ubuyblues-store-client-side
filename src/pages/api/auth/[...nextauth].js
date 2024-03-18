@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import { randomBytes } from 'crypto';
 
 export default NextAuth({
     providers: [
@@ -20,7 +19,7 @@ export default NextAuth({
     jwt: {
         maxAge: 30 * 24 * 60 * 60,
     },
-    secret: randomBytes(32).toString('hex'),
+    secret: process.env.secret,
     pages: {
         signIn: "/auth",
         newUser: "/auth",
