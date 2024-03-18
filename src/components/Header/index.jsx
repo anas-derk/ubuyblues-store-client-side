@@ -12,6 +12,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
 
@@ -19,9 +20,15 @@ export default function Header() {
 
     const [lightMode, setLightMode] = useState("sunny");
 
+    const { data, status } = useSession();
+
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
+
+    useEffect(() => {
+        console.log(status, data);
+    }, [status]);
 
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");

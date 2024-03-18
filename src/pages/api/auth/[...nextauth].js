@@ -10,17 +10,19 @@ export default NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ user }) {
-            console.log(user);
-            return "/";
-        }
+        async signIn() {
+            return true;
+        },
+        async session({ session }){
+            return session;
+        },
+    },
+    jwt: {
+        maxAge: 30 * 24 * 60 * 60, 
     },
     secret: randomBytes(32).toString('hex'),
-    session: {
-        strategy: "jwt",
-    },
     pages: {
         signIn: "/auth",
-        signOut: "/",
+        newUser: "/auth",
     },
 });
