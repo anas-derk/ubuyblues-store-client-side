@@ -19,12 +19,17 @@ import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import validations from "../../public/global_functions/validations";
 import PaginationBar from "@/components/PaginationBar";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    
+    const [isLoggined, setIsLoggined] = useState(false);
+
+    const [loginingMethod, setLoginingMethod] = useState("");
 
     const [token, setToken] = useState("");
 
@@ -80,17 +85,28 @@ export default function Home() {
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
+    const { status, data } = useSession();
+
     const { i18n, t } = useTranslation();
 
     const pageSize = 8;
 
     useEffect(() => {
+        if (status === "authenticated") {
+            setIsLoggined(true);
+            setLoginingMethod("google");
+        }
+    }, [status]);
+
+    useEffect(() => { 
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
             setToken(userToken);
             validations.getUserInfo(userToken)
                 .then((result) => {
                     if (!result.error) {
+                        setIsLoggined(true);
+                        setLoginingMethod("same-site");
                         setUserInfo(result.data);
                         setFavoriteProductsListForUser(result.data.favorite_products_list);
                     }
@@ -423,7 +439,7 @@ export default function Home() {
                 <title>Ubuyblues Store - Home</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <Header />
+                <Header isLoggined={isLoggined} loginingMethod={loginingMethod} />
                 <div className="navigate-to-up-button">
                     {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}

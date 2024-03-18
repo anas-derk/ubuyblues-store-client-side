@@ -12,27 +12,17 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
-export default function Header() {
-
-    const [userToken, setUserToken] = useState("");
+export default function Header({ isLoggined, loginingMethod }) {
 
     const [lightMode, setLightMode] = useState("sunny");
-
-    const { data, status } = useSession();
 
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        console.log(status, data);
-    }, [status]);
-
-    useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
-        setUserToken(userToken);
         const tempLightMode = localStorage.getItem("asfour-store-light-mode");
         if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
             setLightMode(tempLightMode);
@@ -50,8 +40,14 @@ export default function Header() {
     }
 
     const userLogout = async () => {
-        localStorage.removeItem("asfour-store-user-token");
-        await router.push("/auth");
+        if(isLoggined && loginingMethod === "google") {
+            signOut({
+                redirect: "/cart",
+            });
+        } else {
+            localStorage.removeItem("asfour-store-user-token");
+            await router.push("/auth");
+        }
     }
 
     const handleChangeLanguage = (language) => {
@@ -74,7 +70,7 @@ export default function Header() {
                                 <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Home")}
                             </Nav.Link>
-                            {!userToken && <Nav.Link href="/auth" as={Link}>
+                            {!isLoggined && <Nav.Link href="/auth" as={Link}>
                                 <BsFillPersonFill className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Login / Register")}
                             </Nav.Link>}
@@ -102,7 +98,7 @@ export default function Header() {
                                     className="sunny-icon global-header-icon ms-2 me-2"
                                     onClick={handleChangeMode}
                                 />}
-                            {userToken && <>
+                            {isLoggined && <>
                                 <Nav.Link href="/customer-dashboard" as={Link}>
                                     <BsPersonVcard className="user-icon link-icon" />
                                 </Nav.Link>
