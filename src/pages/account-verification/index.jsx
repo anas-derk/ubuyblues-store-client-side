@@ -84,7 +84,6 @@ export default function AccountVerification({ email }) {
 
     const sendTheCodeToUserEmail = async () => {
         try {
-
             const res = await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}`);
             return res.data;
         }
