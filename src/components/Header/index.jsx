@@ -44,6 +44,7 @@ export default function Header({ isLoggined, loginingMethod }) {
             signOut({
                 redirect: false,
             });
+            await router.push("/auth");
         } else {
             localStorage.removeItem("asfour-store-user-token");
             await router.push("/auth");

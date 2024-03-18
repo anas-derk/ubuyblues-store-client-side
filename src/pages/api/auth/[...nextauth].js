@@ -9,12 +9,12 @@ export default NextAuth({
         }),
     ],
     callbacks: {
-        async signIn() {
+        async signIn({ user }) {
             return "/";
         },
-        async session({ session }){
-            return session;
-        },
+    },
+    session: {
+        strategy: "jwt",
     },
     jwt: {
         maxAge: 30 * 24 * 60 * 60,
@@ -22,6 +22,5 @@ export default NextAuth({
     secret: process.env.secret,
     pages: {
         signIn: "/auth",
-        newUser: "/auth",
-    },
+    }
 });
