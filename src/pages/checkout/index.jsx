@@ -440,7 +440,7 @@ export default function Checkout() {
                 })),
                 requestNotes,
             });
-            router.push(`/confirmation?orderId=${result.orderId}`);
+            await router.push(`/confirmation?orderId=${result.data.orderId}`);
         }
         catch (err) {
             setIsWaitApproveOnPayPalOrder(false);
