@@ -250,6 +250,7 @@ export default function UpdateAndDeleteProducts() {
                     setSuccessChangeProductImageMsg(result.msg);
                     let successTimeout = setTimeout(async () => {
                         setSuccessChangeProductImageMsg("");
+                        setCurrentPage(1);
                         setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
                         setUpdatingProductIndex(-1);
                         clearTimeout(successTimeout);
