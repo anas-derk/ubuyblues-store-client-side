@@ -42,6 +42,7 @@ export default function AccountVerification({ email }) {
             setIsWaitResendTheCode(true);
             sendTheCodeToUserEmail()
                 .then((result) => {
+                    console.log(result);
                     setAccountVerificationCode(result.data.code);
                     setIsWaitResendTheCode(false);
                     setSuccessMsg(result.msg);
