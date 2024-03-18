@@ -86,7 +86,7 @@ export default function Home() {
 
     const { i18n, t } = useTranslation();
 
-    const pageSize = 2;
+    const pageSize = 8;
 
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
