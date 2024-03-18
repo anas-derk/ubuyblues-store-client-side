@@ -9,12 +9,19 @@ export default NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ user }) {
+        async signIn({ user, credentials, account }) {
+            console.log(account)
             return "/";
         },
+        
     },
     session: {
         strategy: "jwt",
+    },
+    cookies: {
+        sessionToken: {
+            name: "asfour-store-user-token",
+        }
     },
     jwt: {
         maxAge: 30 * 24 * 60 * 60,
