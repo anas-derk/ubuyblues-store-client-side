@@ -55,6 +55,32 @@ export default function Header() {
         localStorage.setItem("asfour-store-language", language);
     }
 
+    const handleSelectCountry = (country) => {
+        try {
+            switch (country) {
+                case "kuwait": {
+                    localStorage.setItem("asfour-store-country", country);
+                    return;
+                }
+                case "germany": {
+                    localStorage.setItem("asfour-store-country", country);
+                    return;
+                }
+                case "turkey": {
+                    localStorage.setItem("asfour-store-country", country);
+                    return
+                }
+                default: {
+                    return "Sorry, Invalid Country !!";
+                }
+            }
+
+        }
+        catch (err) {
+            return err;
+        }
+    }
+
     return (
         <header className="global-header">
             <Navbar expand="lg" className="bg-body-tertiary bg-white" fixed="top">
@@ -81,6 +107,13 @@ export default function Header() {
                                 <NavDropdown.Item onClick={() => handleChangeLanguage("tr")}>{t("Turkey")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={() => handleChangeLanguage("de")}>{t("Germany")}</NavDropdown.Item>
+                            </NavDropdown>
+                            <NavDropdown title={t("Countries")} id="products-nav-dropdown">
+                                <NavDropdown.Item onClick={() => handleSelectCountry("kuwait")}>{t("Kuwait")}</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={() => handleSelectCountry("germany")}>{t("Germany")}</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={() => handleSelectCountry("turkey")}>{t("Turkey")}</NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link href="/cart" as={Link}>
                                 <FaShoppingCart className="cart-icon link-icon" />
