@@ -212,13 +212,13 @@ export default function UserAuth() {
     const loginingSuccessWithGoogle = async (credentialResponse) => {
         try{
             console.log(credentialResponse.credential);
-            const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.credential}`, {
-                headers: {
-                    Authorization: `Bearer ${credentialResponse.credential}`,
-                }
-            });
-            const data = res.data;
-            console.log(data);
+            // const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.credential}`, {
+            //     headers: {
+            //         Authorization: `Bearer ${credentialResponse.credential}`,
+            //     }
+            // });
+            // const data = res.data;
+            // console.log(data);
         }
         catch(err) {
             console.log(err);
