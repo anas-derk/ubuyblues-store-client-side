@@ -213,8 +213,22 @@ export default function UserAuth() {
     const loginingSuccessWithGoogle = async (credentialResponse) => {
         try{
             setIsLoginingStatus(true);
-            const result = decode(credentialResponse.credential);
-            console.log(result);
+            let result = decode(credentialResponse.credential);
+            const res = await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&first_name=${result.given_name}&last_name=${result.family_name}&preview_name=${result.name}`);
+            result = res.data;
+            if (result.error) {
+                setIsLoginingStatus(false);
+                setErrorMsg(result.msg);
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 5000);
+            } else {
+                if (result.data.isVerified) {
+                    localStorage.setItem("asfour-store-user-token", result.data.token);
+                    await router.push("/");
+                } else await router.push(`/account-verification?email=${emailForLogin}`);
+            }
         }
         catch(err) {
             setIsLoginingStatus(false);
