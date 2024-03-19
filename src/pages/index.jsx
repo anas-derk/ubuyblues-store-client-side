@@ -91,8 +91,10 @@ export default function Home({ countryAsQuery }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        setCountry(countryAsQuery);
-        setIsLoadingPage(false);
+        setTimeout(() => {
+            setCountry(countryAsQuery);
+            setIsLoadingPage(false);
+        }, 5000);
     }, [countryAsQuery]);
 
     useEffect(() => {
