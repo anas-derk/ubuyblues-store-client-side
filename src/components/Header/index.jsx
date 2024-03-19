@@ -13,15 +13,21 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 
-export default function Header({ isLoggined, loginingMethod }) {
+export default function Header() {
 
     const [lightMode, setLightMode] = useState("sunny");
+
+    const [token, setToken] = useState("");
 
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            setToken(userToken);
+        }
         const tempLightMode = localStorage.getItem("asfour-store-light-mode");
         if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
             setLightMode(tempLightMode);
@@ -68,7 +74,7 @@ export default function Header({ isLoggined, loginingMethod }) {
                                 <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Home")}
                             </Nav.Link>
-                            {!isLoggined && <Nav.Link href="/auth" as={Link}>
+                            {!token && <Nav.Link href="/auth" as={Link}>
                                 <BsFillPersonFill className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Login / Register")}
                             </Nav.Link>}
@@ -96,7 +102,7 @@ export default function Header({ isLoggined, loginingMethod }) {
                                     className="sunny-icon global-header-icon ms-2 me-2"
                                     onClick={handleChangeMode}
                                 />}
-                            {isLoggined && <>
+                            {token && <>
                                 <Nav.Link href="/customer-dashboard" as={Link}>
                                     <BsPersonVcard className="user-icon link-icon" />
                                 </Nav.Link>
