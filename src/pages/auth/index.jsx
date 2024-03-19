@@ -13,6 +13,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { GoogleLogin } from '@react-oauth/google';
+import { decode } from "jsonwebtoken";
 
 export default function UserAuth() {
 
@@ -211,17 +212,17 @@ export default function UserAuth() {
 
     const loginingSuccessWithGoogle = async (credentialResponse) => {
         try{
-            console.log(credentialResponse.credential);
-            // const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.credential}`, {
-            //     headers: {
-            //         Authorization: `Bearer ${credentialResponse.credential}`,
-            //     }
-            // });
-            // const data = res.data;
-            // console.log(data);
+            setIsLoginingStatus(true);
+            const result = decode(credentialResponse.credential);
+            console.log(result);
         }
         catch(err) {
-            console.log(err);
+            setIsLoginingStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 5000);
         }
     }
 
