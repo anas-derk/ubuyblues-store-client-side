@@ -209,6 +209,10 @@ export default function UserAuth() {
         }
     }
 
+    const loginingSuccessWithGoogle = (credentialResponse) => {
+        console.log(credentialResponse);
+    }
+
     return (
         <div className="auth d-flex flex-column justify-content-center page">
             <Head>
@@ -320,12 +324,15 @@ export default function UserAuth() {
                                             </button>}
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
-                                            <GoogleLogin onSuccess={(c) => console.log(c)} onError={(err) => console.log(err)} />
-                                            {/* <ul className="external-auth-sites-list">
-                                                <li className="external-auth-site-item" onClick={() => signIn("google")}>
-                                                    <FaGoogle className="external-auth-site-icon" />
+                                            <ul className="external-auth-sites-list">
+                                                <li className="external-auth-site-item">
+                                                    <GoogleLogin
+                                                        type="icon"
+                                                        onSuccess={loginingSuccessWithGoogle}
+                                                        onError={(err) => console.log(err)}
+                                                    />
                                                 </li>
-                                            </ul> */}
+                                            </ul>
                                         </form>
                                         <Link href="/forget-password" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
                                     </div>
