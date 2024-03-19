@@ -209,8 +209,24 @@ export default function UserAuth() {
         }
     }
 
-    const loginingSuccessWithGoogle = (credentialResponse) => {
-        console.log(credentialResponse);
+    const loginingSuccessWithGoogle = async (credentialResponse) => {
+        try{
+            console.log(credentialResponse.credential);
+            const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credentialResponse.credential}`, {
+                headers: {
+                    Authorization: `Bearer ${credentialResponse.credential}`,
+                }
+            });
+            const data = res.data;
+            console.log(data);
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    const loginingFailedWithGoogle = (err) => {
+        alert("Login Failed With Google, Please Repeate The Process !!");
     }
 
     return (
@@ -329,7 +345,7 @@ export default function UserAuth() {
                                                     <GoogleLogin
                                                         type="icon"
                                                         onSuccess={loginingSuccessWithGoogle}
-                                                        onError={(err) => console.log(err)}
+                                                        onError={loginingFailedWithGoogle}
                                                     />
                                                 </li>
                                             </ul>
