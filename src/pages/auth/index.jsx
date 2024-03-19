@@ -211,7 +211,7 @@ export default function UserAuth() {
     }
 
     const loginingSuccessWithGoogle = async (credentialResponse) => {
-        try{
+        try {
             setIsLoginingStatus(true);
             let result = decode(credentialResponse.credential);
             const res = await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&first_name=${result.given_name}&last_name=${result.family_name}&preview_name=${result.name}`);
@@ -230,7 +230,7 @@ export default function UserAuth() {
                 } else await router.push(`/account-verification?email=${emailForLogin}`);
             }
         }
-        catch(err) {
+        catch (err) {
             setIsLoginingStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -309,8 +309,12 @@ export default function UserAuth() {
                                             {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign Up With")}</h6>
                                             <ul className="external-auth-sites-list">
-                                                <li className="external-auth-site-item" onClick={() => signIn("google")}>
-                                                    <FaGoogle className="external-auth-site-icon" />
+                                                <li className="external-auth-site-item">
+                                                    <GoogleLogin
+                                                        type="icon"
+                                                        onSuccess={loginingSuccessWithGoogle}
+                                                        onError={loginingFailedWithGoogle}
+                                                    />
                                                 </li>
                                             </ul>
                                         </form>
