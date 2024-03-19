@@ -45,13 +45,8 @@ export default function Header() {
     }
 
     const userLogout = async () => {
-        if(isLoggined && loginingMethod === "google") {
-            
-            await router.push("/auth");
-        } else {
-            localStorage.removeItem("asfour-store-user-token");
-            await router.push("/auth");
-        }
+        localStorage.removeItem("asfour-store-user-token");
+        await router.push("/auth");
     }
 
     const handleChangeLanguage = (language) => {
