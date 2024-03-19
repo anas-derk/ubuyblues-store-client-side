@@ -67,10 +67,15 @@ export default function UserAuth() {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
-                }).catch(() => {
+                }).catch((err) => {
                     handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        setIsLoadingPage(false);
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
                 });
         } else {
             handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");

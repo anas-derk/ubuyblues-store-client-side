@@ -91,8 +91,6 @@ export default function Home() {
             validations.getUserInfo(userToken)
                 .then((result) => {
                     if (!result.error) {
-                        setIsLoggined(true);
-                        setLoginingMethod("same-site");
                         setUserInfo(result.data);
                         setFavoriteProductsListForUser(result.data.favorite_products_list);
                     }
@@ -100,6 +98,9 @@ export default function Home() {
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-user-token");
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
                     }
                 });
         }
