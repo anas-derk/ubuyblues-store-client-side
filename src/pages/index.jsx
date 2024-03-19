@@ -19,14 +19,17 @@ import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import validations from "../../public/global_functions/validations";
 import PaginationBar from "@/components/PaginationBar";
+import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Home({ countryAsQuery }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [token, setToken] = useState("");
+
+    const [country, setCountry] = useState(countryAsQuery);
 
     const [isGetCategories, setIsGetCategories] = useState(true);
 
@@ -82,9 +85,17 @@ export default function Home() {
 
     const { i18n, t } = useTranslation();
 
+    const router = useRouter();
+
     const pageSize = 8;
 
-    useEffect(() => { 
+    useEffect(() => {
+        setIsLoadingPage(true);
+        setCountry(countryAsQuery);
+        setIsLoadingPage(false);
+    }, [countryAsQuery]);
+
+    useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
             setToken(userToken);
@@ -161,7 +172,7 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        if (!isGetCategories, !isGetProducts) {
+        if (!isGetCategories && !isGetProducts) {
             setIsLoadingPage(false);
         }
     }, [isGetCategories, isGetProducts]);
@@ -616,4 +627,42 @@ export default function Home() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div >
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/",
+                },
+                props: {
+                    countryAsQuery: "kuwait",
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?country=${query.country}`,
+                },
+                props: {
+                    countryAsQuery: query.country,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsQuery: query.country,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsQuery: "kuwait",
+        },
+    }
 }

@@ -55,18 +55,39 @@ export default function Header() {
         localStorage.setItem("asfour-store-language", language);
     }
 
-    const handleSelectCountry = (country) => {
+    const handleSelectCountry = async (country) => {
         try {
             switch (country) {
                 case "kuwait": {
+                    await router.replace({
+                        pathname: router.pathname,
+                        query: {
+                            ...router.query,
+                            country,
+                        }
+                    });
                     localStorage.setItem("asfour-store-country", country);
                     return;
                 }
                 case "germany": {
+                    await router.replace({
+                        pathname: router.pathname,
+                        query: {
+                            ...router.query,
+                            country,
+                        }
+                    });
                     localStorage.setItem("asfour-store-country", country);
                     return;
                 }
                 case "turkey": {
+                    await router.replace({
+                        pathname: router.pathname,
+                        query: {
+                            ...router.query,
+                            country,
+                        }
+                    });
                     localStorage.setItem("asfour-store-country", country);
                     return
                 }
