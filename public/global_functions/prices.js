@@ -1,13 +1,13 @@
-const getProductPriceByCountry = (price, country) => {
+const getUSDPriceAgainstCurrency = (country) => {
     switch(country) {
         case "kuwait": {
-            return price * 3.25;
+            return 1 * 3.25;
         }
         case "germany": {
-            return price * 1.2;
+            return 1 * 1.2;
         }
         case "turkey": {
-            return price / 30;
+            return 1 / 30;
 
         }
         default: {
@@ -17,5 +17,5 @@ const getProductPriceByCountry = (price, country) => {
 }
 
 export default {
-    getProductPriceByCountry,
+    getUSDPriceAgainstCurrency,
 }
