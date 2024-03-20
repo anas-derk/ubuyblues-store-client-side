@@ -20,6 +20,7 @@ import { FaCheck } from 'react-icons/fa';
 import validations from "../../public/global_functions/validations";
 import PaginationBar from "@/components/PaginationBar";
 import { useRouter } from "next/router";
+import prices from "../../public/global_functions/prices";
 
 export default function Home({ countryAsQuery }) {
 
@@ -557,8 +558,8 @@ export default function Home({ countryAsQuery }) {
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} {t("KWD")}</h5>
-                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{product.price - product.discount} {t("KWD")}</h4>}
+                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{prices.getProductPriceByCountry(product.price, countryAsQuery)} {t("KWD")}</h5>
+                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{prices.getProductPriceByCountry(product.price - product.discount, countryAsQuery)} {t("KWD")}</h4>}
                                         </div>
                                     </div>
                                 ))}
