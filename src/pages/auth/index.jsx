@@ -21,10 +21,6 @@ export default function UserAuth() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [isLoggined, setIsLoggined] = useState(false);
-
-    const [loginingMethod, setLoginingMethod] = useState("");
-
     const [appearedAuthPartName, setAppearedAuthPartName] = useState("login");
 
     const [emailForLogin, setEmailForLogin] = useState("");
@@ -255,7 +251,7 @@ export default function UserAuth() {
                 <title>Ubuyblues Store - User Auth</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <Header isLoggined={isLoggined} loginingMethod={loginingMethod} />
+                <Header />
                 <div className="page-content text-white p-4 text-center">
                     <div className="container-fluid">
                         <section className="auth-part-display-control mb-5">

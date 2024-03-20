@@ -1,13 +1,22 @@
 import Link from "next/link";
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaLongArrowAltRight, FaLongArrowAltLeft, FaCcPaypal, FaInstagram, FaTiktok } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
+import axios from "axios";
 
 export default function Footer() {
+
+    const [email, setEmail] = useState("");
+
+    const [waitMsg, setWaitMsg] = useState("");
+
+    const [errMsg, setErrorMsg] = useState("");
+
+    const [successMsg, setSuccessMsg] = useState("");
 
     const { i18n, t } = useTranslation();
 
@@ -21,11 +30,44 @@ export default function Footer() {
         document.body.lang = userLanguage;
     }
 
+    const handleSubscription = async (e, email) => {
+        try {
+            e.preventDefault();
+            setWaitMsg("Please Wait ...");
+            setWaitMsg("");
+            const res = await axios.post(`${process.env.BASE_API_URL}/subscriptions/add-new-subscription`, {
+                email,
+            });
+            const result = res.data;
+            if (!result.error) {
+                setSuccessMsg("Success Subscription !!");
+                let errorTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(errorTimeout);
+                }, 5000);
+            } else {
+                setErrorMsg(result.msg);
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 5000);
+            }
+        }
+        catch (err) {
+            setWaitMsg(false);
+            setErrorMsg("Sorry, Someting Went Wrong !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 5000);
+        }
+    }
+
     return (
         <footer className="pt-4 pb-4">
             <div className="container-fluid">
                 <div className="row align-items-center mb-4">
-                    <div className="col-md-3 text-center">
+                    <div className="col-md-2 text-center">
                         <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="asfour-logo-for-footer" />
                     </div>
                     <div className="col-md-3">
@@ -88,14 +130,30 @@ export default function Footer() {
                             </li>
                         </ul>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Payment Methods").toUpperCase()}</h5>
-                        <ul className="payment-methods-list">
+                        <ul className="payment-methods-list mb-5">
                             <li className="payment-method-item fw-bold mb-3">
                                 <FaCcPaypal className={`icon paypal-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 <span>{t("PayPal")}</span>
                             </li>
                         </ul>
+                        <h5 className="fw-bold mb-3 border-bottom border-dark border-2 pb-2 title">{t("Subscription").toUpperCase()}</h5>
+                        <h6 className="mb-3">{t("Enter your email address")}</h6>
+                        <h6 className="mb-3">{t("( I want to receive all the latest updates via email )")}</h6>
+                        <form className="subscription" onSubmit={(e) => handleSubscription(e, email)}>
+                            <input
+                                type="email"
+                                className="form-control  p-2 d-block w-75 mb-3"
+                                placeholder={t("Please Enter Email Here")}
+                                onChange={(e) => setEmail(e.target.value.trim())}
+                                required
+                            />
+                            {!waitMsg && !successMsg && !errMsg && <button type="submit" className="btn btn-info">Subscription</button>}
+                            {waitMsg && <button type="button" disabled className="btn btn-info">{waitMsg}</button>}
+                            {successMsg && <button type="button" disabled className="btn btn-success">{successMsg}</button>}
+                            {errMsg && <button type="button" disabled className="btn btn-danger">{errMsg}</button>}
+                        </form>
                     </div>
                 </div>
                 <p className="mb-0 text-center fw-bold">
