@@ -10,13 +10,13 @@ const getUSDPriceAgainstCurrency = async (country) => {
         const data = res.data.data;
         switch (country) {
             case "kuwait": {
-                return data["KWD"].value.toFixed(2);
+                return data["KWD"].value;
             }
             case "germany": {
-                return data["EUR"].value.toFixed(2);;
+                return data["EUR"].value;
             }
             case "turkey": {
-                return data["TRY"].value.toFixed(2);;
+                return data["TRY"].value;
             }
             default: {
                 throw Error("Sorry, Invalid Country !!");
@@ -28,6 +28,24 @@ const getUSDPriceAgainstCurrency = async (country) => {
     }
 }
 
+const getCurrencyNameByCountry = (country) => {
+    switch (country) {
+        case "kuwait": {
+            return "KWD";
+        }
+        case "germany": {
+            return "EUR";
+        }
+        case "turkey": {
+            return "TRY";
+        }
+        default: {
+            throw Error("Sorry, Invalid Country !!");
+        }
+    }
+}
+
 export default {
     getUSDPriceAgainstCurrency,
+    getCurrencyNameByCountry,
 }

@@ -34,6 +34,8 @@ export default function Home({ countryAsQuery }) {
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
+
     const [isGetCategories, setIsGetCategories] = useState(true);
 
     const [isGetProducts, setIsGetProducts] = useState(true);
@@ -97,6 +99,7 @@ export default function Home({ countryAsQuery }) {
         setCountry(countryAsQuery);
         prices.getUSDPriceAgainstCurrency(countryAsQuery).then((price) => {
             setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(country));
             if(!isGetCategories && !isGetProducts) {
                 setIsLoadingPage(false);
             }
@@ -567,8 +570,8 @@ export default function Home({ countryAsQuery }) {
                                         <div className="product-details p-3 text-center">
                                             <h4 className="product-name fw-bold">{product.name}</h4>
                                             <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price * usdPriceAgainstCurrency} {t("KWD")}</h5>
-                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{(product.price - product.discount) * usdPriceAgainstCurrency} {t("KWD")}</h4>}
+                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
                                         </div>
                                     </div>
                                 ))}
