@@ -2,6 +2,22 @@ import axios from "axios";
 
 const getUSDPriceAgainstCurrency = async (country) => {
     try {
+        if(process.env.NODE_ENV === "development") {
+            switch (country) {
+                case "kuwait": {
+                    return 3.25
+                }
+                case "germany": {
+                    return 1.2;
+                }
+                case "turkey": {
+                    return 32;
+                }
+                default: {
+                    throw Error("Sorry, Invalid Country !!");
+                }
+            }
+        }
         const res = await axios.get(`https://api.currencyapi.com/v3/latest?base_currency=USD&currencies=EUR,KWD,TRY`, {
             headers: {
                 "apiKey": "cur_live_AeqmPRub8bYXk9M1QsqYgaMGQLPlnZMLWVQhESph",
