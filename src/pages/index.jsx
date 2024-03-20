@@ -96,7 +96,9 @@ export default function Home({ countryAsQuery }) {
         setIsLoadingPage(true);
         setCountry(countryAsQuery);
         setUsdPriceAgainstCurrency(prices.getUSDPriceAgainstCurrency(countryAsQuery));
-        setIsLoadingPage(false);
+        if(!isGetCategories && !isGetProducts) {
+            setIsLoadingPage(false);
+        }
     }, [countryAsQuery]);
 
     useEffect(() => {
