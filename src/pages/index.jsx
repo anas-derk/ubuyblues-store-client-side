@@ -95,10 +95,16 @@ export default function Home({ countryAsQuery }) {
     useEffect(() => {
         setIsLoadingPage(true);
         setCountry(countryAsQuery);
-        setUsdPriceAgainstCurrency(prices.getUSDPriceAgainstCurrency(countryAsQuery));
-        if(!isGetCategories && !isGetProducts) {
+        prices.getUSDPriceAgainstCurrency(countryAsQuery).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            if(!isGetCategories && !isGetProducts) {
+                setIsLoadingPage(false);
+            }
+        })
+        .catch((err) => {
             setIsLoadingPage(false);
-        }
+            setIsErrorMsgOnLoadingThePage(true);
+        });
     }, [countryAsQuery]);
 
     useEffect(() => {
