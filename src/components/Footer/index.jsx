@@ -2,7 +2,8 @@ import Link from "next/link";
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-import { FaLongArrowAltRight, FaLongArrowAltLeft, FaCcPaypal } from "react-icons/fa";
+import { FaLongArrowAltRight, FaLongArrowAltLeft, FaCcPaypal, FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 
@@ -67,7 +68,19 @@ export default function Footer() {
                         <ul className="links-list">
                             <li className="link-item fw-bold mb-3">
                                 <IoLogoFacebook className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="https://www.facebook.com/profile.php?id=61555678003785&mibextid=ZbWKwL" target="_blank" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
+                                <Link href="https://www.facebook.com/AsfourInternational?mibextid=ZbWKwL" target="_blank" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
+                            </li>
+                            <li className="link-item fw-bold mb-3">
+                                <FaInstagram className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <Link href="https://www.instagram.com/asfourintl?igsh=MTluaXV1aG9yb2QwdQ==" target="_blank" className="text-dark link-btn">{t("Instagram").toUpperCase()}</Link>
+                            </li>
+                            <li className="link-item fw-bold mb-3">
+                                <FaXTwitter className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <Link href="https://x.com/AsfourIntl?t=TyZqHPOL5gf009kl4Iz69g&s=09" target="_blank" className="text-dark link-btn">{t("x").toUpperCase()}</Link>
+                            </li>
+                            <li className="link-item fw-bold mb-3">
+                                <FaTiktok className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <Link href="https://www.tiktok.com/@asfourintl?_t=8kpQN2SnUBe&_r=1" target="_blank" className="text-dark link-btn">{t("Tiktok").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <MdEmail className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
