@@ -99,7 +99,7 @@ export default function Home({ countryAsQuery }) {
         setCountry(countryAsQuery);
         prices.getUSDPriceAgainstCurrency(countryAsQuery).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(country));
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsQuery));
             if(!isGetCategories && !isGetProducts) {
                 setIsLoadingPage(false);
             }
