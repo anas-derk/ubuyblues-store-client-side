@@ -2,7 +2,7 @@ import Link from "next/link";
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
+import { FaLongArrowAltRight, FaLongArrowAltLeft, FaCcPaypal } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 
@@ -63,10 +63,7 @@ export default function Footer() {
                         </ul>
                     </div>
                     <div className="col-md-3">
-
-                    </div>
-                    <div className="col-md-3">
-                    <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Contact Us").toUpperCase()}</h5>
+                        <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Contact Us").toUpperCase()}</h5>
                         <ul className="links-list">
                             <li className="link-item fw-bold mb-3">
                                 <IoLogoFacebook className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
@@ -75,6 +72,15 @@ export default function Footer() {
                             <li className="link-item fw-bold mb-3">
                                 <MdEmail className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 <Link href="mailto:info@asfourintlco.com" className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="col-md-3">
+                        <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Payment Methods").toUpperCase()}</h5>
+                        <ul className="payment-methods-list">
+                            <li className="payment-method-item fw-bold mb-3">
+                                <FaCcPaypal className={`icon paypal-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <span>{t("PayPal")}</span>
                             </li>
                         </ul>
                     </div>
