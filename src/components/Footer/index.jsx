@@ -34,11 +34,11 @@ export default function Footer() {
         try {
             e.preventDefault();
             setWaitMsg("Please Wait ...");
-            setWaitMsg("");
             const res = await axios.post(`${process.env.BASE_API_URL}/subscriptions/add-new-subscription`, {
                 email,
             });
             const result = res.data;
+            setWaitMsg("");
             if (!result.error) {
                 setSuccessMsg("Success Subscription !!");
                 let errorTimeout = setTimeout(() => {
