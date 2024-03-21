@@ -33,49 +33,28 @@
         border-radius: 50%;
         padding: 5px;
     }
-    .contact-icons-box{
-        position: fixed;
-        left: 30px;
-        bottom: 30px;
-        cursor: pointer;
-        .contact-icons-list{
-            .contact-icon-item{
-                width: 60px;
-                height: 60px;
-                text-align: center;
-                line-height: 60px;
-                border-radius: 50%;
-                background-color: var(--main-color-two);
-            }
-        }
-        .contact-icon, .close-icon, .whatsapp-icon, .mail-icon{
-            font-size: 35px;
-            color: #000;
-        }
-    }
-    .navigate-link-for-display-products{
-        border-radius: 15px;
-        border: 5p solid var(--main-color-three);
-        gap: 40px;
-        .display-product-link{
-            color: var(--main-color-one);
-            .icon{
-                font-size: 70px;
-            }
-            @media (max-width: 576px) {
-                .icon{
-                    font-size: 50px;
-                }
-                .link-name{
-                    font-size: 18px;
-                }
-            }
-        }
-    }
-    .products-display-managment{
+    .categories{
+        border-bottom: 2px solid var(--main-color-two);
         .row{
-            @media (max-width: 767px) {
-                gap: 30px;
+            row-gap: 30px;
+        }
+        .category-details{
+            background-color: var(--main-color-two);
+            border-left: 10px solid #FFF;
+            border-radius: 15px;
+            &:hover{
+                border-left: none;
+            }
+            .forward-arrow-icon{
+                background-color: #FFF;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                font-size: 15px;
+                &:hover{
+                    background-color: var(--main-color-one);
+                    color: #FFF;
+                }
             }
         }
     }
@@ -176,31 +155,6 @@
                 .product-managment-icon{
                     cursor: pointer;
                     font-size: 20px;
-                }
-            }
-        }
-    }
-    .categories{
-        border-bottom: 2px solid var(--main-color-two);
-        .row{
-            row-gap: 30px;
-        }
-        .category-details{
-            background-color: var(--main-color-two);
-            border-left: 10px solid #FFF;
-            border-radius: 15px;
-            &:hover{
-                border-left: none;
-            }
-            .forward-arrow-icon{
-                background-color: #FFF;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                font-size: 15px;
-                &:hover{
-                    background-color: var(--main-color-one);
-                    color: #FFF;
                 }
             }
         }
