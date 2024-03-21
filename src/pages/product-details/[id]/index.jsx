@@ -1,16 +1,12 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { BsFillCartPlusFill, BsFillSuitHeartFill, BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
-import { FaShoppingCart } from "react-icons/fa";
-import { BiSolidCategory, BiSearchAlt } from "react-icons/bi";
-import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
-import { AiOutlineEye, AiOutlineHome } from "react-icons/ai";
+import { BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
+import { AiOutlineHome } from "react-icons/ai";
 import Footer from "@/components/Footer";
 import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
-import { GrFormClose } from "react-icons/gr";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
@@ -18,18 +14,15 @@ import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
-import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import Slider from "react-slick";
-import { PiShareFatLight } from "react-icons/pi";
-import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
-import { FaEnvelope, FaTimes, FaWhatsapp } from "react-icons/fa";
-import { MdOutlineContactPhone } from "react-icons/md";
 
 export default function ProductDetails() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -39,11 +32,7 @@ export default function ProductDetails() {
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
-    const [isGetProductsStatus, setIsGetProductsStatus] = useState(false);
-
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
-
-    const [allCategories, setAllCategories] = useState([]);
 
     const [productAddingId, setProductAddingId] = useState("");
 
@@ -71,72 +60,39 @@ export default function ProductDetails() {
 
     const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
 
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const [totalPagesCount, setTotalPagesCount] = useState(0);
-
-    const [pageNumber, setPageNumber] = useState(0);
-
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
-
-    const [appearedSections, setAppearedSections] = useState([]);
-
-    const [allBrands, setAllBrands] = useState([]);
-
-    const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
     const router = useRouter();
 
     const sliderRef = useRef();
 
-    const pageSize = 8;
-
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
-        const userId = localStorage.getItem("asfour-store-user-id");
-        setUserId(userId);
-        getProductsCount()
-            .then(async (result) => {
-                if (result > 0) {
-                    setAllProductsInsideThePage(await getAllProductsInsideThePage(1, pageSize));
-                    setTotalPagesCount(Math.ceil(result / pageSize));
-                    let res1 = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`);
-                    setAllCategories(await res1.data);
-                    if (userId) {
-                        res1 = await axios.get(`${process.env.BASE_API_URL}/users/user-info/${userId}`);
-                        const result2 = await res1.data;
-                        setUserInfo(result2);
-                        setFavoriteProductsListForUser(result2.favorite_products_list);
-                    }
-                    res1 = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-                    let result2 = await res1.data;
-                    const appearedSectionsLength = result2.length;
-                    setAppearedSections(appearedSectionsLength > 0 ? result2.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
-                    if (appearedSectionsLength > 0) {
-                        for (let i = 0; i < appearedSectionsLength; i++) {
-                            if (result2[i].sectionName === "brands" && result2[i].isAppeared) {
-                                res1 = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands`);
-                                setAllBrands(await res1.data);
-                            }
-                        }
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            setToken(userToken);
+            validations.getUserInfo(userToken)
+                .then((result) => {
+                    if (!result.error) {
+                        setUserInfo(result.data);
+                        setFavoriteProductsListForUser(result.data.favorite_products_list);
                     }
                     setWindowInnerWidth(window.innerWidth);
                     window.addEventListener("resize", function () {
                         setWindowInnerWidth(this.innerWidth);
                     });
                     setIsLoadingPage(false);
-                }
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        }
     }, []);
-
-    const userLogout = () => {
-        localStorage.removeItem("asfour-store-user-id");
-        router.push("/auth");
-    }
 
     const handleScrollToUpAndDown = (window) => {
         if (window.scrollY > 500) {
@@ -162,20 +118,6 @@ export default function ProductDetails() {
         }
     }
 
-    const getLastSevenProducts = () => {
-        let lastSevenProducts = [];
-        if (allProductsInsideThePage.length >= 7) {
-            for (let i = 0; i < 2; i++) {
-                lastSevenProducts.push(allProductsInsideThePage[i]);
-            }
-        } else {
-            for (let i = 0; i < allProductsInsideThePage.length; i++) {
-                lastSevenProducts.push(allProductsInsideThePage[i]);
-            }
-        }
-        return lastSevenProducts;
-    }
-
     const isFavoriteProductForUser = (favorite_products_list, productId) => {
         for (let i = 0; i < favorite_products_list.length; i++) {
             if (favorite_products_list[i]._id === productId) return true;
@@ -183,39 +125,59 @@ export default function ProductDetails() {
         return false;
     }
 
-    const addProductToFavoriteUserProducts = async (productIndex, userId) => {
+    const addProductToFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, undefined, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
-            if (result === "Ok !!, Adding New Favorite Product To This User Is Successfuly !!") {
+            if (!result.error) {
                 let tempFavoriteProductsForUser = favoriteProductsListForUser;
                 tempFavoriteProductsForUser.push(allProductsInsideThePage[productIndex]);
                 setFavoriteProductsListForUser(tempFavoriteProductsForUser);
                 setIsWaitAddProductToFavoriteUserProductsList(false);
-                setFavoriteProductAddingId("");
+                setIsSuccessAddProductToFavoriteUserProductsList(true);
+                let successAddToCartTimeout = setTimeout(() => {
+                    setIsSuccessAddProductToFavoriteUserProductsList(false);
+                    setFavoriteProductAddingId("");
+                    clearTimeout(successAddToCartTimeout);
+                }, 3000);
             }
         }
         catch (err) {
-            console.log(err);
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/auth");
+                return;
+            }
+            setIsWaitAddProductToFavoriteUserProductsList(false);
+            setFavoriteProductAddingId("");
         }
     }
 
-    const deleteProductFromFavoriteUserProducts = async (productIndex, userId) => {
+    const deleteProductFromFavoriteUserProducts = async (productIndex) => {
         try {
-            setIsWaitAddProductToFavoriteUserProductsList(true);
+            setIsWaitDeleteProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?userId=${userId}&productId=${allProductsInsideThePage[productIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`);
             const result = await res.data;
-            if (result === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
-                setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favorite_product) => favorite_product._id != allProductsInsideThePage[productIndex]._id));
-                setIsWaitAddProductToFavoriteUserProductsList(false);
-                setFavoriteProductAddingId("");
+            if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
+                setFavoriteProductsListForUser(result.newFavoriteProductsList);
+                setIsWaitDeleteProductToFavoriteUserProductsList(false);
+                setIsSuccessDeleteProductToFavoriteUserProductsList(true);
+                let successDeleteToCartTimeout = setTimeout(() => {
+                    setIsSuccessDeleteProductToFavoriteUserProductsList(false);
+                    setFavoriteProductAddingId("");
+                    clearTimeout(successDeleteToCartTimeout);
+                }, 3000);
             }
         }
         catch (err) {
-            console.log(err);
+            setIsWaitDeleteProductToFavoriteUserProductsList(false);
+            setFavoriteProductAddingId("");
         }
     }
 
@@ -282,128 +244,6 @@ export default function ProductDetails() {
         );
     }
 
-    const isItStillDiscountForProduct = (startDiscountPeriod, endDiscountPeriod) => {
-        const dateAndTimeNow = new Date(Date.now());
-        const startDiscountDateAndTime = new Date(startDiscountPeriod);
-        if (dateAndTimeNow > startDiscountDateAndTime) {
-            const endDiscountDateAndTime = new Date(endDiscountPeriod);
-            return endDiscountDateAndTime - dateAndTimeNow > 0;
-        }
-        return false;
-        // if (dateAndTimeNow)
-        // console.log(new Date(startDiscountDateAndTime.getTime() - endDiscountDateAndTime.getTime()));
-    }
-
-    const getProductsCount = async () => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count`);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const getAllProductsInsideThePage = async (pageNumber, pageSize) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const getPreviousPage = async () => {
-        setIsGetProductsStatus(true);
-        const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
-        setCurrentPage(newCurrentPage);
-        setIsGetProductsStatus(false);
-    }
-
-    const getNextPage = async () => {
-        setIsGetProductsStatus(true);
-        const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage(await getAllProductsInsideThePage(newCurrentPage, pageSize));
-        setCurrentPage(newCurrentPage);
-        setIsGetProductsStatus(false);
-    }
-
-    const paginationBar = () => {
-        const paginationButtons = [];
-        for (let i = 1; i <= totalPagesCount; i++) {
-            if (i < 11) {
-                paginationButtons.push(
-                    <button
-                        key={i}
-                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""} ${i === 1 ? "ms-3" : ""}`}
-                        onClick={async () => {
-                            setIsGetProductsStatus(true);
-                            setAllProductsInsideThePage(await getAllProductsInsideThePage(i, pageSize));
-                            setCurrentPage(i);
-                            setIsGetProductsStatus(false);
-                        }}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        if (totalPagesCount > 10) {
-            paginationButtons.push(
-                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
-            );
-            paginationButtons.push(
-                <button
-                    key={totalPagesCount}
-                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => {
-                        setIsGetProductsStatus(true);
-                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsGetProductsStatus(false);
-                    }}
-                >
-                    {totalPagesCount}
-                </button>
-            );
-        }
-        return (
-            <section className="pagination d-flex justify-content-center align-items-center">
-                {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon"
-                    onClick={getPreviousPage}
-                />}
-                {paginationButtons}
-                {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className="next-page-icon pagination-icon me-3"
-                    onClick={getNextPage}
-                />}
-                <span className="current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white me-3">The Page {currentPage} of {totalPagesCount} Pages</span>
-                <form
-                    className="navigate-to-specific-page-form w-25"
-                    onSubmit={async (e) => {
-                        e.preventDefault();
-                        setIsGetProductsStatus(true);
-                        setAllProductsInsideThePage(await getAllProductsInsideThePage(pageNumber, pageSize));
-                        setCurrentPage(pageNumber);
-                        setIsGetProductsStatus(false);
-                    }}
-                >
-                    <input
-                        type="number"
-                        className="form-control p-1 ps-2 page-number-input"
-                        placeholder="Enter Page Number"
-                        min="1"
-                        max={totalPagesCount}
-                        onChange={(e) => setPageNumber(e.target.valueAsNumber)}
-                    />
-                </form>
-            </section>
-        );
-    }
-
     const goToSlide = (slideIndex) => {
         sliderRef.current.slickGoTo(slideIndex);
     }
@@ -411,7 +251,7 @@ export default function ProductDetails() {
     return (
         <div className="home page">
             <Head>
-                <title>Ubuyblues Store - Home</title>
+                <title>Ubuyblues Store - Product Details</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
@@ -420,48 +260,8 @@ export default function ProductDetails() {
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
                 {/* Start Overlay */}
-                {productIndex > -1 && <div className="overlay">
+                <div className="overlay">
                     <div className="content p-4 text-white">
-                        <GrFormClose className="close-overlay-icon" onClick={() => setProductIndex(-1)} />
-                        <header className="overlay-header mb-4">
-                            <div className="row align-items-center">
-                                <div className="col-md-6">
-                                    <h6 className="product-name-and-category">
-                                        <span className="me-2">Main</span>
-                                        <IoIosArrowForward className="me-2" />
-                                        <span className="me-2 product-category-name">{allProductsInsideThePage[productIndex].category}</span>
-                                        <IoIosArrowForward className="me-2" />
-                                        <span className="product-name">{allProductsInsideThePage[productIndex].name}</span>
-                                    </h6>
-                                </div>
-                                <div className="col-md-6">
-                                    <ul className="navigate-links-list d-flex p-3 justify-content-center">
-                                        <li className="navigate-links-item">
-                                            <Link href="/" className="navigate-link">
-                                                <AiOutlineHome className="home-icon overlay-header-icon" />
-                                            </Link>
-                                        </li>
-                                        {!userId && <li className="navigate-links-item">
-                                            <Link href="/auth" className="navigate-link">
-                                                <BsFillPersonFill className="auth-icon overlay-header-icon" />
-                                            </Link>
-                                        </li>}
-                                        {userId && <>
-                                            <li className="navigate-links-item">
-                                                <Link href="#" className="navigate-link" onClick={userLogout}>
-                                                    <MdOutlineLogout className="logout-icon overlay-header-icon" />
-                                                </Link>
-                                            </li>
-                                            <li className="navigate-links-item">
-                                                <Link href="/customer-dashboard" className="navigate-link">
-                                                    <BsPersonVcard className="user-account-icon overlay-header-icon" />
-                                                </Link>
-                                            </li>
-                                        </>}
-                                    </ul>
-                                </div>
-                            </div>
-                        </header>
                         <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
                             <div className="row mb-3">
                                 <div className="col-lg-6">
@@ -635,176 +435,9 @@ export default function ProductDetails() {
                             <Footer />
                         </div>
                     </div>
-                </div>}
+                </div>
                 {/* End Overlay */}
-                {/* Start Share Options Box */}
-                {isDisplayShareOptionsBox && <div className="share-options-box">
-                    <div className="share-icons-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
-                        <GrFormClose className="close-share-options-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
-                        <h2 className="mb-3 pb-3 border-bottom border-white">Share Your Favorite Product With Your Friends</h2>
-                        <div className="row">
-                            <div className="col-md-3">
-                                <WhatsappShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                    <WhatsappIcon size={45} round />
-                                </WhatsappShareButton>
-                            </div>
-                            <div className="col-md-3">
-                                <FacebookShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                    <FacebookIcon size={45} round />
-                                </FacebookShareButton>
-                            </div>
-                            <div className="col-md-3">
-                                <FacebookMessengerShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                    <FacebookMessengerIcon size={45} round />
-                                </FacebookMessengerShareButton>
-                            </div>
-                            <div className="col-md-3">
-                                <TelegramShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
-                                    <TelegramIcon size={45} round />
-                                </TelegramShareButton>
-                            </div>
-                        </div>
-                    </div>
-                </div>}
-                {/* End Share Options Box */}
                 <div className="page-content">
-                    <section className="links-and-logo bg-white">
-                        <div className="links-box d-flex">
-                            <Link href="/">
-                                <FaShoppingCart className="cart-icon link-icon" />
-                            </Link>
-                            <Link href="/customer-dashboard/wish-list">
-                                <BsFillSuitHeartFill className="cart-icon link-icon" />
-                            </Link>
-                            <Link href="/cart">
-                                <BsFillCartPlusFill className="cart-icon link-icon" />
-                            </Link>
-                        </div>
-                        <div className="logo-box m-0 d-flex align-items-center justify-content-center"></div>
-                    </section>
-                    <div className="container-fluid">
-                        <div className="products-display-managment">
-                            <div className="row">
-                                <div className="col-md-3">
-                                    <aside className="side-bar bg-white p-3 fw-bold">Sale Products</aside>
-                                </div>
-                                <div className="col-md-9">
-                                    <section className="navigate-link-for-display-products bg-white p-2 d-flex justify-content-center mb-5">
-                                        <Link href="#categories" className="display-product-link me-5 text-center">
-                                            <BiSolidCategory className="icon mb-2" />
-                                            <h5 className="link-name">Category</h5>
-                                        </Link>
-                                        <Link href="#latest-added-products" className="display-product-link me-5 text-center">
-                                            <BiSolidCategory className="icon mb-2" />
-                                            <h5 className="link-name">Last Added</h5>
-                                        </Link>
-                                        <Link href="#best-seller" className="display-product-link me-5 text-center">
-                                            <BiSolidCategory className="icon mb-2" />
-                                            <h5 className="link-name">Best</h5>
-                                        </Link>
-                                    </section>
-                                </div>
-                            </div>
-                        </div>
-                        <section className="search mb-5 text-end">
-                            <BiSearchAlt className="search-icon p-2" />
-                        </section>
-                        <section className="categories mb-5" id="categories">
-                            <h2 className="section-name text-center mb-4 text-white">Categories</h2>
-                            <div className="row">
-                                {allCategories.map((category) => (
-                                    <div className="col-md-3" key={category._id}>
-                                        <div className="category-details p-3">
-                                            <Link href={`/categories/${category._id}`} className="product-by-category-link text-dark">
-                                                <h5 className="cateogory-name mb-3">{category.name}</h5>
-                                                <MdKeyboardArrowRight className="forward-arrow-icon" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-                        <section className="last-added-products mb-5">
-                            <h2 className="section-name text-center mb-4 text-white">Last Added Products</h2>
-                            <div className="row products-box bg-white pt-4 pb-4">
-                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
-                                    <div className="col-md-3" key={product._id}>
-                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="product image !!" />
-                                        <div className="product-details p-3 text-center">
-                                            <h4 className="product-name fw-bold">{product.name}</h4>
-                                            <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} $</h5>
-                                            {product.discount != 0 && <h4 className="product-after-discount">{product.price - product.discount} $</h4>}
-                                            <div className="product-managment-buttons-box">
-                                                <PiShareFatLight
-                                                    className="product-managment-icon me-2"
-                                                    onClick={() => setIsDisplayShareOptionsBox(true)}
-                                                />
-
-                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
-                                                    className="product-managment-icon me-2"
-                                                    onClick={() => deleteProductFromFavoriteUserProducts(index, userId)}
-                                                /> : <BsSuitHeart
-                                                    className="product-managment-icon me-2"
-                                                    onClick={() => addProductToFavoriteUserProducts(index, userId)}
-                                                />}
-                                                <AiOutlineEye className="me-2 eye-icon product-managment-icon" onClick={() => setProductIndex(index)} />
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
-                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn p-2" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn p-2" disabled>Sorry, Something Went Wrong !!</button>}
-                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success" disabled>Display Your Cart</Link>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                                {totalPagesCount > 0 && !isGetProductsStatus && paginationBar()}
-                            </div>
-                        </section>
-                        {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
-                            <h2 className="section-name text-center mb-5 text-white">Brands</h2>
-                            <div className="container-fluid">
-                                <Slider
-                                    dots={true}
-                                    arrows={false}
-                                    infinite={true}
-                                    speed={500}
-                                    slidesToShow={1}
-                                    slidesToScroll={1}
-                                >
-                                    {allBrands.map((brand) => (
-                                        <div className="brand-box mb-4" key={brand._id}>
-                                            <div className="brand-image-box mb-4">
-                                                <a
-                                                    href="https://google.com"
-                                                    target="_blank"
-                                                >
-                                                    <img
-                                                        src={`${process.env.BASE_API_URL}/${brand.imagePath}`}
-                                                        alt={`${brand.title} Brand Image`}
-                                                    />
-                                                </a>
-                                            </div>
-                                            <h2 className="text-white text-center">{brand.title}</h2>
-                                        </div>
-                                    ))}
-                                </Slider>
-                            </div>
-                        </section>}
-                        {/* Start Contact Icons Box */}
-                        <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
-                            <ul className="contact-icons-list">
-                                {isDisplayContactIcons && <li className="contact-icon-item mb-3">
-                                    <a href="mailto:info@asfourintlco.com" target="_blank"><MdOutlineMail className="mail-icon" /></a>
-                                </li>}
-                                {isDisplayContactIcons && appearedSections.includes("whatsapp button") && <li className="contact-icon-item mb-3">
-                                    <a href="https://wa.me/96566817628?text=welcome" target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
-                                </li>}
-                                {!isDisplayContactIcons && <li className="contact-icon-item"><MdOutlineContactPhone className="contact-icon" /></li>}
-                                {isDisplayContactIcons && <li className="contact-icon-item"><FaTimes className="close-icon" /></li>}
-                            </ul>
-                        </div>
-                        {/* End Contact Icons Box */}
-                    </div>
                     <Footer />
                 </div>
             </>}
