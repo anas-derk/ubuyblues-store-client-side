@@ -151,10 +151,10 @@ export default function ProductDetails() {
         return false;
     }
 
-    const addProductToFavoriteUserProducts = async (productIndex) => {
+    const addProductToFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productInfo._id}`, undefined, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productId}`, undefined, {
                 headers: {
                     Authorization: token,
                 }
@@ -181,10 +181,10 @@ export default function ProductDetails() {
         }
     }
 
-    const deleteProductFromFavoriteUserProducts = async (productIndex) => {
+    const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productInfo._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`);
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setFavoriteProductsListForUser(result.newFavoriteProductsList);
@@ -352,14 +352,14 @@ export default function ProductDetails() {
                                     <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
                                         {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
                                             className="product-managment-icon mb-3"
-                                            onClick={() => deleteProductFromFavoriteUserProducts(productIndex)}
+                                            onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
                                         /> : <BsSuitHeart
                                             className="product-managment-icon mb-3"
-                                            onClick={() => addProductToFavoriteUserProducts(productIndex)}
+                                            onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
                                         />}
                                         <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
                                             <div className="add-to-cart-managment-btns-box col-md-8">
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>Add To Cart</button>}
+                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>Add To Cart</button>}
                                                 {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
                                                 {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
                                                 {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
