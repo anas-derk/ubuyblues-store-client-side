@@ -15,6 +15,7 @@ import Slider from "react-slick";
 import validations from "../../../../public/global_functions/validations";
 import prices from "../../../../public/global_functions/prices";
 import { useTranslation } from "react-i18next";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -36,7 +37,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
-    const [userInfo, setUserInfo] = useState("");
+    const [userInfo, setUserInfo] = useState({});
 
     const [productInfo, setProductInfo] = useState("");
 
@@ -110,7 +111,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-user-token");
                     } else {
@@ -121,6 +121,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         } else setIsGetUserInfo(false);
         getProductInfo(productIdAsProperty)
             .then((res) => {
+                console.log(res.data);
                 setProductInfo(res.data);
                 setIsGetProductInfo(false);
             })
@@ -305,180 +306,181 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 </div>
                 <div className="page-content">
                     <div className="container-fluid">
-                        <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
-                            <h1 className="section-name text-center mb-5 text-white pb-3">{t("Product Details")}</h1>
-                            <div className="row mb-3">
-                                <div className="col-lg-6">
-                                    <div className="product-images-box mb-4">
-                                        <div className="main-product-image-box mb-3">
-                                            <Slider
-                                                dots={false}
-                                                infinite={true}
-                                                speed={500}
-                                                slidesToShow={1}
-                                                slidesToScroll={1}
-                                                ref={sliderRef}
-                                                afterChange={(slideIndex) => setProductGalleryImageIndex(slideIndex - 1)}
-                                            >
-                                                <div>
-                                                    <img
-                                                        src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
-                                                        alt="product image !!"
-                                                        className="w-100 h-100 product-image"
-                                                    />
-                                                </div>
-                                                {productInfo.galleryImagesPaths.map((path, pathIndex) => (
-                                                    <div key={pathIndex}>
+                        {Object.keys(productInfo).length > 0 ?
+                            <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
+                                <h1 className="section-name text-center mb-5 text-white pb-3">{t("Product Details")}</h1>
+                                <div className="row mb-3">
+                                    <div className="col-lg-6">
+                                        <div className="product-images-box mb-4">
+                                            <div className="main-product-image-box mb-3">
+                                                <Slider
+                                                    dots={false}
+                                                    infinite={true}
+                                                    speed={500}
+                                                    slidesToShow={1}
+                                                    slidesToScroll={1}
+                                                    ref={sliderRef}
+                                                    afterChange={(slideIndex) => setProductGalleryImageIndex(slideIndex - 1)}
+                                                >
+                                                    <div>
                                                         <img
-                                                            src={`${process.env.BASE_API_URL}/${path}`}
+                                                            src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
                                                             alt="product image !!"
                                                             className="w-100 h-100 product-image"
                                                         />
                                                     </div>
-                                                ))}
-                                            </Slider>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-3 text-center">
-                                                <div
-                                                    className="product-image-box"
-                                                    onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
-                                                >
-                                                    <img
-                                                        src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
-                                                        className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
-                                                    />
-                                                </div>
+                                                    {productInfo.galleryImagesPaths.map((path, pathIndex) => (
+                                                        <div key={pathIndex}>
+                                                            <img
+                                                                src={`${process.env.BASE_API_URL}/${path}`}
+                                                                alt="product image !!"
+                                                                className="w-100 h-100 product-image"
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </Slider>
                                             </div>
-                                            {productInfo.galleryImagesPaths.map((path, pathIndex) => (
-                                                <div
-                                                    className="col-sm-3 text-center"
-                                                    key={pathIndex}
-                                                    onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
-                                                >
-                                                    <div className="gallery-image-box" onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                            <div className="row">
+                                                <div className="col-sm-3 text-center">
+                                                    <div
+                                                        className="product-image-box"
+                                                        onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
+                                                    >
                                                         <img
-                                                            src={`${process.env.BASE_API_URL}/${path}`}
-                                                            alt="product image !!"
-                                                            className={`${productGalleryImageIndex === pathIndex ? "selection" : ""}`}
+                                                            src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
+                                                            className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
                                                         />
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                        <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
-                                        <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                                        {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
-                                        <h5 className="product-quantity">1 Product Available In Store</h5>
-                                    </div>
-                                    <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
-                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
-                                            className="product-managment-icon mb-3"
-                                            onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
-                                        /> : <BsSuitHeart
-                                            className="product-managment-icon mb-3"
-                                            onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
-                                        />}
-                                        <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
-                                            <div className="add-to-cart-managment-btns-box col-md-8">
-                                                {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>Add To Cart</button>}
-                                                {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
-                                                {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
-                                                {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
-                                            </div>
-                                            <div className="select-product-quantity-box p-3 col-md-4">
-                                                <HiMinus className="select-product-quantity-icon"
-                                                    onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
-                                                />
-                                                <span className="ms-3 me-3">{productQuantity}</span>
-                                                <HiPlus className="select-product-quantity-icon"
-                                                    onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity + 1)}
-                                                />
+                                                {productInfo.galleryImagesPaths.map((path, pathIndex) => (
+                                                    <div
+                                                        className="col-sm-3 text-center"
+                                                        key={pathIndex}
+                                                        onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
+                                                    >
+                                                        <div className="gallery-image-box" onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                            <img
+                                                                src={`${process.env.BASE_API_URL}/${path}`}
+                                                                alt="product image !!"
+                                                                className={`${productGalleryImageIndex === pathIndex ? "selection" : ""}`}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>
-                                    <h5 className="product-category-name">
-                                        <span className="fw-bold">Category: </span>
-                                        <span>{productInfo.category}</span>
-                                    </h5>
-                                </div>
-                            </div>
-                            <div className={`product-description-and-referrals mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
-                                <div className="row justify-content-center">
-                                    <div className="col-lg-6 text-center">
-                                        <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
-                                    </div>
-                                    <div className="col-lg-6 text-center">
-                                        <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2">
-                                <h6 className="mb-3 fw-bold">Description</h6>
-                                <p className="description-content">{productInfo.description}</p>
-                            </div>}
-                            {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2">
-                                <div className="row">
                                     <div className="col-lg-6">
-                                        <h6 className="mb-4 fw-bold">Referrals</h6>
-                                        <h6 className="mb-4">There are no reviews yet !!</h6>
-                                    </div>
-                                    <div className="col-lg-6">
-                                        <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
-                                        <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
-                                        {getRatingStars()}
-                                        <form className="referral-form mb-4">
-                                            <textarea
-                                                className="p-2 mb-4"
-                                                placeholder="Your Referral *"
-                                            ></textarea>
-                                            <div className="row mb-4 name-and-email-box">
-                                                <div className="col-md-6">
-                                                    <input
-                                                        type="text"
-                                                        className="p-2"
-                                                        placeholder="Name *"
-                                                    />
+                                        <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
+                                            <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
+                                            <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                                            {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                                            <h5 className="product-quantity">1 Product Available In Store</h5>
+                                        </div>
+                                        <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
+                                            {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
+                                                className="product-managment-icon mb-3"
+                                                onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
+                                            /> : <BsSuitHeart
+                                                className="product-managment-icon mb-3"
+                                                onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
+                                            />}
+                                            <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
+                                                <div className="add-to-cart-managment-btns-box col-md-8">
+                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>Add To Cart</button>}
+                                                    {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
+                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
+                                                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <input
-                                                        type="text"
-                                                        className="p-2"
-                                                        placeholder="Email *"
+                                                <div className="select-product-quantity-box p-3 col-md-4">
+                                                    <HiMinus className="select-product-quantity-icon"
+                                                        onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
+                                                    />
+                                                    <span className="ms-3 me-3">{productQuantity}</span>
+                                                    <HiPlus className="select-product-quantity-icon"
+                                                        onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity + 1)}
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="save-your-details-box mb-3 row">
-                                                <div className="col-md-1">
-                                                    <input
-                                                        type="checkbox"
-                                                        className=""
-                                                        id="save-your-details-checkbox"
-                                                    />
-                                                </div>
-                                                <div className="col-md-11">
-                                                    <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
-                                                </div>
-                                            </div>
-                                            <button
-                                                className="send-referral-btn p-2 d-block w-100"
-                                                type="submit"
-                                                onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
-                                            >
-                                                Send
-                                            </button>
-                                        </form>
+                                        </div>
+                                        <h5 className="product-category-name">
+                                            <span className="fw-bold">Category: </span>
+                                            <span>{productInfo.category}</span>
+                                        </h5>
                                     </div>
                                 </div>
-                            </div>}
-                            <div className="related-products-box">
-                                <h5 className="mb-4 fw-bold">Related Products</h5>
-                            </div>
-                        </section>
+                                <div className={`product-description-and-referrals mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
+                                    <div className="row justify-content-center">
+                                        <div className="col-lg-6 text-center">
+                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
+                                        </div>
+                                        <div className="col-lg-6 text-center">
+                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2">
+                                    <h6 className="mb-3 fw-bold">Description</h6>
+                                    <p className="description-content">{productInfo.description}</p>
+                                </div>}
+                                {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <h6 className="mb-4 fw-bold">Referrals</h6>
+                                            <h6 className="mb-4">There are no reviews yet !!</h6>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
+                                            <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
+                                            {getRatingStars()}
+                                            <form className="referral-form mb-4">
+                                                <textarea
+                                                    className="p-2 mb-4"
+                                                    placeholder="Your Referral *"
+                                                ></textarea>
+                                                <div className="row mb-4 name-and-email-box">
+                                                    <div className="col-md-6">
+                                                        <input
+                                                            type="text"
+                                                            className="p-2"
+                                                            placeholder="Name *"
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <input
+                                                            type="text"
+                                                            className="p-2"
+                                                            placeholder="Email *"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="save-your-details-box mb-3 row">
+                                                    <div className="col-md-1">
+                                                        <input
+                                                            type="checkbox"
+                                                            className=""
+                                                            id="save-your-details-checkbox"
+                                                        />
+                                                    </div>
+                                                    <div className="col-md-11">
+                                                        <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    type="submit"
+                                                    onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
+                                                >
+                                                    Send
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>}
+                                <div className="related-products-box">
+                                    <h5 className="mb-4 fw-bold">Related Products</h5>
+                                </div>
+                            </section> : <NotFoundError errorMsg={t("Sorry, This Product Is Not Exist !!")} />}
                     </div>
                     <Footer />
                 </div>

@@ -64,6 +64,15 @@ textarea {
   font-size: 13px;
 }
 
+.not-found-error {
+  color: #FFF;
+  min-height: 300px;
+}
+
+.not-found-error .sorry-icon {
+  font-size: 70px;
+}
+
 .password-field-box,
 .email-field-box,
 .confirm-password-field-box,

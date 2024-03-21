@@ -4,9 +4,9 @@ import Header from "@/components/Header";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { BsTrash } from "react-icons/bs";
 import Link from "next/link";
-import { PiSmileySad } from "react-icons/pi";
 import LoaderPage from "@/components/LoaderPage";
 import { useTranslation } from "react-i18next";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function Cart() {
 
@@ -267,10 +267,7 @@ export default function Cart() {
                                     <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
                                 </section>
                             </div>
-                        </div> : <section className="not-found-any-products-for-user-in-cart text-center">
-                            <PiSmileySad className="sorry-icon mb-5" />
-                            <h1 className="h4">{t("Sorry, Can't Find Any Products For You In Cart !!")}</h1>
-                        </section>}
+                        </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For You In Cart !!")} />}
                     </div>
                 </div>
             </>}
