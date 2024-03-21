@@ -440,6 +440,7 @@ export default function Checkout() {
                 })),
                 requestNotes,
             });
+            localStorage.removeItem("asfour-store-user-cart");
             await router.push(`/confirmation?orderId=${result.data.orderId}`);
         }
         catch (err) {
