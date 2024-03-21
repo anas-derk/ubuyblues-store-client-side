@@ -111,11 +111,11 @@ export default function ProductDetails() {
     }, [isGetUserInfo, isGetProductInfo]);
 
     const getProductInfo = async (productId) => {
-        try{
+        try {
             const res = await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}`);
             return res.data;
         }
-        catch(err) {
+        catch (err) {
             throw Error(err);
         }
     }
@@ -279,7 +279,7 @@ export default function ProductDetails() {
                 </div>
                 <div className="page-content">
                     <div className="container-fluid">
-                    <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
+                        <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
                             <div className="row mb-3">
                                 <div className="col-lg-6">
                                     <div className="product-images-box mb-4">
@@ -449,9 +449,9 @@ export default function ProductDetails() {
                             <div className="related-products-box">
                                 <h5 className="mb-4 fw-bold">Related Products</h5>
                             </div>
-                            <Footer />
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
