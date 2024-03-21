@@ -14,7 +14,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
 import validations from "../../../../public/global_functions/validations";
 
-export default function ProductDetails({ countryAsQuery, productIdAsQuery }) {
+export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -93,7 +93,7 @@ export default function ProductDetails({ countryAsQuery, productIdAsQuery }) {
                     }
                 });
         } else setIsGetUserInfo(false);
-        getProductInfo(productIdAsQuery)
+        getProductInfo(productIdAsProperty)
             .then((res) => {
                 setProductInfo(res.data);
                 setIsGetProductInfo(false);
@@ -468,7 +468,7 @@ export async function getServerSideProps({ query, params }) {
                 destination: "/",
             },
             props: {
-                countryAsQuery: "kuwait",
+                countryAsProperty: "kuwait",
             },
         }
     }
@@ -481,8 +481,8 @@ export async function getServerSideProps({ query, params }) {
                     destination: `/product-details/${params.id}`,
                 },
                 props: {
-                    countryAsQuery: "kuwait",
-                    productIdAsQuery: params.id,
+                    countryAsProperty: "kuwait",
+                    productIdAsProperty: params.id,
                 },
             }
         }
@@ -493,22 +493,22 @@ export async function getServerSideProps({ query, params }) {
                     destination: `/product-details/${params.id}?country=${query.country}`,
                 },
                 props: {
-                    countryAsQuery: query.country,
-                    productIdAsQuery: params.id,
+                    countryAsProperty: query.country,
+                    productIdAsProperty: params.id,
                 },
             }
         }
         return {
             props: {
-                countryAsQuery: query.country,
-                productIdAsQuery: params.id,
+                countryAsProperty: query.country,
+                productIdAsProperty: params.id,
             },
         }
     }
     return {
         props: {
-            countryAsQuery: "kuwait",
-            productIdAsQuery: params.id,
+            countryAsProperty: "kuwait",
+            productIdAsProperty: params.id,
         },
     }
 }
