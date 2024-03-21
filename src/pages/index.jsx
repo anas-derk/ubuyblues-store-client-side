@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
 import Footer from "@/components/Footer";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { GrFormClose } from "react-icons/gr";
@@ -22,7 +22,7 @@ import PaginationBar from "@/components/PaginationBar";
 import { useRouter } from "next/router";
 import prices from "../../public/global_functions/prices";
 
-export default function Home({ countryAsQuery }) {
+export default function Home({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -30,7 +30,7 @@ export default function Home({ countryAsQuery }) {
 
     const [token, setToken] = useState("");
 
-    const [country, setCountry] = useState(countryAsQuery);
+    const [country, setCountry] = useState(countryAsProperty);
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -96,10 +96,10 @@ export default function Home({ countryAsQuery }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        setCountry(countryAsQuery);
-        prices.getUSDPriceAgainstCurrency(countryAsQuery).then((price) => {
+        setCountry(countryAsProperty);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsQuery));
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
             if(!isGetCategories && !isGetProducts) {
                 setIsLoadingPage(false);
             }
@@ -108,7 +108,7 @@ export default function Home({ countryAsQuery }) {
             setIsLoadingPage(false);
             setIsErrorMsgOnLoadingThePage(true);
         });
-    }, [countryAsQuery]);
+    }, [countryAsProperty]);
 
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
@@ -654,7 +654,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/",
                 },
                 props: {
-                    countryAsQuery: "kuwait",
+                    countryAsProperty: "kuwait",
                 },
             }
         }
@@ -665,19 +665,19 @@ export async function getServerSideProps({ query }) {
                     destination: `/?country=${query.country}`,
                 },
                 props: {
-                    countryAsQuery: query.country,
+                    countryAsProperty: query.country,
                 },
             }
         }
         return {
             props: {
-                countryAsQuery: query.country,
+                countryAsProperty: query.country,
             },
         }
     }
     return {
         props: {
-            countryAsQuery: "kuwait",
+            countryAsProperty: "kuwait",
         },
     }
 }

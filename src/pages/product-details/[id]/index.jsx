@@ -13,6 +13,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
 import validations from "../../../../public/global_functions/validations";
+import prices from "../../../../public/global_functions/prices";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -21,6 +22,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [token, setToken] = useState("");
+
+    const [country, setCountry] = useState(countryAsProperty);
+
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
@@ -65,6 +72,22 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const router = useRouter();
 
     const sliderRef = useRef();
+
+    useEffect(() => {
+        setIsLoadingPage(true);
+        setCountry(countryAsProperty);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            if(!isGetUserInfo && !isGetProductInfo) {
+                setIsLoadingPage(false);
+            }
+        })
+        .catch(() => {
+            setIsLoadingPage(false);
+            setIsErrorMsgOnLoadingThePage(true);
+        });
+    }, [countryAsProperty]);
 
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
