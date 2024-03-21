@@ -538,7 +538,7 @@ export default function Home({ countryAsQuery }) {
                                                 backgroundImage: `url(${process.env.BASE_API_URL}/${product.imagePath})`
                                             }}
                                         >
-                                            <a className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></a>
+                                            <Link className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
                                             <div className="product-managment-buttons p-2">
                                                 <PiShareFatLight
                                                     className="product-managment-icon d-block mb-2"
