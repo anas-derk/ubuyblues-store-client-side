@@ -1,14 +1,11 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { BsSuitHeart, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
-import { AiOutlineHome } from "react-icons/ai";
+import { BsSuitHeart } from "react-icons/bs";
 import Footer from "@/components/Footer";
 import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
-import { IoIosArrowForward } from "react-icons/io";
-import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
@@ -26,15 +23,9 @@ export default function ProductDetails() {
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
-    const [userId, setUserId] = useState("");
-
     const [userInfo, setUserInfo] = useState("");
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
-
-    const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
-
-    const [productAddingId, setProductAddingId] = useState("");
 
     const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
 
@@ -45,6 +36,8 @@ export default function ProductDetails() {
     const [favoriteProductAddingId, setFavoriteProductAddingId] = useState("");
 
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
+
+    const [isWaitDeleteProductToFavoriteUserProductsList, setIsWaitDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
 
@@ -128,7 +121,6 @@ export default function ProductDetails() {
     const addProductToFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
             const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, undefined, {
                 headers: {
                     Authorization: token,
@@ -143,7 +135,6 @@ export default function ProductDetails() {
                 setIsSuccessAddProductToFavoriteUserProductsList(true);
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddProductToFavoriteUserProductsList(false);
-                    setFavoriteProductAddingId("");
                     clearTimeout(successAddToCartTimeout);
                 }, 3000);
             }
@@ -154,14 +145,12 @@ export default function ProductDetails() {
                 return;
             }
             setIsWaitAddProductToFavoriteUserProductsList(false);
-            setFavoriteProductAddingId("");
         }
     }
 
     const deleteProductFromFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
             const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`);
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
@@ -170,19 +159,16 @@ export default function ProductDetails() {
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
                 let successDeleteToCartTimeout = setTimeout(() => {
                     setIsSuccessDeleteProductToFavoriteUserProductsList(false);
-                    setFavoriteProductAddingId("");
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
             }
         }
         catch (err) {
             setIsWaitDeleteProductToFavoriteUserProductsList(false);
-            setFavoriteProductAddingId("");
         }
     }
 
     const addToCart = (id, name, price, description, category, discount, imagePath) => {
-        setProductAddingId(id);
         setIsWaitAddToCart(true);
         let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
         if (allProductsData) {
@@ -223,7 +209,6 @@ export default function ProductDetails() {
                 clearTimeout(successAddToCartTimeout);
             }, 1500);
         }
-        setProductAddingId("");
     }
 
     const getRatingStars = () => {
@@ -334,10 +319,10 @@ export default function ProductDetails() {
                                     <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
                                         {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsInsideThePage[productIndex]._id) ? <BsFillSuitHeartFill
                                             className="product-managment-icon mb-3"
-                                            onClick={() => deleteProductFromFavoriteUserProducts(productIndex, userId)}
+                                            onClick={() => deleteProductFromFavoriteUserProducts(productIndex)}
                                         /> : <BsSuitHeart
                                             className="product-managment-icon mb-3"
-                                            onClick={() => addProductToFavoriteUserProducts(productIndex, userId)}
+                                            onClick={() => addProductToFavoriteUserProducts(productIndex)}
                                         />}
                                         <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
                                             <div className="add-to-cart-managment-btns-box col-md-8">
