@@ -371,8 +371,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 <div className="col-lg-6">
                                     <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
                                         <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
-                                        <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{productInfo.price} $</h5>
-                                        {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{productInfo.price - productInfo.discount} $</h4>}
+                                        <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                                        {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
                                         <h5 className="product-quantity">1 Product Available In Store</h5>
                                     </div>
                                     <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
