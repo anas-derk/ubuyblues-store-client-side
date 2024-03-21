@@ -409,13 +409,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             </div>
                             <div className={`product-description-and-referrals mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
                                 <div className="row justify-content-center">
-                                <div className="col-lg-6 text-center">
-                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
-                                </div>
-                                <div className="col-lg-6 text-center">
-                                    <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
-                                </div>
-
+                                    <div className="col-lg-6 text-center">
+                                        <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
+                                    </div>
+                                    <div className="col-lg-6 text-center">
+                                        <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
+                                    </div>
                                 </div>
                             </div>
                             {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2">
