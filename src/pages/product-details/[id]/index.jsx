@@ -14,7 +14,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
 import validations from "../../../../public/global_functions/validations";
 
-export default function ProductDetails() {
+export default function ProductDetails({ countryAsQuery, productIdAsQuery }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -93,12 +93,12 @@ export default function ProductDetails() {
                     }
                 });
         } else setIsGetUserInfo(false);
-        getProductInfo("65ee66be22ea92ff275203c5")
+        getProductInfo(productIdAsQuery)
             .then((res) => {
                 setProductInfo(res.data);
                 setIsGetProductInfo(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             })
@@ -458,4 +458,57 @@ export default function ProductDetails() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div >
     );
+}
+
+export async function getServerSideProps({ query, params }) {
+    if (!params.id) {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/",
+            },
+            props: {
+                countryAsQuery: "kuwait",
+            },
+        }
+    }
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/product-details/${params.id}`,
+                },
+                props: {
+                    countryAsQuery: "kuwait",
+                    productIdAsQuery: params.id,
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/product-details/${params.id}?country=${query.country}`,
+                },
+                props: {
+                    countryAsQuery: query.country,
+                    productIdAsQuery: params.id,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsQuery: query.country,
+                productIdAsQuery: params.id,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsQuery: "kuwait",
+            productIdAsQuery: params.id,
+        },
+    }
 }
