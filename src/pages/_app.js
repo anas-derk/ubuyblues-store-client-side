@@ -19,6 +19,7 @@ import "../pages/account-verification/account_verification.css";
 import "../pages/admin-dashboard/orders-managment/billing/[orderId]/billing.css";
 import "../components/ErrorOnLoadingThePage/error_on_loading_the_page.css";
 import "../pages/checkout/checkout.css";
+import "../pages/product-details/[id]/product_details.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../../config/i18n";

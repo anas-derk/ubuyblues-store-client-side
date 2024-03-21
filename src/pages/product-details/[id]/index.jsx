@@ -267,7 +267,7 @@ export default function ProductDetails() {
     }
 
     return (
-        <div className="home page">
+        <div className="product-details page">
             <Head>
                 <title>Ubuyblues Store - Product Details</title>
             </Head>
@@ -277,10 +277,9 @@ export default function ProductDetails() {
                     {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
-                {/* Start Overlay */}
-                <div className="overlay">
-                    <div className="content p-4 text-white">
-                        <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
+                <div className="page-content">
+                    <div className="container-fluid">
+                    <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
                             <div className="row mb-3">
                                 <div className="col-lg-6">
                                     <div className="product-images-box mb-4">
@@ -453,10 +452,6 @@ export default function ProductDetails() {
                             <Footer />
                         </div>
                     </div>
-                </div>
-                {/* End Overlay */}
-                <div className="page-content">
-                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

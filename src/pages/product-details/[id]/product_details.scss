@@ -1,0 +1,146 @@
+.product-details{
+    .product-details-box{
+        height: calc(100% - (73px + 3rem));
+        overflow-y: auto;
+        overflow-x: hidden;
+        .product-images-box{
+            .main-product-image-box{
+                height: 370px;
+                max-height: 100%;
+                @media (max-width: 767px) {
+                    height: 330px;
+                }
+                .slick-slider{
+                    height: 370px;
+                max-height: 100%;
+                @media (max-width: 767px) {
+                    height: 330px;
+                }
+                    .slick-list{
+                        .slick-slide{
+                            div{
+                                height: 370px;
+                                max-height: 100%;
+                                @media (max-width: 767px) {
+                                    height: 330px;
+                                }
+                            }
+                        }
+                    }
+                    .slick-arrow{
+                        z-index: 1;
+                    }
+                    .slick-next{
+                        right: 20px;
+                    }
+                    .slick-prev{
+                        left: 20px;
+                    }
+                }
+            }
+            .row{
+                @media (max-width: 576px) {
+                    gap: 30px;
+                }
+            }
+            .product-image-box, .gallery-image-box{
+                img{
+                    cursor: pointer;
+                    width: 92px;
+                    height: 92px;
+                    &:hover{
+                        border: 3px solid #000;
+                    }
+                    &.selection {
+                        border: 3px solid #000;
+                    }
+                }
+            }
+        }
+        .product-price-and-quantity{
+            @media (max-width: 991px) {
+                text-align: center;
+            }
+        }
+        .add-to-wish-list-or-cart{
+            .product-managment-icon{
+                cursor: pointer;
+                font-size: 25px;
+            }
+            .add-to-cart{
+                @media (max-width: 767px) {
+                    row-gap: 30px;
+                }
+                .add-to-cart-managment-btns-box{
+                    .add-to-cart-btn, .wait-to-cart-btn, .error-to-cart-btn{
+                        border-top-right-radius: 20px;
+                        border: 5px solid #FFF;
+                        background-color: var(--main-color-two);
+                        &:hover{
+                            background-color: transparent;
+                            color: #FFF;
+                        }
+                    }
+                }
+                .select-product-quantity-box{
+                    border: 1px solid #FFF;
+                    .select-product-quantity-icon{
+                        cursor: pointer;
+                        font-size: 22px;
+                        height: 25px;
+                        border-radius: 2px;
+                        &:hover{
+                            background-color: #FFF;
+                            color: #000;
+                        }
+                    }
+                }
+            }
+        }
+        .product-description-and-referrals{
+            h6{
+                cursor: pointer;
+                &:hover{
+                    color: var(--main-color-two);
+                }
+                &.selected{
+                    color: var(--main-color-two);
+                    border: 1px solid var(--main-color-two);
+                    font-weight: bold;
+                }
+            }
+            .product-referrals{
+                .rating-box{
+                    .star-icon{
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+        .note{
+            @media (max-width: 767px) {
+                line-height: 2;
+            }
+        }
+        .referral-form{
+            textarea{
+                height: 100px;
+                resize: none;
+            }
+            .send-referral-btn{
+                border-top-right-radius: 20px;
+                border: 5px solid #FFF;
+                background-color: var(--main-color-two);
+                &:hover{
+                    background-color: transparent;
+                    color: #FFF;
+                }
+            }
+            .name-and-email-box{
+                @media (max-width: 767px) {
+                    gap: 30px;
+                }
+            }
+        }
+    }
+}
