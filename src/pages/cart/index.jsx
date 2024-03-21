@@ -7,10 +7,13 @@ import Link from "next/link";
 import LoaderPage from "@/components/LoaderPage";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
+import Footer from "@/components/Footer";
 
 export default function Cart() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [allProductsData, setAllProductsData] = useState([]);
 
@@ -134,10 +137,10 @@ export default function Cart() {
             <Head>
                 <title>Ubuyblues Store - User Cart</title>
             </Head>
-            {!isLoadingPage && <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white p-4 text-center">
-                    <div className="container-fluid">
+                <div className="page-content">
+                    <div className="container-fluid text-white text-center mb-4">
                         {allProductsData.length > 0 ? <div className="row align-items-center">
                             <div className="col-xl-8">
                                 {windowInnerWidth > 991 && <section className="products w-100">
@@ -269,9 +272,11 @@ export default function Cart() {
                             </div>
                         </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For You In Cart !!")} />}
                     </div>
+                    <Footer />
                 </div>
             </>}
-            {isLoadingPage && <LoaderPage />}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }
