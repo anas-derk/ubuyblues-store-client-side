@@ -12,6 +12,7 @@ import { FaRegStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
+import validations from "../../../../public/global_functions/validations";
 
 export default function ProductDetails() {
 
@@ -21,9 +22,15 @@ export default function ProductDetails() {
 
     const [token, setToken] = useState("");
 
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
+
+    const [isGetProductInfo, setIsGetProductInfo] = useState(true);
+
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [userInfo, setUserInfo] = useState("");
+
+    const [productInfo, setProductInfo] = useState("");
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
@@ -61,6 +68,10 @@ export default function ProductDetails() {
 
     useEffect(() => {
         window.onscroll = function () { handleScrollToUpAndDown(this) };
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", function () {
+            setWindowInnerWidth(this.innerWidth);
+        });
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
             setToken(userToken);
@@ -69,14 +80,11 @@ export default function ProductDetails() {
                     if (!result.error) {
                         setUserInfo(result.data);
                         setFavoriteProductsListForUser(result.data.favorite_products_list);
+                        setIsGetUserInfo(false);
                     }
-                    setWindowInnerWidth(window.innerWidth);
-                    window.addEventListener("resize", function () {
-                        setWindowInnerWidth(this.innerWidth);
-                    });
-                    setIsLoadingPage(false);
                 })
                 .catch((err) => {
+                    console.log(err);
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-user-token");
                     } else {
@@ -84,8 +92,33 @@ export default function ProductDetails() {
                         setIsErrorMsgOnLoadingThePage(true);
                     }
                 });
-        }
+        } else setIsGetUserInfo(false);
+        getProductInfo("65ee66be22ea92ff275203c5")
+            .then((res) => {
+                setProductInfo(res.data);
+                setIsGetProductInfo(false);
+            })
+            .catch((err) => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            })
     }, []);
+
+    useEffect(() => {
+        if (!isGetUserInfo && !isGetProductInfo) {
+            setIsLoadingPage(false);
+        }
+    }, [isGetUserInfo, isGetProductInfo]);
+
+    const getProductInfo = async (productId) => {
+        try{
+            const res = await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}`);
+            return res.data;
+        }
+        catch(err) {
+            throw Error(err);
+        }
+    }
 
     const handleScrollToUpAndDown = (window) => {
         if (window.scrollY > 500) {
@@ -121,7 +154,7 @@ export default function ProductDetails() {
     const addProductToFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, undefined, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productInfo._id}`, undefined, {
                 headers: {
                     Authorization: token,
                 }
@@ -129,7 +162,7 @@ export default function ProductDetails() {
             const result = await res.data;
             if (!result.error) {
                 let tempFavoriteProductsForUser = favoriteProductsListForUser;
-                tempFavoriteProductsForUser.push(allProductsInsideThePage[productIndex]);
+                tempFavoriteProductsForUser.push(productInfo);
                 setFavoriteProductsListForUser(tempFavoriteProductsForUser);
                 setIsWaitAddProductToFavoriteUserProductsList(false);
                 setIsSuccessAddProductToFavoriteUserProductsList(true);
@@ -151,7 +184,7 @@ export default function ProductDetails() {
     const deleteProductFromFavoriteUserProducts = async (productIndex) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productInfo._id}`);
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setFavoriteProductsListForUser(result.newFavoriteProductsList);
@@ -263,12 +296,12 @@ export default function ProductDetails() {
                                             >
                                                 <div>
                                                     <img
-                                                        src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
+                                                        src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
                                                         alt="product image !!"
                                                         className="w-100 h-100 product-image"
                                                     />
                                                 </div>
-                                                {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
+                                                {productInfo.galleryImagesPaths.map((path, pathIndex) => (
                                                     <div key={pathIndex}>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${path}`}
@@ -286,12 +319,12 @@ export default function ProductDetails() {
                                                     onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
                                                 >
                                                     <img
-                                                        src={`${process.env.BASE_API_URL}/${allProductsInsideThePage[productIndex].imagePath}`}
+                                                        src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
                                                         className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
                                                     />
                                                 </div>
                                             </div>
-                                            {allProductsInsideThePage[productIndex].galleryImagesPaths.map((path, pathIndex) => (
+                                            {productInfo.galleryImagesPaths.map((path, pathIndex) => (
                                                 <div
                                                     className="col-sm-3 text-center"
                                                     key={pathIndex}
@@ -311,13 +344,13 @@ export default function ProductDetails() {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                        <h2 className="product-name fw-bold mb-4">{allProductsInsideThePage[productIndex].name}</h2>
-                                        <h5 className={`product-price ${allProductsInsideThePage[productIndex].discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{allProductsInsideThePage[productIndex].price} $</h5>
-                                        {allProductsInsideThePage[productIndex].discount != 0 && <h4 className="product-after-discount mb-4">{allProductsInsideThePage[productIndex].price - allProductsInsideThePage[productIndex].discount} $</h4>}
+                                        <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
+                                        <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{productInfo.price} $</h5>
+                                        {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{productInfo.price - productInfo.discount} $</h4>}
                                         <h5 className="product-quantity">1 Product Available In Store</h5>
                                     </div>
                                     <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
-                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, allProductsInsideThePage[productIndex]._id) ? <BsFillSuitHeartFill
+                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
                                             className="product-managment-icon mb-3"
                                             onClick={() => deleteProductFromFavoriteUserProducts(productIndex)}
                                         /> : <BsSuitHeart
@@ -344,7 +377,7 @@ export default function ProductDetails() {
                                     </div>
                                     <h5 className="product-category-name">
                                         <span className="fw-bold">Category: </span>
-                                        <span>{allProductsInsideThePage[productIndex].category}</span>
+                                        <span>{productInfo.category}</span>
                                     </h5>
                                 </div>
                             </div>
@@ -358,7 +391,7 @@ export default function ProductDetails() {
                             </div>
                             {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2 me-3">
                                 <h6 className="mb-3 fw-bold">Description</h6>
-                                <p className="description-content">{allProductsInsideThePage[productIndex].description}</p>
+                                <p className="description-content">{productInfo.description}</p>
                             </div>}
                             {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2 me-3">
                                 <div className="row">
@@ -367,7 +400,7 @@ export default function ProductDetails() {
                                         <h6 className="mb-4">There are no reviews yet !!</h6>
                                     </div>
                                     <div className="col-lg-6">
-                                        <h6 className="mb-4">Be the first to review "{allProductsInsideThePage[productIndex].name}"</h6>
+                                        <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
                                         <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
                                         {getRatingStars()}
                                         <form className="referral-form mb-4">
