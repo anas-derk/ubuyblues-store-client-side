@@ -14,6 +14,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
 import validations from "../../../../public/global_functions/validations";
 import prices from "../../../../public/global_functions/prices";
+import { useTranslation } from "react-i18next";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -69,6 +70,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
+    const { i18n, t } = useTranslation();
+
     const router = useRouter();
 
     const sliderRef = useRef();
@@ -79,14 +82,14 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
-            if(!isGetUserInfo && !isGetProductInfo) {
+            if (!isGetUserInfo && !isGetProductInfo) {
                 setIsLoadingPage(false);
             }
         })
-        .catch(() => {
-            setIsLoadingPage(false);
-            setIsErrorMsgOnLoadingThePage(true);
-        });
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
     }, [countryAsProperty]);
 
     useEffect(() => {
@@ -302,7 +305,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 </div>
                 <div className="page-content">
                     <div className="container-fluid">
-                        <div className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
+                        <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
+                            <h1 className="section-name text-center mb-5 text-white pb-3">{t("Product Details")}</h1>
                             <div className="row mb-3">
                                 <div className="col-lg-6">
                                     <div className="product-images-box mb-4">
@@ -472,7 +476,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             <div className="related-products-box">
                                 <h5 className="mb-4 fw-bold">Related Products</h5>
                             </div>
-                        </div>
+                        </section>
                     </div>
                     <Footer />
                 </div>

@@ -1,3 +1,14 @@
+.product-details .product-details-box {
+  color: #FFF;
+}
+
+.product-details .product-details-box .section-name {
+  border-bottom: 3px solid var(--main-color-two);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .product-details .product-details-box .product-images-box .main-product-image-box {
   height: 370px;
   max-height: 100%;
