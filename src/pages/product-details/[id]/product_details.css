@@ -123,8 +123,9 @@
 
 .product-details .product-details-box .product-description-and-referrals h6.selected {
   color: var(--main-color-two);
-  border: 1px solid var(--main-color-two);
+  background-color: #FFF;
   font-weight: bold;
+  color: #000;
 }
 
 .product-details .product-details-box .product-description-and-referrals .product-referrals .rating-box .star-icon {
