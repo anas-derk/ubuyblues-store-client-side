@@ -12,12 +12,19 @@ import { countries, getCountryCode } from 'countries-list';
 import { FaCcPaypal } from "react-icons/fa";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
+import prices from "../../../public/global_functions/prices";
 
-export default function Checkout() {
+export default function Checkout({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [country, setCountry] = useState(countryAsProperty);
+
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [allProductsData, setAllProductsData] = useState([]);
 
@@ -48,6 +55,20 @@ export default function Checkout() {
     const router = useRouter();
 
     const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+        setIsLoadingPage(true);
+        setCountry(countryAsProperty);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setIsLoadingPage(false);
+        })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
@@ -853,7 +874,7 @@ export default function Checkout() {
                                                 </span>}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {product.price * product.quantity} {t("KWD")}
+                                                {(product.price * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </div>
                                     ))}
@@ -862,7 +883,7 @@ export default function Checkout() {
                                             {t("Total Price Before Discount")}
                                         </div>
                                         <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {pricesDetailsSummary.totalPriceBeforeDiscount} {t("KWD")}
+                                            {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
@@ -870,7 +891,7 @@ export default function Checkout() {
                                             {t("Total Discount")}
                                         </div>
                                         <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {pricesDetailsSummary.totalDiscount} {t("KWD")}
+                                            {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-4">
@@ -878,7 +899,7 @@ export default function Checkout() {
                                             {t("Total Price After Discount")}
                                         </div>
                                         <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {pricesDetailsSummary.totalPriceAfterDiscount} {t("KWD")}
+                                            {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                         </div>
                                     </div>
                                     {/* Start Payement Methods Section */}
@@ -930,4 +951,42 @@ export default function Checkout() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/",
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsProperty: query.country,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+        },
+    }
 }
