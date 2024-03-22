@@ -8,12 +8,20 @@ import LoaderPage from "@/components/LoaderPage";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
+import prices from "../../../public/global_functions/prices";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
-export default function Cart() {
+export default function Cart({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [country, setCountry] = useState(countryAsProperty);
+
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [allProductsData, setAllProductsData] = useState([]);
 
@@ -26,6 +34,20 @@ export default function Cart() {
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+        setIsLoadingPage(true);
+        setCountry(countryAsProperty);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setIsLoadingPage(false);
+        })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
 
     useEffect(() => {
         let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
@@ -163,8 +185,8 @@ export default function Cart() {
                                                             </div>
                                                             <div className="col-lg-8">
                                                                 <h5 className="product-name mb-3">{product.name}</h5>
-                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} {t("KWD")}</h6>
-                                                                {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount}  {t("KWD")}</h6>}
+                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)}  {t(currencyNameByCountry)}</h6>}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -180,7 +202,7 @@ export default function Cart() {
                                                         </div>
                                                     </td>
                                                     <td className="subtotal-cell">
-                                                        {product.price * product.quantity} {t("KWD")}
+                                                        {(product.price * usdPriceAgainstCurrency * product.quantity).toFixed(2)} {t(currencyNameByCountry)}
                                                     </td>
                                                     <td className="delete-product-cell">
                                                         <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
@@ -204,8 +226,8 @@ export default function Cart() {
                                                         <td className="product-cell">
                                                             <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
                                                             <h5 className="product-name mb-3">{product.name}</h5>
-                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{product.price} {t("KWD")}</h6>
-                                                            {product.discount != 0 && <h6 className="product-after-discount">{product.price - product.discount} {t("KWD")}</h6>}
+                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                            {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -225,7 +247,7 @@ export default function Cart() {
                                                     <tr>
                                                         <th>{t("Subtotal")}</th>
                                                         <td className="subtotal-cell">
-                                                            {product.price * product.quantity} {t("KWD")}
+                                                            {(product.price * usdPriceAgainstCurrency * product.quantity).toFixed(2)} {t(currencyNameByCountry)}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -248,7 +270,7 @@ export default function Cart() {
                                             {t("Total Price Before Discount")}
                                         </div>
                                         <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {pricesDetailsSummary.totalPriceBeforeDiscount} {t("KWD")}
+                                            {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                         </div>
                                     </div>
                                     <div className="row total-price-discount total pb-3 mb-5">
@@ -256,7 +278,7 @@ export default function Cart() {
                                             {t("Total Discount")}
                                         </div>
                                         <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {pricesDetailsSummary.totalDiscount} {t("KWD")}
+                                            {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                         </div>
                                     </div>
                                     <div className="row total-price-after-discount total pb-3 mb-5">
@@ -264,7 +286,7 @@ export default function Cart() {
                                             {t("Total Price After Discount")}
                                         </div>
                                         <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {pricesDetailsSummary.totalPriceAfterDiscount} {t("KWD")}
+                                            {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                         </div>
                                     </div>
                                     <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
@@ -279,4 +301,42 @@ export default function Cart() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/",
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsProperty: query.country,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+        },
+    }
 }

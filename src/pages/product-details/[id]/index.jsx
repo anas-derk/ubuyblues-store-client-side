@@ -49,8 +49,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [errorInAddToCart, setErrorInAddToCart] = useState("");
 
-    const [favoriteProductAddingId, setFavoriteProductAddingId] = useState("");
-
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
 
     const [isWaitDeleteProductToFavoriteUserProductsList, setIsWaitDeleteProductToFavoriteUserProductsList] = useState(false);
@@ -61,8 +59,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
-    const [productIndex, setProductIndex] = useState(-1);
-
     const [productQuantity, setProductQuantity] = useState(1);
 
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
@@ -71,7 +67,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
     const router = useRouter();
 
