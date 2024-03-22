@@ -4,15 +4,24 @@ import LoaderPage from "@/components/LoaderPage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
+import ubuybluesLogo from "../../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import prices from "../../../../public/global_functions/prices";
 
-export default function Confirmation({ orderId }) {
+export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [country, setCountry] = useState(countryAsProperty);
+
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
+
+    const [isGetOrderInfo, setIsGetOrderInfo] = useState(true);
 
     const [orderDetails, setOrderDetails] = useState({});
 
@@ -24,27 +33,47 @@ export default function Confirmation({ orderId }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        if (orderId) {
-            const userLanguage = localStorage.getItem("asfour-store-language");
-            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-            getOrderDetails(orderId)
-                .then((res) => {
-                    const result = res.data;
-                    if (!result.error) {
-                        setOrderDetails(result);
-                        setPricesDetailsSummary({
-                            totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
-                            totalDiscount: calcTotalOrderDiscount(result.order_products),
-                        });
-                        setIsLoadingPage(false);
-                    }
-                })
-                .catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
-                });
+        setIsLoadingPage(true);
+        setCountry(countryAsProperty);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            if(!isGetOrderInfo) {
+                setIsLoadingPage(false);
+            }
+        })
+            .catch((err) => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        getOrderDetails(orderIdAsProperty)
+            .then((res) => {
+                const result = res.data;
+                if (!res.error) {
+                    setOrderDetails(result);
+                    setPricesDetailsSummary({
+                        totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
+                        totalDiscount: calcTotalOrderDiscount(result.order_products),
+                    });
+                    setIsGetOrderInfo(false);
+                }
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [orderIdAsProperty]);
+
+    useEffect(() => {
+        if (!isGetOrderInfo) {
+            setIsLoadingPage(false);
         }
-    }, [orderId]);
+    }, [isGetOrderInfo]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -54,7 +83,7 @@ export default function Confirmation({ orderId }) {
     const getOrderDetails = async (orderId) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -82,7 +111,7 @@ export default function Confirmation({ orderId }) {
             <Head>
                 <title>Ubuyblues Store - Confirmation</title>
             </Head>
-            {!isLoadingPage && <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content text-white p-4">
                     <h1 className="welcome-msg text-center mb-5">{t("Welcome To You In Payment Confirmation Page")}</h1>
@@ -117,13 +146,13 @@ export default function Confirmation({ orderId }) {
                                     </span>}
                                 </div>
                                 <div className="col-md-3 fw-bold p-0">
-                                    {product.unit_price} {t("KWD")}
+                                    {(product.unit_price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                                 <div className="col-md-3 fw-bold p-0">
-                                    {product.discount} {t("KWD")}
+                                    {(product.discount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                                 <div className="col-md-3 fw-bold p-0">
-                                    {(product.unit_price - product.discount) * product.quantity} {t("KWD")}
+                                    {((product.unit_price - product.discount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
                         ))}
@@ -132,7 +161,7 @@ export default function Confirmation({ orderId }) {
                                 {t("Total Price Before Discount")}
                             </div>
                             <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {pricesDetailsSummary.totalPriceBeforeDiscount} {t("KWD")}
+                                {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
                             </div>
                         </div>
                         <div className="row total-price-discount total pb-3 mb-5">
@@ -140,7 +169,7 @@ export default function Confirmation({ orderId }) {
                                 {t("Total Discount")}
                             </div>
                             <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {pricesDetailsSummary.totalDiscount} {t("KWD")}
+                                {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
                             </div>
                         </div>
                         <div className="row total-price-after-discount total pb-3 mb-5">
@@ -148,7 +177,7 @@ export default function Confirmation({ orderId }) {
                                 {t("Total Price After Discount")}
                             </div>
                             <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {orderDetails.order_amount} {t("KWD")}
+                                {(orderDetails.order_amount * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
                             </div>
                         </div>
                         <div className="thanks-icon-box mb-4">
@@ -172,23 +201,55 @@ export default function Confirmation({ orderId }) {
     );
 }
 
-export async function getServerSideProps(context) {
-    const orderId = context.query.orderId;
-    if (!orderId) {
+export async function getServerSideProps({ query, params }) {
+    if (!params.id) {
         return {
             redirect: {
                 permanent: false,
-                destination: "/confirmation",
+                destination: "/",
             },
             props: {
-                orderId: "658b171ba676cdf6528d0ad5",
+                countryAsProperty: "kuwait",
             },
         }
-    } else {
+    }
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/confirmation/${params.id}`,
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                    orderIdAsProperty: params.id,
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/confirmation/${params.id}?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                    orderIdAsProperty: params.id,
+                },
+            }
+        }
         return {
             props: {
-                orderId,
+                countryAsProperty: query.country,
+                orderIdAsProperty: params.id,
             },
         }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+            orderIdAsProperty: params.id,
+        },
     }
 }
