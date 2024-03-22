@@ -1,3 +1,6 @@
+$width: 400px;
+$height: 400px;
+
 .product-details {
     .product-details-box {
         color: #FFF;
@@ -11,28 +14,22 @@
         }
         .product-images-box {
             .main-product-image-box {
-                height: 370px;
+                width: $width;
+                height: $height;
                 max-height: 100%;
                 max-width: 100%;
-                @media (max-width: 767px) {
-                    height: 330px;
-                }
                 .slick-slider {
-                    height: 370px;
+                    width: $width;
+                    height: $height;
                     max-height: 100%;
                     max-width: 100%;
-                    @media (max-width: 767px) {
-                        height: 330px;
-                    }
                     .slick-list {
                         .slick-slide {
                             div {
-                                height: 370px;
+                                width: $width;
+                                height: $height;
                                 max-height: 100%;
                                 max-width: 100%;
-                                @media (max-width: 767px) {
-                                    height: 330px;
-                                }
                             }
                         }
                     }
@@ -52,6 +49,8 @@
                     gap: 30px;
                 }
             }
+        }
+        .all-product-images{
             .product-image-box,
             .gallery-image-box {
                 img {

@@ -10,39 +10,24 @@
 }
 
 .product-details .product-details-box .product-images-box .main-product-image-box {
-  height: 370px;
+  width: 400px;
+  height: 400px;
   max-height: 100%;
   max-width: 100%;
-}
-
-@media (max-width: 767px) {
-  .product-details .product-details-box .product-images-box .main-product-image-box {
-    height: 330px;
-  }
 }
 
 .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider {
-  height: 370px;
+  width: 400px;
+  height: 400px;
   max-height: 100%;
   max-width: 100%;
-}
-
-@media (max-width: 767px) {
-  .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider {
-    height: 330px;
-  }
 }
 
 .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-list .slick-slide div {
-  height: 370px;
+  width: 400px;
+  height: 400px;
   max-height: 100%;
   max-width: 100%;
-}
-
-@media (max-width: 767px) {
-  .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-list .slick-slide div {
-    height: 330px;
-  }
 }
 
 .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-arrow {
@@ -63,20 +48,20 @@
   }
 }
 
-.product-details .product-details-box .product-images-box .product-image-box img,
-.product-details .product-details-box .product-images-box .gallery-image-box img {
+.product-details .product-details-box .all-product-images .product-image-box img,
+.product-details .product-details-box .all-product-images .gallery-image-box img {
   cursor: pointer;
   width: 92px;
   height: 92px;
 }
 
-.product-details .product-details-box .product-images-box .product-image-box img:hover,
-.product-details .product-details-box .product-images-box .gallery-image-box img:hover {
+.product-details .product-details-box .all-product-images .product-image-box img:hover,
+.product-details .product-details-box .all-product-images .gallery-image-box img:hover {
   border: 3px solid #000;
 }
 
-.product-details .product-details-box .product-images-box .product-image-box img.selection,
-.product-details .product-details-box .product-images-box .gallery-image-box img.selection {
+.product-details .product-details-box .all-product-images .product-image-box img.selection,
+.product-details .product-details-box .all-product-images .gallery-image-box img.selection {
   border: 3px solid #000;
 }
 

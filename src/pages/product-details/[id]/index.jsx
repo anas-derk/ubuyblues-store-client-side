@@ -293,6 +293,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         sliderRef.current.slickGoTo(slideIndex);
     }
 
+    const getAppearedSlidesCount = (windowInnerWidth, count) => {
+        if (windowInnerWidth < 420) return 2;
+        if (windowInnerWidth > 420 && windowInnerWidth < 576 ) return 3;
+        if (windowInnerWidth >= 576) return 4;
+        return count;
+    }
+
     return (
         <div className="product-details page">
             <Head>
@@ -308,11 +315,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     <div className="container-fluid">
                         {Object.keys(productInfo).length > 0 ?
                             <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
-                                <h1 className="section-name text-center mb-5 text-white pb-3">{t("Product Details")}</h1>
-                                <div className="row mb-3">
+                                <h1 className="section-name text-center mb-4 text-white pb-3">{t("Product Details")}</h1>
+                                <div className="row mb-3 justify-content-center align-items-center">
                                     <div className="col-lg-6">
                                         <div className="product-images-box mb-4">
-                                            <div className="main-product-image-box mb-3">
+                                            <div className="main-product-image-box mb-5 mx-auto">
                                                 <Slider
                                                     dots={false}
                                                     infinite={true}
@@ -339,34 +346,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </div>
                                                     ))}
                                                 </Slider>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-3 text-center">
-                                                    <div
-                                                        className="product-image-box"
-                                                        onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
-                                                    >
-                                                        <img
-                                                            src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
-                                                            className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                {productInfo.galleryImagesPaths.map((path, pathIndex) => (
-                                                    <div
-                                                        className="col-sm-3 text-center"
-                                                        key={pathIndex}
-                                                        onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
-                                                    >
-                                                        <div className="gallery-image-box" onClick={() => setProductGalleryImageIndex(pathIndex)}>
-                                                            <img
-                                                                src={`${process.env.BASE_API_URL}/${path}`}
-                                                                alt="product image !!"
-                                                                className={`${productGalleryImageIndex === pathIndex ? "selection" : ""}`}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                ))}
                                             </div>
                                         </div>
                                     </div>
@@ -408,6 +387,42 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="col-lg-6">
+                                        <div className="all-product-images">
+                                            <Slider
+                                                arrows={false}
+                                                infinite={false}
+                                                speed={500}
+                                                slidesToShow={getAppearedSlidesCount(windowInnerWidth, productInfo.galleryImagesPaths.length + 1)}
+                                                slidesToScroll={getAppearedSlidesCount(windowInnerWidth, productInfo.galleryImagesPaths.length + 1)}
+                                            >
+                                                <div
+                                                    className="product-image-box"
+                                                    onClick={() => { setProductGalleryImageIndex(-1); goToSlide(0); }}
+                                                >
+                                                    <img
+                                                        src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
+                                                        className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
+                                                    />
+                                                </div>
+                                                {productInfo.galleryImagesPaths.map((path, pathIndex) => (
+                                                    <div
+                                                        key={pathIndex}
+                                                        onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
+                                                    >
+                                                        <div className="gallery-image-box" onClick={() => setProductGalleryImageIndex(pathIndex)}>
+                                                            <img
+                                                                src={`${process.env.BASE_API_URL}/${path}`}
+                                                                alt="product image !!"
+                                                                className={`${productGalleryImageIndex === pathIndex ? "selection" : ""}`}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </Slider>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-6"></div>
                                 </div>
                                 <div className={`product-description-and-referrals border-top border-2 mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
                                     <div className="row justify-content-center">
