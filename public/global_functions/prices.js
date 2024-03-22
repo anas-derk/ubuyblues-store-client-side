@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getUSDPriceAgainstCurrency = async (country) => {
     try {
-        if(process.env.NODE_ENV === "development") {
+        if(process.env.NODE_ENV === "development" || process.env.NODE_ENV === "production") {
             switch (country) {
                 case "kuwait": {
                     return 3.25
