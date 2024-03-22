@@ -12,6 +12,7 @@
 .product-details .product-details-box .product-images-box .main-product-image-box {
   height: 370px;
   max-height: 100%;
+  max-width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -23,6 +24,7 @@
 .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider {
   height: 370px;
   max-height: 100%;
+  max-width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -34,6 +36,7 @@
 .product-details .product-details-box .product-images-box .main-product-image-box .slick-slider .slick-list .slick-slide div {
   height: 370px;
   max-height: 100%;
+  max-width: 100%;
 }
 
 @media (max-width: 767px) {

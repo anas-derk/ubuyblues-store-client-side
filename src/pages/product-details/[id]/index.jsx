@@ -373,6 +373,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     <div className="col-lg-6">
                                         <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
                                             <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
+                                            <h5 className="product-category-name mb-4">
+                                                <span className="fw-bold">Category: </span>
+                                                <span>{productInfo.category}</span>
+                                            </h5>
                                             <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                                             {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
                                             <h5 className="product-quantity">1 Product Available In Store</h5>
@@ -403,13 +407,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 </div>
                                             </div>
                                         </div>
-                                        <h5 className="product-category-name">
-                                            <span className="fw-bold">Category: </span>
-                                            <span>{productInfo.category}</span>
-                                        </h5>
                                     </div>
                                 </div>
-                                <div className={`product-description-and-referrals mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
+                                <div className={`product-description-and-referrals border-top border-2 mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
                                     <div className="row justify-content-center">
                                         <div className="col-lg-6 text-center">
                                             <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>

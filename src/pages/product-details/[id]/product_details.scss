@@ -13,12 +13,14 @@
             .main-product-image-box {
                 height: 370px;
                 max-height: 100%;
+                max-width: 100%;
                 @media (max-width: 767px) {
                     height: 330px;
                 }
                 .slick-slider {
                     height: 370px;
                     max-height: 100%;
+                    max-width: 100%;
                     @media (max-width: 767px) {
                         height: 330px;
                     }
@@ -27,6 +29,7 @@
                             div {
                                 height: 370px;
                                 max-height: 100%;
+                                max-width: 100%;
                                 @media (max-width: 767px) {
                                     height: 330px;
                                 }
