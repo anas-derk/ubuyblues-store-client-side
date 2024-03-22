@@ -195,8 +195,8 @@ export default function Checkout({ countryAsProperty }) {
         return totalPriceBeforeDiscount - totalDiscount;
     }
 
-    const validateFormFields = (ddd) => {
-        return validations.inputValuesValidation(ddd);
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
     }
 
     const createNewOrder = async (orderDetails) => {
