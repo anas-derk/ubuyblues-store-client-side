@@ -95,6 +95,7 @@ export default function CustomerAccountDetails() {
     const updateUserInfo = async (e) => {
         try {
             e.preventDefault();
+            setFormValidationErrors({});
             const errorsObject = validateFormFields([
                 {
                     name: "first_name",

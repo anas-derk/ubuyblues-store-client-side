@@ -16,6 +16,7 @@ import validations from "../../../../public/global_functions/validations";
 import prices from "../../../../public/global_functions/prices";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -65,7 +66,19 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
 
-    const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
+    const [referalDetails, setReferalDetails] = useState({
+        name: "",
+        email: "",
+        referal: "",
+    });
+
+    const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const [waitAddNewReferalMsg, setWaitAddNewReferalMsg] = useState("");
+
+    const [successAddNewReferalMsg, setSuccessAddNewReferalMsg] = useState("");
+
+    const [errorAddNewReferalMsg, setErrorAddNewReferalMsg] = useState("");
 
     const { t } = useTranslation();
 
@@ -291,9 +304,81 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
         if (windowInnerWidth < 420) return 2;
-        if (windowInnerWidth > 420 && windowInnerWidth < 576 ) return 3;
+        if (windowInnerWidth > 420 && windowInnerWidth < 576) return 3;
         if (windowInnerWidth >= 576) return 4;
         return count;
+    }
+
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
+
+    const addNewReferal = async (e) => {
+        try {
+            e.preventDefault();
+            setFormValidationErrors({});
+            const errorsObject = validateFormFields([
+                {
+                    name: "name",
+                    value: referalDetails.name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "email",
+                    value: referalDetails.email,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+                {
+                    name: "referal",
+                    value: referalDetails.referal,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setWaitAddNewReferalMsg("Please Wait ...");
+                const res = await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal`, referalDetails);
+                const result = res.data;
+                setWaitAddNewReferalMsg("");
+                if (!result.error) {
+                    setSuccessAddNewReferalMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessAddNewReferalMsg("");
+                        clearTimeout(successTimeout);
+                    }, 2000);
+                } else {
+                    setErrorAddNewReferalMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorAddNewReferalMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 2000);
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+            setWaitAddNewReferalMsg("");
+            setErrorAddNewReferalMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorAddNewReferalMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
+        }
     }
 
     return (
@@ -444,25 +529,43 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
                                             <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
                                             {getRatingStars()}
-                                            <form className="referral-form mb-4">
+                                            <form className="referral-form mb-4" onSubmit={addNewReferal}>
                                                 <textarea
-                                                    className="p-2 mb-4"
-                                                    placeholder="Your Referral *"
+                                                    className={`p-2 mb-3 ${formValidationErrors.name ? "border-3 border-danger" : ""}`}
+                                                    placeholder={t("Your Referral *")}
+                                                    defaultValue={referalDetails.referal}
+                                                    onChange={(e) => setReferalDetails({ ...referalDetails, referal: e.target.value.trim() })}
                                                 ></textarea>
+                                                {formValidationErrors.referal && <p className="bg-danger p-2 form-field-error-box mb-4">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{t(formValidationErrors.referal)}</span>
+                                                </p>}
                                                 <div className="row mb-4 name-and-email-box">
                                                     <div className="col-md-6">
                                                         <input
                                                             type="text"
-                                                            className="p-2"
-                                                            placeholder="Name *"
+                                                            className={`p-2 ${formValidationErrors.name ? "border-3 border-danger mb-3" : ""}`}
+                                                            placeholder={t("Name *")}
+                                                            defaultValue={referalDetails.name}
+                                                            onChange={(e) => setReferalDetails({ ...referalDetails, name: e.target.value.trim() })}
                                                         />
+                                                        {formValidationErrors.name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                            <span>{t(formValidationErrors.name)}</span>
+                                                        </p>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <input
                                                             type="text"
-                                                            className="p-2"
-                                                            placeholder="Email *"
+                                                            className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
+                                                            placeholder={t("Email *")}
+                                                            defaultValue={referalDetails.email}
+                                                            onChange={(e) => setReferalDetails({ ...referalDetails, email: e.target.value.trim() })}
                                                         />
+                                                        {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                            <span>{t(formValidationErrors.email)}</span>
+                                                        </p>}
                                                     </div>
                                                 </div>
                                                 <div className="save-your-details-box mb-3 row">
@@ -477,13 +580,30 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
                                                     </div>
                                                 </div>
-                                                <button
+                                                {!waitAddNewReferalMsg && !successAddNewReferalMsg && !errorAddNewReferalMsg && <button
                                                     className="send-referral-btn p-2 d-block w-100"
                                                     type="submit"
-                                                    onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}
                                                 >
                                                     Send
-                                                </button>
+                                                </button>}
+                                                {waitAddNewReferalMsg && <button
+                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    disabled
+                                                >
+                                                    { waitAddNewReferalMsg }
+                                                </button>}
+                                                {successAddNewReferalMsg && <button
+                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    disabled
+                                                >
+                                                    { successAddNewReferalMsg }
+                                                </button>}
+                                                {errorAddNewReferalMsg && <button
+                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    disabled
+                                                >
+                                                    { errorAddNewReferalMsg }
+                                                </button>}
                                             </form>
                                         </div>
                                     </div>
