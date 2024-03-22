@@ -581,25 +581,25 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     </div>
                                                 </div>
                                                 {!waitAddNewReferalMsg && !successAddNewReferalMsg && !errorAddNewReferalMsg && <button
-                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    className="private-btn p-2 d-block w-100 fw-bold"
                                                     type="submit"
                                                 >
                                                     Send
                                                 </button>}
                                                 {waitAddNewReferalMsg && <button
-                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    className="private-btn private-wait-btn p-2 d-block w-100 fw-bold"
                                                     disabled
                                                 >
                                                     { waitAddNewReferalMsg }
                                                 </button>}
                                                 {successAddNewReferalMsg && <button
-                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    className="private-btn private-success-btn p-2 d-block w-100 fw-bold"
                                                     disabled
                                                 >
                                                     { successAddNewReferalMsg }
                                                 </button>}
                                                 {errorAddNewReferalMsg && <button
-                                                    className="send-referral-btn p-2 d-block w-100"
+                                                    className="private-btn private-error-btn p-2 d-block w-100 fw-bold"
                                                     disabled
                                                 >
                                                     { errorAddNewReferalMsg }

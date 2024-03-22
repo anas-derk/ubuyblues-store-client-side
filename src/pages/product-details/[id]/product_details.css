@@ -143,17 +143,6 @@
   resize: none;
 }
 
-.product-details .product-details-box .referral-form .send-referral-btn {
-  border-top-right-radius: 20px;
-  border: 5px solid #FFF;
-  background-color: var(--main-color-two);
-}
-
-.product-details .product-details-box .referral-form .send-referral-btn:hover {
-  background-color: transparent;
-  color: #FFF;
-}
-
 @media (max-width: 767px) {
   .product-details .product-details-box .referral-form .name-and-email-box {
     gap: 30px;

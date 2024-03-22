@@ -64,6 +64,44 @@ textarea {
   font-size: 13px;
 }
 
+.private-btn {
+  border-top-right-radius: 20px;
+  border: 5px solid #FFF;
+  background-color: var(--main-color-two);
+}
+
+.private-btn:hover {
+  background-color: transparent;
+  color: #FFF;
+}
+
+.private-btn.private-wait-btn {
+  background-color: yellow;
+  color: #000;
+}
+
+.private-btn.private-wait-btn:hover {
+  background-color: yellow;
+}
+
+.private-btn.private-success-btn {
+  background-color: #0F0;
+  color: #000;
+}
+
+.private-btn.private-success-btn:hover {
+  background-color: #0F0;
+}
+
+.private-btn.private-error-btn {
+  background-color: #F00;
+  color: #FFF;
+}
+
+.private-btn.private-error-btn:hover {
+  background-color: #F00;
+}
+
 .not-found-error {
   color: #FFF;
   min-height: 300px;
