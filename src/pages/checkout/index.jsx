@@ -462,7 +462,7 @@ export default function Checkout({ countryAsProperty }) {
                 requestNotes,
             });
             localStorage.removeItem("asfour-store-user-cart");
-            await router.push(`/confirmation?orderId=${result.data.orderId}`);
+            await router.push(`/confirmation/${result.data.orderId}?country=${country}`);
         }
         catch (err) {
             setIsWaitApproveOnPayPalOrder(false);
