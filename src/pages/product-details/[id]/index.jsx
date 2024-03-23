@@ -77,6 +77,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [referalDetails, setReferalDetails] = useState({
         name: "",
         email: "",
+        productId: "",
         referal: "",
     });
 
@@ -162,9 +163,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     }
                     const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
                     if (referalWriterInfo) {
-                        setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email });
+                        setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
                         setIsSaveReferalWriterInfo(true);
                     }
+                    setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
                     setIsGetProductReferals(false);
                 }
             })
@@ -614,8 +616,22 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2">
                                     <div className="row">
                                         <div className="col-lg-6">
-                                            <h6 className="mb-4 fw-bold">Referrals</h6>
-                                            <h6 className="mb-4">There are no reviews yet !!</h6>
+                                            <h6 className="mb-2 fw-bold">Referrals</h6>
+                                            {allProductReferalsInsideThePage.length === 0 && !isGetProductReferals && <h6 className="mb-4">There are no reviews yet !!</h6>}
+                                            {isGetProductReferals && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                                                <span className="loader-table-data"></span>
+                                            </div>}
+                                            {allProductReferalsInsideThePage.length > 0 && <div className="referals">
+                                                {allProductReferalsInsideThePage.map((referal, referalIndex) => (
+                                                    <div className="referal-box" key={referal._id}>
+                                                        <div className="referal-details pt-3 pb-3">
+                                                            <h6>Referal #{referalIndex + 1}</h6>
+                                                            <h6>Name: { referal.name }</h6>
+                                                            <h6 className="mb-0">Email: { referal.email }</h6>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>}
                                         </div>
                                         <div className="col-lg-6">
                                             <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
