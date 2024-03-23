@@ -38,6 +38,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isGetProductReferals, setIsGetProductReferals] = useState(true);
 
+    const [allProductReferalsCount, setAllProductReferalsCount] = useState(0);
+
     const [allProductReferalsInsideThePage, setAllProductReferalsInsideThePage] = useState([]);
 
     const [isWaitGetProductReferalsStatus, setIsWaitGetProductReferalsStatus] = useState(false);
@@ -151,6 +153,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsGetProductInfo(false);
                 if (result) {
                     result = await getProductReferalsCount(productIdAsProperty);
+                    setAllProductReferalsCount(result.data);
                     if (result.data > 0) {
                         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
                         setTotalPagesCount(Math.ceil(result.data / pageSize));
@@ -585,7 +588,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
                                         </div>
                                         <div className="col-lg-6 text-center">
-                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals (0)</h6>
+                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals ({ allProductReferalsCount })</h6>
                                         </div>
                                     </div>
                                 </div>
