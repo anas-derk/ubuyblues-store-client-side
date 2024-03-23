@@ -20,6 +20,8 @@ export default function Checkout({ countryAsProperty }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
+
     const [country, setCountry] = useState(countryAsProperty);
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
@@ -62,7 +64,9 @@ export default function Checkout({ countryAsProperty }) {
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
-            setIsLoadingPage(false);
+            if(!isGetUserInfo) {
+                setIsLoadingPage(false);
+            }
         })
             .catch(() => {
                 setIsLoadingPage(false);
@@ -93,7 +97,7 @@ export default function Checkout({ countryAsProperty }) {
                             }
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                        setIsLoadingPage(false);
+                        setIsGetUserInfo(false);
                     } else {
                         localStorage.removeItem("asfour-store-user-token");
                         await router.push("/auth");
@@ -157,9 +161,15 @@ export default function Checkout({ countryAsProperty }) {
                 }
             }
             handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-            setIsLoadingPage(false);
+            setIsGetUserInfo(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (!isGetUserInfo) {
+            setIsLoadingPage(false);
+        }
+    }, [isGetUserInfo]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
