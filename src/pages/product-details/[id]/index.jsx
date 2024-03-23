@@ -166,8 +166,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     if (referalWriterInfo) {
                         setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
                         setIsSaveReferalWriterInfo(true);
+                    } else {
+                        setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
                     }
-                    setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
                     setIsGetProductReferals(false);
                 }
             })
@@ -634,7 +635,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     </div>
                                                 ))}
                                             </div>}
-                                            {totalPagesCount > 0 && !isGetProductReferals &&
+                                            {totalPagesCount > 1 && !isGetProductReferals &&
                                                 <PaginationBar
                                                     totalPagesCount={totalPagesCount}
                                                     currentPage={currentPage}
