@@ -238,7 +238,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                         />
                                                         <h6>{walletProduct.name}</h6>
                                                     </td>
-                                                    <td>{(walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
+                                                    <td>{((walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
@@ -273,7 +273,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{(walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
+                                                            <td>{((walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Stock Status")}</th>

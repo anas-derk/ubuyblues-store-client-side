@@ -237,7 +237,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                         />
                                                         <h6>{favoriteProduct.name}</h6>
                                                     </td>
-                                                    <td>{(favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
+                                                    <td>{((favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
@@ -272,7 +272,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{(favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
+                                                            <td>{((favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Stock Status")}</th>

@@ -10,20 +10,23 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
+import prices from "../../../../public/global_functions/prices";
 
-export default function CustomerOrders() {
+export default function CustomerOrders({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
-    const [userInfo, setUserInfo] = useState(true);
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
+
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
 
-    const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(false);
+    const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(true);
 
     const [errMsg, setErrorMsg] = useState("");
 
@@ -44,13 +47,27 @@ export default function CustomerOrders() {
     const pageSize = 5;
 
     useEffect(() => {
+        setIsLoadingPage(true);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            if (!isFilteringOrdersStatus) {
+                setIsLoadingPage(false);
+            }
+        })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
+
+    useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
             validations.getUserInfo(userToken)
                 .then(async (result) => {
                     if (!result.error) {
-                        setUserInfo(result);
                         setFilters({ ...filters, customerId: result.data._id });
                         const result2 = await getOrdersCount(`customerId=${result.data._id}`);
                         if (result2.data > 0) {
@@ -62,7 +79,7 @@ export default function CustomerOrders() {
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
                         });
-                        setIsLoadingPage(false);
+                        setIsFilteringOrdersStatus(false);
                     } else {
                         localStorage.removeItem("asfour-store-user-token");
                         await router.push("/auth");
@@ -82,6 +99,12 @@ export default function CustomerOrders() {
             router.push("/auth");
         }
     }, []);
+
+    useEffect(() => {
+        if (!isFilteringOrdersStatus) {
+            setIsLoadingPage(false);
+        }
+    }, [isFilteringOrdersStatus]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -254,7 +277,7 @@ export default function CustomerOrders() {
                                                             {t(order.status)}
                                                         </td>
                                                         <td>
-                                                            {order.order_amount}
+                                                            {order.order_amount * usdPriceAgainstCurrency} {t(currencyNameByCountry)}
                                                         </td>
                                                         <td>{getDateFormated(order.added_date)}</td>
                                                         <td>
@@ -355,4 +378,42 @@ export default function CustomerOrders() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/",
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsProperty: query.country,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+        },
+    }
 }
