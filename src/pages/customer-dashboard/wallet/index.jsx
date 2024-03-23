@@ -13,12 +13,17 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
+import prices from "../../../../public/global_functions/prices";
 
-export default function CustomerWalletProductsList() {
+export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [token, setToken] = useState(false);
 
@@ -26,7 +31,7 @@ export default function CustomerWalletProductsList() {
 
     const [allWalletProductsInsideThePage, setAllWalletProductsInsideThePage] = useState([]);
 
-    const [isWaitGetWalletProductsStatus, setIsWaitGetWalletProductsStatus] = useState(false);
+    const [isWaitGetWalletProductsStatus, setIsWaitGetWalletProductsStatus] = useState(true);
 
     const [isDeletingWalletProduct, setIsDeletingWalletProduct] = useState(false);
 
@@ -42,11 +47,26 @@ export default function CustomerWalletProductsList() {
         customerId: "",
     });
 
-    const pageSize = 10;
+    const pageSize = 5;
 
     const router = useRouter();
 
     const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+        setIsLoadingPage(true);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            if (!isWaitGetWalletProductsStatus) {
+                setIsLoadingPage(false);
+            }
+        })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
@@ -67,7 +87,7 @@ export default function CustomerWalletProductsList() {
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
                         });
-                        setIsLoadingPage(false);
+                        setIsWaitGetWalletProductsStatus(false);
                     } else {
                         localStorage.removeItem("asfour-store-user-token");
                         await router.push("/auth");
@@ -87,6 +107,12 @@ export default function CustomerWalletProductsList() {
             router.push("/auth");
         }
     }, []);
+
+    useEffect(() => {
+        if (!isWaitGetWalletProductsStatus) {
+            setIsLoadingPage(false);
+        }
+    }, [isWaitGetWalletProductsStatus]);
 
     const getWalletProductsCount = async (filters) => {
         try {
@@ -212,14 +238,14 @@ export default function CustomerWalletProductsList() {
                                                         />
                                                         <h6>{walletProduct.name}</h6>
                                                     </td>
-                                                    <td>{walletProduct.price - walletProduct.discount} $</td>
+                                                    <td>{(walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                         {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         <Link
-                                                            href={`/product-details/${walletProduct._id}`}
+                                                            href={`/product-details/${walletProduct.productId}`}
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
                                                         >{t("Show Product Details")}</Link>
                                                     </td>
@@ -247,7 +273,7 @@ export default function CustomerWalletProductsList() {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{walletProduct.price - walletProduct.discount} $</td>
+                                                            <td>{(walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Stock Status")}</th>
@@ -260,7 +286,7 @@ export default function CustomerWalletProductsList() {
                                                                 {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 <Link
-                                                                    href={`/product-details/${walletProduct._id}`}
+                                                                    href={`/product-details/${walletProduct.productId}`}
                                                                     className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
                                                                 >{t("Show Product Details")}</Link>
                                                             </td>
@@ -285,6 +311,12 @@ export default function CustomerWalletProductsList() {
                                         getPreviousPage={getPreviousPage}
                                         getNextPage={getNextPage}
                                         getSpecificPage={getSpecificPage}
+                                        paginationButtonTextColor={"#FFF"}
+                                        paginationButtonBackgroundColor={"transparent"}
+                                        activePaginationButtonColor={"#000"}
+                                        activePaginationButtonBackgroundColor={"#FFF"}
+                                        isDisplayCurrentPageNumberAndCountOfPages={false}
+                                        isDisplayNavigateToSpecificPageForm={false}
                                     />
                                 }
                             </div>
@@ -296,4 +328,42 @@ export default function CustomerWalletProductsList() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/",
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsProperty: query.country,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+        },
+    }
 }

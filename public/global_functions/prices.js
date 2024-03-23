@@ -5,10 +5,10 @@ const getUSDPriceAgainstCurrency = async (country) => {
         if(process.env.NODE_ENV === "development" || process.env.NODE_ENV === "production") {
             switch (country) {
                 case "kuwait": {
-                    return 3.25
+                    return 0.3;
                 }
                 case "germany": {
-                    return 1.2;
+                    return 0.83;
                 }
                 case "turkey": {
                     return 32;

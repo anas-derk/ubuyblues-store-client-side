@@ -15,8 +15,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [country, setCountry] = useState(countryAsProperty);
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -34,7 +32,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        setCountry(countryAsProperty);
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));

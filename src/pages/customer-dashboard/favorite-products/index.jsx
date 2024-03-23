@@ -13,12 +13,17 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
+import prices from "../../../../public/global_functions/prices";
 
-export default function CustomerFavoriteProductsList() {
+export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [token, setToken] = useState(false);
 
@@ -42,11 +47,26 @@ export default function CustomerFavoriteProductsList() {
         customerId: "",
     });
 
-    const pageSize = 10;
+    const pageSize = 5;
 
     const router = useRouter();
 
     const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+        setIsLoadingPage(true);
+        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            if (!isWaitGetFavoriteProductsStatus) {
+                setIsLoadingPage(false);
+            }
+        })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
@@ -67,7 +87,7 @@ export default function CustomerFavoriteProductsList() {
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
                         });
-                        setIsLoadingPage(false);
+                        setIsWaitGetFavoriteProductsStatus(false);
                     } else {
                         localStorage.removeItem("asfour-store-user-token");
                         await router.push("/auth");
@@ -87,6 +107,12 @@ export default function CustomerFavoriteProductsList() {
             router.push("/auth");
         }
     }, []);
+
+    useEffect(() => {
+        if (!isWaitGetFavoriteProductsStatus) {
+            setIsLoadingPage(false);
+        }
+    }, [isWaitGetFavoriteProductsStatus]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -211,7 +237,7 @@ export default function CustomerFavoriteProductsList() {
                                                         />
                                                         <h6>{favoriteProduct.name}</h6>
                                                     </td>
-                                                    <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
+                                                    <td>{(favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
@@ -246,7 +272,7 @@ export default function CustomerFavoriteProductsList() {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{favoriteProduct.price - favoriteProduct.discount} $</td>
+                                                            <td>{(favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Stock Status")}</th>
@@ -284,8 +310,12 @@ export default function CustomerFavoriteProductsList() {
                                         getPreviousPage={getPreviousPage}
                                         getNextPage={getNextPage}
                                         getSpecificPage={getSpecificPage}
-                                        paginationButtonTextColor="black"
-                                        paginationButtonBackgroundColor="white"
+                                        paginationButtonTextColor={"#FFF"}
+                                        paginationButtonBackgroundColor={"transparent"}
+                                        activePaginationButtonColor={"#000"}
+                                        activePaginationButtonBackgroundColor={"#FFF"}
+                                        isDisplayCurrentPageNumberAndCountOfPages={false}
+                                        isDisplayNavigateToSpecificPageForm={false}
                                     />
                                 }
                             </div>
@@ -297,4 +327,42 @@ export default function CustomerFavoriteProductsList() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/",
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsProperty: query.country,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+        },
+    }
 }

@@ -17,8 +17,6 @@ export default function Cart({ countryAsProperty }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [country, setCountry] = useState(countryAsProperty);
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -37,7 +35,6 @@ export default function Cart({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        setCountry(countryAsProperty);
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
