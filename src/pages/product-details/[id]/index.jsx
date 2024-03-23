@@ -27,8 +27,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [token, setToken] = useState("");
 
-    const [country, setCountry] = useState(countryAsProperty);
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -42,8 +40,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [allProductReferalsCount, setAllProductReferalsCount] = useState(0);
 
     const [allProductReferalsInsideThePage, setAllProductReferalsInsideThePage] = useState([]);
-
-    const [isWaitGetProductReferalsStatus, setIsWaitGetProductReferalsStatus] = useState(false);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -110,7 +106,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     useEffect(() => {
         setIsLoadingPage(true);
-        setCountry(countryAsProperty);
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
@@ -448,26 +443,26 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const getPreviousPage = async () => {
-        setIsWaitGetProductReferalsStatus(true);
+        setIsGetProductReferals(true);
         const newCurrentPage = currentPage - 1;
         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
-        setIsWaitGetProductReferalsStatus(false);
+        setIsGetProductReferals(false);
     }
 
     const getNextPage = async () => {
-        setIsWaitGetProductReferalsStatus(true);
+        setIsGetProductReferals(true);
         const newCurrentPage = currentPage + 1;
         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
-        setIsWaitGetProductReferalsStatus(false);
+        setIsGetProductReferals(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsWaitGetProductReferalsStatus(true);
+        setIsGetProductReferals(true);
         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
-        setIsWaitGetProductReferalsStatus(false);
+        setIsGetProductReferals(false);
     }
 
     const getFilteringString = (filters) => {

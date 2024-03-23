@@ -97,14 +97,14 @@ export default function Home({ countryAsProperty }) {
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
-            if(!isGetCategories && !isGetProducts) {
+            if (!isGetCategories && !isGetProducts) {
                 setIsLoadingPage(false);
             }
         })
-        .catch(() => {
-            setIsLoadingPage(false);
-            setIsErrorMsgOnLoadingThePage(true);
-        });
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
     }, [countryAsProperty]);
 
     useEffect(() => {
@@ -528,47 +528,47 @@ export default function Home({ countryAsProperty }) {
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
-                                    <div className="col-xs-12 col-md-4 col-xl-4 product" key={product._id}>
-                                        <div
-                                            className="product-managment-box"
-                                            style={{
-                                                backgroundImage: `url(${process.env.BASE_API_URL}/${product.imagePath})`
-                                            }}
-                                        >
-                                            <Link className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
-                                            <div className="product-managment-buttons p-2">
-                                                <PiShareFatLight
-                                                    className="product-managment-icon d-block mb-2"
-                                                    onClick={() => setIsDisplayShareOptionsBox(true)}
-                                                />
-                                                {!isWaitAddProductToFavoriteUserProductsList && !isWaitDeleteProductToFavoriteUserProductsList && product._id !== favoriteProductAddingId && <>
-                                                    {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
-                                                        className="product-managment-icon"
-                                                        onClick={() => deleteProductFromFavoriteUserProducts(index)}
-                                                    /> :
-                                                        <BsSuitHeart
+                                    <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                        <div className="product">
+                                            <div
+                                                className="product-managment-box"
+                                            >
+                                                {/* <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image" /> */}
+                                                <Link className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
+                                                <div className="product-managment-buttons p-2">
+                                                    <PiShareFatLight
+                                                        className="product-managment-icon d-block mb-2"
+                                                        onClick={() => setIsDisplayShareOptionsBox(true)}
+                                                    />
+                                                    {!isWaitAddProductToFavoriteUserProductsList && !isWaitDeleteProductToFavoriteUserProductsList && product._id !== favoriteProductAddingId && <>
+                                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
                                                             className="product-managment-icon"
-                                                            onClick={() => addProductToFavoriteUserProducts(index)}
-                                                        />}
-                                                </>}
-                                                {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <BsClock className="product-managment-icon" />}
-                                                {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <FaCheck className="product-managment-icon" />}
+                                                            onClick={() => deleteProductFromFavoriteUserProducts(index)}
+                                                        /> :
+                                                            <BsSuitHeart
+                                                                className="product-managment-icon"
+                                                                onClick={() => addProductToFavoriteUserProducts(index)}
+                                                            />}
+                                                    </>}
+                                                    {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <BsClock className="product-managment-icon" />}
+                                                    {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <FaCheck className="product-managment-icon" />}
+                                                </div>
+                                                <div className={`add-to-cart-button-box ${product._id == productAddingId ? "displaying" : ""}`}>
+                                                    {!isWaitAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
+                                                    {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
+                                                    {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
+                                                    {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                                                        <FaCheck className="me-2" />
+                                                        <span>{t("Click To Go To Cart Page")}</span>
+                                                    </Link>}
+                                                </div>
                                             </div>
-                                            <div className={`add-to-cart-button-box ${product._id == productAddingId ? "displaying" : ""}`}>
-                                                {!isWaitAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
-                                                {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
-                                                {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
-                                                {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
-                                                    <FaCheck className="me-2" />
-                                                    <span>{t("Click To Go To Cart Page")}</span>
-                                                </Link>}
+                                            <div className="product-details p-3 text-center">
+                                                <h4 className="product-name fw-bold">{product.name}</h4>
+                                                <h5 className="product-category">{product.category}</h5>
+                                                <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                                                {product.discount != 0 && <h4 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
                                             </div>
-                                        </div>
-                                        <div className="product-details p-3 text-center">
-                                            <h4 className="product-name fw-bold">{product.name}</h4>
-                                            <h5 className="product-category">{product.category}</h5>
-                                            <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                                            {product.discount != 0 && <h4 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
                                         </div>
                                     </div>
                                 ))}
