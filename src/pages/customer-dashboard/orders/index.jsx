@@ -338,6 +338,12 @@ export default function CustomerOrders() {
                                         getPreviousPage={getPreviousPage}
                                         getNextPage={getNextPage}
                                         getSpecificPage={getSpecificPage}
+                                        paginationButtonTextColor={"#FFF"}
+                                        paginationButtonBackgroundColor={"transparent"}
+                                        activePaginationButtonColor={"#000"}
+                                        activePaginationButtonBackgroundColor={"#FFF"}
+                                        isDisplayCurrentPageNumberAndCountOfPages={false}
+                                        isDisplayNavigateToSpecificPageForm={false}
                                     />
                                 }
                             </div>

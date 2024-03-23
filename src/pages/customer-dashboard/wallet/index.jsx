@@ -304,7 +304,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                 {isWaitGetWalletProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                     <span className="loader-table-data"></span>
                                 </div>}
-                                {totalPagesCount > 0 && !isWaitGetWalletProductsStatus &&
+                                {totalPagesCount > 1 && !isWaitGetWalletProductsStatus &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
                                         currentPage={currentPage}

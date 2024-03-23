@@ -303,7 +303,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                 {isWaitGetFavoriteProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                     <span className="loader-table-data"></span>
                                 </div>}
-                                {totalPagesCount > 0 && !isWaitGetFavoriteProductsStatus &&
+                                {totalPagesCount > 1 && !isWaitGetFavoriteProductsStatus &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
                                         currentPage={currentPage}
