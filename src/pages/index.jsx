@@ -533,7 +533,7 @@ export default function Home({ countryAsProperty }) {
                                             <div
                                                 className="product-managment-box"
                                             >
-                                                {/* <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image" /> */}
+                                                <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image" />
                                                 <Link className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
                                                 <div className="product-managment-buttons p-2">
                                                     <PiShareFatLight

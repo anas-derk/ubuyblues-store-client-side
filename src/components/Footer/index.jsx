@@ -67,10 +67,10 @@ export default function Footer() {
         <footer className="pt-4 pb-4">
             <div className="container-fluid">
                 <div className="row align-items-center mb-4">
-                    <div className="col-md-2 text-center">
+                    <div className="col-xl-2 text-center">
                         <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="asfour-logo-for-footer" />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-xl-3">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Our links").toUpperCase()}</h5>
                         <ul className="links-list">
                             <li className="link-item fw-bold mb-3">
@@ -105,7 +105,7 @@ export default function Footer() {
                             </li>
                         </ul>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-xl-3">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Contact Us").toUpperCase()}</h5>
                         <ul className="links-list">
                             <li className="link-item fw-bold mb-3">
@@ -130,7 +130,7 @@ export default function Footer() {
                             </li>
                         </ul>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-xl-4">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Payment Methods").toUpperCase()}</h5>
                         <ul className="payment-methods-list mb-5">
                             <li className="payment-method-item fw-bold mb-3">
