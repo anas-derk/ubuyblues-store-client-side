@@ -286,7 +286,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                                 className="btn btn-success d-block mx-auto mb-4 global-button"
                                                             >{t("Show Details")}</Link>
                                                             <Link
-                                                                href={`/confirmation?orderId=${order._id}`}
+                                                                href={`/confirmation/${order._id}`}
                                                                 className="btn btn-success d-block mx-auto global-button"
                                                             >{t("Show Billing")}</Link>
                                                         </td>
