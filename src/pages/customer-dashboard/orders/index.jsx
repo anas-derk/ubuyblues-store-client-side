@@ -314,7 +314,7 @@ export default function CustomerOrders() {
                                                                         className="btn btn-success d-block mx-auto mb-4 global-button"
                                                                     >{t("Show Details")}</Link>
                                                                     <Link
-                                                                        href={`/confirmation?orderId=${order._id}`}
+                                                                        href={`/confirmation/${order._id}`}
                                                                         className="btn btn-success d-block mx-auto global-button"
                                                                     >{t("Show Billing")}</Link>
                                                                 </td>
@@ -331,7 +331,7 @@ export default function CustomerOrders() {
                                         <span className="loader-table-data"></span>
                                     </div>}
                                 </div>
-                                {totalPagesCount > 0 && !isFilteringOrdersStatus &&
+                                {totalPagesCount > 1 && !isFilteringOrdersStatus &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
                                         currentPage={currentPage}
