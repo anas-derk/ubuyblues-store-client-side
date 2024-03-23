@@ -36,6 +36,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isGetProductInfo, setIsGetProductInfo] = useState(true);
 
+    const [allProductReferalsInsideThePage, setAllProductReferalsInsideThePage] = useState([]);
+
+    const [isWaitGetProductReferalsStatus, setIsWaitGetProductReferalsStatus] = useState(false);
+
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [userInfo, setUserInfo] = useState({});
@@ -79,6 +83,16 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [successAddNewReferalMsg, setSuccessAddNewReferalMsg] = useState("");
 
     const [errorAddNewReferalMsg, setErrorAddNewReferalMsg] = useState("");
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [totalPagesCount, setTotalPagesCount] = useState(0);
+
+    const [filters, setFilters] = useState({
+        customerName: "",
+    });
+
+    const pageSize = 5;
 
     const { t } = useTranslation();
 
@@ -379,6 +393,56 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 clearTimeout(errorTimeout);
             }, 2000);
         }
+    }
+
+    const getProductReferalsCount = async (productId, filters) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/all-product-referals-inside-the-page/${productId}?${filters ? filters : ""}`);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getAllProductReferalsInsideThePage = async (productId, pageNumber, pageSize, filters) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/users/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getPreviousPage = async () => {
+        setIsWaitGetProductReferalsStatus(true);
+        const newCurrentPage = currentPage - 1;
+        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetProductReferalsStatus(false);
+    }
+
+    const getNextPage = async () => {
+        setIsWaitGetProductReferalsStatus(true);
+        const newCurrentPage = currentPage + 1;
+        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setCurrentPage(newCurrentPage);
+        setIsWaitGetProductReferalsStatus(false);
+    }
+
+    const getSpecificPage = async (pageNumber) => {
+        setIsWaitGetProductReferalsStatus(true);
+        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+        setCurrentPage(pageNumber);
+        setIsWaitGetProductReferalsStatus(false);
+    }
+
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
     }
 
     return (
