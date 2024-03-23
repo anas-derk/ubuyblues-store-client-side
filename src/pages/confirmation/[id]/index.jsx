@@ -161,7 +161,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 {t("Total Price Before Discount")}
                             </div>
                             <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
+                                {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                             </div>
                         </div>
                         <div className="row total-price-discount total pb-3 mb-5">
@@ -169,7 +169,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 {t("Total Discount")}
                             </div>
                             <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
+                                {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                             </div>
                         </div>
                         <div className="row total-price-after-discount total pb-3 mb-5">
@@ -177,7 +177,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 {t("Total Price After Discount")}
                             </div>
                             <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {(orderDetails.order_amount * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
+                                {(orderDetails.order_amount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                             </div>
                         </div>
                         <div className="thanks-icon-box mb-4">
