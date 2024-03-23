@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import Header from "@/components/Header";
 import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
 import { useEffect, useState } from "react";
@@ -216,13 +217,17 @@ export default function CustomerFavoriteProductsList() {
                                                         {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
                                                         {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                         {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        <Link
+                                                            href={`/product-details/${favoriteProduct._id}`}
+                                                            className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
+                                                        >{t("Show Product Details")}</Link>
                                                     </td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table> : <div className="favorite-products-for-user">
-                                        {favoriteProductsListForUser.map((favoriteProduct, favoriteProductIndex) => (
-                                            <div className="favorite-product data-box mb-5" key={favoriteProductsListForUser._id}>
+                                        {allFavoriteProductsInsideThePage.map((favoriteProduct, favoriteProductIndex) => (
+                                            <div className="favorite-product data-box mb-5" key={favoriteProduct._id}>
                                                 <h4 className="mb-3 text-white">{t("Product")} # {favoriteProductIndex + 1}</h4>
                                                 <table className="favorite-products-table-for-user data-table w-100">
                                                     <tbody>
@@ -253,6 +258,10 @@ export default function CustomerFavoriteProductsList() {
                                                                 {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
                                                                 {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                                 {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                <Link
+                                                                    href={`/product-details/${favoriteProduct._id}`}
+                                                                    className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
+                                                                >{t("Show Product Details")}</Link>
                                                             </td>
                                                         </tr>
                                                     </tbody>

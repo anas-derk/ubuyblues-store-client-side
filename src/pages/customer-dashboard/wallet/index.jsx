@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import Header from "@/components/Header";
 import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
 import { useEffect, useState } from "react";
@@ -217,6 +218,10 @@ export default function CustomerWalletProductsList() {
                                                         {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                         {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                        <Link
+                                                            href={`/product-details/${walletProduct._id}`}
+                                                            className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
+                                                        >{t("Show Product Details")}</Link>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -254,6 +259,10 @@ export default function CustomerWalletProductsList() {
                                                                 {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                                 {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                                <Link
+                                                                    href={`/product-details/${walletProduct._id}`}
+                                                                    className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
+                                                                >{t("Show Product Details")}</Link>
                                                             </td>
                                                         </tr>
                                                     </tbody>
