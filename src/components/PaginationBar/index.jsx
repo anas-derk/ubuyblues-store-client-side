@@ -97,7 +97,7 @@ export default function PaginationBar({
     }
 
     return (
-        <section className="pagination-bar d-flex justify-content-center align-items-center w-100">
+        <section className="pagination-bar d-flex justify-content-center align-items-center w-100 mb-3">
             {getPaginationButtons()}
         </section>
     );

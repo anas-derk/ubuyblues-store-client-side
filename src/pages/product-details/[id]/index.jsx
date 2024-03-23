@@ -17,6 +17,7 @@ import prices from "../../../../public/global_functions/prices";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import PaginationBar from "@/components/PaginationBar";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -77,8 +78,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [referalDetails, setReferalDetails] = useState({
         name: "",
         email: "",
+        content: "",
         productId: "",
-        referal: "",
     });
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
@@ -99,7 +100,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         customerName: "",
     });
 
-    const pageSize = 5;
+    const pageSize = 3;
 
     const { t } = useTranslation();
 
@@ -376,8 +377,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     },
                 },
                 {
-                    name: "referal",
-                    value: referalDetails.referal,
+                    name: "content",
+                    value: referalDetails.content,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -448,7 +449,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const getPreviousPage = async () => {
         setIsWaitGetProductReferalsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetProductReferalsStatus(false);
     }
@@ -456,14 +457,14 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const getNextPage = async () => {
         setIsWaitGetProductReferalsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsWaitGetProductReferalsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsWaitGetProductReferalsStatus(true);
-        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsWaitGetProductReferalsStatus(false);
     }
@@ -625,13 +626,29 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 {allProductReferalsInsideThePage.map((referal, referalIndex) => (
                                                     <div className="referal-box" key={referal._id}>
                                                         <div className="referal-details pt-3 pb-3">
-                                                            <h6>Referal #{referalIndex + 1}</h6>
-                                                            <h6>Name: { referal.name }</h6>
-                                                            <h6 className="mb-0">Email: { referal.email }</h6>
+                                                            <h6 className="referal-number">Referal #{referalIndex + 1}</h6>
+                                                            <h6 className="referal-writer-name">Name: {referal.name}</h6>
+                                                            <h6 className="referal-writer-email mb-0">Email: {referal.email}</h6>
+                                                            <p className="referal-content mb-0">{ referal.content }</p>
                                                         </div>
                                                     </div>
                                                 ))}
                                             </div>}
+                                            {totalPagesCount > 0 && !isGetProductReferals &&
+                                                <PaginationBar
+                                                    totalPagesCount={totalPagesCount}
+                                                    currentPage={currentPage}
+                                                    getPreviousPage={getPreviousPage}
+                                                    getNextPage={getNextPage}
+                                                    getSpecificPage={getSpecificPage}
+                                                    paginationButtonTextColor={"#FFF"}
+                                                    paginationButtonBackgroundColor={"transparent"}
+                                                    activePaginationButtonColor={"#000"}
+                                                    activePaginationButtonBackgroundColor={"#FFF"}
+                                                    isDisplayCurrentPageNumberAndCountOfPages={false}
+                                                    isDisplayNavigateToSpecificPageForm={false}
+                                                />
+                                            }
                                         </div>
                                         <div className="col-lg-6">
                                             <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
@@ -641,12 +658,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 <textarea
                                                     className={`p-2 mb-3 ${formValidationErrors.name ? "border-3 border-danger" : ""}`}
                                                     placeholder={t("Your Referral *")}
-                                                    defaultValue={referalDetails.referal}
-                                                    onChange={(e) => setReferalDetails({ ...referalDetails, referal: e.target.value.trim() })}
+                                                    defaultValue={referalDetails.content}
+                                                    onChange={(e) => setReferalDetails({ ...referalDetails, content: e.target.value.trim() })}
                                                 ></textarea>
-                                                {formValidationErrors.referal && <p className="bg-danger p-2 form-field-error-box mb-4">
+                                                {formValidationErrors.content && <p className="bg-danger p-2 form-field-error-box mb-4">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.referal)}</span>
+                                                    <span>{t(formValidationErrors.content)}</span>
                                                 </p>}
                                                 <div className="row mb-4 name-and-email-box">
                                                     <div className="col-md-6">
