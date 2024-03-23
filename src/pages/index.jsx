@@ -176,7 +176,7 @@ export default function Home({ countryAsProperty }) {
                     }
                 }
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
