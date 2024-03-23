@@ -36,6 +36,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isGetProductInfo, setIsGetProductInfo] = useState(true);
 
+    const [isGetProductReferals, setIsGetProductReferals] = useState(true);
+
     const [allProductReferalsInsideThePage, setAllProductReferalsInsideThePage] = useState([]);
 
     const [isWaitGetProductReferalsStatus, setIsWaitGetProductReferalsStatus] = useState(false);
@@ -143,22 +145,30 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 });
         } else setIsGetUserInfo(false);
         getProductInfo(productIdAsProperty)
-            .then((res) => {
-                console.log(res.data);
-                setProductInfo(res.data);
+            .then(async (res) => {
+                let result = res.data;
+                setProductInfo(result);
                 setIsGetProductInfo(false);
+                if (result) {
+                    result = await getProductReferalsCount(productIdAsProperty);
+                    if (result.data > 0) {
+                        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    }
+                    setIsGetProductReferals(false);
+                }
             })
             .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
-            })
+            });
     }, []);
 
     useEffect(() => {
-        if (!isGetUserInfo && !isGetProductInfo) {
+        if (!isGetUserInfo && !isGetProductInfo && !isGetProductReferals) {
             setIsLoadingPage(false);
         }
-    }, [isGetUserInfo, isGetProductInfo]);
+    }, [isGetUserInfo, isGetProductInfo, isGetProductReferals]);
 
     const getProductInfo = async (productId) => {
         try {
@@ -397,7 +407,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductReferalsCount = async (productId, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/all-product-referals-inside-the-page/${productId}?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/referals/product-referals-count/${productId}?${filters ? filters : ""}`);
             return res.data;
         }
         catch (err) {
@@ -407,7 +417,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getAllProductReferalsInsideThePage = async (productId, pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/users/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/referals/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
             return res.data;
         }
         catch (err) {
@@ -654,19 +664,19 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     className="private-btn private-wait-btn p-2 d-block w-100 fw-bold"
                                                     disabled
                                                 >
-                                                    { waitAddNewReferalMsg }
+                                                    {waitAddNewReferalMsg}
                                                 </button>}
                                                 {successAddNewReferalMsg && <button
                                                     className="private-btn private-success-btn p-2 d-block w-100 fw-bold"
                                                     disabled
                                                 >
-                                                    { successAddNewReferalMsg }
+                                                    {successAddNewReferalMsg}
                                                 </button>}
                                                 {errorAddNewReferalMsg && <button
                                                     className="private-btn private-error-btn p-2 d-block w-100 fw-bold"
                                                     disabled
                                                 >
-                                                    { errorAddNewReferalMsg }
+                                                    {errorAddNewReferalMsg}
                                                 </button>}
                                             </form>
                                         </div>
