@@ -88,6 +88,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [errorAddNewReferalMsg, setErrorAddNewReferalMsg] = useState("");
 
+    const [isSaveReferalWriterInfo, setIsSaveReferalWriterInfo] = useState(false);
+
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
@@ -157,6 +159,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     if (result.data > 0) {
                         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
                         setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    }
+                    const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
+                    if (referalWriterInfo) {
+                        setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email });
+                        setIsSaveReferalWriterInfo(true);
                     }
                     setIsGetProductReferals(false);
                 }
@@ -378,6 +385,14 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
+                if (isSaveReferalWriterInfo) {
+                    localStorage.setItem("asfour-store-referal-writer-info", JSON.stringify({
+                        name: referalDetails.name,
+                        email: referalDetails.email,
+                    }));
+                } else {
+                    localStorage.removeItem("asfour-store-referal-writer-info");
+                }
                 setWaitAddNewReferalMsg("Please Wait ...");
                 const res = await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal`, referalDetails);
                 const result = res.data;
@@ -588,7 +603,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
                                         </div>
                                         <div className="col-lg-6 text-center">
-                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals ({ allProductReferalsCount })</h6>
+                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals ({allProductReferalsCount})</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -647,11 +662,15 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 </div>
                                                 <div className="save-your-details-box mb-3 row">
                                                     <div className="col-md-1">
-                                                        <input
-                                                            type="checkbox"
-                                                            className=""
-                                                            id="save-your-details-checkbox"
-                                                        />
+                                                        <div className="form-check mb-3">
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="checkbox"
+                                                                defaultChecked={isSaveReferalWriterInfo}
+                                                                id="save-your-details-checkbox"
+                                                                onChange={(e) => setIsSaveReferalWriterInfo(e.target.checked)}
+                                                            />
+                                                        </div>
                                                     </div>
                                                     <div className="col-md-11">
                                                         <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
