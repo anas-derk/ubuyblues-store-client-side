@@ -4,7 +4,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { BsFillSuitHeartFill, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
-import { MdOutlineDarkMode, MdOutlineWbSunny, MdLanguage } from "react-icons/md";
+import { MdOutlineDarkMode, MdOutlineWbSunny } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -12,7 +12,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
-import { IoEarthSharp } from "react-icons/io5";
 
 export default function Header() {
 
@@ -114,26 +113,28 @@ export default function Header() {
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
                             <Nav.Link href="/" as={Link}>
-                                <AiOutlineHome className={`home-icon global-header-icon`} />
+                                <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Home")}
                             </Nav.Link>
                             {!token && <Nav.Link href="/auth" as={Link}>
-                                <BsFillPersonFill className={`home-icon global-header-icon`} />
+                                <BsFillPersonFill className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Login / Register")}
                             </Nav.Link>}
-                            <NavDropdown title={<MdLanguage />} id="products-nav-dropdown">
-                                <NavDropdown.Item onClick={() => handleChangeLanguage("ar")}>{t("AR")}</NavDropdown.Item>
+                            <NavDropdown title={t("Languages")} id="products-nav-dropdown">
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("ar")}>{t("Arabic")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleChangeLanguage("en")}>{t("EN")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("en")}>{t("English")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleChangeLanguage("tr")}>{t("TR")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("tr")}>{t("Turkey")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleChangeLanguage("de")}>{t("DE")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("de")}>{t("Germany")}</NavDropdown.Item>
                             </NavDropdown>
-                            <NavDropdown title={<IoEarthSharp />} id="products-nav-dropdown">
-                                <NavDropdown.Item onClick={() => handleSelectCountry("kuwait")}>{t("Kuwait")}</NavDropdown.Item>
+                            <NavDropdown title={t("Countries")} id="products-nav-dropdown">
+                                <NavDropdown.Item onClick={() => handleSelectCountry("kuwait")}>{t("KW")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleSelectCountry("germany")}>{t("Germany")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleSelectCountry("germany")}>{t("DE")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleSelectCountry("turkey")}>{t("Turkey")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleSelectCountry("turkey")}>{t("TR")}</NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link href="/cart" as={Link}>
                                 <FaShoppingCart className="cart-icon link-icon" />
