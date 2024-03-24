@@ -108,7 +108,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const pageSize = 3;
 
-    const { t } = useTranslation();
+    const { i18n, t } = useTranslation();
 
     const router = useRouter();
 
@@ -569,7 +569,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
                                             <div className="product-managment-buttons mb-3">
                                                 <PiShareFatLight
-                                                    className="product-managment-icon me-3"
+                                                    className={`product-managment-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`}
                                                     onClick={() => setIsDisplayShareOptionsBox(true)}
                                                 />
                                                 {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
@@ -582,7 +582,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon" />}
                                                 {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                                             </div>
-                                            <div className="add-to-cart row align-items-center mb-4">
+                                            <div className={`add-to-cart row align-items-center mb-4 ${i18n.language !== "ar" && windowInnerWidth > 767 && "me-2"} ${i18n.language === "ar" && windowInnerWidth > 767 && "ms-2"}`}>
                                                 <div className="add-to-cart-managment-btns-box col-md-8">
                                                     {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>{t("Add To Cart")}</button>}
                                                     {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>{t("Waiting In Add To Cart ...")}</button>}
