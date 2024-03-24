@@ -39,9 +39,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isGetProductReferals, setIsGetProductReferals] = useState(true);
 
+    const [isGetSampleFromRelatedProductsInProduct, setIsGetSampleFromRelatedProductsInProduct] = useState(true);
+
     const [allProductReferalsCount, setAllProductReferalsCount] = useState(0);
 
     const [allProductReferalsInsideThePage, setAllProductReferalsInsideThePage] = useState([]);
+
+    const [sampleFromRelatedProductsInProduct, setSampleFromRelatedProductsInProduct] = useState([]);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -152,25 +156,36 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 });
         } else setIsGetUserInfo(false);
         getProductInfo(productIdAsProperty)
-            .then(async (res) => {
+            .then((res) => {
                 let result = res.data;
-                setProductInfo(result);
                 setIsGetProductInfo(false);
+                setProductInfo(result);
                 if (result) {
-                    result = await getProductReferalsCount(productIdAsProperty);
-                    setAllProductReferalsCount(result.data);
-                    if (result.data > 0) {
-                        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    }
-                    const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
-                    if (referalWriterInfo) {
-                        setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
-                        setIsSaveReferalWriterInfo(true);
-                    } else {
-                        setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
-                    }
-                    setIsGetProductReferals(false);
+                    getProductReferalsCount(productIdAsProperty)
+                        .then(async (result) => {
+                            setAllProductReferalsCount(result.data);
+                            if (result.data > 0) {
+                                setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
+                                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                            }
+                            const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
+                            if (referalWriterInfo) {
+                                setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
+                                setIsSaveReferalWriterInfo(true);
+                            } else {
+                                setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
+                            }
+                            setIsGetProductReferals(false);
+                        })
+                        .catch(() => {
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
+                        });
+                    getSampleFromRelatedProductsInProduct(productIdAsProperty)
+                    .then((result) => {
+                        setSampleFromRelatedProductsInProduct(result.data);
+                        setIsGetSampleFromRelatedProductsInProduct(false);
+                    })
                 }
             })
             .catch(() => {
@@ -180,14 +195,24 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }, []);
 
     useEffect(() => {
-        if (!isGetUserInfo && !isGetProductInfo && !isGetProductReferals) {
+        if (!isGetUserInfo && !isGetProductInfo && !isGetProductReferals && !isGetSampleFromRelatedProductsInProduct) {
             setIsLoadingPage(false);
         }
-    }, [isGetUserInfo, isGetProductInfo, isGetProductReferals]);
+    }, [isGetUserInfo, isGetProductInfo, isGetProductReferals, isGetSampleFromRelatedProductsInProduct]);
 
     const getProductInfo = async (productId) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}`);
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getSampleFromRelatedProductsInProduct = async (productId) => {
+        try {
+            const res = await axios.get(`${process.env.BASE_API_URL}/products/sample-from-related-products-in-the-product/${productId}`)
             return res.data;
         }
         catch (err) {
