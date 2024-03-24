@@ -18,6 +18,8 @@ import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import PaginationBar from "@/components/PaginationBar";
+import { PiShareFatLight } from "react-icons/pi";
+import ShareOptionsBox from "@/components/ShareOptionsBox";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -47,6 +49,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [productInfo, setProductInfo] = useState("");
 
+    const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
+
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
     const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
@@ -60,6 +64,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isWaitDeleteProductToFavoriteUserProductsList, setIsWaitDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
+
+    const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
 
@@ -483,6 +489,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
+                {/* Start Share Options Box */}
+                {isDisplayShareOptionsBox && <ShareOptionsBox setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox} />}
+                {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
                         {Object.keys(productInfo).length > 0 ?
@@ -533,14 +542,22 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             <h5 className="product-quantity">1 Product Available In Store</h5>
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
-                                            {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
-                                                className="product-managment-icon mb-3"
-                                                onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
-                                            /> : <BsSuitHeart
-                                                className="product-managment-icon mb-3"
-                                                onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
-                                            />}
-                                            <div className={`add-to-cart row align-items-center mb-4 ${windowInnerWidth > 767 ? "me-3" : ""}`}>
+                                            <div className="product-managment-buttons mb-3">
+                                                <PiShareFatLight
+                                                    className="product-managment-icon me-3"
+                                                    onClick={() => setIsDisplayShareOptionsBox(true)}
+                                                />
+                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
+                                                    className="product-managment-icon"
+                                                    onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
+                                                /> : <BsSuitHeart
+                                                    className="product-managment-icon"
+                                                    onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
+                                                />}
+                                                {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon" />}
+                                                {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
+                                            </div>
+                                            <div className="add-to-cart row align-items-center mb-4">
                                                 <div className="add-to-cart-managment-btns-box col-md-8">
                                                     {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>Add To Cart</button>}
                                                     {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
@@ -625,7 +642,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                             <h6 className="referal-number">Referal #{referalIndex + 1}</h6>
                                                             <h6 className="referal-writer-name">Name: {referal.name}</h6>
                                                             <h6 className="referal-writer-email mb-0">Email: {referal.email}</h6>
-                                                            <p className="referal-content mb-0">{ referal.content }</p>
+                                                            <p className="referal-content mb-0">{referal.content}</p>
                                                         </div>
                                                     </div>
                                                 ))}
