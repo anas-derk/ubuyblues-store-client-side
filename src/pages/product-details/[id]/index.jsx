@@ -329,7 +329,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         ];
         return (
             <div className="rating-box mb-4">
-                <span className="me-3">Your rating *</span>
+                <span className="me-3">{t("Your rating")} *</span>
                 {starsIconsArray.map((starIcon, starIndex) => <Fragment key={starIndex}>
                     {starIcon}
                 </Fragment>)}
@@ -534,12 +534,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                         <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
                                             <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
                                             <h5 className="product-category-name mb-4">
-                                                <span className="fw-bold">Category: </span>
+                                                <span className="fw-bold">{t("Category")}: </span>
                                                 <span>{productInfo.category}</span>
                                             </h5>
                                             <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                                             {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
-                                            <h5 className="product-quantity">1 Product Available In Store</h5>
+                                            <h5 className="product-quantity">1 {t("Product Available In Store")}</h5>
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
                                             <div className="product-managment-buttons mb-3">
@@ -559,10 +559,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             </div>
                                             <div className="add-to-cart row align-items-center mb-4">
                                                 <div className="add-to-cart-managment-btns-box col-md-8">
-                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>Add To Cart</button>}
-                                                    {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>Waiting In Add To Cart ...</button>}
-                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>Sorry, Something Went Wrong !!</button>}
-                                                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>Display Your Cart</Link>}
+                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>{t("Add To Cart")}</button>}
+                                                    {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>{t("Waiting In Add To Cart ...")}</button>}
+                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>{t("Sorry, Something Went Wrong !!")}</button>}
+                                                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>{t("Display Your Cart")}</Link>}
                                                 </div>
                                                 <div className="select-product-quantity-box p-3 col-md-4">
                                                     <HiMinus className="select-product-quantity-icon"
@@ -616,22 +616,22 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 <div className={`product-description-and-referrals border-top border-2 mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
                                     <div className="row justify-content-center">
                                         <div className="col-lg-6 text-center">
-                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>Description</h6>
+                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>{t("Description")}</h6>
                                         </div>
                                         <div className="col-lg-6 text-center">
-                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>Referrals ({allProductReferalsCount})</h6>
+                                            <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>{t("Referrals")} ({allProductReferalsCount})</h6>
                                         </div>
                                     </div>
                                 </div>
                                 {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2">
-                                    <h6 className="mb-3 fw-bold">Description</h6>
+                                    <h6 className="mb-3 fw-bold">{t("Description")}</h6>
                                     <p className="description-content">{productInfo.description}</p>
                                 </div>}
                                 {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2">
                                     <div className="row">
                                         <div className="col-lg-6">
-                                            <h6 className="mb-2 fw-bold">Referrals</h6>
-                                            {allProductReferalsInsideThePage.length === 0 && !isGetProductReferals && <h6 className="mb-4">There are no reviews yet !!</h6>}
+                                            <h6 className="mb-2 fw-bold">{t("Referrals")}</h6>
+                                            {allProductReferalsInsideThePage.length === 0 && !isGetProductReferals && <h6 className="mb-4">{t("There are no reviews yet")} !!</h6>}
                                             {isGetProductReferals && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                                 <span className="loader-table-data"></span>
                                             </div>}
@@ -639,9 +639,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 {allProductReferalsInsideThePage.map((referal, referalIndex) => (
                                                     <div className="referal-box" key={referal._id}>
                                                         <div className="referal-details pt-3 pb-3">
-                                                            <h6 className="referal-number">Referal #{referalIndex + 1}</h6>
-                                                            <h6 className="referal-writer-name">Name: {referal.name}</h6>
-                                                            <h6 className="referal-writer-email mb-0">Email: {referal.email}</h6>
+                                                            <h6 className="referal-number">{t("Referal")} #{referalIndex + 1}</h6>
+                                                            <h6 className="referal-writer-name">{t("Name")}: {referal.name}</h6>
+                                                            <h6 className="referal-writer-email mb-0">{t("Email")}: {referal.email}</h6>
                                                             <p className="referal-content mb-0">{referal.content}</p>
                                                         </div>
                                                     </div>
@@ -664,13 +664,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             }
                                         </div>
                                         <div className="col-lg-6">
-                                            <h6 className="mb-4">Be the first to review "{productInfo.name}"</h6>
-                                            <h6 className="mb-4 note">your e-mail address will not be published. Required fields are marked *</h6>
+                                            <h6 className="mb-4">{t("Be the first to review")} .</h6>
+                                            <h6 className="mb-4 note">{t("your e-mail address will not be published. Required fields are marked")} *</h6>
                                             {getRatingStars()}
                                             <form className="referral-form mb-4" onSubmit={addNewReferal}>
                                                 <textarea
                                                     className={`p-2 mb-3 ${formValidationErrors.name ? "border-3 border-danger" : ""}`}
-                                                    placeholder={t("Your Referral *")}
+                                                    placeholder={t("Your Referal") + " *"}
                                                     defaultValue={referalDetails.content}
                                                     onChange={(e) => setReferalDetails({ ...referalDetails, content: e.target.value.trim() })}
                                                 ></textarea>
@@ -683,7 +683,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         <input
                                                             type="text"
                                                             className={`p-2 ${formValidationErrors.name ? "border-3 border-danger mb-3" : ""}`}
-                                                            placeholder={t("Name *")}
+                                                            placeholder={t("Name") + " *"}
                                                             defaultValue={referalDetails.name}
                                                             onChange={(e) => setReferalDetails({ ...referalDetails, name: e.target.value.trim() })}
                                                         />
@@ -696,7 +696,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         <input
                                                             type="text"
                                                             className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
-                                                            placeholder={t("Email *")}
+                                                            placeholder={t("Email") + " *"}
                                                             defaultValue={referalDetails.email}
                                                             onChange={(e) => setReferalDetails({ ...referalDetails, email: e.target.value.trim() })}
                                                         />
@@ -719,14 +719,14 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </div>
                                                     </div>
                                                     <div className="col-md-11">
-                                                        <label htmlFor="save-your-details-checkbox">Save my name, email, and website in this browser for the next time I comment.</label>
+                                                        <label htmlFor="save-your-details-checkbox">{t("Save my name, email, and referal in this browser for the next time I comment")} .</label>
                                                     </div>
                                                 </div>
                                                 {!waitAddNewReferalMsg && !successAddNewReferalMsg && !errorAddNewReferalMsg && <button
                                                     className="private-btn p-2 d-block w-100 fw-bold"
                                                     type="submit"
                                                 >
-                                                    Send
+                                                    {t("Send")}
                                                 </button>}
                                                 {waitAddNewReferalMsg && <button
                                                     className="private-btn private-wait-btn p-2 d-block w-100 fw-bold"
@@ -751,7 +751,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     </div>
                                 </div>}
                                 <div className="related-products-box">
-                                    <h5 className="mb-4 fw-bold">Related Products</h5>
+                                    <h5 className="mb-4 fw-bold">{t("Related Products")}</h5>
                                 </div>
                             </section> : <NotFoundError errorMsg={t("Sorry, This Product Is Not Exist !!")} />}
                     </div>
