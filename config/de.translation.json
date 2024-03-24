@@ -376,5 +376,9 @@
     "Wallet": "Geldbörse",
     "Favorite Products": "Lieblingsprodukte",
     "Sorry, Can't Find Any Previous Products In Your History Wallet !!": "Leider können in Ihrer Verlaufsmappe keine früheren Produkte gefunden werden !!",
-    "Enter Page Number": "Geben Sie die Seitenzahl ein"
+    "Enter Page Number": "Geben Sie die Seitenzahl ein",
+    "Payment Methods": "ZAHLUNGSMETHODEN",
+    "Subscription": "Abonnement",
+    "Enter your email address": "Geben Sie Ihre E-Mail-Adresse ein",
+    "I want to receive all the latest updates via email": "Ich möchte alle neuesten Updates per E-Mail erhalten"
 }

@@ -140,7 +140,7 @@ export default function Footer() {
                         </ul>
                         <h5 className="fw-bold mb-3 border-bottom border-dark border-2 pb-2 title">{t("Subscription").toUpperCase()}</h5>
                         <h6 className="mb-3">{t("Enter your email address")}</h6>
-                        <h6 className="mb-3">{t("( I want to receive all the latest updates via email )")}</h6>
+                        <h6 className="mb-3">{"(" + t("I want to receive all the latest updates via email") + " )"}</h6>
                         <form className="subscription" onSubmit={(e) => handleSubscription(e, email)}>
                             <input
                                 type="email"
@@ -149,7 +149,7 @@ export default function Footer() {
                                 onChange={(e) => setEmail(e.target.value.trim())}
                                 required
                             />
-                            {!waitMsg && !successMsg && !errMsg && <button type="submit" className="btn btn-info">Subscription</button>}
+                            {!waitMsg && !successMsg && !errMsg && <button type="submit" className="btn btn-info">{t("Subscription")}</button>}
                             {waitMsg && <button type="button" disabled className="btn btn-info">{waitMsg}</button>}
                             {successMsg && <button type="button" disabled className="btn btn-success">{successMsg}</button>}
                             {errMsg && <button type="button" disabled className="btn btn-danger">{errMsg}</button>}
