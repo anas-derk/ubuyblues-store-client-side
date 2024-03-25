@@ -5,15 +5,18 @@ import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { PiShareFatLight } from "react-icons/pi";
 import { FaCheck } from "react-icons/fa";
 import Link from "next/link";
+import axios from "axios";
 
 export default function ProductCard({
     product,
     setIsDisplayShareOptionsBox,
-    isFavoriteProductForUser,
+    isFavoriteProductForUserAsProperty,
     usdPriceAgainstCurrency,
     currencyNameByCountry,
     token,
 }) {
+
+    const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
 
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
 
@@ -28,11 +31,11 @@ export default function ProductCard({
     const [isSuccessAddToCart, setIsSuccessAddToCart] = useState(false);
 
     const [errorInAddToCart, setErrorInAddToCart] = useState("");
-    
+
     const { t } = useTranslation();
 
     const router = useRouter();
-    
+
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
@@ -47,6 +50,7 @@ export default function ProductCard({
                 setIsSuccessAddProductToFavoriteUserProductsList(true);
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddProductToFavoriteUserProductsList(false);
+                    setIsFavoriteProductForUser(true);
                     clearTimeout(successAddToCartTimeout);
                 }, 3000);
             }
@@ -66,11 +70,11 @@ export default function ProductCard({
             const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`);
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
-                setFavoriteProductsListForUser(result.newFavoriteProductsList);
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
                 let successDeleteToCartTimeout = setTimeout(() => {
                     setIsSuccessDeleteProductToFavoriteUserProductsList(false);
+                    setIsFavoriteProductForUser(false);
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
             }
@@ -81,44 +85,54 @@ export default function ProductCard({
     }
 
     const addToCart = (id, name, price, description, category, discount, imagePath) => {
-        setIsWaitAddToCart(true);
-        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-        if (allProductsData) {
-            allProductsData.push({
-                id,
-                name,
-                price,
-                description,
-                category,
-                discount,
-                imagePath,
-                quantity: 1,
-            });
-            localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+        try {
+            setIsWaitAddToCart(true);
+            let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+            if (allProductsData) {
+                allProductsData.push({
+                    id,
+                    name,
+                    price,
+                    description,
+                    category,
+                    discount,
+                    imagePath,
+                    quantity: 1,
+                });
+                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                setIsWaitAddToCart(false);
+                setIsSuccessAddToCart(true);
+                let successAddToCartTimeout = setTimeout(() => {
+                    setIsSuccessAddToCart(false);
+                    clearTimeout(successAddToCartTimeout);
+                }, 3000);
+            } else {
+                let allProductsData = [];
+                allProductsData.push({
+                    id,
+                    name,
+                    price,
+                    description,
+                    category,
+                    discount,
+                    imagePath,
+                    quantity: 1,
+                });
+                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                setIsWaitAddToCart(false);
+                setIsSuccessAddToCart(true);
+                let successAddToCartTimeout = setTimeout(() => {
+                    setIsSuccessAddToCart(false);
+                    clearTimeout(successAddToCartTimeout);
+                }, 3000);
+            }
+        }
+        catch (err) {
             setIsWaitAddToCart(false);
-            setIsSuccessAddToCart(true);
-            let successAddToCartTimeout = setTimeout(() => {
-                setIsSuccessAddToCart(false);
-                clearTimeout(successAddToCartTimeout);
-            }, 3000);
-        } else {
-            let allProductsData = [];
-            allProductsData.push({
-                id,
-                name,
-                price,
-                description,
-                category,
-                discount,
-                imagePath,
-                quantity: 1,
-            });
-            localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-            setIsWaitAddToCart(false);
-            setIsSuccessAddToCart(true);
-            let successAddToCartTimeout = setTimeout(() => {
-                setIsSuccessAddToCart(false);
-                clearTimeout(successAddToCartTimeout);
+            setErrorInAddToCart(true);
+            let errorInAddToCartTimeout = setTimeout(() => {
+                setErrorInAddToCart(false);
+                clearTimeout(errorInAddToCartTimeout);
             }, 3000);
         }
     }
