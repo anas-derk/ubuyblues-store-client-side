@@ -8,6 +8,7 @@ import ubuybluesLogo from "../../../../public/images/UbuyBlues_Logo_merged_Purpl
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import prices from "../../../../public/global_functions/prices";
+import Footer from "@/components/Footer";
 
 export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
@@ -35,7 +36,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
-            if(!isGetOrderInfo) {
+            if (!isGetOrderInfo) {
                 setIsLoadingPage(false);
             }
         })
@@ -110,86 +111,89 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white p-4">
-                    <h1 className="welcome-msg text-center mb-5">{t("Welcome To You In Payment Confirmation Page")}</h1>
-                    <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
-                        <h5 className="fw-bold mb-4 text-center">{t("Your Request")}</h5>
-                        <div className="order-id-and-number border border-white border-2 p-4 mb-5">
-                            <h5 className="mb-4 text-center">{t("Order Id")}: {orderDetails._id}</h5>
-                            <h5 className="mb-0 text-center">{t("Order Number")}: {orderDetails.orderNumber}</h5>
-                        </div>
-                        <h5 className="mb-5 text-center border border-white border-2 p-4">{t("Order Details")}</h5>
-                        <div className="row total pb-3 mb-5">
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Product Name And Quantity")}
+                <div className="page-content">
+                    <div className="container-fluid align-items-center pb-4 text-white">
+                        <h1 className="welcome-msg text-center mb-5">{t("Welcome To You In Payment Confirmation Page")}</h1>
+                        <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
+                            <h5 className="fw-bold mb-4 text-center">{t("Your Request")}</h5>
+                            <div className="order-id-and-number border border-white border-2 p-4 mb-5">
+                                <h5 className="mb-4 text-center">{t("Order Id")}: {orderDetails._id}</h5>
+                                <h5 className="mb-0 text-center">{t("Order Number")}: {orderDetails.orderNumber}</h5>
                             </div>
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Unit Price Before Discount")}
-                            </div>
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Unit Discount")}
-                            </div>
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Sum")}
-                            </div>
-                        </div>
-                        {orderDetails.order_products.map((product, productIndex) => (
-                            <div className="row total pb-3 mb-5" key={productIndex}>
+                            <h5 className="mb-5 text-center border border-white border-2 p-4">{t("Order Details")}</h5>
+                            <div className="row total pb-3 mb-5">
                                 <div className="col-md-3 fw-bold p-0">
-                                    {i18n.language !== "ar" ? <span>
-                                        ( {product.name} ) x {product.quantity}
-                                    </span> : <span>
-                                        ( {product.name} ) {product.quantity} x
-                                    </span>}
+                                    {t("Product Name And Quantity")}
                                 </div>
                                 <div className="col-md-3 fw-bold p-0">
-                                    {(product.unit_price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {t("Unit Price Before Discount")}
                                 </div>
                                 <div className="col-md-3 fw-bold p-0">
-                                    {(product.discount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {t("Unit Discount")}
                                 </div>
                                 <div className="col-md-3 fw-bold p-0">
-                                    {((product.unit_price - product.discount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {t("Sum")}
                                 </div>
                             </div>
-                        ))}
-                        <div className="row total-price-before-discount total pb-3 mb-5">
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Total Price Before Discount")}
+                            {orderDetails.order_products.map((product, productIndex) => (
+                                <div className="row total pb-3 mb-5" key={productIndex}>
+                                    <div className="col-md-3 fw-bold p-0">
+                                        {i18n.language !== "ar" ? <span>
+                                            ( {product.name} ) x {product.quantity}
+                                        </span> : <span>
+                                            ( {product.name} ) {product.quantity} x
+                                        </span>}
+                                    </div>
+                                    <div className="col-md-3 fw-bold p-0">
+                                        {(product.unit_price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    </div>
+                                    <div className="col-md-3 fw-bold p-0">
+                                        {(product.discount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    </div>
+                                    <div className="col-md-3 fw-bold p-0">
+                                        {((product.unit_price - product.discount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="row total-price-before-discount total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Total Price Before Discount")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
                             </div>
-                            <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                            <div className="row total-price-discount total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Total Discount")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
                             </div>
-                        </div>
-                        <div className="row total-price-discount total pb-3 mb-5">
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Total Discount")}
+                            <div className="row total-price-after-discount total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Total Price After Discount")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {(orderDetails.order_amount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
                             </div>
-                            <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                            <div className="thanks-icon-box mb-4">
+                                <FaRegSmileWink className="thanks-icon" style={{ fontSize: "70px" }} />
                             </div>
-                        </div>
-                        <div className="row total-price-after-discount total pb-3 mb-5">
-                            <div className="col-md-3 fw-bold p-0">
-                                {t("Total Price After Discount")}
-                            </div>
-                            <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                {(orderDetails.order_amount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
-                            </div>
-                        </div>
-                        <div className="thanks-icon-box mb-4">
-                            <FaRegSmileWink className="thanks-icon" style={{ fontSize: "70px" }} />
-                        </div>
-                        <h4 className="mb-4">
-                            {t("Thanks For Purchase From Ubuyblues Store")}
-                        </h4>
-                        <img
-                            src={ubuybluesLogo.src}
-                            alt="Ubuyblues Logo"
-                            width="150"
-                            height="150"
-                        />
-                    </section>
+                            <h4 className="mb-4">
+                                {t("Thanks For Purchase From Ubuyblues Store")}
+                            </h4>
+                            <img
+                                src={ubuybluesLogo.src}
+                                alt="Ubuyblues Logo"
+                                width="150"
+                                height="150"
+                            />
+                        </section>
+                    </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
