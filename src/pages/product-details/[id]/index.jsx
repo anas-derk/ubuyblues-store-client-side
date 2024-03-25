@@ -20,6 +20,7 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 import PaginationBar from "@/components/PaginationBar";
 import { PiShareFatLight } from "react-icons/pi";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
+import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -52,8 +53,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [userInfo, setUserInfo] = useState({});
 
     const [productInfo, setProductInfo] = useState("");
-
-    const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
@@ -187,7 +186,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         .then((result) => {
                             setSampleFromRelatedProductsInProduct(result.data);
                             setIsGetSampleFromRelatedProductsInProduct(false);
-                        })
+                        });
+                    
                 }
             })
             .catch(() => {
@@ -793,8 +793,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 <section className="related-products-box">
                                     <h2 className="text-center mb-4">{t("Related Products")}</h2>
                                     <div className="row products-box pt-4 pb-4">
-                                        {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
-                                            <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                        {sampleFromRelatedProductsInProduct.length > 0 ? sampleFromRelatedProductsInProduct.map((product) => (
+                                            <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
                                                 <ProductCard
                                                     product={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -804,20 +804,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                                 />
                                             </div>
-                                        ))}
-                                        {totalPagesCount.forProducts > 0 && !isGetProducts &&
-                                            <PaginationBar
-                                                totalPagesCount={totalPagesCount.forProducts}
-                                                currentPage={currentPage.forProducts}
-                                                getPreviousPage={getPreviousPage}
-                                                getNextPage={getNextPage}
-                                                getSpecificPage={getSpecificPage}
-                                                paginationButtonTextColor={"#FFF"}
-                                                paginationButtonBackgroundColor={"transparent"}
-                                                activePaginationButtonColor={"#000"}
-                                                activePaginationButtonBackgroundColor={"#FFF"}
-                                                section="products"
-                                            />}
+                                        )): <NotFoundError errorMsg={t("Sorry, There Is No Related Products In This Product !!")} />}
                                     </div>
                                 </section>
                             </section> : <NotFoundError errorMsg={t("Sorry, This Product Is Not Exist !!")} />}

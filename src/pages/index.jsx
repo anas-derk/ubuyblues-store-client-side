@@ -37,8 +37,6 @@ export default function Home({ countryAsProperty }) {
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
-    const [userInfo, setUserInfo] = useState("");
-
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
@@ -91,7 +89,6 @@ export default function Home({ countryAsProperty }) {
             validations.getUserInfo(userToken)
                 .then((result) => {
                     if (!result.error) {
-                        setUserInfo(result.data);
                         setFavoriteProductsListForUser(result.data.favorite_products_list);
                     }
                 })
@@ -136,7 +133,7 @@ export default function Home({ countryAsProperty }) {
                 }
                 setIsGetProducts(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });

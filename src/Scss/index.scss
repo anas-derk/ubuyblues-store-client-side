@@ -355,6 +355,12 @@ textarea{
     }
 }
 
+.products-box{
+    &.row{
+        row-gap: 40px;
+    }
+}
+
 @keyframes rotation {
     0% {
         transform: rotate(0deg);
