@@ -382,7 +382,7 @@ export default function Home({ countryAsProperty }) {
                                             usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                             currencyNameByCountry={currencyNameByCountry}
                                             token={token}
-                                            isFavoriteProductForUser={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                            isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                         />
                                     </div>
                                 ))}

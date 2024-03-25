@@ -56,6 +56,7 @@ export default function ProductCard({
             }
         }
         catch (err) {
+            console.log(err);
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/auth");
                 return;
@@ -67,7 +68,11 @@ export default function ProductCard({
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
@@ -149,16 +154,21 @@ export default function ProductCard({
                         className="product-managment-icon d-block mb-2"
                         onClick={() => setIsDisplayShareOptionsBox(true)}
                     />
-                    {!isWaitAddProductToFavoriteUserProductsList && !isWaitDeleteProductToFavoriteUserProductsList && <>
-                        {isFavoriteProductForUser ? <BsFillSuitHeartFill
-                            className="product-managment-icon"
-                            onClick={() => deleteProductFromFavoriteUserProducts(product._id)}
-                        /> :
-                            <BsSuitHeart
+                    {
+                        !isWaitAddProductToFavoriteUserProductsList &&
+                        !isWaitDeleteProductToFavoriteUserProductsList &&
+                        !isSuccessAddProductToFavoriteUserProductsList &&
+                        !isSuccessDeleteProductToFavoriteUserProductsList &&
+                        <>
+                            {isFavoriteProductForUser ? <BsFillSuitHeartFill
                                 className="product-managment-icon"
-                                onClick={() => addProductToFavoriteUserProducts(product._id)}
-                            />}
-                    </>}
+                                onClick={() => deleteProductFromFavoriteUserProducts(product._id)}
+                            /> :
+                                <BsSuitHeart
+                                    className="product-managment-icon"
+                                    onClick={() => addProductToFavoriteUserProducts(product._id)}
+                                />}
+                        </>}
                     {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon" />}
                     {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                 </div>
