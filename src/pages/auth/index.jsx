@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { GoogleLogin } from '@react-oauth/google';
 import { decode } from "jsonwebtoken";
+import Footer from "@/components/Footer";
 
 export default function UserAuth() {
 
@@ -252,8 +253,8 @@ export default function UserAuth() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white p-4 text-center">
-                    <div className="container-fluid">
+                <div className="page-content">
+                    <div className="container-fluid p-4 text-white text-center">
                         <section className="auth-part-display-control mb-5">
                             <h4
                                 className="m-0 display-login-btn display-btn p-3"
@@ -376,6 +377,7 @@ export default function UserAuth() {
                             </div>
                         </section>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

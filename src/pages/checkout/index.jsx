@@ -13,6 +13,7 @@ import { FaCcPaypal } from "react-icons/fa";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import prices from "../../../public/global_functions/prices";
+import Footer from "@/components/Footer";
 
 export default function Checkout({ countryAsProperty }) {
 
@@ -488,8 +489,8 @@ export default function Checkout({ countryAsProperty }) {
                     <p>{t("Please Wait")} ...</p>
                 </div>}
                 <Header />
-                <div className="page-content text-white p-4">
-                    <div className="container-fluid">
+                <div className="page-content">
+                    <div className="container-fluid text-white p-4">
                         <h1 className="h3 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
                         <div className="row align-items-center">
                             <div className="col-xl-6">
@@ -952,6 +953,7 @@ export default function Checkout({ countryAsProperty }) {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

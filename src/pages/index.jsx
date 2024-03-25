@@ -330,7 +330,7 @@ export default function Home({ countryAsProperty }) {
                                     </div>
                                 ))}
                             </div>
-                            {totalPagesCount.forCategories > 0 && !isGetCategories &&
+                            {totalPagesCount.forCategories > 1 && !isGetCategories &&
                                 <PaginationBar
                                     totalPagesCount={totalPagesCount.forCategories}
                                     currentPage={currentPage.forCategories}
@@ -364,7 +364,7 @@ export default function Home({ countryAsProperty }) {
                                         />
                                     </div>
                                 ))}
-                                {totalPagesCount.forProducts > 0 && !isGetProducts &&
+                                {totalPagesCount.forProducts > 1 && !isGetProducts &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forProducts}
                                         currentPage={currentPage.forProducts}
