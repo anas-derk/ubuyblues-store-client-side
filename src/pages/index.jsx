@@ -301,7 +301,11 @@ export default function Home({ countryAsProperty }) {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
             setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setFavoriteProductsListForUser(result.newFavoriteProductsList);
@@ -501,7 +505,7 @@ export default function Home({ countryAsProperty }) {
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
-                                        <div className="product">
+                                        <div className="product-card">
                                             <div
                                                 className="product-managment-box"
                                             >
