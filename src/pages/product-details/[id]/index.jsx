@@ -187,7 +187,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             setSampleFromRelatedProductsInProduct(result.data);
                             setIsGetSampleFromRelatedProductsInProduct(false);
                         });
-                    
+
                 }
             })
             .catch(() => {
@@ -350,7 +350,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 }, 1500);
             }
         }
-        catch(err) {
+        catch (err) {
             setErrorInAddToCart("Error");
             let errorInAddToCartTimeout = setTimeout(() => {
                 setIsSuccessAddToCart(false);
@@ -794,7 +794,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     <h2 className="text-center mb-4">{t("Related Products")}</h2>
                                     <div className="row products-box pt-4 pb-4">
                                         {sampleFromRelatedProductsInProduct.length > 0 ? sampleFromRelatedProductsInProduct.map((product) => (
-                                            <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
+                                            product._id !== productIdAsProperty && <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
                                                 <ProductCard
                                                     product={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -804,7 +804,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                                 />
                                             </div>
-                                        )): <NotFoundError errorMsg={t("Sorry, There Is No Related Products In This Product !!")} />}
+                                        )) : <NotFoundError errorMsg={t("Sorry, There Is No Related Products In This Product !!")} />}
                                     </div>
                                 </section>
                             </section> : <NotFoundError errorMsg={t("Sorry, This Product Is Not Exist !!")} />}
