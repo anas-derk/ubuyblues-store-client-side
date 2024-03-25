@@ -17,6 +17,7 @@ import PaginationBar from "@/components/PaginationBar";
 import prices from "../../public/global_functions/prices";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
+import { getProductsCount, getAllProductsInsideThePage } from "../../public/global_functions/popular";
 
 export default function Home({ countryAsProperty }) {
 
@@ -248,26 +249,6 @@ export default function Home({ countryAsProperty }) {
         return count;
     }
 
-    const getProductsCount = async () => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count`);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const getAllProductsInsideThePage = async (pageNumber, pageSize) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
     const getPreviousPage = async (section) => {
         if (section === "categories") {
             setIsGetCategories(true);
@@ -374,11 +355,11 @@ export default function Home({ countryAsProperty }) {
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <div className="row products-box pt-4 pb-4">
-                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
+                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                         <ProductCard
                                             product={product}
-                                            setIsDisplayShareOptionsBox={setIsDisplayContactIcons}
+                                            setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                             usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                             currencyNameByCountry={currencyNameByCountry}
                                             token={token}

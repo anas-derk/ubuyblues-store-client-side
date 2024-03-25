@@ -53,6 +53,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [productInfo, setProductInfo] = useState("");
 
+    const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
+
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
@@ -182,10 +184,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             setIsErrorMsgOnLoadingThePage(true);
                         });
                     getSampleFromRelatedProductsInProduct(productIdAsProperty)
-                    .then((result) => {
-                        setSampleFromRelatedProductsInProduct(result.data);
-                        setIsGetSampleFromRelatedProductsInProduct(false);
-                    })
+                        .then((result) => {
+                            setSampleFromRelatedProductsInProduct(result.data);
+                            setIsGetSampleFromRelatedProductsInProduct(false);
+                        })
                 }
             })
             .catch(() => {
@@ -278,6 +280,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 return;
             }
             setIsWaitAddProductToFavoriteUserProductsList(false);
+            let errorInAddToCartTimeout = setTimeout(() => {
+                setErrorAddProductToFavoriteUserProductsList("Error");
+                clearTimeout(errorInAddToCartTimeout);
+            }, 3000);
         }
     }
 
@@ -302,44 +308,53 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const addToCart = (id, name, price, description, category, discount, imagePath) => {
-        setIsWaitAddToCart(true);
-        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-        if (allProductsData) {
-            allProductsData.push({
-                id,
-                name,
-                price,
-                description,
-                category,
-                discount,
-                imagePath,
-                quantity: 1,
-            });
-            localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-            setIsWaitAddToCart(false);
-            setIsSuccessAddToCart(true);
-            let successAddToCartTimeout = setTimeout(() => {
+        try {
+            setIsWaitAddToCart(true);
+            let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+            if (allProductsData) {
+                allProductsData.push({
+                    id,
+                    name,
+                    price,
+                    description,
+                    category,
+                    discount,
+                    imagePath,
+                    quantity: 1,
+                });
+                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                setIsWaitAddToCart(false);
+                setIsSuccessAddToCart(true);
+                let successAddToCartTimeout = setTimeout(() => {
+                    setIsSuccessAddToCart(false);
+                    clearTimeout(successAddToCartTimeout);
+                }, 1500);
+            } else {
+                let allProductsData = [];
+                allProductsData.push({
+                    id,
+                    name,
+                    price,
+                    description,
+                    category,
+                    discount,
+                    imagePath,
+                    quantity: 1,
+                });
+                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                setIsWaitAddToCart(false);
+                setIsSuccessAddToCart(true);
+                let successAddToCartTimeout = setTimeout(() => {
+                    setIsSuccessAddToCart(false);
+                    clearTimeout(successAddToCartTimeout);
+                }, 1500);
+            }
+        }
+        catch(err) {
+            setErrorInAddToCart("Error");
+            let errorInAddToCartTimeout = setTimeout(() => {
                 setIsSuccessAddToCart(false);
-                clearTimeout(successAddToCartTimeout);
-            }, 1500);
-        } else {
-            let allProductsData = [];
-            allProductsData.push({
-                id,
-                name,
-                price,
-                description,
-                category,
-                discount,
-                imagePath,
-                quantity: 1,
-            });
-            localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-            setIsWaitAddToCart(false);
-            setIsSuccessAddToCart(true);
-            let successAddToCartTimeout = setTimeout(() => {
-                setIsSuccessAddToCart(false);
-                clearTimeout(successAddToCartTimeout);
+                clearTimeout(errorInAddToCartTimeout);
             }, 1500);
         }
     }
@@ -775,9 +790,36 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                         </div>
                                     </div>
                                 </div>}
-                                <div className="related-products-box">
-                                    <h5 className="mb-4 fw-bold">{t("Related Products")}</h5>
-                                </div>
+                                <section className="related-products-box">
+                                    <h2 className="text-center mb-4">{t("Related Products")}</h2>
+                                    <div className="row products-box pt-4 pb-4">
+                                        {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
+                                            <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                                <ProductCard
+                                                    product={product}
+                                                    setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                                                    usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                    currencyNameByCountry={currencyNameByCountry}
+                                                    token={token}
+                                                    isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                                />
+                                            </div>
+                                        ))}
+                                        {totalPagesCount.forProducts > 0 && !isGetProducts &&
+                                            <PaginationBar
+                                                totalPagesCount={totalPagesCount.forProducts}
+                                                currentPage={currentPage.forProducts}
+                                                getPreviousPage={getPreviousPage}
+                                                getNextPage={getNextPage}
+                                                getSpecificPage={getSpecificPage}
+                                                paginationButtonTextColor={"#FFF"}
+                                                paginationButtonBackgroundColor={"transparent"}
+                                                activePaginationButtonColor={"#000"}
+                                                activePaginationButtonBackgroundColor={"#FFF"}
+                                                section="products"
+                                            />}
+                                    </div>
+                                </section>
                             </section> : <NotFoundError errorMsg={t("Sorry, This Product Is Not Exist !!")} />}
                     </div>
                     <Footer />
