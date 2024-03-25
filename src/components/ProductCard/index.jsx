@@ -9,6 +9,7 @@ import Link from "next/link";
 export default function ProductCard({
     product,
     setIsDisplayShareOptionsBox,
+    isFavoriteProductForUser,
     usdPriceAgainstCurrency,
     currencyNameByCountry,
     token,
@@ -80,7 +81,6 @@ export default function ProductCard({
     }
 
     const addToCart = (id, name, price, description, category, discount, imagePath) => {
-        setProductAddingId(id);
         setIsWaitAddToCart(true);
         let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
         if (allProductsData) {
@@ -99,7 +99,6 @@ export default function ProductCard({
             setIsSuccessAddToCart(true);
             let successAddToCartTimeout = setTimeout(() => {
                 setIsSuccessAddToCart(false);
-                setProductAddingId("");
                 clearTimeout(successAddToCartTimeout);
             }, 3000);
         } else {
@@ -119,7 +118,6 @@ export default function ProductCard({
             setIsSuccessAddToCart(true);
             let successAddToCartTimeout = setTimeout(() => {
                 setIsSuccessAddToCart(false);
-                setProductAddingId("");
                 clearTimeout(successAddToCartTimeout);
             }, 3000);
         }
@@ -150,7 +148,7 @@ export default function ProductCard({
                     {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon" />}
                     {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                 </div>
-                <div className={`add-to-cart-button-box ${product._id == productAddingId ? "displaying" : ""}`}>
+                <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
                     {!isWaitAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
                     {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
                     {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}

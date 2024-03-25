@@ -9,17 +9,14 @@ import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
-import { PiShareFatLight } from "react-icons/pi";
 import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
-import { FaCheck } from 'react-icons/fa';
 import validations from "../../public/global_functions/validations";
 import PaginationBar from "@/components/PaginationBar";
-import { useRouter } from "next/router";
 import prices from "../../public/global_functions/prices";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
+import ProductCard from "@/components/ProductCard";
 
 export default function Home({ countryAsProperty }) {
 
@@ -47,24 +44,6 @@ export default function Home({ countryAsProperty }) {
 
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
-    const [productAddingId, setProductAddingId] = useState("");
-
-    const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
-
-    const [isSuccessAddToCart, setIsSuccessAddToCart] = useState(false);
-
-    const [errorInAddToCart, setErrorInAddToCart] = useState("");
-
-    const [favoriteProductAddingId, setFavoriteProductAddingId] = useState("");
-
-    const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
-
-    const [isWaitDeleteProductToFavoriteUserProductsList, setIsWaitDeleteProductToFavoriteUserProductsList] = useState(false);
-
-    const [isSuccessAddProductToFavoriteUserProductsList, setIsSuccessAddProductToFavoriteUserProductsList] = useState(false);
-
-    const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
-
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [currentPage, setCurrentPage] = useState({
@@ -86,8 +65,6 @@ export default function Home({ countryAsProperty }) {
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
     const { i18n, t } = useTranslation();
-
-    const router = useRouter();
 
     const pageSize = 8;
 
@@ -264,112 +241,6 @@ export default function Home({ countryAsProperty }) {
         return false;
     }
 
-    const addProductToFavoriteUserProducts = async (productIndex) => {
-        try {
-            setIsWaitAddProductToFavoriteUserProductsList(true);
-            setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, undefined, {
-                headers: {
-                    Authorization: token,
-                }
-            });
-            const result = await res.data;
-            if (!result.error) {
-                let tempFavoriteProductsForUser = favoriteProductsListForUser;
-                tempFavoriteProductsForUser.push(allProductsInsideThePage[productIndex]);
-                setFavoriteProductsListForUser(tempFavoriteProductsForUser);
-                setIsWaitAddProductToFavoriteUserProductsList(false);
-                setIsSuccessAddProductToFavoriteUserProductsList(true);
-                let successAddToCartTimeout = setTimeout(() => {
-                    setIsSuccessAddProductToFavoriteUserProductsList(false);
-                    setFavoriteProductAddingId("");
-                    clearTimeout(successAddToCartTimeout);
-                }, 3000);
-            }
-        }
-        catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/auth");
-                return;
-            }
-            setIsWaitAddProductToFavoriteUserProductsList(false);
-            setFavoriteProductAddingId("");
-        }
-    }
-
-    const deleteProductFromFavoriteUserProducts = async (productIndex) => {
-        try {
-            setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            setFavoriteProductAddingId(allProductsInsideThePage[productIndex]._id);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allProductsInsideThePage[productIndex]._id}`, {
-                headers: {
-                    Authorization: token,
-                }
-            });
-            const result = await res.data;
-            if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
-                setFavoriteProductsListForUser(result.newFavoriteProductsList);
-                setIsWaitDeleteProductToFavoriteUserProductsList(false);
-                setIsSuccessDeleteProductToFavoriteUserProductsList(true);
-                let successDeleteToCartTimeout = setTimeout(() => {
-                    setIsSuccessDeleteProductToFavoriteUserProductsList(false);
-                    setFavoriteProductAddingId("");
-                    clearTimeout(successDeleteToCartTimeout);
-                }, 3000);
-            }
-        }
-        catch (err) {
-            setIsWaitDeleteProductToFavoriteUserProductsList(false);
-            setFavoriteProductAddingId("");
-        }
-    }
-
-    const addToCart = (id, name, price, description, category, discount, imagePath) => {
-        setProductAddingId(id);
-        setIsWaitAddToCart(true);
-        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-        if (allProductsData) {
-            allProductsData.push({
-                id,
-                name,
-                price,
-                description,
-                category,
-                discount,
-                imagePath,
-                quantity: 1,
-            });
-            localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-            setIsWaitAddToCart(false);
-            setIsSuccessAddToCart(true);
-            let successAddToCartTimeout = setTimeout(() => {
-                setIsSuccessAddToCart(false);
-                setProductAddingId("");
-                clearTimeout(successAddToCartTimeout);
-            }, 3000);
-        } else {
-            let allProductsData = [];
-            allProductsData.push({
-                id,
-                name,
-                price,
-                description,
-                category,
-                discount,
-                imagePath,
-                quantity: 1,
-            });
-            localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-            setIsWaitAddToCart(false);
-            setIsSuccessAddToCart(true);
-            let successAddToCartTimeout = setTimeout(() => {
-                setIsSuccessAddToCart(false);
-                setProductAddingId("");
-                clearTimeout(successAddToCartTimeout);
-            }, 3000);
-        }
-    }
-
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
         if (windowInnerWidth < 767) return 1;
         if (windowInnerWidth >= 767 && windowInnerWidth < 1199 && count >= 2) return 2;
@@ -505,47 +376,14 @@ export default function Home({ countryAsProperty }) {
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
-                                        <div className="product-card">
-                                            <div
-                                                className="product-managment-box"
-                                            >
-                                                <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image" />
-                                                <Link className={`product-overlay ${product._id == productAddingId ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
-                                                <div className="product-managment-buttons p-2">
-                                                    <PiShareFatLight
-                                                        className="product-managment-icon d-block mb-2"
-                                                        onClick={() => setIsDisplayShareOptionsBox(true)}
-                                                    />
-                                                    {!isWaitAddProductToFavoriteUserProductsList && !isWaitDeleteProductToFavoriteUserProductsList && product._id !== favoriteProductAddingId && <>
-                                                        {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, product._id) ? <BsFillSuitHeartFill
-                                                            className="product-managment-icon"
-                                                            onClick={() => deleteProductFromFavoriteUserProducts(index)}
-                                                        /> :
-                                                            <BsSuitHeart
-                                                                className="product-managment-icon"
-                                                                onClick={() => addProductToFavoriteUserProducts(index)}
-                                                            />}
-                                                    </>}
-                                                    {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <BsClock className="product-managment-icon" />}
-                                                    {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && product._id === favoriteProductAddingId && <FaCheck className="product-managment-icon" />}
-                                                </div>
-                                                <div className={`add-to-cart-button-box ${product._id == productAddingId ? "displaying" : ""}`}>
-                                                    {!isWaitAddToCart && product._id !== productAddingId && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
-                                                    {isWaitAddToCart && product._id == productAddingId && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
-                                                    {errorInAddToCart && product._id == productAddingId && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
-                                                    {isSuccessAddToCart && product._id == productAddingId && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
-                                                        <FaCheck className="me-2" />
-                                                        <span>{t("Click To Go To Cart Page")}</span>
-                                                    </Link>}
-                                                </div>
-                                            </div>
-                                            <div className="product-details p-3 text-center">
-                                                <h4 className="product-name fw-bold">{product.name}</h4>
-                                                <h5 className="product-category">{product.category}</h5>
-                                                <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                                                {product.discount != 0 && <h4 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
-                                            </div>
-                                        </div>
+                                        <ProductCard
+                                            product={product}
+                                            setIsDisplayShareOptionsBox={setIsDisplayContactIcons}
+                                            usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                            currencyNameByCountry={currencyNameByCountry}
+                                            token={token}
+                                            isFavoriteProductForUser={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                        />
                                     </div>
                                 ))}
                                 {totalPagesCount.forProducts > 0 && !isGetProducts &&
