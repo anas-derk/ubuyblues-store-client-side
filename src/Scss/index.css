@@ -401,6 +401,26 @@ textarea {
   row-gap: 40px;
 }
 
+.customer-billing-address .edit-customer-billing-address-form, .customer-billing-address .edit-customer-shipping-address-form, .customer-shipping-address .edit-customer-billing-address-form, .customer-shipping-address .edit-customer-shipping-address-form {
+  color: #FFF;
+  font-size: 13px;
+}
+
+.customer-billing-address .edit-customer-billing-address-form h6, .customer-billing-address .edit-customer-shipping-address-form h6, .customer-shipping-address .edit-customer-billing-address-form h6, .customer-shipping-address .edit-customer-shipping-address-form h6 {
+  font-size: 14px;
+}
+
+.customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link, .customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link, .customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link, .customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link {
+  border: 2px dotted #FFF;
+}
+
+.customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link .editing-link, .customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link .editing-link, .customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link .editing-link, .customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link .editing-link {
+  background: none;
+  border: none;
+  color: var(--main-color-two);
+  border-bottom: 1px solid var(--main-color-two);
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

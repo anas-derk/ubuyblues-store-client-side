@@ -8,6 +8,7 @@ import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import validations from "../../../../public/global_functions/validations";
+import Footer from "@/components/Footer";
 
 export default function CustomerAddreses() {
 
@@ -60,8 +61,8 @@ export default function CustomerAddreses() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content d-flex align-items-center">
-                    <div className="container-fluid">
+                <div className="page-content">
+                    <div className="container-fluid align-items-center pb-4">
                         <div className="row">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
@@ -84,6 +85,7 @@ export default function CustomerAddreses() {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

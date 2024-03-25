@@ -11,6 +11,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from 'countries-list';
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
+import Footer from "@/components/Footer";
 
 export default function CustomerBillingAddress() {
 
@@ -217,8 +218,8 @@ export default function CustomerBillingAddress() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content d-flex align-items-center">
-                    <div className="container-fluid">
+                <div className="page-content">
+                    <div className="container-fluid align-items-center pb-4">
                         <div className="row">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
@@ -417,6 +418,7 @@ export default function CustomerBillingAddress() {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

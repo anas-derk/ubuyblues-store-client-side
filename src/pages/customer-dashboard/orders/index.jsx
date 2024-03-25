@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import prices from "../../../../public/global_functions/prices";
+import Footer from "@/components/Footer";
 
 export default function CustomerOrders({ countryAsProperty }) {
 
@@ -202,15 +203,15 @@ export default function CustomerOrders({ countryAsProperty }) {
     }
 
     return (
-        <div className="customer-orders-managment customer-dashboard page pb-4">
+        <div className="customer-orders-managment customer-dashboard page">
             <Head>
                 <title>Ubuyblues Store - Customer Orders</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content d-flex align-items-center">
+                <div className="page-content">
                     <div className="container-fluid">
-                        <div className="row">
+                        <div className="row align-items-center">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
@@ -372,6 +373,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

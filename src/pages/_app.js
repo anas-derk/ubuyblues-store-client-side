@@ -11,8 +11,6 @@ import "../pages/customer-dashboard/customer_dashboard.css";
 import "../pages/customer-dashboard/addreses/addreses.css";
 import "../pages/customer-dashboard/orders/index.css";
 import "../pages/customer-dashboard/account-details/customer_account_details.css";
-import "../pages/customer-dashboard/addreses/billing-address/customer_billing_address.css";
-import "../pages/customer-dashboard/addreses/shipping-address/customer_shipping_address.css";
 import "../pages/404/404.css";
 import "../pages/admin-dashboard/update-and-delete-products/update_and_delete_products.css";
 import "../pages/account-verification/account_verification.css";

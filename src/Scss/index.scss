@@ -361,6 +361,25 @@ textarea{
     }
 }
 
+.customer-billing-address, .customer-shipping-address{
+    .edit-customer-billing-address-form, .edit-customer-shipping-address-form{
+        color: #FFF;
+        font-size: 13px;
+        h6{
+            font-size: 14px;
+        }
+        .address-name-and-editing-link{
+            border: 2px dotted #FFF;
+            .editing-link{
+                background: none;
+                border: none;
+                color: var(--main-color-two);
+                border-bottom: 1px solid var(--main-color-two);
+            }
+        }
+    }
+}
+
 @keyframes rotation {
     0% {
         transform: rotate(0deg);

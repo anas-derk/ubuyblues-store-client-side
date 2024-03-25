@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import prices from "../../../../public/global_functions/prices";
+import Footer from "@/components/Footer";
 
 export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
@@ -207,9 +208,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content d-flex align-items-center">
-                    <div className="container-fluid">
-                        <div className="row align-items-center">
+                <div className="page-content">
+                    <div className="container-fluid align-items-center pb-4">
+                        <div className="row">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
@@ -321,6 +322,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
