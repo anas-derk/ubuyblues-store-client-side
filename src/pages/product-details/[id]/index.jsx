@@ -792,8 +792,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 </div>}
                                 <section className="related-products-box">
                                     <h2 className="text-center mb-4">{t("Related Products")}</h2>
-                                    <div className="row products-box pt-4 pb-4">
-                                        {sampleFromRelatedProductsInProduct.length > 0 ? sampleFromRelatedProductsInProduct.map((product) => (
+                                    {sampleFromRelatedProductsInProduct.length > 0 ? <div className="row products-box pt-4 pb-4">
+                                        {sampleFromRelatedProductsInProduct.map((product) => (
                                             product._id !== productIdAsProperty && <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
                                                 <ProductCard
                                                     product={product}
@@ -804,8 +804,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                                 />
                                             </div>
-                                        )) : <NotFoundError errorMsg={t("Sorry, There Is No Related Products In This Product !!")} />}
-                                    </div>
+                                        ))}
+                                    </div> : <NotFoundError errorMsg={t("Sorry, There Is No Related Products In This Product !!")} />}
                                 </section>
                             </section> : <NotFoundError errorMsg={t("Sorry, This Product Is Not Exist !!")} />}
                     </div>
