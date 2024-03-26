@@ -679,7 +679,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 {allProductReferalsInsideThePage.map((referal, referalIndex) => (
                                                     <div className="referal-box" key={referal._id}>
                                                         <div className="referal-details pt-3 pb-3">
-                                                            <h6 className="referal-number">{t("Referal")} #{referalIndex + 1}</h6>
+                                                            <h6 className="referal-number">{t("Referral")} #{referalIndex + 1}</h6>
                                                             <h6 className="referal-writer-name">{t("Name")}: {referal.name}</h6>
                                                             <h6 className="referal-writer-email mb-0">{t("Email")}: {referal.email}</h6>
                                                             <p className="referal-content mb-0">{referal.content}</p>
