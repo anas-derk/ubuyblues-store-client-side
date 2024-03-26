@@ -322,7 +322,7 @@ export default function Home({ countryAsProperty }) {
                                 {allCategoriesInsideThePage.map((category) => (
                                     <div className="col-md-3" key={category._id}>
                                         <div className="category-details p-3">
-                                            <Link href={`/categories/${category._id}`} className="product-by-category-link text-dark">
+                                            <Link href={`/products-by-category?category=${category.name}`} className="product-by-category-link text-dark">
                                                 <h5 className="cateogory-name mb-3">{category.name}</h5>
                                                 <MdKeyboardArrowRight className="forward-arrow-icon" />
                                             </Link>
