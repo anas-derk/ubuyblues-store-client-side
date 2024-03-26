@@ -385,5 +385,8 @@
     "Last Added Products By Category Name": "المنتجات المضافة مؤخراً من خلال التصنيف",
     "Referral": "المراجعة",
     "Sorry, There Is No Related Products In This Product !!": "عذراً ، لا يوجد منتجات ذات صلة بهذا المنتج !!",
-    "Click To Go To Cart Page": "إضغط للانتقال إلى صفحة سلة الشراء"
+    "Click To Go To Cart Page": "إضغط للانتقال إلى صفحة سلة الشراء",
+    "Sorry, This Product Is Not Exist In Your Cart !!": "عذراً ، هذا المنتج غير موجود في سلة الشراء الخاصة بك !!",
+    "Sorry, This Product Is Already Exist In Your Cart !!": "عذراً ، هذا المنتج موجود مسبقاً في سلة الشراء الخاصة بك !!",
+    "Delete From Cart": "حذف من سلة الشراء"
 }

@@ -384,5 +384,8 @@
     "Last Added Products By Category Name": "Zuletzt hinzugefügte Produkte nach Kategorienamen",
     "Referral": "Empfehlung",
     "Sorry, There Is No Related Products In This Product !!": "Es tut uns leid, aber es gibt keine verwandten Produkte für dieses Produkt !!",
-    "Click To Go To Cart Page": "Klicken Sie hier, um zur Warenkorbseite zu gelangen"
+    "Click To Go To Cart Page": "Klicken Sie hier, um zur Warenkorbseite zu gelangen",
+    "Sorry, This Product Is Not Exist In Your Cart !!": "Entschuldigung, dieses Produkt existiert nicht in Ihrem Warenkorb!",
+    "Sorry, This Product Is Already Exist In Your Cart !!": "Entschuldigung, dieses Produkt befindet sich bereits in Ihrem Warenkorb!",
+    "Delete From Cart": "Aus dem Warenkorb entfernen"
 }

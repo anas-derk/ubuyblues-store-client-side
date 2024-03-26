@@ -385,5 +385,8 @@
     "Last Added Products By Category Name": "Kategori Adına Göre Son Eklenen Ürünler",
     "Referral": "Referans",
     "Sorry, There Is No Related Products In This Product !!": "Üzgünüz, ancak bu ürün için ilişkili ürün bulunmamaktadır !!",
-    "Click To Go To Cart Page": "Sepet sayfasına gitmek için tıklayın"
+    "Click To Go To Cart Page": "Sepet sayfasına gitmek için tıklayın",
+    "Sorry, This Product Is Not Exist In Your Cart !!": "Üzgünüz, bu ürün sepetinizde mevcut değil!",
+    "Sorry, This Product Is Already Exist In Your Cart !!": "Üzgünüz, bu ürün zaten sepetinizde mevcut!",
+    "Delete From Cart": "Sepetten Sil"
 }

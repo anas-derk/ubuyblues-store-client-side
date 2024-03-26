@@ -12,12 +12,15 @@ export default function ProductCard({
     product,
     setIsDisplayShareOptionsBox,
     isFavoriteProductForUserAsProperty,
+    isExistProductInsideTheCartAsProperty,
     usdPriceAgainstCurrency,
     currencyNameByCountry,
     token,
 }) {
 
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
+
+    const [isExistProductInsideTheCart, setIsExistProductInsideTheCart] = useState(isExistProductInsideTheCartAsProperty);
 
     const [isWaitAddProductToFavoriteUserProductsList, setIsWaitAddProductToFavoriteUserProductsList] = useState(false);
 
@@ -99,25 +102,59 @@ export default function ProductCard({
     const addToCart = (id, name, price, description, category, discount, imagePath) => {
         try {
             setIsWaitAddToCart(true);
-            let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-            if (allProductsData) {
-                allProductsData.push({
-                    id,
-                    name,
-                    price,
-                    description,
-                    category,
-                    discount,
-                    imagePath,
-                    quantity: 1,
-                });
-                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-                setIsWaitAddToCart(false);
-                setIsSuccessAddToCart(true);
-                let successAddToCartTimeout = setTimeout(() => {
-                    setIsSuccessAddToCart(false);
-                    clearTimeout(successAddToCartTimeout);
-                }, 3000);
+            const userCart = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+            if (Array.isArray(userCart)) {
+                if (userCart.length > 0) {
+                    const productIndex = userCart.findIndex((product) => product.id === id);
+                    if (productIndex === -1) {
+                        userCart.push({
+                            id,
+                            name,
+                            price,
+                            description,
+                            category,
+                            discount,
+                            imagePath,
+                            quantity: 1,
+                        });
+                        localStorage.setItem("asfour-store-user-cart", JSON.stringify(userCart));
+                        setIsWaitAddToCart(false);
+                        setIsSuccessAddToCart(true);
+                        let successAddToCartTimeout = setTimeout(() => {
+                            setIsSuccessAddToCart(false);
+                            setIsExistProductInsideTheCart(true);
+                            clearTimeout(successAddToCartTimeout);
+                        }, 3000);
+                    } else {
+                        setIsWaitAddToCart(false);
+                        setErrorInAddToCart("Sorry, This Product Is Already Exist In Your Cart !!");
+                        let errorInAddToCartTimeout = setTimeout(() => {
+                            setErrorInAddToCart("");
+                            clearTimeout(errorInAddToCartTimeout);
+                        }, 3000);
+                    }
+                }
+                else {
+                    let allProductsData = [];
+                    allProductsData.push({
+                        id,
+                        name,
+                        price,
+                        description,
+                        category,
+                        discount,
+                        imagePath,
+                        quantity: 1,
+                    });
+                    localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                    setIsWaitAddToCart(false);
+                    setIsSuccessAddToCart(true);
+                    let successAddToCartTimeout = setTimeout(() => {
+                        setIsSuccessAddToCart(false);
+                        setIsExistProductInsideTheCart(true);
+                        clearTimeout(successAddToCartTimeout);
+                    }, 3000);
+                }
             } else {
                 let allProductsData = [];
                 allProductsData.push({
@@ -135,17 +172,53 @@ export default function ProductCard({
                 setIsSuccessAddToCart(true);
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddToCart(false);
+                    setIsExistProductInsideTheCart(true);
                     clearTimeout(successAddToCartTimeout);
                 }, 3000);
             }
         }
         catch (err) {
             setIsWaitAddToCart(false);
-            setErrorInAddToCart(true);
+            setErrorInAddToCart("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorInAddToCartTimeout = setTimeout(() => {
                 setErrorInAddToCart(false);
                 clearTimeout(errorInAddToCartTimeout);
             }, 3000);
+        }
+    }
+
+    const deleteFromCart = (productId) => {
+        setIsWaitDeleteFromCart(true);
+        const userCart = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+        if (Array.isArray(userCart)) {
+            if (userCart.length > 0) {
+                const newUserCart = userCart.filter((product) => product.id !== productId);
+                if (newUserCart.length < userCart.length) {
+                    localStorage.setItem("asfour-store-user-cart", JSON.stringify(newUserCart));
+                    setIsWaitDeleteFromCart(false);
+                    setIsSuccessDeleteFromCart(true);
+                    let successDeleteFromCartTimeout = setTimeout(() => {
+                        setIsSuccessDeleteFromCart(false);
+                        setIsExistProductInsideTheCart(false);
+                        clearTimeout(successDeleteFromCartTimeout);
+                    }, 3000);
+                } else {
+                    setIsWaitDeleteFromCart(false);
+                    setErrorInDeleteFromCart("Sorry, This Product Is Not Exist In Your Cart !!");
+                    let errorInDeleteFromCartTimeout = setTimeout(() => {
+                        setErrorInDeleteFromCart("");
+                        clearTimeout(errorInDeleteFromCartTimeout);
+                    }, 3000);
+                }
+            } else {
+                setIsWaitDeleteFromCart(false);
+                setErrorInDeleteFromCart("Sorry, This Product Is Not Exist In Your Cart !!");
+                localStorage.setItem("asfour-store-user-cart", JSON.stringify([]));
+                let errorInDeleteFromCartTimeout = setTimeout(() => {
+                    setErrorInDeleteFromCart("");
+                    clearTimeout(errorInDeleteFromCartTimeout);
+                }, 3000);
+            }
         }
     }
 
@@ -180,25 +253,17 @@ export default function ProductCard({
                     {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                 </div>
                 <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
-                    {!isWaitAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
-                    {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
-                    {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
-                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
+                    {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2">{t("Waiting In Add To Cart")} ...</button>}
+                    {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
+                    {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn p-2 btn btn-success text-white">
                         <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
                         <span>{t("Click To Go To Cart Page")}</span>
                     </Link>}
-                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
-                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
-                        <span>{t("Click To Go To Cart Page")}</span>
-                    </Link>}
-                    {!isWaitDeleteFromCart && !isSuccessDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(product._id)}>{t("Delete From Cart")} <MdDeleteForever /> </button>}
-                    {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
-                    {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
-                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
-                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
-                        <span>{t("Click To Go To Cart Page")}</span>
-                    </Link>}
-                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(product._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
+                    {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn p-2 bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}
+                    {errorInDeleteFromCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white" disabled>{errorInDeleteFromCart}</button>}
+                    {isSuccessDeleteFromCart && <Link href="/cart" className="success-in-delete-from-cart-btn cart-btn p-2 btn btn-success text-white">
                         <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
                         <span>{t("Click To Go To Cart Page")}</span>
                     </Link>}

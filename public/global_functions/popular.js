@@ -20,7 +20,16 @@ const getAllProductsInsideThePage = async (pageNumber, pageSize) => {
     }
 }
 
+const isExistProductInsideTheCart = (productId) => {
+    const userCart = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+    if (Array.isArray(userCart)) {
+        return userCart.findIndex((product) => product.id === productId) > -1 ? true : false;
+    }
+    return false;
+}
+
 export {
     getProductsCount,
     getAllProductsInsideThePage,
+    isExistProductInsideTheCart,
 }
