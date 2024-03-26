@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { PiShareFatLight } from "react-icons/pi";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaCartPlus } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
 
@@ -32,7 +33,13 @@ export default function ProductCard({
 
     const [errorInAddToCart, setErrorInAddToCart] = useState("");
 
-    const { t } = useTranslation();
+    const [isWaitDeleteFromCart, setIsWaitDeleteFromCart] = useState(false);
+
+    const [isSuccessDeleteFromCart, setIsSuccessDeleteFromCart] = useState(false);
+
+    const [errorInDeleteFromCart, setErrorInDeleteFromCart] = useState("");
+
+    const { t, i18n } = useTranslation();
 
     const router = useRouter();
 
@@ -173,11 +180,26 @@ export default function ProductCard({
                     {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                 </div>
                 <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
-                    {!isWaitAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")}</button>}
+                    {!isWaitAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
                     {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
                     {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
                     {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
-                        <FaCheck className="me-2" />
+                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
+                        <span>{t("Click To Go To Cart Page")}</span>
+                    </Link>}
+                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
+                        <span>{t("Click To Go To Cart Page")}</span>
+                    </Link>}
+                    {!isWaitDeleteFromCart && !isSuccessDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(product._id)}>{t("Delete From Cart")} <MdDeleteForever /> </button>}
+                    {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2" disabled>{t("Waiting In Add To Cart")} ...</button>}
+                    {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2" disabled>{t("Sorry, Something Went Wrong")} !!</button>}
+                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
+                        <span>{t("Click To Go To Cart Page")}</span>
+                    </Link>}
+                    {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn cart-btn p-2 btn btn-success text-dark">
+                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
                         <span>{t("Click To Go To Cart Page")}</span>
                     </Link>}
                 </div>

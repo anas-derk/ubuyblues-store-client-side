@@ -170,8 +170,11 @@
 
 .product-card .product-managment-box .add-to-cart-button-box .cart-btn {
   width: 100%;
-  background-color: var(--main-color-two);
   border: none;
+}
+
+.product-card .product-managment-box .add-to-cart-button-box .add-to-cart-btn {
+  background-color: var(--main-color-two);
   font-weight: bold;
 }
 

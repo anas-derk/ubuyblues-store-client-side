@@ -239,6 +239,10 @@ export default function Home({ countryAsProperty }) {
         return false;
     }
 
+    const isExistProductInsideTheCart = (productId) => {
+        const userCart = localStorage.getItem("asfour-store-user-cart");
+    }
+
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
         if (windowInnerWidth < 767) return 1;
         if (windowInnerWidth >= 767 && windowInnerWidth < 1199 && count >= 2) return 2;
@@ -361,6 +365,7 @@ export default function Home({ countryAsProperty }) {
                                             currencyNameByCountry={currencyNameByCountry}
                                             token={token}
                                             isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                            isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                         />
                                     </div>
                                 ))}
