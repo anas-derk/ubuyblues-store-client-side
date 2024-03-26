@@ -248,6 +248,27 @@ textarea {
   color: #FFF;
 }
 
+.contact-icons-box {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  cursor: pointer;
+}
+
+.contact-icons-box .contact-icons-list .contact-icon-item {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  background-color: var(--main-color-two);
+}
+
+.contact-icons-box .contact-icon, .contact-icons-box .close-icon, .contact-icons-box .whatsapp-icon, .contact-icons-box .mail-icon {
+  font-size: 35px;
+  color: #000;
+}
+
 .form-field-error-box {
   border-radius: 3px;
 }

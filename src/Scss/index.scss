@@ -184,7 +184,7 @@ textarea{
     animation: rotation 1s linear infinite;
 }
 
-.navigate-to-up-button{
+.navigate-to-up-button {
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -202,6 +202,28 @@ textarea{
         color: #FFF;
     }
 }
+
+.contact-icons-box{
+    position: fixed;
+    left: 30px;
+    bottom: 30px;
+    cursor: pointer;
+    .contact-icons-list{
+        .contact-icon-item{
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            line-height: 60px;
+            border-radius: 50%;
+            background-color: var(--main-color-two);
+        }
+    }
+    .contact-icon, .close-icon, .whatsapp-icon, .mail-icon{
+        font-size: 35px;
+        color: #000;
+    }
+}
+
 
 .form-field-error-box{
     border-radius: 3px;
