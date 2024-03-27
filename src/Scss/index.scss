@@ -107,7 +107,8 @@ textarea{
 .confirm-new-password-field-box,
 .code-field-box,
 .new-password-field-box,
-.product-name-field-box{
+.product-name-field-box,
+.select-sort-type-box{
     position: relative;
     .icon-box{
         position: absolute;
@@ -131,8 +132,12 @@ textarea{
     }
 }
 
-.search-form{
-    width: 75%;
+.select-sort-type{
+    text-indent: 18px;
+}
+
+.filters-and-sorting-box{
+    width: 100%;
     margin: 0 auto;
     @media (max-width: 767px) {
         width: 100%;

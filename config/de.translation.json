@@ -389,5 +389,10 @@
     "Sorry, This Product Is Already Exist In Your Cart !!": "Entschuldigung, dieses Produkt befindet sich bereits in Ihrem Warenkorb!",
     "Delete From Cart": "Aus dem Warenkorb entfernen",
     "Please Enter The name Of The Product You Want To Search For": "Bitte geben Sie den Namen des Produkts ein, das Sie suchen möchten",
-    "Sorry, Not Found Any Products Related In This Name !!": "Entschuldigung, es wurden keine Produkte mit diesem Namen gefunden!"
+    "Sorry, Not Found Any Products Related In This Name !!": "Entschuldigung, es wurden keine Produkte mit diesem Namen gefunden!",
+    "Order By": "Sortieren nach",
+    "From Latest To Oldest": "Von neuestem bis ältestem",
+    "From Oldest To Latest": "Von ältestem bis neuestem",
+    "From Highest Price To Lowest": "Vom höchsten zum niedrigsten Preis",
+    "From Lowest Price To Highest": "Vom niedrigsten zum höchsten Preis"
 }

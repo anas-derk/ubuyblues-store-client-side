@@ -19,6 +19,7 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheCart } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
+import { FaSort } from "react-icons/fa6";
 import NotFoundError from "@/components/NotFoundError";
 
 export default function Home({ countryAsProperty }) {
@@ -68,8 +69,6 @@ export default function Home({ countryAsProperty }) {
     const [allBrands, setAllBrands] = useState([]);
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
-
-    const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -392,23 +391,76 @@ export default function Home({ countryAsProperty }) {
                         {/* Start Last Added Products */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
-                            <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters)}>
-                                <div className="product-name-field-box">
-                                    <input
-                                        type="text"
-                                        placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                        className={`form-control p-3 border-2 mb-4`}
-                                        onChange={(e) => {
-                                            const tempFilters = { ...filters, name: e.target.value.trim() };
-                                            setFilters(tempFilters);
-                                            searchOnProduct(e, tempFilters);
-                                        }}
-                                    />
-                                    <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                        <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters)} />
-                                    </div>
+                            <div className="row filters-and-sorting-box mb-4">
+                                <div className="col-xs-12 col-md-6">
+                                    <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                        <div className="product-name-field-box">
+                                            <input
+                                                type="text"
+                                                placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                                className={`form-control p-3 border-2`}
+                                                onChange={(e) => {
+                                                    const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                    setFilters(tempFilters);
+                                                    searchOnProduct(e, tempFilters);
+                                                }}
+                                            />
+                                            <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters)} />
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                                <div className="col-xs-12 col-md-6">
+                                    <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                        <div className="select-sort-type-box">
+                                            <select
+                                                className="select-sort-type form-select p-3"
+                                                onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                                            >
+                                                <option value="" hidden>{t("Order By")}</option>
+                                                <option value="from-latest-to-oldest">{t("From Latest To Oldest")}</option>
+                                                <option value="from-oldest-to-latest">{t("From Oldest To Latest")}</option>
+                                                <option value="from-highest-to-lowest">{t("From Highest Price To Lowest")}</option>
+                                                <option value="from-lowest-to-highest">{t("From Highest Price To Lowest")}</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {/* <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                <section className="filters mb-3 bg-white border-3 border-info p-3 text-start w-100">
+                                    <h5 className="section-name fw-bold text-center">Filters: </h5>
+                                    <hr />
+                                    <div className="row mb-4">
+                                        <div className="col-md-12 d-flex align-items-center">
+                                            <h6 className="me-2 mb-0 fw-bold text-center">Category</h6>
+                                            <select
+                                                className="select-product-category form-select"
+                                                onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                                            >
+                                                <option value="" hidden>Pleae Select Category</option>
+                                                <option value="">All</option>
+                                                {allCategories.map((category) => (
+                                                    <option value={category.name} key={category._id}>{category.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {!isFilteringProductsStatus && <button
+                                        className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
+                                        onClick={() => filterProductsByCategory()}
+                                    >
+                                        Filter
+                                    </button>}
+                                    {isFilteringProductsStatus && <button
+                                        className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
+                                        disabled
+                                    >
+                                        Filtering ...
+                                    </button>}
+                                </section>
+                            </form> */}
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
