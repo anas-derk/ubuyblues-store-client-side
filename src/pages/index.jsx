@@ -62,6 +62,11 @@ export default function Home({ countryAsProperty }) {
         name: "",
     });
 
+    const [sortDetails, setSortDetails] = useState({
+        by: "",
+        type: 1,
+    });
+
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const [appearedSections, setAppearedSections] = useState([]);
@@ -252,11 +257,17 @@ export default function Home({ countryAsProperty }) {
         return count;
     }
 
-    const getFilteringString = (filters) => {
-        let filteringString = "";
-        if (filters.name) filteringString += `name=${filters.name}&`;
-        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
-        return filteringString;
+    const getFiltersAsQuery = (filters) => {
+        let filtersAsQuery = "";
+        if (filters.name) filtersAsQuery += `name=${filters.name}&`;
+        if (filtersAsQuery) filtersAsQuery = filtersAsQuery.substring(0, filtersAsQuery.length - 1);
+        return filtersAsQuery;
+    }
+
+    const getSortDetailsAsQuery = (sortDetails) => {
+        let sortDetailsAsQuery = "";
+        if (sortDetails.by && sortDetails.type) sortDetailsAsQuery += `sortBy=${sortDetails.by}&sortType=${sortDetails.type}`;
+        return sortDetailsAsQuery;
     }
 
     const getPreviousPage = async (section) => {
@@ -270,7 +281,7 @@ export default function Home({ countryAsProperty }) {
         if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
@@ -287,7 +298,7 @@ export default function Home({ countryAsProperty }) {
         if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
@@ -302,21 +313,22 @@ export default function Home({ countryAsProperty }) {
         }
         if (section === "products") {
             setIsGetProducts(true);
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
             setCurrentPage({ ...currentPage, forProducts: pageNumber });
             setIsGetProducts(false);
         }
     }
 
-    const searchOnProduct = async (e, filters) => {
+    const searchOnProduct = async (e, filters, sortDetails) => {
         try {
             e.preventDefault();
             setIsGetProducts(true);
             setCurrentPage({ ...currentPage, forProducts: 1 });
-            let filteringString = getFilteringString(filters);
-            const result = await getProductsCount(filteringString);
+            let filtersAsQuery = getFiltersAsQuery(filters);
+            const result = await getProductsCount(filtersAsQuery);
             if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filteringString)).data);
+                console.log(getSortDetailsAsQuery(sortDetails))
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data);
                 totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                 setIsGetProducts(false);
             } else {
@@ -393,7 +405,7 @@ export default function Home({ countryAsProperty }) {
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <div className="row filters-and-sorting-box mb-4">
                                 <div className="col-xs-12 col-md-6">
-                                    <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                    <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
                                         <div className="product-name-field-box">
                                             <input
                                                 type="text"
@@ -402,11 +414,11 @@ export default function Home({ countryAsProperty }) {
                                                 onChange={(e) => {
                                                     const tempFilters = { ...filters, name: e.target.value.trim() };
                                                     setFilters(tempFilters);
-                                                    searchOnProduct(e, tempFilters);
+                                                    searchOnProduct(e, tempFilters, sortDetails);
                                                 }}
                                             />
                                             <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters)} />
+                                                <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
                                             </div>
                                         </div>
                                     </form>
@@ -416,13 +428,18 @@ export default function Home({ countryAsProperty }) {
                                         <div className="select-sort-type-box">
                                             <select
                                                 className="select-sort-type form-select p-3"
-                                                onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                                                onChange={(e) => {
+                                                    const sortDetailsArray = e.target.value.split(",");
+                                                    const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
+                                                    setSortDetails(tempSortDetails);
+                                                    searchOnProduct(e, filters, tempSortDetails);
+                                                }}
                                             >
-                                                <option value="" hidden>{t("Order By")}</option>
-                                                <option value="from-latest-to-oldest">{t("From Latest To Oldest")}</option>
-                                                <option value="from-oldest-to-latest">{t("From Oldest To Latest")}</option>
-                                                <option value="from-highest-to-lowest">{t("From Highest Price To Lowest")}</option>
-                                                <option value="from-lowest-to-highest">{t("From Highest Price To Lowest")}</option>
+                                                <option value="" hidden>{t("Sort By")}</option>
+                                                <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
+                                                <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                <option value="price,-1">{t("From Highest Price To Lowest")}</option>
+                                                <option value="price,1">{t("From Lowest Price To Highest")}</option>
                                             </select>
                                         </div>
                                     </form>

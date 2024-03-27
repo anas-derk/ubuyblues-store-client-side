@@ -11,9 +11,9 @@ const getProductsCount = async (filters) => {
     }
 }
 
-const getAllProductsInsideThePage = async (pageNumber, pageSize, filters) => {
+const getAllProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+        const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`);
         return await res.data;
     }
     catch (err) {
