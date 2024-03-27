@@ -227,6 +227,7 @@ export default function ProductCard({
             <div
                 className="product-managment-box"
             >
+                {product.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( { ( product.discount / product.price ) * 100 } % )</div>}
                 <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image" />
                 <Link className={`product-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
                 <div className="product-managment-buttons p-2">
