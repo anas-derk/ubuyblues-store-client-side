@@ -389,5 +389,6 @@
     "Sorry, This Product Is Not Exist In Your Cart !!": "Üzgünüz, bu ürün sepetinizde mevcut değil!",
     "Sorry, This Product Is Already Exist In Your Cart !!": "Üzgünüz, bu ürün zaten sepetinizde mevcut!",
     "Delete From Cart": "Sepetten Sil",
-    "Please Enter The name Of The Product You Want To Search For": "Lütfen aramak istediğiniz ürünün adını girin"
+    "Please Enter The name Of The Product You Want To Search For": "Lütfen aramak istediğiniz ürünün adını girin",
+    "Sorry, Not Found Any Products Related In This Name !!": "Üzgünüz, Bu İsimle İlgili Hiçbir Ürün Bulunamadı !!"
 }
