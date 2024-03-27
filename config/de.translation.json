@@ -388,5 +388,6 @@
     "Sorry, This Product Is Not Exist In Your Cart !!": "Entschuldigung, dieses Produkt existiert nicht in Ihrem Warenkorb!",
     "Sorry, This Product Is Already Exist In Your Cart !!": "Entschuldigung, dieses Produkt befindet sich bereits in Ihrem Warenkorb!",
     "Delete From Cart": "Aus dem Warenkorb entfernen",
-    "Please Enter The name Of The Product You Want To Search For": "Bitte geben Sie den Namen des Produkts ein, das Sie suchen möchten"
+    "Please Enter The name Of The Product You Want To Search For": "Bitte geben Sie den Namen des Produkts ein, das Sie suchen möchten",
+    "Sorry, Not Found Any Products Related In This Name !!": "Entschuldigung, es wurden keine Produkte mit diesem Namen gefunden!"
 }

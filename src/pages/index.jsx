@@ -19,6 +19,7 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheCart } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function Home({ countryAsProperty }) {
 
@@ -56,6 +57,10 @@ export default function Home({ countryAsProperty }) {
         forCategories: 0,
     });
 
+    const [filters, setFilters] = useState({
+        name: "",
+    });
+
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const [appearedSections, setAppearedSections] = useState([]);
@@ -64,9 +69,9 @@ export default function Home({ countryAsProperty }) {
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
-    const [productName, setProductName] = useState("");
-
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const [errorMsg, setErrorMsg] = useState("");
 
     const { i18n, t } = useTranslation();
 
@@ -171,7 +176,7 @@ export default function Home({ countryAsProperty }) {
     const getCategoriesCount = async () => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -181,7 +186,7 @@ export default function Home({ countryAsProperty }) {
     const getAllCategoriesInsideThePage = async (pageNumber, pageSize) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -248,6 +253,13 @@ export default function Home({ countryAsProperty }) {
         return count;
     }
 
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.name) filteringString += `name=${filters.name}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
     const getPreviousPage = async (section) => {
         if (section === "categories") {
             setIsGetCategories(true);
@@ -259,7 +271,7 @@ export default function Home({ countryAsProperty }) {
         if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize)).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
@@ -276,7 +288,7 @@ export default function Home({ countryAsProperty }) {
         if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize)).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
@@ -291,33 +303,36 @@ export default function Home({ countryAsProperty }) {
         }
         if (section === "products") {
             setIsGetProducts(true);
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize)).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
             setCurrentPage({ ...currentPage, forProducts: pageNumber });
             setIsGetProducts(false);
         }
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
-    }
-
-    const searchOnProduct = (productName) => {
-        e.preventDefault();
-        setFormValidationErrors({});
-        let errorsObject = validateFormFields([
-            {
-                name: "productName",
-                value: productName,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, This Field Can't Be Empty !!",
-                    },
-                },
-            },
-        ]);
-        setFormValidationErrors(errorsObject);
-        if (Object.keys(errorsObject).length == 0) {
-
+    const searchOnProduct = async (e, filters) => {
+        try {
+            e.preventDefault();
+            setIsGetProducts(true);
+            setCurrentPage({ ...currentPage, forProducts: 1 });
+            let filteringString = getFilteringString(filters);
+            const result = await getProductsCount(filteringString);
+            if (result.data > 0) {
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filteringString)).data);
+                totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
+                setIsGetProducts(false);
+            } else {
+                setAllProductsInsideThePage([]);
+                totalPagesCount.forProducts = 0;
+                setIsGetProducts(false);
+            }
+        }
+        catch (err) {
+            setIsGetProducts(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
         }
     }
 
@@ -377,21 +392,25 @@ export default function Home({ countryAsProperty }) {
                         {/* Start Last Added Products */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
-                            <form className="search-form">
+                            <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters)}>
                                 <div className="product-name-field-box w-75 mx-auto">
                                     <input
                                         type="text"
                                         placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                        className={`form-control p-3 border-2 ${formValidationErrors["productName"] ? "border-danger mb-2" : "mb-4"}`}
-                                        onChange={(e) => setProductName(e.target.value.trim())}
+                                        className={`form-control p-3 border-2 mb-4`}
+                                        onChange={(e) => {
+                                            const tempFilters = { ...filters, name: e.target.value.trim() };
+                                            setFilters(tempFilters);
+                                            searchOnProduct(e, tempFilters);
+                                        }}
                                     />
                                     <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                        <FaSearch className='icon' />
+                                        <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters)} />
                                     </div>
                                 </div>
                             </form>
                             <div className="row products-box pt-4 pb-4">
-                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
+                                {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                         <ProductCard
                                             product={product}
@@ -403,7 +422,7 @@ export default function Home({ countryAsProperty }) {
                                             isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                         />
                                     </div>
-                                ))}
+                                )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
                                 {totalPagesCount.forProducts > 1 && !isGetProducts &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forProducts}

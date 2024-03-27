@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import { getProductsCount, getAllProductsInsideThePage } from "../../../../public/global_functions/popular";
 
 export default function UpdateAndDeleteProducts() {
 
@@ -56,8 +57,6 @@ export default function UpdateAndDeleteProducts() {
     const [isDeleteProductGalleryImage, setIsDeleteProductGalleryImage] = useState(false);
 
     const [newProductGalleryImageFiles, setNewProductGalleryImageFiles] = useState([]);
-
-    const [newProductGalleryImages, setNewProductGalleryImages] = useState([]);
 
     const [isAddingNewImagesToProductGallery, setIsAddingNewImagesToProductGallery] = useState(false);
 
@@ -116,27 +115,6 @@ export default function UpdateAndDeleteProducts() {
 
     const validateFormFields = (validateDetailsList) => {
         return validations.inputValuesValidation(validateDetailsList);
-    }
-
-    const getProductsCount = async (filters) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`);
-            const result = await res.data;
-            return result;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const getAllProductsInsideThePage = async (pageNumber, pageSize, filters) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
     }
 
     const getAllCategories = async () => {
