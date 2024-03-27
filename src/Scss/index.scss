@@ -131,6 +131,14 @@ textarea{
     }
 }
 
+.search-form{
+    width: 75%;
+    margin: 0 auto;
+    @media (max-width: 767px) {
+        width: 100%;
+    }
+}
+
 .managment-table, .customer-table{
     td, th{
         border: 1px solid;

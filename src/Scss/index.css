@@ -186,6 +186,17 @@ textarea {
   transform: translateY(-80%);
 }
 
+.search-form {
+  width: 75%;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .search-form {
+    width: 100%;
+  }
+}
+
 .managment-table td, .managment-table th, .customer-table td, .customer-table th {
   border: 1px solid;
   padding: 15px;

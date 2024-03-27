@@ -393,7 +393,7 @@ export default function Home({ countryAsProperty }) {
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                             <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters)}>
-                                <div className="product-name-field-box w-75 mx-auto">
+                                <div className="product-name-field-box">
                                     <input
                                         type="text"
                                         placeholder={t("Please Enter The name Of The Product You Want To Search For")}
