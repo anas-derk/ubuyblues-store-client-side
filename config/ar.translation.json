@@ -388,5 +388,6 @@
     "Click To Go To Cart Page": "إضغط للانتقال إلى صفحة سلة الشراء",
     "Sorry, This Product Is Not Exist In Your Cart !!": "عذراً ، هذا المنتج غير موجود في سلة الشراء الخاصة بك !!",
     "Sorry, This Product Is Already Exist In Your Cart !!": "عذراً ، هذا المنتج موجود مسبقاً في سلة الشراء الخاصة بك !!",
-    "Delete From Cart": "حذف من سلة الشراء"
+    "Delete From Cart": "حذف من سلة الشراء",
+    "Please Enter The name Of The Product You Want To Search For": "من فضلك أدخل اسم المنتج الذي تريد البحث عنه"
 }

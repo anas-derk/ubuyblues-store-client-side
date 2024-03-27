@@ -18,6 +18,7 @@ import prices from "../../public/global_functions/prices";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheCart } from "../../public/global_functions/popular";
+import { FaSearch } from "react-icons/fa";
 
 export default function Home({ countryAsProperty }) {
 
@@ -62,6 +63,10 @@ export default function Home({ countryAsProperty }) {
     const [allBrands, setAllBrands] = useState([]);
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
+
+    const [productName, setProductName] = useState("");
+
+    const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const { i18n, t } = useTranslation();
 
@@ -292,6 +297,30 @@ export default function Home({ countryAsProperty }) {
         }
     }
 
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
+
+    const searchOnProduct = (productName) => {
+        e.preventDefault();
+        setFormValidationErrors({});
+        let errorsObject = validateFormFields([
+            {
+                name: "productName",
+                value: productName,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, This Field Can't Be Empty !!",
+                    },
+                },
+            },
+        ]);
+        setFormValidationErrors(errorsObject);
+        if (Object.keys(errorsObject).length == 0) {
+
+        }
+    }
+
     return (
         <div className="home page">
             <Head>
@@ -348,6 +377,19 @@ export default function Home({ countryAsProperty }) {
                         {/* Start Last Added Products */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
+                            <form className="search-form">
+                                <div className="product-name-field-box w-75 mx-auto">
+                                    <input
+                                        type="text"
+                                        placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                        className={`form-control p-3 border-2 ${formValidationErrors["productName"] ? "border-danger mb-2" : "mb-4"}`}
+                                        onChange={(e) => setProductName(e.target.value.trim())}
+                                    />
+                                    <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                        <FaSearch className='icon' />
+                                    </div>
+                                </div>
+                            </form>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product, index) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
