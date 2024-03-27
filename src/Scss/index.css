@@ -204,6 +204,7 @@ textarea {
 @media (max-width: 767px) {
   .filters-and-sorting-box {
     width: 100%;
+    gap: 30px;
   }
 }
 
