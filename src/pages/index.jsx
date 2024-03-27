@@ -19,7 +19,6 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheCart } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
-import { FaSort } from "react-icons/fa6";
 import NotFoundError from "@/components/NotFoundError";
 
 export default function Home({ countryAsProperty }) {
@@ -327,7 +326,6 @@ export default function Home({ countryAsProperty }) {
             let filtersAsQuery = getFiltersAsQuery(filters);
             const result = await getProductsCount(filtersAsQuery);
             if (result.data > 0) {
-                console.log(getSortDetailsAsQuery(sortDetails))
                 setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data);
                 totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                 setIsGetProducts(false);
@@ -445,39 +443,6 @@ export default function Home({ countryAsProperty }) {
                                     </form>
                                 </div>
                             </div>
-                            {/* <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
-                                <section className="filters mb-3 bg-white border-3 border-info p-3 text-start w-100">
-                                    <h5 className="section-name fw-bold text-center">Filters: </h5>
-                                    <hr />
-                                    <div className="row mb-4">
-                                        <div className="col-md-12 d-flex align-items-center">
-                                            <h6 className="me-2 mb-0 fw-bold text-center">Category</h6>
-                                            <select
-                                                className="select-product-category form-select"
-                                                onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                                            >
-                                                <option value="" hidden>Pleae Select Category</option>
-                                                <option value="">All</option>
-                                                {allCategories.map((category) => (
-                                                    <option value={category.name} key={category._id}>{category.name}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    {!isFilteringProductsStatus && <button
-                                        className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
-                                        onClick={() => filterProductsByCategory()}
-                                    >
-                                        Filter
-                                    </button>}
-                                    {isFilteringProductsStatus && <button
-                                        className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
-                                        disabled
-                                    >
-                                        Filtering ...
-                                    </button>}
-                                </section>
-                            </form> */}
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>

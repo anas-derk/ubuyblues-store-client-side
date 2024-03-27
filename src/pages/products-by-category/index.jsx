@@ -12,6 +12,8 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
 import PaginationBar from "@/components/PaginationBar";
+import { FaSearch } from "react-icons/fa";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function ProductByCategory({ countryAsProperty, categoryNameAsProperty }) {
 
@@ -45,6 +47,13 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
         category: "",
     });
 
+    const [sortDetails, setSortDetails] = useState({
+        by: "",
+        type: 1,
+    });
+
+    const [errorMsg, setErrorMsg] = useState("");
+
     const { t, i18n } = useTranslation();
 
     const pageSize = 3;
@@ -71,7 +80,6 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
             validations.getUserInfo(userToken)
             .then((result) => {
                 if (!result.error) {
-                        setFilters({ ...filters, category: categoryNameAsProperty });
                         setFavoriteProductsListForUser(result.data.favorite_products_list);
                     }
                     setIsGetUserInfo(false);
@@ -92,10 +100,11 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // =============================================================================
-        getProductsCount()
+        console.log(getFiltersAsQuery({ category: categoryNameAsProperty }))
+        getProductsCount(getFiltersAsQuery({ category: categoryNameAsProperty }))
             .then(async (result) => {
                 if (result.data > 0) {
-                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
+                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ category: categoryNameAsProperty }))).data);
                     setTotalPagesCount(Math.ceil(result.data / pageSize));
                 }
                 setIsGetProducts(false);
@@ -109,6 +118,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
 
     useEffect(() => {
         if (!isGetUserInfo && !isGetProducts) {
+            setFilters({ ...filters, category: categoryNameAsProperty });
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetProducts]);
@@ -149,10 +159,24 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
         return false;
     }
 
+    const getFiltersAsQuery = (filters) => {
+        let filtersAsQuery = "";
+        if (filters.name) filtersAsQuery += `name=${filters.name}&`;
+        if (filters.category) filtersAsQuery += `category=${filters.category}&`;
+        if (filtersAsQuery) filtersAsQuery = filtersAsQuery.substring(0, filtersAsQuery.length - 1);
+        return filtersAsQuery;
+    }
+
+    const getSortDetailsAsQuery = (sortDetails) => {
+        let sortDetailsAsQuery = "";
+        if (sortDetails.by && sortDetails.type) sortDetailsAsQuery += `sortBy=${sortDetails.by}&sortType=${sortDetails.type}`;
+        return sortDetailsAsQuery;
+    }
+
     const getPreviousPage = async () => {
         setIsGetProducts(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
         setCurrentPage(newCurrentPage);
         setIsGetProducts(false);
     }
@@ -160,23 +184,43 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
     const getNextPage = async () => {
         setIsGetProducts(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
         setCurrentPage(newCurrentPage);
         setIsGetProducts(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsGetProducts(true);
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
         setCurrentPage(pageNumber);
         setIsGetProducts(false);
     }
 
-    const getFilteringString = (filters) => {
-        let filteringString = "";
-        if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
-        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
-        return filteringString;
+    const searchOnProduct = async (e, filters, sortDetails) => {
+        try {
+            e.preventDefault();
+            setIsGetProducts(true);
+            setCurrentPage(1);
+            let filtersAsQuery = getFiltersAsQuery(filters);
+            const result = await getProductsCount(filtersAsQuery);
+            if (result.data > 0) {
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data);
+                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                setIsGetProducts(false);
+            } else {
+                setAllProductsInsideThePage([]);
+                setTotalPagesCount(0);
+                setIsGetProducts(false);
+            }
+        }
+        catch (err) {
+            setIsGetProducts(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
     }
 
     return (
@@ -198,8 +242,50 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
                         {/* Start Last Added Products By Category Name */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products By Category Name")} : { categoryNameAsProperty }</h2>
+                            <div className="row filters-and-sorting-box mb-4">
+                                <div className="col-xs-12 col-md-6">
+                                    <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                        <div className="product-name-field-box">
+                                            <input
+                                                type="text"
+                                                placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                                className={`form-control p-3 border-2`}
+                                                onChange={(e) => {
+                                                    const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                    setFilters(tempFilters);
+                                                    searchOnProduct(e, tempFilters, sortDetails);
+                                                }}
+                                            />
+                                            <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="col-xs-12 col-md-6">
+                                    <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                        <div className="select-sort-type-box">
+                                            <select
+                                                className="select-sort-type form-select p-3"
+                                                onChange={(e) => {
+                                                    const sortDetailsArray = e.target.value.split(",");
+                                                    const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
+                                                    setSortDetails(tempSortDetails);
+                                                    searchOnProduct(e, filters, tempSortDetails);
+                                                }}
+                                            >
+                                                <option value="" hidden>{t("Sort By")}</option>
+                                                <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
+                                                <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                <option value="price,-1">{t("From Highest Price To Lowest")}</option>
+                                                <option value="price,1">{t("From Lowest Price To Highest")}</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                             <div className="row products-box pt-4 pb-4">
-                                {allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
+                                {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                         <ProductCard
                                             product={product}
@@ -210,7 +296,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
                                             isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                         />
                                     </div>
-                                ))}
+                                )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
                                 {totalPagesCount > 1 && !isGetProducts &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
