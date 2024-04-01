@@ -13,18 +13,22 @@ export default function AdminDashboard() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [userInfo, setUserInfo] = useState({});
+
     const router = useRouter();
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
             validations.getAdminInfo(adminToken)
-                .then(async (res) => {
-                    const result = res.data;
+                .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
-                    } else setIsLoadingPage(false);
+                    } else {
+                        setIsLoadingPage(false);
+                        setUserInfo(result.data);
+                    }
                 })
                 .catch(async (err) => {
                     if (err.response.data?.msg === "Unauthorized Error") {
@@ -49,7 +53,7 @@ export default function AdminDashboard() {
                 <div className="page-content d-flex justify-content-center align-items-center">
                     <h1 className="fw-bold w-fit pb-2">
                         <PiHandWavingThin className="me-2" />
-                        Welcome To You In Your Admin Dashboard Page
+                        Welcome { `${userInfo.firstName} ${userInfo.lastName}` } In Your Admin Dashboard Page
                     </h1>
                 </div>
             </>}

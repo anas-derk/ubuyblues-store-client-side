@@ -34,9 +34,7 @@ export default function AdminLogin() {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
             validations.getAdminInfo(adminToken)
-                .then(async (res) => {
-                    console.log(res);
-                    const result = res.data;
+                .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         setIsLoadingPage(false);

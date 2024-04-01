@@ -31,13 +31,12 @@ export default function OrderDetails({ orderId }) {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
             validations.getAdminInfo(adminToken)
-                .then(async (res) => {
-                    const result = res.data;
+                .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        const result = await getOrderDetails(orderId);
+                        result = await getOrderDetails(orderId);
                         if (!result.error) {
                             setOrderDetails(result.data);
                             setToken(adminToken);

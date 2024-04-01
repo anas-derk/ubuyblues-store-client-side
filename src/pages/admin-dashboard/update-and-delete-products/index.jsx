@@ -84,8 +84,7 @@ export default function UpdateAndDeleteProducts() {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
             validations.getAdminInfo(adminToken)
-                .then(async (res) => {
-                    let result = res.data;
+                .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
