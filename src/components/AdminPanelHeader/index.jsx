@@ -23,6 +23,9 @@ export default function AdminPanelHeader() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
+                            <NavDropdown title="Stores" id="brands-nav-dropdown">
+                                <NavDropdown.Item href="/admin-dashboard/stores-managment" as={Link}>All Stores</NavDropdown.Item>
+                            </NavDropdown>
                             <NavDropdown title="Global" id="brands-nav-dropdown">
                                 <NavDropdown.Item href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
                                 <NavDropdown.Divider />

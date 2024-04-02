@@ -10,7 +10,7 @@ import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
-export default function OrdersManagment() {
+export default function StoresManagment() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -18,11 +18,11 @@ export default function OrdersManagment() {
 
     const [token, setToken] = useState("");
 
-    const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
+    const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
 
     const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(false);
 
-    const [selectedOrderIndex, setSelectedOrderIndex] = useState(-1);
+    const [selectedStoreIndex, setSelectedStoreIndex] = useState(-1);
 
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
@@ -59,9 +59,9 @@ export default function OrdersManagment() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        result = await getOrdersCount();
+                        result = await getStoresCount();
                         if (result.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
                         setToken(adminToken);
@@ -85,9 +85,9 @@ export default function OrdersManagment() {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const getOrdersCount = async (filters) => {
+    const getStoresCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?${filters ? filters : ""}`);
             return await res.data;
         }
         catch (err) {
@@ -95,9 +95,9 @@ export default function OrdersManagment() {
         }
     }
 
-    const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
+    const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
             return await res.data;
         }
         catch (err) {
@@ -117,7 +117,7 @@ export default function OrdersManagment() {
     const getPreviousPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
@@ -125,14 +125,14 @@ export default function OrdersManagment() {
     const getNextPage = async () => {
         setIsFilteringOrdersStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
         setIsFilteringOrdersStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringOrdersStatus(true);
-        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+        setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsFilteringOrdersStatus(false);
     }
@@ -155,11 +155,11 @@ export default function OrdersManagment() {
             let filteringString = getFilteringString(filters);
             const result = await getOrdersCount(filteringString);
             if (result.data > 0) {
-                setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
+                setAllStoresInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                 setIsFilteringOrdersStatus(false);
             } else {
-                setAllOrdersInsideThePage([]);
+                setAllStoresInsideThePage([]);
                 setTotalPagesCount(0);
                 setIsFilteringOrdersStatus(false);
             }
@@ -179,7 +179,7 @@ export default function OrdersManagment() {
     }
 
     const changeOrderData = (productIndex, fieldName, newValue) => {
-        allOrdersInsideThePage[productIndex][fieldName] = newValue;
+        allStoresInsideThePage[productIndex][fieldName] = newValue;
     }
 
     const updateOrderData = async (orderIndex) => {
@@ -188,7 +188,7 @@ export default function OrdersManagment() {
             let errorsObject = validateFormFields([
                 {
                     name: "totalAmount",
-                    value: allOrdersInsideThePage[orderIndex].order_amount,
+                    value: allStoresInsideThePage[orderIndex].order_amount,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -201,12 +201,12 @@ export default function OrdersManagment() {
                 },
             ]);
             setFormValidationErrors(errorsObject);
-            setSelectedOrderIndex(orderIndex);
+            setSelectedStoreIndex(orderIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setIsUpdatingStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/orders/update-order/${allOrdersInsideThePage[orderIndex]._id}`, {
-                    order_amount: allOrdersInsideThePage[orderIndex].order_amount,
-                    status: allOrdersInsideThePage[orderIndex].status,
+                const res = await axios.post(`${process.env.BASE_API_URL}/orders/update-order/${allStoresInsideThePage[orderIndex]._id}`, {
+                    order_amount: allStoresInsideThePage[orderIndex].order_amount,
+                    status: allStoresInsideThePage[orderIndex].status,
                 }, {
                     headers: {
                         Authorization: token,
@@ -218,7 +218,7 @@ export default function OrdersManagment() {
                     setIsSuccessStatus(true);
                     let successTimeout = setTimeout(() => {
                         setIsSuccessStatus(false);
-                        setSelectedOrderIndex(-1);
+                        setSelectedStoreIndex(-1);
                         clearTimeout(successTimeout);
                     }, 3000);
                 }
@@ -229,7 +229,7 @@ export default function OrdersManagment() {
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
                 setIsErrorStatus(false);
-                setSelectedOrderIndex(-1);
+                setSelectedStoreIndex(-1);
                 clearTimeout(errorTimeout);
             }, 3000);
         }
@@ -238,8 +238,8 @@ export default function OrdersManagment() {
     const deleteOrder = async (orderIndex) => {
         try {
             setIsDeletingStatus(true);
-            setSelectedOrderIndex(orderIndex);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allOrdersInsideThePage[orderIndex]._id}`, {
+            setSelectedStoreIndex(orderIndex);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allStoresInsideThePage[orderIndex]._id}`, {
                 headers: {
                     Authorization: token,
                 }
@@ -250,9 +250,9 @@ export default function OrdersManagment() {
                 setIsSuccessStatus(true);
                 let successTimeout = setTimeout(async () => {
                     setIsSuccessStatus(false);
-                    setSelectedOrderIndex(-1);
+                    setSelectedStoreIndex(-1);
                     setIsFilteringOrdersStatus(true);
-                    setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                    setAllStoresInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
                     setCurrentPage(1);
                     setIsFilteringOrdersStatus(false);
                     clearTimeout(successTimeout);
@@ -271,9 +271,9 @@ export default function OrdersManagment() {
     }
 
     return (
-        <div className="orders-managment admin-dashboard">
+        <div className="stores-managment admin-dashboard">
             <Head>
-                <title>Ubuyblues Store - Orders Managment</title>
+                <title>Ubuyblues Store - Stores Managment</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
@@ -282,28 +282,28 @@ export default function OrdersManagment() {
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-3 pb-3">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Orders Managment</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Stores Managment</h1>
                         <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
                             <div className="row mb-4">
                                 <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Order Number</h6>
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Store Number</h6>
                                     <input
                                         type="number"
                                         className="form-control"
-                                        placeholder="Pleae Enter Order Number"
+                                        placeholder="Pleae Enter Store Number"
                                         min="1"
-                                        max={allOrdersInsideThePage.length}
-                                        onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber })}
+                                        max={allStoresInsideThePage.length}
+                                        onChange={(e) => setFilters({ ...filters, storeNumber: e.target.valueAsNumber })}
                                     />
                                 </div>
                                 <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Order Id</h6>
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Store Id</h6>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Pleae Enter Order Id"
+                                        placeholder="Pleae Enter Store Id"
                                         onChange={(e) => setFilters({ ...filters, orderId: e.target.value.trim() })}
                                     />
                                 </div>
@@ -315,9 +315,9 @@ export default function OrdersManagment() {
                                     >
                                         <option value="" hidden>Pleae Enter Status</option>
                                         <option value="">All</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="shipping">Shipping</option>
-                                        <option value="completed">Completed</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="rejected">Rejected</option>
+                                        <option value="blocked">Blocked</option>
                                     </select>
                                 </div>
                                 <div className="col-md-6 d-flex align-items-center mt-4">
@@ -352,98 +352,81 @@ export default function OrdersManagment() {
                                 Filtering ...
                             </button>}
                         </section>
-                        {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
+                        {allStoresInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
                             <table className="orders-data-table mb-4 managment-table bg-white w-100">
                                 <thead>
                                     <tr>
-                                        <th>Order Number</th>
-                                        <th>Order Id</th>
-                                        <th>Checkout Status</th>
-                                        <th>Status</th>
-                                        <th>Order Total Amount</th>
-                                        <th>Added Date</th>
+                                        <th>Store Number</th>
+                                        <th>Store Id</th>
+                                        <th>Name</th>
+                                        <th>Owner Full Name</th>
+                                        <th>Owner Email</th>
+                                        <th>Products Type</th>
+                                        <th>Products Description</th>
+                                        <th>Is Approved</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {allOrdersInsideThePage.map((order, orderIndex) => (
-                                        <tr key={order._id}>
-                                            <td>{order.orderNumber}</td>
-                                            <td>{order._id}</td>
-                                            <td>{order.checkout_status}</td>
+                                    {allStoresInsideThePage.map((store, storeIndex) => (
+                                        <tr key={store._id}>
+                                            <td>{storeIndex + 1}</td>
+                                            <td>{store._id}</td>
+                                            <td>{store.name}</td>
                                             <td>
-                                                <h6 className="fw-bold">{order.status}</h6>
-                                                <hr />
-                                                <select
-                                                    className="select-order-status form-select"
-                                                    onChange={(e) => changeOrderData(orderIndex, "status", e.target.value)}
-                                                >
-                                                    <option value="" hidden>Pleae Enter Status</option>
-                                                    <option value="pending">Pending</option>
-                                                    <option value="shipping">Shipping</option>
-                                                    <option value="completed">Completed</option>
-                                                </select>
+                                                <h6>First Name: </h6>
+                                                <span>{store.ownerFirstName}</span>
+                                                <h6>Last Name: </h6>
+                                                <span>{store.ownerLastName}</span>
                                             </td>
+                                            <td>{store.ownerEmail}</td>
+                                            <td>{store.productsType}</td>
+                                            <td>{store.productsDescription}</td>
+                                            <td>{store.isApproved ? "yes" : "no"}</td>
                                             <td>
-                                                <section className="order-total-amount mb-4">
-                                                    <input
-                                                        type="number"
-                                                        defaultValue={order.order_amount}
-                                                        className={`form-control d-block mx-auto p-2 border-2 brand-title-field ${formValidationErrors["totalAmount"] && orderIndex === selectedOrderIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                        placeholder="Pleae Enter Order Amount"
-                                                        onChange={(e) => changeOrderData(orderIndex, "order_amount", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
-                                                    />
-                                                    {formValidationErrors["totalAmount"] && orderIndex === selectedOrderIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{formValidationErrors["totalAmount"]}</span>
-                                                    </p>}
-                                                </section>
-                                            </td>
-                                            <td>{getDateFormated(order.added_date)}</td>
-                                            <td>
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !order.isDeleted && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    onClick={() => updateOrderData(orderIndex)}
+                                                    onClick={() => updateOrderData(storeIndex)}
                                                 >
                                                     Update
                                                 </button>}
-                                                {isUpdatingStatus && orderIndex === selectedOrderIndex && <button
+                                                {isUpdatingStatus && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Updating ...
                                                 </button>}
-                                                {isSuccessStatus && orderIndex === selectedOrderIndex && <button
+                                                {isSuccessStatus && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-success d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Success
                                                 </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !order.isDeleted && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    onClick={() => deleteOrder(orderIndex)}
+                                                    onClick={() => deleteOrder(storeIndex)}
                                                 >
                                                     Delete
                                                 </button>}
-                                                {isDeletingStatus && !order.isDeleted && orderIndex === selectedOrderIndex && <button
+                                                {isDeletingStatus && !store.isDeleted && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Deleting ...
                                                 </button>}
-                                                {order.isDeleted && <button
+                                                {store.isDeleted && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Deleted Successful
                                                 </button>}
-                                                {isErrorStatus && orderIndex === selectedOrderIndex && <button
+                                                {isErrorStatus && orderIndex === selectedStoreIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Sorry, Someting Went Wrong, Please Repeate The Process !!
                                                 </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
+                                                {/* {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
                                                     <Link
                                                         href={`/admin-dashboard/orders-managment/${order._id}`}
                                                         className="btn btn-success d-block mx-auto mb-4 global-button"
@@ -452,14 +435,14 @@ export default function OrdersManagment() {
                                                         href={`/admin-dashboard/orders-managment/billing/${order._id}`}
                                                         className="btn btn-success d-block mx-auto mb-4 global-button"
                                                     >Show Billing</Link>
-                                                </>}
+                                                </>} */}
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </section>}
-                        {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
+                        {allStoresInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
                         {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                             <span className="loader-table-data"></span>
                         </div>}
