@@ -88,7 +88,7 @@ export default function OrdersManagment() {
     const getOrdersCount = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -98,7 +98,7 @@ export default function OrdersManagment() {
     const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);

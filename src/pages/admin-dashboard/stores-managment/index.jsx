@@ -98,20 +98,11 @@ export default function StoresManagment() {
     const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
         }
-    }
-
-    const getDateFormated = (orderedDate) => {
-        let orderedDateInDateFormat = new Date(orderedDate);
-        const year = orderedDateInDateFormat.getFullYear();
-        const month = orderedDateInDateFormat.getMonth() + 1;
-        const day = orderedDateInDateFormat.getDate();
-        orderedDateInDateFormat = `${year} / ${month} / ${day}`;
-        return orderedDateInDateFormat;
     }
 
     const getPreviousPage = async () => {
@@ -139,11 +130,12 @@ export default function StoresManagment() {
 
     const getFilteringString = (filters) => {
         let filteringString = "";
-        if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
-        if (filters.orderId) filteringString += `_id=${filters.orderId}&`;
-        if (filters.status) filteringString += `status=${filters.status}&`;
-        if (filters.customerName) filteringString += `customerName=${filters.customerName}&`;
-        if (filters.email) filteringString += `email=${filters.email}&`;
+        if (filters.storeId) filteringString += `_id=${filters.storeId}&`;
+        if (filters.name) filteringString += `name=${filters.name}&`;
+        if (filters.status) filteringString += `ownerEmail=${filters.status}&`;
+        if (filters.ownerFirstName) filteringString += `ownerFirstName=${filters.ownerFirstName}&`;
+        if (filters.ownerLastName) filteringString += `ownerLastName=${filters.ownerLastName}&`;
+        if (filters.ownerEmail) filteringString += `ownerEmail=${filters.ownerEmail}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
     }
@@ -308,7 +300,7 @@ export default function StoresManagment() {
                                 <div className="col-md-4 d-flex align-items-center">
                                     <h6 className="me-2 mb-0 fw-bold text-center">Status</h6>
                                     <select
-                                        className="select-order-status form-select"
+                                        className="select-store-status form-select"
                                         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                                     >
                                         <option value="" hidden>Pleae Enter Status</option>
@@ -318,16 +310,25 @@ export default function StoresManagment() {
                                         <option value="blocked">Blocked</option>
                                     </select>
                                 </div>
-                                <div className="col-md-6 d-flex align-items-center mt-4">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner Full Name</h6>
+                                <div className="col-md-4 d-flex align-items-center mt-5">
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner First Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Pleae Enter Owner Full Name"
+                                        placeholder="Pleae Enter Owner First Name"
                                         onChange={(e) => setFilters({ ...filters, ownerFirstName: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-6 d-flex align-items-center mt-4">
+                                <div className="col-md-4 d-flex align-items-center mt-5">
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner Last Name</h6>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Pleae Enter Owner Last Name"
+                                        onChange={(e) => setFilters({ ...filters, ownerLastName: e.target.value.trim() })}
+                                    />
+                                </div>
+                                <div className="col-md-4 d-flex align-items-center mt-5">
                                     <h6 className="me-2 mb-0 fw-bold text-center">Owner Email</h6>
                                     <input
                                         type="email"
