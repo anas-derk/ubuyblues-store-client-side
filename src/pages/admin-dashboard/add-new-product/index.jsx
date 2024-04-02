@@ -146,7 +146,7 @@ export default function AddNewProduct() {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
                         isImage: {
-                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or WEBP Image File !!",
                         },
                     },
                 },
@@ -158,7 +158,7 @@ export default function AddNewProduct() {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
                         isImages: {
-                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or WEBP Image File !!",
                         },
                     },
                 },
@@ -179,7 +179,7 @@ export default function AddNewProduct() {
                         Authorization: token,
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);

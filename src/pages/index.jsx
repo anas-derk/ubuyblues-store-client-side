@@ -72,9 +72,27 @@ export default function Home({ countryAsProperty }) {
 
     const [allBrands, setAllBrands] = useState([]);
 
+    const [storeData, setStoreData] = useState({
+        name: "",
+        ownerFirstName: "",
+        ownerLastName: "",
+        ownerEmail: "",
+        productsType: "",
+        productsDescription: "",
+        image: null,
+    });
+
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
+    const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const [isWaitStatus, setIsWaitStatus] = useState("");
+
     const [errorMsg, setErrorMsg] = useState("");
+
+    const [successMsg, setSuccessMsg] = useState("");
+
+    const storeImageFileElementRef = useRef();
 
     const { i18n, t } = useTranslation();
 
@@ -345,6 +363,134 @@ export default function Home({ countryAsProperty }) {
         }
     }
 
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
+
+    const addNewStore = async (e) => {
+        try {
+            e.preventDefault();
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "name",
+                    value: storeData.name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "ownerFirstName",
+                    value: storeData.ownerFirstName,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "ownerLastName",
+                    value: storeData.ownerLastName,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "ownerEmail",
+                    value: storeData.ownerEmail,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, This Email Is Not Valid !!",
+                        }
+                    },
+                },
+                {
+                    name: "productsType",
+                    value: storeData.productsType,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "productsDescription",
+                    value: storeData.productsDescription,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "image",
+                    value: storeData.image,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or WEBP Image File !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                let formData = new FormData();
+                formData.append("name", storeData.name);
+                formData.append("ownerFirstName", storeData.ownerFirstName);
+                formData.append("ownerLastName", storeData.ownerLastName);
+                formData.append("ownerEmail", storeData.ownerEmail);
+                formData.append("productsType", storeData.productsType);
+                formData.append("productsDescription", storeData.productsDescription);
+                formData.append("image", storeData.image);
+                setIsWaitStatus(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/stores/add-new-store`, formData);
+                const result = res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        setStoreData({
+                            name: "",
+                            ownerFirstName: "",
+                            ownerLastName: "",
+                            ownerEmail: "",
+                            productsType: "",
+                            productsDescription: "",
+                            image: null,
+                        });
+                        storeImageFileElementRef.current.value = "";
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                } else {
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 1500);
+                }
+            }
+        }
+        catch (err) {
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
     return (
         <div className="home page">
             <Head>
@@ -502,6 +648,24 @@ export default function Home({ countryAsProperty }) {
                                     ))}
                                 </Slider>
                             </div>
+                        </section>}
+                        {appearedSections.includes("add your store") && <section className="add-your-store">
+                            <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>
+                            <form className="add-your-store-form w-50 mx-auto" onSubmit={addNewStore}>
+                                <section className="name mb-4">
+                                    <input
+                                        type="text"
+                                        className={`form-control p-3 border-2 product-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
+                                        placeholder="Please Enter Store Name"
+                                        onChange={(e) => setStoreData({ ...storeData, name: e.target.value })}
+                                        value={storeData.name}
+                                    />
+                                    {formValidationErrors["name"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                        <span>{formValidationErrors["name"]}</span>
+                                    </p>}
+                                </section>
+                            </form>
                         </section>}
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
