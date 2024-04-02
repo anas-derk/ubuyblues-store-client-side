@@ -354,13 +354,13 @@ export default function StoresManagment() {
                             <table className="orders-data-table mb-4 managment-table bg-white w-100">
                                 <thead>
                                     <tr>
-                                        <th>Store Number</th>
-                                        <th>Store Id</th>
+                                        <th width="50">Store Number</th>
+                                        <th width="50">Store Id</th>
                                         <th>Name</th>
                                         <th>Owner Full Name</th>
                                         <th>Owner Email</th>
-                                        <th>Products Type</th>
-                                        <th>Is Approved</th>
+                                        <th width="200">Products Type</th>
+                                        <th width="50">Is Approved</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -369,12 +369,52 @@ export default function StoresManagment() {
                                         <tr key={store._id}>
                                             <td>{storeIndex + 1}</td>
                                             <td>{store._id}</td>
-                                            <td>{store.name}</td>
                                             <td>
-                                                {store.ownerFirstName + " " + store.ownerLastName}
+                                                <section className="store-name mb-4">
+                                                    <input
+                                                        type="text"
+                                                        defaultValue={store.name}
+                                                        className={`form-control d-block mx-auto p-2 border-2 store-name-field ${formValidationErrors["name"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                        placeholder="Pleae Enter Store Name"
+                                                        onChange={(e) => changeStoreData(storeIndex, "name", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                    />
+                                                    {formValidationErrors["name"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                        <span>{formValidationErrors["name"]}</span>
+                                                    </p>}
+                                                </section>
                                             </td>
-                                            <td>{store.ownerEmail}</td>
-                                            <td>{store.productsType}</td>
+                                            <td>{store.ownerFirstName + " " + store.ownerLastName}</td>
+                                            <td>
+                                                <section className="store-owner-email mb-4">
+                                                    <input
+                                                        type="text"
+                                                        defaultValue={store.ownerEmail}
+                                                        className={`form-control d-block mx-auto p-2 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                        placeholder="Pleae Enter Owner Email"
+                                                        onChange={(e) => changeStoreData(storeIndex, "ownerEmail", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                    />
+                                                    {formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                        <span>{formValidationErrors["ownerEmail"]}</span>
+                                                    </p>}
+                                                </section>
+                                            </td>
+                                            <td>
+                                                <section className="store-products-type mb-4">
+                                                    <input
+                                                        type="text"
+                                                        defaultValue={store.productsType}
+                                                        className={`form-control d-block mx-auto p-2 border-2 store-products-type-field ${formValidationErrors["productsType"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                        placeholder="Pleae Enter Owner Email"
+                                                        onChange={(e) => changeStoreData(storeIndex, "productsType", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                    />
+                                                    {formValidationErrors["productsType"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                        <span>{formValidationErrors["productsType"]}</span>
+                                                    </p>}
+                                                </section>
+                                            </td>
                                             <td>{store.isApproved ? "yes" : "no"}</td>
                                             <td>
                                                 {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
