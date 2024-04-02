@@ -142,18 +142,34 @@ export default function StoresManagment() {
 
     const filterStores = async (filters) => {
         try {
-            setIsFilteringStoresStatus(true);
-            setCurrentPage(1);
-            let filteringString = getFilteringString(filters);
-            const result = await getStoresCount(filteringString);
-            if (result.data > 0) {
-                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
-                setTotalPagesCount(Math.ceil(result.data / pageSize));
-                setIsFilteringStoresStatus(false);
-            } else {
-                setAllStoresInsideThePage([]);
-                setTotalPagesCount(0);
-                setIsFilteringStoresStatus(false);
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "ownerEmail",
+                    value: allStoresInsideThePage[orderIndex].ownerEmail,
+                    rules: {
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            console.log(errorsObject)
+            if (Object.keys(errorsObject).length == 0) {
+                setIsFilteringStoresStatus(true);
+                setCurrentPage(1);
+                let filteringString = getFilteringString(filters);
+                const result = await getStoresCount(filteringString);
+                if (result.data > 0) {
+                    setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
+                    setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    setIsFilteringStoresStatus(false);
+                } else {
+                    setAllStoresInsideThePage([]);
+                    setTotalPagesCount(0);
+                    setIsFilteringStoresStatus(false);
+                }
             }
         }
         catch (err) {
@@ -179,15 +195,11 @@ export default function StoresManagment() {
             setFormValidationErrors({});
             let errorsObject = validateFormFields([
                 {
-                    name: "totalAmount",
-                    value: allStoresInsideThePage[orderIndex].order_amount,
+                    name: "ownerEmail",
+                    value: allStoresInsideThePage[orderIndex].ownerEmail,
                     rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                        minNumber: {
-                            value: 0,
-                            msg: "Sorry, Min Number Is: 1 !!",
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
                         },
                     },
                 },
@@ -291,7 +303,7 @@ export default function StoresManagment() {
                                 <div className="col-md-4 d-flex align-items-center">
                                     <h6 className="me-2 mb-0 fw-bold text-center">Store Name</h6>
                                     <input
-                                        type="email"
+                                        type="text"
                                         className="form-control"
                                         placeholder="Pleae Enter Store Name"
                                         onChange={(e) => setFilters({ ...filters, name: e.target.value.trim() })}
