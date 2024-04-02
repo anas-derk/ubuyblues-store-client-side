@@ -321,21 +321,21 @@ export default function StoresManagment() {
                                     </select>
                                 </div>
                                 <div className="col-md-6 d-flex align-items-center mt-4">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Customer Name</h6>
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner Full Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Pleae Enter Customer Name"
-                                        onChange={(e) => setFilters({ ...filters, customerName: e.target.value.trim() })}
+                                        placeholder="Pleae Enter Owner Full Name"
+                                        onChange={(e) => setFilters({ ...filters, ownerFirstName: e.target.value.trim() })}
                                     />
                                 </div>
                                 <div className="col-md-6 d-flex align-items-center mt-4">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Customer Email</h6>
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner Email</h6>
                                     <input
                                         type="email"
                                         className="form-control"
-                                        placeholder="Pleae Enter Customer Email"
-                                        onChange={(e) => setFilters({ ...filters, email: e.target.value.trim() })}
+                                        placeholder="Pleae Enter Owner Email"
+                                        onChange={(e) => setFilters({ ...filters, ownerEmail: e.target.value.trim() })}
                                     />
                                 </div>
                             </div>
@@ -362,7 +362,6 @@ export default function StoresManagment() {
                                         <th>Owner Full Name</th>
                                         <th>Owner Email</th>
                                         <th>Products Type</th>
-                                        <th>Products Description</th>
                                         <th>Is Approved</th>
                                         <th>Action</th>
                                     </tr>
@@ -374,14 +373,10 @@ export default function StoresManagment() {
                                             <td>{store._id}</td>
                                             <td>{store.name}</td>
                                             <td>
-                                                <h6>First Name: </h6>
-                                                <span>{store.ownerFirstName}</span>
-                                                <h6>Last Name: </h6>
-                                                <span>{store.ownerLastName}</span>
+                                                {store.ownerFirstName + " " + store.ownerLastName}
                                             </td>
                                             <td>{store.ownerEmail}</td>
                                             <td>{store.productsType}</td>
-                                            <td>{store.productsDescription}</td>
                                             <td>{store.isApproved ? "yes" : "no"}</td>
                                             <td>
                                                 {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
@@ -420,22 +415,18 @@ export default function StoresManagment() {
                                                 >
                                                     Deleted Successful
                                                 </button>}
-                                                {isErrorStatus && orderIndex === selectedStoreIndex && <button
+                                                {isErrorStatus && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Sorry, Someting Went Wrong, Please Repeate The Process !!
                                                 </button>}
-                                                {/* {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
+                                                {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
                                                     <Link
-                                                        href={`/admin-dashboard/orders-managment/${order._id}`}
+                                                        href={`/admin-dashboard/stores-managment/${store._id}`}
                                                         className="btn btn-success d-block mx-auto mb-4 global-button"
-                                                    >Show Details</Link>
-                                                    <Link
-                                                        href={`/admin-dashboard/orders-managment/billing/${order._id}`}
-                                                        className="btn btn-success d-block mx-auto mb-4 global-button"
-                                                    >Show Billing</Link>
-                                                </>} */}
+                                                    >Show Full Details</Link>
+                                                </>}
                                             </td>
                                         </tr>
                                     ))}
