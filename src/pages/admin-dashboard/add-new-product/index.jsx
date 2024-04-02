@@ -304,7 +304,6 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["discount"]}</span>
                             </p>}
                         </section>
-
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
                         <section className="image mb-4">
                             <input
