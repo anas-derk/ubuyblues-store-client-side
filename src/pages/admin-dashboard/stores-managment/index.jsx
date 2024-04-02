@@ -142,34 +142,18 @@ export default function StoresManagment() {
 
     const filterStores = async (filters) => {
         try {
-            setFormValidationErrors({});
-            let errorsObject = validateFormFields([
-                {
-                    name: "ownerEmail",
-                    value: allStoresInsideThePage[orderIndex].ownerEmail,
-                    rules: {
-                        isEmail: {
-                            msg: "Sorry, Invalid Email !!",
-                        },
-                    },
-                },
-            ]);
-            setFormValidationErrors(errorsObject);
-            console.log(errorsObject)
-            if (Object.keys(errorsObject).length == 0) {
-                setIsFilteringStoresStatus(true);
-                setCurrentPage(1);
-                let filteringString = getFilteringString(filters);
-                const result = await getStoresCount(filteringString);
-                if (result.data > 0) {
-                    setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
-                    setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    setIsFilteringStoresStatus(false);
-                } else {
-                    setAllStoresInsideThePage([]);
-                    setTotalPagesCount(0);
-                    setIsFilteringStoresStatus(false);
-                }
+            setIsFilteringStoresStatus(true);
+            setCurrentPage(1);
+            let filteringString = getFilteringString(filters);
+            const result = await getStoresCount(filteringString);
+            if (result.data > 0) {
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
+                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                setIsFilteringStoresStatus(false);
+            } else {
+                setAllStoresInsideThePage([]);
+                setTotalPagesCount(0);
+                setIsFilteringStoresStatus(false);
             }
         }
         catch (err) {
