@@ -148,7 +148,7 @@ export default function OrdersManagment() {
         return filteringString;
     }
 
-    const filterOrders = async () => {
+    const filterOrders = async (filters) => {
         try {
             setIsFilteringOrdersStatus(true);
             setCurrentPage(1);
@@ -341,7 +341,7 @@ export default function OrdersManagment() {
                             </div>
                             {!isFilteringOrdersStatus && <button
                                 className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
-                                onClick={() => filterOrders()}
+                                onClick={() => filterOrders(filters)}
                             >
                                 Filter
                             </button>}

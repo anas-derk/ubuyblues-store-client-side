@@ -20,7 +20,7 @@ export default function StoresManagment() {
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
 
-    const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(false);
+    const [isFilteringStoresStatus, setIsFilteringStoresStatus] = useState(false);
 
     const [selectedStoreIndex, setSelectedStoreIndex] = useState(-1);
 
@@ -115,26 +115,26 @@ export default function StoresManagment() {
     }
 
     const getPreviousPage = async () => {
-        setIsFilteringOrdersStatus(true);
+        setIsFilteringStoresStatus(true);
         const newCurrentPage = currentPage - 1;
         setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
-        setIsFilteringOrdersStatus(false);
+        setIsFilteringStoresStatus(false);
     }
 
     const getNextPage = async () => {
-        setIsFilteringOrdersStatus(true);
+        setIsFilteringStoresStatus(true);
         const newCurrentPage = currentPage + 1;
         setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
         setCurrentPage(newCurrentPage);
-        setIsFilteringOrdersStatus(false);
+        setIsFilteringStoresStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsFilteringOrdersStatus(true);
+        setIsFilteringStoresStatus(true);
         setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
-        setIsFilteringOrdersStatus(false);
+        setIsFilteringStoresStatus(false);
     }
 
     const getFilteringString = (filters) => {
@@ -148,20 +148,20 @@ export default function StoresManagment() {
         return filteringString;
     }
 
-    const filterOrders = async () => {
+    const filterStores = async (filters) => {
         try {
-            setIsFilteringOrdersStatus(true);
+            setIsFilteringStoresStatus(true);
             setCurrentPage(1);
             let filteringString = getFilteringString(filters);
-            const result = await getOrdersCount(filteringString);
+            const result = await getStoresCount(filteringString);
             if (result.data > 0) {
-                setAllStoresInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
                 setTotalPagesCount(Math.ceil(result.data / pageSize));
-                setIsFilteringOrdersStatus(false);
+                setIsFilteringStoresStatus(false);
             } else {
                 setAllStoresInsideThePage([]);
                 setTotalPagesCount(0);
-                setIsFilteringOrdersStatus(false);
+                setIsFilteringStoresStatus(false);
             }
         }
         catch (err) {
@@ -169,7 +169,7 @@ export default function StoresManagment() {
                 await router.push("/admin-dashboard/login");
                 return;
             }
-            setIsFilteringOrdersStatus(false);
+            setIsFilteringStoresStatus(false);
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
                 setIsErrorStatus(false);
@@ -178,11 +178,11 @@ export default function StoresManagment() {
         }
     }
 
-    const changeOrderData = (productIndex, fieldName, newValue) => {
+    const changeStoreData = (productIndex, fieldName, newValue) => {
         allStoresInsideThePage[productIndex][fieldName] = newValue;
     }
 
-    const updateOrderData = async (orderIndex) => {
+    const updateStoreData = async (orderIndex) => {
         try {
             setFormValidationErrors({});
             let errorsObject = validateFormFields([
@@ -235,7 +235,7 @@ export default function StoresManagment() {
         }
     }
 
-    const deleteOrder = async (orderIndex) => {
+    const deleteStore = async (orderIndex) => {
         try {
             setIsDeletingStatus(true);
             setSelectedStoreIndex(orderIndex);
@@ -251,10 +251,10 @@ export default function StoresManagment() {
                 let successTimeout = setTimeout(async () => {
                     setIsSuccessStatus(false);
                     setSelectedStoreIndex(-1);
-                    setIsFilteringOrdersStatus(true);
+                    setIsFilteringStoresStatus(true);
                     setAllStoresInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
                     setCurrentPage(1);
-                    setIsFilteringOrdersStatus(false);
+                    setIsFilteringStoresStatus(false);
                     clearTimeout(successTimeout);
                 }, 3000);
             }
@@ -288,23 +288,21 @@ export default function StoresManagment() {
                             <hr />
                             <div className="row mb-4">
                                 <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Store Number</h6>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Pleae Enter Store Number"
-                                        min="1"
-                                        max={allStoresInsideThePage.length}
-                                        onChange={(e) => setFilters({ ...filters, storeNumber: e.target.valueAsNumber })}
-                                    />
-                                </div>
-                                <div className="col-md-4 d-flex align-items-center">
                                     <h6 className="me-2 mb-0 fw-bold text-center">Store Id</h6>
                                     <input
                                         type="text"
                                         className="form-control"
                                         placeholder="Pleae Enter Store Id"
-                                        onChange={(e) => setFilters({ ...filters, orderId: e.target.value.trim() })}
+                                        onChange={(e) => setFilters({ ...filters, storeId: e.target.value.trim() })}
+                                    />
+                                </div>
+                                <div className="col-md-4 d-flex align-items-center">
+                                    <h6 className="me-2 mb-0 fw-bold text-center">Store Name</h6>
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        placeholder="Pleae Enter Store Name"
+                                        onChange={(e) => setFilters({ ...filters, name: e.target.value.trim() })}
                                     />
                                 </div>
                                 <div className="col-md-4 d-flex align-items-center">
@@ -339,20 +337,20 @@ export default function StoresManagment() {
                                     />
                                 </div>
                             </div>
-                            {!isFilteringOrdersStatus && <button
+                            {!isFilteringStoresStatus && <button
                                 className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
-                                onClick={() => filterOrders()}
+                                onClick={() => filterStores(filters)}
                             >
                                 Filter
                             </button>}
-                            {isFilteringOrdersStatus && <button
+                            {isFilteringStoresStatus && <button
                                 className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
                                 disabled
                             >
                                 Filtering ...
                             </button>}
                         </section>
-                        {allStoresInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
+                        {allStoresInsideThePage.length > 0 && !isFilteringStoresStatus && <section className="orders-data-box p-3 data-box">
                             <table className="orders-data-table mb-4 managment-table bg-white w-100">
                                 <thead>
                                     <tr>
@@ -381,7 +379,7 @@ export default function StoresManagment() {
                                             <td>
                                                 {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    onClick={() => updateOrderData(storeIndex)}
+                                                    onClick={() => updateStoreData(storeIndex)}
                                                 >
                                                     Update
                                                 </button>}
@@ -399,7 +397,7 @@ export default function StoresManagment() {
                                                 </button>}
                                                 {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    onClick={() => deleteOrder(storeIndex)}
+                                                    onClick={() => deleteStore(storeIndex)}
                                                 >
                                                     Delete
                                                 </button>}
@@ -433,11 +431,11 @@ export default function StoresManagment() {
                                 </tbody>
                             </table>
                         </section>}
-                        {allStoresInsideThePage.length === 0 && !isFilteringOrdersStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
-                        {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                        {allStoresInsideThePage.length === 0 && !isFilteringStoresStatus && <p className="alert alert-danger">Sorry, Can't Find Any Orders !!</p>}
+                        {isFilteringStoresStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                             <span className="loader-table-data"></span>
                         </div>}
-                        {totalPagesCount > 1 && !isFilteringOrdersStatus &&
+                        {totalPagesCount > 1 && !isFilteringStoresStatus &&
                             <PaginationBar
                                 totalPagesCount={totalPagesCount}
                                 currentPage={currentPage}
