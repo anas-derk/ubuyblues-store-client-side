@@ -368,7 +368,7 @@ export default function Home({ countryAsProperty }) {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const addNewStore = async (e) => {
+    const createNewStore = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
@@ -452,24 +452,25 @@ export default function Home({ countryAsProperty }) {
                 formData.append("ownerEmail", storeData.ownerEmail);
                 formData.append("productsType", storeData.productsType);
                 formData.append("productsDescription", storeData.productsDescription);
-                formData.append("image", storeData.image);
+                formData.append("storeImg", storeData.image);
                 setIsWaitStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/stores/add-new-store`, formData);
+                const res = await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData);
                 const result = res.data;
                 setIsWaitStatus(false);
+                console.log(result);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
-                        setStoreData({
-                            name: "",
-                            ownerFirstName: "",
-                            ownerLastName: "",
-                            ownerEmail: "",
-                            productsType: "",
-                            productsDescription: "",
-                            image: null,
-                        });
+                        // setStoreData({
+                        //     name: "",
+                        //     ownerFirstName: "",
+                        //     ownerLastName: "",
+                        //     ownerEmail: "",
+                        //     productsType: "",
+                        //     productsDescription: "",
+                        //     image: null,
+                        // });
                         storeImageFileElementRef.current.value = "";
                         clearTimeout(successTimeout);
                     }, 1500);
@@ -652,7 +653,7 @@ export default function Home({ countryAsProperty }) {
                         </section>}
                         {appearedSections.includes("add your store") && <section className="add-your-store pb-5">
                             <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>
-                            <form className="add-your-store-form w-50 mx-auto" onSubmit={addNewStore}>
+                            <form className="add-your-store-form w-50 mx-auto" onSubmit={createNewStore}>
                                 <section className="name mb-4">
                                     <input
                                         type="text"
@@ -729,6 +730,20 @@ export default function Home({ countryAsProperty }) {
                                     {formValidationErrors["productsDescription"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["productsDescription"])}</span>
+                                    </p>}
+                                </section>
+                                <section className="image mb-4">
+                                    <input
+                                        type="file"
+                                        className={`form-control p-2 border-2 product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
+                                        placeholder="Please Enter Product Image"
+                                        onChange={(e) => setStoreData({ ...storeData, image: e.target.files[0] })}
+                                        ref={storeImageFileElementRef}
+                                        value={storeImageFileElementRef.current?.value}
+                                    />
+                                    {formValidationErrors["image"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                        <span>{t(formValidationErrors["image"])}</span>
                                     </p>}
                                 </section>
                                 {!isWaitStatus && !successMsg && !errorMsg && <button
