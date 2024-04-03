@@ -462,15 +462,15 @@ export default function Home({ countryAsProperty }) {
                     setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
-                        // setStoreData({
-                        //     name: "",
-                        //     ownerFirstName: "",
-                        //     ownerLastName: "",
-                        //     ownerEmail: "",
-                        //     productsType: "",
-                        //     productsDescription: "",
-                        //     image: null,
-                        // });
+                        setStoreData({
+                            name: "",
+                            ownerFirstName: "",
+                            ownerLastName: "",
+                            ownerEmail: "",
+                            productsType: "",
+                            productsDescription: "",
+                            image: null,
+                        });
                         storeImageFileElementRef.current.value = "";
                         clearTimeout(successTimeout);
                     }, 1500);
