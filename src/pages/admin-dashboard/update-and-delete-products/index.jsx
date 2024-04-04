@@ -19,6 +19,8 @@ export default function UpdateAndDeleteProducts() {
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [token, setToken] = useState("");
+    
+    const [userInfo, setUserInfo] = useState({});
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
@@ -89,6 +91,7 @@ export default function UpdateAndDeleteProducts() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setUserInfo(result.data);
                         result = await getProductsCount();
                         if (result.data > 0) {
                             setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
@@ -696,7 +699,7 @@ export default function UpdateAndDeleteProducts() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-4">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Update / Delete Products Page
+                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Update / Delete Products Page
                     </h1>
                     <section className="filters mb-3 bg-white border-3 border-info p-3 text-start w-100">
                         <h5 className="section-name fw-bold text-center">Filters: </h5>

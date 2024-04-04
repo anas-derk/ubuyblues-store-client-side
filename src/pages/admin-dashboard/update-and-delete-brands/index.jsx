@@ -18,6 +18,8 @@ export default function UpdateAndDeleteBrands() {
 
     const [token, setToken] = useState("");
 
+    const [userInfo, setUserInfo] = useState({});
+
     const [isWaitGetBrandsStatus, setIsWaitGetBrandsStatus] = useState(false);
 
     const [allBrandsInsideThePage, setAllBrandsInsideThePage] = useState([]);
@@ -55,6 +57,7 @@ export default function UpdateAndDeleteBrands() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setUserInfo(result.data);
                         result = await getBrandsCount();
                         if (result.data > 0) {
                             setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
@@ -291,7 +294,7 @@ export default function UpdateAndDeleteBrands() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-4">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Update / Delete Brands Page
+                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Update / Delete Brands Page
                     </h1>
                     {allBrandsInsideThePage.length > 0 && !isWaitGetBrandsStatus && <section className="brands-box w-100">
                         <table className="brands-table mb-4 managment-table bg-white w-100">

@@ -17,6 +17,8 @@ export default function AddNewCategory() {
 
     const [token, setToken] = useState("");
 
+    const [userInfo, setUserInfo] = useState({});
+
     const [categoryName, setCategoryName] = useState("");
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
@@ -38,6 +40,7 @@ export default function AddNewCategory() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setUserInfo(result.data);
                         setToken(adminToken);
                         setIsLoadingPage(false);
                     }
@@ -79,6 +82,7 @@ export default function AddNewCategory() {
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
                     categoryName,
+                    storeId: userInfo.storeId,
                 }, {
                     headers: {
                         Authorization: token,
@@ -127,7 +131,7 @@ export default function AddNewCategory() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Add New Category Page
+                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Add New Category Page
                     </h1>
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewCategory(e, categoryName)}>
                         <section className="category-name mb-4">

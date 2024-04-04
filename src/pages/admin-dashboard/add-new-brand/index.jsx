@@ -17,6 +17,8 @@ export default function AddNewBrand() {
 
     const [token, setToken] = useState("");
 
+    const [userInfo, setUserInfo] = useState({});
+
     const [brandImage, setBrandImage] = useState("");
 
     const [brandTitle, setBrandTitle] = useState("");
@@ -42,6 +44,7 @@ export default function AddNewBrand() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setUserInfo(result.data);
                         setToken(adminToken);
                         setIsLoadingPage(false);
                     }
@@ -146,7 +149,7 @@ export default function AddNewBrand() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Add New Brand Page
+                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Add New Brand Page
                     </h1>
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewBrand(e, brandTitle)}>
                         <h6 className="mb-3 fw-bold">Please Select Brand Image</h6>

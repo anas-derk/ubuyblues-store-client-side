@@ -18,6 +18,8 @@ export default function UpdateAndDeleteCategories() {
 
     const [token, setToken] = useState("");
 
+    const [userInfo, setUserInfo] = useState({});
+
     const [isWaitGetCategoriesStatus, setIsWaitGetCategoriesStatus] = useState(false);
 
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
@@ -49,6 +51,7 @@ export default function UpdateAndDeleteCategories() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setUserInfo(result.data);
                         result = await getCategoriesCount();
                         if (result.data > 0) {
                             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
@@ -228,7 +231,7 @@ export default function UpdateAndDeleteCategories() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-4">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Update / Delete Categories Page
+                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Update / Delete Categories Page
                     </h1>
                     {allCategoriesInsideThePage.length > 0 && !isWaitGetCategoriesStatus && <section className="categories-box w-100">
                         <table className="products-table mb-4 managment-table bg-white w-100">
