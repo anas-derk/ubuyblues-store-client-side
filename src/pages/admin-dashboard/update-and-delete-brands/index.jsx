@@ -394,7 +394,7 @@ export default function UpdateAndDeleteBrands() {
                     {isWaitGetBrandsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
-                    {totalPagesCount > 0 && !isWaitGetBrandsStatus &&
+                    {totalPagesCount > 1 && !isWaitGetBrandsStatus &&
                         <PaginationBar
                             totalPagesCount={totalPagesCount}
                             currentPage={currentPage}

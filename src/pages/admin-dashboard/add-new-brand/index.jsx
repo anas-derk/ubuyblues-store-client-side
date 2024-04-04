@@ -98,6 +98,7 @@ export default function AddNewBrand() {
                 let formData = new FormData();
                 formData.append("brandImg", brandImage);
                 formData.append("title", brandTitle);
+                formData.append("storeId", userInfo.storeId);
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
                     headers: {
