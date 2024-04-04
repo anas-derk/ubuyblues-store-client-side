@@ -273,7 +273,7 @@ export default function StoresManagment() {
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Stores Managment</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {userInfo.firstName + " " + userInfo.lastName} In Stores Managment</h1>
                         <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
@@ -304,6 +304,7 @@ export default function StoresManagment() {
                                     >
                                         <option value="" hidden>Pleae Enter Status</option>
                                         <option value="">All</option>
+                                        <option value="pending">Pending</option>
                                         <option value="approved">Approved</option>
                                         <option value="rejected">Rejected</option>
                                         <option value="blocked">Blocked</option>
@@ -358,9 +359,9 @@ export default function StoresManagment() {
                                         <th width="50">Store Id</th>
                                         <th>Name</th>
                                         <th>Owner Full Name</th>
-                                        <th>Owner Email</th>
+                                        <th width="250">Owner Email</th>
                                         <th width="200">Products Type</th>
-                                        <th width="50">Is Approved</th>
+                                        <th width="250">Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -415,7 +416,19 @@ export default function StoresManagment() {
                                                     </p>}
                                                 </section>
                                             </td>
-                                            <td>{store.isApproved ? "yes" : "no"}</td>
+                                            <td>
+                                                {store.status}
+                                                <hr />
+                                                <select
+                                                    className="select-store-status form-select"
+                                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                                                >
+                                                    <option value="" hidden>Pleae Enter New Status</option>
+                                                    <option value="approved">Approved</option>
+                                                    <option value="rejected">Rejected</option>
+                                                    <option value="blocked">Blocked</option>
+                                                </select>
+                                            </td>
                                             <td>
                                                 {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
