@@ -17,6 +17,8 @@ export default function AddNewProduct() {
 
     const [token, setToken] = useState("");
 
+    const [userInfo, setUserInfo] = useState({});
+
     const [allCategories, setAllCategories] = useState([]);
 
     const [productData, setProductData] = useState({
@@ -52,6 +54,7 @@ export default function AddNewProduct() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setUserInfo(result.data);
                         setToken(adminToken);
                         setAllCategories((await getAllCategories()).data);
                         setIsLoadingPage(false);
@@ -173,6 +176,7 @@ export default function AddNewProduct() {
                 formData.append("discount", productData.discount);
                 formData.append("productImage", productData.image);
                 formData.append("galleryImages", productData.galleryImages[0]);
+                formData.append("storeId", userInfo.storeId);
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData, {
                     headers: {
@@ -234,7 +238,7 @@ export default function AddNewProduct() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Add New Product Page
+                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Add New Product Page
                     </h1>
                     {allCategories.length > 0 ? <form className="add-new-product-form w-50" onSubmit={(e) => addNewProduct(e, productData)}>
                         <section className="name mb-4">
