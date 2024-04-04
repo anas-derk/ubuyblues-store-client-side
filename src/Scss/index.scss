@@ -239,7 +239,6 @@ textarea{
     }
 }
 
-
 .form-field-error-box{
     border-radius: 3px;
 }
@@ -414,6 +413,43 @@ textarea{
                 border-bottom: 1px solid var(--main-color-two);
             }
         }
+    }
+}
+
+.popup-box {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000, $alpha: 0.5);
+    z-index: 3;
+    .content-box{
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--main-color-one);
+        box-shadow: 1px 1px 10px #000;
+        width: 90%;
+        height: 60%;
+        &.share-icons-box{
+            .row{
+                @media (max-width: 767px) {
+                    gap: 20px;
+                }
+            }
+        }
+    }
+    .close-box-icon{
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        font-size: 40px;
+        background-color: red;
+        cursor: pointer;
+        border-radius: 50%;
+        padding: 5px;
     }
 }
 

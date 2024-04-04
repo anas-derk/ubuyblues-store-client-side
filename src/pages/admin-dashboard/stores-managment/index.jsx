@@ -39,14 +39,15 @@ export default function StoresManagment() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [filters, setFilters] = useState({
-        orderNumber: -1,
-        orderId: "",
+        storeId: "",
         status: "",
         customerName: "",
         email: "",
     });
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const [isDisplayChangeStoreStatusBox, setIsDisplayChangeStoreStatusBox] = useState(false);
 
     const router = useRouter();
 
@@ -419,24 +420,20 @@ export default function StoresManagment() {
                                             </td>
                                             <td>
                                                 {store.status}
-                                                <hr />
-                                                <select
-                                                    className="select-store-status form-select"
-                                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                                                >
-                                                    <option value="" hidden>Pleae Enter New Status</option>
-                                                    <option value="approved">Approved</option>
-                                                    <option value="rejected">Rejected</option>
-                                                    <option value="blocked">Blocked</option>
-                                                </select>
                                             </td>
                                             <td>
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
-                                                    className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    onClick={() => updateStoreData(storeIndex)}
-                                                >
-                                                    Update
-                                                </button>}
+                                                {
+                                                    !isUpdatingStatus &&
+                                                    !isDeletingStatus &&
+                                                    !isSuccessStatus &&
+                                                    !isErrorStatus &&
+                                                    <button
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                        onClick={() => updateStoreData(storeIndex)}
+                                                    >
+                                                        Update
+                                                    </button>
+                                                }
                                                 {isUpdatingStatus && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
                                                     disabled
@@ -449,11 +446,34 @@ export default function StoresManagment() {
                                                 >
                                                     Success
                                                 </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && !store.isDeleted && <button
+                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     onClick={() => deleteStore(storeIndex)}
                                                 >
                                                     Delete
+                                                </button>}
+                                                {
+                                                    !isUpdatingStatus &&
+                                                    !isDeletingStatus &&
+                                                    !isSuccessStatus &&
+                                                    !isErrorStatus &&
+                                                    <button
+                                                        className="btn btn-success d-block mx-auto mb-3 global-button"
+                                                        onClick={() => deleteStore(storeIndex)}
+                                                    >
+                                                        Approve
+                                                    </button>}
+                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && <button
+                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    onClick={() => deleteStore(storeIndex)}
+                                                >
+                                                    Reject
+                                                </button>}
+                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && <button
+                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    onClick={() => deleteStore(storeIndex)}
+                                                >
+                                                    Blocking
                                                 </button>}
                                                 {isDeletingStatus && !store.isDeleted && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
