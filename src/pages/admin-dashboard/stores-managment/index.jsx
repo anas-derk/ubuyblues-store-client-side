@@ -52,6 +52,8 @@ export default function StoresManagment() {
 
     const pageSize = 3;
 
+    const storeStatusList = ["pending", "approving", "rejecting", "blocking"];
+
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
@@ -304,10 +306,9 @@ export default function StoresManagment() {
                                     >
                                         <option value="" hidden>Pleae Enter Status</option>
                                         <option value="">All</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="approved">Approved</option>
-                                        <option value="rejected">Rejected</option>
-                                        <option value="blocked">Blocked</option>
+                                        {storeStatusList.map((status, index) => (
+                                            <option value={status} key={index}>{status}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div className="col-md-4 d-flex align-items-center mt-5">
