@@ -53,7 +53,7 @@ export default function StoresManagment() {
     const [isDisplayChangeStoreStatusBox, setIsDisplayChangeStoreStatusBox] = useState(false);
 
     const [newStoreStatus, setNewStoreStatus] = useState("");
-    
+
     const [selectedStoreId, setSelectedStoreId] = useState("");
 
     const router = useRouter();
@@ -292,6 +292,7 @@ export default function StoresManagment() {
                     setNewStoreStatus={setNewStoreStatus}
                     storeId={selectedStoreId}
                     newStoreStatus={newStoreStatus}
+                    token={token}
                 />}
                 {/* End Share Options Box */}
                 {/* Start Content Section */}
@@ -483,19 +484,32 @@ export default function StoresManagment() {
                                                         onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
                                                     >
                                                         Approve
-                                                    </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    onClick={() => deleteStore(storeIndex)}
-                                                >
-                                                    Reject
-                                                </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    onClick={() => deleteStore(storeIndex)}
-                                                >
-                                                    Blocking
-                                                </button>}
+                                                    </button>
+                                                }
+                                                {
+                                                    !isUpdatingStatus &&
+                                                    !isDeletingStatus &&
+                                                    !isSuccessStatus &&
+                                                    !isErrorStatus &&
+                                                    <button
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "rejecting")}
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                }
+                                                {
+                                                    !isUpdatingStatus &&
+                                                    !isDeletingStatus &&
+                                                    !isSuccessStatus &&
+                                                    !isErrorStatus &&
+                                                    <button
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
+                                                    >
+                                                        Blocking
+                                                    </button>
+                                                }
                                                 {isDeletingStatus && !store.isDeleted && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
