@@ -41,8 +41,10 @@ export default function StoresManagment() {
 
     const [filters, setFilters] = useState({
         storeId: "",
+        name: "",
         status: "",
-        customerName: "",
+        ownerFirstName: "",
+        ownerLastName: "",
         email: "",
     });
 
@@ -143,7 +145,7 @@ export default function StoresManagment() {
         let filteringString = "";
         if (filters.storeId) filteringString += `_id=${filters.storeId}&`;
         if (filters.name) filteringString += `name=${filters.name}&`;
-        if (filters.status) filteringString += `ownerEmail=${filters.status}&`;
+        if (filters.status) filteringString += `status=${filters.status}&`;
         if (filters.ownerFirstName) filteringString += `ownerFirstName=${filters.ownerFirstName}&`;
         if (filters.ownerLastName) filteringString += `ownerLastName=${filters.ownerLastName}&`;
         if (filters.ownerEmail) filteringString += `ownerEmail=${filters.ownerEmail}&`;
