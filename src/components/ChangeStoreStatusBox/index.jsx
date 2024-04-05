@@ -30,6 +30,42 @@ export default function ChangeStoreStatusBox({
         return validations.inputValuesValidation(validateDetailsList);
     }
 
+    const approveStoreCreate = async (storeId) => {
+        try {
+            setIsWaitStatus(true);
+            const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store-create/${storeId}`,
+                {
+                    headers: {
+                        Authorization: token,
+                    }
+                }
+            );
+            const result = res.data;
+            if (!result.error) {
+                setIsSuccessStatus(true);
+                let successTimeout = setTimeout(async () => {
+                    setIsSuccessStatus(false);
+                    handleClosePopupBox();
+                    clearTimeout(successTimeout);
+                });
+            } else {
+                
+            }
+        }
+        catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
     const changeStoreStatus = async (e, storeId, newStoreStatus) => {
         try {
             e.preventDefault();
@@ -65,7 +101,6 @@ export default function ChangeStoreStatusBox({
             }
         }
         catch (err) {
-            console.log(err)
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
@@ -85,7 +120,7 @@ export default function ChangeStoreStatusBox({
                 {!isWaitStatus && !errorMsg && !successMsg && <GrFormClose className="close-popup-box-icon" onClick={handleClosePopupBox} />}
                 <h2 className="mb-5 pb-3 border-bottom border-white">Change Store Status</h2>
                 <h4 className="mb-4">Are You Sure From: {newStoreStatus} Store: ( {storeId} ) ?</h4>
-                <form className="change-store-status-form w-50" onSubmit={(e) => changeStoreStatus(e, storeId, newStoreStatus)}>
+                <form className="change-store-status-form w-50" onSubmit={(e) => e.preventDefault()}>
                     {(newStoreStatus === "rejecting" || newStoreStatus === "blocking") && <section className="change-store-status mb-4">
                         <input
                             type="text"
@@ -106,7 +141,7 @@ export default function ChangeStoreStatusBox({
                         newStoreStatus === "approving" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
-                            type="submit"
+                            onClick={() => approveStoreCreate(storeId)}
                         >
                             Approve
                         </button>
@@ -148,7 +183,7 @@ export default function ChangeStoreStatusBox({
                             className="btn btn-danger d-block mx-auto mb-3 global-button"
                             disabled
                         >
-                            { errorMsg }
+                            {errorMsg}
                         </button>
                     }
                     {successMsg &&
@@ -156,7 +191,7 @@ export default function ChangeStoreStatusBox({
                             className="btn btn-success d-block mx-auto mb-3 global-button"
                             disabled
                         >
-                            { successMsg }
+                            {successMsg}
                         </button>
                     }
                     <button
