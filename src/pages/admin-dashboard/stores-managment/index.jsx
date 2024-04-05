@@ -189,31 +189,50 @@ export default function StoresManagment() {
         setIsDisplayChangeStoreStatusBox(true);
     }
 
-    const changeStoreData = (productIndex, fieldName, newValue) => {
-        allStoresInsideThePage[productIndex][fieldName] = newValue;
+    const changeStoreData = (storeIndex, fieldName, newValue) => {
+        allStoresInsideThePage[storeIndex][fieldName] = newValue;
     }
 
-    const updateStoreData = async (orderIndex) => {
+    const updateStoreData = async (storeIndex) => {
         try {
             setFormValidationErrors({});
             let errorsObject = validateFormFields([
                 {
+                    name: "name",
+                    value: allStoresInsideThePage[storeIndex].name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
                     name: "ownerEmail",
-                    value: allStoresInsideThePage[orderIndex].ownerEmail,
+                    value: allStoresInsideThePage[storeIndex].ownerEmail,
                     rules: {
                         isEmail: {
                             msg: "Sorry, Invalid Email !!",
                         },
                     },
                 },
+                {
+                    name: "productsType",
+                    value: allStoresInsideThePage[storeIndex].productsType,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
             ]);
             setFormValidationErrors(errorsObject);
-            setSelectedStoreIndex(orderIndex);
+            setSelectedStoreIndex(storeIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setIsUpdatingStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/orders/update-order/${allStoresInsideThePage[orderIndex]._id}`, {
-                    order_amount: allStoresInsideThePage[orderIndex].order_amount,
-                    status: allStoresInsideThePage[orderIndex].status,
+                const res = await axios.post(`${process.env.BASE_API_URL}/stores/update-store-info/${allStoresInsideThePage[storeIndex]._id}`, {
+                    name: allStoresInsideThePage[storeIndex].name,
+                    ownerEmail: allStoresInsideThePage[storeIndex].ownerEmail,
+                    productsType: allStoresInsideThePage[storeIndex].productsType,
                 }, {
                     headers: {
                         Authorization: token,
@@ -242,11 +261,11 @@ export default function StoresManagment() {
         }
     }
 
-    const deleteStore = async (orderIndex) => {
+    const deleteStore = async (storeIndex) => {
         try {
             setIsDeletingStatus(true);
-            setSelectedStoreIndex(orderIndex);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allStoresInsideThePage[orderIndex]._id}`, {
+            setSelectedStoreIndex(storeIndex);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allStoresInsideThePage[storeIndex]._id}`, {
                 headers: {
                     Authorization: token,
                 }
@@ -401,7 +420,7 @@ export default function StoresManagment() {
                                                         defaultValue={store.name}
                                                         className={`form-control d-block mx-auto p-2 border-2 store-name-field ${formValidationErrors["name"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
                                                         placeholder="Pleae Enter Store Name"
-                                                        onChange={(e) => changeStoreData(storeIndex, "name", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                        onChange={(e) => changeStoreData(storeIndex, "name", e.target.value)}
                                                     />
                                                     {formValidationErrors["name"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -417,7 +436,7 @@ export default function StoresManagment() {
                                                         defaultValue={store.ownerEmail}
                                                         className={`form-control d-block mx-auto p-2 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
                                                         placeholder="Pleae Enter Owner Email"
-                                                        onChange={(e) => changeStoreData(storeIndex, "ownerEmail", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                        onChange={(e) => changeStoreData(storeIndex, "ownerEmail", e.target.value)}
                                                     />
                                                     {formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -431,8 +450,8 @@ export default function StoresManagment() {
                                                         type="text"
                                                         defaultValue={store.productsType}
                                                         className={`form-control d-block mx-auto p-2 border-2 store-products-type-field ${formValidationErrors["productsType"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                        placeholder="Pleae Enter Owner Email"
-                                                        onChange={(e) => changeStoreData(storeIndex, "productsType", e.target.valueAsNumber ? e.target.valueAsNumber : "")}
+                                                        placeholder="Pleae Enter Products Type"
+                                                        onChange={(e) => changeStoreData(storeIndex, "productsType", e.target.value)}
                                                     />
                                                     {formValidationErrors["productsType"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
