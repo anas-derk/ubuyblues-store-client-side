@@ -270,7 +270,7 @@ export default function StoresManagment() {
                     Authorization: token,
                 }
             });
-            const result = res.data;
+            let result = res.data;
             setIsDeletingStatus(false);
             if (!result.error) {
                 setIsSuccessStatus(true);
@@ -278,7 +278,11 @@ export default function StoresManagment() {
                     setIsSuccessStatus(false);
                     setSelectedStoreIndex(-1);
                     setIsFilteringStoresStatus(true);
-                    setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                    result = await getStoresCount();
+                        if (result.data > 0) {
+                            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                            setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        }
                     setCurrentPage(1);
                     setIsFilteringStoresStatus(false);
                     clearTimeout(successTimeout);
