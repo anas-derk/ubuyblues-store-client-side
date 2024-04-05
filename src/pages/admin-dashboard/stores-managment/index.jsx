@@ -479,6 +479,7 @@ export default function StoresManagment() {
                                                     !isDeletingStatus &&
                                                     !isSuccessStatus &&
                                                     !isErrorStatus &&
+                                                    store.status === "pending" &&
                                                     <button
                                                         className="btn btn-success d-block mx-auto mb-3 global-button"
                                                         onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
@@ -491,6 +492,7 @@ export default function StoresManagment() {
                                                     !isDeletingStatus &&
                                                     !isSuccessStatus &&
                                                     !isErrorStatus &&
+                                                    store.status === "pending" &&
                                                     <button
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         onClick={() => handleDisplayChangeStoreStatusBox(store._id, "rejecting")}
@@ -503,6 +505,7 @@ export default function StoresManagment() {
                                                     !isDeletingStatus &&
                                                     !isSuccessStatus &&
                                                     !isErrorStatus &&
+                                                    store.status === "pending" || store.status === "approving" &&
                                                     <button
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
