@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GrFormClose } from "react-icons/gr";
 import axios from "axios";
 import validations from "../../../public/global_functions/validations";
+import { useRouter } from "next/router";
 
 export default function ChangeStoreStatusBox({
     setIsDisplayChangeStoreStatusBox,
@@ -21,6 +22,8 @@ export default function ChangeStoreStatusBox({
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
+    const router = useRouter();
+
     const handleClosePopupBox = () => {
         setIsDisplayChangeStoreStatusBox(false);
         setStoreAction("");
@@ -33,7 +36,7 @@ export default function ChangeStoreStatusBox({
     const approveStoreCreate = async (storeId) => {
         try {
             setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}`,
+            const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}`, undefined,
                 {
                     headers: {
                         Authorization: token,
@@ -41,15 +44,13 @@ export default function ChangeStoreStatusBox({
                 }
             );
             const result = res.data;
+            setIsWaitStatus(false);
             if (!result.error) {
-                setIsSuccessStatus(true);
+                setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(async () => {
-                    setIsSuccessStatus(false);
-                    handleClosePopupBox();
+                    setSuccessMsg("");
                     clearTimeout(successTimeout);
                 });
-            } else {
-                
             }
         }
         catch (err) {

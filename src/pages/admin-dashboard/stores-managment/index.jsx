@@ -251,6 +251,10 @@ export default function StoresManagment() {
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsUpdatingStatus(false);
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
@@ -290,6 +294,10 @@ export default function StoresManagment() {
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsDeletingStatus(false);
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
