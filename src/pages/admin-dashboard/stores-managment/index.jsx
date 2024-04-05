@@ -52,7 +52,7 @@ export default function StoresManagment() {
 
     const [isDisplayChangeStoreStatusBox, setIsDisplayChangeStoreStatusBox] = useState(false);
 
-    const [newStoreStatus, setNewStoreStatus] = useState("");
+    const [storeAction, setStoreAction] = useState("");
 
     const [selectedStoreId, setSelectedStoreId] = useState("");
 
@@ -183,8 +183,8 @@ export default function StoresManagment() {
         }
     }
 
-    const handleDisplayChangeStoreStatusBox = (storeId, newStoreStatus) => {
-        setNewStoreStatus(newStoreStatus);
+    const handleDisplayChangeStoreStatusBox = (storeId, storeAction) => {
+        setStoreAction(storeAction);
         setSelectedStoreId(storeId);
         setIsDisplayChangeStoreStatusBox(true);
     }
@@ -229,7 +229,7 @@ export default function StoresManagment() {
             setSelectedStoreIndex(storeIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setIsUpdatingStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/stores/update-store-info/${allStoresInsideThePage[storeIndex]._id}`, {
+                const res = await axios.put(`${process.env.BASE_API_URL}/stores/update-store-info/${allStoresInsideThePage[storeIndex]._id}`, {
                     name: allStoresInsideThePage[storeIndex].name,
                     ownerEmail: allStoresInsideThePage[storeIndex].ownerEmail,
                     productsType: allStoresInsideThePage[storeIndex].productsType,
@@ -312,9 +312,9 @@ export default function StoresManagment() {
                 {/* Start Share Options Box */}
                 {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox
                     setIsDisplayChangeStoreStatusBox={setIsDisplayChangeStoreStatusBox}
-                    setNewStoreStatus={setNewStoreStatus}
+                    setStoreAction={setStoreAction}
                     storeId={selectedStoreId}
-                    newStoreStatus={newStoreStatus}
+                    storeAction={storeAction}
                     token={token}
                 />}
                 {/* End Share Options Box */}

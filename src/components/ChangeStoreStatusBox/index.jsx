@@ -5,9 +5,9 @@ import validations from "../../../public/global_functions/validations";
 
 export default function ChangeStoreStatusBox({
     setIsDisplayChangeStoreStatusBox,
-    setNewStoreStatus,
+    setStoreAction,
     storeId,
-    newStoreStatus,
+    storeAction,
     token,
 }) {
 
@@ -23,7 +23,7 @@ export default function ChangeStoreStatusBox({
 
     const handleClosePopupBox = () => {
         setIsDisplayChangeStoreStatusBox(false);
-        setNewStoreStatus("");
+        setStoreAction("");
     }
 
     const validateFormFields = (validateDetailsList) => {
@@ -33,7 +33,7 @@ export default function ChangeStoreStatusBox({
     const approveStoreCreate = async (storeId) => {
         try {
             setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store-create/${storeId}`,
+            const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}`,
                 {
                     headers: {
                         Authorization: token,
@@ -71,13 +71,13 @@ export default function ChangeStoreStatusBox({
             <div className="content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
                 {!isWaitStatus && !errorMsg && !successMsg && <GrFormClose className="close-popup-box-icon" onClick={handleClosePopupBox} />}
                 <h2 className="mb-5 pb-3 border-bottom border-white">Change Store Status</h2>
-                <h4 className="mb-4">Are You Sure From: {newStoreStatus} Store: ( {storeId} ) ?</h4>
+                <h4 className="mb-4">Are You Sure From: {storeAction} Store: ( {storeId} ) ?</h4>
                 <form className="change-store-status-form w-50" onSubmit={(e) => e.preventDefault()}>
-                    {(newStoreStatus === "rejecting" || newStoreStatus === "blocking") && <section className="change-store-status mb-4">
+                    {(storeAction === "rejecting" || storeAction === "blocking") && <section className="change-store-status mb-4">
                         <input
                             type="text"
                             className={`form-control p-3 border-2 change-status-reason-field ${formValidationErrors["changeStatusReason"] ? "border-danger mb-3" : "mb-4"}`}
-                            placeholder={`Please Enter ${newStoreStatus} Reason`}
+                            placeholder={`Please Enter ${storeAction} Reason`}
                             onChange={(e) => setChangeStatusReason(e.target.value)}
                             value={changeStatusReason}
                         />
@@ -90,7 +90,7 @@ export default function ChangeStoreStatusBox({
                         !isWaitStatus &&
                         !errorMsg &&
                         !successMsg &&
-                        newStoreStatus === "approving" &&
+                        storeAction === "approving" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
                             onClick={() => approveStoreCreate(storeId)}
@@ -102,7 +102,7 @@ export default function ChangeStoreStatusBox({
                         !isWaitStatus &&
                         !errorMsg &&
                         !successMsg &&
-                        newStoreStatus === "rejecting" &&
+                        storeAction === "rejecting" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
                             type="submit"
@@ -114,7 +114,7 @@ export default function ChangeStoreStatusBox({
                         !isWaitStatus &&
                         !errorMsg &&
                         !successMsg &&
-                        newStoreStatus === "blocking" &&
+                        storeAction === "blocking" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
                             type="submit"
