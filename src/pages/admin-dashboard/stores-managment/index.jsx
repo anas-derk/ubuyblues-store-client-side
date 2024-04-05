@@ -50,6 +50,10 @@ export default function StoresManagment() {
 
     const [isDisplayChangeStoreStatusBox, setIsDisplayChangeStoreStatusBox] = useState(false);
 
+    const [newStoreStatus, setNewStoreStatus] = useState("");
+    
+    const [selectedStoreId, setSelectedStoreId] = useState("");
+
     const router = useRouter();
 
     const pageSize = 3;
@@ -177,6 +181,12 @@ export default function StoresManagment() {
         }
     }
 
+    const handleDisplayChangeStoreStatusBox = (storeId, newStoreStatus) => {
+        setNewStoreStatus(newStoreStatus);
+        setSelectedStoreId(storeId);
+        setIsDisplayChangeStoreStatusBox(true);
+    }
+
     const changeStoreData = (productIndex, fieldName, newValue) => {
         allStoresInsideThePage[productIndex][fieldName] = newValue;
     }
@@ -275,7 +285,12 @@ export default function StoresManagment() {
                 <AdminPanelHeader />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Share Options Box */}
-                {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox setIsDisplayChangeStoreStatusBox={setIsDisplayChangeStoreStatusBox} />}
+                {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox
+                    setIsDisplayChangeStoreStatusBox={setIsDisplayChangeStoreStatusBox}
+                    setNewStoreStatus={setNewStoreStatus}
+                    storeId={selectedStoreId}
+                    newStoreStatus={newStoreStatus}
+                />}
                 {/* End Share Options Box */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
@@ -463,7 +478,7 @@ export default function StoresManagment() {
                                                     !isErrorStatus &&
                                                     <button
                                                         className="btn btn-success d-block mx-auto mb-3 global-button"
-                                                        onClick={() => setIsDisplayChangeStoreStatusBox(true)}
+                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
                                                     >
                                                         Approve
                                                     </button>}
