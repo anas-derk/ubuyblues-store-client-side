@@ -394,7 +394,7 @@ export default function StoresManagment() {
                                 Filtering ...
                             </button>}
                         </section>
-                        {allStoresInsideThePage.length > 1 && !isFilteringStoresStatus && <section className="stores-data-box p-3 data-box">
+                        {allStoresInsideThePage.length > 0 && !isFilteringStoresStatus && <section className="stores-data-box p-3 data-box">
                             <table className="stores-data-table mb-4 managment-table bg-white w-100">
                                 <thead>
                                     <tr>
@@ -410,7 +410,7 @@ export default function StoresManagment() {
                                 </thead>
                                 <tbody>
                                     {allStoresInsideThePage.map((store, storeIndex) => (
-                                        store._id !== userInfo.storeId && <tr key={store._id}>
+                                        <tr key={store._id}>
                                             <td>{storeIndex + 1}</td>
                                             <td>{store._id}</td>
                                             <td>
@@ -466,112 +466,115 @@ export default function StoresManagment() {
                                                 {store.status}
                                             </td>
                                             <td>
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    <button
+                                                {store._id !== userInfo.storeId ? <>
+
+                                                    {
+                                                        !isUpdatingStatus &&
+                                                        !isDeletingStatus &&
+                                                        !isSuccessStatus &&
+                                                        !isErrorStatus &&
+                                                        <button
+                                                            className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                            onClick={() => updateStoreData(storeIndex)}
+                                                        >
+                                                            Update
+                                                        </button>
+                                                    }
+                                                    {isUpdatingStatus && storeIndex === selectedStoreIndex && <button
                                                         className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                        onClick={() => updateStoreData(storeIndex)}
+                                                        disabled
                                                     >
-                                                        Update
-                                                    </button>
-                                                }
-                                                {isUpdatingStatus && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Updating ...
-                                                </button>}
-                                                {isSuccessStatus && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-success d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Success
-                                                </button>}
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    <button
-                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                        onClick={() => deleteStore(storeIndex)}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                }
-                                                {isDeletingStatus && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Deleting ...
-                                                </button>}
-                                                {isSuccessStatus && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Deleted Successful
-                                                </button>}
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    store.status === "pending" &&
-                                                    <button
+                                                        Updating ...
+                                                    </button>}
+                                                    {isSuccessStatus && storeIndex === selectedStoreIndex && <button
                                                         className="btn btn-success d-block mx-auto mb-3 global-button"
-                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
+                                                        disabled
                                                     >
-                                                        Approve
-                                                    </button>
-                                                }
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    store.status === "pending" &&
-                                                    <button
+                                                        Success
+                                                    </button>}
+                                                    {
+                                                        !isUpdatingStatus &&
+                                                        !isDeletingStatus &&
+                                                        !isSuccessStatus &&
+                                                        !isErrorStatus &&
+                                                        <button
+                                                            className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                            onClick={() => deleteStore(storeIndex)}
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    }
+                                                    {isDeletingStatus && storeIndex === selectedStoreIndex && <button
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "rejecting")}
+                                                        disabled
                                                     >
-                                                        Reject
-                                                    </button>
-                                                }
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    store.status === "pending" || store.status === "approving" &&
-                                                    <button
+                                                        Deleting ...
+                                                    </button>}
+                                                    {isSuccessStatus && <button
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
+                                                        disabled
                                                     >
-                                                        Blocking
-                                                    </button>
-                                                }
-                                                {isErrorStatus && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Sorry, Someting Went Wrong, Please Repeate The Process !!
-                                                </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
-                                                    <Link
-                                                        href={`/admin-dashboard/stores-managment/${store._id}`}
-                                                        className="btn btn-success d-block mx-auto mb-4 global-button"
-                                                    >Show Full Details</Link>
-                                                </>}
+                                                        Deleted Successful
+                                                    </button>}
+                                                    {
+                                                        !isUpdatingStatus &&
+                                                        !isDeletingStatus &&
+                                                        !isSuccessStatus &&
+                                                        !isErrorStatus &&
+                                                        store.status === "pending" &&
+                                                        <button
+                                                            className="btn btn-success d-block mx-auto mb-3 global-button"
+                                                            onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                    }
+                                                    {
+                                                        !isUpdatingStatus &&
+                                                        !isDeletingStatus &&
+                                                        !isSuccessStatus &&
+                                                        !isErrorStatus &&
+                                                        store.status === "pending" &&
+                                                        <button
+                                                            className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                            onClick={() => handleDisplayChangeStoreStatusBox(store._id, "rejecting")}
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    }
+                                                    {
+                                                        !isUpdatingStatus &&
+                                                        !isDeletingStatus &&
+                                                        !isSuccessStatus &&
+                                                        !isErrorStatus &&
+                                                        store.status === "pending" || store.status === "approving" &&
+                                                        <button
+                                                            className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                            onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
+                                                        >
+                                                            Blocking
+                                                        </button>
+                                                    }
+                                                    {isErrorStatus && storeIndex === selectedStoreIndex && <button
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                        disabled
+                                                    >
+                                                        Sorry, Someting Went Wrong, Please Repeate The Process !!
+                                                    </button>}
+                                                    {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
+                                                        <Link
+                                                            href={`/admin-dashboard/stores-managment/${store._id}`}
+                                                            className="btn btn-success d-block mx-auto mb-4 global-button"
+                                                        >Show Full Details</Link>
+                                                    </>}
+                                                </> : <span className="fw-bold text-danger">Reject Actions</span>}
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </section>}
-                        {allStoresInsideThePage.length === 1 && !isFilteringStoresStatus && <p className="alert alert-danger">Sorry, Can't Find Any Stores !!</p>}
+                        {allStoresInsideThePage.length === 0 && !isFilteringStoresStatus && <p className="alert alert-danger">Sorry, Can't Find Any Stores !!</p>}
                         {isFilteringStoresStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                             <span className="loader-table-data"></span>
                         </div>}
