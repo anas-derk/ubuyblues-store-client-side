@@ -9,6 +9,7 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import ChangeStoreStatusBox from "@/components/ChangeStoreStatusBox";
 
 export default function StoresManagment() {
 
@@ -273,6 +274,9 @@ export default function StoresManagment() {
                 {/* Start Admin Dashboard Side Bar */}
                 <AdminPanelHeader />
                 {/* Start Admin Dashboard Side Bar */}
+                {/* Start Share Options Box */}
+                {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox setIsDisplayChangeStoreStatusBox={setIsDisplayChangeStoreStatusBox} />}
+                {/* End Share Options Box */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
@@ -459,7 +463,7 @@ export default function StoresManagment() {
                                                     !isErrorStatus &&
                                                     <button
                                                         className="btn btn-success d-block mx-auto mb-3 global-button"
-                                                        onClick={() => deleteStore(storeIndex)}
+                                                        onClick={() => setIsDisplayChangeStoreStatusBox(true)}
                                                     >
                                                         Approve
                                                     </button>}

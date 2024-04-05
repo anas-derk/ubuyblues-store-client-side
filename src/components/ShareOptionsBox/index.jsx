@@ -20,7 +20,7 @@ export default function ShareOptionsBox({ setIsDisplayShareOptionsBox }) {
     return (
         <div className="share-options-box popup-box">
             <div className="share-icons-box content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
-                <GrFormClose className="close-share-options-box-icon close-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
+                <GrFormClose className="close-share-options-box-icon close-popup-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
                 <h2 className="mb-3 pb-3 border-bottom border-white">{t("Share Your Favorite Product With Your Friends")}</h2>
                 <div className="row">
                     <div className="col-md-3">
