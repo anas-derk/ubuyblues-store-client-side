@@ -394,8 +394,8 @@ export default function StoresManagment() {
                                 Filtering ...
                             </button>}
                         </section>
-                        {allStoresInsideThePage.length > 0 && !isFilteringStoresStatus && <section className="orders-data-box p-3 data-box">
-                            <table className="orders-data-table mb-4 managment-table bg-white w-100">
+                        {allStoresInsideThePage.length > 1 && !isFilteringStoresStatus && <section className="stores-data-box p-3 data-box">
+                            <table className="stores-data-table mb-4 managment-table bg-white w-100">
                                 <thead>
                                     <tr>
                                         <th width="50">Store Number</th>
