@@ -66,54 +66,6 @@ export default function ChangeStoreStatusBox({
         }
     }
 
-    const changeStoreStatus = async (e, storeId, newStoreStatus) => {
-        try {
-            e.preventDefault();
-            let errorsObject = {}, bodyData = {};
-            if (newStoreStatus === "rejecting" || newStoreStatus === "blocking") {
-                errorsObject = validateFormFields([
-                    {
-                        name: "changeStatusReason",
-                        value: changeStatusReason,
-                        rules: {
-                            isRequired: {
-                                msg: "Sorry, This Field Can't Be Empty !!",
-                            },
-                        },
-                    },
-                ]);
-                setFormValidationErrors(errorsObject);
-            }
-            console.log(errorsObject)
-            if (Object.keys(errorsObject).length == 0) {
-                setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/stores/update-store-status/${storeId}`, bodyData,
-                    {
-                        headers: {
-                            Authorization: token,
-                        }
-                    }
-                );
-                const result = res.data;
-                if (!result.error) {
-
-                }
-            }
-        }
-        catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/admin-dashboard/login");
-                return;
-            }
-            setIsWaitStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(errorTimeout);
-            }, 1500);
-        }
-    }
-
     return (
         <div className="change-store-status-box popup-box">
             <div className="content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
