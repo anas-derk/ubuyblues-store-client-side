@@ -502,6 +502,18 @@ export default function StoresManagment() {
                                                         Delete
                                                     </button>
                                                 }
+                                                {isDeletingStatus && storeIndex === selectedStoreIndex && <button
+                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    disabled
+                                                >
+                                                    Deleting ...
+                                                </button>}
+                                                {isSuccessStatus && <button
+                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    disabled
+                                                >
+                                                    Deleted Successful
+                                                </button>}
                                                 {
                                                     !isUpdatingStatus &&
                                                     !isDeletingStatus &&
@@ -541,18 +553,6 @@ export default function StoresManagment() {
                                                         Blocking
                                                     </button>
                                                 }
-                                                {isDeletingStatus && !store.isDeleted && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Deleting ...
-                                                </button>}
-                                                {store.isDeleted && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Deleted Successful
-                                                </button>}
                                                 {isErrorStatus && storeIndex === selectedStoreIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
