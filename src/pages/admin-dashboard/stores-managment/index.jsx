@@ -265,7 +265,7 @@ export default function StoresManagment() {
         try {
             setIsDeletingStatus(true);
             setSelectedStoreIndex(storeIndex);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allStoresInsideThePage[storeIndex]._id}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/stores/delete-store/${allStoresInsideThePage[storeIndex]._id}`, {
                 headers: {
                     Authorization: token,
                 }
@@ -278,7 +278,7 @@ export default function StoresManagment() {
                     setIsSuccessStatus(false);
                     setSelectedStoreIndex(-1);
                     setIsFilteringStoresStatus(true);
-                    setAllStoresInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                    setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
                     setCurrentPage(1);
                     setIsFilteringStoresStatus(false);
                     clearTimeout(successTimeout);
@@ -290,7 +290,7 @@ export default function StoresManagment() {
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
                 setIsErrorStatus(false);
-                setSelectedOrderIndex(-1);
+                setSelectedStoreIndex(-1);
                 clearTimeout(errorTimeout);
             }, 3000);
         }
@@ -410,154 +410,163 @@ export default function StoresManagment() {
                                 </thead>
                                 <tbody>
                                     {allStoresInsideThePage.map((store, storeIndex) => (
-                                        <tr key={store._id}>
-                                            <td>{storeIndex + 1}</td>
-                                            <td>{store._id}</td>
-                                            <td>
-                                                <section className="store-name mb-4">
-                                                    <input
-                                                        type="text"
-                                                        defaultValue={store.name}
-                                                        className={`form-control d-block mx-auto p-2 border-2 store-name-field ${formValidationErrors["name"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                        placeholder="Pleae Enter Store Name"
-                                                        onChange={(e) => changeStoreData(storeIndex, "name", e.target.value)}
-                                                    />
-                                                    {formValidationErrors["name"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{formValidationErrors["name"]}</span>
-                                                    </p>}
-                                                </section>
-                                            </td>
-                                            <td>{store.ownerFirstName + " " + store.ownerLastName}</td>
-                                            <td>
-                                                <section className="store-owner-email mb-4">
-                                                    <input
-                                                        type="text"
-                                                        defaultValue={store.ownerEmail}
-                                                        className={`form-control d-block mx-auto p-2 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                        placeholder="Pleae Enter Owner Email"
-                                                        onChange={(e) => changeStoreData(storeIndex, "ownerEmail", e.target.value)}
-                                                    />
-                                                    {formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{formValidationErrors["ownerEmail"]}</span>
-                                                    </p>}
-                                                </section>
-                                            </td>
-                                            <td>
-                                                <section className="store-products-type mb-4">
-                                                    <input
-                                                        type="text"
-                                                        defaultValue={store.productsType}
-                                                        className={`form-control d-block mx-auto p-2 border-2 store-products-type-field ${formValidationErrors["productsType"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                        placeholder="Pleae Enter Products Type"
-                                                        onChange={(e) => changeStoreData(storeIndex, "productsType", e.target.value)}
-                                                    />
-                                                    {formValidationErrors["productsType"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{formValidationErrors["productsType"]}</span>
-                                                    </p>}
-                                                </section>
-                                            </td>
-                                            <td>
-                                                {store.status}
-                                            </td>
-                                            <td>
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    <button
-                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                        onClick={() => updateStoreData(storeIndex)}
-                                                    >
-                                                        Update
-                                                    </button>
-                                                }
-                                                {isUpdatingStatus && storeIndex === selectedStoreIndex && <button
+                                        store._id !== userInfo.storeId && <tr key={store._id}>
+                                        <td>{storeIndex + 1}</td>
+                                        <td>{store._id}</td>
+                                        <td>
+                                            <section className="store-name mb-4">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={store.name}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-name-field ${formValidationErrors["name"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter Store Name"
+                                                    onChange={(e) => changeStoreData(storeIndex, "name", e.target.value)}
+                                                    disabled={store._id === userInfo.storeId}
+                                                />
+                                                {formValidationErrors["name"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["name"]}</span>
+                                                </p>}
+                                            </section>
+                                        </td>
+                                        <td>{store.ownerFirstName + " " + store.ownerLastName}</td>
+                                        <td>
+                                            <section className="store-owner-email mb-4">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={store.ownerEmail}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter Owner Email"
+                                                    onChange={(e) => changeStoreData(storeIndex, "ownerEmail", e.target.value)}
+                                                    disabled={store._id === userInfo.storeId}
+                                                />
+                                                {formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["ownerEmail"]}</span>
+                                                </p>}
+                                            </section>
+                                        </td>
+                                        <td>
+                                            <section className="store-products-type mb-4">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={store.productsType}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-products-type-field ${formValidationErrors["productsType"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter Products Type"
+                                                    onChange={(e) => changeStoreData(storeIndex, "productsType", e.target.value)}
+                                                    disabled={store._id === userInfo.storeId}
+                                                />
+                                                {formValidationErrors["productsType"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["productsType"]}</span>
+                                                </p>}
+                                            </section>
+                                        </td>
+                                        <td>
+                                            {store.status}
+                                        </td>
+                                        <td>
+                                            {
+                                                !isUpdatingStatus &&
+                                                !isDeletingStatus &&
+                                                !isSuccessStatus &&
+                                                !isErrorStatus &&
+                                                <button
                                                     className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    disabled
+                                                    onClick={() => updateStoreData(storeIndex)}
                                                 >
-                                                    Updating ...
-                                                </button>}
-                                                {isSuccessStatus && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-success d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Success
-                                                </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isSuccessStatus && !isErrorStatus && <button
+                                                    Update
+                                                </button>
+                                            }
+                                            {isUpdatingStatus && storeIndex === selectedStoreIndex && <button
+                                                className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                disabled
+                                            >
+                                                Updating ...
+                                            </button>}
+                                            {isSuccessStatus && storeIndex === selectedStoreIndex && <button
+                                                className="btn btn-success d-block mx-auto mb-3 global-button"
+                                                disabled
+                                            >
+                                                Success
+                                            </button>}
+                                            {
+                                                !isUpdatingStatus &&
+                                                !isDeletingStatus &&
+                                                !isSuccessStatus &&
+                                                !isErrorStatus &&
+                                                <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     onClick={() => deleteStore(storeIndex)}
                                                 >
                                                     Delete
-                                                </button>}
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    store.status === "pending" &&
-                                                    <button
-                                                        className="btn btn-success d-block mx-auto mb-3 global-button"
-                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
-                                                    >
-                                                        Approve
-                                                    </button>
-                                                }
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    store.status === "pending" &&
-                                                    <button
-                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "rejecting")}
-                                                    >
-                                                        Reject
-                                                    </button>
-                                                }
-                                                {
-                                                    !isUpdatingStatus &&
-                                                    !isDeletingStatus &&
-                                                    !isSuccessStatus &&
-                                                    !isErrorStatus &&
-                                                    store.status === "pending" || store.status === "approving" &&
-                                                    <button
-                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                        onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
-                                                    >
-                                                        Blocking
-                                                    </button>
-                                                }
-                                                {isDeletingStatus && !store.isDeleted && storeIndex === selectedStoreIndex && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
+                                                </button>
+                                            }
+                                            {
+                                                !isUpdatingStatus &&
+                                                !isDeletingStatus &&
+                                                !isSuccessStatus &&
+                                                !isErrorStatus &&
+                                                store.status === "pending" &&
+                                                <button
+                                                    className="btn btn-success d-block mx-auto mb-3 global-button"
+                                                    onClick={() => handleDisplayChangeStoreStatusBox(store._id, "approving")}
                                                 >
-                                                    Deleting ...
-                                                </button>}
-                                                {store.isDeleted && <button
+                                                    Approve
+                                                </button>
+                                            }
+                                            {
+                                                !isUpdatingStatus &&
+                                                !isDeletingStatus &&
+                                                !isSuccessStatus &&
+                                                !isErrorStatus &&
+                                                store.status === "pending" &&
+                                                <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
+                                                    onClick={() => handleDisplayChangeStoreStatusBox(store._id, "rejecting")}
                                                 >
-                                                    Deleted Successful
-                                                </button>}
-                                                {isErrorStatus && storeIndex === selectedStoreIndex && <button
+                                                    Reject
+                                                </button>
+                                            }
+                                            {
+                                                !isUpdatingStatus &&
+                                                !isDeletingStatus &&
+                                                !isSuccessStatus &&
+                                                !isErrorStatus &&
+                                                store.status === "pending" || store.status === "approving" &&
+                                                <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
+                                                    onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
                                                 >
-                                                    Sorry, Someting Went Wrong, Please Repeate The Process !!
-                                                </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
-                                                    <Link
-                                                        href={`/admin-dashboard/stores-managment/${store._id}`}
-                                                        className="btn btn-success d-block mx-auto mb-4 global-button"
-                                                    >Show Full Details</Link>
-                                                </>}
-                                            </td>
-                                        </tr>
+                                                    Blocking
+                                                </button>
+                                            }
+                                            {isDeletingStatus && !store.isDeleted && storeIndex === selectedStoreIndex && <button
+                                                className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                disabled
+                                            >
+                                                Deleting ...
+                                            </button>}
+                                            {store.isDeleted && <button
+                                                className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                disabled
+                                            >
+                                                Deleted Successful
+                                            </button>}
+                                            {isErrorStatus && storeIndex === selectedStoreIndex && <button
+                                                className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                disabled
+                                            >
+                                                Sorry, Someting Went Wrong, Please Repeate The Process !!
+                                            </button>}
+                                            {!isUpdatingStatus && !isDeletingStatus && !isErrorStatus && !isSuccessStatus && <>
+                                                <Link
+                                                    href={`/admin-dashboard/stores-managment/${store._id}`}
+                                                    className="btn btn-success d-block mx-auto mb-4 global-button"
+                                                >Show Full Details</Link>
+                                            </>}
+                                        </td>
+                                    </tr>
                                     ))}
                                 </tbody>
                             </table>
