@@ -14,6 +14,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import prices from "../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function Checkout({ countryAsProperty }) {
 
@@ -470,7 +471,7 @@ export default function Checkout({ countryAsProperty }) {
                 requestNotes,
             });
             localStorage.removeItem("asfour-store-user-cart");
-            await router.push(`/confirmation/${result.data.orderId}?country=${country}`);
+            await router.push(`/confirmation/${result.data.orderId}?country=${countryAsProperty}`);
         }
         catch (err) {
             setIsWaitApproveOnPayPalOrder(false);
@@ -492,7 +493,7 @@ export default function Checkout({ countryAsProperty }) {
                 <div className="page-content">
                     <div className="container-fluid text-white p-4">
                         <h1 className="h3 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
-                        <div className="row align-items-center">
+                        {allProductsData.length > 0 ? <div className="row align-items-center">
                             <div className="col-xl-6">
                                 <h6 className="mb-4 fw-bold">{t("Billing Details")}</h6>
                                 <form className="edit-customer-billing-address-form" onSubmit={(e) => e.preventDefault()}>
@@ -951,7 +952,7 @@ export default function Checkout({ countryAsProperty }) {
                                     {/* End Payement Methods Section */}
                                 </section>
                             </div>
-                        </div>
+                        </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For You In Cart !!")} />}
                     </div>
                     <Footer />
                 </div>
