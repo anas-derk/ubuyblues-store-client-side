@@ -3,6 +3,7 @@ import { GrFormClose } from "react-icons/gr";
 import axios from "axios";
 import validations from "../../../public/global_functions/validations";
 import { useRouter } from "next/router";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function ChangeStoreStatusBox({
     setIsDisplayChangeStoreStatusBox,
@@ -67,6 +68,55 @@ export default function ChangeStoreStatusBox({
         }
     }
 
+    const rejectStoreCreate = async (storeId, changeStatusReason) => {
+        try {
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "changeStatusReason",
+                    value: changeStatusReason,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+                const res = await axios.delete(`${process.env.BASE_API_URL}/stores/reject-store/${storeId}?rejectingReason=${changeStatusReason}`,
+                    {
+                        headers: {
+                            Authorization: token,
+                        }
+                    }
+                );
+                const result = res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    });
+                }
+            }
+        }
+        catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
     return (
         <div className="change-store-status-box popup-box">
             <div className="content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
@@ -106,7 +156,7 @@ export default function ChangeStoreStatusBox({
                         storeAction === "rejecting" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
-                            type="submit"
+                            onClick={() => rejectStoreCreate(storeId, changeStatusReason)}
                         >
                             Reject
                         </button>
