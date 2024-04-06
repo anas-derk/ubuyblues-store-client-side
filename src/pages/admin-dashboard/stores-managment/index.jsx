@@ -157,7 +157,7 @@ export default function StoresManagment() {
         try {
             setIsFilteringStoresStatus(true);
             setCurrentPage(1);
-            let filteringString = getFilteringString(filters);
+            const filteringString = getFilteringString(filters);
             const result = await getStoresCount(filteringString);
             if (result.data > 0) {
                 setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
@@ -283,10 +283,10 @@ export default function StoresManagment() {
                     setSelectedStoreIndex(-1);
                     setIsFilteringStoresStatus(true);
                     result = await getStoresCount();
-                        if (result.data > 0) {
-                            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        }
+                    if (result.data > 0) {
+                        setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    }
                     setCurrentPage(1);
                     setIsFilteringStoresStatus(false);
                     clearTimeout(successTimeout);
@@ -308,6 +308,43 @@ export default function StoresManagment() {
         }
     }
 
+    const handleChangeStoreStatus = async (newStatus) => {
+        try {
+            switch (newStatus) {
+                case "approving": {
+                    setIsFilteringStoresStatus(true);
+                    const filteringString = getFilteringString(filters);
+                    const result = await getStoresCount(filteringString);
+                    if (result.data > 0) {
+                        setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    }
+                    setCurrentPage(1);
+                    setIsFilteringStoresStatus(false);
+                    return;
+                }
+                case "rejecting": {
+                    setIsFilteringStoresStatus(true);
+                    const filteringString = getFilteringString(filters);
+                    const result = await getStoresCount(filteringString);
+                    if (result.data > 0) {
+                        setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    }
+                    setCurrentPage(1);
+                    setIsFilteringStoresStatus(false);
+                    return;
+                }
+                case "blocking": {
+
+                }
+            }
+        }
+        catch (err) {
+
+        }
+    }
+
     return (
         <div className="stores-managment admin-dashboard">
             <Head>
@@ -324,6 +361,7 @@ export default function StoresManagment() {
                     storeId={selectedStoreId}
                     storeAction={storeAction}
                     token={token}
+                    handleChangeStoreStatus={handleChangeStoreStatus}
                 />}
                 {/* End Share Options Box */}
                 {/* Start Content Section */}

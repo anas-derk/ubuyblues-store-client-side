@@ -11,6 +11,7 @@ export default function ChangeStoreStatusBox({
     storeId,
     storeAction,
     token,
+    handleChangeStoreStatus,
 }) {
 
     const [changeStatusReason, setChangeStatusReason] = useState("");
@@ -50,6 +51,8 @@ export default function ChangeStoreStatusBox({
                 setSuccessMsg(result.msg);
                 let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
+                    handleClosePopupBox();
+                    handleChangeStoreStatus("approving");
                     clearTimeout(successTimeout);
                 });
             }
@@ -98,6 +101,8 @@ export default function ChangeStoreStatusBox({
                     setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(async () => {
                         setSuccessMsg("");
+                        handleClosePopupBox();
+                        handleChangeStoreStatus("rejecting");
                         clearTimeout(successTimeout);
                     });
                 }
