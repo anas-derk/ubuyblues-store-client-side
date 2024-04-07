@@ -179,6 +179,7 @@ export default function OrderDetails({ orderId }) {
                                                     className="form-control quantity"
                                                     defaultValue={orderProduct.quantity}
                                                     onChange={(e) => changeOrderProductData(orderProductIndex, "quantity", e.target.valueAsNumber)}
+                                                    disabled={orderDetails.isDeleted}
                                                 />
                                             </td>
                                             <td>
@@ -187,6 +188,7 @@ export default function OrderDetails({ orderId }) {
                                                     className="form-control name"
                                                     defaultValue={orderProduct.name}
                                                     onChange={(e) => changeOrderProductData(orderProductIndex, "name", e.target.value)}
+                                                    disabled={orderDetails.isDeleted}
                                                 />
                                             </td>
                                             <td>
@@ -195,6 +197,7 @@ export default function OrderDetails({ orderId }) {
                                                     className="form-control unit-price"
                                                     defaultValue={orderProduct.unit_price}
                                                     onChange={(e) => changeOrderProductData(orderProductIndex, "unit_price", e.target.valueAsNumber)}
+                                                    disabled={orderDetails.isDeleted}
                                                 />
                                             </td>
                                             <td>
@@ -203,6 +206,7 @@ export default function OrderDetails({ orderId }) {
                                                     className="form-control total-amount"
                                                     defaultValue={orderProduct.total_amount}
                                                     onChange={(e) => changeOrderProductData(orderProductIndex, "total_amount", e.target.valueAsNumber)}
+                                                    disabled={orderDetails.isDeleted}
                                                 />
                                             </td>
                                             <td>
@@ -214,38 +218,40 @@ export default function OrderDetails({ orderId }) {
                                                 />
                                             </td>
                                             <td>
-                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && !successMsg && <button
-                                                    className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    onClick={() => updateOrderProductData(orderProductIndex)}
-                                                >
-                                                    Update
-                                                </button>}
-                                                {isUpdatingStatus && <button
-                                                    className="btn btn-info d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Updating ...
-                                                </button>}
-                                                {!isUpdatingStatus && !isDeletingStatus && !errorMsg && !successMsg && orderDetails.order_products.length > 1 && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    onClick={() => deleteProductFromOrder(orderProductIndex)}
-                                                >
-                                                    Delete
-                                                </button>}
-                                                {isDeletingStatus && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Deleting ...
-                                                </button>}
-                                                {successMsg && <button
-                                                    className="btn btn-success d-block mx-auto global-button"
-                                                    disabled
-                                                >{successMsg}</button>}
-                                                {errorMsg && <button
-                                                    className="btn btn-danger d-block mx-auto global-button"
-                                                    disabled
-                                                >{errorMsg}</button>}
+                                                {!orderDetails.isDeleted ? <>
+                                                    {!isUpdatingStatus && !isDeletingStatus && !errorMsg && !successMsg && <button
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                        onClick={() => updateOrderProductData(orderProductIndex)}
+                                                    >
+                                                        Update
+                                                    </button>}
+                                                    {isUpdatingStatus && <button
+                                                        className="btn btn-info d-block mx-auto mb-3 global-button"
+                                                        disabled
+                                                    >
+                                                        Updating ...
+                                                    </button>}
+                                                    {!isUpdatingStatus && !isDeletingStatus && !errorMsg && !successMsg && orderDetails.order_products.length > 1 && <button
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                        onClick={() => deleteProductFromOrder(orderProductIndex)}
+                                                    >
+                                                        Delete
+                                                    </button>}
+                                                    {isDeletingStatus && <button
+                                                        className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                        disabled
+                                                    >
+                                                        Deleting ...
+                                                    </button>}
+                                                    {successMsg && <button
+                                                        className="btn btn-success d-block mx-auto global-button"
+                                                        disabled
+                                                    >{successMsg}</button>}
+                                                    {errorMsg && <button
+                                                        className="btn btn-danger d-block mx-auto global-button"
+                                                        disabled
+                                                    >{errorMsg}</button>}
+                                                </> : <span className="fw-bold text-danger">Reject Actions</span>}
                                             </td>
                                         </tr>
                                     ))}
