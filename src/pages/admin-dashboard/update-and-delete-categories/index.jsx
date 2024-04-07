@@ -151,7 +151,8 @@ export default function UpdateAndDeleteCategories() {
                         Authorization: token,
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
+                console.log(result)
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
