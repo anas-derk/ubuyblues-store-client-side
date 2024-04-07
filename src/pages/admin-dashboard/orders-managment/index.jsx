@@ -9,6 +9,7 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import { getDateFormated } from "../../../../public/global_functions/popular";
 
 export default function OrdersManagment() {
 
@@ -107,15 +108,6 @@ export default function OrdersManagment() {
         catch (err) {
             throw Error(err);
         }
-    }
-
-    const getDateFormated = (orderedDate) => {
-        let orderedDateInDateFormat = new Date(orderedDate);
-        const year = orderedDateInDateFormat.getFullYear();
-        const month = orderedDateInDateFormat.getMonth() + 1;
-        const day = orderedDateInDateFormat.getDate();
-        orderedDateInDateFormat = `${year} / ${month} / ${day}`;
-        return orderedDateInDateFormat;
     }
 
     const getPreviousPage = async () => {

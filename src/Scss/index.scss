@@ -453,6 +453,19 @@ textarea{
     }
 }
 
+.table-for-mobiles-and-tablets{
+    th, td{
+        border: 1px solid;
+        padding: 15px;
+    }
+    th{
+        width: 25%;
+    }
+    td{
+        text-align: center;
+    }
+}
+
 @keyframes rotation {
     0% {
         transform: rotate(0deg);

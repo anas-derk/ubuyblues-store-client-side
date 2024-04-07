@@ -29,8 +29,18 @@ const isExistProductInsideTheCart = (productId) => {
     return false;
 }
 
+const getDateFormated = (orderedDate) => {
+    let orderedDateInDateFormat = new Date(orderedDate);
+    const year = orderedDateInDateFormat.getFullYear();
+    const month = orderedDateInDateFormat.getMonth() + 1;
+    const day = orderedDateInDateFormat.getDate();
+    orderedDateInDateFormat = `${year} / ${month} / ${day}`;
+    return orderedDateInDateFormat;
+}
+
 export {
     getProductsCount,
     getAllProductsInsideThePage,
     isExistProductInsideTheCart,
+    getDateFormated,
 }

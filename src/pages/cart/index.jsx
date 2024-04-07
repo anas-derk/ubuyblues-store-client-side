@@ -216,7 +216,7 @@ export default function Cart({ countryAsProperty }) {
                                     {allProductsData.map((product, index) => (
                                         <div className="product mb-4" key={index}>
                                             <h4 className="mb-3">{t("Product")} # {index + 1}</h4>
-                                            <table className="user-products-table-for-mobiles-and-tablets w-100">
+                                            <table className="user-products-table-for-mobiles-and-tablets table-for-mobiles-and-tablets w-100">
                                                 <tbody>
                                                     <tr>
                                                         <th>{t("Product")}</th>

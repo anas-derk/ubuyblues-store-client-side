@@ -508,6 +508,19 @@ textarea {
   padding: 5px;
 }
 
+.table-for-mobiles-and-tablets th, .table-for-mobiles-and-tablets td {
+  border: 1px solid;
+  padding: 15px;
+}
+
+.table-for-mobiles-and-tablets th {
+  width: 25%;
+}
+
+.table-for-mobiles-and-tablets td {
+  text-align: center;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

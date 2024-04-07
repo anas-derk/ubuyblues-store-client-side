@@ -10,19 +10,6 @@
   border-bottom: 2px dashed #FFF;
 }
 
-.cart .products .user-products-table-for-mobiles-and-tablets th, .cart .products .user-products-table-for-mobiles-and-tablets td {
-  border: 1px solid;
-  padding: 15px;
-}
-
-.cart .products .user-products-table-for-mobiles-and-tablets th {
-  width: 25%;
-}
-
-.cart .products .user-products-table-for-mobiles-and-tablets td {
-  text-align: center;
-}
-
 .cart .products .update-product-quantity-cell .update-product-quantity {
   border: 1px solid #FFF;
   width: fit-content;
