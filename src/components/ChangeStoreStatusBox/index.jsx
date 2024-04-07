@@ -122,6 +122,93 @@ export default function ChangeStoreStatusBox({
         }
     }
 
+    const blockingStore = async (storeId, changeStatusReason) => {
+        try {
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "changeStatusReason",
+                    value: changeStatusReason,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+                const res = await axios.put(`${process.env.BASE_API_URL}/stores/blocking-store/${storeId}?blockingReason=${changeStatusReason}`, undefined,
+                    {
+                        headers: {
+                            Authorization: token,
+                        }
+                    }
+                );
+                const result = res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessMsg("");
+                        handleClosePopupBox();
+                        handleChangeStoreStatus("blocking");
+                        clearTimeout(successTimeout);
+                    });
+                }
+            }
+        }
+        catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
+    const cancelBlockingStore = async (storeId) => {
+        try {
+            setIsWaitStatus(true);
+            const res = await axios.put(`${process.env.BASE_API_URL}/stores/cancel-blocking/${storeId}`, undefined,
+                {
+                    headers: {
+                        Authorization: token,
+                    }
+                }
+            );
+            const result = res.data;
+            setIsWaitStatus(false);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(async () => {
+                    setSuccessMsg("");
+                    handleClosePopupBox();
+                    handleChangeStoreStatus("approving");
+                    clearTimeout(successTimeout);
+                });
+            }
+        }
+        catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsWaitStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
     return (
         <div className="change-store-status-box popup-box">
             <div className="content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
@@ -173,9 +260,21 @@ export default function ChangeStoreStatusBox({
                         storeAction === "blocking" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
-                            type="submit"
+                            onClick={() => blockingStore(storeId, changeStatusReason)}
                         >
                             Block
+                        </button>
+                    }
+                    {
+                        !isWaitStatus &&
+                        !errorMsg &&
+                        !successMsg &&
+                        storeAction === "cancel-blocking" &&
+                        <button
+                            className="btn btn-success d-block mx-auto mb-4 global-button"
+                            onClick={() => cancelBlockingStore(storeId)}
+                        >
+                            Cancel Blocking
                         </button>
                     }
                     {isWaitStatus &&

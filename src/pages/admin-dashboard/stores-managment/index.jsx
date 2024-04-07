@@ -314,12 +314,8 @@ export default function StoresManagment() {
                 case "approving": {
                     setIsFilteringStoresStatus(true);
                     const filteringString = getFilteringString(filters);
-                    const result = await getStoresCount(filteringString);
-                    if (result.data > 0) {
-                        setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    }
-                    setCurrentPage(1);
+                    setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
+                    setCurrentPage(currentPage);
                     setIsFilteringStoresStatus(false);
                     return;
                 }
@@ -336,12 +332,26 @@ export default function StoresManagment() {
                     return;
                 }
                 case "blocking": {
-
+                    setIsFilteringStoresStatus(true);
+                    const filteringString = getFilteringString(filters);
+                    setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filteringString)).data);
+                    setCurrentPage(currentPage);
+                    setIsFilteringStoresStatus(false);
+                    return;
                 }
             }
         }
         catch (err) {
-
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsFilteringStoresStatus(false);
+            setIsErrorStatus(true);
+            let errorTimeout = setTimeout(() => {
+                setIsErrorStatus(false);
+                clearTimeout(errorTimeout);
+            }, 3000);
         }
     }
 
@@ -603,6 +613,19 @@ export default function StoresManagment() {
                                                             onClick={() => handleDisplayChangeStoreStatusBox(store._id, "blocking")}
                                                         >
                                                             Blocking
+                                                        </button>
+                                                    }
+                                                    {
+                                                        !isUpdatingStatus &&
+                                                        !isDeletingStatus &&
+                                                        !isSuccessStatus &&
+                                                        !isErrorStatus &&
+                                                        store.status === "blocking" &&
+                                                        <button
+                                                            className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                            onClick={() => handleDisplayChangeStoreStatusBox(store._id, "cancel-blocking")}
+                                                        >
+                                                            Cancel Blocking
                                                         </button>
                                                     }
                                                     {isErrorStatus && storeIndex === selectedStoreIndex && <button
