@@ -7,6 +7,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../../public/global_functions/validations";
 import { getDateFormated } from "../../../../../public/global_functions/popular";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function StoreDetails({ storeId }) {
 
@@ -77,6 +78,109 @@ export default function StoreDetails({ storeId }) {
         }
     }
 
+    const validateFormFields = (validateDetailsList) => {
+        return validations.inputValuesValidation(validateDetailsList);
+    }
+
+    const updateStoreData = async (storeId) => {
+        try {
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "name",
+                    value: storeDetails.name,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "ownerFirstName",
+                    value: storeDetails.ownerFirstName,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "ownerLastName",
+                    value: storeDetails.ownerLastName,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "ownerEmail",
+                    value: storeDetails.ownerEmail,
+                    rules: {
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+                {
+                    name: "productsType",
+                    value: storeDetails.productsType,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "productsDescription",
+                    value: storeDetails.productsDescription,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsUpdatingStatus(true);
+                const res = await axios.put(`${process.env.BASE_API_URL}/stores/update-store-info/${storeId}`, {
+                    name: storeDetails.name,
+                    ownerFirstName: storeDetails.ownerFirstName,
+                    ownerLastName: storeDetails.ownerLastName,
+                    ownerEmail: storeDetails.ownerEmail,
+                    productsType: storeDetails.productsType,
+                    productsDescription: storeDetails.productsDescription,
+                }, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = await res.data;
+                if (!result.error) {
+                    setIsUpdatingStatus(false);
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 3000);
+                }
+            }
+        }
+        catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsUpdatingStatus(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 3000);
+        }
+    }
+
     return (
         <div className="store-details admin-dashboard">
             <Head>
@@ -102,7 +206,19 @@ export default function StoreDetails({ storeId }) {
                                     <tr>
                                         <th>Name</th>
                                         <td className="update-store-name-cell">
-                                            {storeDetails.name}
+                                            <section className="store-name">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={storeDetails.name}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter New Store Name"
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, name: e.target.value })}
+                                                />
+                                                {formValidationErrors["name"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["name"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                     </tr>
                                     <tr className="store-image-cell">
@@ -150,31 +266,91 @@ export default function StoreDetails({ storeId }) {
                                     <tr>
                                         <th>Owner First Name</th>
                                         <td className="update-owner-first-name-cell">
-                                            {storeDetails.ownerFirstName}
+                                            <section className="store-owner-first-name">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={storeDetails.ownerFirstName}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-owner-first-name-field ${formValidationErrors["ownerFirstName"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter New Owner First Name"
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, ownerFirstName: e.target.value })}
+                                                />
+                                                {formValidationErrors["ownerFirstName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["ownerFirstName"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Owner Last Name</th>
                                         <td className="update-owner-last-name-cell">
-                                            {storeDetails.ownerLastName}
+                                            <section className="store-owner-last-name">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={storeDetails.ownerLastName}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-owner-last-name-field ${formValidationErrors["ownerLastName"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter New Owner Last Name"
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, ownerLastName: e.target.value })}
+                                                />
+                                                {formValidationErrors["ownerLastName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["ownerLastName"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Owner Email</th>
                                         <td className="update-owner-email-cell">
-                                            {storeDetails.ownerEmail}
+                                            <section className="store-owner-email">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={storeDetails.ownerEmail}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter New Store Owner Email"
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, ownerEmail: e.target.value })}
+                                                />
+                                                {formValidationErrors["ownerEmail"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["ownerEmail"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Products Type</th>
                                         <td className="update-products-type-cell">
-                                            {storeDetails.productsType}
+                                            <section className="store-products-type">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={storeDetails.productsType}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-products-type-field ${formValidationErrors["productsType"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter New Store Products Type"
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, productsType: e.target.value })}
+                                                />
+                                                {formValidationErrors["productsType"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["productsType"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Products Description</th>
                                         <td className="update-products-description-cell">
-                                            {storeDetails.productsDescription}
+                                            <section className="store-products-description">
+                                                <input
+                                                    type="text"
+                                                    defaultValue={storeDetails.productsDescription}
+                                                    className={`form-control d-block mx-auto p-2 border-2 store-products-description-field ${formValidationErrors["productsDescription"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    placeholder="Pleae Enter New Store Products Description"
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, productsDescription: e.target.value })}
+                                                />
+                                                {formValidationErrors["productsDescription"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["productsDescription"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                     </tr>
                                     <tr>
@@ -211,6 +387,26 @@ export default function StoreDetails({ storeId }) {
                                         <th>Cancel Blocking Date</th>
                                         <td className="cancel-blocking-store-date-cell">
                                             {storeDetails.dateOfCancelBlocking ? getDateFormated(storeDetails.dateOfCancelBlocking) : "-----"}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <td>
+                                            {!isUpdatingStatus && !errorMsg && !successMsg && <button
+                                                    className="btn btn-success d-block mb-3 mx-auto global-button"
+                                                    onClick={() => updateStoreData(storeId)}
+                                                >Update</button>}
+                                            {isUpdatingStatus && <button
+                                                className="btn btn-info d-block mb-3 mx-auto global-button"
+                                            >Please Waiting</button>}
+                                            {successMsg && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                disabled
+                                            >{successMsg}</button>}
+                                            {errorMsg && <button
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
+                                            >{errorMsg}</button>}
                                         </td>
                                     </tr>
                                 </tbody>
