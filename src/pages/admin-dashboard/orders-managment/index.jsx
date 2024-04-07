@@ -44,6 +44,7 @@ export default function OrdersManagment() {
         status: "",
         customerName: "",
         email: "",
+        isDeleted: false,
     });
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
@@ -62,9 +63,9 @@ export default function OrdersManagment() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         setUserInfo(result.data);
-                        result = await getOrdersCount();
+                        result = await getOrdersCount(getFilteringString(filters));
                         if (result.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(filters))).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
                         setToken(adminToken);
@@ -147,6 +148,8 @@ export default function OrdersManagment() {
         if (filters.status) filteringString += `status=${filters.status}&`;
         if (filters.customerName) filteringString += `customerName=${filters.customerName}&`;
         if (filters.email) filteringString += `email=${filters.email}&`;
+        if (filters.isDeleted) filteringString += `isDeleted=yes&`;
+        else filteringString += `isDeleted=no&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
     }
@@ -254,10 +257,17 @@ export default function OrdersManagment() {
                 let successTimeout = setTimeout(async () => {
                     setIsSuccessStatus(false);
                     setSelectedOrderIndex(-1);
-                    setIsFilteringOrdersStatus(true);
-                    setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
-                    setCurrentPage(1);
-                    setIsFilteringOrdersStatus(false);
+                    const filteringString = getFilteringString(filters);
+                    const result = await getOrdersCount(filteringString);
+                    if (result.data > 0) {
+                        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        setIsFilteringOrdersStatus(false);
+                    } else {
+                        setAllOrdersInsideThePage([]);
+                        setTotalPagesCount(0);
+                        setIsFilteringOrdersStatus(false);
+                    }
                     clearTimeout(successTimeout);
                 }, 3000);
             }
@@ -285,7 +295,7 @@ export default function OrdersManagment() {
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Orders Managment</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {userInfo.firstName + " " + userInfo.lastName} In Orders Managment</h1>
                         <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
@@ -428,17 +438,17 @@ export default function OrdersManagment() {
                                                 >
                                                     Delete
                                                 </button>}
+                                                {order.isDeleted && <button
+                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
+                                                    disabled
+                                                >
+                                                    Deleted
+                                                </button>}
                                                 {isDeletingStatus && !order.isDeleted && orderIndex === selectedOrderIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                     disabled
                                                 >
                                                     Deleting ...
-                                                </button>}
-                                                {order.isDeleted && <button
-                                                    className="btn btn-danger d-block mx-auto mb-3 global-button"
-                                                    disabled
-                                                >
-                                                    Deleted Successful
                                                 </button>}
                                                 {isErrorStatus && orderIndex === selectedOrderIndex && <button
                                                     className="btn btn-danger d-block mx-auto mb-3 global-button"
