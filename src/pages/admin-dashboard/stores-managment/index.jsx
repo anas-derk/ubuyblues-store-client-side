@@ -458,7 +458,6 @@ export default function StoresManagment() {
                             <table className="stores-data-table mb-4 managment-table bg-white w-100">
                                 <thead>
                                     <tr>
-                                        <th width="50">Store Number</th>
                                         <th width="50">Store Id</th>
                                         <th>Name</th>
                                         <th>Owner Full Name</th>
@@ -471,7 +470,6 @@ export default function StoresManagment() {
                                 <tbody>
                                     {allStoresInsideThePage.map((store, storeIndex) => (
                                         <tr key={store._id}>
-                                            <td>{storeIndex + 1}</td>
                                             <td>{store._id}</td>
                                             <td>
                                                 <section className="store-name mb-4">
@@ -574,7 +572,7 @@ export default function StoresManagment() {
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         disabled
                                                     >
-                                                        Deleted Successful
+                                                        Deleting Successful
                                                     </button>}
                                                     {
                                                         !isUpdatingStatus &&
