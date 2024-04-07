@@ -100,7 +100,6 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // =============================================================================
-        console.log(getFiltersAsQuery({ category: categoryNameAsProperty }))
         getProductsCount(getFiltersAsQuery({ category: categoryNameAsProperty }))
             .then(async (result) => {
                 if (result.data > 0) {

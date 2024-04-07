@@ -54,7 +54,7 @@ export default function ProductCard({
                     Authorization: token,
                 }
             });
-            const result = await res.data;
+            const result = res.data;
             setIsWaitAddProductToFavoriteUserProductsList(false);
             if (!result.error) {
                 setIsSuccessAddProductToFavoriteUserProductsList(true);
@@ -83,8 +83,8 @@ export default function ProductCard({
                     Authorization: token,
                 }
             });
-            const result = await res.data;
-            if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
+            const result = res.data;
+            if (!result.error) {
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
                 let successDeleteToCartTimeout = setTimeout(() => {

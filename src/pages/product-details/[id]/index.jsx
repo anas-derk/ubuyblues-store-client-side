@@ -190,7 +190,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });

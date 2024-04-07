@@ -265,7 +265,7 @@ export default function Home({ countryAsProperty }) {
     }
 
     const isFavoriteProductForUser = (favorite_products_list, productId) => {
-        return favorite_products_list.findIndex((favorite_product) => favorite_product._id === productId);
+        return favorite_products_list.findIndex((favorite_product) => favorite_product._id === productId) > -1 ? true : false;
     }
 
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
