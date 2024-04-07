@@ -54,10 +54,12 @@ export default function ChangeBussinessEmailPassword() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
-                        if (adminInfo.isWebsiteOwner) {
+                        if (adminDetails.isWebsiteOwner) {
                             setAdminInfo(adminDetails);
                             setToken(adminToken);
                             setIsLoadingPage(false);
+                        } else {
+                            await router.replace("/admin-dashboard");
                         }
                     }
                 })
