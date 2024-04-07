@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
@@ -34,6 +34,8 @@ export default function StoreDetails({ storeId }) {
     const [successChangeStoreImageMsg, setSuccessChangeStoreImageMsg] = useState(false);
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const storeImageFileElementRef = useRef();
 
     const router = useRouter();
 
@@ -181,6 +183,60 @@ export default function StoreDetails({ storeId }) {
         }
     }
 
+    const changeStoreImage = async (storeId) => {
+        try {
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
+                {
+                    name: "image",
+                    value: storeDetails.image,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitChangeStoreImage(true);
+                let formData = new FormData();
+                formData.append("storeImage", storeDetails.image);
+                const res = await axios.put(`${process.env.BASE_API_URL}/stores/change-store-image/${storeId}`, formData, {
+                    headers: {
+                        Authorization: token,
+                    }
+                });
+                const result = res.data;
+                if (!result.error) {
+                    setIsWaitChangeStoreImage(false);
+                    setSuccessChangeStoreImageMsg(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessChangeStoreImageMsg("");
+                        storeImageFileElementRef.current.value = "";
+                        setStoreDetails({ ...storeDetails, imagePath: result.data.newStoreImagePath });
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                }
+            }
+        }
+        catch (err) {
+            if (err.response.data?.msg === "Unauthorized Error") {
+                await router.push("/admin-dashboard/login");
+                return;
+            }
+            setIsWaitChangeStoreImage(false);
+            setErrorChangeStoreImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorChangeStoreImageMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
     return (
         <div className="store-details admin-dashboard">
             <Head>
@@ -235,11 +291,13 @@ export default function StoreDetails({ storeId }) {
                                             <section className="update-store-image mb-4">
                                                 <input
                                                     type="file"
-                                                    className={`form-control d-block mx-auto p-2 border-2 brand-image-field ${formValidationErrors["image"] && index === updatingBrandIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                    onChange={(e) => changeBrandData(index, "image", e.target.files[0])}
+                                                    className={`form-control d-block mx-auto p-2 border-2 brand-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
+                                                    onChange={(e) => setStoreDetails({ ...storeDetails, image: e.target.files[0] })}
                                                     accept=".png, .jpg, .webp"
+                                                    ref={storeImageFileElementRef}
+                                                    value={storeImageFileElementRef.current?.value}
                                                 />
-                                                {formValidationErrors["image"] && index === updatingBrandIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                {formValidationErrors["image"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{formValidationErrors["image"]}</span>
                                                 </p>}
@@ -247,7 +305,7 @@ export default function StoreDetails({ storeId }) {
                                             {!isWaitChangeStoreImage && !errorChangeStoreImageMsg && !successChangeStoreImageMsg &&
                                                 <button
                                                     className="btn btn-success d-block mb-3 w-50 mx-auto global-button"
-                                                    onClick={() => updateBrandImage(index)}
+                                                    onClick={() => changeStoreImage(storeId)}
                                                 >Change</button>
                                             }
                                             {isWaitChangeStoreImage && <button
@@ -393,9 +451,9 @@ export default function StoreDetails({ storeId }) {
                                         <th>Actions</th>
                                         <td>
                                             {!isUpdatingStatus && !errorMsg && !successMsg && <button
-                                                    className="btn btn-success d-block mb-3 mx-auto global-button"
-                                                    onClick={() => updateStoreData(storeId)}
-                                                >Update</button>}
+                                                className="btn btn-success d-block mb-3 mx-auto global-button"
+                                                onClick={() => updateStoreData(storeId)}
+                                            >Update</button>}
                                             {isUpdatingStatus && <button
                                                 className="btn btn-info d-block mb-3 mx-auto global-button"
                                             >Please Waiting</button>}

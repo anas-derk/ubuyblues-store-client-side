@@ -133,7 +133,7 @@ export default function UpdateAndDeleteBrands() {
         setAllBrandsInsideThePage(brandsDataTemp);
     }
 
-    const updateBrandImage = async (brandIndex) => {
+    const changeBrandImage = async (brandIndex) => {
         try {
             setFormValidationErrors({});
             let errorsObject = validateFormFields([
@@ -156,7 +156,7 @@ export default function UpdateAndDeleteBrands() {
                 setIsWaitChangeBrandImage(true);
                 let formData = new FormData();
                 formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
-                const res = await axios.put(`${process.env.BASE_API_URL}/brands/update-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
+                const res = await axios.put(`${process.env.BASE_API_URL}/brands/change-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
                     headers: {
                         Authorization: token,
                     }
@@ -346,7 +346,7 @@ export default function UpdateAndDeleteBrands() {
                                             {!isWaitChangeBrandImage && !errorChangeBrandImageMsg && !successChangeBrandImageMsg &&
                                                 <button
                                                     className="btn btn-success d-block mb-3 w-50 mx-auto global-button"
-                                                    onClick={() => updateBrandImage(index)}
+                                                    onClick={() => changeBrandImage(index)}
                                                 >Change</button>
                                             }
                                             {isWaitChangeBrandImage && <button
