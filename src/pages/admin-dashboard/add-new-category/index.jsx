@@ -17,7 +17,7 @@ export default function AddNewCategory() {
 
     const [token, setToken] = useState("");
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const [categoryName, setCategoryName] = useState("");
 
@@ -40,7 +40,7 @@ export default function AddNewCategory() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setUserInfo(result.data);
+                        setAdminInfo(result.data);
                         setToken(adminToken);
                         setIsLoadingPage(false);
                     }
@@ -82,13 +82,13 @@ export default function AddNewCategory() {
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
                     categoryName,
-                    storeId: userInfo.storeId,
+                    storeId: adminInfo.storeId,
                 }, {
                     headers: {
                         Authorization: token,
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
@@ -127,11 +127,11 @@ export default function AddNewCategory() {
                 <title>Ubuyblues Store - Add New Category</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Add New Category Page
+                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Category Page
                     </h1>
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewCategory(e, categoryName)}>
                         <section className="category-name mb-4">

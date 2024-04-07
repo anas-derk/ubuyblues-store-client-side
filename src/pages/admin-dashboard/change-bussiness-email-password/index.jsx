@@ -18,6 +18,8 @@ export default function ChangeBussinessEmailPassword() {
 
     const [token, setToken] = useState("");
 
+    const [adminInfo, setAdminInfo] = useState({});
+
     const [email, setEmail] = useState("");
 
     const [currentPassword, setCurrentPassword] = useState("");
@@ -51,8 +53,12 @@ export default function ChangeBussinessEmailPassword() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
+                        const adminDetails = result.data;
+                        if (adminInfo.isWebsiteOwner) {
+                            setAdminInfo(adminDetails);
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        }
                     }
                 })
                 .catch(async (err) => {
@@ -177,11 +183,11 @@ export default function ChangeBussinessEmailPassword() {
                 <title>Ubuyblues Store - Change Bussiness Email Password</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In  Change Bussiness Email Password Page
+                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In  Change Bussiness Email Password Page
                     </h1>
                     <form className="change-bussiness-email-password-form w-50" onSubmit={changeBussinessEmailPassword}>
                         <section className="email mb-4">

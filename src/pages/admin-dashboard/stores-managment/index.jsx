@@ -19,7 +19,7 @@ export default function StoresManagment() {
 
     const [token, setToken] = useState("");
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
 
@@ -71,14 +71,19 @@ export default function StoresManagment() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setUserInfo(result.data);
-                        result = await getStoresCount();
-                        if (result.data > 0) {
-                            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        const adminDetails = result.data;
+                        if (adminDetails.isWebsiteOwner) {
+                            setAdminInfo(adminDetails);
+                            result = await getStoresCount();
+                            if (result.data > 0) {
+                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                            }
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        } else {
+                            await router.replace("/admin-dashboard");
                         }
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
                     }
                 })
                 .catch(async (err) => {
@@ -362,7 +367,7 @@ export default function StoresManagment() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Share Options Box */}
                 {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox
@@ -377,7 +382,7 @@ export default function StoresManagment() {
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {userInfo.firstName + " " + userInfo.lastName} In Stores Managment</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Stores Managment</h1>
                         <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
@@ -479,7 +484,7 @@ export default function StoresManagment() {
                                                         className={`form-control d-block mx-auto p-2 border-2 store-name-field ${formValidationErrors["name"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
                                                         placeholder="Pleae Enter Store Name"
                                                         onChange={(e) => changeStoreData(storeIndex, "name", e.target.value)}
-                                                        disabled={store._id === userInfo.storeId}
+                                                        disabled={store._id === adminInfo.storeId}
                                                     />
                                                     {formValidationErrors["name"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -496,7 +501,7 @@ export default function StoresManagment() {
                                                         className={`form-control d-block mx-auto p-2 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
                                                         placeholder="Pleae Enter Owner Email"
                                                         onChange={(e) => changeStoreData(storeIndex, "ownerEmail", e.target.value)}
-                                                        disabled={store._id === userInfo.storeId}
+                                                        disabled={store._id === adminInfo.storeId}
                                                     />
                                                     {formValidationErrors["ownerEmail"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -512,7 +517,7 @@ export default function StoresManagment() {
                                                         className={`form-control d-block mx-auto p-2 border-2 store-products-type-field ${formValidationErrors["productsType"] && storeIndex === selectedStoreIndex ? "border-danger mb-3" : "mb-4"}`}
                                                         placeholder="Pleae Enter Products Type"
                                                         onChange={(e) => changeStoreData(storeIndex, "productsType", e.target.value)}
-                                                        disabled={store._id === userInfo.storeId}
+                                                        disabled={store._id === adminInfo.storeId}
                                                     />
                                                     {formValidationErrors["productsType"] && storeIndex === selectedStoreIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -524,7 +529,7 @@ export default function StoresManagment() {
                                                 {store.status}
                                             </td>
                                             <td>
-                                                {store._id !== userInfo.storeId ? <>
+                                                {store._id !== adminInfo.storeId ? <>
 
                                                     {
                                                         !isUpdatingStatus &&

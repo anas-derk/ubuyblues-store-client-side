@@ -6,7 +6,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-export default function AdminPanelHeader() {
+export default function AdminPanelHeader({ isWebsiteOwner = false }) {
 
     const router = useRouter();
 
@@ -23,16 +23,18 @@ export default function AdminPanelHeader() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
-                            <NavDropdown title="Stores" id="brands-nav-dropdown">
-                                <NavDropdown.Item href="/admin-dashboard/stores-managment" as={Link}>All Stores</NavDropdown.Item>
-                            </NavDropdown>
-                            <NavDropdown title="Global" id="brands-nav-dropdown">
-                                <NavDropdown.Item href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="/admin-dashboard/change-bussiness-email-password" as={Link}>
-                                    Change Bussiness Email Password
-                                </NavDropdown.Item>
-                            </NavDropdown>
+                            {isWebsiteOwner && <>
+                                <NavDropdown title="Stores" id="brands-nav-dropdown">
+                                    <NavDropdown.Item href="/admin-dashboard/stores-managment" as={Link}>All Stores</NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="Global" id="brands-nav-dropdown">
+                                    <NavDropdown.Item href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="/admin-dashboard/change-bussiness-email-password" as={Link}>
+                                        Change Bussiness Email Password
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </>}
                             <NavDropdown title="Products" id="products-nav-dropdown">
                                 <NavDropdown.Item href="/admin-dashboard/add-new-product" as={Link}>Add New</NavDropdown.Item>
                                 <NavDropdown.Divider />

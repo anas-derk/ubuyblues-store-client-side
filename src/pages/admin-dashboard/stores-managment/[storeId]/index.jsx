@@ -17,7 +17,7 @@ export default function StoreDetails({ storeId }) {
 
     const [token, setToken] = useState("");
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const [storeDetails, setStoreDetails] = useState({});
 
@@ -48,12 +48,17 @@ export default function StoreDetails({ storeId }) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setUserInfo(result.data);
-                        result = await getStoreDetails(storeId);
-                        if (!result.error) {
-                            setStoreDetails(result.data);
-                            setToken(adminToken);
-                            setIsLoadingPage(false);
+                        const adminDetails = result.data;
+                        if (adminDetails.isWebsiteOwner) {
+                            setAdminInfo(adminDetails);
+                            result = await getStoreDetails(storeId);
+                            if (!result.error) {
+                                setStoreDetails(result.data);
+                                setToken(adminToken);
+                                setIsLoadingPage(false);
+                            }
+                        } else {
+                            await router.replace("/admin-dashboard");
                         }
                     }
                 })
@@ -244,12 +249,12 @@ export default function StoreDetails({ storeId }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-4 pb-4">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {userInfo.firstName + " " + userInfo.lastName} In Store Details Page</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Store Details Page</h1>
                         {storeDetails ? <div className="store-details-box p-3 data-box">
                             <table className="store-details-table table-for-mobiles-and-tablets bg-white w-100">
                                 <tbody>

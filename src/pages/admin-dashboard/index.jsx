@@ -13,7 +13,7 @@ export default function AdminDashboard() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const router = useRouter();
 
@@ -27,7 +27,7 @@ export default function AdminDashboard() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         setIsLoadingPage(false);
-                        setUserInfo(result.data);
+                        setAdminInfo(result.data);
                     }
                 })
                 .catch(async (err) => {
@@ -49,11 +49,11 @@ export default function AdminDashboard() {
                 <title>Ubuyblues Store - Admin Dashboard</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center">
                     <h1 className="fw-bold w-fit pb-2">
                         <PiHandWavingThin className="me-2" />
-                        Welcome { `${userInfo.firstName} ${userInfo.lastName}` } In Your Admin Dashboard Page
+                        Welcome { `${adminInfo.firstName} ${adminInfo.lastName}` } In Your Admin Dashboard Page
                     </h1>
                 </div>
             </>}

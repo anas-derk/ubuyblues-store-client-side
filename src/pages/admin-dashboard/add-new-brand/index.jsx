@@ -17,7 +17,7 @@ export default function AddNewBrand() {
 
     const [token, setToken] = useState("");
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const [brandImage, setBrandImage] = useState("");
 
@@ -44,7 +44,7 @@ export default function AddNewBrand() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setUserInfo(result.data);
+                        setAdminInfo(result.data);
                         setToken(adminToken);
                         setIsLoadingPage(false);
                     }
@@ -98,7 +98,7 @@ export default function AddNewBrand() {
                 let formData = new FormData();
                 formData.append("brandImg", brandImage);
                 formData.append("title", brandTitle);
-                formData.append("storeId", userInfo.storeId);
+                formData.append("storeId", adminInfo.storeId);
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
                     headers: {
@@ -146,11 +146,11 @@ export default function AddNewBrand() {
                 <title>Ubuyblues Store - Add New Brand</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Add New Brand Page
+                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Brand Page
                     </h1>
                     <form className="add-new-category-form w-50" onSubmit={(e) => addNewBrand(e, brandTitle)}>
                         <h6 className="mb-3 fw-bold">Please Select Brand Image</h6>

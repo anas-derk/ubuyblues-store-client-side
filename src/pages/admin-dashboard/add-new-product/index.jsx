@@ -17,7 +17,7 @@ export default function AddNewProduct() {
 
     const [token, setToken] = useState("");
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const [allCategories, setAllCategories] = useState([]);
 
@@ -54,7 +54,7 @@ export default function AddNewProduct() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setUserInfo(result.data);
+                        setAdminInfo(result.data);
                         setToken(adminToken);
                         setAllCategories((await getAllCategories()).data);
                         setIsLoadingPage(false);
@@ -176,7 +176,7 @@ export default function AddNewProduct() {
                 formData.append("discount", productData.discount);
                 formData.append("productImage", productData.image);
                 formData.append("galleryImages", productData.galleryImages[0]);
-                formData.append("storeId", userInfo.storeId);
+                formData.append("storeId", adminInfo.storeId);
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData, {
                     headers: {
@@ -212,7 +212,7 @@ export default function AddNewProduct() {
             }
         }
         catch (err) {
-            if (err.response.data?.msg === "Unauthorized Error") {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -234,11 +234,11 @@ export default function AddNewProduct() {
                 <title>Ubuyblues Store - Add New Product</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { userInfo.firstName + " " + userInfo.lastName } In Your Add New Product Page
+                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Product Page
                     </h1>
                     {allCategories.length > 0 ? <form className="add-new-product-form w-50" onSubmit={(e) => addNewProduct(e, productData)}>
                         <section className="name mb-4">

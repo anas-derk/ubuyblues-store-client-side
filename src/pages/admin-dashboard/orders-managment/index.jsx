@@ -19,7 +19,7 @@ export default function OrdersManagment() {
 
     const [token, setToken] = useState("");
 
-    const [userInfo, setUserInfo] = useState({});
+    const [adminInfo, setAdminInfo] = useState({});
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
 
@@ -63,7 +63,7 @@ export default function OrdersManagment() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setUserInfo(result.data);
+                        setAdminInfo(result.data);
                         result = await getOrdersCount(getFilteringString(filters));
                         if (result.data > 0) {
                             setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(filters))).data);
@@ -282,12 +282,12 @@ export default function OrdersManagment() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {userInfo.firstName + " " + userInfo.lastName} In Orders Managment</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Orders Managment</h1>
                         <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />

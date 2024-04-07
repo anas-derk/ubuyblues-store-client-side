@@ -16,6 +16,8 @@ export default function ShowAndHideSections() {
 
     const [token, setToken] = useState("");
 
+    const [adminInfo, setAdminInfo] = useState({});
+
     const [allSections, setAllSections] = useState();
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
@@ -35,13 +37,19 @@ export default function ShowAndHideSections() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        const res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-                        result = res.data;
-                        if(!result.error) {
-                            setAllSections(result.data);
+                        const adminDetails = result.data;
+                        setAdminInfo(adminDetails);
+                        if (adminDetails.isWebsiteOwner) {
+                            const res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
+                            result = res.data;
+                            if(!result.error) {
+                                setAllSections(result.data);
+                            }
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        } else {
+                            await router.replace("/admin-dashboard");
                         }
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
                     }
                 })
                 .catch(async (err) => {
@@ -101,11 +109,11 @@ export default function ShowAndHideSections() {
                 <title>Ubuyblues Store - Show And Hide Sections</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr Asfour In Your Add Show And Hide Sections Page
+                        Hi, Mr {  adminInfo.firstName + " " + adminInfo.lastName } In Your Add Show And Hide Sections Page
                     </h1>
                     <div className="sections-box w-100">
                         {allSections.length > 0 ? <table className="sections-table mb-4 managment-table bg-white w-100">

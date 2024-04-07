@@ -15,6 +15,8 @@ export default function OrderDetails({ orderId }) {
 
     const [token, setToken] = useState("");
 
+    const [adminInfo, setAdminInfo] = useState({});
+
     const [orderDetails, setOrderDetails] = useState({});
 
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
@@ -36,6 +38,7 @@ export default function OrderDetails({ orderId }) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
+                        setAdminInfo(result.data);
                         result = await getOrderDetails(orderId);
                         if (!result.error) {
                             setOrderDetails(result.data);
@@ -150,7 +153,7 @@ export default function OrderDetails({ orderId }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
-                <AdminPanelHeader />
+                <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 {/* Start Admin Dashboard Side Bar */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-4 pb-4">
