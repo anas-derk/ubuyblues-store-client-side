@@ -60,7 +60,7 @@ export default function StoresManagment() {
 
     const pageSize = 3;
 
-    const storeStatusList = ["pending", "approving", "rejecting", "blocking"];
+    const storeStatusList = ["pending", "approving", "blocking"];
 
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
