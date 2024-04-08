@@ -73,6 +73,7 @@ export default function UpdateAndDeleteProducts() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [filters, setFilters] = useState({
+        storeId: "",
         category: "",
     });
 
@@ -91,10 +92,13 @@ export default function UpdateAndDeleteProducts() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        result = await getProductsCount();
+                        const adminDetails = result.data;
+                        setAdminInfo(adminDetails);
+                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                        setFilters(tempFilters);
+                        result = await getProductsCount(getFilteringString(tempFilters));
                         if (result.data > 0) {
-                            setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
+                            setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                             setAllCategories((await getAllCategories()).data);
                         }
@@ -119,10 +123,10 @@ export default function UpdateAndDeleteProducts() {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const getAllCategories = async () => {
+    const getAllCategories = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
-            return await res.data;
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories?${filters ? filters : ""}`)
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -155,6 +159,7 @@ export default function UpdateAndDeleteProducts() {
     const getFilteringString = (filters) => {
         let filteringString = "";
         if (filters.category) filteringString += `category=${filters.category}&`;
+        if (filters.storeId) filteringString += `storeId=${filters.storeId}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
     }
