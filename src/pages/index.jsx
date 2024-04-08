@@ -20,7 +20,6 @@ import ProductCard from "@/components/ProductCard";
 import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheCart } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
-import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function Home({ countryAsProperty }) {
 

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import NotFoundError from "@/components/NotFoundError";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function AddYourStore() {
 
