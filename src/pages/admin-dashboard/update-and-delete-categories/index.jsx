@@ -308,7 +308,7 @@ export default function UpdateAndDeleteCategories() {
                     {isWaitGetCategoriesStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
-                    {totalPagesCount > 0 && !isWaitGetCategoriesStatus &&
+                    {totalPagesCount > 1 && !isWaitGetCategoriesStatus &&
                         <PaginationBar
                             totalPagesCount={totalPagesCount}
                             currentPage={currentPage}
