@@ -38,15 +38,23 @@ export default function ShowBilling({ orderId }) {
                             localStorage.removeItem("asfour-store-admin-user-token");
                             await router.push("/admin-dashboard/login");
                         } else {
-                            result = await getOrderDetails(orderId);
-                            if (!result.error) {
-                                setOrderDetails(result.data);
-                                setPricesDetailsSummary({
-                                    totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.data.order_products),
-                                    totalDiscount: calcTotalOrderDiscount(result.data.order_products),
-                                });
+                            const adminDetails = result.data;
+                            if (adminDetails.isBlocked) {
+                                localStorage.removeItem("asfour-store-admin-user-token");
+                                await router.push("/admin-dashboard/login");
+                            } else {
+                                setAdminInfo(adminDetails);
+                                setToken(adminToken);
+                                result = await getOrderDetails(orderId);
+                                if (!result.error) {
+                                    setOrderDetails(result.data);
+                                    setPricesDetailsSummary({
+                                        totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.data.order_products),
+                                        totalDiscount: calcTotalOrderDiscount(result.data.order_products),
+                                    });
+                                }
+                                setIsLoadingPage(false);
                             }
-                            setIsLoadingPage(false);
                         }
                     })
                     .catch(async (err) => {

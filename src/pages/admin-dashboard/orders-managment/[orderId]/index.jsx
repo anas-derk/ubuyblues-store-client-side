@@ -38,12 +38,18 @@ export default function OrderDetails({ orderId }) {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        result = await getOrderDetails(orderId);
-                        if (!result.error) {
-                            setOrderDetails(result.data);
-                            setToken(adminToken);
-                            setIsLoadingPage(false);
+                        const adminDetails = result.data;
+                        if (adminDetails.isBlocked) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
+                        } else {
+                            setAdminInfo(adminDetails);
+                            result = await getOrderDetails(orderId);
+                            if (!result.error) {
+                                setOrderDetails(result.data);
+                                setToken(adminToken);
+                                setIsLoadingPage(false);
+                            }
                         }
                     }
                 })

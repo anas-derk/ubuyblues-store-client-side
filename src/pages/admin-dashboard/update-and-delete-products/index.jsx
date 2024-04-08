@@ -19,7 +19,7 @@ export default function UpdateAndDeleteProducts() {
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [token, setToken] = useState("");
-    
+
     const [adminInfo, setAdminInfo] = useState({});
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
@@ -93,17 +93,23 @@ export default function UpdateAndDeleteProducts() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
-                        setAdminInfo(adminDetails);
-                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
-                        setFilters(tempFilters);
-                        result = await getProductsCount(getFilteringString(tempFilters));
-                        if (result.data > 0) {
-                            setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                            setAllCategories((await getAllCategories()).data);
+                        if (adminDetails.isBlocked) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
                         }
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
+                        else {
+                            setAdminInfo(adminDetails);
+                            const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                            setFilters(tempFilters);
+                            result = await getProductsCount(getFilteringString(tempFilters));
+                            if (result.data > 0) {
+                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
+                                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                                setAllCategories((await getAllCategories()).data);
+                            }
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        }
                     }
                 })
                 .catch(async (err) => {
@@ -711,7 +717,7 @@ export default function UpdateAndDeleteProducts() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-4">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Update / Delete Products Page
+                        Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Your Update / Delete Products Page
                     </h1>
                     <section className="filters mb-3 bg-white border-3 border-info p-3 text-start w-100">
                         <h5 className="section-name fw-bold text-center">Filters: </h5>

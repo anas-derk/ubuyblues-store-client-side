@@ -56,16 +56,22 @@ export default function UpdateAndDeleteCategories() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
-                        setAdminInfo(adminDetails);
-                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
-                        setFilters(tempFilters);
-                        result = await getCategoriesCount(getFilteringString(tempFilters));
-                        if (result.data > 0) {
-                            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        if (adminDetails.isBlocked) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
                         }
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
+                        else {
+                            setAdminInfo(adminDetails);
+                            const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                            setFilters(tempFilters);
+                            result = await getCategoriesCount(getFilteringString(tempFilters));
+                            if (result.data > 0) {
+                                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
+                                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                            }
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        }
                     }
                 })
                 .catch(async (err) => {
@@ -248,7 +254,7 @@ export default function UpdateAndDeleteCategories() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-5">
                     <h1 className="fw-bold w-fit pb-2 mb-4">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Update / Delete Categories Page
+                        Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Your Update / Delete Categories Page
                     </h1>
                     {allCategoriesInsideThePage.length > 0 && !isWaitGetCategoriesStatus && <section className="categories-box w-100">
                         <table className="products-table mb-4 managment-table bg-white w-100">

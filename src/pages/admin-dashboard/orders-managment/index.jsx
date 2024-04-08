@@ -65,17 +65,21 @@ export default function OrdersManagment() {
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
-                        setAdminInfo(adminDetails);
-                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
-                        setFilters(tempFilters);
-                        result = await getOrdersCount(getFilteringString(tempFilters));
-                        console.log(result)
-                        if (result.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        if (adminDetails.isBlocked) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
+                        } else {
+                            setAdminInfo(adminDetails);
+                            const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                            setFilters(tempFilters);
+                            result = await getOrdersCount(getFilteringString(tempFilters));
+                            if (result.data > 0) {
+                                setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
+                                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                            }
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
                         }
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
                     }
                 })
                 .catch(async (err) => {

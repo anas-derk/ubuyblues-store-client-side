@@ -54,10 +54,16 @@ export default function AddNewProduct() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        setToken(adminToken);
-                        setAllCategories((await getAllCategories()).data);
-                        setIsLoadingPage(false);
+                        const adminDetails = result.data;
+                        if (adminDetails.isBlocked) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
+                        } else {
+                            setAdminInfo(adminDetails);
+                            setToken(adminToken);
+                            setAllCategories((await getAllCategories()).data);
+                            setIsLoadingPage(false);
+                        }
                     }
                 })
                 .catch(async (err) => {

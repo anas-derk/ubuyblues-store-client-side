@@ -40,9 +40,15 @@ export default function AddNewCategory() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        setToken(adminToken);
-                        setIsLoadingPage(false);
+                        const adminDetails = result.data;
+                        if (adminDetails.isBlocked) {
+                            localStorage.removeItem("asfour-store-admin-user-token");
+                            await router.push("/admin-dashboard/login");
+                        } else {
+                            setAdminInfo(adminDetails);
+                            setToken(adminToken);
+                            setIsLoadingPage(false);
+                        }
                     }
                 })
                 .catch(async (err) => {
