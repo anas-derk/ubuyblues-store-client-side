@@ -9,6 +9,7 @@ import validations from "../../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { getDateFormated } from "../../../../public/global_functions/popular";
 
 export default function AdminLogin() {
 
@@ -19,6 +20,8 @@ export default function AdminLogin() {
     const [email, setEmail] = useState("");
 
     const [password, setPassword] = useState("");
+
+    const [blockingDateAndReason, setBlockingDateAndReason] = useState({});
 
     const [isLoginingStatus, setIsLoginingStatus] = useState(false);
 
@@ -88,13 +91,16 @@ export default function AdminLogin() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsLoginingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
-                const result = await res.data;
+                const result = res.data;
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
+                    if (result.data) {
+                        setBlockingDateAndReason(result.data);
+                    }
                     setTimeout(() => {
                         setErrorMsg("");
-                    }, 3000);
+                    }, 4000);
                 } else {
                     localStorage.setItem("asfour-store-admin-user-token", result.data.token);
                     await router.push("/admin-dashboard");
@@ -154,6 +160,10 @@ export default function AdminLogin() {
                             <span className="me-2">{errMsg}</span>
                             <FiLogIn />
                         </button>}
+                        {errMsg && blockingDateAndReason && <div className="blocking-date-and-reason-box bg-white border border-danger p-3">
+                            <h6 className="blocking-date fw-bold">Blocking Date: { getDateFormated(blockingDateAndReason.blockingDate) }</h6>
+                            <h6 className="blocking-reason m-0 fw-bold">Blocking Reason: { blockingDateAndReason.blockingReason }</h6>
+                        </div>}
                     </form>
                 </div>
             </div>}
