@@ -40,6 +40,7 @@ export default function OrdersManagment() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [filters, setFilters] = useState({
+        storeId: "",
         orderNumber: -1,
         orderId: "",
         status: "",
@@ -63,10 +64,14 @@ export default function OrdersManagment() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        result = await getOrdersCount(getFilteringString(filters));
+                        const adminDetails = result.data;
+                        setAdminInfo(adminDetails);
+                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                        setFilters(tempFilters);
+                        result = await getOrdersCount(getFilteringString(tempFilters));
+                        console.log(result)
                         if (result.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(filters))).data);
+                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
                         setToken(adminToken);
@@ -93,6 +98,7 @@ export default function OrdersManagment() {
     const getFilteringString = (filters) => {
         let filteringString = "";
         if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
+        if (filters.storeId) filteringString += `storeId=${filters.storeId}&`;
         if (filters.orderId) filteringString += `_id=${filters.orderId}&`;
         if (filters.status) filteringString += `status=${filters.status}&`;
         if (filters.customerName) filteringString += `customerName=${filters.customerName}&`;
