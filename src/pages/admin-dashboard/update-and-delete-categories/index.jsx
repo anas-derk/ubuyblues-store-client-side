@@ -172,7 +172,6 @@ export default function UpdateAndDeleteCategories() {
                     }
                 });
                 const result = res.data;
-                console.log(result)
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
