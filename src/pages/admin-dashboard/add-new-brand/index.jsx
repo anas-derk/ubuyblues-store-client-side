@@ -128,6 +128,7 @@ export default function AddNewBrand() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem("asfour-store-admin-user-token");
                 await router.push("/admin-dashboard/login");
                 return;
             }

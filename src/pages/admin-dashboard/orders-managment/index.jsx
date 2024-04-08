@@ -229,6 +229,11 @@ export default function OrdersManagment() {
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem("asfour-store-admin-user-token");
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsUpdatingStatus(false);
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
@@ -271,6 +276,11 @@ export default function OrdersManagment() {
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem("asfour-store-admin-user-token");
+                await router.push("/admin-dashboard/login");
+                return;
+            }
             setIsDeletingStatus(false);
             setIsErrorStatus(true);
             let errorTimeout = setTimeout(() => {
