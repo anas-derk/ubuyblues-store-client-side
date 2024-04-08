@@ -17,8 +17,6 @@ export default function StoresManagment() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
@@ -79,7 +77,6 @@ export default function StoresManagment() {
                                 setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         } else {
                             await router.replace("/admin-dashboard");
@@ -241,7 +238,7 @@ export default function StoresManagment() {
                     productsType: allStoresInsideThePage[storeIndex].productsType,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
@@ -278,7 +275,7 @@ export default function StoresManagment() {
             setSelectedStoreIndex(storeIndex);
             const res = await axios.delete(`${process.env.BASE_API_URL}/stores/delete-store/${allStoresInsideThePage[storeIndex]._id}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             let result = res.data;
@@ -378,7 +375,6 @@ export default function StoresManagment() {
                     setStoreAction={setStoreAction}
                     storeId={selectedStoreId}
                     storeAction={storeAction}
-                    token={token}
                     handleChangeStoreStatus={handleChangeStoreStatus}
                 />}
                 {/* End Share Options Box */}

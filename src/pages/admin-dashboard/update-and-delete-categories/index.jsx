@@ -16,8 +16,6 @@ export default function UpdateAndDeleteCategories() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [isWaitGetCategoriesStatus, setIsWaitGetCategoriesStatus] = useState(false);
@@ -69,7 +67,6 @@ export default function UpdateAndDeleteCategories() {
                                 setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
@@ -168,7 +165,7 @@ export default function UpdateAndDeleteCategories() {
                     newCategoryName: allCategoriesInsideThePage[categoryIndex].name,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = res.data;
@@ -204,7 +201,7 @@ export default function UpdateAndDeleteCategories() {
             setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/categories/${categoryId}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = await res.data;

@@ -16,8 +16,6 @@ export default function UpdateAndDeleteBrands() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [isWaitGetBrandsStatus, setIsWaitGetBrandsStatus] = useState(false);
@@ -75,7 +73,6 @@ export default function UpdateAndDeleteBrands() {
                                 setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
@@ -178,7 +175,7 @@ export default function UpdateAndDeleteBrands() {
                 formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
                 const res = await axios.put(`${process.env.BASE_API_URL}/brands/change-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = res.data;
@@ -232,7 +229,7 @@ export default function UpdateAndDeleteBrands() {
                     newBrandTitle: allBrandsInsideThePage[brandIndex].title,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
@@ -268,7 +265,7 @@ export default function UpdateAndDeleteBrands() {
             setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/brands/${brandId}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = await res.data;

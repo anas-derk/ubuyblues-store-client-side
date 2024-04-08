@@ -13,8 +13,6 @@ export default function OrderDetails({ orderId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [orderDetails, setOrderDetails] = useState({});
@@ -47,7 +45,6 @@ export default function OrderDetails({ orderId }) {
                             result = await getOrderDetails(orderId);
                             if (!result.error) {
                                 setOrderDetails(result.data);
-                                setToken(adminToken);
                                 setIsLoadingPage(false);
                             }
                         }
@@ -92,7 +89,7 @@ export default function OrderDetails({ orderId }) {
                 unit_price: orderDetails.order_products[orderProductIndex].unit_price,
             }, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = res.data;
@@ -125,7 +122,7 @@ export default function OrderDetails({ orderId }) {
             setIsDeletingStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/orders/products/delete-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex].productId}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = await res.data;

@@ -16,8 +16,6 @@ export default function ChangeBussinessEmailPassword() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [email, setEmail] = useState("");
@@ -56,7 +54,6 @@ export default function ChangeBussinessEmailPassword() {
                         const adminDetails = result.data;
                         if (adminDetails.isWebsiteOwner) {
                             setAdminInfo(adminDetails);
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         } else {
                             await router.replace("/admin-dashboard");
@@ -141,7 +138,7 @@ export default function ChangeBussinessEmailPassword() {
                 setIsWaitStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/global-passwords/change-bussiness-email-password?email=${email}&password=${currentPassword}&newPassword=${newPassword}`, undefined, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     },
                 });
                 const result = await res.data;

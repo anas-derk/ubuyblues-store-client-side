@@ -15,8 +15,6 @@ export default function AddNewProduct() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [allCategories, setAllCategories] = useState([]);
@@ -66,8 +64,6 @@ export default function AddNewProduct() {
                             setAdminInfo(adminDetails);
                             const tempFilters = { ...filters, storeId: adminDetails.storeId };
                             setFilters(tempFilters);
-
-                            setToken(adminToken);
                             setAllCategories((await getAllCategories(getFilteringString(tempFilters))).data);
                             setIsLoadingPage(false);
                         }
@@ -201,7 +197,7 @@ export default function AddNewProduct() {
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = res.data;

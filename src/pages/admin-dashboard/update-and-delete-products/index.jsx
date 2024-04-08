@@ -18,8 +18,6 @@ export default function UpdateAndDeleteProducts() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
@@ -107,7 +105,6 @@ export default function UpdateAndDeleteProducts() {
                                 setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
@@ -234,7 +231,7 @@ export default function UpdateAndDeleteProducts() {
                 formData.append("productImage", allProductsInsideThePage[productIndex].image);
                 const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = res.data;
@@ -339,7 +336,7 @@ export default function UpdateAndDeleteProducts() {
                     endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
@@ -375,7 +372,7 @@ export default function UpdateAndDeleteProducts() {
             setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/products/${productId}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = await res.data;
@@ -419,7 +416,7 @@ export default function UpdateAndDeleteProducts() {
             setIsDeleteProductGalleryImage(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsInsideThePage[productIndex]._id}?galleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = res.data;
@@ -480,7 +477,7 @@ export default function UpdateAndDeleteProducts() {
                 formData.append("productGalleryImage", newProductGalleryImageFiles[productGalleryImageIndex]);
                 const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsInsideThePage[productIndex]._id}?oldGalleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
@@ -535,7 +532,7 @@ export default function UpdateAndDeleteProducts() {
                 }
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;

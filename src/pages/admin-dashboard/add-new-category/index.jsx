@@ -15,8 +15,6 @@ export default function AddNewCategory() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [categoryName, setCategoryName] = useState("");
@@ -46,7 +44,6 @@ export default function AddNewCategory() {
                             await router.push("/admin-dashboard/login");
                         } else {
                             setAdminInfo(adminDetails);
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
@@ -91,7 +88,7 @@ export default function AddNewCategory() {
                     storeId: adminInfo.storeId,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = res.data;

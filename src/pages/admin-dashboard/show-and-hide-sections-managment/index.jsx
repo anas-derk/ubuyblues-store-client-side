@@ -14,8 +14,6 @@ export default function ShowAndHideSections() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [allSections, setAllSections] = useState();
@@ -45,7 +43,6 @@ export default function ShowAndHideSections() {
                             if(!result.error) {
                                 setAllSections(result.data);
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         } else {
                             await router.replace("/admin-dashboard");
@@ -76,7 +73,7 @@ export default function ShowAndHideSections() {
                 sectionsStatus: allSections.map((section) => ({ _id: section._id, isAppeared: section.isAppeared })),
             }, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = await res.data;

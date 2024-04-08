@@ -11,7 +11,6 @@ export default function ChangeStoreStatusBox({
     setStoreAction,
     storeId,
     storeAction,
-    token,
     handleChangeStoreStatus,
 }) {
 
@@ -63,7 +62,7 @@ export default function ChangeStoreStatusBox({
                 const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}?password=${adminPassword}`, undefined,
                     {
                         headers: {
-                            Authorization: token,
+                            Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                         }
                     }
                 );
@@ -100,7 +99,7 @@ export default function ChangeStoreStatusBox({
             const res = await axios.delete(`${process.env.BASE_API_URL}/stores/reject-store/${storeId}`,
                 {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 }
             );
@@ -150,7 +149,7 @@ export default function ChangeStoreStatusBox({
                 const res = await axios.put(`${process.env.BASE_API_URL}/stores/blocking-store/${storeId}?blockingReason=${changeStatusReason}`, undefined,
                     {
                         headers: {
-                            Authorization: token,
+                            Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                         }
                     }
                 );
@@ -187,7 +186,7 @@ export default function ChangeStoreStatusBox({
             const res = await axios.put(`${process.env.BASE_API_URL}/stores/cancel-blocking/${storeId}`, undefined,
                 {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 }
             );

@@ -17,8 +17,6 @@ export default function OrdersManagment() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
@@ -77,7 +75,6 @@ export default function OrdersManagment() {
                                 setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
@@ -217,7 +214,7 @@ export default function OrdersManagment() {
                     status: allOrdersInsideThePage[orderIndex].status,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
@@ -254,7 +251,7 @@ export default function OrdersManagment() {
             setSelectedOrderIndex(orderIndex);
             const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allOrdersInsideThePage[orderIndex]._id}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                 }
             });
             const result = res.data;

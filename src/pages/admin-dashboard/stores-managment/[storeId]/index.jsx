@@ -15,8 +15,6 @@ export default function StoreDetails({ storeId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [storeDetails, setStoreDetails] = useState({});
@@ -54,7 +52,6 @@ export default function StoreDetails({ storeId }) {
                             result = await getStoreDetails(storeId);
                             if (!result.error) {
                                 setStoreDetails(result.data);
-                                setToken(adminToken);
                                 setIsLoadingPage(false);
                             }
                         } else {
@@ -160,7 +157,7 @@ export default function StoreDetails({ storeId }) {
                     productsDescription: storeDetails.productsDescription,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
@@ -212,7 +209,7 @@ export default function StoreDetails({ storeId }) {
                 formData.append("storeImage", storeDetails.image);
                 const res = await axios.put(`${process.env.BASE_API_URL}/stores/change-store-image/${storeId}`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = res.data;
