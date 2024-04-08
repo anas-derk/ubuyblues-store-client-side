@@ -15,6 +15,8 @@ export default function ShowBilling({ orderId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [adminInfo, setAdminInfo] = useState({});
+
     const [orderDetails, setOrderDetails] = useState({});
 
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
@@ -44,7 +46,6 @@ export default function ShowBilling({ orderId }) {
                                 await router.push("/admin-dashboard/login");
                             } else {
                                 setAdminInfo(adminDetails);
-                                setToken(adminToken);
                                 result = await getOrderDetails(orderId);
                                 if (!result.error) {
                                     setOrderDetails(result.data);
