@@ -36,6 +36,10 @@ export default function UpdateAndDeleteCategories() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
+    const [filters, setFilters] = useState({
+        storeId: "",
+    });
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const router = useRouter();
@@ -51,10 +55,13 @@ export default function UpdateAndDeleteCategories() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        result = await getCategoriesCount();
+                        const adminDetails = result.data;
+                        setAdminInfo(adminDetails);
+                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                        setFilters(tempFilters);
+                        result = await getCategoriesCount(getFilteringString(tempFilters));
                         if (result.data > 0) {
-                            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
+                            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
                         setToken(adminToken);
@@ -78,20 +85,27 @@ export default function UpdateAndDeleteCategories() {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const getCategoriesCount = async () => {
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.storeId) filteringString += `storeId=${filters.storeId}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
+    const getCategoriesCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count`);
-            return await res.data;
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count?${filters ? filters : ""}`);
+            return res.data;
         }
         catch (err) {
             throw Error(err);
         }
     }
 
-    const getAllCategoriesInsideThePage = async (pageNumber, pageSize) => {
+    const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-            return await res.data;
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            return res.data;
         }
         catch (err) {
             throw Error(err);
