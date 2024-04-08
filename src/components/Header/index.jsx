@@ -120,6 +120,10 @@ export default function Header() {
                                 <BsFillPersonFill className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Login / Register")}
                             </Nav.Link>}
+                            <Nav.Link href="/add-your-store" as={Link}>
+                                <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Add Your Store")}
+                            </Nav.Link>
                             <NavDropdown title={t("Languages")} id="products-nav-dropdown">
                                 <NavDropdown.Item onClick={() => handleChangeLanguage("ar")}>{t("Arabic")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
