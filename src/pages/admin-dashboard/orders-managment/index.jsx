@@ -90,6 +90,19 @@ export default function OrdersManagment() {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
+        if (filters.orderId) filteringString += `_id=${filters.orderId}&`;
+        if (filters.status) filteringString += `status=${filters.status}&`;
+        if (filters.customerName) filteringString += `customerName=${filters.customerName}&`;
+        if (filters.email) filteringString += `email=${filters.email}&`;
+        if (filters.isDeleted) filteringString += `isDeleted=yes&`;
+        else filteringString += `isDeleted=no&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
     const getOrdersCount = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`);
@@ -131,19 +144,6 @@ export default function OrdersManagment() {
         setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
         setCurrentPage(pageNumber);
         setIsFilteringOrdersStatus(false);
-    }
-
-    const getFilteringString = (filters) => {
-        let filteringString = "";
-        if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
-        if (filters.orderId) filteringString += `_id=${filters.orderId}&`;
-        if (filters.status) filteringString += `status=${filters.status}&`;
-        if (filters.customerName) filteringString += `customerName=${filters.customerName}&`;
-        if (filters.email) filteringString += `email=${filters.email}&`;
-        if (filters.isDeleted) filteringString += `isDeleted=yes&`;
-        else filteringString += `isDeleted=no&`;
-        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
-        return filteringString;
     }
 
     const filterOrders = async (filters) => {

@@ -42,6 +42,10 @@ export default function UpdateAndDeleteBrands() {
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
+    const [filters, setFilters] = useState({
+        storeId: "",
+    });
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const router = useRouter();
@@ -57,10 +61,13 @@ export default function UpdateAndDeleteBrands() {
                         localStorage.removeItem("asfour-store-admin-user-token");
                         await router.push("/admin-dashboard/login");
                     } else {
-                        setAdminInfo(result.data);
-                        result = await getBrandsCount();
+                        const adminDetails = result.data;
+                        setAdminInfo(adminDetails);
+                        const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                        setFilters(tempFilters);
+                        result = await getBrandsCount(getFilteringString(tempFilters));
                         if (result.data > 0) {
-                            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize)).data);
+                            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                             setTotalPagesCount(Math.ceil(result.data / pageSize));
                         }
                         setToken(adminToken);
@@ -84,20 +91,27 @@ export default function UpdateAndDeleteBrands() {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const getBrandsCount = async () => {
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.storeId) filteringString += `storeId=${filters.storeId}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
+    const getBrandsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/brands/brands-count`);
-            return await res.data;
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/brands-count?${filters ? filters : ""}`);
+            return res.data;
         }
         catch (err) {
             throw Error(err);
         }
     }
 
-    const getAllBrandsInsideThePage = async (pageNumber, pageSize) => {
+    const getAllBrandsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-            return await res.data;
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            return res.data;
         }
         catch (err) {
             throw Error(err);
