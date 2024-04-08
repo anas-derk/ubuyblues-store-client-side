@@ -15,8 +15,6 @@ export default function AddNewBrand() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [adminInfo, setAdminInfo] = useState({});
 
     const [brandImage, setBrandImage] = useState("");
@@ -51,7 +49,6 @@ export default function AddNewBrand() {
                         }
                         else {
                             setAdminInfo(adminDetails);
-                            setToken(adminToken);
                             setIsLoadingPage(false);
                         }
                     }
@@ -109,7 +106,7 @@ export default function AddNewBrand() {
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     }
                 });
                 const result = await res.data;
