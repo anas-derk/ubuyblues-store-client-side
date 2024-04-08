@@ -101,11 +101,11 @@ export default function UpdateAndDeleteProducts() {
                             setAdminInfo(adminDetails);
                             const tempFilters = { ...filters, storeId: adminDetails.storeId };
                             setFilters(tempFilters);
+                            setAllCategories((await getAllCategories(getFilteringString(tempFilters))).data);
                             result = await getProductsCount(getFilteringString(tempFilters));
                             if (result.data > 0) {
                                 setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
-                                setAllCategories((await getAllCategories()).data);
                             }
                             setToken(adminToken);
                             setIsLoadingPage(false);
@@ -132,6 +132,7 @@ export default function UpdateAndDeleteProducts() {
     const getAllCategories = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories?${filters ? filters : ""}`)
+            console.log(res.data)
             return res.data;
         }
         catch (err) {
@@ -948,7 +949,7 @@ export default function UpdateAndDeleteProducts() {
                     {isFilteringProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                         <span className="loader-table-data"></span>
                     </div>}
-                    {totalPagesCount > 0 && !isFilteringProductsStatus &&
+                    {totalPagesCount > 1 && !isFilteringProductsStatus &&
                         <PaginationBar
                             totalPagesCount={totalPagesCount}
                             currentPage={currentPage}

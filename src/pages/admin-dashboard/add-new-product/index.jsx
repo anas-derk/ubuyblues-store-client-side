@@ -37,6 +37,10 @@ export default function AddNewProduct() {
 
     const [successMsg, setSuccessMsg] = useState("");
 
+    const [filters, setFilters] = useState({
+        storeId: "",
+    });
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const productImageFileElementRef = useRef();
@@ -60,13 +64,17 @@ export default function AddNewProduct() {
                             await router.push("/admin-dashboard/login");
                         } else {
                             setAdminInfo(adminDetails);
+                            const tempFilters = { ...filters, storeId: adminDetails.storeId };
+                            setFilters(tempFilters);
+
                             setToken(adminToken);
-                            setAllCategories((await getAllCategories()).data);
+                            setAllCategories((await getAllCategories(getFilteringString(tempFilters))).data);
                             setIsLoadingPage(false);
                         }
                     }
                 })
                 .catch(async (err) => {
+                    console.log(err)
                     if (err?.message === "Network Error") {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -83,9 +91,16 @@ export default function AddNewProduct() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const getAllCategories = async () => {
+    const getFilteringString = (filters) => {
+        let filteringString = "";
+        if (filters.storeId) filteringString += `storeId=${filters.storeId}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
+    const getAllCategories = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories`)
+            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories?${filters ? filters : ""}`)
             return await res.data;
         }
         catch (err) {
