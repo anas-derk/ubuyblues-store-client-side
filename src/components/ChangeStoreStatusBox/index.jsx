@@ -4,6 +4,7 @@ import axios from "axios";
 import validations from "../../../public/global_functions/validations";
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function ChangeStoreStatusBox({
     setIsDisplayChangeStoreStatusBox,
@@ -15,6 +16,10 @@ export default function ChangeStoreStatusBox({
 }) {
 
     const [changeStatusReason, setChangeStatusReason] = useState("");
+
+    const [adminPassword, setAdminPassword] = useState("");
+
+    const [isVisiblePassword, setIsVisiblePassword] = useState("");
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
@@ -37,24 +42,42 @@ export default function ChangeStoreStatusBox({
 
     const approveStoreCreate = async (storeId) => {
         try {
-            setIsWaitStatus(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}`, undefined,
+            setFormValidationErrors({});
+            let errorsObject = validateFormFields([
                 {
-                    headers: {
-                        Authorization: token,
+                    name: "adminPassword",
+                    value: adminPassword,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitStatus(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}?password=${adminPassword}`, undefined,
+                    {
+                        headers: {
+                            Authorization: token,
+                        }
                     }
+                );
+                const result = res.data;
+                setIsWaitStatus(false);
+                if (!result.error) {
+                    setSuccessMsg(result.msg);
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessMsg("");
+                        handleClosePopupBox();
+                        handleChangeStoreStatus("approving");
+                        clearTimeout(successTimeout);
+                    });
                 }
-            );
-            const result = res.data;
-            setIsWaitStatus(false);
-            if (!result.error) {
-                setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(async () => {
-                    setSuccessMsg("");
-                    handleClosePopupBox();
-                    handleChangeStoreStatus("approving");
-                    clearTimeout(successTimeout);
-                });
             }
         }
         catch (err) {
@@ -71,41 +94,26 @@ export default function ChangeStoreStatusBox({
         }
     }
 
-    const rejectStoreCreate = async (storeId, changeStatusReason) => {
+    const rejectStoreCreate = async (storeId) => {
         try {
-            setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            setIsWaitStatus(true);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/stores/reject-store/${storeId}`,
                 {
-                    name: "changeStatusReason",
-                    value: changeStatusReason,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-            ]);
-            setFormValidationErrors(errorsObject);
-            if (Object.keys(errorsObject).length == 0) {
-                setIsWaitStatus(true);
-                const res = await axios.delete(`${process.env.BASE_API_URL}/stores/reject-store/${storeId}?rejectingReason=${changeStatusReason}`,
-                    {
-                        headers: {
-                            Authorization: token,
-                        }
+                    headers: {
+                        Authorization: token,
                     }
-                );
-                const result = res.data;
-                setIsWaitStatus(false);
-                if (!result.error) {
-                    setSuccessMsg(result.msg);
-                    let successTimeout = setTimeout(async () => {
-                        setSuccessMsg("");
-                        handleClosePopupBox();
-                        handleChangeStoreStatus("rejecting");
-                        clearTimeout(successTimeout);
-                    });
                 }
+            );
+            const result = res.data;
+            setIsWaitStatus(false);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(async () => {
+                    setSuccessMsg("");
+                    handleClosePopupBox();
+                    handleChangeStoreStatus("rejecting");
+                    clearTimeout(successTimeout);
+                });
             }
         }
         catch (err) {
@@ -216,7 +224,7 @@ export default function ChangeStoreStatusBox({
                 <h2 className="mb-5 pb-3 border-bottom border-white">Change Store Status</h2>
                 <h4 className="mb-4">Are You Sure From: {storeAction} Store: ( {storeId} ) ?</h4>
                 <form className="change-store-status-form w-50" onSubmit={(e) => e.preventDefault()}>
-                    {(storeAction === "rejecting" || storeAction === "blocking") && <section className="change-store-status mb-4">
+                    {storeAction === "blocking" && <section className="change-store-status mb-4">
                         <input
                             type="text"
                             className={`form-control p-3 border-2 change-status-reason-field ${formValidationErrors["changeStatusReason"] ? "border-danger mb-3" : "mb-4"}`}
@@ -229,6 +237,29 @@ export default function ChangeStoreStatusBox({
                             <span>{formValidationErrors["changeStatusReason"]}</span>
                         </p>}
                     </section>}
+                    {
+                        !isWaitStatus &&
+                        !errorMsg &&
+                        !successMsg &&
+                        storeAction === "approving" && <section className="change-store-status mb-4">
+                            <div className="password-field-box">
+                                <input
+                                    type={isVisiblePassword ? "text" : "password"}
+                                    placeholder="Please Enter Merchant Account Password"
+                                    className={`form-control p-3 border-2 ${formValidationErrors["isVisiblePassword"] ? "border-danger mb-3" : "mb-5"}`}
+                                    onChange={(e) => setAdminPassword(e.target.value.trim())}
+                                />
+                                <div className="icon-box text-dark other-languages-mode">
+                                    {!isVisiblePassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
+                                    {isVisiblePassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePassword(value => value = !value)} />}
+                                </div>
+                            </div>
+                            {formValidationErrors["adminPassword"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["adminPassword"]}</span>
+                            </p>}
+                        </section>
+                    }
                     {
                         !isWaitStatus &&
                         !errorMsg &&
@@ -248,7 +279,7 @@ export default function ChangeStoreStatusBox({
                         storeAction === "rejecting" &&
                         <button
                             className="btn btn-success d-block mx-auto mb-4 global-button"
-                            onClick={() => rejectStoreCreate(storeId, changeStatusReason)}
+                            onClick={() => rejectStoreCreate(storeId)}
                         >
                             Reject
                         </button>
