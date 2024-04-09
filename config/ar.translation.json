@@ -397,5 +397,11 @@
     "From Highest Price To Lowest": "من الأعلى سعراً إلى الأقل",
     "From Lowest Price To Highest": "من الأقل سعراً إلى الأعلى",
     "Discount": "تخفيض",
-    "Add Your Store": "أضف متجرك"
+    "Add Your Store": "أضف متجرك",
+    "Please Enter Your Store Name": "من فضلك أدخل أسم المتجر الخاص بك",
+    "Please Enter Your First Name": "من فضلك أدخل الاسم الأول",
+    "Please Enter Your Last Name": "من فضلك أدخل الاسم الثاني",
+    "Please Enter Your Products Type": "من فضلك أدخل نوع المنتجات الخاصة بك",
+    "Please Enter Your Products Description": "من فضلك أدخل وصف المنتجات الخاصة بك",
+    "Add Now": "Jetzt hinzufügen"
 }

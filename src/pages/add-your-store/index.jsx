@@ -220,7 +220,7 @@ export default function AddYourStore() {
                                     <input
                                         type="text"
                                         className={`form-control p-3 border-2 store-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
-                                        placeholder={t("Please Enter Store Name")}
+                                        placeholder={t("Please Enter Your Store Name")}
                                         onChange={(e) => setStoreData({ ...storeData, name: e.target.value })}
                                         value={storeData.name}
                                     />
@@ -233,7 +233,7 @@ export default function AddYourStore() {
                                     <input
                                         type="text"
                                         className={`form-control p-3 border-2 store-owner-first-name-field ${formValidationErrors["ownerFirstName"] ? "border-danger mb-3" : "mb-4"}`}
-                                        placeholder={t("Please Enter First Name")}
+                                        placeholder={t("Please Enter Your First Name")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerFirstName: e.target.value })}
                                         value={storeData.ownerFirstName}
                                     />
@@ -246,7 +246,7 @@ export default function AddYourStore() {
                                     <input
                                         type="text"
                                         className={`form-control p-3 border-2 store-owner-last-name-field ${formValidationErrors["ownerLastName"] ? "border-danger mb-3" : "mb-4"}`}
-                                        placeholder={t("Please Enter Last Name")}
+                                        placeholder={t("Please Enter Your Last Name")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerLastName: e.target.value })}
                                         value={storeData.ownerLastName}
                                     />
@@ -259,7 +259,7 @@ export default function AddYourStore() {
                                     <input
                                         type="text"
                                         className={`form-control p-3 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] ? "border-danger mb-3" : "mb-4"}`}
-                                        placeholder={t("Please Enter Email")}
+                                        placeholder={t("Please Enter Your Email")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerEmail: e.target.value })}
                                         value={storeData.ownerEmail}
                                     />
@@ -272,7 +272,7 @@ export default function AddYourStore() {
                                     <input
                                         type="text"
                                         className={`form-control p-3 border-2 store-products-type-field ${formValidationErrors["productsType"] ? "border-danger mb-3" : "mb-4"}`}
-                                        placeholder={t("Please Enter Products Type")}
+                                        placeholder={t("Please Enter Your Products Type")}
                                         onChange={(e) => setStoreData({ ...storeData, productsType: e.target.value })}
                                         value={storeData.productsType}
                                     />
@@ -285,7 +285,7 @@ export default function AddYourStore() {
                                     <input
                                         type="text"
                                         className={`form-control p-3 border-2 store-products-description-field ${formValidationErrors["productsDescription"] ? "border-danger mb-3" : "mb-4"}`}
-                                        placeholder={t("Please Enter Products Description")}
+                                        placeholder={t("Please Enter Your Products Description")}
                                         onChange={(e) => setStoreData({ ...storeData, productsDescription: e.target.value })}
                                         value={storeData.productsDescription}
                                     />

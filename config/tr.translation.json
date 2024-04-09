@@ -397,5 +397,11 @@
     "From Highest Price To Lowest": "En Yüksekten En Düşüğe",
     "From Lowest Price To Highest": "En düşükten en yükseğe",
     "Discount": "İndirim",
-    "Add Your Store": "Mağazanızı ekleyin"
+    "Add Your Store": "Mağazanızı ekleyin",
+    "Please Enter Your Store Name": "Lütfen Mağaza Adınızı Girin",
+    "Please Enter Your First Name": "Lütfen Adınızı Girin",
+    "Please Enter Your Last Name": "Lütfen Soyadınızı Girin",
+    "Please Enter Your Products Type": "Lütfen Ürün Tipinizi Girin",
+    "Please Enter Your Products Description": "Lütfen Ürün Açıklamasını Girin",
+    "Add Now": "Şimdi Ekle"
 }
