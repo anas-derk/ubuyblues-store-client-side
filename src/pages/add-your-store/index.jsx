@@ -331,7 +331,7 @@ export default function AddYourStore() {
                                     {t(successMsg)}
                                 </button>}
                             </form>
-                        </section> : <NotFoundError errorMsg="Sorry, This Service Is Not Available Now !!" />}
+                        </section> : <NotFoundError errorMsg={t("Sorry, This Service Is Not Available Now !!")} />}
                     </div>
                     <Footer />
                 </div>
