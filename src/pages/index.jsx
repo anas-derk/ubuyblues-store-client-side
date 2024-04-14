@@ -17,7 +17,14 @@ import PaginationBar from "@/components/PaginationBar";
 import prices from "../../public/global_functions/prices";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
-import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheCart } from "../../public/global_functions/popular";
+import {
+    getProductsCount,
+    getAllProductsInsideThePage,
+    isExistProductInsideTheCart,
+    getStoreDetails,
+    getCategoriesCount,
+    getAllCategoriesInsideThePage,
+} from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 
@@ -38,6 +45,8 @@ export default function Home({ countryAsProperty, storeId }) {
     const [isGetProducts, setIsGetProducts] = useState(true);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
+    const [storeDetails, setStoreDetails] = useState({});
 
     const [isGetStores, setIsGetStores] = useState(true);
 
@@ -61,6 +70,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [filters, setFilters] = useState({
         name: "",
+        storeId: "",
     });
 
     const [sortDetails, setSortDetails] = useState({
@@ -145,49 +155,61 @@ export default function Home({ countryAsProperty, storeId }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // =============================================================================
-        getCategoriesCount()
-            .then(async (result) => {
-                if (result.data > 0) {
-                    setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize)).data);
-                    totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
+        getStoreDetails(storeId)
+            .then((result) => {
+                if (!result.error) {
+                    setStoreDetails(result.data);
+                    const tempFilters = { ...filters, storeId };
+                    setFilters(tempFilters);
+                    getCategoriesCount(getFiltersAsQuery(tempFilters))
+                        .then(async (result) => {
+                            if (result.data > 0) {
+                                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
+                                totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
+                            }
+                            setIsGetCategories(false);
+                        })
+                        .catch(() => {
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
+                        });
+                    // =============================================================================
+                    getProductsCount(getFiltersAsQuery(tempFilters))
+                        .then(async (result) => {
+                            if (result.data > 0) {
+                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
+                                totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
+                            }
+                            setIsGetProducts(false);
+                        })
+                        .catch(() => {
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
+                        });
+                    // =============================================================================
+                    getAppearedSections()
+                        .then(async (result) => {
+                            const appearedSectionsLength = result.data.length;
+                            setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
+                            if (appearedSectionsLength > 0) {
+                                for (let i = 0; i < appearedSectionsLength; i++) {
+                                    if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
+                                        setAllBrands((await getAllBrands()).data);
+                                    }
+                                }
+                            }
+                        })
+                        .catch(() => {
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
+                        });
+                    // ==========================================================================================
                 }
-                setIsGetCategories(false);
             })
             .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
-        // =============================================================================
-        getProductsCount()
-            .then(async (result) => {
-                if (result.data > 0) {
-                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data);
-                    totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
-                }
-                setIsGetProducts(false);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-        // =============================================================================
-        getAppearedSections()
-            .then(async (result) => {
-                const appearedSectionsLength = result.data.length;
-                setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
-                if (appearedSectionsLength > 0) {
-                    for (let i = 0; i < appearedSectionsLength; i++) {
-                        if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                            setAllBrands((await getAllBrands()).data);
-                        }
-                    }
-                }
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-        // ========================================================================================== 
     }, []);
 
     useEffect(() => {
@@ -195,26 +217,6 @@ export default function Home({ countryAsProperty, storeId }) {
             setIsLoadingPage(false);
         }
     }, [isGetCategories, isGetProducts]);
-
-    const getCategoriesCount = async () => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const getAllCategoriesInsideThePage = async (pageNumber, pageSize) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
 
     const getAppearedSections = async () => {
         try {
@@ -279,6 +281,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const getFiltersAsQuery = (filters) => {
         let filtersAsQuery = "";
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
+        if (filters.storeId) filtersAsQuery += `storeId=${filters.storeId}&`;
         if (filtersAsQuery) filtersAsQuery = filtersAsQuery.substring(0, filtersAsQuery.length - 1);
         return filtersAsQuery;
     }
@@ -458,7 +461,6 @@ export default function Home({ countryAsProperty, storeId }) {
                 const res = await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData);
                 const result = res.data;
                 setIsWaitStatus(false);
-                console.log(result);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {

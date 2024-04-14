@@ -38,9 +38,47 @@ const getDateFormated = (date) => {
     return orderedDateInDateFormat;
 }
 
+const getStoreDetails = async (storeId) => {
+    try {
+        let res;
+        if (!storeId) {
+            res = await axios.get(`${process.env.BASE_API_URL}/stores/main-store-details`);
+        } else {
+            res = await axios.get(`${process.env.BASE_API_URL}/stores/store-details/${storeId}`);
+        }
+        return res.data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
+const getCategoriesCount = async (filters) => {
+    try {
+        const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count?${filters ? filters : ""}`);
+        return res.data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
+const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
+    try {
+        const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+        return res.data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 export {
     getProductsCount,
     getAllProductsInsideThePage,
     isExistProductInsideTheCart,
     getDateFormated,
+    getStoreDetails,
+    getCategoriesCount,
+    getAllCategoriesInsideThePage,
 }

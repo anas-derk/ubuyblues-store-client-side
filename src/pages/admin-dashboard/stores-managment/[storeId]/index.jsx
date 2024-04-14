@@ -6,7 +6,7 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import validations from "../../../../../public/global_functions/validations";
-import { getDateFormated } from "../../../../../public/global_functions/popular";
+import { getDateFormated, getStoreDetails } from "../../../../../public/global_functions/popular";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function StoreDetails({ storeId }) {
@@ -71,16 +71,6 @@ export default function StoreDetails({ storeId }) {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
-
-    const getStoreDetails = async (storeId) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/stores/store-details/${storeId}`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
 
     const validateFormFields = (validateDetailsList) => {
         return validations.inputValuesValidation(validateDetailsList);

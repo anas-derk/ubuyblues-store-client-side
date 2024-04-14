@@ -62,9 +62,9 @@ export default function UpdateAndDeleteCategories() {
                             setAdminInfo(adminDetails);
                             const tempFilters = { ...filters, storeId: adminDetails.storeId };
                             setFilters(tempFilters);
-                            result = await getCategoriesCount(getFilteringString(tempFilters));
+                            result = await getCategoriesCount(getFiltersAsQuery(tempFilters));
                             if (result.data > 0) {
-                                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
+                                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
                             setIsLoadingPage(false);
@@ -88,7 +88,7 @@ export default function UpdateAndDeleteCategories() {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const getFilteringString = (filters) => {
+    const getFiltersAsQuery = (filters) => {
         let filteringString = "";
         if (filters.storeId) filteringString += `storeId=${filters.storeId}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
