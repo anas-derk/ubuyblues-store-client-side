@@ -21,7 +21,7 @@ import { getProductsCount, getAllProductsInsideThePage, isExistProductInsideTheC
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 
-export default function Home({ countryAsProperty }) {
+export default function Home({ countryAsProperty, storeId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -38,6 +38,8 @@ export default function Home({ countryAsProperty }) {
     const [isGetProducts, setIsGetProducts] = useState(true);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
+    const [isGetStores, setIsGetStores] = useState(true);
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
@@ -677,6 +679,18 @@ export async function getServerSideProps({ query }) {
     const allowedCountries = ["kuwait", "germany", "turkey"];
     if (query.country) {
         if (!allowedCountries.includes(query.country)) {
+            if (query.storeId) {
+                return {
+                    redirect: {
+                        permanent: false,
+                        destination: `/?storeId=${query.storeId}`,
+                    },
+                    props: {
+                        countryAsProperty: "kuwait",
+                        storeId: query.storeId,
+                    },
+                }
+            }
             return {
                 redirect: {
                     permanent: false,
@@ -687,20 +701,34 @@ export async function getServerSideProps({ query }) {
                 },
             }
         }
-        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+        if (Object.keys(query).filter((key) => key !== "country" && key !== "storedId").length > 2) {
             return {
                 redirect: {
                     permanent: false,
-                    destination: `/?country=${query.country}`,
+                    destination: `/?country=${query.country}&storeId=${query.storeId}`,
                 },
                 props: {
                     countryAsProperty: query.country,
+                    storeId: query.storeId,
                 },
             }
         }
         return {
             props: {
                 countryAsProperty: query.country,
+                storeId: query.storeId,
+            },
+        }
+    }
+    if (query.storeId) {
+        return {
+            redirect: {
+                permanent: false,
+                destination: `/?storeId=${query.storeId}`,
+            },
+            props: {
+                countryAsProperty: "kuwait",
+                storeId: query.storeId,
             },
         }
     }
