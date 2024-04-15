@@ -9,7 +9,7 @@ import Link from "next/link";
 import axios from "axios";
 
 export default function ProductCard({
-    product,
+    productDetails,
     setIsDisplayShareOptionsBox,
     isFavoriteProductForUserAsProperty,
     isExistProductInsideTheCartAsProperty,
@@ -51,7 +51,7 @@ export default function ProductCard({
             setIsWaitAddProductToFavoriteUserProductsList(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productId}`, undefined, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
                 }
             });
             const result = res.data;
@@ -66,7 +66,6 @@ export default function ProductCard({
             }
         }
         catch (err) {
-            console.log(err);
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/auth");
                 return;
@@ -227,9 +226,9 @@ export default function ProductCard({
             <div
                 className="product-managment-box"
             >
-                {product.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( { ( product.discount / product.price * 100 ).toFixed(2) } % )</div>}
-                <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} alt="Product Image" />
-                <Link className={`product-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${product._id}`}></Link>
+                {productDetails.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( { ( productDetails.discount / productDetails.price * 100 ).toFixed(2) } % )</div>}
+                <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
+                <Link className={`product-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
                 <div className="product-managment-buttons p-2">
                     <PiShareFatLight
                         className="product-managment-icon d-block mb-2"
@@ -254,7 +253,7 @@ export default function ProductCard({
                     {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                 </div>
                 <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
-                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(product._id, product.name, product.price, product.description, product.category, product.discount, product.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
+                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id, productDetails.name, productDetails.price, productDetails.description, productDetails.category, productDetails.discount, productDetails.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
                     {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2">{t("Waiting In Add To Cart")} ...</button>}
                     {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
                     {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn p-2 btn btn-success text-white">
@@ -271,10 +270,10 @@ export default function ProductCard({
                 </div>
             </div>
             <div className="product-details p-3 text-center">
-                <h4 className="product-name fw-bold">{product.name}</h4>
-                <h5 className="product-category">{product.category}</h5>
-                <h5 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                {product.discount != 0 && <h4 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                <h4 className="product-name fw-bold">{productDetails.name}</h4>
+                <h5 className="product-category">{productDetails.category}</h5>
+                <h5 className={`product-price ${productDetails.discount != 0 ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                {productDetails.discount != 0 && <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
             </div>
         </div>
     );

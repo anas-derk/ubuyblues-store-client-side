@@ -34,8 +34,6 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -84,25 +82,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [allBrands, setAllBrands] = useState([]);
 
-    const [storeData, setStoreData] = useState({
-        name: "",
-        ownerFirstName: "",
-        ownerLastName: "",
-        ownerEmail: "",
-        productsType: "",
-        productsDescription: "",
-        image: null,
-    });
-
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
-
-    const [formValidationErrors, setFormValidationErrors] = useState({});
-
-    const [isWaitStatus, setIsWaitStatus] = useState("");
-
-    const [errorMsg, setErrorMsg] = useState("");
-
-    const [successMsg, setSuccessMsg] = useState("");
 
     const { i18n, t } = useTranslation();
 
@@ -126,7 +106,6 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            setToken(userToken);
             validations.getUserInfo(userToken)
                 .then((result) => {
                     if (!result.error) {
@@ -366,10 +345,6 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
-    }
-
     return (
         <div className="home page">
             <Head>
@@ -485,11 +460,10 @@ export default function Home({ countryAsProperty, storeId }) {
                                 {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                         <ProductCard
-                                            product={product}
+                                            productDetails={product}
                                             setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                             usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                             currencyNameByCountry={currencyNameByCountry}
-                                            token={token}
                                             isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                             isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                         />

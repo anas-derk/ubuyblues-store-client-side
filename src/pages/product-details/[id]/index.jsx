@@ -28,8 +28,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -138,7 +136,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         });
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            setToken(userToken);
             validations.getUserInfo(userToken)
                 .then((result) => {
                     if (!result.error) {
@@ -190,7 +187,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
                 }
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -258,7 +255,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             setIsWaitAddProductToFavoriteUserProductsList(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productId}`, undefined, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
                 }
             });
             const result = await res.data;
@@ -290,7 +287,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`);
+            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`, {
+                headers: {
+                    Authorization: localStorage.getItem("asfour-store-user-token")
+                }
+            });
             const result = await res.data;
             if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
                 setFavoriteProductsListForUser(result.newFavoriteProductsList);
@@ -796,11 +797,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                         {sampleFromRelatedProductsInProduct.map((product) => (
                                             product._id !== productIdAsProperty && <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
                                                 <ProductCard
-                                                    product={product}
+                                                    productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                                     usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                                     currencyNameByCountry={currencyNameByCountry}
-                                                    token={token}
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                                 />
                                             </div>
