@@ -737,12 +737,7 @@ export async function getServerSideProps({ query }) {
     }
     if (query.storeId) {
         return {
-            redirect: {
-                permanent: false,
-                destination: `/?storeId=${query.storeId}`,
-            },
             props: {
-                countryAsProperty: "kuwait",
                 storeId: query.storeId,
             },
         }
