@@ -222,14 +222,14 @@ export default function ProductCard({
     }
 
     return (
-        <div className="product-card">
+        <div className="product-card card-box">
             <div
-                className="product-managment-box"
+                className="product-managment-box managment-box"
             >
                 {productDetails.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( { ( productDetails.discount / productDetails.price * 100 ).toFixed(2) } % )</div>}
                 <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
-                <Link className={`product-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
-                <div className="product-managment-buttons p-2">
+                <Link className={`product-overlay card-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
+                <div className="product-managment-buttons managment-buttons p-2">
                     <PiShareFatLight
                         className="product-managment-icon d-block mb-2"
                         onClick={() => setIsDisplayShareOptionsBox(true)}
@@ -241,16 +241,16 @@ export default function ProductCard({
                         !isSuccessDeleteProductToFavoriteUserProductsList &&
                         <>
                             {isFavoriteProductForUser ? <BsFillSuitHeartFill
-                                className="product-managment-icon"
+                                className="product-managment-icon managment-icon"
                                 onClick={() => deleteProductFromFavoriteUserProducts(product._id)}
                             /> :
                                 <BsSuitHeart
-                                    className="product-managment-icon"
+                                    className="product-managment-icon managment-icon"
                                     onClick={() => addProductToFavoriteUserProducts(product._id)}
                                 />}
                         </>}
-                    {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon" />}
-                    {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
+                    {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon managment-icon" />}
+                    {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon managment-icon" />}
                 </div>
                 <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
                     {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id, productDetails.name, productDetails.price, productDetails.description, productDetails.category, productDetails.discount, productDetails.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
@@ -269,7 +269,7 @@ export default function ProductCard({
                     </Link>}
                 </div>
             </div>
-            <div className="product-details p-3 text-center">
+            <div className="product-details details-box p-3 text-center">
                 <h4 className="product-name fw-bold">{productDetails.name}</h4>
                 <h5 className="product-category">{productDetails.category}</h5>
                 <h5 className={`product-price ${productDetails.discount != 0 ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>

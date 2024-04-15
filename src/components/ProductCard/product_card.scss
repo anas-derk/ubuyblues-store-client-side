@@ -1,105 +1,10 @@
 .product-card{
-    margin: auto;
-    height: auto;
-    @media (min-width: 320px) and (max-width: 400px) {
-        width: 280px;
-    }
-    @media (min-width: 401px) and (max-width: 500px) {
-        width: 360px;
-    }
-    @media (min-width: 501px) and (max-width: 600px) {
-        width: 450px;
-    }
-    @media (min-width: 601px) and (max-width: 700px) {
-        width: 500px;
-    }
-    @media (min-width: 701px) and (max-width: 767px) {
-        width: 550px;
-    }
-    @media (min-width: 768px) and (max-width: 991px) {
-        width: 500px;
-    }
-    @media (min-width: 992px) and (max-width: 1199px) {
-        width: 450px;
-    }
-    @media (min-width: 1200px) and (max-width: 1300px) {
-        width: 360px;
-    }
-    @media (min-width: 1301px) {
-        width: 400px;
-    }
     .product-managment-box{
-        position: relative;
-        cursor: pointer;
-        border-top-right-radius: 8px;
-        border-top-left-radius: 8px;
-        @media (min-width: 320px) and (max-width: 400px) {
-            width: 280px;
-            height: 280px;
-        }
-        @media (min-width: 401px) and (max-width: 500px) {
-            width: 360px;
-            height: 360px;
-        }
-        @media (min-width: 501px) and (max-width: 600px) {
-            width: 450px;
-            height: 450px;
-        }
-        @media (min-width: 601px) and (max-width: 700px) {
-            width: 500px;
-            height: 500px;
-        }
-        @media (min-width: 701px) and (max-width: 767px) {
-            width: 550px;
-            height: 550px;
-        }
-        @media (min-width: 768px) and (max-width: 991px) {
-            width: 500px;
-            height: 500px;
-        }
-        @media (min-width: 992px) and (max-width: 1199px) {
-            width: 450px;
-            height: 450px;
-        }
-        @media (min-width: 1200px) and (max-width: 1300px) {
-            width: 360px;
-            height: 360px;
-        }
-        @media (min-width: 1301px) {
-            width: 400px;
-            height: 400px;
-        }
         .sale-box{
             position: absolute;
             left: 0;
             top: 0;
             width: 100%;
-        }
-        img{
-            width: 100%;
-            height: 100%;
-        }
-        .product-overlay{
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: inherit;
-            background-color: rgba($color: #000000, $alpha: 0.6);
-            opacity: 0;
-            transition: .3s;
-            
-        }
-        .product-managment-buttons{
-            position: absolute;
-            right: 8px;
-            top: 8px;
-            background-color: #FFF;
-            border-radius: 10px;
-            opacity: 0;
-            .product-managment-icon{
-                font-size: 20px;
-            }
         }
         .add-to-cart-button-box{
             position: absolute;
@@ -119,18 +24,8 @@
                 font-weight: bold;
             }
         }
-        &:hover{
-            .product-overlay, .product-managment-buttons, .add-to-cart-button-box{
-                opacity: 1;
-            }
-        }
     }
     .product-details{
-        position: relative;
-        background-color: #FFF;
-        border-bottom-right-radius: 8px;
-        border-bottom-left-radius: 8px;
-        min-height: 142px;
         .product-name{
             font-size: 19px;
         }
@@ -149,17 +44,6 @@
             font-size: 20px;
             border: 3px solid #000;
             font-weight: bold;
-        }
-        .product-managment-buttons-box{
-            .add-to-cart-btn{
-                background-color: #FFF;
-                border: 2px solid #CCC;
-                border-top-left-radius: 15px;
-            }
-            .product-managment-icon{
-                cursor: pointer;
-                font-size: 20px;
-            }
         }
     }
 }

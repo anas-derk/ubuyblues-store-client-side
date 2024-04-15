@@ -521,6 +521,176 @@ textarea {
   text-align: center;
 }
 
+.card-box {
+  margin: auto;
+  height: auto;
+}
+
+@media (min-width: 320px) and (max-width: 400px) {
+  .card-box {
+    width: 280px;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 500px) {
+  .card-box {
+    width: 360px;
+  }
+}
+
+@media (min-width: 501px) and (max-width: 600px) {
+  .card-box {
+    width: 450px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 700px) {
+  .card-box {
+    width: 500px;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 767px) {
+  .card-box {
+    width: 550px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-box {
+    width: 500px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .card-box {
+    width: 450px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1300px) {
+  .card-box {
+    width: 360px;
+  }
+}
+
+@media (min-width: 1301px) {
+  .card-box {
+    width: 400px;
+  }
+}
+
+.card-box .managment-box {
+  position: relative;
+  cursor: pointer;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+@media (min-width: 320px) and (max-width: 400px) {
+  .card-box .managment-box {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 500px) {
+  .card-box .managment-box {
+    width: 360px;
+    height: 360px;
+  }
+}
+
+@media (min-width: 501px) and (max-width: 600px) {
+  .card-box .managment-box {
+    width: 450px;
+    height: 450px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 700px) {
+  .card-box .managment-box {
+    width: 500px;
+    height: 500px;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 767px) {
+  .card-box .managment-box {
+    width: 550px;
+    height: 550px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-box .managment-box {
+    width: 500px;
+    height: 500px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .card-box .managment-box {
+    width: 450px;
+    height: 450px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1300px) {
+  .card-box .managment-box {
+    width: 360px;
+    height: 360px;
+  }
+}
+
+@media (min-width: 1301px) {
+  .card-box .managment-box {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+.card-box .managment-box img {
+  width: 100%;
+  height: 100%;
+}
+
+.card-box .managment-box .card-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: inherit;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: .3s;
+}
+
+.card-box .managment-box .managment-buttons {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background-color: #FFF;
+  border-radius: 10px;
+  opacity: 0;
+}
+
+.card-box .managment-box .managment-buttons .managment-icon {
+  font-size: 20px;
+}
+
+.card-box .managment-box:hover .card-overlay, .card-box .managment-box:hover .managment-buttons, .card-box .managment-box:hover .add-to-cart-button-box {
+  opacity: 1;
+}
+
+.card-box .details-box {
+  position: relative;
+  background-color: #FFF;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  min-height: 142px;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
