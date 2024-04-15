@@ -131,56 +131,44 @@ export default function Home({ countryAsProperty, storeId }) {
         });
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        // ==========================================================================================
+        getAppearedSections()
+            .then(async (result) => {
+                const appearedSectionsLength = result.data.length;
+                setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
+                if (appearedSectionsLength > 0) {
+                    for (let i = 0; i < appearedSectionsLength; i++) {
+                        if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
+                            setAllBrands((await getAllBrands()).data);
+                        }
+                    }
+                }
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
         // =============================================================================
         getStoreDetails(storeId)
-            .then((result) => {
+            .then(async (result) => {
                 if (!result.error) {
                     setStoreDetails(result.data);
                     const tempFilters = { ...filters, storeId };
                     setFilters(tempFilters);
-                    getCategoriesCount(getFiltersAsQuery(tempFilters))
-                        .then(async (result) => {
-                            if (result.data > 0) {
-                                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
-                                totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
-                            }
-                            setIsGetCategories(false);
-                        })
-                        .catch(() => {
-                            setIsLoadingPage(false);
-                            setIsErrorMsgOnLoadingThePage(true);
-                        });
+                    result = await getCategoriesCount(getFiltersAsQuery(tempFilters));
+                    if (result.data > 0) {
+                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
+                        totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
+                    }
+                    setIsGetCategories(false);
                     // =============================================================================
-                    getProductsCount(getFiltersAsQuery(tempFilters))
-                        .then(async (result) => {
-                            if (result.data > 0) {
-                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
-                                totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
-                            }
-                            setIsGetProducts(false);
-                        })
-                        .catch(() => {
-                            setIsLoadingPage(false);
-                            setIsErrorMsgOnLoadingThePage(true);
-                        });
+                    result = await getProductsCount(getFiltersAsQuery(tempFilters));
+                    if (result.data > 0) {
+                        setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
+                        totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
+                    }
+                    setIsGetProducts(false);
                     // =============================================================================
-                    getAppearedSections()
-                        .then(async (result) => {
-                            const appearedSectionsLength = result.data.length;
-                            setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
-                            if (appearedSectionsLength > 0) {
-                                for (let i = 0; i < appearedSectionsLength; i++) {
-                                    if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                                        setAllBrands((await getAllBrands()).data);
-                                    }
-                                }
-                            }
-                        })
-                        .catch(() => {
-                            setIsLoadingPage(false);
-                            setIsErrorMsgOnLoadingThePage(true);
-                        });
-                    // ==========================================================================================
                 }
             })
             .catch(() => {
@@ -361,118 +349,43 @@ export default function Home({ countryAsProperty, storeId }) {
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
-                        {/* Start Store Details Section */}
-                        <section className="store-details text-white text-center mb-5">
-                            <img
-                                src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
-                                alt={`${storeDetails.name} Store Image`}
-                                width="200"
-                                height="200"
-                                className="d-block mx-auto mb-5 store-image"
-                            />
-                            <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto">{t("Welcome To You In Store")} {storeDetails.name}</h1>
-                            <h2 className="products-description mb-4">{storeDetails.productsDescription}</h2>
-                        </section>
-                        {/* End Store Details Section */}
-                        {/* Start Categories Section */}
-                        <section className="categories mb-5 pb-5" id="categories">
-                            <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
-                            {allCategoriesInsideThePage.length === 0 && !isGetCategories && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
-                            {isGetCategories && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
-                                <span className="loader-table-data"></span>
-                            </div>}
-                            <div className="row mb-5">
-                                {allCategoriesInsideThePage.map((category) => (
-                                    <div className="col-md-3" key={category._id}>
-                                        <div className="category-details p-3">
-                                            <Link href={`/products-by-category?category=${category.name}`} className="product-by-category-link text-dark">
-                                                <h5 className="cateogory-name mb-3">{category.name}</h5>
-                                                <MdKeyboardArrowRight className="forward-arrow-icon" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            {totalPagesCount.forCategories > 1 && !isGetCategories &&
-                                <PaginationBar
-                                    totalPagesCount={totalPagesCount.forCategories}
-                                    currentPage={currentPage.forCategories}
-                                    getPreviousPage={getPreviousPage}
-                                    getNextPage={getNextPage}
-                                    getSpecificPage={getSpecificPage}
-                                    paginationButtonTextColor={"#FFF"}
-                                    paginationButtonBackgroundColor={"transparent"}
-                                    activePaginationButtonColor={"#000"}
-                                    activePaginationButtonBackgroundColor={"#FFF"}
-                                    isDisplayCurrentPageNumberAndCountOfPages={false}
-                                    isDisplayNavigateToSpecificPageForm={false}
-                                    section="categories"
+                        {storeDetails ? <>
+                            {/* Start Store Details Section */}
+                            <section className="store-details text-white text-center mb-5">
+                                <img
+                                    src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
+                                    alt={`${storeDetails.name} Store Image`}
+                                    width="200"
+                                    height="200"
+                                    className="d-block mx-auto mb-5 store-image"
                                 />
-                            }
-                        </section>
-                        {/* End Categories Section */}
-                        {/* Start Last Added Products */}
-                        <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
-                            <div className="row filters-and-sorting-box mb-4">
-                                <div className="col-xs-12 col-md-6">
-                                    <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
-                                        <div className="product-name-field-box">
-                                            <input
-                                                type="text"
-                                                placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                className={`form-control p-3 border-2`}
-                                                onChange={(e) => {
-                                                    const tempFilters = { ...filters, name: e.target.value.trim() };
-                                                    setFilters(tempFilters);
-                                                    searchOnProduct(e, tempFilters, sortDetails);
-                                                }}
-                                            />
-                                            <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto">{t("Welcome To You In Store")} {storeDetails.name}</h1>
+                                <h2 className="products-description mb-4">{storeDetails.productsDescription}</h2>
+                            </section>
+                            {/* End Store Details Section */}
+                            {/* Start Categories Section */}
+                            <section className="categories mb-5 pb-5" id="categories">
+                                <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
+                                {allCategoriesInsideThePage.length === 0 && !isGetCategories && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
+                                {isGetCategories && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
+                                    <span className="loader-table-data"></span>
+                                </div>}
+                                <div className="row mb-5">
+                                    {allCategoriesInsideThePage.map((category) => (
+                                        <div className="col-md-3" key={category._id}>
+                                            <div className="category-details p-3">
+                                                <Link href={`/products-by-category?category=${category.name}`} className="product-by-category-link text-dark">
+                                                    <h5 className="cateogory-name mb-3">{category.name}</h5>
+                                                    <MdKeyboardArrowRight className="forward-arrow-icon" />
+                                                </Link>
                                             </div>
                                         </div>
-                                    </form>
+                                    ))}
                                 </div>
-                                <div className="col-xs-12 col-md-6">
-                                    <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
-                                        <div className="select-sort-type-box">
-                                            <select
-                                                className="select-sort-type form-select p-3"
-                                                onChange={(e) => {
-                                                    const sortDetailsArray = e.target.value.split(",");
-                                                    const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
-                                                    setSortDetails(tempSortDetails);
-                                                    searchOnProduct(e, filters, tempSortDetails);
-                                                }}
-                                            >
-                                                <option value="" hidden>{t("Sort By")}</option>
-                                                <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
-                                                <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
-                                                <option value="price,-1">{t("From Highest Price To Lowest")}</option>
-                                                <option value="price,1">{t("From Lowest Price To Highest")}</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div className="row products-box pt-4 pb-4">
-                                {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
-                                    <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
-                                        <ProductCard
-                                            productDetails={product}
-                                            setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
-                                            usdPriceAgainstCurrency={usdPriceAgainstCurrency}
-                                            currencyNameByCountry={currencyNameByCountry}
-                                            isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
-                                            isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
-                                        />
-                                    </div>
-                                )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
-                                {totalPagesCount.forProducts > 1 && !isGetProducts &&
+                                {totalPagesCount.forCategories > 1 && !isGetCategories &&
                                     <PaginationBar
-                                        totalPagesCount={totalPagesCount.forProducts}
-                                        currentPage={currentPage.forProducts}
+                                        totalPagesCount={totalPagesCount.forCategories}
+                                        currentPage={currentPage.forCategories}
                                         getPreviousPage={getPreviousPage}
                                         getNextPage={getNextPage}
                                         getSpecificPage={getSpecificPage}
@@ -480,41 +393,118 @@ export default function Home({ countryAsProperty, storeId }) {
                                         paginationButtonBackgroundColor={"transparent"}
                                         activePaginationButtonColor={"#000"}
                                         activePaginationButtonBackgroundColor={"#FFF"}
-                                        section="products"
-                                    />}
-                            </div>
-                        </section>
-                        {/* End Last Added Products */}
-                        {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
-                            <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
-                            <div className="container-fluid">
-                                <Slider
-                                    dots={true}
-                                    arrows={false}
-                                    infinite={false}
-                                    speed={500}
-                                    slidesToShow={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
-                                    slidesToScroll={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
-                                >
-                                    {allBrands.map((brand) => (
-                                        <div className="brand-box mb-4" key={brand._id}>
-                                            <div className="brand-image-box mb-4">
-                                                <a
-                                                    href="https://google.com"
-                                                    target="_blank"
-                                                >
-                                                    <img
-                                                        src={`${process.env.BASE_API_URL}/${brand.imagePath}`}
-                                                        alt={`${brand.title} Brand Image`}
-                                                    />
-                                                </a>
+                                        isDisplayCurrentPageNumberAndCountOfPages={false}
+                                        isDisplayNavigateToSpecificPageForm={false}
+                                        section="categories"
+                                    />
+                                }
+                            </section>
+                            {/* End Categories Section */}
+                            {/* Start Last Added Products */}
+                            <section className="last-added-products mb-5 pb-3" id="latest-added-products">
+                                <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
+                                <div className="row filters-and-sorting-box mb-4">
+                                    <div className="col-xs-12 col-md-6">
+                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                            <div className="product-name-field-box">
+                                                <input
+                                                    type="text"
+                                                    placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                                    className={`form-control p-3 border-2`}
+                                                    onChange={(e) => {
+                                                        const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                        setFilters(tempFilters);
+                                                        searchOnProduct(e, tempFilters, sortDetails);
+                                                    }}
+                                                />
+                                                <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                </div>
                                             </div>
-                                            <h2 className="text-white text-center">{brand.title}</h2>
+                                        </form>
+                                    </div>
+                                    <div className="col-xs-12 col-md-6">
+                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                            <div className="select-sort-type-box">
+                                                <select
+                                                    className="select-sort-type form-select p-3"
+                                                    onChange={(e) => {
+                                                        const sortDetailsArray = e.target.value.split(",");
+                                                        const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
+                                                        setSortDetails(tempSortDetails);
+                                                        searchOnProduct(e, filters, tempSortDetails);
+                                                    }}
+                                                >
+                                                    <option value="" hidden>{t("Sort By")}</option>
+                                                    <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
+                                                    <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                    <option value="price,-1">{t("From Highest Price To Lowest")}</option>
+                                                    <option value="price,1">{t("From Lowest Price To Highest")}</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div className="row products-box pt-4 pb-4">
+                                    {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
+                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                            <ProductCard
+                                                productDetails={product}
+                                                setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                                                usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                currencyNameByCountry={currencyNameByCountry}
+                                                isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                                isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
+                                            />
                                         </div>
-                                    ))}
-                                </Slider>
-                            </div>
-                        </section>}
+                                    )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
+                                    {totalPagesCount.forProducts > 1 && !isGetProducts &&
+                                        <PaginationBar
+                                            totalPagesCount={totalPagesCount.forProducts}
+                                            currentPage={currentPage.forProducts}
+                                            getPreviousPage={getPreviousPage}
+                                            getNextPage={getNextPage}
+                                            getSpecificPage={getSpecificPage}
+                                            paginationButtonTextColor={"#FFF"}
+                                            paginationButtonBackgroundColor={"transparent"}
+                                            activePaginationButtonColor={"#000"}
+                                            activePaginationButtonBackgroundColor={"#FFF"}
+                                            section="products"
+                                        />}
+                                </div>
+                            </section>
+                            {/* End Last Added Products */}
+                            {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
+                                <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
+                                <div className="container-fluid">
+                                    <Slider
+                                        dots={true}
+                                        arrows={false}
+                                        infinite={false}
+                                        speed={500}
+                                        slidesToShow={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
+                                        slidesToScroll={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
+                                    >
+                                        {allBrands.map((brand) => (
+                                            <div className="brand-box mb-4" key={brand._id}>
+                                                <div className="brand-image-box mb-4">
+                                                    <a
+                                                        href="https://google.com"
+                                                        target="_blank"
+                                                    >
+                                                        <img
+                                                            src={`${process.env.BASE_API_URL}/${brand.imagePath}`}
+                                                            alt={`${brand.title} Brand Image`}
+                                                        />
+                                                    </a>
+                                                </div>
+                                                <h2 className="text-white text-center">{brand.title}</h2>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                </div>
+                            </section>}
+                        </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
                                 {isDisplayContactIcons && <li className="contact-icon-item mb-3">
