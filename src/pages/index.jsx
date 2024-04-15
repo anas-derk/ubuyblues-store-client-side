@@ -24,6 +24,8 @@ import {
     getStoreDetails,
     getCategoriesCount,
     getAllCategoriesInsideThePage,
+    getStoresCount,
+    getAllStoresInsideThePage,
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -54,6 +56,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
+    const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
+
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [currentPage, setCurrentPage] = useState({
@@ -64,6 +68,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const [totalPagesCount, setTotalPagesCount] = useState({
         forProducts: 0,
         forCategories: 0,
+        forStores: 0,
     });
 
     const [filters, setFilters] = useState({
@@ -169,6 +174,12 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetProducts(false);
                     // =============================================================================
+                    result = await getStoresCount();
+                    if (result.data > 0) {
+                        setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                        totalPagesCount.forStores = Math.ceil(result.data / pageSize);
+                    }
+                    setIsGetStores(false);
                 }
             })
             .catch(() => {
@@ -178,10 +189,10 @@ export default function Home({ countryAsProperty, storeId }) {
     }, [storeId]);
 
     useEffect(() => {
-        if (!isGetCategories && !isGetProducts) {
+        if (!isGetCategories && !isGetProducts && !isGetStores) {
             setIsLoadingPage(false);
         }
-    }, [isGetCategories, isGetProducts]);
+    }, [isGetCategories, isGetProducts, isGetStores]);
 
     const getAppearedSections = async () => {
         try {

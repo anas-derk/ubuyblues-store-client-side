@@ -10,6 +10,7 @@ import PaginationBar from "@/components/PaginationBar";
 import validations from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import ChangeStoreStatusBox from "@/components/ChangeStoreStatusBox";
+import { getStoresCount, getAllStoresInsideThePage } from "../../../../public/global_functions/popular"; 
 
 export default function StoresManagment() {
 
@@ -98,26 +99,6 @@ export default function StoresManagment() {
 
     const validateFormFields = (validateDetailsList) => {
         return validations.inputValuesValidation(validateDetailsList);
-    }
-
-    const getStoresCount = async (filters) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?${filters ? filters : ""}`);
-            return await res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
     }
 
     const getPreviousPage = async () => {
