@@ -210,7 +210,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
-    }, []);
+    }, [storeId]);
 
     useEffect(() => {
         if (!isGetCategories && !isGetProducts) {
