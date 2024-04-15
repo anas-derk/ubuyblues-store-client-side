@@ -21,8 +21,6 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -76,7 +74,6 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            setToken(userToken);
             validations.getUserInfo(userToken)
             .then((result) => {
                 if (!result.error) {
@@ -287,11 +284,10 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
                                 {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                         <ProductCard
-                                            product={product}
+                                            productDetails={product}
                                             setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                             usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                             currencyNameByCountry={currencyNameByCountry}
-                                            token={token}
                                             isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                         />
                                     </div>
