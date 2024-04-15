@@ -1,5 +1,9 @@
-.home .categories {
+.home .store-details {
   border-bottom: 2px solid var(--main-color-two);
+}
+
+.home .welcome-msg {
+  width: fit-content;
 }
 
 .home .categories .row {

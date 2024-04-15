@@ -512,6 +512,19 @@ export default function Home({ countryAsProperty, storeId }) {
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
+                        {/* Start Store Details Section */}
+                        <section className="store-details text-white text-center mb-5">
+                            <img
+                                src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
+                                alt={`${storeDetails.name} Store Image`}
+                                width="200"
+                                height="200"
+                                className="d-block mx-auto mb-5 store-image"
+                            />
+                            <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto">{t("Welcome To You In Store")} {storeDetails.name}</h1>
+                            <h2 className="products-description mb-4">{storeDetails.productsDescription}</h2>
+                        </section>
+                        {/* End Store Details Section */}
                         {/* Start Categories Section */}
                         <section className="categories mb-5 pb-5" id="categories">
                             <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
