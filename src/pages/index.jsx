@@ -104,8 +104,6 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [successMsg, setSuccessMsg] = useState("");
 
-    const storeImageFileElementRef = useRef();
-
     const { i18n, t } = useTranslation();
 
     const pageSize = 8;
@@ -119,7 +117,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -372,130 +370,6 @@ export default function Home({ countryAsProperty, storeId }) {
         return validations.inputValuesValidation(validateDetailsList);
     }
 
-    const createNewStore = async (e) => {
-        try {
-            e.preventDefault();
-            setFormValidationErrors({});
-            let errorsObject = validateFormFields([
-                {
-                    name: "name",
-                    value: storeData.name,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-                {
-                    name: "ownerFirstName",
-                    value: storeData.ownerFirstName,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-                {
-                    name: "ownerLastName",
-                    value: storeData.ownerLastName,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-                {
-                    name: "ownerEmail",
-                    value: storeData.ownerEmail,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                        isEmail: {
-                            msg: "Sorry, This Email Is Not Valid !!",
-                        }
-                    },
-                },
-                {
-                    name: "productsType",
-                    value: storeData.productsType,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-                {
-                    name: "productsDescription",
-                    value: storeData.productsDescription,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-                {
-                    name: "image",
-                    value: storeData.image,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                        isImage: {
-                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Or WEBP Image File !!",
-                        },
-                    },
-                },
-            ]);
-            setFormValidationErrors(errorsObject);
-            if (Object.keys(errorsObject).length == 0) {
-                let formData = new FormData();
-                formData.append("name", storeData.name);
-                formData.append("ownerFirstName", storeData.ownerFirstName);
-                formData.append("ownerLastName", storeData.ownerLastName);
-                formData.append("ownerEmail", storeData.ownerEmail);
-                formData.append("productsType", storeData.productsType);
-                formData.append("productsDescription", storeData.productsDescription);
-                formData.append("storeImg", storeData.image);
-                setIsWaitStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData);
-                const result = res.data;
-                setIsWaitStatus(false);
-                if (!result.error) {
-                    setSuccessMsg(result.msg);
-                    let successTimeout = setTimeout(() => {
-                        setSuccessMsg("");
-                        setStoreData({
-                            name: "",
-                            ownerFirstName: "",
-                            ownerLastName: "",
-                            ownerEmail: "",
-                            productsType: "",
-                            productsDescription: "",
-                            image: null,
-                        });
-                        storeImageFileElementRef.current.value = "";
-                        clearTimeout(successTimeout);
-                    }, 1500);
-                } else {
-                    setErrorMsg(result.msg);
-                    let errorTimeout = setTimeout(() => {
-                        setErrorMsg("");
-                        clearTimeout(errorTimeout);
-                    }, 1500);
-                }
-            }
-        }
-        catch (err) {
-            setIsWaitStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(errorTimeout);
-            }, 1500);
-        }
-    }
-
     return (
         <div className="home page">
             <Head>
@@ -738,6 +612,7 @@ export async function getServerSideProps({ query }) {
     if (query.storeId) {
         return {
             props: {
+                countryAsProperty: "kuwait",
                 storeId: query.storeId,
             },
         }
