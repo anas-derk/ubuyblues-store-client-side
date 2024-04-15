@@ -146,10 +146,18 @@ export default function Home({ countryAsProperty, storeId }) {
                         if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
                             setAllBrands((await getAllBrands()).data);
                         }
+                        if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
+                            const storesCount = await getStoresCount();
+                            if (storesCount.data > 0) {
+                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                                totalPagesCount.forStores = Math.ceil(storesCount.data / pageSize);
+                            }
+                            setIsGetStores(false);
+                        }
                     }
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -174,12 +182,6 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetProducts(false);
                     // =============================================================================
-                    result = await getStoresCount();
-                    if (result.data > 0) {
-                        setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
-                        totalPagesCount.forStores = Math.ceil(result.data / pageSize);
-                    }
-                    setIsGetStores(false);
                 }
             })
             .catch(() => {
