@@ -133,6 +133,9 @@ export default function Home({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
+        setIsGetCategories(false);
+        setIsGetProducts(false);
+        setIsGetStores(true);
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", function () {
