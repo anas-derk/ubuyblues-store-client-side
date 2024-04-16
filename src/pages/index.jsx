@@ -76,6 +76,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const [filters, setFilters] = useState({
         name: "",
         storeId: "",
+        status: "approving"
     });
 
     const [sortDetails, setSortDetails] = useState({
@@ -149,9 +150,9 @@ export default function Home({ countryAsProperty, storeId }) {
                             setAllBrands((await getAllBrands()).data);
                         }
                         if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
-                            const storesCount = await getStoresCount();
+                            const storesCount = await getStoresCount(getFiltersAsQuery(filters));
                             if (storesCount.data > 0) {
-                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize)).data);
+                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, getFiltersAsQuery(filters))).data);
                                 totalPagesCount.forStores = Math.ceil(storesCount.data / pageSize);
                             }
                             setIsGetStores(false);
@@ -159,7 +160,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                 }
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -262,6 +263,7 @@ export default function Home({ countryAsProperty, storeId }) {
         let filtersAsQuery = "";
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
         if (filters.storeId) filtersAsQuery += `storeId=${filters.storeId}&`;
+        if (filters.status) filtersAsQuery += `status=${filters.status}&`;
         if (filtersAsQuery) filtersAsQuery = filtersAsQuery.substring(0, filtersAsQuery.length - 1);
         return filtersAsQuery;
     }
