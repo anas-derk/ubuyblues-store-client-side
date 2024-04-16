@@ -13,7 +13,7 @@ export default function StoreCard({
                 className="store-managment-box managment-box"
             >
                 <img src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`} alt={`${storeDetails.name} Store Image`} />
-                <Link className="store-overlay card-overlay" href={`/${storeDetails._id}`}></Link>
+                <Link className="store-overlay card-overlay" href={`/storeId=${storeDetails._id}`}></Link>
                 <div className="store-managment-buttons managment-buttons p-2">
                     <PiShareFatLight
                         className="store-managment-icon managment-icon d-block"
