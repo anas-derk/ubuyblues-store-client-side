@@ -369,7 +369,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
-                        {storeDetails ? <>
+                        {Object.keys(storeDetails).length > 0 ? <>
                             {/* Start Store Details Section */}
                             <section className="store-details text-white text-center mb-5">
                                 <img
@@ -529,48 +529,6 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Stores Section */}
                             {appearedSections.includes("stores") && allBrands.length > 0 && <section className="stores mb-5">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
-                                {/* <div className="row filters-and-sorting-box mb-4">
-                                    <div className="col-xs-12 col-md-6">
-                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
-                                            <div className="product-name-field-box">
-                                                <input
-                                                    type="text"
-                                                    placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                    className={`form-control p-3 border-2`}
-                                                    onChange={(e) => {
-                                                        const tempFilters = { ...filters, name: e.target.value.trim() };
-                                                        setFilters(tempFilters);
-                                                        searchOnProduct(e, tempFilters, sortDetails);
-                                                    }}
-                                                />
-                                                <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
-                                            <div className="select-sort-type-box">
-                                                <select
-                                                    className="select-sort-type form-select p-3"
-                                                    onChange={(e) => {
-                                                        const sortDetailsArray = e.target.value.split(",");
-                                                        const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
-                                                        setSortDetails(tempSortDetails);
-                                                        searchOnProduct(e, filters, tempSortDetails);
-                                                    }}
-                                                >
-                                                    <option value="" hidden>{t("Sort By")}</option>
-                                                    <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
-                                                    <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
-                                                    <option value="price,-1">{t("From Highest Price To Lowest")}</option>
-                                                    <option value="price,1">{t("From Lowest Price To Highest")}</option>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div> */}
                                 <div className="row stores-box pt-4 pb-4">
                                     {allStoresInsideThePage.length > 0 ? allStoresInsideThePage.map((store) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={store._id}>
