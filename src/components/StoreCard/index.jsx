@@ -13,15 +13,15 @@ export default function StoreCard({
                 className="store-managment-box managment-box"
             >
                 <img src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`} alt={`${storeDetails.name} Store Image`} />
-                <Link className="store-overlay overlay" href={`/${storeDetails._id}`}></Link>
+                <Link className="store-overlay card-overlay" href={`/${storeDetails._id}`}></Link>
                 <div className="store-managment-buttons managment-buttons p-2">
                     <PiShareFatLight
-                        className="store-managment-icon managment-icon d-block mb-2"
+                        className="store-managment-icon managment-icon d-block"
                         onClick={() => setIsDisplayShareOptionsBox(true)}
                     />
                 </div>
             </div>
-            <div className="store-details p-3 text-center">
+            <div className="store-details details-box p-3 text-center">
                 <h4 className="store-name fw-bold">{storeDetails.name}</h4>
             </div>
         </div>

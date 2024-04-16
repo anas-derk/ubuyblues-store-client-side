@@ -29,6 +29,7 @@ import {
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
+import StoreCard from "@/components/StoreCard";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -63,6 +64,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const [currentPage, setCurrentPage] = useState({
         forCategories: 1,
         forProducts: 1,
+        forStores: 1,
     });
 
     const [totalPagesCount, setTotalPagesCount] = useState({
@@ -487,6 +489,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 </div>
                             </section>
                             {/* End Last Added Products */}
+                            {/* Start Brands Section */}
                             {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
                                 <div className="container-fluid">
@@ -517,6 +520,77 @@ export default function Home({ countryAsProperty, storeId }) {
                                     </Slider>
                                 </div>
                             </section>}
+                            {/* End Brands Section */}
+                            {/* Start Stores Section */}
+                            {appearedSections.includes("stores") && allBrands.length > 0 && <section className="stores mb-5">
+                                <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
+                                {/* <div className="row filters-and-sorting-box mb-4">
+                                    <div className="col-xs-12 col-md-6">
+                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                            <div className="product-name-field-box">
+                                                <input
+                                                    type="text"
+                                                    placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                                    className={`form-control p-3 border-2`}
+                                                    onChange={(e) => {
+                                                        const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                        setFilters(tempFilters);
+                                                        searchOnProduct(e, tempFilters, sortDetails);
+                                                    }}
+                                                />
+                                                <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div className="col-xs-12 col-md-6">
+                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                            <div className="select-sort-type-box">
+                                                <select
+                                                    className="select-sort-type form-select p-3"
+                                                    onChange={(e) => {
+                                                        const sortDetailsArray = e.target.value.split(",");
+                                                        const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
+                                                        setSortDetails(tempSortDetails);
+                                                        searchOnProduct(e, filters, tempSortDetails);
+                                                    }}
+                                                >
+                                                    <option value="" hidden>{t("Sort By")}</option>
+                                                    <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
+                                                    <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                    <option value="price,-1">{t("From Highest Price To Lowest")}</option>
+                                                    <option value="price,1">{t("From Lowest Price To Highest")}</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div> */}
+                                <div className="row stores-box pt-4 pb-4">
+                                    {allStoresInsideThePage.length > 0 ? allStoresInsideThePage.map((store) => (
+                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={store._id}>
+                                            <StoreCard
+                                                storeDetails={store}
+                                                setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                                            />
+                                        </div>
+                                    )) : <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
+                                    {totalPagesCount.forStores > 1 && !isGetStores &&
+                                        <PaginationBar
+                                            totalPagesCount={totalPagesCount.forStores}
+                                            currentPage={currentPage.forStores}
+                                            getPreviousPage={getPreviousPage}
+                                            getNextPage={getNextPage}
+                                            getSpecificPage={getSpecificPage}
+                                            paginationButtonTextColor={"#FFF"}
+                                            paginationButtonBackgroundColor={"transparent"}
+                                            activePaginationButtonColor={"#000"}
+                                            activePaginationButtonBackgroundColor={"#FFF"}
+                                            section="stores"
+                                        />}
+                                </div>
+                            </section>}
+                            {/* End Stores Section */}
                         </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
