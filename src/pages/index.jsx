@@ -185,6 +185,9 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetProducts(false);
                     // =============================================================================
+                } else {
+                    setIsGetCategories(false);
+                    setIsGetProducts(false);
                 }
             })
             .catch(() => {
