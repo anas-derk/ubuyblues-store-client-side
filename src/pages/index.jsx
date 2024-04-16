@@ -167,7 +167,7 @@ export default function Home({ countryAsProperty, storeId }) {
         // =============================================================================
         getStoreDetails(storeId)
             .then(async (result) => {
-                if (!result.error) {
+                if (!result.error && result.data?.status === "approving") {
                     setStoreDetails(result.data);
                     const tempFilters = { ...filters, storeId };
                     setFilters(tempFilters);
