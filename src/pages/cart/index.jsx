@@ -52,24 +52,17 @@ export default function Cart({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        if (Array.isArray(allProductsData)) {
-            if (allProductsData.length > 0) {
-                getProductsByIds(allProductsData.map((product) => product._id))
+        if (Array.isArray(tempAllProductsDataInsideTheCart)) {
+            if (tempAllProductsDataInsideTheCart.length > 0) {
+                getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
                     .then((result) => {
                         if (result.data.length > 0) {
                             let tempPricesDetailsSummary = [];
                             result.data.forEach((data) => {
-                                const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(data.products);
-                                const totalDiscount = calcTotalOrderDiscount(data.products);
-                                const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
-                                tempPricesDetailsSummary.push({
-                                    totalPriceBeforeDiscount,
-                                    totalDiscount,
-                                    totalPriceAfterDiscount
-                                });
+                                tempPricesDetailsSummary.push(calcTotalPrices(data.products));
                             });
                             setPricesDetailsSummary(tempPricesDetailsSummary);
                             setAllProductsData(result.data);
@@ -177,22 +170,27 @@ export default function Cart({ countryAsProperty }) {
         const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
         const totalDiscount = calcTotalOrderDiscount(allProductsData);
         const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
-        setPricesDetailsSummary({
+        return {
             totalPriceBeforeDiscount,
             totalDiscount,
-            totalPriceAfterDiscount,
-        });
+            totalPriceAfterDiscount
+        };
     }
 
-    const deleteProduct = (productId) => {
-        const newProductsData = allProductsData.filter((product) => product.id != productId);
+    const deleteProduct = async (productId) => {
+        const newProductsData = JSON.parse(localStorage.getItem("asfour-store-customer-cart")).filter((product) => product._id !== productId);
         updateCartInLocalStorage(newProductsData);
-        calcTotalPrices(newProductsData);
-        setAllProductsData(newProductsData);
+        const result = await getProductsByIds(newProductsData.map((product) => product._id));
+        let tempPricesDetailsSummary = [];
+        result.data.forEach((data) => {
+            tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+        });
+        setPricesDetailsSummary(tempPricesDetailsSummary);
+        setAllProductsData(result.data);
     }
 
     const updateCartInLocalStorage = (newProductsData) => {
-        localStorage.setItem("asfour-store-user-cart", JSON.stringify(newProductsData));
+        localStorage.setItem("asfour-store-customer-cart", JSON.stringify(newProductsData));
     }
 
     return (
@@ -250,7 +248,7 @@ export default function Cart({ countryAsProperty }) {
                                                                     {(product.price * usdPriceAgainstCurrency * 1).toFixed(2)} {t(currencyNameByCountry)}
                                                                 </td>
                                                                 <td className="delete-product-cell">
-                                                                    <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
+                                                                    <BsTrash className="trash-icon" onClick={() => deleteProduct(product._id)} />
                                                                 </td>
                                                             </tr>
                                                         ))}
