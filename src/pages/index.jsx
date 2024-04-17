@@ -137,6 +137,16 @@ export default function Home({ countryAsProperty, storeId }) {
         setAllProductsInsideThePage([]);
         setAllBrands([]);
         setAllStoresInsideThePage([]);
+        setTotalPagesCount({
+            forCategories: 0,
+            forProducts: 0,
+            forStores: 0,
+        });
+        setCurrentPage({
+            forCategories: 0,
+            forProducts: 0,
+            forStores: 0
+        });
         setIsGetCategories(true);
         setIsGetProducts(true);
         setIsGetStores(true);
