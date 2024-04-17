@@ -158,7 +158,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 if (appearedSectionsLength > 0) {
                     for (let i = 0; i < appearedSectionsLength; i++) {
                         if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                            setAllBrands((await getAllBrands()).data);
+                            setAllBrands((await getAllBrands(filtersAsString)).data);
                         }
                         if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
                             const storesCount = await getStoresCount(filtersAsString);
@@ -221,9 +221,9 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const getAllBrands = async () => {
+    const getAllBrands = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands?${filters ? filters : ""}`);
             return res.data;
         }
         catch (err) {
