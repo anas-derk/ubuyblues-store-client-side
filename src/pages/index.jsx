@@ -133,14 +133,16 @@ export default function Home({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
+        setAllCategoriesInsideThePage([]);
+        setAllProductsInsideThePage([]);
+        setAllBrands([]);
+        setAllStoresInsideThePage([]);
         setIsGetCategories(true);
         setIsGetProducts(true);
         setIsGetStores(true);
-        setFilters({
-            name: "",
-            storeId: "",
-            status: "approving"
-        });
+        const tempFilters = { ...filters, storeId };
+        setFilters(tempFilters);
+        const filtersAsString = getFiltersAsQuery(tempFilters);
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", function () {
@@ -159,9 +161,9 @@ export default function Home({ countryAsProperty, storeId }) {
                             setAllBrands((await getAllBrands()).data);
                         }
                         if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
-                            const storesCount = await getStoresCount(getFiltersAsQuery(filters));
+                            const storesCount = await getStoresCount(filtersAsString);
                             if (storesCount.data > 0) {
-                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, getFiltersAsQuery(filters))).data);
+                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filtersAsString)).data);
                                 totalPagesCount.forStores = Math.ceil(storesCount.data / pageSize);
                             }
                             setIsGetStores(false);
@@ -178,18 +180,16 @@ export default function Home({ countryAsProperty, storeId }) {
             .then(async (result) => {
                 if (!result.error && result.data?.status === "approving") {
                     setStoreDetails(result.data);
-                    const tempFilters = { ...filters, storeId };
-                    setFilters(tempFilters);
-                    result = await getCategoriesCount(getFiltersAsQuery(tempFilters));
+                    result = await getCategoriesCount(filtersAsString);
                     if (result.data > 0) {
-                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
+                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
                         totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
                     }
                     setIsGetCategories(false);
                     // =============================================================================
-                    result = await getProductsCount(getFiltersAsQuery(tempFilters));
+                    result = await getProductsCount(filtersAsString);
                     if (result.data > 0) {
-                        setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery(tempFilters))).data);
+                        setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data);
                         totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                     }
                     setIsGetProducts(false);
