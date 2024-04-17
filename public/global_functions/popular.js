@@ -93,6 +93,40 @@ const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
     }
 }
 
+const getProductQuantity = (productId) => {
+    return JSON.parse(localStorage.getItem("asfour-store-customer-cart")).find((product) => product._id === productId).quantity;
+}
+
+const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
+    let tempTotalPriceBeforeDiscount = 0;
+    allProductsData.forEach((product) => {
+        tempTotalPriceBeforeDiscount += product.price * getProductQuantity(product._id);
+    });
+    return tempTotalPriceBeforeDiscount;
+}
+
+const calcTotalOrderDiscount = (allProductsData) => {
+    let tempTotalDiscount = 0;
+    allProductsData.forEach((product) => {
+        tempTotalDiscount += product.discount * getProductQuantity(product._id);
+    });
+    return tempTotalDiscount;
+}
+
+const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
+    return totalPriceBeforeDiscount - totalDiscount;
+}
+
+const calcTotalPrices = (allProductsData) => {
+    const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
+    const totalDiscount = calcTotalOrderDiscount(allProductsData);
+    return {
+        totalPriceBeforeDiscount,
+        totalDiscount,
+        totalPriceAfterDiscount: calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount)
+    };
+}
+
 export {
     getProductsCount,
     getAllProductsInsideThePage,
@@ -103,4 +137,6 @@ export {
     getAllCategoriesInsideThePage,
     getStoresCount,
     getAllStoresInsideThePage,
+    getProductQuantity,
+    calcTotalPrices,
 }

@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import prices from "../../../public/global_functions/prices";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
+import { getProductQuantity, calcTotalPrices } from "../../../public/global_functions/popular";
 
 export default function Cart({ countryAsProperty }) {
 
@@ -117,30 +118,6 @@ export default function Cart({ countryAsProperty }) {
         document.body.lang = userLanguage;
     }
 
-    const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
-        let tempTotalPriceBeforeDiscount = 0;
-        allProductsData.forEach((product) => {
-            tempTotalPriceBeforeDiscount += product.price * getProductQuantity(product._id);
-        });
-        return tempTotalPriceBeforeDiscount;
-    }
-
-    const calcTotalOrderDiscount = (allProductsData) => {
-        let tempTotalDiscount = 0;
-        allProductsData.forEach((product) => {
-            tempTotalDiscount += product.discount * getProductQuantity(product._id);
-        });
-        return tempTotalDiscount;
-    }
-
-    const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
-        return totalPriceBeforeDiscount - totalDiscount;
-    }
-
-    const getProductQuantity = (productId) => {
-        return JSON.parse(localStorage.getItem("asfour-store-customer-cart")).find((product) => product._id === productId).quantity;
-    }
-
     const updateProductQuantity = async (productId, operation) => {
         switch (operation) {
             case "increase-product-quantity": {
@@ -177,17 +154,6 @@ export default function Cart({ countryAsProperty }) {
                 console.log("Error, Wrong Operation !!");
             }
         }
-    }
-
-    const calcTotalPrices = (allProductsData) => {
-        const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
-        const totalDiscount = calcTotalOrderDiscount(allProductsData);
-        const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
-        return {
-            totalPriceBeforeDiscount,
-            totalDiscount,
-            totalPriceAfterDiscount
-        };
     }
 
     const deleteProduct = async (productId) => {

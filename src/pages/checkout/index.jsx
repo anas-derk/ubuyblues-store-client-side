@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import prices from "../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails } from "../../../public/global_functions/popular";
+import { getStoreDetails, getProductQuantity, calcTotalPrices } from "../../../public/global_functions/popular";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -93,6 +93,49 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                 localStorage.removeItem("asfour-store-user-token");
                                 await router.push("/auth");
                             }
+                        } else {
+                            const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
+                            if (userAddresses) {
+                                setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
+                                setIsSavePaymentInfo(true);
+                            } else {
+                                setUserInfo({
+                                    billing_address: {
+                                        first_name: "",
+                                        last_name: "",
+                                        company_name: "",
+                                        country: "Kuwait",
+                                        street_address: "",
+                                        apartment_number: 1,
+                                        city: "",
+                                        postal_code: 1,
+                                        phone_number: "0096560048235",
+                                        email: "",
+                                    },
+                                    shipping_address: {
+                                        first_name: "",
+                                        last_name: "",
+                                        company_name: "",
+                                        country: "Kuwait",
+                                        street_address: "",
+                                        apartment_number: 1,
+                                        city: "",
+                                        postal_code: 1,
+                                        phone_number: "0096560048235",
+                                        email: "",
+                                    },
+                                });
+                            }
+                        }
+                        const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+                        if (Array.isArray(tempAllProductsDataInsideTheCart)) {
+                            if (tempAllProductsDataInsideTheCart.length > 0) {
+                                result = await getProductsByIdsAnsStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
+                                if (result.data.length > 0) {
+                                    setPricesDetailsSummary(calcTotalPrices(result.data));
+                                    setAllProductsData(result.data);
+                                }
+                            }
                         }
                     }
                 }
@@ -107,96 +150,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     setIsErrorMsgOnLoadingThePage(true);
                 }
             });
-
-        // if (userToken) {
-        //     validations.getUserInfo(userToken)
-        //         .then(async (result) => {
-        //             setIsGetUserInfo(false);
-        //             if (!result.error) {
-        //                 setUserInfo(result.data);
-        //                 result = getStoreDetails(storeId);
-        //                 if (!result.error) {
-        //                     if (result.data?.status === "approving") {
-        //                         setStoreDetails(result.data);
-        //                         const allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-        //                         if (Array.isArray(allProductsData)) {
-        //                             if (allProductsData.length > 0) {
-        //                                 const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
-        //                                 const totalDiscount = calcTotalOrderDiscount(allProductsData);
-        //                                 const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
-        //                                 setPricesDetailsSummary({
-        //                                     totalPriceBeforeDiscount,
-        //                                     totalDiscount,
-        //                                     totalPriceAfterDiscount,
-        //                                 });
-        //                                 setAllProductsData(allProductsData);
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             } else {
-        //                 localStorage.removeItem("asfour-store-user-token");
-        //                 await router.push("/auth");
-        //             }
-        //         })
-        //         .catch(async (err) => {
-        //             if (err?.response?.data?.msg === "Unauthorized Error") {
-        //                 localStorage.removeItem("asfour-store-user-token");
-        //                 await router.push("/auth");
-        //             } else {
-        //                 setIsLoadingPage(false);
-        //                 setIsErrorMsgOnLoadingThePage(true);
-        //             }
-        //         });
-        // } else {
-        //     const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
-        //     if (userAddresses) {
-        //         setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
-        //         setIsSavePaymentInfo(true);
-        //     } else {
-        //         setUserInfo({
-        //             billing_address: {
-        //                 first_name: "",
-        //                 last_name: "",
-        //                 company_name: "",
-        //                 country: "Kuwait",
-        //                 street_address: "",
-        //                 apartment_number: 1,
-        //                 city: "",
-        //                 postal_code: 1,
-        //                 phone_number: "0096560048235",
-        //                 email: "",
-        //             },
-        //             shipping_address: {
-        //                 first_name: "",
-        //                 last_name: "",
-        //                 company_name: "",
-        //                 country: "Kuwait",
-        //                 street_address: "",
-        //                 apartment_number: 1,
-        //                 city: "",
-        //                 postal_code: 1,
-        //                 phone_number: "0096560048235",
-        //                 email: "",
-        //             },
-        //         });
-        //     }
-        //     const allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-        //     if (Array.isArray(allProductsData)) {
-        //         if (allProductsData.length > 0) {
-        //             const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
-        //             const totalDiscount = calcTotalOrderDiscount(allProductsData);
-        //             const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
-        //             setPricesDetailsSummary({
-        //                 totalPriceBeforeDiscount,
-        //                 totalDiscount,
-        //                 totalPriceAfterDiscount,
-        //             });
-        //             setAllProductsData(allProductsData);
-        //         }
-        //     }
-        //     setIsGetUserInfo(false);
-        // }
     }, [storeId]);
 
     useEffect(() => {
@@ -210,6 +163,18 @@ export default function Checkout({ countryAsProperty, storeId }) {
         document.body.lang = userLanguage;
     }
 
+    const getProductsByIdsAnsStoreId = async (storeId, productsIds) => {
+        try {
+            const res = await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids-and-store-id?storeId=${storeId}`, {
+                productsIds,
+            });
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
+
     const getPhoneNumberFromString = (text, country) => {
         try {
             return parsePhoneNumber(text, country).nationalNumber;
@@ -217,26 +182,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
         catch (err) {
             return "";
         }
-    }
-
-    const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
-        let tempTotalPriceBeforeDiscount = 0;
-        allProductsData.forEach((product) => {
-            tempTotalPriceBeforeDiscount += product.price * product.quantity;
-        });
-        return tempTotalPriceBeforeDiscount;
-    }
-
-    const calcTotalOrderDiscount = (allProductsData) => {
-        let tempTotalDiscount = 0;
-        allProductsData.forEach((product) => {
-            tempTotalDiscount += product.discount * product.quantity;
-        });
-        return tempTotalDiscount;
-    }
-
-    const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscount) => {
-        return totalPriceBeforeDiscount - totalDiscount;
     }
 
     const validateFormFields = (validateDetailsList) => {
@@ -913,13 +858,13 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             <div className="row total pb-3 mb-5" key={productIndex}>
                                                 <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                     {i18n.language !== "ar" ? <span>
-                                                        ( {product.name} ) x {product.quantity}
+                                                        ( {product.name} ) x {getProductQuantity(product._id)}
                                                     </span> : <span>
-                                                        ( {product.name} ) {product.quantity} x
+                                                        ( {product.name} ) {getProductQuantity(product._id)} x
                                                     </span>}
                                                 </div>
                                                 <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                    {(product.price * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                    {(product.price * getProductQuantity(product._id) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                                 </div>
                                             </div>
                                         ))}
