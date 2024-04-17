@@ -133,8 +133,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        setIsGetCategories(false);
-        setIsGetProducts(false);
+        setIsGetCategories(true);
+        setIsGetProducts(true);
         setIsGetStores(true);
         setFilters({
             name: "",
