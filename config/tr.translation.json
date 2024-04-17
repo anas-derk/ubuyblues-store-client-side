@@ -408,5 +408,8 @@
     "Sorry, This Service Is Not Available Now !!": "Üzgünüz, Bu Hizmet Şu Anda Mevcut Değil !!",
     "Stores": "Mağazalar",
     "Sorry, This Store Is Not Found !!": "Üzgünüm, Bu Mağaza Bulunamadı !!",
-    "Sorry, Can't Find Any Categories For This Store !!": "Üzgünüm, Bu Mağaza için herhangi bir kategori bulunamadı !!"
+    "Sorry, Can't Find Any Categories For This Store !!": "Üzgünüm, Bu Mağaza için herhangi bir kategori bulunamadı !!",
+    "Store Name": "Mağaza Adı",
+    "Products Type": "Ürün Türü",
+    "Products Description": "Ürün Açıklaması"
 }

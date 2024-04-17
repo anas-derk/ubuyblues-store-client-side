@@ -407,5 +407,8 @@
     "Sorry, This Service Is Not Available Now !!": "Entschuldigung, dieser Service ist im Moment nicht verfügbar !!",
     "Stores": "Shops",
     "Sorry, This Store Is Not Found !!": "Entschuldigung, Dieser Laden wurde nicht gefunden !!",
-    "Sorry, Can't Find Any Categories For This Store !!": "Entschuldigung, Es wurden keine Kategorien für diesen Laden gefunden !!"
+    "Sorry, Can't Find Any Categories For This Store !!": "Entschuldigung, Es wurden keine Kategorien für diesen Laden gefunden !!",
+    "Store Name": "Geschäftsname",
+    "Products Type": "Produkttyp",
+    "Products Description": "Produktbeschreibung"
 }

@@ -409,5 +409,8 @@
     "Welcome To You In Store": "مرحباً بك في متجر",
     "Stores": "المتاجر",
     "Sorry, This Store Is Not Found !!": "عذراً ، هذا المتجر غير موجود !!",
-    "Sorry, Can't Find Any Categories For This Store !!": "عذراً ، لا يوجد أي تصنيفات لهذا المتجر !!"
+    "Sorry, Can't Find Any Categories For This Store !!": "عذراً ، لا يوجد أي تصنيفات لهذا المتجر !!",
+    "Store Name": "اسم المتجر",
+    "Products Type": "نوع المنتجات",
+    "Products Description": "وصف المنتجات"
 }
