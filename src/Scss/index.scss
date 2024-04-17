@@ -391,12 +391,6 @@ textarea{
     }
 }
 
-.products-box{
-    &.row{
-        row-gap: 40px;
-    }
-}
-
 .customer-billing-address, .customer-shipping-address{
     .edit-customer-billing-address-form, .edit-customer-shipping-address-form{
         color: #FFF;
@@ -579,7 +573,7 @@ textarea{
 }
 
 .section-data-box{
-    row-gap: 30px;
+    row-gap: 40px;
 }
 
 @keyframes rotation {

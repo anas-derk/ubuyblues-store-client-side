@@ -446,10 +446,6 @@ textarea {
   font-size: 30px;
 }
 
-.products-box.row {
-  row-gap: 40px;
-}
-
 .customer-billing-address .edit-customer-billing-address-form, .customer-billing-address .edit-customer-shipping-address-form, .customer-shipping-address .edit-customer-billing-address-form, .customer-shipping-address .edit-customer-shipping-address-form {
   color: #FFF;
   font-size: 13px;
@@ -692,7 +688,7 @@ textarea {
 }
 
 .section-data-box {
-  row-gap: 30px;
+  row-gap: 40px;
 }
 
 @keyframes rotation {
