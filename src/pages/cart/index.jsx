@@ -22,6 +22,8 @@ export default function Cart({ countryAsProperty }) {
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
+    const [isGetGroupedProductsByStoreId, setIsGetGroupedProductsByStoreId] = useState(true);
+
     const [allProductsData, setAllProductsData] = useState([]);
 
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState([{
@@ -39,7 +41,9 @@ export default function Cart({ countryAsProperty }) {
         prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
-            setIsLoadingPage(false);
+            if (!isGetGroupedProductsByStoreId) {
+                setIsLoadingPage(false);
+            }
         })
             .catch(() => {
                 setIsLoadingPage(false);
@@ -82,19 +86,29 @@ export default function Cart({ countryAsProperty }) {
                                 } else cartTotalBtnBox.style.display = "none";
                             }
                         });
+                        setIsGetGroupedProductsByStoreId(false);
                         setIsLoadingPage(false);
                     })
-                    .catch((err) => {
-                        console.log(err)
+                    .catch(() => {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     });
+            } else {
+                setIsGetGroupedProductsByStoreId(false);
+                setIsLoadingPage(false);
             }
         }
         else {
+            setIsGetGroupedProductsByStoreId(false);
             setIsLoadingPage(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (!isGetGroupedProductsByStoreId) {
+            setIsLoadingPage(false);
+        }
+    }, [isGetGroupedProductsByStoreId]);
 
     const getProductsByIds = async (productsIds) => {
         try {
@@ -193,7 +207,7 @@ export default function Cart({ countryAsProperty }) {
                         {allProductsData.length > 0 ? <section className="products-by-store">
                             {allProductsData.map((store, storeIndex) => (
                                 <div className="store mb-5 pb-5" key={store.storeId}>
-                                    <h2 className="mb-5">{t("Store-Associated Products")} : { store.storeId }</h2>
+                                    <h2 className="mb-5">{t("Store-Associated Products")} : {store.storeId}</h2>
                                     <div className="row align-items-center">
                                         <div className="col-xl-8">
                                             {windowInnerWidth > 991 && <section className="products w-100">
@@ -208,7 +222,7 @@ export default function Cart({ countryAsProperty }) {
                                                     </thead>
                                                     <tbody>
                                                         {store.products.map((product) => (
-                                                            <tr key={product.id}>
+                                                            <tr key={product._id}>
                                                                 <td className="product-cell">
                                                                     <div className="row">
                                                                         <div className="col-lg-4">
