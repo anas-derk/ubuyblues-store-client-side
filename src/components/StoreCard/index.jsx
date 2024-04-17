@@ -24,9 +24,9 @@ export default function StoreCard({
                 </div>
             </div>
             <div className="store-details details-box p-3 text-center">
-                <h6 className="store-name fw-bold mb-4">{t("Store Name")}: {storeDetails.name}</h6>
-                <h6 className="store-name fw-bold mb-4">{t("Products Type")}: {storeDetails.productsType}</h6>
-                <h6 className="store-name fw-bold">{t("Products Description")}: {storeDetails.productsDescription}</h6>
+                <h6 className="store-name fw-bold mb-4">{t("Store Name")} : {storeDetails.name}</h6>
+                <h6 className="store-name fw-bold mb-4">{t("Products Type")} : {storeDetails.productsType}</h6>
+                <h6 className="store-name fw-bold">{t("Products Description")} : {storeDetails.productsDescription}</h6>
             </div>
         </div>
     );
