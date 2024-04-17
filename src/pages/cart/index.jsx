@@ -80,7 +80,6 @@ export default function Cart({ countryAsProperty }) {
                             }
                         });
                         setIsGetGroupedProductsByStoreId(false);
-                        setIsLoadingPage(false);
                     })
                     .catch(() => {
                         setIsLoadingPage(false);
@@ -88,12 +87,10 @@ export default function Cart({ countryAsProperty }) {
                     });
             } else {
                 setIsGetGroupedProductsByStoreId(false);
-                setIsLoadingPage(false);
             }
         }
         else {
             setIsGetGroupedProductsByStoreId(false);
-            setIsLoadingPage(false);
         }
     }, []);
 
@@ -348,7 +345,7 @@ export default function Cart({ countryAsProperty }) {
                                                         {(pricesDetailsSummary[storeIndex].totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                                     </div>
                                                 </div>
-                                                <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
+                                                <Link href={`/checkout?storeId=${store.storeId}`} className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
                                             </section>
                                         </div>
                                     </div>
