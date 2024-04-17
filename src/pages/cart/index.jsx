@@ -123,7 +123,7 @@ export default function Cart({ countryAsProperty }) {
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
         allProductsData.forEach((product) => {
-            tempTotalPriceBeforeDiscount += product.price * 1;
+            tempTotalPriceBeforeDiscount += product.price * getProductQuantity(product._id);
         });
         return tempTotalPriceBeforeDiscount;
     }
@@ -131,7 +131,7 @@ export default function Cart({ countryAsProperty }) {
     const calcTotalOrderDiscount = (allProductsData) => {
         let tempTotalDiscount = 0;
         allProductsData.forEach((product) => {
-            tempTotalDiscount += product.discount * 1;
+            tempTotalDiscount += product.discount * getProductQuantity(product._id);
         });
         return tempTotalDiscount;
     }
@@ -140,24 +140,40 @@ export default function Cart({ countryAsProperty }) {
         return totalPriceBeforeDiscount - totalDiscount;
     }
 
-    const updateProductQuantity = (allProductsData, productId, operation) => {
+    const getProductQuantity = (productId) => {
+        return JSON.parse(localStorage.getItem("asfour-store-customer-cart")).find((product) => product._id === productId).quantity;
+    }
+
+    const updateProductQuantity = async (productId, operation) => {
         switch (operation) {
             case "increase-product-quantity": {
-                allProductsData.forEach((product) => {
-                    if (product.id === productId && product.quantity < 50) product.quantity++;
+                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+                tempAllProductsDataInsideTheCart.forEach((product) => {
+                    if (product._id === productId && product.quantity < 50) product.quantity++;
                 });
-                updateCartInLocalStorage(allProductsData);
-                calcTotalPrices(allProductsData);
-                setAllProductsData(allProductsData);
+                updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
+                const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
+                let tempPricesDetailsSummary = [];
+                result.data.forEach((data) => {
+                    tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+                });
+                setPricesDetailsSummary(tempPricesDetailsSummary);
+                setAllProductsData(result.data);
                 break;
             }
             case "decrease-product-quantity": {
-                allProductsData.forEach((product) => {
-                    if (product.id === productId && product.quantity > 1) product.quantity--;
+                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+                tempAllProductsDataInsideTheCart.forEach((product) => {
+                    if (product._id === productId && product.quantity > 1) product.quantity--;
                 });
-                updateCartInLocalStorage(allProductsData);
-                calcTotalPrices(allProductsData);
-                setAllProductsData(allProductsData);
+                updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
+                const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
+                let tempPricesDetailsSummary = [];
+                result.data.forEach((data) => {
+                    tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+                });
+                setPricesDetailsSummary(tempPricesDetailsSummary);
+                setAllProductsData(result.data);
                 break;
             }
             default: {
@@ -236,16 +252,16 @@ export default function Cart({ countryAsProperty }) {
                                                                 <td className="update-product-quantity-cell">
                                                                     <div className="update-product-quantity p-3">
                                                                         <HiMinus className="update-product-icon"
-                                                                            onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
+                                                                            onClick={() => updateProductQuantity(product._id, "decrease-product-quantity")}
                                                                         />
-                                                                        <span className="ms-3 me-3">{product.quantity}</span>
+                                                                        <span className="ms-3 me-3">{getProductQuantity(product._id)}</span>
                                                                         <HiPlus className="update-product-icon"
-                                                                            onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
+                                                                            onClick={() => updateProductQuantity(product._id, "increase-product-quantity")}
                                                                         />
                                                                     </div>
                                                                 </td>
                                                                 <td className="subtotal-cell">
-                                                                    {(product.price * usdPriceAgainstCurrency * 1).toFixed(2)} {t(currencyNameByCountry)}
+                                                                    {(product.price * usdPriceAgainstCurrency * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
                                                                 </td>
                                                                 <td className="delete-product-cell">
                                                                     <BsTrash className="trash-icon" onClick={() => deleteProduct(product._id)} />
@@ -278,11 +294,11 @@ export default function Cart({ countryAsProperty }) {
                                                                     <td className="update-product-quantity-cell">
                                                                         <div className="update-product-quantity p-3 w-100">
                                                                             <HiMinus className="update-product-icon"
-                                                                                onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
+                                                                                onClick={() => updateProductQuantity(product._id, "decrease-product-quantity")}
                                                                             />
-                                                                            <span className="ms-3 me-3">{product.quantity}</span>
+                                                                            <span className="ms-3 me-3">{getProductQuantity(product._id)}</span>
                                                                             <HiPlus className="update-product-icon"
-                                                                                onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
+                                                                                onClick={() => updateProductQuantity(product._id, "increase-product-quantity")}
                                                                             />
                                                                         </div>
                                                                     </td>
@@ -290,13 +306,13 @@ export default function Cart({ countryAsProperty }) {
                                                                 <tr>
                                                                     <th>{t("Subtotal")}</th>
                                                                     <td className="subtotal-cell">
-                                                                        {(product.price * usdPriceAgainstCurrency * product.quantity).toFixed(2)} {t(currencyNameByCountry)}
+                                                                        {(product.price * usdPriceAgainstCurrency * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>{t("Action")}</th>
                                                                     <td className="delete-product-cell">
-                                                                        <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
+                                                                        <BsTrash className="trash-icon" onClick={() => deleteProduct(product._id)} />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
