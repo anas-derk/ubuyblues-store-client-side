@@ -99,25 +99,19 @@ export default function ProductCard({
         }
     }
 
-    const addToCart = (id, name, price, description, category, discount, imagePath) => {
+    const addToCart = (productId) => {
         try {
             setIsWaitAddToCart(true);
-            const userCart = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+            const userCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
             if (Array.isArray(userCart)) {
                 if (userCart.length > 0) {
-                    const productIndex = userCart.findIndex((product) => product.id === id);
+                    const productIndex = userCart.findIndex((product) => product._id === productId);
                     if (productIndex === -1) {
                         userCart.push({
-                            id,
-                            name,
-                            price,
-                            description,
-                            category,
-                            discount,
-                            imagePath,
+                            _id,
                             quantity: 1,
                         });
-                        localStorage.setItem("asfour-store-user-cart", JSON.stringify(userCart));
+                        localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
                         let successAddToCartTimeout = setTimeout(() => {
@@ -137,16 +131,10 @@ export default function ProductCard({
                 else {
                     let allProductsData = [];
                     allProductsData.push({
-                        id,
-                        name,
-                        price,
-                        description,
-                        category,
-                        discount,
-                        imagePath,
+                        _id,
                         quantity: 1,
                     });
-                    localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                    localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
                     let successAddToCartTimeout = setTimeout(() => {
@@ -158,16 +146,10 @@ export default function ProductCard({
             } else {
                 let allProductsData = [];
                 allProductsData.push({
-                    id,
-                    name,
-                    price,
-                    description,
-                    category,
-                    discount,
-                    imagePath,
+                    _id,
                     quantity: 1,
                 });
-                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
                 let successAddToCartTimeout = setTimeout(() => {
@@ -189,12 +171,12 @@ export default function ProductCard({
 
     const deleteFromCart = (productId) => {
         setIsWaitDeleteFromCart(true);
-        const userCart = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+        const userCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         if (Array.isArray(userCart)) {
             if (userCart.length > 0) {
-                const newUserCart = userCart.filter((product) => product.id !== productId);
+                const newUserCart = userCart.filter((product) => product._id !== productId);
                 if (newUserCart.length < userCart.length) {
-                    localStorage.setItem("asfour-store-user-cart", JSON.stringify(newUserCart));
+                    localStorage.setItem("asfour-store-customer-cart", JSON.stringify(newUserCart));
                     setIsWaitDeleteFromCart(false);
                     setIsSuccessDeleteFromCart(true);
                     let successDeleteFromCartTimeout = setTimeout(() => {
@@ -213,7 +195,7 @@ export default function ProductCard({
             } else {
                 setIsWaitDeleteFromCart(false);
                 setErrorInDeleteFromCart("Sorry, This Product Is Not Exist In Your Cart !!");
-                localStorage.setItem("asfour-store-user-cart", JSON.stringify([]));
+                localStorage.setItem("asfour-store-customer-cart", JSON.stringify([]));
                 let errorInDeleteFromCartTimeout = setTimeout(() => {
                     setErrorInDeleteFromCart("");
                     clearTimeout(errorInDeleteFromCartTimeout);
