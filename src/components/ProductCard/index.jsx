@@ -108,7 +108,7 @@ export default function ProductCard({
                     const productIndex = userCart.findIndex((product) => product._id === productId);
                     if (productIndex === -1) {
                         userCart.push({
-                            _id,
+                            _id: productId,
                             quantity: 1,
                         });
                         localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
@@ -131,7 +131,7 @@ export default function ProductCard({
                 else {
                     let allProductsData = [];
                     allProductsData.push({
-                        _id,
+                        _id: productId,
                         quantity: 1,
                     });
                     localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
@@ -146,7 +146,7 @@ export default function ProductCard({
             } else {
                 let allProductsData = [];
                 allProductsData.push({
-                    _id,
+                    _id: productId,
                     quantity: 1,
                 });
                 localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));

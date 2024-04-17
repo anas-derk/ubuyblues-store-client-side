@@ -10,6 +10,7 @@ import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import prices from "../../../public/global_functions/prices";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import axios from "axios";
 
 export default function Cart({ countryAsProperty }) {
 
@@ -23,11 +24,11 @@ export default function Cart({ countryAsProperty }) {
 
     const [allProductsData, setAllProductsData] = useState([]);
 
-    const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
+    const [pricesDetailsSummary, setPricesDetailsSummary] = useState([{
         totalPriceBeforeDiscount: 0,
         totalDiscount: 0,
         totalPriceAfterDiscount: 0,
-    });
+    }]);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -47,36 +48,66 @@ export default function Cart({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
+        let allProductsData = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         if (Array.isArray(allProductsData)) {
             if (allProductsData.length > 0) {
-                const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
-                const totalDiscount = calcTotalOrderDiscount(allProductsData);
-                const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
-                setPricesDetailsSummary({
-                    totalPriceBeforeDiscount,
-                    totalDiscount,
-                    totalPriceAfterDiscount,
-                });
-                setAllProductsData(allProductsData);
-                setWindowInnerWidth(window.innerWidth);
-                window.addEventListener("resize", () => {
-                    setWindowInnerWidth(window.innerWidth);
-                });
-                window.addEventListener("scroll", function () {
-                    if (this.innerWidth < 991) {
-                        let cartTotalBtnBox = document.querySelector(".products .cart-total-btn-box");
-                        if (this.scrollY < 613) {
-                            cartTotalBtnBox.style.display = "block";
-                        } else cartTotalBtnBox.style.display = "none";
-                    }
-                });
+                getProductsByIds(allProductsData.map((product) => product._id))
+                    .then((result) => {
+                        if (result.data.length > 0) {
+                            let tempPricesDetailsSummary = [];
+                            result.data.forEach((data) => {
+                                const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(data.products);
+                                const totalDiscount = calcTotalOrderDiscount(data.products);
+                                const totalPriceAfterDiscount = calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount);
+                                tempPricesDetailsSummary.push({
+                                    totalPriceBeforeDiscount,
+                                    totalDiscount,
+                                    totalPriceAfterDiscount
+                                });
+                            });
+                            setPricesDetailsSummary(tempPricesDetailsSummary);
+                            setAllProductsData(allProductsData);
+                        }
+                        setWindowInnerWidth(window.innerWidth);
+                        window.addEventListener("resize", () => {
+                            setWindowInnerWidth(window.innerWidth);
+                        });
+                        window.addEventListener("scroll", function () {
+                            if (this.innerWidth < 991) {
+                                let cartTotalBtnBox = document.querySelector(".products .cart-total-btn-box");
+                                if (this.scrollY < 613) {
+                                    cartTotalBtnBox.style.display = "block";
+                                } else cartTotalBtnBox.style.display = "none";
+                            }
+                        });
+                        setIsLoadingPage(false);
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    });
             }
         }
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        setIsLoadingPage(false);
+        else {
+            setIsLoadingPage(false);
+            setIsErrorMsgOnLoadingThePage(true);
+        }
     }, []);
+
+    const getProductsByIds = async (productsIds) => {
+        try {
+            const res = await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids`, {
+                productsIds,
+            });
+            return res.data;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+    }
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -86,7 +117,7 @@ export default function Cart({ countryAsProperty }) {
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
         allProductsData.forEach((product) => {
-            tempTotalPriceBeforeDiscount += product.price * product.quantity;
+            tempTotalPriceBeforeDiscount += product.price * 1;
         });
         return tempTotalPriceBeforeDiscount;
     }
@@ -94,7 +125,7 @@ export default function Cart({ countryAsProperty }) {
     const calcTotalOrderDiscount = (allProductsData) => {
         let tempTotalDiscount = 0;
         allProductsData.forEach((product) => {
-            tempTotalDiscount += product.discount * product.quantity;
+            tempTotalDiscount += product.discount * 1;
         });
         return tempTotalDiscount;
     }
