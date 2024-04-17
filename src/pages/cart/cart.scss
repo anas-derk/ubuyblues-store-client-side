@@ -1,4 +1,9 @@
 .cart{
+    .products-by-store{
+        .store{
+            border-bottom: 2px solid var(--main-color-two);
+        }
+    }
     .products{
         .user-products-table{
             thead{

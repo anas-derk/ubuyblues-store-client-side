@@ -68,7 +68,7 @@ export default function Cart({ countryAsProperty }) {
                                 });
                             });
                             setPricesDetailsSummary(tempPricesDetailsSummary);
-                            setAllProductsData(allProductsData);
+                            setAllProductsData(result.data);
                         }
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
@@ -191,136 +191,143 @@ export default function Cart({ countryAsProperty }) {
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid text-white text-center mb-4">
-                        {allProductsData.length > 0 ? <div className="row align-items-center">
-                            <div className="col-xl-8">
-                                {windowInnerWidth > 991 && <section className="products w-100">
-                                    <table className="user-products-table mb-4 w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>{t("Product")}</th>
-                                                <th>{t("Quantity")}</th>
-                                                <th>{t("Subtotal")}</th>
-                                                <th>{t("Action")}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {allProductsData.map((product) => (
-                                                <tr key={product.id}>
-                                                    <td className="product-cell">
-                                                        <div className="row">
-                                                            <div className="col-lg-4">
-                                                                <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" />
-                                                            </div>
-                                                            <div className="col-lg-8">
-                                                                <h5 className="product-name mb-3">{product.name}</h5>
-                                                                <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
-                                                                {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)}  {t(currencyNameByCountry)}</h6>}
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td className="update-product-quantity-cell">
-                                                        <div className="update-product-quantity p-3">
-                                                            <HiMinus className="update-product-icon"
-                                                                onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
-                                                            />
-                                                            <span className="ms-3 me-3">{product.quantity}</span>
-                                                            <HiPlus className="update-product-icon"
-                                                                onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
-                                                            />
-                                                        </div>
-                                                    </td>
-                                                    <td className="subtotal-cell">
-                                                        {(product.price * usdPriceAgainstCurrency * product.quantity).toFixed(2)} {t(currencyNameByCountry)}
-                                                    </td>
-                                                    <td className="delete-product-cell">
-                                                        <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </section>}
-                                {windowInnerWidth <= 991 && <section className="products w-100">
-                                    <a href="#order-total" className="cart-total-btn-box">
-                                        {t("Go To Cart Totals")}
-                                    </a>
-                                    {allProductsData.map((product, index) => (
-                                        <div className="product mb-4" key={index}>
-                                            <h4 className="mb-3">{t("Product")} # {index + 1}</h4>
-                                            <table className="user-products-table-for-mobiles-and-tablets table-for-mobiles-and-tablets w-100">
-                                                <tbody>
-                                                    <tr>
-                                                        <th>{t("Product")}</th>
-                                                        <td className="product-cell">
-                                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
-                                                            <h5 className="product-name mb-3">{product.name}</h5>
-                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
-                                                            {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>{t("Quantity")}</th>
-                                                        <td className="update-product-quantity-cell">
-                                                            <div className="update-product-quantity p-3 w-100">
-                                                                <HiMinus className="update-product-icon"
-                                                                    onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
-                                                                />
-                                                                <span className="ms-3 me-3">{product.quantity}</span>
-                                                                <HiPlus className="update-product-icon"
-                                                                    onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
-                                                                />
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>{t("Subtotal")}</th>
-                                                        <td className="subtotal-cell">
-                                                            {(product.price * usdPriceAgainstCurrency * product.quantity).toFixed(2)} {t(currencyNameByCountry)}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>{t("Action")}</th>
-                                                        <td className="delete-product-cell">
-                                                            <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                        {allProductsData.length > 0 ? <section className="products-by-store">
+                            {allProductsData.map((store, storeIndex) => (
+                                <div className="store mb-5 pb-5" key={store.storeId}>
+                                    <h2 className="mb-5">{t("Store-Associated Products")} : { store.storeId }</h2>
+                                    <div className="row align-items-center">
+                                        <div className="col-xl-8">
+                                            {windowInnerWidth > 991 && <section className="products w-100">
+                                                <table className="user-products-table mb-4 w-100">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{t("Product")}</th>
+                                                            <th>{t("Quantity")}</th>
+                                                            <th>{t("Subtotal")}</th>
+                                                            <th>{t("Action")}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {store.products.map((product) => (
+                                                            <tr key={product.id}>
+                                                                <td className="product-cell">
+                                                                    <div className="row">
+                                                                        <div className="col-lg-4">
+                                                                            <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" />
+                                                                        </div>
+                                                                        <div className="col-lg-8">
+                                                                            <h5 className="product-name mb-3">{product.name}</h5>
+                                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)}  {t(currencyNameByCountry)}</h6>}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="update-product-quantity-cell">
+                                                                    <div className="update-product-quantity p-3">
+                                                                        <HiMinus className="update-product-icon"
+                                                                            onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
+                                                                        />
+                                                                        <span className="ms-3 me-3">{product.quantity}</span>
+                                                                        <HiPlus className="update-product-icon"
+                                                                            onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
+                                                                        />
+                                                                    </div>
+                                                                </td>
+                                                                <td className="subtotal-cell">
+                                                                    {(product.price * usdPriceAgainstCurrency * 1).toFixed(2)} {t(currencyNameByCountry)}
+                                                                </td>
+                                                                <td className="delete-product-cell">
+                                                                    <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </section>}
+                                            {windowInnerWidth <= 991 && <section className="products w-100">
+                                                <a href="#order-total" className="cart-total-btn-box">
+                                                    {t("Go To Cart Totals")}
+                                                </a>
+                                                {store.products.map((product, index) => (
+                                                    <div className="product mb-4" key={product._id}>
+                                                        <h4 className="mb-3">{t("Product")} # {index + 1}</h4>
+                                                        <table className="user-products-table-for-mobiles-and-tablets table-for-mobiles-and-tablets w-100">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th>{t("Product")}</th>
+                                                                    <td className="product-cell">
+                                                                        <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
+                                                                        <h5 className="product-name mb-3">{product.name}</h5>
+                                                                        <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                        {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>{t("Quantity")}</th>
+                                                                    <td className="update-product-quantity-cell">
+                                                                        <div className="update-product-quantity p-3 w-100">
+                                                                            <HiMinus className="update-product-icon"
+                                                                                onClick={() => updateProductQuantity(allProductsData, product.id, "decrease-product-quantity")}
+                                                                            />
+                                                                            <span className="ms-3 me-3">{product.quantity}</span>
+                                                                            <HiPlus className="update-product-icon"
+                                                                                onClick={() => updateProductQuantity(allProductsData, product.id, "increase-product-quantity")}
+                                                                            />
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>{t("Subtotal")}</th>
+                                                                    <td className="subtotal-cell">
+                                                                        {(product.price * usdPriceAgainstCurrency * product.quantity).toFixed(2)} {t(currencyNameByCountry)}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>{t("Action")}</th>
+                                                                    <td className="delete-product-cell">
+                                                                        <BsTrash className="trash-icon" onClick={() => deleteProduct(product.id)} />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                ))}
+                                            </section>}
                                         </div>
-                                    ))}
-                                </section>}
-                            </div>
-                            <div className="col-xl-4">
-                                <section className="order-total border border-3 p-4 ps-5 pe-5 text-start" id="order-total">
-                                    <h5 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h5>
-                                    <div className="row total-price-before-discount total pb-3 mb-5">
-                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
-                                            {t("Total Price Before Discount")}
-                                        </div>
-                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                        <div className="col-xl-4">
+                                            <section className="order-total border border-3 p-4 ps-5 pe-5 text-start" id="order-total">
+                                                <h5 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h5>
+                                                <div className="row total-price-before-discount total pb-3 mb-5">
+                                                    <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                        {t("Total Price Before Discount")}
+                                                    </div>
+                                                    <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                        {(pricesDetailsSummary[storeIndex].totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                    </div>
+                                                </div>
+                                                <div className="row total-price-discount total pb-3 mb-5">
+                                                    <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                        {t("Total Discount")}
+                                                    </div>
+                                                    <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                        {(pricesDetailsSummary[storeIndex].totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                    </div>
+                                                </div>
+                                                <div className="row total-price-after-discount total pb-3 mb-5">
+                                                    <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                        {t("Total Price After Discount")}
+                                                    </div>
+                                                    <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                        {(pricesDetailsSummary[storeIndex].totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                    </div>
+                                                </div>
+                                                <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
+                                            </section>
                                         </div>
                                     </div>
-                                    <div className="row total-price-discount total pb-3 mb-5">
-                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
-                                            {t("Total Discount")}
-                                        </div>
-                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
-                                        </div>
-                                    </div>
-                                    <div className="row total-price-after-discount total pb-3 mb-5">
-                                        <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
-                                            {t("Total Price After Discount")}
-                                        </div>
-                                        <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                            {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
-                                        </div>
-                                    </div>
-                                    <Link href="/checkout" className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
-                                </section>
-                            </div>
-                        </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For You In Cart !!")} />}
+                                </div>
+                            ))}
+                        </section> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For You In Cart !!")} />}
                     </div>
                     <Footer />
                 </div>
