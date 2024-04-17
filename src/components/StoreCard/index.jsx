@@ -5,9 +5,17 @@ import { PiShareFatLight } from "react-icons/pi";
 export default function StoreCard({
     storeDetails,
     setIsDisplayShareOptionsBox,
+    setSharingName,
+    setSharingURL
 }) {
     
     const { t } = useTranslation();
+
+    const handleDisplayShareOptionsBox = (sharingURL) => {
+        setIsDisplayShareOptionsBox(true);
+        setSharingName("Store");
+        setSharingURL(sharingURL);
+    }
 
     return (
         <div className="store-card card-box">
@@ -19,7 +27,7 @@ export default function StoreCard({
                 <div className="store-managment-buttons managment-buttons p-2">
                     <PiShareFatLight
                         className="store-managment-icon managment-icon d-block"
-                        onClick={() => setIsDisplayShareOptionsBox(true)}
+                        onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/?storeId=${storeDetails._id}`)}
                     />
                 </div>
             </div>

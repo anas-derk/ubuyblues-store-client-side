@@ -86,6 +86,10 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
+    const [sharingName, setSharingName] = useState("");
+
+    const [sharingURL, setSharingURL] = useState("");
+
     const [appearedSections, setAppearedSections] = useState([]);
 
     const [allBrands, setAllBrands] = useState([]);
@@ -384,7 +388,11 @@ export default function Home({ countryAsProperty, storeId }) {
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
                 {/* Start Share Options Box */}
-                {isDisplayShareOptionsBox && <ShareOptionsBox setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox} />}
+                {isDisplayShareOptionsBox && <ShareOptionsBox
+                    setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                    sharingName={sharingName}
+                    sharingURL={sharingURL}
+                />}
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
@@ -493,6 +501,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 currencyNameByCountry={currencyNameByCountry}
                                                 isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
+                                                setSharingName={setSharingName}
+                                                setSharingURL={setSharingURL}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
@@ -553,6 +563,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                             <StoreCard
                                                 storeDetails={store}
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                                                setSharingName={setSharingName}
+                                                setSharingURL={setSharingURL}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}

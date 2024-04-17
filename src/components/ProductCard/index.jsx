@@ -15,7 +15,8 @@ export default function ProductCard({
     isExistProductInsideTheCartAsProperty,
     usdPriceAgainstCurrency,
     currencyNameByCountry,
-    token,
+    setSharingName,
+    setSharingURL,
 }) {
 
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
@@ -79,7 +80,7 @@ export default function ProductCard({
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
                 }
             });
             const result = res.data;
@@ -221,6 +222,12 @@ export default function ProductCard({
         }
     }
 
+    const handleDisplayShareOptionsBox = (sharingURL) => {
+        setIsDisplayShareOptionsBox(true);
+        setSharingName("Product");
+        setSharingURL(sharingURL);
+    }
+
     return (
         <div className="product-card card-box">
             <div
@@ -232,7 +239,7 @@ export default function ProductCard({
                 <div className="product-managment-buttons managment-buttons p-2">
                     <PiShareFatLight
                         className="product-managment-icon d-block mb-2"
-                        onClick={() => setIsDisplayShareOptionsBox(true)}
+                        onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/${productDetails._id}`)}
                     />
                     {
                         !isWaitAddProductToFavoriteUserProductsList &&

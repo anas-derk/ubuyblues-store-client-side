@@ -3,7 +3,7 @@ import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, F
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 
-export default function ShareOptionsBox({ setIsDisplayShareOptionsBox }) {
+export default function ShareOptionsBox({ setIsDisplayShareOptionsBox, sharingName, sharingURL }) {
 
     const { i18n, t } = useTranslation();
 
@@ -21,25 +21,25 @@ export default function ShareOptionsBox({ setIsDisplayShareOptionsBox }) {
         <div className="share-options-box popup-box">
             <div className="share-icons-box content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
                 <GrFormClose className="close-share-options-box-icon close-popup-box-icon" onClick={() => setIsDisplayShareOptionsBox(false)} />
-                <h2 className="mb-3 pb-3 border-bottom border-white">{t("Share Your Favorite Product With Your Friends")}</h2>
+                <h2 className="mb-3 pb-3 border-bottom border-white">{t(`Share Your Favorite ${sharingName} With Your Friends`)}</h2>
                 <div className="row">
                     <div className="col-md-3">
-                        <WhatsappShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                        <WhatsappShareButton url={sharingURL} title="تحقق من هذا المنتج">
                             <WhatsappIcon size={45} round />
                         </WhatsappShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                        <FacebookShareButton url={sharingURL} title="تحقق من هذا المنتج">
                             <FacebookIcon size={45} round />
                         </FacebookShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookMessengerShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                        <FacebookMessengerShareButton url={sharingURL} title="تحقق من هذا المنتج">
                             <FacebookMessengerIcon size={45} round />
                         </FacebookMessengerShareButton>
                     </div>
                     <div className="col-md-3">
-                        <TelegramShareButton url={"https://ubuyblues.com"} title="تحقق من هذا المنتج">
+                        <TelegramShareButton url={sharingURL} title="تحقق من هذا المنتج">
                             <TelegramIcon size={45} round />
                         </TelegramShareButton>
                     </div>
