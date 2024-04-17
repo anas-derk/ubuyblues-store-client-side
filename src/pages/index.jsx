@@ -483,7 +483,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         </form>
                                     </div>
                                 </div>
-                                <div className="row products-box pt-4 pb-4">
+                                <div className="row products-box section-data-box pt-4 pb-4">
                                     {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                             <ProductCard
@@ -547,7 +547,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Stores Section */}
                             {appearedSections.includes("stores") && allBrands.length > 0 && <section className="stores mb-5">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
-                                <div className="row stores-box pt-4 pb-4">
+                                <div className="row stores-box section-data-box pt-4 pb-4">
                                     {allStoresInsideThePage.length > 0 ? allStoresInsideThePage.map((store) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={store._id}>
                                             <StoreCard

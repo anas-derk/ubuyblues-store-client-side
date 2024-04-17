@@ -578,6 +578,10 @@ textarea{
     }
 }
 
+.section-data-box{
+    row-gap: 30px;
+}
+
 @keyframes rotation {
     0% {
         transform: rotate(0deg);
