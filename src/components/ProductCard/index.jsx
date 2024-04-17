@@ -242,11 +242,11 @@ export default function ProductCard({
                         <>
                             {isFavoriteProductForUser ? <BsFillSuitHeartFill
                                 className="product-managment-icon managment-icon"
-                                onClick={() => deleteProductFromFavoriteUserProducts(product._id)}
+                                onClick={() => deleteProductFromFavoriteUserProducts(productDetails._id)}
                             /> :
                                 <BsSuitHeart
                                     className="product-managment-icon managment-icon"
-                                    onClick={() => addProductToFavoriteUserProducts(product._id)}
+                                    onClick={() => addProductToFavoriteUserProducts(productDetails._id)}
                                 />}
                         </>}
                     {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon managment-icon" />}
@@ -260,7 +260,7 @@ export default function ProductCard({
                         <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
                         <span>{t("Click To Go To Cart Page")}</span>
                     </Link>}
-                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(product._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
+                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(productDetails._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
                     {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn p-2 bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}
                     {errorInDeleteFromCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white" disabled>{errorInDeleteFromCart}</button>}
                     {isSuccessDeleteFromCart && <Link href="/cart" className="success-in-delete-from-cart-btn cart-btn p-2 btn btn-success text-white">
