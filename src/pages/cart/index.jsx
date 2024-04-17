@@ -93,7 +93,6 @@ export default function Cart({ countryAsProperty }) {
         }
         else {
             setIsLoadingPage(false);
-            setIsErrorMsgOnLoadingThePage(true);
         }
     }, []);
 
