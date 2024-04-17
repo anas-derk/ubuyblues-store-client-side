@@ -105,7 +105,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -136,6 +136,11 @@ export default function Home({ countryAsProperty, storeId }) {
         setIsGetCategories(false);
         setIsGetProducts(false);
         setIsGetStores(true);
+        setFilters({
+            name: "",
+            storeId: "",
+            status: "approving"
+        });
         window.onscroll = function () { handleScrollToUpAndDown(this) };
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", function () {
@@ -388,9 +393,8 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>
                             {/* End Store Details Section */}
                             {/* Start Categories Section */}
-                            <section className="categories mb-5 pb-5" id="categories">
+                            {allCategoriesInsideThePage.length > 0 ? <section className="categories mb-5 pb-5" id="categories">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
-                                {allCategoriesInsideThePage.length === 0 && !isGetCategories && <p className="alert alert-danger w-100">Sorry, Can't Find Any Categories !!</p>}
                                 {isGetCategories && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                     <span className="loader-table-data"></span>
                                 </div>}
@@ -422,7 +426,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         section="categories"
                                     />
                                 }
-                            </section>
+                            </section> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
                             {/* End Categories Section */}
                             {/* Start Last Added Products */}
                             <section className="last-added-products mb-5 pb-3" id="latest-added-products">
@@ -542,22 +546,22 @@ export default function Home({ countryAsProperty, storeId }) {
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
-                                    {totalPagesCount.forStores > 1 && !isGetStores &&
-                                        <PaginationBar
-                                            totalPagesCount={totalPagesCount.forStores}
-                                            currentPage={currentPage.forStores}
-                                            getPreviousPage={getPreviousPage}
-                                            getNextPage={getNextPage}
-                                            getSpecificPage={getSpecificPage}
-                                            paginationButtonTextColor={"#FFF"}
-                                            paginationButtonBackgroundColor={"transparent"}
-                                            activePaginationButtonColor={"#000"}
-                                            activePaginationButtonBackgroundColor={"#FFF"}
-                                            section="stores"
-                                        />}
                                 </div>
                             </section>}
                             {/* End Stores Section */}
+                            {totalPagesCount.forStores > 1 && !isGetStores &&
+                                <PaginationBar
+                                    totalPagesCount={totalPagesCount.forStores}
+                                    currentPage={currentPage.forStores}
+                                    getPreviousPage={getPreviousPage}
+                                    getNextPage={getNextPage}
+                                    getSpecificPage={getSpecificPage}
+                                    paginationButtonTextColor={"#FFF"}
+                                    paginationButtonBackgroundColor={"transparent"}
+                                    activePaginationButtonColor={"#000"}
+                                    activePaginationButtonBackgroundColor={"#FFF"}
+                                    section="stores"
+                                />}
                         </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
