@@ -9,6 +9,7 @@ import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import prices from "../../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
+import { getStoreDetails } from "../../../../public/global_functions/popular";
 
 export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
@@ -23,6 +24,8 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     const [isGetOrderInfo, setIsGetOrderInfo] = useState(true);
 
     const [orderDetails, setOrderDetails] = useState({});
+
+    const [storeDetails, setStoreDetails] = useState({});
 
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
         totalPriceBeforeDiscount: 0,
@@ -50,14 +53,16 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getOrderDetails(orderIdAsProperty)
-            .then((res) => {
-                const result = res.data;
+            .then(async (res) => {
+                let result = res.data;
                 if (!res.error) {
                     setOrderDetails(result);
                     setPricesDetailsSummary({
                         totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
                         totalDiscount: calcTotalOrderDiscount(result.order_products),
                     });
+                    result = await getStoreDetails(result.storeId);
+                    setStoreDetails(result.data);
                     setIsGetOrderInfo(false);
                 }
             })
@@ -117,8 +122,11 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                         <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
                             <h5 className="fw-bold mb-4 text-center">{t("Your Request")}</h5>
                             <div className="order-id-and-number border border-white border-2 p-4 mb-5">
-                                <h5 className="mb-4 text-center">{t("Order Id")}: {orderDetails._id}</h5>
-                                <h5 className="mb-0 text-center">{t("Order Number")}: {orderDetails.orderNumber}</h5>
+                                <h5 className="mb-4 text-center">{t("Order Id")} : {orderDetails._id}</h5>
+                                <h5 className="mb-4 text-center">{t("Order Number")} : {orderDetails.orderNumber}</h5>
+                                <h5 className="mb-4 text-center">{t("Store Id")} : {storeDetails._id}</h5>
+                                <h5 className="mb-4 text-center">{t("Store Name")} : {storeDetails.name}</h5>
+                                <h5 className="mb-0 text-center">{t("Owner Full Name")} : {storeDetails.ownerFirstName} {storeDetails.ownerLastName}</h5>
                             </div>
                             <h5 className="mb-5 text-center border border-white border-2 p-4">{t("Order Details")}</h5>
                             <div className="row total pb-3 mb-5">
@@ -183,10 +191,10 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 <FaRegSmileWink className="thanks-icon" style={{ fontSize: "70px" }} />
                             </div>
                             <h4 className="mb-4">
-                                {t("Thanks For Purchase From Ubuyblues Store")}
+                                {t("Thanks For Purchase From Store") + " : " + storeDetails.name}
                             </h4>
                             <img
-                                src={ubuybluesLogo.src}
+                                src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
                                 alt="Ubuyblues Logo"
                                 width="150"
                                 height="150"
