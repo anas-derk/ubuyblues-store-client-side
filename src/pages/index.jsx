@@ -53,9 +53,9 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
-    const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
-
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
+
+    const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
 
@@ -147,9 +147,9 @@ export default function Home({ countryAsProperty, storeId }) {
             forStores: 0,
         });
         setCurrentPage({
-            forCategories: 0,
-            forProducts: 0,
-            forStores: 0
+            forCategories: 1,
+            forProducts: 1,
+            forStores: 1
         });
         setIsGetCategories(true);
         setIsGetProducts(true);
@@ -172,7 +172,8 @@ export default function Home({ countryAsProperty, storeId }) {
                 if (appearedSectionsLength > 0) {
                     for (let i = 0; i < appearedSectionsLength; i++) {
                         if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                            setAllBrands((await getAllBrands(filtersAsString)).data);
+                            console.log(await getAllBrandsByStoreId(filtersAsString))
+                            setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
                         }
                         if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
                             const storesCount = await getStoresCount(filtersAsString);
@@ -235,9 +236,9 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const getAllBrands = async (filters) => {
+    const getAllBrandsByStoreId = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-by-store-id?${filters ? filters : ""}`);
             return res.data;
         }
         catch (err) {
@@ -555,7 +556,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}
-                            {appearedSections.includes("stores") && allBrands.length > 0 && <section className="stores mb-5">
+                            {appearedSections.includes("stores") && <section className="stores mb-5">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
                                 <div className="row stores-box section-data-box pt-4 pb-4">
                                     {allStoresInsideThePage.length > 0 ? allStoresInsideThePage.map((store) => (
