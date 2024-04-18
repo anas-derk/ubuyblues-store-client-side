@@ -412,6 +412,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         try {
             setIsWaitApproveOnPayPalOrder(true);
             const result = await createNewOrder({
+                storeId,
                 customerId: userInfo ? userInfo._id : "",
                 order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
                 checkout_status: "checkout_successful",
@@ -440,17 +441,19 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
                 },
                 order_products: allProductsData.map((product) => ({
-                    productId: product.id,
+                    productId: product._id,
                     name: product.name,
                     unit_price: product.price,
                     discount: product.discount,
-                    total_amount: product.price * product.quantity,
-                    quantity: product.quantity,
+                    total_amount: product.price * getProductQuantity(product._id),
+                    quantity: getProductQuantity(product._id),
                     image_path: product.imagePath,
                 })),
                 requestNotes,
             });
-            localStorage.removeItem("asfour-store-user-cart");
+            const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+            const orderProductsIds = allProductsData.map((product) => product._id);
+            localStorage.setItem("asfour-store-customer-cart", JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
             await router.push(`/confirmation/${result.data.orderId}?country=${countryAsProperty}`);
         }
         catch (err) {
