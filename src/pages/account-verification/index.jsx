@@ -84,6 +84,36 @@ export default function AccountVerification({ email }) {
         document.body.lang = userLanguage;
     }
 
+    const resendTheCodeToEmail = async () => {
+        try {
+            setIsWaitSendTheCode(true);
+            const result = await sendTheCodeToUserEmail();
+            setIsWaitSendTheCode(false);
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                handleTimeCounter();
+                let successMsgTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successMsgTimeout);
+                }, 2000);
+            } else {
+                setErrorMsg(result.msg);
+                let errorMsgTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorMsgTimeout);
+                }, 2000);
+            }
+        }
+        catch (err) {
+            setIsWaitSendTheCode(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
+            let errorMsgTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorMsgTimeout);
+            }, 2000);
+        }
+    }
+
     const sendTheCodeToUserEmail = async () => {
         try {
             const res = await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}`);
@@ -224,7 +254,7 @@ export default function AccountVerification({ email }) {
                                     <span className="fw-bold">{t("Didn't get your email?")} </span>
                                     {!isWaitSendTheCode && !errorMsg && <button
                                         className="btn btn-danger me-2"
-                                        onClick={sendTheCodeToUserEmail}
+                                        onClick={resendTheCodeToEmail}
                                         disabled={seconds == 0 && minutes == 0 ? false : true}
                                     >
                                         {t("Resend The Code")}
