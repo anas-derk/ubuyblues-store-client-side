@@ -13,8 +13,6 @@ export default function AccountVerification({ email }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [accountVerificationCodeCharactersList, setAccountVerificationCodeCharactersList] = useState([]);
-
     const [minutes, setMinutes] = useState(1);
 
     const [seconds, setSeconds] = useState(59);
@@ -23,7 +21,7 @@ export default function AccountVerification({ email }) {
 
     const [isWaitCheckingStatus, setIsWaitCheckingStatus] = useState(false);
 
-    const [isWaitResendTheCode, setIsWaitResendTheCode] = useState(false);
+    const [isWaitSendTheCode, setIsWaitSendTheCode] = useState(false);
 
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -39,11 +37,10 @@ export default function AccountVerification({ email }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         if (validations.isEmail(email)) {
-            setIsWaitResendTheCode(true);
+            setIsWaitSendTheCode(true);
             sendTheCodeToUserEmail()
                 .then((result) => {
-                    setAccountVerificationCode(result.data.code);
-                    setIsWaitResendTheCode(false);
+                    setIsWaitSendTheCode(false);
                     setSuccessMsg(result.msg);
                     handleTimeCounter();
                     let successMsgTimeout = setTimeout(() => {
@@ -53,7 +50,7 @@ export default function AccountVerification({ email }) {
                     setIsLoadingPage(false);
                 })
                 .catch((err) => {
-                    setIsWaitResendTheCode(false);
+                    setIsWaitSendTheCode(false);
                     const errorMsg = err.message;
                     if (errorMsg === "Request failed with status code 400") {
                         const result = err.response.data;
@@ -221,14 +218,14 @@ export default function AccountVerification({ email }) {
                                 </form>
                                 <div className="email-sent-manager-box pb-3">
                                     <span className="fw-bold">{t("Didn't get your email?")} </span>
-                                    {!isWaitResendTheCode && !errorMsg && <button
+                                    {!isWaitSendTheCode && !errorMsg && <button
                                         className="btn btn-danger me-2"
                                         onClick={sendTheCodeToUserEmail}
                                         disabled={seconds == 0 && minutes == 0 ? false : true}
                                     >
                                         {t("Resend The Code")}
                                     </button>}
-                                    {isWaitResendTheCode && <button
+                                    {isWaitSendTheCode && <button
                                         className="btn btn-danger me-2"
                                         disabled
                                     >
