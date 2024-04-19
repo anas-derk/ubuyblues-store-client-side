@@ -17,8 +17,6 @@ export default function AccountVerification({ email }) {
 
     const [seconds, setSeconds] = useState(59);
 
-    const [accountVerificationCode, setAccountVerificationCode] = useState("");
-
     const [isWaitCheckingStatus, setIsWaitCheckingStatus] = useState(false);
 
     const [isWaitSendTheCode, setIsWaitSendTheCode] = useState(false);
@@ -28,6 +26,8 @@ export default function AccountVerification({ email }) {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [errorMsgOnLoading, setErrorMsgOnLoading] = useState("");
+
+    const [accountVerificationCodeCharactersList, setAccountVerificationCodeCharactersList] = useState([]);
 
     const router = useRouter();
 
@@ -93,13 +93,12 @@ export default function AccountVerification({ email }) {
         try {
             e.preventDefault();
             setIsWaitCheckingStatus(true);
-            if (accountVerificationCodeCharactersList.join("") === accountVerificationCode) {
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}`);
-                const result = await res.data;
+            const res = await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}&code=${accountVerificationCodeCharactersList.join("")}`);
+            const result = res.data;
+            if (!result.error) {
                 localStorage.setItem("asfour-store-user-token", result.data.token);
                 router.push("/");
-            }
-            else {
+            } else {
                 let checkAccountVerificationCodeTimeout = setTimeout(() => {
                     setIsWaitCheckingStatus(false);
                     setErrorMsg("Sorry, Invalid Code !!");

@@ -186,7 +186,7 @@ export default function UserAuth() {
                     email: emailForSignup,
                     password: passwordForSignup,
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsSignupStatus(false);
                 if (result.error) {
                     setErrorMsg(result.msg);
@@ -204,6 +204,7 @@ export default function UserAuth() {
             }
         }
         catch (err) {
+            setIsSignupStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
