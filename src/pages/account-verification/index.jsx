@@ -41,13 +41,18 @@ export default function AccountVerification({ email }) {
             sendTheCodeToUserEmail()
                 .then((result) => {
                     setIsWaitSendTheCode(false);
-                    setSuccessMsg(result.msg);
-                    handleTimeCounter();
-                    let successMsgTimeout = setTimeout(() => {
-                        setSuccessMsg("");
-                        clearTimeout(successMsgTimeout);
-                    }, 2000);
-                    setIsLoadingPage(false);
+                    if (!result.error) {
+                        setSuccessMsg(result.msg);
+                        setIsLoadingPage(false);
+                        handleTimeCounter();
+                        let successMsgTimeout = setTimeout(() => {
+                            setSuccessMsg("");
+                            clearTimeout(successMsgTimeout);
+                        }, 2000);
+                    } else {
+                        setErrorMsgOnLoading(result.msg);
+                        setIsLoadingPage(false);
+                    }
                 })
                 .catch((err) => {
                     setIsWaitSendTheCode(false);
