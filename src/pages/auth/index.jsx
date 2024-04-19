@@ -54,7 +54,7 @@ export default function UserAuth() {
         const userToken = localStorage.getItem("asfour-store-user-token");
         const userLanguage = localStorage.getItem("asfour-store-language");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            validations.getUserInfo()
                 .then(async (res) => {
                     const result = res.data;
                     if (!result.error) {

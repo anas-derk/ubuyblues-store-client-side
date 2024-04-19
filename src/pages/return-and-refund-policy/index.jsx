@@ -3,18 +3,41 @@ import Header from "@/components/Header";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
+import validations from "../../../public/global_functions/validations";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function PolicesTermsAndConditions() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [token, setToken] = useState("");
 
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        setIsLoadingPage(false);
-    }, []);
+        const userToken = localStorage.getItem("asfour-store-user-token");
+        if (userToken) {
+            validations.getUserInfo()
+                .then((result) => {
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-user-token");
+                    }
+                    setIsLoadingPage(false);
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        }
+    }, []);;
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -26,8 +49,8 @@ export default function PolicesTermsAndConditions() {
             <Head>
                 <title>Ubuyblues Store - Return And Refund Policy</title>
             </Head>
-            {!isLoadingPage ? <>
-                <Header />
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+                <Header token={token} />
                 <div className="page-content text-white p-4">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Return & Refund Policy")}</h1>
@@ -68,7 +91,9 @@ export default function PolicesTermsAndConditions() {
                         </div>
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

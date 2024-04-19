@@ -151,28 +151,28 @@ function inputValuesValidation(inputs) {
     return errorsObject;
 }
 
-async function getAdminInfo(adminToken) {
+async function getAdminInfo() {
     try{
         const res = await axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
             headers: {
-                "Authorization": adminToken,
+                "Authorization": localStorage.getItem("tavlorify-store-admin-user-token"),
             },
         });
-        return await res.data;
+        return res.data;
     }
     catch(err) {
         throw err;
     }
 }
 
-async function getUserInfo(userToken) {
+async function getUserInfo() {
     try{
         const res = await axios.get(`${process.env.BASE_API_URL}/users/user-info`, {
             headers: {
-                "Authorization": userToken,
+                "Authorization": localStorage.getItem("asfour-store-user-token"),
             },
         });
-        return await res.data;
+        return res.data;
     }
     catch(err) {
         throw err;

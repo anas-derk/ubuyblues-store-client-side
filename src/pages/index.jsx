@@ -118,10 +118,12 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            validations.getUserInfo()
                 .then((result) => {
                     if (!result.error) {
                         setFavoriteProductsListForUser(result.data.favorite_products_list);
+                    } else {
+                        localStorage.removeItem("asfour-store-user-token");
                     }
                 })
                 .catch((err) => {

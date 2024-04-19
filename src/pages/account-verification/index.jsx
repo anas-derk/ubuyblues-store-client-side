@@ -34,48 +34,71 @@ export default function AccountVerification({ email }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
+        const userToken = localStorage.getItem("asfour-store-user-token");
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        if (validations.isEmail(email)) {
-            setIsWaitSendTheCode(true);
-            sendTheCodeToUserEmail()
-                .then((result) => {
-                    setIsWaitSendTheCode(false);
+        if (userToken) {
+            validations.getUserInfo()
+                .then(async (res) => {
+                    const result = res.data;
                     if (!result.error) {
-                        setSuccessMsg(result.msg);
-                        setIsLoadingPage(false);
-                        handleTimeCounter();
-                        let successMsgTimeout = setTimeout(() => {
-                            setSuccessMsg("");
-                            clearTimeout(successMsgTimeout);
-                        }, 2000);
+                        await router.push("/");
                     } else {
-                        setErrorMsgOnLoading(result.msg);
-                        setIsLoadingPage(false);
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
                     }
-                })
-                .catch((err) => {
-                    setIsWaitSendTheCode(false);
-                    const errorMsg = err.message;
-                    if (errorMsg === "Request failed with status code 400") {
-                        const result = err.response.data;
-                        if (result.data === "Sorry, The User Is Not Exist !!, Please Enter Another User Email .." || result === "Sorry, The Email For This User Has Been Verified !!") {
-                            setErrorMsgOnLoading(result);
-                        }
-                    } else if (errorMsg === "Network Error") {
-                        setErrorMsgOnLoading(errorMsg);
+                }).catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem("asfour-store-user-token");
+                        await router.push("/auth");
                     } else {
-                        setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                        let errorMsgTimeout = setTimeout(() => {
-                            setErrorMsg("");
-                            clearTimeout(errorMsgTimeout);
-                        }, 2000);
+                        setIsLoadingPage(false);
+                        setErrorMsgOnLoading("Sorry, Someting Went Wrong, Please Repeat The Process !!");
                     }
-                    setIsLoadingPage(false);
                 });
-        } else {
-            setErrorMsgOnLoading("Sorry, Invalid Email Address !!");
-            setIsLoadingPage(false);
+        }
+        else {
+            if (validations.isEmail(email)) {
+                setIsWaitSendTheCode(true);
+                sendTheCodeToUserEmail()
+                    .then((result) => {
+                        setIsWaitSendTheCode(false);
+                        if (!result.error) {
+                            setSuccessMsg(result.msg);
+                            setIsLoadingPage(false);
+                            handleTimeCounter();
+                            let successMsgTimeout = setTimeout(() => {
+                                setSuccessMsg("");
+                                clearTimeout(successMsgTimeout);
+                            }, 2000);
+                        } else {
+                            setErrorMsgOnLoading(result.msg);
+                            setIsLoadingPage(false);
+                        }
+                    })
+                    .catch((err) => {
+                        setIsWaitSendTheCode(false);
+                        const errorMsg = err.message;
+                        if (errorMsg === "Request failed with status code 400") {
+                            const result = err.response.data;
+                            if (result.data === "Sorry, The User Is Not Exist !!, Please Enter Another User Email .." || result === "Sorry, The Email For This User Has Been Verified !!") {
+                                setErrorMsgOnLoading(result);
+                            }
+                        } else if (errorMsg === "Network Error") {
+                            setErrorMsgOnLoading(errorMsg);
+                        } else {
+                            setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                            let errorMsgTimeout = setTimeout(() => {
+                                setErrorMsg("");
+                                clearTimeout(errorMsgTimeout);
+                            }, 2000);
+                        }
+                        setIsLoadingPage(false);
+                    });
+            } else {
+                setErrorMsgOnLoading("Sorry, Invalid Email Address !!");
+                setIsLoadingPage(false);
+            }
         }
     }, []);
 
