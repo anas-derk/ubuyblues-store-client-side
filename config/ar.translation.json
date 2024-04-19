@@ -17,7 +17,7 @@
     "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter.": "عذراً كلمة السر يجب أن تكون على الأقل 8 محارف ، بحيث تحتوي على الأقل رقم واحد ، حرف واحد ، بالإضافة على الأقل حرف صغير وحرف كبير .",
     "Sorry, Email Or Password Incorrect !!": "عذراً ، الإيميل أو كلمة السر غير صحيحة !!",
     "Sorry, Someting Went Wrong, Please Try Again The Process !!": "عذراً ، هناك خطأ ما حدث ، الرجاء إعادة العملية !!",
-    "Sorry, Can't Create User Because it is Exist !!!": "عذراً ، لا يمكن إنشاء الحساب لأنه موجود !!",
+    "Sorry, Can't Create User Because it is Exist !!": "عذراً ، لا يمكن إنشاء الحساب لأنه موجود !!",
     "Ok !!, Create New User Process Has Been Successfuly !!, Please Wait To Navigate To Verification Page !!": "عملية إنشاء الحساب نجحت ، الرجاء الانتظار ريثما يتم الانتقال إلى صفحة تأكيد الحساب !!",
     "Dashboard": "لوحة التحكم",
     "Orders": "الطلبات",

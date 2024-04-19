@@ -17,7 +17,7 @@
     "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter.": "Üzgünüm, Şifre en az 8 karakter uzunluğunda olmalıdır, en az bir rakam, en az bir küçük harf ve en az bir büyük harf içermelidir.",
     "Sorry, Email Or Password Incorrect !!": "Üzgünüm, E-posta veya Şifre Hatalı!!",
     "Sorry, Someting Went Wrong, Please Try Again The Process !!": "Üzgünüm, Bir Şeyler Ters Gitti, Lütfen İşlemi Tekrar Deneyin!!",
-    "Sorry, Can't Create User Because it is Exist !!!": "Üzgünüm, Kullanıcı Oluşturulamıyor Çünkü Var!!!",
+    "Sorry, Can't Create User Because it is Exist !!": "Üzgünüm, Kullanıcı Oluşturulamıyor Çünkü Var!!!",
     "Ok !!, Create New User Process Has Been Successfuly !!, Please Wait To Navigate To Verification Page !!": "Tamam!!, Yeni Kullanıcı Başarıyla Oluşturuldu!!, Lütfen Doğrulama Sayfasına Yönlendirilene Kadar Bekleyin!!",
     "Dashboard": "Gösterge Paneli",
     "Orders": "Siparişler",

@@ -17,7 +17,7 @@
     "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter.": "Entschuldigung, das Passwort muss mindestens 8 Zeichen lang sein, mit mindestens einer Zahl, mindestens einem Kleinbuchstaben und mindestens einem Großbuchstaben.",
     "Sorry, Email Or Password Incorrect !!": "Entschuldigung, E-Mail oder Passwort falsch !!",
     "Sorry, Someting Went Wrong, Please Try Again The Process !!": "Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie den Vorgang erneut !!",
-    "Sorry, Can't Create User Because it is Exist !!!": "Entschuldigung, Benutzer kann nicht erstellt werden, weil er bereits existiert !!!",
+    "Sorry, Can't Create User Because it is Exist !!": "Entschuldigung, Benutzer kann nicht erstellt werden, weil er bereits existiert !!!",
     "Ok !!, Create New User Process Has Been Successfuly !!, Please Wait To Navigate To Verification Page !!": "OK !! Die Erstellung eines neuen Benutzers war erfolgreich !! Bitte warten Sie, um zur Bestätigungsseite zu wechseln !!",
     "Dashboard": "Dashboard",
     "Orders": "Bestellungen",
