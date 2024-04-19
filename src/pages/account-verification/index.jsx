@@ -79,12 +79,7 @@ export default function AccountVerification({ email }) {
                     .catch((err) => {
                         setIsWaitSendTheCode(false);
                         const errorMsg = err.message;
-                        if (errorMsg === "Request failed with status code 400") {
-                            const result = err.response.data;
-                            if (result.data === "Sorry, The User Is Not Exist !!, Please Enter Another User Email .." || result === "Sorry, The Email For This User Has Been Verified !!") {
-                                setErrorMsgOnLoading(result);
-                            }
-                        } else if (errorMsg === "Network Error") {
+                        if (errorMsg === "Network Error") {
                             setErrorMsgOnLoading(errorMsg);
                         } else {
                             setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
