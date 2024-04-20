@@ -181,15 +181,16 @@ export default function ForgetPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password/${userId}?newPassword=${newPassword}`);
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}`);
                 const result = res.data;
+                setIsResetingPasswordStatus(false);
                 if(!result.error) {
                     setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
                     let successTimeout = setTimeout(async () => {
                         await router.push(`/auth`);
                         clearTimeout(successTimeout);
                     }, 6000);
-                } else {
+                } else {        
                     setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
