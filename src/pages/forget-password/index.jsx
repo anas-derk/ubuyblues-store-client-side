@@ -147,10 +147,6 @@ export default function ForgetPassword() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
-                        isMatch: {
-                            value: code,
-                            msg: "Sorry, This Code Is Not Valid !!",
-                        },
                     },
                 },
                 {
@@ -186,13 +182,19 @@ export default function ForgetPassword() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password/${userId}?newPassword=${newPassword}`);
-                const result = await res.data;
+                const result = res.data;
                 if(!result.error) {
                     setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
                     let successTimeout = setTimeout(async () => {
                         await router.push(`/auth`);
                         clearTimeout(successTimeout);
                     }, 6000);
+                } else {
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 5000);
                 }
             }
         }
