@@ -12,8 +12,6 @@ export default function PolicesTermsAndConditions() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
@@ -52,7 +50,7 @@ export default function PolicesTermsAndConditions() {
                 <title>Ubuyblues Store - Return And Refund Policy</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
-                <Header token={token} />
+                <Header />
                 <div className="page-content text-white p-4">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Return & Refund Policy")}</h1>
