@@ -36,6 +36,8 @@ export default function PolicesTermsAndConditions() {
                         setIsErrorMsgOnLoadingThePage(true);
                     }
                 });
+        } else {
+            setIsLoadingPage(false);
         }
     }, []);;
 
