@@ -416,5 +416,6 @@
     "Thanks For Purchase From Store": "Vielen Dank für den Kauf im Geschäft",
     "Store Id": "Geschäfts-ID",
     "Owner Full Name": "Vollständiger Name des Eigentümers",
-    "Sorry, This User Is Not Found !!": "Entschuldigung, dieser Benutzer wurde nicht gefunden !!"
+    "Sorry, This User Is Not Found !!": "Entschuldigung, dieser Benutzer wurde nicht gefunden !!",
+    "Sorry, The Email For This User Is Not Verified !!": "Entschuldigung, die E-Mail-Adresse für diesen Benutzer wurde nicht verifiziert !!"
 }

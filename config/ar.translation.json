@@ -419,5 +419,6 @@
     "Thanks For Purchase From Store": "شكراً لك للشراء من متجر",
     "Store Id": "معرّف المتجر",
     "Owner Full Name": "اسم مالك المتجر الكامل",
-    "Sorry, This User Is Not Found !!": "عذراً ، هذا المستخدم غير موجود !!"
+    "Sorry, This User Is Not Found !!": "عذراً ، هذا المستخدم غير موجود !!",
+    "Sorry, The Email For This User Is Not Verified !!": "عذراً ، هذا الإيميل للمستخدم لم يتم التحقق منه !!"
 }

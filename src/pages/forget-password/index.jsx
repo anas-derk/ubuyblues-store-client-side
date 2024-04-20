@@ -105,16 +105,21 @@ export default function ForgetPassword() {
                 if (result.error) {
                     setIsCheckingStatus(false);
                     setErrorMsg(result.msg);
-                    let errorTimeout = setTimeout(() => {
-                        setErrorMsg("");
-                        clearTimeout(errorTimeout);
-                    }, 5000);
+                    if (result.msg === "Sorry, The Email For This User Is Not Verified !!") {
+                        let errorTimeout = setTimeout(async () => {
+                            await router.push(`/account-verification?email=${email}`);
+                            clearTimeout(errorTimeout);
+                        }, 5000);
+                    }
+                    else {
+                        let errorTimeout = setTimeout(async () => {
+                            setErrorMsg("");
+                            clearTimeout(errorTimeout);
+                        }, 5000);
+                    }
                 } else {
-                    if (result.data.isVerified) {
-                        setCode(result.data.code);
-                        setUserId(result.data._id);
-                        setIsDisplayResetPasswordForm(true);
-                    } else await router.push(`/account-verification?email=${email}`);
+                    setUserId(result.data._id);
+                    setIsDisplayResetPasswordForm(true);
                 }
             }
         }
