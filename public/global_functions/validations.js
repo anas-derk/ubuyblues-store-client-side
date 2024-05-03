@@ -155,7 +155,7 @@ async function getAdminInfo() {
     try{
         const res = await axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
             headers: {
-                "Authorization": localStorage.getItem("tavlorify-store-admin-user-token"),
+                "Authorization": localStorage.getItem("asfour-store-admin-user-token"),
             },
         });
         return res.data;
