@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
 import Footer from "@/components/Footer";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -12,9 +12,8 @@ import Slider from "react-slick";
 import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import validations from "../../public/global_functions/validations";
 import PaginationBar from "@/components/PaginationBar";
-import prices from "../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../public/global_functions/prices";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import {
@@ -30,6 +29,7 @@ import {
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 import StoreCard from "@/components/StoreCard";
+import { getUserInfo } from "../../public/global_functions/validations";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -102,9 +102,9 @@ export default function Home({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetCategories && !isGetProducts) {
                 setIsLoadingPage(false);
             }
@@ -118,7 +118,7 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo()
+            getUserInfo()
                 .then((result) => {
                     if (!result.error) {
                         setFavoriteProductsListForUser(result.data.favorite_products_list);

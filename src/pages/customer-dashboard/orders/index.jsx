@@ -9,9 +9,9 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
-import validations from "../../../../public/global_functions/validations";
-import prices from "../../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import { getUserInfo } from "../../../../public/global_functions/validations";
 
 export default function CustomerOrders({ countryAsProperty }) {
 
@@ -49,9 +49,9 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isFilteringOrdersStatus) {
                 setIsLoadingPage(false);
             }
@@ -66,7 +66,7 @@ export default function CustomerOrders({ countryAsProperty }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo(userToken)
                 .then(async (result) => {
                     if (!result.error) {
                         setFilters({ ...filters, customerId: result.data._id });
@@ -115,7 +115,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     const getOrdersCount = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -125,7 +125,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);

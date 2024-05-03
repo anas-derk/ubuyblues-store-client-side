@@ -7,7 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
-import validations from "../../../../../public/global_functions/validations";
+import { getUserInfo } from "../../../../../public/global_functions/validations";
 
 export default function OrderDetails() {
 
@@ -31,7 +31,7 @@ export default function OrderDetails() {
             handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             const userToken = localStorage.getItem("asfour-store-user-token");
             if (userToken) {
-                validations.getUserInfo(userToken)
+                getUserInfo()
                     .then(async (res) => {
                         let result = res.data;
                         if (result.error) {
@@ -71,7 +71,7 @@ export default function OrderDetails() {
     const getOrderDetails = async (orderId) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);

@@ -4,12 +4,11 @@ import LoaderPage from "@/components/LoaderPage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import ubuybluesLogo from "../../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import prices from "../../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
 import { getStoreDetails } from "../../../../public/global_functions/popular";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 
 export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
@@ -36,9 +35,9 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetOrderInfo) {
                 setIsLoadingPage(false);
             }

@@ -7,8 +7,8 @@ import LoaderPage from "@/components/LoaderPage";
 import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
-import validations from "../../../../public/global_functions/validations";
 import Footer from "@/components/Footer";
+import { getUserInfo } from "../../../../public/global_functions/validations";
 
 export default function CustomerAddreses() {
 
@@ -24,7 +24,7 @@ export default function CustomerAddreses() {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo()
+            getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");

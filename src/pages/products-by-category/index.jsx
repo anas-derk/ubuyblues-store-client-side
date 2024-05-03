@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useState, useEffect } from "react";
-import validations from "../../../public/global_functions/validations";
-import prices from "../../../public/global_functions/prices";
+import { getUserInfo } from "../../../public/global_functions/validations";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getProductsCount, getAllProductsInsideThePage } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
@@ -58,9 +58,9 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetUserInfo && !isGetProducts) {
                 setIsLoadingPage(false);
             }
@@ -74,7 +74,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
     useEffect(() => {
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo()
             .then((result) => {
                 if (!result.error) {
                         setFavoriteProductsListForUser(result.data.favorite_products_list);

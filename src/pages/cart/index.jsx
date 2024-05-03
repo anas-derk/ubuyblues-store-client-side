@@ -8,10 +8,10 @@ import LoaderPage from "@/components/LoaderPage";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
-import prices from "../../../public/global_functions/prices";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
 import { getProductQuantity, calcTotalPrices } from "../../../public/global_functions/popular";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 
 export default function Cart({ countryAsProperty }) {
 
@@ -39,9 +39,9 @@ export default function Cart({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetGroupedProductsByStoreId) {
                 setIsLoadingPage(false);
             }

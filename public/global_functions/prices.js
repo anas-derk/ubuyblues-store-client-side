@@ -61,7 +61,7 @@ const getCurrencyNameByCountry = (country) => {
     }
 }
 
-export default {
+export {
     getUSDPriceAgainstCurrency,
     getCurrencyNameByCountry,
 }

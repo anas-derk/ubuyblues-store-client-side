@@ -12,8 +12,6 @@ import { FaRegStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
-import validations from "../../../../public/global_functions/validations";
-import prices from "../../../../public/global_functions/prices";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
@@ -21,6 +19,8 @@ import PaginationBar from "@/components/PaginationBar";
 import { PiShareFatLight } from "react-icons/pi";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import { getUserInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -115,9 +115,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetUserInfo && !isGetProductInfo) {
                 setIsLoadingPage(false);
             }
@@ -136,7 +136,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         });
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo()
                 .then((result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
@@ -390,7 +390,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const addNewReferal = async (e) => {

@@ -12,9 +12,9 @@ import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
-import validations from "../../../../public/global_functions/validations";
-import prices from "../../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import { getUserInfo } from "../../../../public/global_functions/validations";
 
 export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
@@ -56,9 +56,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isWaitGetFavoriteProductsStatus) {
                 setIsLoadingPage(false);
             }
@@ -73,7 +73,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         setToken(userToken);
@@ -123,7 +123,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const getFavoriteProductsCount = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products-count?${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);
@@ -133,7 +133,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/users/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return await res.data;
+            return res.data;
         }
         catch (err) {
             throw Error(err);

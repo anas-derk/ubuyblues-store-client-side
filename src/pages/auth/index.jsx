@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
-import { FaGoogle } from "react-icons/fa";
-import validations from "../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -15,6 +13,7 @@ import Link from "next/link";
 import { GoogleLogin } from '@react-oauth/google';
 import { decode } from "jsonwebtoken";
 import Footer from "@/components/Footer";
+import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function UserAuth() {
 
@@ -54,7 +53,7 @@ export default function UserAuth() {
         const userToken = localStorage.getItem("asfour-store-user-token");
         const userLanguage = localStorage.getItem("asfour-store-language");
         if (userToken) {
-            validations.getUserInfo()
+            getUserInfo()
                 .then(async (res) => {
                     const result = res.data;
                     if (!result.error) {
@@ -85,13 +84,17 @@ export default function UserAuth() {
         document.body.lang = userLanguage;
     }
 
+    const validateFormFields = (validateDetailsList) => {
+        return inputValuesValidation(validateDetailsList);
+    }
+
     const userLogin = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
             setErrorMsg("");
             setSuccessMsg("");
-            let errorsObject = validations.inputValuesValidation([
+            let errorsObject = validateFormFields([
                 {
                     name: "emailForLogin",
                     value: emailForLogin,
@@ -153,7 +156,7 @@ export default function UserAuth() {
             setErrorMsg("");
             setSuccessMsg("");
             setFormValidationErrors({});
-            let errorsObject = validations.inputValuesValidation([
+            let errorsObject = validateFormFields([
                 {
                     name: "emailForSignup",
                     value: emailForSignup,

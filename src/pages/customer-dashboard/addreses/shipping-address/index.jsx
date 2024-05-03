@@ -5,12 +5,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
-import validations from "../../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { countries, getCountryCode } from 'countries-list';
+import { countries, getCountryCode } from "countries-list";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
+import { getUserInfo, inputValuesValidation } from "../../../../../public/global_functions/validations";
 
 export default function CustomerBillingAddress() {
 
@@ -40,7 +40,7 @@ export default function CustomerBillingAddress() {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
@@ -82,7 +82,7 @@ export default function CustomerBillingAddress() {
     }
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const updateShippingAddressInfoForUser = async (e) => {

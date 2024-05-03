@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import validations from "../../../public/global_functions/validations";
+import { inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function AddYourStore() {
 
@@ -55,7 +55,7 @@ export default function AddYourStore() {
                 }
                 setIsLoadingPage(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -77,7 +77,7 @@ export default function AddYourStore() {
     }
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const createNewStore = async (e) => {

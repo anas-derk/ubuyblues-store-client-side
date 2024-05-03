@@ -3,8 +3,8 @@ import Header from "@/components/Header";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
-import validations from "../../../public/global_functions/validations";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { getUserInfo } from "../../../public/global_functions/validations";
 
 export default function PolicesTermsAndConditions() {
 
@@ -19,7 +19,7 @@ export default function PolicesTermsAndConditions() {
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo()
+            getUserInfo()
                 .then((result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-user-token");

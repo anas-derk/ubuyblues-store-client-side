@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
-import validations from "../../../public/global_functions/validations";
 import { BiSolidUser } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaCode } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
+import { inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function ForgetPassword() {
 
@@ -28,10 +28,6 @@ export default function ForgetPassword() {
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const [isDisplayResetPasswordForm, setIsDisplayResetPasswordForm] = useState(false);
-
-    const [code, setCode] = useState("");
-
-    const [userId, setUserId] = useState("");
 
     const [typedUserCode, setTypedUser] = useState(false);
 
@@ -83,7 +79,7 @@ export default function ForgetPassword() {
             setFormValidationErrors({});
             setErrorMsg("");
             setSuccessMsg("");
-            let errorsObject = validations.inputValuesValidation([
+            let errorsObject = inputValuesValidation([
                 {
                     name: "email",
                     value: email,
@@ -139,7 +135,7 @@ export default function ForgetPassword() {
             setFormValidationErrors({});
             setErrorMsg("");
             setSuccessMsg("");
-            let errorsObject = validations.inputValuesValidation([
+            let errorsObject = inputValuesValidation([
                 {
                     name: "typedUserCode",
                     value: typedUserCode,

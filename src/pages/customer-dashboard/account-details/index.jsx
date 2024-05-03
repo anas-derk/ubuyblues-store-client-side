@@ -7,10 +7,10 @@ import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import validations from "../../../../public/global_functions/validations";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
+import { getUserInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 
 export default function CustomerAccountDetails() {
 
@@ -57,7 +57,7 @@ export default function CustomerAccountDetails() {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
@@ -90,7 +90,7 @@ export default function CustomerAccountDetails() {
     }
     
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const updateUserInfo = async (e) => {

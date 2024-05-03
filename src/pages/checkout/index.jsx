@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Header from "@/components/Header";
-import validations from "../../../public/global_functions/validations";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
@@ -12,10 +11,11 @@ import { countries, getCountryCode } from 'countries-list';
 import { FaCcPaypal } from "react-icons/fa";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
-import prices from "../../../public/global_functions/prices";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
 import { getStoreDetails, getProductQuantity, calcTotalPrices } from "../../../public/global_functions/popular";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
+import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -63,9 +63,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        prices.getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(prices.getCurrencyNameByCountry(countryAsProperty));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetUserInfo) {
                 setIsLoadingPage(false);
             }
@@ -86,7 +86,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     if (result.data?.status === "approving") {
                         setStoreDetails(result.data);
                         if (userToken) {
-                            result = await validations.getUserInfo(userToken);
+                            result = await getUserInfo();
                             if (!result.error) {
                                 setUserInfo(result.data);
                             } else {
@@ -185,7 +185,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const createNewOrder = async (orderDetails) => {

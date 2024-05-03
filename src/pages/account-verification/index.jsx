@@ -5,9 +5,9 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import axios from "axios";
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
-import validations from "../../../public/global_functions/validations";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import { getUserInfo, isEmail } from "../../../public/global_functions/validations";
 
 export default function AccountVerification({ email }) {
 
@@ -38,7 +38,7 @@ export default function AccountVerification({ email }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         if (userToken) {
-            validations.getUserInfo()
+            getUserInfo()
                 .then(async (res) => {
                     const result = res.data;
                     if (!result.error) {
@@ -58,7 +58,7 @@ export default function AccountVerification({ email }) {
                 });
         }
         else {
-            if (validations.isEmail(email)) {
+            if (isEmail(email)) {
                 setIsWaitSendTheCode(true);
                 sendTheCodeToUserEmail()
                     .then((result) => {
