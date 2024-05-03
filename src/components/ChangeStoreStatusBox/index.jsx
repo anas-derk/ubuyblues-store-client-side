@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { GrFormClose } from "react-icons/gr";
 import axios from "axios";
-import validations from "../../../public/global_functions/validations";
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function ChangeStoreStatusBox({
     setIsDisplayChangeStoreStatusBox,
@@ -36,7 +36,7 @@ export default function ChangeStoreStatusBox({
     }
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const approveStoreCreate = async (storeId) => {
