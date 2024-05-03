@@ -5,7 +5,7 @@ import ubuybluesLogo from "../../../../public/images/UbuyBlues_Logo_merged_Purpl
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
-import validations from "../../../../public/global_functions/validations";
+import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -36,7 +36,7 @@ export default function AdminLogin() {
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
-            validations.getAdminInfo(adminToken)
+            getAdminInfo(adminToken)
                 .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
@@ -57,7 +57,7 @@ export default function AdminLogin() {
     }, []);
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const adminLogin = async (e) => {

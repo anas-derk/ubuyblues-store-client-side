@@ -7,7 +7,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
-import validations from "../../../../public/global_functions/validations";
+import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
 export default function UpdateAndDeleteCategories() {
@@ -47,7 +47,7 @@ export default function UpdateAndDeleteCategories() {
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
-            validations.getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
@@ -85,7 +85,7 @@ export default function UpdateAndDeleteCategories() {
     }, []);
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const getFiltersAsQuery = (filters) => {

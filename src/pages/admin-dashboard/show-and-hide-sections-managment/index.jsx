@@ -6,7 +6,7 @@ import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
-import validations from "../../../../public/global_functions/validations";
+import { getAdminInfo } from "../../../../public/global_functions/validations";
 
 export default function ShowAndHideSections() {
 
@@ -29,7 +29,7 @@ export default function ShowAndHideSections() {
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
-            validations.getAdminInfo(adminToken)
+            getAdminInfo(adminToken)
                 .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");

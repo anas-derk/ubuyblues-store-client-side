@@ -7,7 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import PaginationBar from "@/components/PaginationBar";
-import validations from "../../../../public/global_functions/validations";
+import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { getDateFormated } from "../../../../public/global_functions/popular";
 
@@ -56,7 +56,7 @@ export default function OrdersManagment() {
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
-            validations.getAdminInfo(adminToken)
+            getAdminInfo(adminToken)
                 .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");
@@ -93,7 +93,7 @@ export default function OrdersManagment() {
     }, []);
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const getFilteringString = (filters) => {

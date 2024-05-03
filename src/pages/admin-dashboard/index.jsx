@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
-import validations from "../../../public/global_functions/validations";
+import { getAdminInfo } from "../../../public/global_functions/validations";
 
 export default function AdminDashboard() {
 
@@ -20,7 +20,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const adminToken = localStorage.getItem("asfour-store-admin-user-token");
         if (adminToken) {
-            validations.getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
                         localStorage.removeItem("asfour-store-admin-user-token");

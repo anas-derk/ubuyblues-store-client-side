@@ -1,5 +1,5 @@
 import { isValidPhoneNumber }  from 'libphonenumber-js';
-import axios from 'axios';
+import axios from "axios";
 
 // تعريف دالة للتحقق من الإيميل هل صالح أم لا
 function isEmail(email) {
@@ -180,4 +180,4 @@ async function getUserInfo() {
 }
 
 // تصدير الدوال المطلوبة
-export default { isEmail, inputValuesValidation, getAdminInfo, getUserInfo };
+export { isEmail, inputValuesValidation, getAdminInfo, getUserInfo };

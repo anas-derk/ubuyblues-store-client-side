@@ -6,7 +6,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
-import validations from "../../../../../../public/global_functions/validations";
+import { getAdminInfo } from "../../../../../../public/global_functions/validations";
 import { useRouter } from "next/router";
 
 export default function ShowBilling({ orderId }) {
@@ -14,8 +14,6 @@ export default function ShowBilling({ orderId }) {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
-
-    const [adminInfo, setAdminInfo] = useState({});
 
     const [orderDetails, setOrderDetails] = useState({});
 
@@ -34,7 +32,7 @@ export default function ShowBilling({ orderId }) {
             handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             const adminToken = localStorage.getItem("asfour-store-admin-user-token");
             if (adminToken) {
-                validations.getAdminInfo(adminToken)
+                getAdminInfo(adminToken)
                     .then(async (result) => {
                         if (result.error) {
                             localStorage.removeItem("asfour-store-admin-user-token");
@@ -45,7 +43,6 @@ export default function ShowBilling({ orderId }) {
                                 localStorage.removeItem("asfour-store-admin-user-token");
                                 await router.push("/admin-dashboard/login");
                             } else {
-                                setAdminInfo(adminDetails);
                                 result = await getOrderDetails(orderId);
                                 if (!result.error) {
                                     setOrderDetails(result.data);
