@@ -75,8 +75,6 @@ export default function UpdateAndDeleteProducts() {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
-    const [isShowPeriodFieldsForProducts, setIsShowPeriodFieldsForProducts] = useState([]);
-
     const router = useRouter();
 
     const pageSize = 2;
@@ -105,7 +103,6 @@ export default function UpdateAndDeleteProducts() {
                                 let tempAllProductsInsideThePage = (await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data;
                                 setAllProductsInsideThePage(tempAllProductsInsideThePage);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
-                                setIsShowPeriodFieldsForProducts(tempAllProductsInsideThePage.map((product) => product.startDiscountPeriod && product.endDiscountPeriod ? true : false))
                             }
                             setIsLoadingPage(false);
                         }
@@ -564,12 +561,6 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
-    const changeIsShowLimitedPeriodForProduct = (productIndex, isShowLimitedPeriodForProduct) => {
-        let tempIsShowLimitedPeriodFields = isShowPeriodFieldsForProducts;
-        tempIsShowLimitedPeriodFields[productIndex] = isShowLimitedPeriodForProduct;
-        setIsShowPeriodFieldsForProducts(tempIsShowLimitedPeriodFields);
-    }
-
     const getTimeAndDateByLocalTime = (dateAndTimeAsString) => {
         const UTCDateAndTime = new Date(dateAndTimeAsString);
         const DateAndTimeByLocalTime = new Date(UTCDateAndTime.getTime() - UTCDateAndTime.getTimezoneOffset() * 60 * 1000);
@@ -854,19 +845,7 @@ export default function UpdateAndDeleteProducts() {
                                                 </p>}
                                             </section>
                                             <div className="limited-period-box border border-2 p-3 border-dark">
-                                                <div className={`form-check pb-2 ${isShowPeriodFieldsForProducts[productIndex] && "border-bottom border-dark mb-4"}`}>
-                                                    <input
-                                                        type="checkbox"
-                                                        defaultChecked={product.startDiscountPeriod && product.endDiscountPeriod}
-                                                        className="form-check-input"
-                                                        id="defaultCheck1"
-                                                        onChange={(e) => changeIsShowLimitedPeriodForProduct(productIndex, e.target.checked)}
-                                                    />
-                                                    <label className="form-check-label fw-bold" htmlFor="defaultCheck1">
-                                                        For Limited Period
-                                                    </label>
-                                                </div>
-                                                {isShowPeriodFieldsForProducts[productIndex] || (product.startDiscountPeriod && product.endDiscountPeriod) && <div className="period-box">
+                                                <div className="period-box">
                                                     <h6 className="fw-bold">Start Period</h6>
                                                     <input
                                                         type="datetime-local"
@@ -881,7 +860,7 @@ export default function UpdateAndDeleteProducts() {
                                                         onChange={(e) => changeProductData(index, "endDiscountPeriod", e.target.value)}
                                                         defaultValue={product.endDiscountPeriod ? getTimeAndDateByLocalTime(product.endDiscountPeriod) : null}
                                                     />
-                                                </div>}
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="product-image-cell">
