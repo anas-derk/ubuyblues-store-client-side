@@ -570,6 +570,12 @@ export default function UpdateAndDeleteProducts() {
         setIsShowPeriodFieldsForProducts(tempIsShowLimitedPeriodFields);
     }
 
+    const getTimeAndDateByLocalTime = (dateAndTimeAsString) => {
+        const UTCDateAndTime = new Date(dateAndTimeAsString);
+        const DateAndTimeByLocalTime = new Date(UTCDateAndTime.getTime() - UTCDateAndTime.getTimezoneOffset() * 60 * 1000);
+        return DateAndTimeByLocalTime.toISOString().substring(0, 19);
+    }
+
     return (
         <div className="update-and-delete-product admin-dashboard">
             <Head>
@@ -866,14 +872,14 @@ export default function UpdateAndDeleteProducts() {
                                                         type="datetime-local"
                                                         className="form-control mb-4 border border-dark"
                                                         onChange={(e) => changeProductData(index, "startDiscountPeriod", e.target.value)}
-                                                        defaultValue={product.startDiscountPeriod ? (new Date(product.startDiscountPeriod)).toISOString().substring(0, 19) : null}
+                                                        defaultValue={product.startDiscountPeriod ? getTimeAndDateByLocalTime(product.startDiscountPeriod) : null}
                                                     />
                                                     <h6 className="fw-bold">End Period</h6>
                                                     <input
                                                         type="datetime-local"
                                                         className="form-control border border-dark"
                                                         onChange={(e) => changeProductData(index, "endDiscountPeriod", e.target.value)}
-                                                        defaultValue={product.endDiscountPeriod ? (new Date(product.endDiscountPeriod)).toISOString().substring(0, 19) : null}
+                                                        defaultValue={product.endDiscountPeriod ? getTimeAndDateByLocalTime(product.endDiscountPeriod) : null}
                                                     />
                                                 </div>}
                                             </div>
