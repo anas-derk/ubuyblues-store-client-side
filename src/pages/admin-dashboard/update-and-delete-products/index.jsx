@@ -64,8 +64,6 @@ export default function UpdateAndDeleteProducts() {
 
     const [successNewImagesToProductGallery, setSuccessNewImagesToProductGallery] = useState(false);
 
-    const [isShowPeriodFields, setIsShowPeriodFields] = useState(false);
-
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
@@ -76,6 +74,8 @@ export default function UpdateAndDeleteProducts() {
     });
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
+
+    const [isShowPeriodFieldsForProducts, setIsShowPeriodFieldsForProducts] = useState([]);
 
     const router = useRouter();
 
@@ -102,8 +102,10 @@ export default function UpdateAndDeleteProducts() {
                             setAllCategories((await getAllCategories(getFilteringString(tempFilters))).data);
                             result = await getProductsCount(getFilteringString(tempFilters));
                             if (result.data > 0) {
-                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
+                                let tempAllProductsInsideThePage = (await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data;
+                                setAllProductsInsideThePage(tempAllProductsInsideThePage);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
+                                setIsShowPeriodFieldsForProducts(tempAllProductsInsideThePage.map((product) => product.startDiscountPeriod && product.endDiscountPeriod ? true : false))
                             }
                             setIsLoadingPage(false);
                         }
@@ -129,7 +131,6 @@ export default function UpdateAndDeleteProducts() {
     const getAllCategories = async (filters) => {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories?${filters ? filters : ""}`)
-            console.log(res.data)
             return res.data;
         }
         catch (err) {
@@ -563,6 +564,12 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
+    const changeIsShowLimitedPeriodForProduct = (productIndex, isShowLimitedPeriodForProduct) => {
+        let tempIsShowLimitedPeriodFields = isShowPeriodFieldsForProducts;
+        tempIsShowLimitedPeriodFields[productIndex] = isShowLimitedPeriodForProduct;
+        setIsShowPeriodFieldsForProducts(tempIsShowLimitedPeriodFields);
+    }
+
     return (
         <div className="update-and-delete-product admin-dashboard">
             <Head>
@@ -841,31 +848,32 @@ export default function UpdateAndDeleteProducts() {
                                                 </p>}
                                             </section>
                                             <div className="limited-period-box border border-2 p-3 border-dark">
-                                                <div className={`form-check pb-2 ${isShowPeriodFields && "border-bottom border-dark mb-4"}`}>
+                                                <div className={`form-check pb-2 ${isShowPeriodFieldsForProducts[productIndex] && "border-bottom border-dark mb-4"}`}>
                                                     <input
                                                         type="checkbox"
+                                                        defaultChecked={product.startDiscountPeriod && product.endDiscountPeriod}
                                                         className="form-check-input"
                                                         id="defaultCheck1"
-                                                        onChange={(e) => e.target.checked ? setIsShowPeriodFields(true) : setIsShowPeriodFields(false)}
+                                                        onChange={(e) => changeIsShowLimitedPeriodForProduct(productIndex, e.target.checked)}
                                                     />
                                                     <label className="form-check-label fw-bold" htmlFor="defaultCheck1">
                                                         For Limited Period
                                                     </label>
                                                 </div>
-                                                {isShowPeriodFields && <div className="period-box">
+                                                {isShowPeriodFieldsForProducts[productIndex] || (product.startDiscountPeriod && product.endDiscountPeriod) && <div className="period-box">
                                                     <h6 className="fw-bold">Start Period</h6>
                                                     <input
                                                         type="datetime-local"
                                                         className="form-control mb-4 border border-dark"
                                                         onChange={(e) => changeProductData(index, "startDiscountPeriod", e.target.value)}
-                                                        defaultValue={product.startDiscountPeriod}
+                                                        defaultValue={product.startDiscountPeriod ? (new Date(product.startDiscountPeriod)).toISOString().substring(0, 19) : null}
                                                     />
                                                     <h6 className="fw-bold">End Period</h6>
                                                     <input
                                                         type="datetime-local"
                                                         className="form-control border border-dark"
                                                         onChange={(e) => changeProductData(index, "endDiscountPeriod", e.target.value)}
-                                                        defaultValue={product.endDiscountPeriod}
+                                                        defaultValue={product.endDiscountPeriod ? (new Date(product.endDiscountPeriod)).toISOString().substring(0, 19) : null}
                                                     />
                                                 </div>}
                                             </div>
