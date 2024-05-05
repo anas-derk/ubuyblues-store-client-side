@@ -25,6 +25,8 @@ import {
     getAllCategoriesInsideThePage,
     getStoresCount,
     getAllStoresInsideThePage,
+    getFlashProductsCount,
+    getAllFlashProductsInsideThePage,
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -45,6 +47,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isGetProducts, setIsGetProducts] = useState(true);
 
+    const [isGetFlashProducts, setIsGetFlashProducts] = useState(true);
+
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [storeDetails, setStoreDetails] = useState({});
@@ -57,17 +61,21 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
+    const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
+
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
 
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [currentPage, setCurrentPage] = useState({
         forCategories: 1,
+        forFlashProducts: 1,
         forProducts: 1,
         forStores: 1,
     });
 
     const [totalPagesCount, setTotalPagesCount] = useState({
+        forFlashProducts: 0,
         forProducts: 0,
         forCategories: 0,
         forStores: 0,
@@ -105,7 +113,7 @@ export default function Home({ countryAsProperty, storeId }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isGetCategories && !isGetProducts) {
+            if (!isGetCategories && !isGetProducts && !isGetFlashProducts) {
                 setIsLoadingPage(false);
             }
         })
@@ -140,6 +148,7 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         setIsLoadingPage(true);
         setAllCategoriesInsideThePage([]);
+        setAllFlashProductsInsideThePage([]);
         setAllProductsInsideThePage([]);
         setAllBrands([]);
         setAllStoresInsideThePage([]);
@@ -150,11 +159,13 @@ export default function Home({ countryAsProperty, storeId }) {
         });
         setCurrentPage({
             forCategories: 1,
+            forFlashProducts: 1,
             forProducts: 1,
             forStores: 1
         });
         setIsGetCategories(true);
         setIsGetProducts(true);
+        setIsGetFlashProducts(true);
         setIsGetStores(true);
         const tempFilters = { ...filters, storeId };
         setFilters(tempFilters);
@@ -174,7 +185,6 @@ export default function Home({ countryAsProperty, storeId }) {
                 if (appearedSectionsLength > 0) {
                     for (let i = 0; i < appearedSectionsLength; i++) {
                         if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                            console.log(await getAllBrandsByStoreId(filtersAsString))
                             setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
                         }
                         if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
@@ -204,6 +214,13 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetCategories(false);
                     // =============================================================================
+                    result = await getFlashProductsCount(filtersAsString);
+                    if (result.data > 0) {
+                        setAllFlashProductsInsideThePage((await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data);
+                        totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
+                    }
+                    setIsGetFlashProducts(false);
+                    // =============================================================================
                     result = await getProductsCount(filtersAsString);
                     if (result.data > 0) {
                         setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data);
@@ -223,10 +240,10 @@ export default function Home({ countryAsProperty, storeId }) {
     }, [storeId]);
 
     useEffect(() => {
-        if (!isGetCategories && !isGetProducts && !isGetStores) {
+        if (!isGetCategories && !isGetFlashProducts && !isGetProducts && !isGetStores) {
             setIsLoadingPage(false);
         }
-    }, [isGetCategories, isGetProducts, isGetStores]);
+    }, [isGetCategories, isGetFlashProducts, isGetProducts, isGetStores]);
 
     const getAppearedSections = async () => {
         try {
@@ -449,6 +466,82 @@ export default function Home({ countryAsProperty, storeId }) {
                                 }
                             </section> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
                             {/* End Categories Section */}
+                            {/* Start Last Added Flash Products */}
+                            <section className="last-added-flash-products mb-5 pb-3" id="latest-added-products">
+                                <h2 className="section-name text-center mb-4 text-white">{t("Flash Products")}</h2>
+                                <div className="row filters-and-sorting-box mb-4">
+                                    <div className="col-xs-12 col-md-6">
+                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                            <div className="product-name-field-box">
+                                                <input
+                                                    type="text"
+                                                    placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                                    className={`form-control p-3 border-2`}
+                                                    onChange={(e) => {
+                                                        const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                        setFilters(tempFilters);
+                                                        searchOnProduct(e, tempFilters, sortDetails);
+                                                    }}
+                                                />
+                                                <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div className="col-xs-12 col-md-6">
+                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                            <div className="select-sort-type-box">
+                                                <select
+                                                    className="select-sort-type form-select p-3"
+                                                    onChange={(e) => {
+                                                        const sortDetailsArray = e.target.value.split(",");
+                                                        const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
+                                                        setSortDetails(tempSortDetails);
+                                                        searchOnProduct(e, filters, tempSortDetails);
+                                                    }}
+                                                >
+                                                    <option value="" hidden>{t("Sort By")}</option>
+                                                    <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
+                                                    <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                    <option value="price,-1">{t("From Highest Price To Lowest")}</option>
+                                                    <option value="price,1">{t("From Lowest Price To Highest")}</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div className="row products-box section-data-box pt-4 pb-4">
+                                    {allFlashProductsInsideThePage.length > 0 ? allFlashProductsInsideThePage.map((product) => (
+                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                            <ProductCard
+                                                productDetails={product}
+                                                setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                                                usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                currencyNameByCountry={currencyNameByCountry}
+                                                isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                                isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
+                                                setSharingName={setSharingName}
+                                                setSharingURL={setSharingURL}
+                                            />
+                                        </div>
+                                    )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
+                                    {totalPagesCount.forFlashProducts > 1 && !isGetFlashProducts &&
+                                        <PaginationBar
+                                            totalPagesCount={totalPagesCount.forFlashProducts}
+                                            currentPage={currentPage.forFlashProducts}
+                                            getPreviousPage={getPreviousPage}
+                                            getNextPage={getNextPage}
+                                            getSpecificPage={getSpecificPage}
+                                            paginationButtonTextColor={"#FFF"}
+                                            paginationButtonBackgroundColor={"transparent"}
+                                            activePaginationButtonColor={"#000"}
+                                            activePaginationButtonBackgroundColor={"#FFF"}
+                                            section="flash-products"
+                                        />}
+                                </div>
+                            </section>
+                            {/* End Last Added Flash Products */}
                             {/* Start Last Added Products */}
                             <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>

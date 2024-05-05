@@ -1,5 +1,15 @@
 import axios from "axios";
 
+const getFlashProductsCount = async (filters) => {
+    try {
+        const res = await axios.get(`${process.env.BASE_API_URL}/products/flash-products-count?${filters ? filters : ""}`);
+        return res.data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 const getProductsCount = async (filters) => {
     try {
         const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`);
@@ -11,10 +21,20 @@ const getProductsCount = async (filters) => {
     }
 }
 
+const getAllFlashProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
+    try {
+        const res = await axios.get(`${process.env.BASE_API_URL}/products/all-flash-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`);
+        return res.data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 const getAllProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
         const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`);
-        return await res.data;
+        return res.data;
     }
     catch (err) {
         throw Error(err);
@@ -145,8 +165,10 @@ const getRemainingTime = (startDateAsString, endDateAsString) => {
 }
 
 export {
+    getFlashProductsCount,
     getProductsCount,
     getAllProductsInsideThePage,
+    getAllFlashProductsInsideThePage,
     isExistProductInsideTheCart,
     getDateFormated,
     getStoreDetails,
