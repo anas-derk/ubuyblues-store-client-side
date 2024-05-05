@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
@@ -7,6 +7,8 @@ import { FaCheck, FaCartPlus } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
+import { countdown, getRemainingTime } from "../../../public/global_functions/popular";
+import { IoIosFlash } from "react-icons/io";
 
 export default function ProductCard({
     productDetails,
@@ -17,6 +19,7 @@ export default function ProductCard({
     currencyNameByCountry,
     setSharingName,
     setSharingURL,
+    isFlashProduct = false
 }) {
 
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
@@ -43,9 +46,29 @@ export default function ProductCard({
 
     const [errorInDeleteFromCart, setErrorInDeleteFromCart] = useState("");
 
+    const [remainingTimeForDiscountOffer, setRemainingTimeForDiscountOffer] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        timeDiff: 0,
+    });
+
     const { t, i18n } = useTranslation();
 
     const router = useRouter();
+
+    useEffect(() => {
+        if (isFlashProduct){
+            const startDate = new Date(productDetails.startDiscountPeriod);
+            const endDate = new Date(productDetails.endDiscountPeriod);
+            const timeDiff = endDate.getTime() - startDate.getTime();
+            setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
+            setInterval(() => {
+
+            }, []);
+        }
+    }, []);
 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
@@ -212,10 +235,40 @@ export default function ProductCard({
 
     return (
         <div className="product-card card-box">
+            {isFlashProduct && <div className="flash-descount-description bg-white text-dark p-2 text-center">
+                <IoIosFlash className="flash-icon mb-3 border border-4 border-dark" />
+                <h4 className="fw-bold mb-4 border border-4 border-danger p-2">Time Is Running Out !!</h4>
+                <div className="row">
+                    <div className="col-md-3">
+                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                            <span>{remainingTimeForDiscountOffer.days}</span>
+                            <h6 className="mb-0">Days</h6>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                            <span>{remainingTimeForDiscountOffer.hours}</span>
+                            <h6 className="mb-0">Hours</h6>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                            <span>{remainingTimeForDiscountOffer.minutes}</span>
+                            <h6 className="mb-0">Min</h6>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                            <span>{remainingTimeForDiscountOffer.seconds}</span>
+                            <h6 className="mb-0">Sec</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>}
             <div
                 className="product-managment-box managment-box"
             >
-                {productDetails.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( { ( productDetails.discount / productDetails.price * 100 ).toFixed(2) } % )</div>}
+                {productDetails.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
                 <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
                 <Link className={`product-overlay card-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
                 <div className="product-managment-buttons managment-buttons p-2">

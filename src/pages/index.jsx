@@ -523,6 +523,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
+                                                isFlashProduct={true}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
