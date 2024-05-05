@@ -166,24 +166,6 @@ const getRemainingTime = (milliSecondsCount) => {
     }
 }
 
-function countdown(startDateAsString, endDateAsString) {
-    const startDate = new Date(startDateAsString);
-    const endDate = new Date(endDateAsString);
-    let difference = endDate.getTime() - startDate.getTime();
-    console.log(difference)
-    if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        console.log(`الوقت المتبقي: ${days} أيام، ${hours} ساعات، ${minutes} دقائق، ${seconds} ثواني`);
-        difference -= 1000;
-        setTimeout(() => countdown(), 1000);
-    } else {
-        console.log("انتهى العرض.");
-    }
-}
-
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -200,5 +182,4 @@ export {
     calcTotalPrices,
     getTimeAndDateByLocalTime,
     getRemainingTime,
-    countdown
 }

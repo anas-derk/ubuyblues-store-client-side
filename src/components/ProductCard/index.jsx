@@ -62,11 +62,18 @@ export default function ProductCard({
         if (isFlashProduct){
             const startDate = new Date(productDetails.startDiscountPeriod);
             const endDate = new Date(productDetails.endDiscountPeriod);
-            const timeDiff = endDate.getTime() - startDate.getTime();
+            const endDateInMilliSeconds = endDate.getTime();
+            let timeDiff = endDateInMilliSeconds - startDate.getTime();
             setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
-            setInterval(() => {
-
-            }, []);
+            let timeOutInternval = setInterval(() => {
+                if (timeDiff > 0) {
+                    timeDiff -= 1000;
+                    setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
+                } else {
+                    console.log("aa");
+                    clearInterval(timeOutInternval);
+                }
+            }, 1000);
         }
     }, []);
 
