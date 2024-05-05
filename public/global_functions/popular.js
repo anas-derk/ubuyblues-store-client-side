@@ -127,6 +127,23 @@ const calcTotalPrices = (allProductsData) => {
     };
 }
 
+const getTimeAndDateByLocalTime = (dateAndTimeAsString) => {
+    const UTCDateAndTime = new Date(dateAndTimeAsString);
+    const DateAndTimeByLocalTime = new Date(UTCDateAndTime.getTime() - UTCDateAndTime.getTimezoneOffset() * 60 * 1000);
+    return DateAndTimeByLocalTime.toISOString().substring(0, 19);
+}
+
+const getRemainingTime = (startDateAsString, endDateAsString) => {
+    const startDate = new Date(startDateAsString);
+    const endDate = new Date(endDateAsString);
+    const difference = endDate.getTime() - startDate.getTime();
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    return `الوقت المتبقي: ${days} أيام، ${hours} ساعات، ${minutes} دقائق، ${seconds} ثواني`;
+}
+
 export {
     getProductsCount,
     getAllProductsInsideThePage,
@@ -139,4 +156,6 @@ export {
     getAllStoresInsideThePage,
     getProductQuantity,
     calcTotalPrices,
+    getTimeAndDateByLocalTime,
+    getRemainingTime
 }

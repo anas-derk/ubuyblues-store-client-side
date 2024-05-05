@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
 import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import { getProductsCount, getAllProductsInsideThePage } from "../../../../public/global_functions/popular";
+import { getProductsCount, getAllProductsInsideThePage, getTimeAndDateByLocalTime, getRemainingTime } from "../../../../public/global_functions/popular";
 
 export default function UpdateAndDeleteProducts() {
 
@@ -559,12 +559,6 @@ export default function UpdateAndDeleteProducts() {
                 clearTimeout(errorTimeout);
             }, 1500);
         }
-    }
-
-    const getTimeAndDateByLocalTime = (dateAndTimeAsString) => {
-        const UTCDateAndTime = new Date(dateAndTimeAsString);
-        const DateAndTimeByLocalTime = new Date(UTCDateAndTime.getTime() - UTCDateAndTime.getTimezoneOffset() * 60 * 1000);
-        return DateAndTimeByLocalTime.toISOString().substring(0, 19);
     }
 
     return (
