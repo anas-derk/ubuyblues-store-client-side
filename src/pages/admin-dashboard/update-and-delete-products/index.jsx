@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import PaginationBar from "@/components/PaginationBar";
 import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import { getProductsCount, getAllProductsInsideThePage, getTimeAndDateByLocalTime, getRemainingTime } from "../../../../public/global_functions/popular";
+import { getProductsCount, getAllProductsInsideThePage, getTimeAndDateByLocalTime, getDateInUTCFormat } from "../../../../public/global_functions/popular";
 
 export default function UpdateAndDeleteProducts() {
 
@@ -199,8 +199,12 @@ export default function UpdateAndDeleteProducts() {
     }
 
     const changeProductData = (productIndex, fieldName, newValue) => {
+        let tempNewValue = newValue;
+        if (fieldName === "startDiscountPeriod" || fieldName === "endDiscountPeriod") {
+            tempNewValue = getDateInUTCFormat(newValue);
+        }
         let productsDataTemp = allProductsInsideThePage;
-        productsDataTemp[productIndex][fieldName] = newValue;
+        productsDataTemp[productIndex][fieldName] = tempNewValue;
         setAllProductsInsideThePage(productsDataTemp);
     }
 

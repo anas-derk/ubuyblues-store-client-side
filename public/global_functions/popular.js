@@ -166,6 +166,13 @@ const getRemainingTime = (milliSecondsCount) => {
     }
 }
 
+const getDateInUTCFormat = (localTimeAndDateAsString) => {
+    const date = new Date(localTimeAndDateAsString);
+    const diffBetweenLocalTimeAndUTC = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() + diffBetweenLocalTimeAndUTC);
+    return date;
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -182,4 +189,5 @@ export {
     calcTotalPrices,
     getTimeAndDateByLocalTime,
     getRemainingTime,
+    getDateInUTCFormat
 }
