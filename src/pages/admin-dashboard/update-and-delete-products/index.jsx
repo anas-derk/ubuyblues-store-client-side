@@ -319,6 +319,23 @@ export default function UpdateAndDeleteProducts() {
                         },
                     },
                 },
+                {
+                    name: "discountInOfferPeriod",
+                    value: allProductsInsideThePage[productIndex].discountInOfferPeriod,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        minNumber: {
+                            value: 0,
+                            msg: "Sorry, Min Number Is: 0 !!",
+                        },
+                        maxNumber: {
+                            value: allProductsInsideThePage[productIndex].price * 0.99,
+                            msg: `Sorry, Max Number Is: ${allProductsInsideThePage[productIndex].price * 0.99} !!`,
+                        },
+                    },
+                },
             ]);
             setFormValidationErrors(errorsObject);
             setUpdatingProductIndex(productIndex);
@@ -332,6 +349,8 @@ export default function UpdateAndDeleteProducts() {
                     category: allProductsInsideThePage[productIndex].category,
                     startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
                     endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
+                    discountInOfferPeriod: allProductsInsideThePage[productIndex].discountInOfferPeriod,
+                    offerDescription: allProductsInsideThePage[productIndex].offerDescription,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem("asfour-store-admin-user-token"),
@@ -850,10 +869,36 @@ export default function UpdateAndDeleteProducts() {
                                                     <h6 className="fw-bold">End Period</h6>
                                                     <input
                                                         type="datetime-local"
-                                                        className="form-control border border-dark"
+                                                        className="form-control mb-4 border border-dark"
                                                         onChange={(e) => changeProductData(index, "endDiscountPeriod", e.target.value)}
                                                         defaultValue={product.endDiscountPeriod ? getTimeAndDateByLocalTime(product.endDiscountPeriod) : null}
                                                     />
+                                                    <section className="product-price-discount-in-offer-period mb-4">
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Enter New Discount Price"
+                                                            defaultValue={product.discountInOfferPeriod}
+                                                            className={`form-control d-block mx-auto p-2 border-2 product-price-discount-in-offer-period-field ${formValidationErrors["discount"] && index === updatingProductIndex ? "border-danger mb-3" : "mb-2"}`}
+                                                            onChange={(e) => changeProductData(index, "discountInOfferPeriod", e.target.valueAsNumber)}
+                                                        ></input>
+                                                        {formValidationErrors["discountInOfferPeriod"] && index === updatingProductIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                            <span>{formValidationErrors["discountInOfferPeriod"]}</span>
+                                                        </p>}
+                                                    </section>
+                                                    <section className="offer-description">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Enter New Offer Description"
+                                                            defaultValue={product.offerDescription}
+                                                            className={`form-control d-block mx-auto p-2 border-2 offer-description-field ${formValidationErrors["name"] && index === updatingProductIndex ? "border-danger mb-3" : "mb-2"}`}
+                                                            onChange={(e) => changeProductData(index, "offerDescription", e.target.value.trim())}
+                                                        ></input>
+                                                        {formValidationErrors["offerDescription"] && index === updatingProductIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                            <span>{formValidationErrors["offerDescription"]}</span>
+                                                        </p>}
+                                                    </section>
                                                 </div>
                                             </div>
                                         </td>
