@@ -95,7 +95,6 @@ export default function AdminLogin() {
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
-                    console.log(Object.keys(result.data).length);
                     if (Object.keys(result.data).length > 0) {
                         setBlockingDateAndReason(result.data);
                     }
@@ -161,7 +160,7 @@ export default function AdminLogin() {
                             <span className="me-2">{errMsg}</span>
                             <FiLogIn />
                         </button>}
-                        {errMsg && blockingDateAndReason && <div className="blocking-date-and-reason-box bg-white border border-danger p-3">
+                        {errMsg && Object.keys(blockingDateAndReason).length > 0 && <div className="blocking-date-and-reason-box bg-white border border-danger p-3">
                             <h6 className="blocking-date fw-bold">Blocking Date: { getDateFormated(blockingDateAndReason.blockingDate) }</h6>
                             <h6 className="blocking-reason m-0 fw-bold">Blocking Reason: { blockingDateAndReason.blockingReason }</h6>
                         </div>}
