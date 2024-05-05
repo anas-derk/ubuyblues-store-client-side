@@ -92,11 +92,12 @@ export default function AdminLogin() {
                 setIsLoginingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/admins/login?email=${email}&password=${password}`);
                 const result = res.data;
-                console.log(result.data);
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
+                console.log(result.data);
                     if (result.data) {
+                        console.log("aa");
                         setBlockingDateAndReason(result.data);
                     }
                     setTimeout(() => {
