@@ -62,6 +62,8 @@ export default function Home({ countryAsProperty, storeId }) {
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
     const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
+    
+    const [currentDate, setCurrentDate] = useState("");
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
 
@@ -216,7 +218,9 @@ export default function Home({ countryAsProperty, storeId }) {
                     // =============================================================================
                     result = await getFlashProductsCount(filtersAsString);
                     if (result.data > 0) {
-                        setAllFlashProductsInsideThePage((await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data);
+                        const result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
+                        setAllFlashProductsInsideThePage(result1.products);
+                        setCurrentDate(result1.currentDate);
                         totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
                     }
                     setIsGetFlashProducts(false);
@@ -524,6 +528,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
                                                 isFlashProduct={true}
+                                                currentDate={currentDate}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}

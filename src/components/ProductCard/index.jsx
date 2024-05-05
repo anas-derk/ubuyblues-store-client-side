@@ -19,7 +19,8 @@ export default function ProductCard({
     currencyNameByCountry,
     setSharingName,
     setSharingURL,
-    isFlashProduct = false
+    isFlashProduct = false,
+    currentDate,
 }) {
 
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
@@ -60,14 +61,15 @@ export default function ProductCard({
 
     useEffect(() => {
         if (isFlashProduct){
-            const startDate = new Date(productDetails.startDiscountPeriod);
             const endDate = new Date(productDetails.endDiscountPeriod);
+            let startDateInMilliSeconds = (new Date(currentDate)).getTime();
             const endDateInMilliSeconds = endDate.getTime();
-            let timeDiff = endDateInMilliSeconds - startDate.getTime();
+            let timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
             setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
             let timeOutInternval = setInterval(() => {
                 if (timeDiff > 0) {
-                    timeDiff -= 1000;
+                    startDateInMilliSeconds += 1000;
+                    timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
                     setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
                 } else {
                     console.log("aa");
