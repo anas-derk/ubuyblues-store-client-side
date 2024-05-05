@@ -95,9 +95,7 @@ export default function AdminLogin() {
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
-                console.log(result.data);
-                    if (result.data) {
-                        console.log("aa");
+                    if (Object.keys(result.data).length > 0) {
                         setBlockingDateAndReason(result.data);
                     }
                     setTimeout(() => {
