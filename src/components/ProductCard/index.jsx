@@ -66,7 +66,6 @@ export default function ProductCard({
             (
                 productDetails.startDiscountPeriod,
                 productDetails.endDiscountPeriod,
-                productDetails.discountInOfferPeriod,
             )
         ) {
             const endDate = new Date(productDetails.endDiscountPeriod);
@@ -86,12 +85,11 @@ export default function ProductCard({
         }
     }, []);
 
-    const isExistOfferOnProduct = (startDateAsString, endDateAsString, discountInOfferPeriod) => {
+    const isExistOfferOnProduct = (startDateAsString, endDateAsString) => {
         if (isFlashProduct) return true;
         if (
             startDateAsString &&
-            endDateAsString &&
-            discountInOfferPeriod > 0
+            endDateAsString
         ) {
             const currentDate = new Date(currentDateAsString);
             if (
@@ -276,7 +274,15 @@ export default function ProductCard({
         <div className="product-card card-box">
             {isFlashProduct && !isDisplayProduct && <div className="flash-descount-description bg-white text-dark p-4 text-center">
                 <IoIosFlash className="flash-icon mb-3 border border-4 border-dark" />
-                <h4 className="fw-bold mb-4 border border-4 border-danger p-2">Time Is Running Out !!</h4>
+                <h4 className="fw-bold mb-4 border border-4 border-danger p-2">
+                    {
+                        remainingTimeForDiscountOffer.days > 0 ||
+                            remainingTimeForDiscountOffer.hours > 0 ||
+                            remainingTimeForDiscountOffer.minutes > 0 ||
+                            remainingTimeForDiscountOffer.seconds > 0 ? "Time Is Running Out !!" : "Expired !!"
+
+                    }
+                </h4>
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
                 <div className="row mb-4">
                     <div className="col-md-3">
@@ -310,14 +316,38 @@ export default function ProductCard({
                 <div
                     className="product-managment-box managment-box"
                 >
-                    {productDetails.discount > 0 && !isExistOfferOnProduct(productDetails.startDiscountPeriod, productDetails.endDiscountPeriod, productDetails.discountInOfferPeriod) && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
-                    {isExistOfferOnProduct
-                        (
-                            productDetails.startDiscountPeriod,
-                            productDetails.endDiscountPeriod,
-                            productDetails.discountInOfferPeriod,
-                        )
+                    {
+                        productDetails.discount > 0 &&
+                        !isExistOfferOnProduct
+                            (
+                                productDetails.startDiscountPeriod,
+                                productDetails.endDiscountPeriod,
+                                productDetails.discountInOfferPeriod,
+                            )
                         &&
+                        (
+                            remainingTimeForDiscountOffer.days === 0 &&
+                            remainingTimeForDiscountOffer.hours === 0 &&
+                            remainingTimeForDiscountOffer.minutes === 0 &&
+                            remainingTimeForDiscountOffer.seconds === 0
+                        ) &&
+                        <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>
+                    }
+                    {
+                        productDetails.discountInOfferPeriod > 0 &&
+                        isExistOfferOnProduct
+                            (
+                                productDetails.startDiscountPeriod,
+                                productDetails.endDiscountPeriod,
+                                productDetails.discountInOfferPeriod,
+                            )
+                        &&
+                        (
+                            remainingTimeForDiscountOffer.days > 0 ||
+                            remainingTimeForDiscountOffer.hours > 0 ||
+                            remainingTimeForDiscountOffer.minutes > 0 ||
+                            remainingTimeForDiscountOffer.seconds > 0
+                        ) &&
                         <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discountInOfferPeriod / productDetails.price * 100).toFixed(2)} % )</div>
                     }
                     <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
@@ -365,11 +395,33 @@ export default function ProductCard({
                 <div className="product-details details-box p-3 text-center">
                     <h4 className="product-name fw-bold">{productDetails.name}</h4>
                     <h5 className="product-category">{productDetails.category}</h5>
-                    <h5 className={`product-price ${productDetails.discount != 0 ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                    {productDetails.discount > 0 && !isFlashProduct && <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                    <h5 className={`product-price ${(productDetails.discount !== 0 || productDetails.discountInOfferPeriod !== 0) ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                    {
+                        productDetails.discount > 0 &&
+                        !isExistOfferOnProduct
+                            (
+                                productDetails.startDiscountPeriod,
+                                productDetails.endDiscountPeriod,
+                                productDetails.discountInOfferPeriod,
+                            )
+                        &&
+                        (
+                            remainingTimeForDiscountOffer.days === 0 &&
+                            remainingTimeForDiscountOffer.hours === 0 &&
+                            remainingTimeForDiscountOffer.minutes === 0 &&
+                            remainingTimeForDiscountOffer.seconds === 0
+                        ) &&
+                        <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                    }
                     {
                         productDetails.discountInOfferPeriod > 0 &&
-                        isFlashProduct &&
+                        isExistOfferOnProduct
+                            (
+                                productDetails.startDiscountPeriod,
+                                productDetails.endDiscountPeriod,
+                                productDetails.discountInOfferPeriod,
+                            )
+                        &&
                         (
                             remainingTimeForDiscountOffer.days > 0 ||
                             remainingTimeForDiscountOffer.hours > 0 ||
