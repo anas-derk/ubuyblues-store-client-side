@@ -7,7 +7,7 @@ import { FaCheck, FaCartPlus } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
-import { countdown, getRemainingTime } from "../../../public/global_functions/popular";
+import { getRemainingTime } from "../../../public/global_functions/popular";
 import { IoIosFlash } from "react-icons/io";
 
 export default function ProductCard({
@@ -60,7 +60,7 @@ export default function ProductCard({
     const router = useRouter();
 
     useEffect(() => {
-        if (isFlashProduct){
+        if (isFlashProduct) {
             const endDate = new Date(productDetails.endDiscountPeriod);
             let startDateInMilliSeconds = (new Date(currentDate)).getTime();
             const endDateInMilliSeconds = endDate.getTime();
@@ -247,6 +247,7 @@ export default function ProductCard({
             {isFlashProduct && <div className="flash-descount-description bg-white text-dark p-2 text-center">
                 <IoIosFlash className="flash-icon mb-3 border border-4 border-dark" />
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">Time Is Running Out !!</h4>
+                <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
                 <div className="row">
                     <div className="col-md-3">
                         <div className="remaining-time w-100 text-white bg-dark p-3">
@@ -277,7 +278,18 @@ export default function ProductCard({
             <div
                 className="product-managment-box managment-box"
             >
-                {productDetails.discount != 0 && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
+                {productDetails.discount > 0 && !isFlashProduct && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
+                {
+                    productDetails.discountInOfferPeriod > 0 &&
+                    isFlashProduct &&
+                    (
+                        remainingTimeForDiscountOffer.days > 0 ||
+                        remainingTimeForDiscountOffer.hours > 0 ||
+                        remainingTimeForDiscountOffer.minutes > 0 ||
+                        remainingTimeForDiscountOffer.seconds > 0
+                    ) &&
+                    <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discountInOfferPeriod / productDetails.price * 100).toFixed(2)} % )</div>
+                }
                 <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
                 <Link className={`product-overlay card-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
                 <div className="product-managment-buttons managment-buttons p-2">
@@ -324,7 +336,18 @@ export default function ProductCard({
                 <h4 className="product-name fw-bold">{productDetails.name}</h4>
                 <h5 className="product-category">{productDetails.category}</h5>
                 <h5 className={`product-price ${productDetails.discount != 0 ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                {productDetails.discount != 0 && <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                {productDetails.discount > 0 && !isFlashProduct && <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                {
+                    productDetails.discountInOfferPeriod > 0 &&
+                    isFlashProduct &&
+                    (
+                        remainingTimeForDiscountOffer.days > 0 ||
+                        remainingTimeForDiscountOffer.hours > 0 ||
+                        remainingTimeForDiscountOffer.minutes > 0 ||
+                        remainingTimeForDiscountOffer.seconds > 0
+                    ) &&
+                    <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                }
             </div>
         </div>
     );
