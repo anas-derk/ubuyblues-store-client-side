@@ -199,12 +199,8 @@ export default function UpdateAndDeleteProducts() {
     }
 
     const changeProductData = (productIndex, fieldName, newValue) => {
-        let tempNewValue = newValue;
-        if (fieldName === "startDiscountPeriod" || fieldName === "endDiscountPeriod") {
-            tempNewValue = getDateInUTCFormat(newValue);
-        }
         let productsDataTemp = allProductsInsideThePage;
-        productsDataTemp[productIndex][fieldName] = tempNewValue;
+        productsDataTemp[productIndex][fieldName] = newValue;
         setAllProductsInsideThePage(productsDataTemp);
     }
 
