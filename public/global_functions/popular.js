@@ -170,7 +170,6 @@ const getDateInUTCFormat = (localTimeAndDateAsString) => {
     const date = new Date(localTimeAndDateAsString);
     const diffBetweenLocalTimeAndUTC = date.getTimezoneOffset();
     date.setMinutes(date.getMinutes() + diffBetweenLocalTimeAndUTC);
-    let utcDate = new Date(date.getTime() - (diffBetweenLocalTimeAndUTC * 60000));
     return (new Date(date.getTime() - (diffBetweenLocalTimeAndUTC * 60000))).toISOString();
 }
 
