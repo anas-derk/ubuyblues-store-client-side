@@ -23,6 +23,8 @@ export default function ProductCard({
     currentDateAsString,
 }) {
 
+    const [isDisplayProduct, setIsDisplayProduct] = useState(!isFlashProduct);
+
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
 
     const [isExistProductInsideTheCart, setIsExistProductInsideTheCart] = useState(isExistProductInsideTheCartAsProperty);
@@ -266,13 +268,17 @@ export default function ProductCard({
         setSharingURL(sharingURL);
     }
 
+    const handleShowProductDetails = () => {
+        setIsDisplayProduct(true);
+    }
+
     return (
         <div className="product-card card-box">
-            {isFlashProduct && <div className="flash-descount-description bg-white text-dark p-2 text-center">
+            {isFlashProduct && !isDisplayProduct && <div className="flash-descount-description bg-white text-dark p-2 text-center">
                 <IoIosFlash className="flash-icon mb-3 border border-4 border-dark" />
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">Time Is Running Out !!</h4>
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
-                <div className="row">
+                <div className="row mb-4">
                     <div className="col-md-3">
                         <div className="remaining-time w-100 text-white bg-dark p-3">
                             <span>{remainingTimeForDiscountOffer.days}</span>
@@ -298,79 +304,82 @@ export default function ProductCard({
                         </div>
                     </div>
                 </div>
+                <button className="btn btn-danger w-100" onClick={handleShowProductDetails}>Show Product Details</button>
             </div>}
-            <div
-                className="product-managment-box managment-box"
-            >
-                {productDetails.discount > 0 && !isExistOfferOnProduct(productDetails.startDiscountPeriod, productDetails.endDiscountPeriod, productDetails.discountInOfferPeriod) && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
-                {isExistOfferOnProduct
-                    (
-                        productDetails.startDiscountPeriod,
-                        productDetails.endDiscountPeriod,
-                        productDetails.discountInOfferPeriod,
-                    )
-                    &&
-                    <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discountInOfferPeriod / productDetails.price * 100).toFixed(2)} % )</div>
-                }
-                <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
-                <Link className={`product-overlay card-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
-                <div className="product-managment-buttons managment-buttons p-2">
-                    <PiShareFatLight
-                        className="product-managment-icon d-block mb-2"
-                        onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/${productDetails._id}`)}
-                    />
-                    {
-                        !isWaitAddProductToFavoriteUserProductsList &&
-                        !isWaitDeleteProductToFavoriteUserProductsList &&
-                        !isSuccessAddProductToFavoriteUserProductsList &&
-                        !isSuccessDeleteProductToFavoriteUserProductsList &&
-                        <>
-                            {isFavoriteProductForUser ? <BsFillSuitHeartFill
-                                className="product-managment-icon managment-icon"
-                                onClick={() => deleteProductFromFavoriteUserProducts(productDetails._id)}
-                            /> :
-                                <BsSuitHeart
+            {isDisplayProduct && <>
+                <div
+                    className="product-managment-box managment-box"
+                >
+                    {productDetails.discount > 0 && !isExistOfferOnProduct(productDetails.startDiscountPeriod, productDetails.endDiscountPeriod, productDetails.discountInOfferPeriod) && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
+                    {isExistOfferOnProduct
+                        (
+                            productDetails.startDiscountPeriod,
+                            productDetails.endDiscountPeriod,
+                            productDetails.discountInOfferPeriod,
+                        )
+                        &&
+                        <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discountInOfferPeriod / productDetails.price * 100).toFixed(2)} % )</div>
+                    }
+                    <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
+                    <Link className={`product-overlay card-overlay ${(isWaitAddProductToFavoriteUserProductsList || isSuccessAddProductToFavoriteUserProductsList) ? "displaying" : ""}`} href={`/product-details/${productDetails._id}`}></Link>
+                    <div className="product-managment-buttons managment-buttons p-2">
+                        <PiShareFatLight
+                            className="product-managment-icon d-block mb-2"
+                            onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/${productDetails._id}`)}
+                        />
+                        {
+                            !isWaitAddProductToFavoriteUserProductsList &&
+                            !isWaitDeleteProductToFavoriteUserProductsList &&
+                            !isSuccessAddProductToFavoriteUserProductsList &&
+                            !isSuccessDeleteProductToFavoriteUserProductsList &&
+                            <>
+                                {isFavoriteProductForUser ? <BsFillSuitHeartFill
                                     className="product-managment-icon managment-icon"
-                                    onClick={() => addProductToFavoriteUserProducts(productDetails._id)}
-                                />}
-                        </>}
-                    {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon managment-icon" />}
-                    {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon managment-icon" />}
+                                    onClick={() => deleteProductFromFavoriteUserProducts(productDetails._id)}
+                                /> :
+                                    <BsSuitHeart
+                                        className="product-managment-icon managment-icon"
+                                        onClick={() => addProductToFavoriteUserProducts(productDetails._id)}
+                                    />}
+                            </>}
+                        {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon managment-icon" />}
+                        {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon managment-icon" />}
+                    </div>
+                    <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
+                        {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id, productDetails.name, productDetails.price, productDetails.description, productDetails.category, productDetails.discount, productDetails.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
+                        {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2">{t("Waiting In Add To Cart")} ...</button>}
+                        {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
+                        {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn p-2 btn btn-success text-white">
+                            <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
+                            <span>{t("Click To Go To Cart Page")}</span>
+                        </Link>}
+                        {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(productDetails._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
+                        {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn p-2 bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}
+                        {errorInDeleteFromCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white" disabled>{errorInDeleteFromCart}</button>}
+                        {isSuccessDeleteFromCart && <Link href="/cart" className="success-in-delete-from-cart-btn cart-btn p-2 btn btn-success text-white">
+                            <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
+                            <span>{t("Click To Go To Cart Page")}</span>
+                        </Link>}
+                    </div>
                 </div>
-                <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
-                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id, productDetails.name, productDetails.price, productDetails.description, productDetails.category, productDetails.discount, productDetails.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
-                    {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2">{t("Waiting In Add To Cart")} ...</button>}
-                    {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
-                    {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn p-2 btn btn-success text-white">
-                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
-                        <span>{t("Click To Go To Cart Page")}</span>
-                    </Link>}
-                    {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(productDetails._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
-                    {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn p-2 bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}
-                    {errorInDeleteFromCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white" disabled>{errorInDeleteFromCart}</button>}
-                    {isSuccessDeleteFromCart && <Link href="/cart" className="success-in-delete-from-cart-btn cart-btn p-2 btn btn-success text-white">
-                        <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
-                        <span>{t("Click To Go To Cart Page")}</span>
-                    </Link>}
+                <div className="product-details details-box p-3 text-center">
+                    <h4 className="product-name fw-bold">{productDetails.name}</h4>
+                    <h5 className="product-category">{productDetails.category}</h5>
+                    <h5 className={`product-price ${productDetails.discount != 0 ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                    {productDetails.discount > 0 && !isFlashProduct && <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                    {
+                        productDetails.discountInOfferPeriod > 0 &&
+                        isFlashProduct &&
+                        (
+                            remainingTimeForDiscountOffer.days > 0 ||
+                            remainingTimeForDiscountOffer.hours > 0 ||
+                            remainingTimeForDiscountOffer.minutes > 0 ||
+                            remainingTimeForDiscountOffer.seconds > 0
+                        ) &&
+                        <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                    }
                 </div>
-            </div>
-            <div className="product-details details-box p-3 text-center">
-                <h4 className="product-name fw-bold">{productDetails.name}</h4>
-                <h5 className="product-category">{productDetails.category}</h5>
-                <h5 className={`product-price ${productDetails.discount != 0 ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                {productDetails.discount > 0 && !isFlashProduct && <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
-                {
-                    productDetails.discountInOfferPeriod > 0 &&
-                    isFlashProduct &&
-                    (
-                        remainingTimeForDiscountOffer.days > 0 ||
-                        remainingTimeForDiscountOffer.hours > 0 ||
-                        remainingTimeForDiscountOffer.minutes > 0 ||
-                        remainingTimeForDiscountOffer.seconds > 0
-                    ) &&
-                    <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
-                }
-            </div>
+            </>}
         </div>
     );
 }
