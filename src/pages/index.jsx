@@ -528,7 +528,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
                                                 isFlashProduct={true}
-                                                currentDate={currentDate}
+                                                currentDateAsString={currentDate}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
@@ -605,6 +605,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
+                                                currentDateAsString={currentDate}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}

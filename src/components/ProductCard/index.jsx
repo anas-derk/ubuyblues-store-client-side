@@ -20,7 +20,7 @@ export default function ProductCard({
     setSharingName,
     setSharingURL,
     isFlashProduct = false,
-    currentDate,
+    currentDateAsString,
 }) {
 
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
@@ -60,9 +60,15 @@ export default function ProductCard({
     const router = useRouter();
 
     useEffect(() => {
-        if (isFlashProduct) {
+        if (isExistOfferOnProduct
+            (
+                productDetails.startDiscountPeriod,
+                productDetails.endDiscountPeriod,
+                productDetails.discountInOfferPeriod,
+            )
+        ) {
             const endDate = new Date(productDetails.endDiscountPeriod);
-            let startDateInMilliSeconds = (new Date(currentDate)).getTime();
+            let startDateInMilliSeconds = (new Date(currentDateAsString)).getTime();
             const endDateInMilliSeconds = endDate.getTime();
             let timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
             setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
@@ -72,12 +78,30 @@ export default function ProductCard({
                     timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
                     setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
                 } else {
-                    console.log("aa");
                     clearInterval(timeOutInternval);
                 }
             }, 1000);
         }
     }, []);
+
+    const isExistOfferOnProduct = (startDateAsString, endDateAsString, discountInOfferPeriod) => {
+        if (isFlashProduct) return true;
+        if (
+            startDateAsString &&
+            endDateAsString &&
+            discountInOfferPeriod > 0
+        ) {
+            const currentDate = new Date(currentDateAsString);
+            if (
+                currentDate >= new Date(startDateAsString) &&
+                currentDate <= new Date(endDateAsString)
+            ) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
@@ -278,16 +302,14 @@ export default function ProductCard({
             <div
                 className="product-managment-box managment-box"
             >
-                {productDetails.discount > 0 && !isFlashProduct && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
-                {
-                    productDetails.discountInOfferPeriod > 0 &&
-                    isFlashProduct &&
+                {productDetails.discount > 0 && !isExistOfferOnProduct(productDetails.startDiscountPeriod, productDetails.endDiscountPeriod, productDetails.discountInOfferPeriod) && <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>}
+                {isExistOfferOnProduct
                     (
-                        remainingTimeForDiscountOffer.days > 0 ||
-                        remainingTimeForDiscountOffer.hours > 0 ||
-                        remainingTimeForDiscountOffer.minutes > 0 ||
-                        remainingTimeForDiscountOffer.seconds > 0
-                    ) &&
+                        productDetails.startDiscountPeriod,
+                        productDetails.endDiscountPeriod,
+                        productDetails.discountInOfferPeriod,
+                    )
+                    &&
                     <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discountInOfferPeriod / productDetails.price * 100).toFixed(2)} % )</div>
                 }
                 <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />

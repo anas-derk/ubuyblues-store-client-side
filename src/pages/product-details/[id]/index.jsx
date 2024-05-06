@@ -52,6 +52,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [productInfo, setProductInfo] = useState("");
 
+    const [currentDate, setCurrentDate] = useState("");
+
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
@@ -157,7 +159,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             .then((res) => {
                 let result = res.data;
                 setIsGetProductInfo(false);
-                setProductInfo(result);
+                setProductInfo(result.productDetails);
+                setCurrentDate(result.currentDate);
                 if (result) {
                     getProductReferalsCount(productIdAsProperty)
                         .then(async (result) => {
