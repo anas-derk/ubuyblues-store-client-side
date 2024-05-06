@@ -19,11 +19,14 @@ export default function ProductCard({
     currencyNameByCountry,
     setSharingName,
     setSharingURL,
-    isFlashProduct = false,
     currentDateAsString,
+    isFlashProductAsProperty = false,
+    isDisplayCountdown = false
 }) {
 
-    const [isDisplayProduct, setIsDisplayProduct] = useState(!isFlashProduct);
+    const [isFlashProduct, setIsFlashProduct] = useState(isFlashProductAsProperty);
+
+    const [isDisplayProduct, setIsDisplayProduct] = useState(!isDisplayCountdown);
 
     const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(isFavoriteProductForUserAsProperty);
 
@@ -54,20 +57,16 @@ export default function ProductCard({
         hours: 0,
         minutes: 0,
         seconds: 0,
-        timeDiff: 0,
     });
+
+    const [timeDiffInMilliSeconds, setTimeDiffInMilliSeconds] = useState(0);
 
     const { t, i18n } = useTranslation();
 
     const router = useRouter();
 
     useEffect(() => {
-        if (isExistOfferOnProduct
-            (
-                productDetails.startDiscountPeriod,
-                productDetails.endDiscountPeriod,
-            )
-        ) {
+        if (isFlashProduct) {
             const endDate = new Date(productDetails.endDiscountPeriod);
             let startDateInMilliSeconds = (new Date(currentDateAsString)).getTime();
             const endDateInMilliSeconds = endDate.getTime();
@@ -78,30 +77,12 @@ export default function ProductCard({
                     startDateInMilliSeconds += 1000;
                     timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
                 } else {
-                    console.log("yes");
+                    setIsFlashProduct(false);
                     clearInterval(timeOutInternval);
                 }
             }, 1000);
         }
     }, []);
-
-    const isExistOfferOnProduct = (startDateAsString, endDateAsString) => {
-        if (isFlashProduct) return true;
-        if (
-            startDateAsString &&
-            endDateAsString
-        ) {
-            const currentDate = new Date(currentDateAsString);
-            if (
-                currentDate >= new Date(startDateAsString) &&
-                currentDate <= new Date(endDateAsString)
-            ) {
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
@@ -272,7 +253,7 @@ export default function ProductCard({
 
     return (
         <div className="product-card card-box">
-            {isFlashProduct && !isDisplayProduct && <div className="flash-descount-description bg-white text-dark p-4 text-center">
+            {!isDisplayProduct && <div className="flash-descount-description bg-white text-dark p-4 text-center">
                 <IoIosFlash className="flash-icon mb-3 border border-4 border-dark" />
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">
                     {
@@ -317,34 +298,12 @@ export default function ProductCard({
                 >
                     {
                         productDetails.discount > 0 &&
-                        !isExistOfferOnProduct
-                            (
-                                productDetails.startDiscountPeriod,
-                                productDetails.endDiscountPeriod,
-                            )
-                        &&
-                        (
-                            remainingTimeForDiscountOffer.days === 0 &&
-                            remainingTimeForDiscountOffer.hours === 0 &&
-                            remainingTimeForDiscountOffer.minutes === 0 &&
-                            remainingTimeForDiscountOffer.seconds === 0
-                        ) &&
+                        !isFlashProduct &&
                         <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discount / productDetails.price * 100).toFixed(2)} % )</div>
                     }
                     {
                         productDetails.discountInOfferPeriod > 0 &&
-                        isExistOfferOnProduct
-                            (
-                                productDetails.startDiscountPeriod,
-                                productDetails.endDiscountPeriod,
-                            )
-                        &&
-                        (
-                            remainingTimeForDiscountOffer.days > 0 ||
-                            remainingTimeForDiscountOffer.hours > 0 ||
-                            remainingTimeForDiscountOffer.minutes > 0 ||
-                            remainingTimeForDiscountOffer.seconds > 0
-                        ) &&
+                        isFlashProduct &&
                         <div className="sale-box text-white p-2 text-center bg-danger">{t("Discount")} ( {(productDetails.discountInOfferPeriod / productDetails.price * 100).toFixed(2)} % )</div>
                     }
                     <img src={`${process.env.BASE_API_URL}/${productDetails.imagePath}`} alt="Product Image" />
@@ -395,34 +354,12 @@ export default function ProductCard({
                     <h5 className={`product-price ${(productDetails.discount !== 0 || productDetails.discountInOfferPeriod !== 0) ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                     {
                         productDetails.discount > 0 &&
-                        !isExistOfferOnProduct
-                            (
-                                productDetails.startDiscountPeriod,
-                                productDetails.endDiscountPeriod,
-                            )
-                        &&
-                        (
-                            remainingTimeForDiscountOffer.days === 0 &&
-                            remainingTimeForDiscountOffer.hours === 0 &&
-                            remainingTimeForDiscountOffer.minutes === 0 &&
-                            remainingTimeForDiscountOffer.seconds === 0
-                        ) &&
+                        !isFlashProduct &&
                         <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
                     }
                     {
                         productDetails.discountInOfferPeriod > 0 &&
-                        isExistOfferOnProduct
-                            (
-                                productDetails.startDiscountPeriod,
-                                productDetails.endDiscountPeriod,
-                            )
-                        &&
-                        (
-                            remainingTimeForDiscountOffer.days > 0 ||
-                            remainingTimeForDiscountOffer.hours > 0 ||
-                            remainingTimeForDiscountOffer.minutes > 0 ||
-                            remainingTimeForDiscountOffer.seconds > 0
-                        ) &&
+                        isFlashProduct &&
                         <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
                     }
                 </div>

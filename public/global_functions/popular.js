@@ -173,6 +173,23 @@ const getDateInUTCFormat = (localTimeAndDateAsString) => {
     return (new Date(date.getTime() - (diffBetweenLocalTimeAndUTC * 60000))).toISOString();
 }
 
+const isExistOfferOnProduct = (currentDateAsString, startDateAsString, endDateAsString) => {
+    if (
+        startDateAsString &&
+        endDateAsString
+    ) {
+        const currentDate = new Date(currentDateAsString);
+        if (
+            currentDate >= new Date(startDateAsString) &&
+            currentDate <= new Date(endDateAsString)
+        ) {
+            return true;
+        }
+        return false;
+    }
+    return false;
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -189,5 +206,6 @@ export {
     calcTotalPrices,
     getTimeAndDateByLocalTime,
     getRemainingTime,
-    getDateInUTCFormat
+    getDateInUTCFormat,
+    isExistOfferOnProduct
 }

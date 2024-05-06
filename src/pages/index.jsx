@@ -27,6 +27,7 @@ import {
     getAllStoresInsideThePage,
     getFlashProductsCount,
     getAllFlashProductsInsideThePage,
+    isExistOfferOnProduct
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -488,7 +489,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     }}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                    <FaSearch className="icon" onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
                                                 </div>
                                             </div>
                                         </form>
@@ -527,8 +528,9 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
-                                                isFlashProduct={true}
                                                 currentDateAsString={currentDate}
+                                                isFlashProductAsProperty={true}
+                                                isDisplayCountdown={true}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
@@ -606,6 +608,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
                                                 currentDateAsString={currentDate}
+                                                isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
                                             />
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
