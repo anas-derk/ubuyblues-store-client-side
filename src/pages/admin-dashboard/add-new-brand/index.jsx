@@ -7,7 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import { getAdminInfo } from "../../../../public/global_functions/validations";
+import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 
 export default function AddNewBrand() {
 
@@ -67,7 +67,7 @@ export default function AddNewBrand() {
     }, []);
 
     const validateFormFields = (validateDetailsList) => {
-        return validations.inputValuesValidation(validateDetailsList);
+        return inputValuesValidation(validateDetailsList);
     }
 
     const addNewBrand = async (e, brandTitle) => {
