@@ -10,7 +10,7 @@ import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
-import { getProductQuantity, calcTotalPrices } from "../../../public/global_functions/popular";
+import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 
 export default function Cart({ countryAsProperty }) {
@@ -26,6 +26,8 @@ export default function Cart({ countryAsProperty }) {
     const [isGetGroupedProductsByStoreId, setIsGetGroupedProductsByStoreId] = useState(true);
 
     const [allProductsData, setAllProductsData] = useState([]);
+
+    const [currentDate, setCurrentDate] = useState("");
 
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState([{
         totalPriceBeforeDiscount: 0,
@@ -60,13 +62,14 @@ export default function Cart({ countryAsProperty }) {
             if (tempAllProductsDataInsideTheCart.length > 0) {
                 getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
                     .then((result) => {
-                        if (result.data.length > 0) {
+                        if (result.data.productByIds.length > 0) {
+                            setCurrentDate(result.data.currentDate)
                             let tempPricesDetailsSummary = [];
-                            result.data.forEach((data) => {
+                            result.data.productByIds.forEach((data) => {
                                 tempPricesDetailsSummary.push(calcTotalPrices(data.products));
                             });
                             setPricesDetailsSummary(tempPricesDetailsSummary);
-                            setAllProductsData(result.data);
+                            setAllProductsData(result.data.productByIds);
                         }
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
@@ -82,7 +85,8 @@ export default function Cart({ countryAsProperty }) {
                         });
                         setIsGetGroupedProductsByStoreId(false);
                     })
-                    .catch(() => {
+                    .catch((err) => {
+                        console.log(err)
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     });
@@ -207,8 +211,17 @@ export default function Cart({ countryAsProperty }) {
                                                                         </div>
                                                                         <div className="col-lg-8">
                                                                             <h5 className="product-name mb-3">{product.name}</h5>
-                                                                            <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
-                                                                            {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)}  {t(currencyNameByCountry)}</h6>}
+                                                                            <h6 className={`product-price ${product.discount !== 0 || product.discountInOfferPeriod !== 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            {
+                                                                                product.discount > 0 &&
+                                                                                !isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
+                                                                                <h6 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            }
+                                                                            {
+                                                                                product.discountInOfferPeriod > 0 &&
+                                                                                isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
+                                                                                <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            }
                                                                         </div>
                                                                     </div>
                                                                 </td>
