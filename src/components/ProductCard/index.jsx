@@ -72,13 +72,13 @@ export default function ProductCard({
             let startDateInMilliSeconds = (new Date(currentDateAsString)).getTime();
             const endDateInMilliSeconds = endDate.getTime();
             let timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
-            setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
             let timeOutInternval = setInterval(() => {
                 if (timeDiff > 0) {
+                    setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
                     startDateInMilliSeconds += 1000;
                     timeDiff = endDateInMilliSeconds - startDateInMilliSeconds;
-                    setRemainingTimeForDiscountOffer(getRemainingTime(timeDiff));
                 } else {
+                    console.log("yes");
                     clearInterval(timeOutInternval);
                 }
             }, 1000);
@@ -277,10 +277,9 @@ export default function ProductCard({
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">
                     {
                         remainingTimeForDiscountOffer.days > 0 ||
-                            remainingTimeForDiscountOffer.hours > 0 ||
-                            remainingTimeForDiscountOffer.minutes > 0 ||
-                            remainingTimeForDiscountOffer.seconds > 0 ? "Time Is Running Out !!" : "Expired !!"
-
+                        remainingTimeForDiscountOffer.hours > 0 ||
+                        remainingTimeForDiscountOffer.minutes > 0 ||
+                        remainingTimeForDiscountOffer.seconds > 0 ? "Time Is Running Out !!" : "Expired !!"
                     }
                 </h4>
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
@@ -322,7 +321,6 @@ export default function ProductCard({
                             (
                                 productDetails.startDiscountPeriod,
                                 productDetails.endDiscountPeriod,
-                                productDetails.discountInOfferPeriod,
                             )
                         &&
                         (
@@ -339,7 +337,6 @@ export default function ProductCard({
                             (
                                 productDetails.startDiscountPeriod,
                                 productDetails.endDiscountPeriod,
-                                productDetails.discountInOfferPeriod,
                             )
                         &&
                         (
@@ -402,7 +399,6 @@ export default function ProductCard({
                             (
                                 productDetails.startDiscountPeriod,
                                 productDetails.endDiscountPeriod,
-                                productDetails.discountInOfferPeriod,
                             )
                         &&
                         (
@@ -419,7 +415,6 @@ export default function ProductCard({
                             (
                                 productDetails.startDiscountPeriod,
                                 productDetails.endDiscountPeriod,
-                                productDetails.discountInOfferPeriod,
                             )
                         &&
                         (
