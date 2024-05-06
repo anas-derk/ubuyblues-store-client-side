@@ -274,7 +274,7 @@ export default function ProductCard({
 
     return (
         <div className="product-card card-box">
-            {isFlashProduct && !isDisplayProduct && <div className="flash-descount-description bg-white text-dark p-2 text-center">
+            {isFlashProduct && !isDisplayProduct && <div className="flash-descount-description bg-white text-dark p-4 text-center">
                 <IoIosFlash className="flash-icon mb-3 border border-4 border-dark" />
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">Time Is Running Out !!</h4>
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
