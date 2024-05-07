@@ -261,8 +261,17 @@ export default function Cart({ countryAsProperty }) {
                                                                     <td className="product-cell">
                                                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
                                                                         <h5 className="product-name mb-3">{product.name}</h5>
-                                                                        <h6 className={`product-price ${product.discount != 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
-                                                                        {product.discount != 0 && <h6 className="product-after-discount">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>}
+                                                                        <h6 className={`product-price ${(product.discount !== 0 || product.discountInOfferPeriod) ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                        {
+                                                                            product.discount > 0 &&
+                                                                            !isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
+                                                                            <h6 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                        }
+                                                                        {
+                                                                            product.discountInOfferPeriod > 0 &&
+                                                                            isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
+                                                                            <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                        }
                                                                     </td>
                                                                 </tr>
                                                                 <tr>

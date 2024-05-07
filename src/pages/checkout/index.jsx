@@ -33,6 +33,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [allProductsData, setAllProductsData] = useState([]);
 
+    const [currentDate, setCurrentDate] = useState("");
+
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
         totalPriceBeforeDiscount: 0,
         totalDiscount: 0,
@@ -131,9 +133,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
                             if (tempAllProductsDataInsideTheCart.length > 0) {
                                 result = await getProductsByIdsAnsStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
-                                if (result.data.length > 0) {
-                                    setPricesDetailsSummary(calcTotalPrices(result.data));
-                                    setAllProductsData(result.data);
+                                if (result.data.products.length > 0) {
+                                    setCurrentDate(result.data.currentDate);
+                                    setPricesDetailsSummary(calcTotalPrices(result.data.currentDate, result.data.products));
+                                    setAllProductsData(result.data.products);
                                 }
                             }
                         }
