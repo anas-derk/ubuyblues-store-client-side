@@ -21,6 +21,7 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
+import { isExistOfferOnProduct, isExistProductInsideTheCart } from "../../../../public/global_functions/popular";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -98,6 +99,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [errorAddNewReferalMsg, setErrorAddNewReferalMsg] = useState("");
 
     const [isSaveReferalWriterInfo, setIsSaveReferalWriterInfo] = useState(false);
+
+    const [sharingName, setSharingName] = useState("");
+
+    const [sharingURL, setSharingURL] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -534,7 +539,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
                 {/* Start Share Options Box */}
-                {isDisplayShareOptionsBox && <ShareOptionsBox setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox} />}
+                {isDisplayShareOptionsBox && <ShareOptionsBox
+                    setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                    sharingName={sharingName}
+                    sharingURL={sharingURL}
+                />}
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
@@ -582,7 +591,16 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 <span>{productInfo.category}</span>
                                             </h5>
                                             <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
-                                            {productInfo.discount != 0 && <h4 className="product-after-discount mb-4">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>}
+                                            {
+                                                productInfo.discount > 0 &&
+                                                !isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
+                                                <h4 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                                            }
+                                            {
+                                                productInfo.discountInOfferPeriod > 0 &&
+                                                isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
+                                                <h4 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                                            }
                                             <h5 className="product-quantity">1 {t("Product Available In Store")}</h5>
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
@@ -805,6 +823,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                                     currencyNameByCountry={currencyNameByCountry}
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                                    isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
+                                                    setSharingName={setSharingName}
+                                                    setSharingURL={setSharingURL}
+                                                    currentDateAsString={currentDate}
+                                                    isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
                                                 />
                                             </div>
                                         ))}
