@@ -125,10 +125,10 @@ const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
     return tempTotalPriceBeforeDiscount;
 }
 
-const calcTotalOrderDiscount = (allProductsData) => {
+const calcTotalOrderDiscount = (currentDate, allProductsData) => {
     let tempTotalDiscount = 0;
     allProductsData.forEach((product) => {
-        tempTotalDiscount += product.discount * getProductQuantity(product._id);
+        tempTotalDiscount += (isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) ? product.discountInOfferPeriod : product.discount) * getProductQuantity(product._id);
     });
     return tempTotalDiscount;
 }
@@ -137,9 +137,9 @@ const calcTotalOrderPriceAfterDiscount = (totalPriceBeforeDiscount, totalDiscoun
     return totalPriceBeforeDiscount - totalDiscount;
 }
 
-const calcTotalPrices = (allProductsData) => {
+const calcTotalPrices = (currentDate, allProductsData) => {
     const totalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(allProductsData);
-    const totalDiscount = calcTotalOrderDiscount(allProductsData);
+    const totalDiscount = calcTotalOrderDiscount(currentDate, allProductsData);
     return {
         totalPriceBeforeDiscount,
         totalDiscount,

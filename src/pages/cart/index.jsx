@@ -66,7 +66,7 @@ export default function Cart({ countryAsProperty }) {
                             setCurrentDate(result.data.currentDate)
                             let tempPricesDetailsSummary = [];
                             result.data.productByIds.forEach((data) => {
-                                tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+                                tempPricesDetailsSummary.push(calcTotalPrices(result.data.currentDate, data.products));
                             });
                             setPricesDetailsSummary(tempPricesDetailsSummary);
                             setAllProductsData(result.data.productByIds);
@@ -132,11 +132,11 @@ export default function Cart({ countryAsProperty }) {
                 updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
                 const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
                 let tempPricesDetailsSummary = [];
-                result.data.forEach((data) => {
-                    tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+                result.data.productByIds.forEach((data) => {
+                    tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
                 });
                 setPricesDetailsSummary(tempPricesDetailsSummary);
-                setAllProductsData(result.data);
+                setAllProductsData(result.data.productByIds);
                 break;
             }
             case "decrease-product-quantity": {
@@ -147,11 +147,11 @@ export default function Cart({ countryAsProperty }) {
                 updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
                 const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
                 let tempPricesDetailsSummary = [];
-                result.data.forEach((data) => {
-                    tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+                result.data.productByIds.forEach((data) => {
+                    tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
                 });
                 setPricesDetailsSummary(tempPricesDetailsSummary);
-                setAllProductsData(result.data);
+                setAllProductsData(result.data.productByIds);
                 break;
             }
             default: {
@@ -165,11 +165,11 @@ export default function Cart({ countryAsProperty }) {
         updateCartInLocalStorage(newProductsData);
         const result = await getProductsByIds(newProductsData.map((product) => product._id));
         let tempPricesDetailsSummary = [];
-        result.data.forEach((data) => {
-            tempPricesDetailsSummary.push(calcTotalPrices(data.products));
+        result.data.productByIds.forEach((data) => {
+            tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
         });
         setPricesDetailsSummary(tempPricesDetailsSummary);
-        setAllProductsData(result.data);
+        setAllProductsData(result.data.productByIds);
     }
 
     const updateCartInLocalStorage = (newProductsData) => {
