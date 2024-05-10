@@ -117,7 +117,11 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const getWalletProductsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/users/wallet-products-count?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/wallet/wallet-products-count?${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                }
+            });
             return res.data;
         }
         catch (err) {
@@ -127,7 +131,11 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const getAllWalletProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/users/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                }
+            });
             return res.data;
         }
         catch (err) {
