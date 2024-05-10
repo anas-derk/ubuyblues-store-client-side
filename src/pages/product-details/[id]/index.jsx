@@ -164,9 +164,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             .then((res) => {
                 let result = res.data;
                 setIsGetProductInfo(false);
-                setProductInfo(result.productDetails);
-                setCurrentDate(result.currentDate);
-                if (result) {
+                if (Object.keys(result).length > 0) {
+                    setProductInfo(result.productDetails);
+                    setCurrentDate(result.currentDate);
                     getProductReferalsCount(productIdAsProperty)
                         .then(async (result) => {
                             setAllProductReferalsCount(result.data);
@@ -196,12 +196,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             }
                             setIsGetSampleFromRelatedProductsInProduct(false);
                         })
-                        .catch((err) => {
-                            console.log(err);
+                        .catch(() => {
                             setIsLoadingPage(false);
                             setIsErrorMsgOnLoadingThePage(true);
                         });
-
+                } else {
+                    setIsGetProductReferals(false);
+                    setIsGetSampleFromRelatedProductsInProduct(false);
                 }
             })
             .catch(() => {

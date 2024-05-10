@@ -122,7 +122,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const getFavoriteProductsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/users/favorite-products-count?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                }
+            });
             return res.data;
         }
         catch (err) {
@@ -132,7 +136,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/users/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                }
+            });
             return res.data;
         }
         catch (err) {
@@ -173,9 +181,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const deleteProductFromFavoriteUserProducts = async (favoriteProductIndex) => {
         try {
             setIsDeletingFavoriteProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${allFavoriteProductsInsideThePage[favoriteProductIndex]._id}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex]._id}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem("asfour-store-user-token")
                 }
             })
             const result = await res.data;
@@ -238,14 +246,14 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                         />
                                                         <h6>{favoriteProduct.name}</h6>
                                                     </td>
-                                                    <td>{((favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                    <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
                                                         {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                         {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                         <Link
-                                                            href={`/product-details/${favoriteProduct._id}`}
+                                                            href={`/product-details/${favoriteProduct.productId}`}
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
                                                         >{t("Show Product Details")}</Link>
                                                     </td>
