@@ -132,9 +132,7 @@ export default function Home({ countryAsProperty, storeId }) {
         if (userToken) {
             getUserInfo()
                 .then((result) => {
-                    if (!result.error) {
-                        setFavoriteProductsListForUser(result.data.favorite_products_list);
-                    } else {
+                    if (result.error) {
                         localStorage.removeItem("asfour-store-user-token");
                     }
                 })
@@ -307,7 +305,7 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const isFavoriteProductForUser = (favorite_products_list, productId) => {
-        return favorite_products_list.findIndex((favorite_product) => favorite_product._id === productId) > -1 ? true : false;
+        return favorite_products_list.findIndex((favorite_product) => favorite_product.productId === productId) > -1 ? true : false;
     }
 
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
