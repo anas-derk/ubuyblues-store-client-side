@@ -48,7 +48,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         customerId: "",
     });
 
-    const pageSize = 5;
+    const pageSize = 2;
 
     const router = useRouter();
 
