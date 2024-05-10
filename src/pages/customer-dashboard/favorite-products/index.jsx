@@ -189,9 +189,16 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             const result = await res.data;
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
-            let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                setAllFavoriteProductsInsideThePage(result.data.newFavoriteProductsList);
+            let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                 setIsSuccessDeletingFavoriteProduct(false);
+                const result = await getFavoriteProductsCount();
+                if (result.data > 0) {
+                    setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(1, pageSize)).data);
+                    setTotalPagesCount(Math.ceil(result.data / pageSize));
+                } else {
+                    setAllFavoriteProductsInsideThePage([]);
+                    setTotalPagesCount(0);
+                }
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
@@ -218,7 +225,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid align-items-center pb-4">
-                        <div className="row">
+                        <div className="row align-items-center">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
