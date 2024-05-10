@@ -190,6 +190,22 @@ const isExistOfferOnProduct = (currentDateAsString, startDateAsString, endDateAs
     return false;
 }
 
+const getFavoriteProductsByProductsIdsAndUserId = async (userToken, productsIds) => {
+    try{
+        const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/favorite-products-by-products-ids-and-user-id`, {
+            productsIds
+        }, {
+            headers: {
+                Authorization: userToken,
+            }
+        });
+        return res.data;
+    }
+    catch(err) {
+        throw Error(err);
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -207,5 +223,6 @@ export {
     getTimeAndDateByLocalTime,
     getRemainingTime,
     getDateInUTCFormat,
-    isExistOfferOnProduct
+    isExistOfferOnProduct,
+    getFavoriteProductsByProductsIdsAndUserId
 }

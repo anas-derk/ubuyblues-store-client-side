@@ -27,7 +27,8 @@ import {
     getAllStoresInsideThePage,
     getFlashProductsCount,
     getAllFlashProductsInsideThePage,
-    isExistOfferOnProduct
+    isExistOfferOnProduct,
+    getFavoriteProductsByProductsIdsAndUserId
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -63,7 +64,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
     const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
-    
+
     const [currentDate, setCurrentDate] = useState("");
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
@@ -219,10 +220,15 @@ export default function Home({ countryAsProperty, storeId }) {
                     // =============================================================================
                     result = await getFlashProductsCount(filtersAsString);
                     if (result.data > 0) {
-                        const result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
+                        let result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
                         setAllFlashProductsInsideThePage(result1.products);
                         setCurrentDate(result1.currentDate);
                         totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
+                        const userToken = localStorage.getItem("asfour-store-user-token");
+                        if (userToken) {
+                            result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id));
+                            setFavoriteProductsListForUser(result1.data);
+                        }
                     }
                     setIsGetFlashProducts(false);
                     // =============================================================================
@@ -238,7 +244,8 @@ export default function Home({ countryAsProperty, storeId }) {
                     setIsGetProducts(false);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err)
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
