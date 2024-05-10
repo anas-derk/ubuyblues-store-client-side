@@ -206,6 +206,10 @@ const getFavoriteProductsByProductsIdsAndUserId = async (userToken, productsIds)
     }
 }
 
+const isFavoriteProductForUser = (favorite_products_list, productId) => {
+    return favorite_products_list.findIndex((favorite_product) => favorite_product.productId === productId) > -1 ? true : false;
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -224,5 +228,6 @@ export {
     getRemainingTime,
     getDateInUTCFormat,
     isExistOfferOnProduct,
-    getFavoriteProductsByProductsIdsAndUserId
+    getFavoriteProductsByProductsIdsAndUserId,
+    isFavoriteProductForUser
 }

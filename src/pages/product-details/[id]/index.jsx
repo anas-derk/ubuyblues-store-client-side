@@ -21,7 +21,7 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
-import { isExistOfferOnProduct, isExistProductInsideTheCart } from "../../../../public/global_functions/popular";
+import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, isFavoriteProductForUser } from "../../../../public/global_functions/popular";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -147,13 +147,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 .then((result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
-                        setFavoriteProductsListForUser(result.data.favorite_products_list);
                         setIsGetUserInfo(false);
                     }
                 })
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem("asfour-store-user-token");
+                        setIsLoadingPage(false);
                     } else {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -188,9 +188,18 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             setIsErrorMsgOnLoadingThePage(true);
                         });
                     getSampleFromRelatedProductsInProduct(productIdAsProperty)
-                        .then((result) => {
-                            setSampleFromRelatedProductsInProduct(result.data);
+                        .then(async (result) => {
+                            const relatedProducts = result.data;
+                            setSampleFromRelatedProductsInProduct(relatedProducts);
+                            if (userToken) {
+                                setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId(userToken, [productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data)
+                            }
                             setIsGetSampleFromRelatedProductsInProduct(false);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            setIsLoadingPage(false);
+                            setIsErrorMsgOnLoadingThePage(true);
                         });
 
                 }
@@ -249,13 +258,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 left: 0,
             });
         }
-    }
-
-    const isFavoriteProductForUser = (favorite_products_list, productId) => {
-        for (let i = 0; i < favorite_products_list.length; i++) {
-            if (favorite_products_list[i]._id === productId) return true;
-        }
-        return false;
     }
 
     const addProductToFavoriteUserProducts = async (productId) => {
@@ -609,7 +611,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     className={`product-managment-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`}
                                                     onClick={() => setIsDisplayShareOptionsBox(true)}
                                                 />
-                                                {userInfo && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
+                                                {Object.keys(userInfo).length > 0 && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
                                                     className="product-managment-icon"
                                                     onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
                                                 /> : <BsSuitHeart

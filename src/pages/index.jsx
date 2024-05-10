@@ -28,7 +28,8 @@ import {
     getFlashProductsCount,
     getAllFlashProductsInsideThePage,
     isExistOfferOnProduct,
-    getFavoriteProductsByProductsIdsAndUserId
+    getFavoriteProductsByProductsIdsAndUserId,
+    isFavoriteProductForUser
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -313,10 +314,6 @@ export default function Home({ countryAsProperty, storeId }) {
                 left: 0,
             });
         }
-    }
-
-    const isFavoriteProductForUser = (favorite_products_list, productId) => {
-        return favorite_products_list.findIndex((favorite_product) => favorite_product.productId === productId) > -1 ? true : false;
     }
 
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
