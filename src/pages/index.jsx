@@ -216,24 +216,36 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetCategories(false);
                     // =============================================================================
+                    const userToken = localStorage.getItem("asfour-store-user-token");
                     result = await getFlashProductsCount(filtersAsString);
+                    let tempFavoriteProductsListForUser = [];
                     if (result.data > 0) {
                         let result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
                         setAllFlashProductsInsideThePage(result1.products);
                         setCurrentDate(result1.currentDate);
                         totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
-                        const userToken = localStorage.getItem("asfour-store-user-token");
                         if (userToken) {
                             result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id));
-                            setFavoriteProductsListForUser(result1.data);
+                            tempFavoriteProductsListForUser = result1.data; 
+                            setFavoriteProductsListForUser(tempFavoriteProductsListForUser);
                         }
                     }
                     setIsGetFlashProducts(false);
                     // =============================================================================
                     result = await getProductsCount(filtersAsString);
                     if (result.data > 0) {
-                        setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data);
+                        let result1 = (await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data;
+                        setAllProductsInsideThePage(result1);
                         totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
+                        if (userToken) {
+                            result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.map((product) => product._id));
+                            result1.data.forEach((favoriteProduct) => {
+                                if (!tempFavoriteProductsListForUser.includes(favoriteProduct.productId)) {
+                                    tempFavoriteProductsListForUser.push(favoriteProduct);
+                                }
+                            });
+                            setFavoriteProductsListForUser(result1.data);
+                        }
                     }
                     setIsGetProducts(false);
                     // =============================================================================
@@ -243,7 +255,6 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             })
             .catch((err) => {
-                console.log(err)
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
