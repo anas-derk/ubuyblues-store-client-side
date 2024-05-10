@@ -59,8 +59,6 @@ export default function ProductCard({
         seconds: 0,
     });
 
-    const [timeDiffInMilliSeconds, setTimeDiffInMilliSeconds] = useState(0);
-
     const { t, i18n } = useTranslation();
 
     const router = useRouter();
@@ -87,7 +85,7 @@ export default function ProductCard({
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productId}`, undefined, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
                 headers: {
                     Authorization: localStorage.getItem("asfour-store-user-token"),
                 }
@@ -115,7 +113,7 @@ export default function ProductCard({
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
                 headers: {
                     Authorization: localStorage.getItem("asfour-store-user-token"),
                 }
