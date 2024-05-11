@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { getUserInfo } from "../../../public/global_functions/validations";
+import Footer from "@/components/Footer";
 
 export default function PolicesTermsAndConditions() {
 
@@ -91,6 +92,7 @@ export default function PolicesTermsAndConditions() {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}

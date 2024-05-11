@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { getUserInfo } from "../../../public/global_functions/validations";
+import Footer from "@/components/Footer";
 
 export default function PolicesTermsAndConditions() {
 
@@ -51,7 +52,7 @@ export default function PolicesTermsAndConditions() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white p-4">
+                <div className="page-content text-white p-4 pb-5">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Polices-Terms & Conditions")}</h1>
                         <div className="content">
@@ -210,6 +211,7 @@ export default function PolicesTermsAndConditions() {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
