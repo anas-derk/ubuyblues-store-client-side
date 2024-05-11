@@ -163,13 +163,22 @@ export default function Cart({ countryAsProperty }) {
     const deleteProduct = async (productId) => {
         const newProductsData = JSON.parse(localStorage.getItem("asfour-store-customer-cart")).filter((product) => product._id !== productId);
         updateCartInLocalStorage(newProductsData);
-        const result = await getProductsByIds(newProductsData.map((product) => product._id));
-        let tempPricesDetailsSummary = [];
-        result.data.productByIds.forEach((data) => {
-            tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
-        });
-        setPricesDetailsSummary(tempPricesDetailsSummary);
-        setAllProductsData(result.data.productByIds);
+        if (newProductsData.length > 0) {
+            const result = await getProductsByIds(newProductsData.map((product) => product._id));
+            let tempPricesDetailsSummary = [];
+            result.data.productByIds.forEach((data) => {
+                tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
+            });
+            setPricesDetailsSummary(tempPricesDetailsSummary);
+            setAllProductsData(result.data.productByIds);
+        } else {
+            setPricesDetailsSummary([{
+                totalPriceBeforeDiscount: 0,
+                totalDiscount: 0,
+                totalPriceAfterDiscount: 0,
+            }]);
+            setAllProductsData([]);
+        }
     }
 
     const updateCartInLocalStorage = (newProductsData) => {
