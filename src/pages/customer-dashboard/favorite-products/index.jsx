@@ -15,6 +15,7 @@ import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo } from "../../../../public/global_functions/validations";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
@@ -308,10 +309,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                         ))}
                                     </div>}
                                 </section>}
-                                {allFavoriteProductsInsideThePage.length === 0 && !isWaitGetFavoriteProductsStatus && <section className="not-found-any-favorite-products-for-user text-center">
-                                    <PiSmileySad className="sorry-icon mb-5" />
-                                    <h1 className="h4">{t("Sorry, Can't Find Any Favorite Products For You !!")}</h1>
-                                </section>}
+                                {allFavoriteProductsInsideThePage.length === 0 && !isWaitGetFavoriteProductsStatus && <NotFoundError errorMsg={t("Sorry, Can't Find Any Favorite Products For You !!")} />}
                                 {isWaitGetFavoriteProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                     <span className="loader-table-data"></span>
                                 </div>}

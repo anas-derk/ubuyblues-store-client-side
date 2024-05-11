@@ -12,6 +12,7 @@ import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo } from "../../../../public/global_functions/validations";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function CustomerOrders({ countryAsProperty }) {
 
@@ -210,7 +211,7 @@ export default function CustomerOrders({ countryAsProperty }) {
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content">
-                    <div className="container-fluid">
+                    <div className="container-fluid pb-4">
                         <div className="row align-items-center">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
@@ -349,7 +350,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                             ))}
                                         </div>}
                                     </section>}
-                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && !errMsg && <p className="alert alert-danger">{t("Sorry, Can't Find Any Orders")} !!</p>}
+                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && !errMsg && <NotFoundError errorMsg={t("Sorry, Can't Find Any Orders")} />}
                                     {errMsg && <p className="alert alert-danger">{t(errMsg)}</p>}
                                     {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
                                         <span className="loader-table-data"></span>
