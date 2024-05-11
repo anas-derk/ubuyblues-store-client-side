@@ -302,7 +302,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                                 <Link
                                                                     href={`/product-details/${walletProduct.productId}`}
                                                                     className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
-                                                                >{t("Show Product Details")}</Link>
+                                                                >{t("Show Details")}</Link>
                                                             </td>
                                                         </tr>
                                                     </tbody>
