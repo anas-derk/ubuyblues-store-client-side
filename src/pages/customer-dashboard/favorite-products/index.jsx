@@ -186,7 +186,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                     Authorization: localStorage.getItem("asfour-store-user-token")
                 }
             })
-            const result = await res.data;
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {

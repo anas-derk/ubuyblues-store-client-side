@@ -181,22 +181,27 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const deleteProductFromUserProductsWallet = async (walletProductIndex) => {
         try {
             setIsDeletingWalletProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/wallet-product?productId=${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
                 headers: {
                     Authorization: token,
                 }
             })
-            const result = await res.data;
             setIsDeletingWalletProduct(false);
             setIsSuccessDeletingWalletProduct(true);
-            let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                setAllWalletProductsInsideThePage(result.data.newProductsWallet);
+            let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                 setIsSuccessDeletingWalletProduct(false);
+                const result = await getWalletProductsCount();
+                if (result.data > 0) {
+                    setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize)).data);
+                    setTotalPagesCount(Math.ceil(result.data / pageSize));
+                } else {
+                    setAllWalletProductsInsideThePage([]);
+                    setTotalPagesCount(0);
+                }
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
         catch (err) {
-            console.log(err);
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 await router.push("/auth");
                 return;
