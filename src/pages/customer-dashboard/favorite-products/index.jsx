@@ -26,13 +26,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
-    const [token, setToken] = useState(false);
-
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
 
-    const [isWaitGetFavoriteProductsStatus, setIsWaitGetFavoriteProductsStatus] = useState(false);
+    const [isWaitGetFavoriteProductsStatus, setIsWaitGetFavoriteProductsStatus] = useState(true);
 
     const [isDeletingFavoriteProduct, setIsDeletingFavoriteProduct] = useState(false);
 
@@ -76,7 +74,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
-                        setToken(userToken);
                         setFilters({ ...filters, customerId: result.data._id });
                         const result2 = await getFavoriteProductsCount(`customerId=${result.data._id}`);
                         if (result2.data > 0) {
