@@ -224,7 +224,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid  align-items-center pb-4">
-                        <div className="row">
+                        <div className="row align-items-center">
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
