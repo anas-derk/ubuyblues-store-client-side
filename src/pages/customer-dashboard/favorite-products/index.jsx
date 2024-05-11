@@ -181,7 +181,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const deleteProductFromFavoriteUserProducts = async (favoriteProductIndex) => {
         try {
             setIsDeletingFavoriteProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex]._id}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}`, {
                 headers: {
                     Authorization: localStorage.getItem("asfour-store-user-token")
                 }
