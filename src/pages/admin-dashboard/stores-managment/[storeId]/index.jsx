@@ -247,7 +247,7 @@ export default function StoreDetails({ storeId }) {
                 {/* Start Content Section */}
                 <section className="page-content text-center pt-4 pb-4">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Store Details Page</h1>
+                        <h1 className="welcome-msg mb-2 fw-bold mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Store Details Page</h1>
                         {storeDetails ? <div className="store-details-box p-3 data-box">
                             {windowInnerWidth > 567 ? <table className="store-details-table table-for-mobiles-and-tablets bg-white w-100">
                                 <tbody>
