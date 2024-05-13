@@ -1,1 +1,1 @@
-.admin-login{min-height:100vh}.admin-login .page-content .container{background-color:#CCC;box-shadow:1px 1px 15px #EEE;border-radius:5px}
+.admin-login{min-height:100vh}.admin-login .page-content{width:50%;margin:0 auto}@media (max-width: 767px){.admin-login .page-content{width:100%}}@media (min-width: 768px) and (max-width: 1199px){.admin-login .page-content{width:75%}}.admin-login .page-content .container{background-color:#CCC;box-shadow:1px 1px 15px #EEE;border-radius:5px}

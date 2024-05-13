@@ -120,7 +120,7 @@ export default function AdminLogin() {
             <Head>
                 <title>Ubuyblues Store - Admin Dashboard Login</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <div className="page-content text-center w-50 mx-auto">
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <div className="page-content text-center p-4">
                 <div className="container p-4">
                     <img src={ubuybluesLogo.src} alt="logo" width="200" height="200" className="mb-5" />
                     <form className="admin-login-form mb-3" onSubmit={adminLogin}>

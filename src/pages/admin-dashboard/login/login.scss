@@ -1,6 +1,14 @@
 .admin-login{
     min-height: 100vh;
     .page-content{
+        width: 50%;
+        margin: 0 auto;
+        @media (max-width: 767px) {
+            width: 100%;
+        }
+        @media (min-width: 768px) and (max-width: 1199px) {
+            width: 75%;
+        }
         .container{
             background-color: #CCC;
             box-shadow: 1px 1px 15px #EEE;
