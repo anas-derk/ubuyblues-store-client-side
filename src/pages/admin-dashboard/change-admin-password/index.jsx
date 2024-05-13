@@ -159,7 +159,7 @@ export default function ChangeBussinessEmailPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/admins/change-admin-password?websiteOwnerEmail=${websiteOwnerEmail}&websiteOwnerPassword=${websiteOwnerPassword}&newAdminPassword=${newAdminPassword}`, undefined, {
+                const res = await axios.put(`${process.env.BASE_API_URL}/admins/change-admin-password?websiteOwnerEmail=${websiteOwnerEmail}&websiteOwnerPassword=${websiteOwnerPassword}&adminEmail=${adminEmail}&newAdminPassword=${newAdminPassword}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     },
@@ -170,10 +170,11 @@ export default function ChangeBussinessEmailPassword() {
                     setSuccessMsg(result.msg);
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
-                        setEmail("");
-                        setCurrentPassword("");
-                        setNewPassword("");
-                        setConfirmNewPassword("");
+                        setWebsiteOwnerEmail("");
+                        setWebsiteOwnerPassword("");
+                        setAdminEmail("");
+                        setNewAdminPassword("");
+                        setConfirmNewAdminPassword("");
                         clearTimeout(successTimeout);
                     }, 1500);
                 } else {
