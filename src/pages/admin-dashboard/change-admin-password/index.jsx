@@ -18,19 +18,21 @@ export default function ChangeBussinessEmailPassword() {
 
     const [adminInfo, setAdminInfo] = useState({});
 
-    const [email, setEmail] = useState("");
+    const [websiteOwnerEmail, setWebsiteOwnerEmail] = useState("");
 
-    const [currentPassword, setCurrentPassword] = useState("");
+    const [websiteOwnerPassword, setWebsiteOwnerPassword] = useState("");
 
-    const [newPassword, setNewPassword] = useState("");
+    const [adminEmail, setAdminEmail] = useState("");
 
-    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [newAdminPassword, setNewAdminPassword] = useState("");
 
-    const [isVisibleCurrentPassword, setIsVisibleCurrentPassword] = useState(false);
+    const [confirmNewAdminPassword, setConfirmNewAdminPassword] = useState("");
 
-    const [isVisibleNewPassword, setIsVisibleNewPassword] = useState(false);
+    const [isVisibleWebsiteOwnerPassword, setIsVisibleWebsiteOwnerPassword] = useState(false);
+    
+    const [isVisibleNewAdminPassword, setIsVisibleNewAdminPassword] = useState(false);
 
-    const [isVisibleConfirmNewPassword, setIsVisibleConfirmNewPassword] = useState(false);
+    const [isVisibleConfirmNewAdminPassword, setIsVisibleConfirmNewAdminPassword] = useState(false);
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
 
@@ -81,13 +83,13 @@ export default function ChangeBussinessEmailPassword() {
         return inputValuesValidation(validateDetailsList);;
     }
 
-    const changeBussinessEmailPassword = async (e) => {
+    const changeAdminPassword = async (e) => {
         try {
             e.preventDefault();
             const errorsObject = validateFormFields([
                 {
-                    name: "email",
-                    value: email,
+                    name: "websiteOwnerEmail",
+                    value: websiteOwnerEmail,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -98,37 +100,58 @@ export default function ChangeBussinessEmailPassword() {
                     },
                 },
                 {
-                    name: "currentPassword",
-                    value: currentPassword,
+                    name: "websiteOwnerPassword",
+                    value: websiteOwnerPassword,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
                     }
                 },
                 {
-                    name: "newPassword",
-                    value: newPassword,
+                    name: "adminEmail",
+                    value: adminEmail,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+                {
+                    name: "newAdminPassword",
+                    value: newAdminPassword,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
                         isMatch: {
-                            value: confirmNewPassword,
+                            value: confirmNewAdminPassword,
                             msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
                         },
                     }
                 },
                 {
-                    name: "confirmNewPassword",
-                    value: confirmNewPassword,
+                    name: "confirmNewAdminPassword",
+                    value: confirmNewAdminPassword,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
                         isMatch: {
-                            value: newPassword,
+                            value: newAdminPassword,
                             msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
                         },
                     }
                 },
@@ -136,7 +159,7 @@ export default function ChangeBussinessEmailPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/global-passwords/change-bussiness-email-password?email=${email}&password=${currentPassword}&newPassword=${newPassword}`, undefined, {
+                const res = await axios.put(`${process.env.BASE_API_URL}/admins/change-admin-password?websiteOwnerEmail=${websiteOwnerEmail}&websiteOwnerPassword=${websiteOwnerPassword}&newAdminPassword=${newAdminPassword}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem("asfour-store-admin-user-token"),
                     },
@@ -178,86 +201,99 @@ export default function ChangeBussinessEmailPassword() {
     }
 
     return (
-        <div className="change-bussiness-email-password admin-dashboard">
+        <div className="change-admin-password admin-dashboard">
             <Head>
-                <title>Ubuyblues Store - Change Bussiness Email Password</title>
+                <title>Ubuyblues Store - Change Admin Password</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In  Change Bussiness Email Password Page
+                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In  Change Admin Password Page
                     </h1>
-                    <form className="change-bussiness-email-password-form w-50" onSubmit={changeBussinessEmailPassword}>
-                        <section className="email mb-4">
+                    <form className="change-bussiness-email-password-form w-50" onSubmit={changeAdminPassword}>
+                        <section className="website-owner-email mb-4">
                             <input
                                 type="text"
-                                className={`p-2 form-control ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
-                                placeholder="Please Enter Bussiness Email Here"
-                                onChange={(e) => setEmail(e.target.value.trim())}
-                                value={email}
+                                className={`p-2 form-control ${formValidationErrors.websiteOwnerEmail ? "border-3 border-danger mb-3" : ""}`}
+                                placeholder="Please Enter Website Owner Email Here"
+                                onChange={(e) => setWebsiteOwnerEmail(e.target.value.trim())}
+                                value={websiteOwnerEmail}
                             />
-                            {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                            {formValidationErrors.websiteOwnerEmail && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors.email}</span>
+                                <span>{formValidationErrors.websiteOwnerEmail}</span>
                             </p>}
                         </section>
-                        <section className="current-password mb-3">
-                            <div className={`current-password-field-box ${formValidationErrors.currentPassword ? "error-in-field" : ""}`}>
+                        <section className="website-owner-password mb-3">
+                            <div className={`website-owner-password-field-box ${formValidationErrors.websiteOwnerPassword ? "error-in-field" : ""}`}>
                                 <input
-                                    type={isVisibleCurrentPassword ? "text" : "password"}
-                                    className={`p-2 form-control ${formValidationErrors.currentPassword ? "border-3 border-danger mb-3" : ""}`}
-                                    placeholder="Please Enter Current Password"
-                                    onChange={(e) => setCurrentPassword(e.target.value.trim())}
-                                    value={currentPassword}
+                                    type={isVisibleWebsiteOwnerPassword ? "text" : "password"}
+                                    className={`p-2 form-control ${formValidationErrors.websiteOwnerPassword ? "border-3 border-danger mb-3" : ""}`}
+                                    placeholder="Please Enter Website Owner Password"
+                                    onChange={(e) => setWebsiteOwnerPassword(e.target.value.trim())}
+                                    value={websiteOwnerPassword}
                                 />
                                 <div className="icon-box other-languages-mode">
-                                    {!isVisibleCurrentPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleCurrentPassword(value => value = !value)} />}
-                                    {isVisibleCurrentPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleCurrentPassword(value => value = !value)} />}
+                                    {!isVisibleWebsiteOwnerPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleWebsiteOwnerPassword(value => value = !value)} />}
+                                    {isVisibleWebsiteOwnerPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleWebsiteOwnerPassword(value => value = !value)} />}
                                 </div>
                             </div>
-                            {formValidationErrors.currentPassword && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                            {formValidationErrors.websiteOwnerPassword && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors.currentPassword}</span>
+                                <span>{formValidationErrors.websiteOwnerPassword}</span>
+                            </p>}
+                        </section>
+                        <section className="admin-email mb-4">
+                            <input
+                                type="text"
+                                className={`p-2 form-control ${formValidationErrors.adminEmail ? "border-3 border-danger mb-3" : ""}`}
+                                placeholder="Please Enter Admin Email Here"
+                                onChange={(e) => setAdminEmail(e.target.value.trim())}
+                                value={adminEmail}
+                            />
+                            {formValidationErrors.adminEmail && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors.adminEmail}</span>
                             </p>}
                         </section>
                         <section className="new-password mb-3">
-                            <div className={`new-password-field-box ${formValidationErrors.newPassword ? "error-in-field" : ""}`}>
+                            <div className={`new-password-field-box ${formValidationErrors.newAdminPassword ? "error-in-field" : ""}`}>
                                 <input
-                                    type={isVisibleNewPassword ? "text" : "password"}
-                                    className={`p-2 form-control ${formValidationErrors.newPassword ? "border-3 border-danger mb-3" : ""}`}
-                                    placeholder="Please Enter New Password"
-                                    onChange={(e) => setNewPassword(e.target.value.trim())}
-                                    value={newPassword}
+                                    type={isVisibleNewAdminPassword ? "text" : "password"}
+                                    className={`p-2 form-control ${formValidationErrors.newAdminPassword ? "border-3 border-danger mb-3" : ""}`}
+                                    placeholder="Please Enter New Admin Password"
+                                    onChange={(e) => setNewAdminPassword(e.target.value.trim())}
+                                    value={newAdminPassword}
                                 />
                                 <div className="icon-box other-languages-mode">
-                                    {!isVisibleNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
-                                    {isVisibleNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
+                                    {!isVisibleNewAdminPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleNewAdminPassword(value => value = !value)} />}
+                                    {isVisibleNewAdminPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleNewAdminPassword(value => value = !value)} />}
                                 </div>
                             </div>
-                            {formValidationErrors.newPassword && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                            {formValidationErrors.newAdminPassword && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors.newPassword}</span>
+                                <span>{formValidationErrors.newAdminPassword}</span>
                             </p>}
                         </section>
                         <section className="confirm-new-password mb-3">
-                            <div className={`confirm-new-password-field-box ${formValidationErrors.confirmNewPassword ? "error-in-field" : ""}`}>
+                            <div className={`confirm-new-password-field-box ${formValidationErrors.confirmNewAdminPassword ? "error-in-field" : ""}`}>
                                 <input
-                                    type={isVisibleConfirmNewPassword ? "text" : "password"}
-                                    className={`p-2 form-control ${formValidationErrors.confirmNewPassword ? "border-3 border-danger mb-3" : ""}`}
-                                    placeholder="Please Enter Confirm New Password"
-                                    onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
-                                    value={confirmNewPassword}
+                                    type={isVisibleConfirmNewAdminPassword ? "text" : "password"}
+                                    className={`p-2 form-control ${formValidationErrors.confirmNewAdminPassword ? "border-3 border-danger mb-3" : ""}`}
+                                    placeholder="Please Enter Confirm New Admin Password"
+                                    onChange={(e) => setConfirmNewAdminPassword(e.target.value.trim())}
+                                    value={confirmNewAdminPassword}
                                 />
                                 <div className="icon-box other-languages-mode">
-                                    {!isVisibleConfirmNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
-                                    {isVisibleConfirmNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
+                                    {!isVisibleConfirmNewAdminPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleConfirmNewAdminPassword(value => value = !value)} />}
+                                    {isVisibleConfirmNewAdminPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleConfirmNewAdminPassword(value => value = !value)} />}
                                 </div>
                             </div>
-                            {formValidationErrors.confirmNewPassword && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                            {formValidationErrors.confirmNewAdminPassword && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors.confirmNewPassword}</span>
+                                <span>{formValidationErrors.confirmNewAdminPassword}</span>
                             </p>}
                         </section>
                         {!isWaitStatus && !successMsg && !errorMsg && <button

@@ -24,14 +24,18 @@ export default function AdminPanelHeader({ isWebsiteOwner = false }) {
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
                             {isWebsiteOwner && <>
-                                <NavDropdown title="Stores" id="brands-nav-dropdown">
+                                <NavDropdown title="Stores" id="stores-nav-dropdown">
                                     <NavDropdown.Item href="/admin-dashboard/stores-managment" as={Link}>All Stores</NavDropdown.Item>
                                 </NavDropdown>
-                                <NavDropdown title="Global" id="brands-nav-dropdown">
+                                <NavDropdown title="Global" id="global-nav-dropdown">
                                     <NavDropdown.Item href="/admin-dashboard/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="/admin-dashboard/change-bussiness-email-password" as={Link}>
                                         Change Bussiness Email Password
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="/admin-dashboard/change-admin-password" as={Link}>
+                                        Change Admin Password
                                     </NavDropdown.Item>
                                 </NavDropdown>
                             </>}
