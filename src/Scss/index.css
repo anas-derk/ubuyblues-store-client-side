@@ -450,6 +450,66 @@ textarea {
 
 .admin-dashboard .page-content h1 {
   font-size: 30px;
+  text-align: center;
+}
+
+.admin-dashboard .page-content .filters .row {
+  row-gap: 20px;
+}
+
+@media (min-width: 1199px) {
+  .admin-dashboard .page-content .filters .row > div {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 1199px) {
+  .admin-dashboard .page-content .filters .row > div h6 {
+    margin-bottom: 15px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .admin-dashboard .page-content .filters .row > div h6 {
+    margin-bottom: 0;
+  }
+}
+
+.admin-dashboard .page-content .admin-dashbboard-form {
+  width: 50%;
+}
+
+@media (max-width: 767px) {
+  .admin-dashboard .page-content .admin-dashbboard-form {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .admin-dashboard .page-content .admin-dashbboard-form {
+    width: 75%;
+  }
+}
+
+.admin-dashboard .page-content .admin-dashbboard-data-box {
+  overflow-x: auto;
+}
+
+@media (max-width: 991px) {
+  .admin-dashboard .page-content .admin-dashbboard-data-box {
+    margin-bottom: 30px;
+  }
+}
+
+.admin-dashboard .page-content .admin-dashbboard-data-table {
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .admin-dashboard .page-content .admin-dashbboard-data-table {
+    width: 300%;
+  }
 }
 
 .customer-billing-address .edit-customer-billing-address-form, .customer-billing-address .edit-customer-shipping-address-form, .customer-shipping-address .edit-customer-billing-address-form, .customer-shipping-address .edit-customer-shipping-address-form {

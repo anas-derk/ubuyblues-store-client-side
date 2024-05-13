@@ -309,8 +309,8 @@ export default function OrdersManagment() {
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
                             <div className="row mb-4">
-                                <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Order Number</h6>
+                                <div className="col-md-4">
+                                    <h6 className="me-2 fw-bold text-center">Order Number</h6>
                                     <input
                                         type="number"
                                         className="form-control"
@@ -320,8 +320,8 @@ export default function OrdersManagment() {
                                         onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber })}
                                     />
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Order Id</h6>
+                                <div className="col-md-4">
+                                    <h6 className="me-2 fw-bold text-center">Order Id</h6>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -329,8 +329,8 @@ export default function OrdersManagment() {
                                         onChange={(e) => setFilters({ ...filters, orderId: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Status</h6>
+                                <div className="col-md-4">
+                                    <h6 className="me-2 fw-bold text-center">Status</h6>
                                     <select
                                         className="select-order-status form-select"
                                         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -342,8 +342,8 @@ export default function OrdersManagment() {
                                         <option value="completed">Completed</option>
                                     </select>
                                 </div>
-                                <div className="col-md-6 d-flex align-items-center mt-4">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Customer Name</h6>
+                                <div className="col-md-6 mt-4">
+                                    <h6 className="me-2 fw-bold text-center">Customer Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -351,8 +351,8 @@ export default function OrdersManagment() {
                                         onChange={(e) => setFilters({ ...filters, customerName: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-6 d-flex align-items-center mt-4">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Customer Email</h6>
+                                <div className="col-md-6 mt-4">
+                                    <h6 className="me-2 fw-bold text-center">Customer Email</h6>
                                     <input
                                         type="email"
                                         className="form-control"
@@ -374,8 +374,8 @@ export default function OrdersManagment() {
                                 Filtering ...
                             </button>}
                         </section>
-                        {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box">
-                            <table className="orders-data-table mb-4 managment-table bg-white w-100">
+                        {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && <section className="orders-data-box p-3 data-box admin-dashbboard-data-box">
+                            <table className="orders-data-table mb-4 managment-table bg-white admin-dashbboard-data-table">
                                 <thead>
                                     <tr>
                                         <th>Order Number</th>

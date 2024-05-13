@@ -13,6 +13,10 @@
   color: #0F0;
 }
 
+.admin-panel-header .navbar .navbar-toggler {
+  background-color: #FFF;
+}
+
 .admin-panel-header .navbar .navbar-nav .nav-link {
   color: #FFF;
 }

@@ -742,8 +742,8 @@ export default function UpdateAndDeleteProducts() {
                         <h5 className="section-name fw-bold text-center">Filters: </h5>
                         <hr />
                         <div className="row mb-4">
-                            <div className="col-md-12 d-flex align-items-center">
-                                <h6 className="me-2 mb-0 fw-bold text-center">Category</h6>
+                            <div className="col-md-12">
+                                <h6 className="me-2 fw-bold text-center">Category</h6>
                                 <select
                                     className="select-product-category form-select"
                                     onChange={(e) => setFilters({ ...filters, category: e.target.value })}
@@ -769,8 +769,8 @@ export default function UpdateAndDeleteProducts() {
                             Filtering ...
                         </button>}
                     </section>
-                    {allProductsInsideThePage.length > 0 && !isFilteringProductsStatus && <div className="products-box w-100">
-                        <table className="products-table mb-4 managment-table bg-white">
+                    {allProductsInsideThePage.length > 0 && !isFilteringProductsStatus && <div className="products-box admin-dashbboard-data-box w-100">
+                        <table className="products-table mb-4 managment-table admin-dashbboard-data-table bg-white">
                             <thead>
                                 <tr>
                                     <th>Name</th>

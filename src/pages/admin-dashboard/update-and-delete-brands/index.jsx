@@ -316,8 +316,8 @@ export default function UpdateAndDeleteBrands() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Your Update / Delete Brands Page
                     </h1>
-                    {allBrandsInsideThePage.length > 0 && !isWaitGetBrandsStatus && <section className="brands-box w-100">
-                        <table className="brands-table mb-4 managment-table bg-white w-100">
+                    {allBrandsInsideThePage.length > 0 && !isWaitGetBrandsStatus && <section className="brands-box admin-dashbboard-data-box w-100">
+                        <table className="brands-table mb-4 managment-table bg-white admin-dashbboard-data-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>

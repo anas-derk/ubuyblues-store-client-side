@@ -132,12 +132,12 @@ export default function AddNewCategory() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Category Page
                     </h1>
-                    <form className="add-new-category-form w-50" onSubmit={(e) => addNewCategory(e, categoryName)}>
+                    <form className="add-new-category-form admin-dashbboard-form" onSubmit={(e) => addNewCategory(e, categoryName)}>
                         <section className="category-name mb-4">
                             <input
                                 type="text"

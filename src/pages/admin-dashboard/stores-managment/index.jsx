@@ -367,8 +367,8 @@ export default function StoresManagment() {
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
                             <div className="row mb-4">
-                                <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Store Id</h6>
+                                <div className="col-md-4">
+                                    <h6 className="me-2 fw-bold text-center">Store Id</h6>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -376,8 +376,8 @@ export default function StoresManagment() {
                                         onChange={(e) => setFilters({ ...filters, storeId: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Store Name</h6>
+                                <div className="col-md-4">
+                                    <h6 className="me-2 fw-bold text-center">Store Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -385,8 +385,8 @@ export default function StoresManagment() {
                                         onChange={(e) => setFilters({ ...filters, name: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Status</h6>
+                                <div className="col-md-4">
+                                    <h6 className="me-2 fw-bold text-center">Status</h6>
                                     <select
                                         className="select-store-status form-select"
                                         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -398,8 +398,8 @@ export default function StoresManagment() {
                                         ))}
                                     </select>
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center mt-5">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner First Name</h6>
+                                <div className="col-md-4 mt-5">
+                                    <h6 className="me-2 fw-bold text-center">Owner First Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -407,8 +407,8 @@ export default function StoresManagment() {
                                         onChange={(e) => setFilters({ ...filters, ownerFirstName: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center mt-5">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner Last Name</h6>
+                                <div className="col-md-4 mt-5">
+                                    <h6 className="me-2 fw-bold text-center">Owner Last Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -416,8 +416,8 @@ export default function StoresManagment() {
                                         onChange={(e) => setFilters({ ...filters, ownerLastName: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-4 d-flex align-items-center mt-5">
-                                    <h6 className="me-2 mb-0 fw-bold text-center">Owner Email</h6>
+                                <div className="col-md-4 mt-5">
+                                    <h6 className="me-2 fw-bold text-center">Owner Email</h6>
                                     <input
                                         type="email"
                                         className="form-control"
@@ -439,15 +439,15 @@ export default function StoresManagment() {
                                 Filtering ...
                             </button>}
                         </section>
-                        {allStoresInsideThePage.length > 0 && !isFilteringStoresStatus && <section className="stores-data-box p-3 data-box">
-                            <table className="stores-data-table mb-4 managment-table bg-white w-100">
+                        {allStoresInsideThePage.length > 0 && !isFilteringStoresStatus && <section className="stores-data-box p-3 data-box admin-dashbboard-data-box">
+                            <table className="stores-data-table mb-4 managment-table bg-white admin-dashbboard-data-table">
                                 <thead>
                                     <tr>
                                         <th width="50">Store Id</th>
-                                        <th>Name</th>
+                                        <th width="250">Name</th>
                                         <th>Owner Full Name</th>
-                                        <th width="250">Owner Email</th>
-                                        <th width="200">Products Type</th>
+                                        <th width="300">Owner Email</th>
+                                        <th width="300">Products Type</th>
                                         <th width="250">Status</th>
                                         <th>Action</th>
                                     </tr>

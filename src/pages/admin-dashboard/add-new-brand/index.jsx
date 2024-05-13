@@ -152,12 +152,12 @@ export default function AddNewBrand() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Brand Page
                     </h1>
-                    <form className="add-new-category-form w-50" onSubmit={(e) => addNewBrand(e, brandTitle)}>
+                    <form className="add-new-category-form admin-dashbboard-form" onSubmit={(e) => addNewBrand(e, brandTitle)}>
                         <h6 className="mb-3 fw-bold">Please Select Brand Image</h6>
                         <section className="brand-image mb-4">
                             <input

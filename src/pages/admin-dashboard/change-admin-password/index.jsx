@@ -208,12 +208,12 @@ export default function ChangeBussinessEmailPassword() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5 p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In  Change Admin Password Page
                     </h1>
-                    <form className="change-bussiness-email-password-form w-50" onSubmit={changeAdminPassword}>
+                    <form className="change-bussiness-email-password-form admin-dashbboard-form" onSubmit={changeAdminPassword}>
                         <section className="website-owner-email mb-4">
                             <input
                                 type="text"

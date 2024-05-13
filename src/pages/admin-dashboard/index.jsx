@@ -58,7 +58,7 @@ export default function AdminDashboard() {
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 <div className="page-content d-flex justify-content-center align-items-center">
-                    <h1 className="fw-bold w-fit pb-2">
+                    <h1 className="fw-bold w-fit pb-2 text-center">
                         <PiHandWavingThin className="me-2" />
                         Welcome { `${adminInfo.firstName} ${adminInfo.lastName}` } In Your Admin Dashboard Page
                     </h1>

@@ -253,12 +253,12 @@ export default function AddNewProduct() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
-                <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5">
+                <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5 p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Product Page
                     </h1>
-                    {allCategories.length > 0 ? <form className="add-new-product-form w-50" onSubmit={(e) => addNewProduct(e, productData)}>
+                    {allCategories.length > 0 ? <form className="add-new-product-form admin-dashbboard-form" onSubmit={(e) => addNewProduct(e, productData)}>
                         <section className="name mb-4">
                             <input
                                 type="text"
