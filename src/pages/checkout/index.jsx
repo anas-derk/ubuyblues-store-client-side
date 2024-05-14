@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from 'countries-list';
-import { FaCcPaypal } from "react-icons/fa";
+import { FaCcPaypal, FaTape } from "react-icons/fa";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
@@ -49,11 +49,13 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
-    const [paymentMethod, setPaymentMethod] = useState("paypal");
+    const [paymentMethod, setPaymentMethod] = useState("tap");
 
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
 
     const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
+
+    const [isWaitCreateNewOrder, setIsWaitCreateNewOrder] = useState(false);
 
     const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
 
@@ -461,6 +463,59 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             setIsWaitApproveOnPayPalOrder(false);
+            throw Error(err);
+        }
+    }
+
+    const createPaymentOrderByTap = async () => {
+        try{
+            setIsWaitCreateNewOrder(true);
+            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-tap?country=${countryAsProperty}`, {
+                storeId,
+                customerId: userInfo ? userInfo._id : "",
+                order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
+                billing_address: {
+                    first_name: userInfo.billing_address.first_name,
+                    last_name: userInfo.billing_address.last_name,
+                    company_name: userInfo.billing_address.company_name,
+                    country: userInfo.billing_address.country,
+                    street_address: userInfo.billing_address.street_address,
+                    apartment_number: userInfo.billing_address.apartment_number,
+                    city: userInfo.billing_address.city,
+                    postal_code: userInfo.billing_address.postal_code,
+                    phone: userInfo.billing_address.phone_number,
+                    email: userInfo.billing_address.email,
+                },
+                shipping_address: {
+                    first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
+                    last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
+                    company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
+                    country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
+                    street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
+                    apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
+                    city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
+                    postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
+                    phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
+                    email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
+                },
+                order_products: allProductsData.map((product) => ({
+                    productId: product._id,
+                    name: product.name,
+                    unit_price: product.price,
+                    discount: product.discount,
+                    total_amount: product.price * getProductQuantity(product._id),
+                    quantity: getProductQuantity(product._id),
+                    image_path: product.imagePath,
+                })),
+                requestNotes
+            });
+            const result = res.data;
+            if (!result.error) {
+                await router.push(result.data.transaction.url);
+            }
+        }
+        catch(err) {
+            setIsWaitCreateNewOrder(false);
             throw Error(err);
         }
     }
@@ -929,11 +984,39 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     onApprove={approveOnPayPalOrder}
                                                 />
                                             </PayPalScriptProvider>}
+                                            <div className={`row align-items-center pt-3 ${paymentMethod === "tap" ? "mb-3" : ""}`}>
+                                                <div className="col-md-6 text-start">
+                                                    <input
+                                                        type="radio"
+                                                        checked={paymentMethod === "tap"}
+                                                        id="tap-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup"
+                                                        onChange={() => setPaymentMethod("tap")}
+                                                    />
+                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tap")}>{t("Tap")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <FaTape className="icon tap-icon" />
+                                                </div>
+                                            </div>
                                             {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button
                                                 className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={handleSelectPaypalPayment}
                                             >
                                                 {t("Confirm Request")}
+                                            </button>}
+                                            {paymentMethod === "tap" && !isWaitCreateNewOrder && <button
+                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                onClick={createPaymentOrderByTap}
+                                            >
+                                                {t("Confirm Request")}
+                                            </button>}
+                                            {isWaitCreateNewOrder && <button
+                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                disabled
+                                            >
+                                                {t("Please Waiting ...")}
                                             </button>}
                                         </section>
                                         {/* End Payement Methods Section */}

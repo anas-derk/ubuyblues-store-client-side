@@ -164,7 +164,7 @@ export default function OrderDetails({ orderId }) {
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-4 pb-4 p-4">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hello To You In Orders Details Page</h1>
-                        {orderDetails.checkout_status === "checkout_successful" ? <div className="order-details-box p-3 data-box admin-dashbboard-data-box">
+                        {Object.keys(orderDetails).length > 0 ? <div className="order-details-box p-3 data-box admin-dashbboard-data-box">
                             <table className="order-data-table mb-5 managment-table admin-dashbboard-data-table">
                                 <thead>
                                     <tr>
@@ -266,7 +266,7 @@ export default function OrderDetails({ orderId }) {
                                 </tbody>
                             </table>
                         </div> : <p className="alert alert-danger order-not-found-error">Sorry, This Order Is Not Found !!</p>}
-                        <section className="customer-info">
+                        {Object.keys(orderDetails).length > 0 && <section className="customer-info">
                                 <div className="row">
                                     <div className="col-md-6 bg-white border border-2 border-dark">
                                         <div className="billing-address-box text-start p-3">
@@ -297,7 +297,7 @@ export default function OrderDetails({ orderId }) {
                                         </div>
                                     </div>
                                 </div>
-                            </section>
+                        </section>}
                     </div>
                 </section>
                 {/* End Content Section */}
