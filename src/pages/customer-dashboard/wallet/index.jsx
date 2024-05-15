@@ -219,7 +219,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     return (
         <div className="customer-wallet-products-list customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Favorite Products List</title>
+                <title>{t("Ubuyblues Store")} - {t("Customer Wallet Products")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

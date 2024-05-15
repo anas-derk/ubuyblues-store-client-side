@@ -206,7 +206,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     return (
         <div className="customer-orders-managment customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Orders</title>
+                <title>{t("Ubuyblues Store")} - {t("Customer Orders")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

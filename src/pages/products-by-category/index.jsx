@@ -222,7 +222,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
     return (
         <div className="home page">
             <Head>
-                <title>Ubuyblues Store - Products By Category</title>
+                <title>{t("Ubuyblues Store")} - {t("Products By Category")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

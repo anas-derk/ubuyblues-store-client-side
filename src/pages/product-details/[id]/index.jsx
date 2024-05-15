@@ -533,7 +533,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     return (
         <div className="product-details page">
             <Head>
-                <title>Ubuyblues Store - Product Details</title>
+                <title>{t("Ubuyblues Store")} - {t("Product Details")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

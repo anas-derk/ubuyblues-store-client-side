@@ -111,7 +111,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     return (
         <div className="confirmation page">
             <Head>
-                <title>Ubuyblues Store - Confirmation</title>
+                <title>{t("Ubuyblues Store")} - {t("Payment Confirmation")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

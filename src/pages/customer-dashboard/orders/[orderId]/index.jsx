@@ -81,7 +81,7 @@ export default function OrderDetails() {
     return (
         <div className="order-details customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Order Details</title>
+                <title>{t("Ubuyblues Store")} - {t("Order Details")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

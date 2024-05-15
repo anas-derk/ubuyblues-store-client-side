@@ -523,7 +523,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     return (
         <div className="checkout page">
             <Head>
-                <title>Ubuyblues Store - Checkout</title>
+                <title>{t("Ubuyblues Store")} - {t("Checkout")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">

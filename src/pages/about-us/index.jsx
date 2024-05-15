@@ -24,7 +24,7 @@ export default function AboutUs() {
     return (
         <div className="about-us caption-page page">
             <Head>
-                <title>Ubuyblues Store - About Us</title>
+                <title>{t("Ubuyblues Store")} - {t("About Us")}</title>
             </Head>
             {!isLoadingPage ? <>
                 <Header />

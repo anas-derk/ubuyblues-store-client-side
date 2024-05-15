@@ -224,7 +224,7 @@ export default function CustomerAccountDetails() {
     return (
         <div className="customer-account-details customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Account Details</title>
+                <title>{t("Ubuyblues Store")} - {t("Customer Account Info")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

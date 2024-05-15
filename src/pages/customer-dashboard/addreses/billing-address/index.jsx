@@ -214,7 +214,7 @@ export default function CustomerBillingAddress() {
     return (
         <div className="customer-billing-address customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Billing Address</title>
+                <title>{t("Ubuyblues Store")} - {t("Customer Billing Address")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

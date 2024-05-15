@@ -417,7 +417,7 @@ export default function Home({ countryAsProperty, storeId }) {
     return (
         <div className="home page">
             <Head>
-                <title>Ubuyblues Store - Home</title>
+                <title>{t("Ubuyblues Store")} - {t("Home")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

@@ -57,7 +57,7 @@ export default function CustomerAddreses() {
     return (
         <div className="customer-addreses customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Addreses</title>
+                <title>{t("Ubuyblues Store")} - {t("Customer Addreses")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

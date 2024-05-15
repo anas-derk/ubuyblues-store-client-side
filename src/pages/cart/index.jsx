@@ -188,7 +188,7 @@ export default function Cart({ countryAsProperty }) {
     return (
         <div className="cart d-flex flex-column justify-content-center page">
             <Head>
-                <title>Ubuyblues Store - User Cart</title>
+                <title>{t("Ubuyblues Store")} - {t("Cart")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

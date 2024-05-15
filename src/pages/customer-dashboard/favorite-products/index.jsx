@@ -216,7 +216,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     return (
         <div className="customer-favorite-products-list customer-dashboard page">
             <Head>
-                <title>Ubuyblues Store - Customer Favorite Products List</title>
+                <title>{t("Ubuyblues Store")} - {t("Customer Favorite Products")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

@@ -48,7 +48,7 @@ export default function PolicesTermsAndConditions() {
     return (
         <div className="return-and-refund-policy caption-page page">
             <Head>
-                <title>Ubuyblues Store - Return And Refund Policy</title>
+                <title>{t("Ubuyblues Store")} - {t("Return And Refund Policy")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

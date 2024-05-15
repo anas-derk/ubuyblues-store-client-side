@@ -208,7 +208,7 @@ export default function ForgetPassword() {
     return (
         <div className="forget-password page">
             <Head>
-                <title>Ubuyblues Store - Forget Password</title>
+                <title>{t("Ubuyblues Store")} - {t("Forget Password")}</title>
             </Head>
             {!isLoadingPage && <>
                 <Header />

@@ -208,7 +208,7 @@ export default function AddYourStore() {
     return (
         <div className="add-your-store page">
             <Head>
-                <title>Ubuyblues Store - Add Your Store</title>
+                <title>{t("Ubuyblues Store")} - {t("Add Your Store")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
