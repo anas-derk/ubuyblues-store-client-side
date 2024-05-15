@@ -288,7 +288,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{((walletProduct.price - walletProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                            <td>{(walletProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Stock Status")}</th>

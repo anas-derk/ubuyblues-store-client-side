@@ -285,7 +285,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{((favoriteProduct.price - favoriteProduct.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                            <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Stock Status")}</th>
