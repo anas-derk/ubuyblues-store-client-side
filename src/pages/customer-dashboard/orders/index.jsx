@@ -204,13 +204,13 @@ export default function CustomerOrders({ countryAsProperty }) {
     }
 
     return (
-        <div className="customer-orders-managment customer-dashboard page">
+        <div className="customer-orders-managment customer-dashboard">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Customer Orders")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid pb-4">
                         <div className="row align-items-center">
                             <div className="col-xl-3">

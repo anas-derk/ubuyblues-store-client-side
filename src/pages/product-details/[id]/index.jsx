@@ -531,7 +531,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     return (
-        <div className="product-details page">
+        <div className="product-details">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Product Details")}</title>
             </Head>
@@ -548,7 +548,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     sharingURL={sharingURL}
                 />}
                 {/* End Share Options Box */}
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid">
                         {Object.keys(productInfo).length > 0 ?
                             <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>

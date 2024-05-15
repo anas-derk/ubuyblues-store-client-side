@@ -415,7 +415,7 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     return (
-        <div className="home page">
+        <div className="home">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Home")}</title>
             </Head>
@@ -432,7 +432,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     sharingURL={sharingURL}
                 />}
                 {/* End Share Options Box */}
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             {/* Start Store Details Section */}

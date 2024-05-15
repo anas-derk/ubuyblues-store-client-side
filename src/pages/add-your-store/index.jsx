@@ -206,13 +206,13 @@ export default function AddYourStore() {
     }
 
     return (
-        <div className="add-your-store page">
+        <div className="add-your-store">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Add Your Store")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid">
                         {isServiceAvailable ? <section className="add-your-store pb-5">
                             <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>

@@ -220,7 +220,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
     }
 
     return (
-        <div className="home page">
+        <div className="home">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Products By Category")}</title>
             </Head>
@@ -233,7 +233,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox} />}
                 {/* End Share Options Box */}
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Name */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">

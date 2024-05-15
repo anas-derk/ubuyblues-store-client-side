@@ -29,7 +29,7 @@ export default function PageNotFound() {
             </Head>
             {!isLoadingPage && <>
                 <Header />
-                <div className="page-content p-4 d-flex align-items-center justify-content-center flex-column">
+                <div className="page-content page d-flex align-items-center justify-content-center flex-column">
                     <BiError className="error-404-icon" />
                     <h1 className="mb-3">{t("Sorry,")}</h1>
                     <h2 className="mb-3">{t("this page could not be found.")}</h2>

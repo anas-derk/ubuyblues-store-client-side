@@ -79,13 +79,13 @@ export default function OrderDetails() {
     }
 
     return (
-        <div className="order-details customer-dashboard page">
+        <div className="order-details customer-dashboard">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Order Details")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <section className="page-content d-flex justify-content-center align-items-center flex-column pt-4 pb-4">
+                <section className="page-content page d-flex justify-content-center align-items-center flex-column pt-4 pb-4">
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-xl-3">

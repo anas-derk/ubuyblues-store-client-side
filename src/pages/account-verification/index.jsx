@@ -213,13 +213,13 @@ export default function AccountVerification({ email }) {
     }
 
     return (
-        <div className="account-verification page">
+        <div className="account-verification">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Account Verification")}</title>
             </Head>
             {!isLoadingPage ? <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid pb-5">
                         {!errorMsgOnLoading ? <>
                             <h1 className="welcome-msg border-bottom pb-3 mb-5 text-center text-white">{t("Welcome To You In Account Verification Page")}</h1>

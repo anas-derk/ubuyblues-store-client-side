@@ -46,13 +46,13 @@ export default function PolicesTermsAndConditions() {
     }
 
     return (
-        <div className="privacy-policy-and-conditions caption-page page">
+        <div className="privacy-policy-and-conditions caption-page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Polices Terms And Conditions")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white p-4 pb-5">
+                <div className="page-content page text-white p-4 pb-5">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Polices-Terms & Conditions")}</h1>
                         <div className="content">

@@ -214,13 +214,13 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }
 
     return (
-        <div className="customer-favorite-products-list customer-dashboard page">
+        <div className="customer-favorite-products-list customer-dashboard">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Customer Favorite Products")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid align-items-center pb-4">
                         <div className="row align-items-center">
                             <div className="col-xl-3">

@@ -212,13 +212,13 @@ export default function CustomerBillingAddress() {
     }
 
     return (
-        <div className="customer-shipping-address customer-dashboard page">
+        <div className="customer-shipping-address customer-dashboard">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Customer Shipping Address")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content d-flex align-items-center">
+                <div className="page-content page d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-xl-3">

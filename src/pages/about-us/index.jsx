@@ -22,13 +22,13 @@ export default function AboutUs() {
     }
 
     return (
-        <div className="about-us caption-page page">
+        <div className="about-us caption-page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("About Us")}</title>
             </Head>
             {!isLoadingPage ? <>
                 <Header />
-                <div className="page-content text-white p-4">
+                <div className="page-content text-white p-4 page">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("About Us")}</h1>
                         <div className="content">

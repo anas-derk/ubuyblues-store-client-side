@@ -222,13 +222,13 @@ export default function CustomerAccountDetails() {
     }
 
     return (
-        <div className="customer-account-details customer-dashboard page">
+        <div className="customer-account-details customer-dashboard">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Customer Account Info")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid align-items-center pb-4">
                         <div className="row">
                             <div className="col-xl-3">

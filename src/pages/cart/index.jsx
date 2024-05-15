@@ -186,13 +186,13 @@ export default function Cart({ countryAsProperty }) {
     }
 
     return (
-        <div className="cart d-flex flex-column justify-content-center page">
+        <div className="cart d-flex flex-column justify-content-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Cart")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid text-white text-center mb-4">
                         {allProductsData.length > 0 ? <section className="products-by-store">
                             {allProductsData.map((store, storeIndex) => (

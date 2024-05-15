@@ -251,13 +251,13 @@ export default function UserAuth() {
     }
 
     return (
-        <div className="auth d-flex flex-column justify-content-center page">
+        <div className="auth d-flex flex-column justify-content-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("User Auth")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content page">
                     <div className="container-fluid p-4 text-white text-center">
                         <section className="auth-part-display-control mb-5">
                             <h4
