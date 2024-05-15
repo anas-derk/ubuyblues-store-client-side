@@ -258,7 +258,7 @@ export default function ProductCard({
                         remainingTimeForDiscountOffer.days > 0 ||
                         remainingTimeForDiscountOffer.hours > 0 ||
                         remainingTimeForDiscountOffer.minutes > 0 ||
-                        remainingTimeForDiscountOffer.seconds > 0 ? "Time Is Running Out !!" : "Expired !!"
+                        remainingTimeForDiscountOffer.seconds > 0 ? t("Time Is Running Out !!") : t("Expired !!")
                     }
                 </h4>
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
