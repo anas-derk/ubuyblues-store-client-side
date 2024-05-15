@@ -263,32 +263,32 @@ export default function ProductCard({
                 </h4>
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
                 <div className="row mb-4">
-                    <div className="col-md-3">
+                    <div className="col-3">
                         <div className="remaining-time w-100 text-white bg-dark p-3">
                             <span>{remainingTimeForDiscountOffer.days}</span>
-                            <h6 className="mb-0">Days</h6>
+                            <h6 className="mb-0">{t("Days")}</h6>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-3">
                         <div className="remaining-time w-100 text-white bg-dark p-3">
                             <span>{remainingTimeForDiscountOffer.hours}</span>
-                            <h6 className="mb-0">Hours</h6>
+                            <h6 className="mb-0">{t("Hours")}</h6>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-3">
                         <div className="remaining-time w-100 text-white bg-dark p-3">
                             <span>{remainingTimeForDiscountOffer.minutes}</span>
-                            <h6 className="mb-0">Min</h6>
+                            <h6 className="mb-0">{t("Min")}</h6>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-3">
                         <div className="remaining-time w-100 text-white bg-dark p-3">
                             <span>{remainingTimeForDiscountOffer.seconds}</span>
-                            <h6 className="mb-0">Sec</h6>
+                            <h6 className="mb-0">{t("Sec")}</h6>
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-danger w-100" onClick={handleShowProductDetails}>Show Product Details</button>
+                <button className="btn btn-danger w-100" onClick={handleShowProductDetails}>{t("Show Product Details")}</button>
             </div>}
             {isDisplayProduct && <>
                 <div
