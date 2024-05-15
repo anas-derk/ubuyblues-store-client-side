@@ -439,9 +439,9 @@
     "Flash Products": "Blitzangebote für Produkte",
     "Time Is Running Out !!": "Die Zeit läuft ab !!",
     "Expired !!": "Abgelaufen !!",
-    "Days": "Tage",
-    "Hours": "Stunden",
-    "Min": "Minuten",
-    "Sec": "Sekunden",
+    "Days": "Tg.",
+    "Hours": "Std.",
+    "Min": "Min.",
+    "Sec": "Sek.",
     "Show Product Details": "Produktdetails anzeigen"
 }
