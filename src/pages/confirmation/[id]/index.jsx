@@ -59,7 +59,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                     setOrderDetails(result);
                     const tempTotalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(result.order_products);
                     const tempTotalDiscount = calcTotalOrderDiscount(result.order_products);
-                    console.log(tempTotalPriceBeforeDiscount, tempTotalDiscount)
                     setPricesDetailsSummary({
                         totalPriceBeforeDiscount: tempTotalPriceBeforeDiscount,
                         totalDiscount: tempTotalDiscount,
@@ -188,7 +187,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                     {t("Total Price After Discount")}
                                 </div>
                                 <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                    {(orderDetails.order_amount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
                             <div className="thanks-icon-box mb-4">
