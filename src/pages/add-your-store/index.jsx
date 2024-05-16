@@ -101,6 +101,9 @@ export default function AddYourStore() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -110,6 +113,9 @@ export default function AddYourStore() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -216,7 +222,7 @@ export default function AddYourStore() {
                     <div className="container-fluid">
                         {isServiceAvailable ? <section className="add-your-store pb-5">
                             <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>
-                            <form className="add-your-store-form w-50 mx-auto" onSubmit={createNewStore}>
+                            <form className="add-your-store-form mx-auto public-form" onSubmit={createNewStore}>
                                 <section className="name mb-4">
                                     <input
                                         type="text"
@@ -292,7 +298,7 @@ export default function AddYourStore() {
                                 <section className="image mb-4">
                                     <input
                                         type="file"
-                                        className={`form-control p-2 border-2 product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control p-3 border-2 product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder="Please Enter Product Image"
                                         onChange={(e) => setStoreData({ ...storeData, image: e.target.files[0] })}
                                         ref={storeImageFileElementRef}
