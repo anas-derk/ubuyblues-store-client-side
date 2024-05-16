@@ -90,7 +90,7 @@
     "Please Enter Email Here": "الرجاء إدخال البريد الإلكتروني هنا",
     "Save Changes": "حفظ التغييرات",
     "Saving": "جارِ الحفظ",
-    "Updating User Info Process Has Been Successfuly ...": "عملية تحديث بيانات المستخدم قد أكتملت ...",
+    "Updating User Info Process Has Been Successfuly !!": "عملية تحديث بيانات المستخدم قد أكتملت ...",
     "Sorry, This Password Is Uncorrect !!": "عذراً ، كلمة السر هذه غير صحيحة !!",
     "Sorry, Invalid Mobile Phone !!": "عذراً ، رقم موبايل غير صالح !!",
     "Sorry, There Is No Match Between New Password And Confirm It !!": "عذراً ، لا يوجد تطابق بين كلمة السر وتأكيدها !!",
@@ -446,5 +446,7 @@
     "Hour": "ساعة",
     "Min": "دقيقة",
     "Sec": "ثانية",
-    "Show Product Details": "عرض تفاصيل المنتج"
+    "Show Product Details": "عرض تفاصيل المنتج",
+    "Sorry, This Name Is Not Valid !!": "عذراً ، هذا الاسم غير صحيح !!",
+    "Show Billing": "عرض الفاتورة"
 }

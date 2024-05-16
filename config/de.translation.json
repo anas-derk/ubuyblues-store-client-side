@@ -90,7 +90,7 @@
     "Please Enter Email Here": "Bitte geben Sie hier die E-Mail ein",
     "Save Changes": "Änderungen speichern",
     "Saving": "Speichern",
-    "Updating User Info Process Has Been Successfuly ...": "Die Aktualisierung der Benutzerinformationen war erfolgreich ...",
+    "Updating User Info Process Has Been Successfuly !!": "Die Aktualisierung der Benutzerinformationen war erfolgreich ...",
     "Sorry, This Password Is Uncorrect !!": "Entschuldigung, dieses Passwort ist falsch !!",
     "Sorry, Invalid Mobile Phone !!": "Entschuldigung, ungültige Handynummer !!",
     "Sorry, There Is No Match Between New Password And Confirm It !!": "Entschuldigung, es besteht kein Übereinstimmung zwischen dem neuen Passwort und der Bestätigung !!",
@@ -443,5 +443,7 @@
     "Hours": "Std.",
     "Min": "Min.",
     "Sec": "Sek.",
-    "Show Product Details": "Produktdetails anzeigen"
+    "Show Product Details": "Produktdetails anzeigen",
+    "Sorry, This Name Is Not Valid !!": "Entschuldigung, dieser Name ist ungültig!!",
+    "Show Billing": "Rechnung anzeigen"
 }

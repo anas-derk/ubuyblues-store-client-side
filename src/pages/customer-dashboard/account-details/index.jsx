@@ -18,15 +18,12 @@ export default function CustomerAccountDetails() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [userInfo, setUserInfo] = useState({
         email: "",
         password: "",
         first_name: "",
         last_name: "",
         preview_name: "",
-        favorite_products_list: [],
     });
 
     const [currentPassword, setCurrentPassword] = useState("");
@@ -61,7 +58,6 @@ export default function CustomerAccountDetails() {
                 .then(async (result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
-                        setToken(userToken);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
@@ -105,6 +101,9 @@ export default function CustomerAccountDetails() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -114,6 +113,9 @@ export default function CustomerAccountDetails() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -123,6 +125,9 @@ export default function CustomerAccountDetails() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -187,10 +192,10 @@ export default function CustomerAccountDetails() {
                 setIsWaitStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, newUserInfo, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-user-token"),
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);

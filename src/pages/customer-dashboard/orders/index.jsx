@@ -46,7 +46,7 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const { t, i18n } = useTranslation();
 
-    const pageSize = 5;
+    const pageSize = 3;
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -67,7 +67,7 @@ export default function CustomerOrders({ countryAsProperty }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
-            getUserInfo(userToken)
+            getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         setFilters({ ...filters, customerId: result.data._id });

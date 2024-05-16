@@ -19,8 +19,6 @@ export default function CustomerBillingAddress() {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [token, setToken] = useState("");
-
     const [userInfo, setUserInfo] = useState("");
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
@@ -45,7 +43,6 @@ export default function CustomerBillingAddress() {
                 .then(async (result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
-                        setToken(userToken);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
@@ -97,6 +94,9 @@ export default function CustomerBillingAddress() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -106,6 +106,9 @@ export default function CustomerBillingAddress() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -115,6 +118,9 @@ export default function CustomerBillingAddress() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -133,6 +139,9 @@ export default function CustomerBillingAddress() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        }
                     },
                 },
                 {
@@ -177,10 +186,10 @@ export default function CustomerBillingAddress() {
                     billing_address: userInfo.billing_address,
                 }, {
                     headers: {
-                        Authorization: token,
+                        Authorization: localStorage.getItem("asfour-store-user-token"),
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);

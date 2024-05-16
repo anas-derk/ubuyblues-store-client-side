@@ -22,6 +22,11 @@ function isValidMobilePhone(mobilePhone, countryCode) {
     return isValidPhoneNumber(mobilePhone, countryCode);
 }
 
+// تعريف دالة للتحقق من الاسم هل هو اسم صالح أم لا )
+function isValidName(name) {
+    return name.match(/^([\u0600-\u06FF\s]+|[a-zA-Z\s]+)$/);
+}
+
 // تعريف دالة للتحقق من قيم المدخلات
 function inputValuesValidation(inputs) {
     // تعريف المصفوفة التي ستخزن الأخطاء
@@ -45,6 +50,15 @@ function inputValuesValidation(inputs) {
                 // التحقق من أنّ القاعدة محققة ، وفي حالة لم تكن محققة فإننا نضيف الخطأ إلى مصفوفة الأخطاء
                 if (!isEmail(input.value)) {
                     errorsObject[input.name] = inputRules.isEmail.msg;
+                    // في حالة وجود خطأ نقوم بتجاهل كل التعليمات اللاحقة داخل التكرار الحالي للحلقة والانتقال إلى التكرار التالي
+                    continue;
+                }
+            }
+            // التحقق من كون القاعدة داخل كائن القواعد موجودة 
+            if (typeof inputRules.isName !== "undefined") {
+                // التحقق من أنّ القاعدة محققة ، وفي حالة لم تكن محققة فإننا نضيف الخطأ إلى مصفوفة الأخطاء
+                if (!isValidName(input.value)) {
+                    errorsObject[input.name] = inputRules.isName.msg;
                     // في حالة وجود خطأ نقوم بتجاهل كل التعليمات اللاحقة داخل التكرار الحالي للحلقة والانتقال إلى التكرار التالي
                     continue;
                 }

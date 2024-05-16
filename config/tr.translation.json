@@ -90,7 +90,7 @@
     "Please Enter Email Here": "Lütfen E-postayı Buraya Girin",
     "Save Changes": "Değişiklikleri Kaydet",
     "Saving": "Kaydediliyor",
-    "Updating User Info Process Has Been Successfuly ...": "Kullanıcı Bilgileri Güncelleme İşlemi Başarıyla Tamamlandı...",
+    "Updating User Info Process Has Been Successfuly !!": "Kullanıcı Bilgileri Güncelleme İşlemi Başarıyla Tamamlandı...",
     "Sorry, This Password Is Uncorrect !!": "Üzgünüm, Bu Şifre Yanlış !!",
     "Sorry, Invalid Mobile Phone !!": "Üzgünüm, Geçersiz Cep Telefonu !!",
     "Sorry, There Is No Match Between New Password And Confirm It !!": "Üzgünüm, Yeni Şifre ile Onay Şifresi Eşleşmiyor !!",
@@ -444,5 +444,7 @@
     "Hours": "Sa",
     "Min": "Dk",
     "Sec": "Sn",
-    "Show Product Details": "Ürün Detaylarını Göster"
+    "Show Product Details": "Ürün Detaylarını Göster",
+    "Sorry, This Name Is Not Valid !!": "Üzgünüm, Bu İsim Geçerli Değil !!",
+    "Show Billing": "Faturayı Göster"
 }
