@@ -50,7 +50,6 @@
     "Filtering": "Filtreleme",
     "Order Details": "Sipariş Detayları",
     "Checkout Status": "Satın Alma Durumu",
-    "checkout_successful": "Ödeme başarılı",
     "Order Total Amount": "Toplam Sipariş Tutarı",
     "Added Date": "Eklenme Tarihi",
     "Action": "Eylem",
@@ -446,5 +445,6 @@
     "Sec": "Sn",
     "Show Product Details": "Ürün Detaylarını Göster",
     "Sorry, This Name Is Not Valid !!": "Üzgünüm, Bu İsim Geçerli Değil !!",
-    "Show Billing": "Faturayı Göster"
+    "Show Billing": "Faturayı Göster",
+    "Checkout Successfull": "Ödeme Başarılı"
 }

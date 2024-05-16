@@ -50,7 +50,6 @@
     "Filtering": "جاري التصفية",
     "Order Details": "تفاصيل الطلب",
     "Checkout Status": "حالة التحقق",
-    "checkout_successful": "نجاح التحقق",
     "Order Total Amount": "المبلغ الإجمالي للطلب",
     "Added Date": "تاريخ الإضافة",
     "Action": "العملية",
@@ -448,5 +447,6 @@
     "Sec": "ثانية",
     "Show Product Details": "عرض تفاصيل المنتج",
     "Sorry, This Name Is Not Valid !!": "عذراً ، هذا الاسم غير صحيح !!",
-    "Show Billing": "عرض الفاتورة"
+    "Show Billing": "عرض الفاتورة",
+    "Checkout Successfull": "اكتمال التحقق"
 }

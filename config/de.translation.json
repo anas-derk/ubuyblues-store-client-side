@@ -50,7 +50,6 @@
     "Filtering": "Filtern",
     "Order Details": "Bestelldetails",
     "Checkout Status": "Checkout-Status",
-    "checkout_successful": "Bezahlung erfolgreich",
     "Order Total Amount": "Gesamtbestellwert",
     "Added Date": "Hinzugefügt am",
     "Action": "Aktion",
@@ -445,5 +444,6 @@
     "Sec": "Sek.",
     "Show Product Details": "Produktdetails anzeigen",
     "Sorry, This Name Is Not Valid !!": "Entschuldigung, dieser Name ist ungültig!!",
-    "Show Billing": "Rechnung anzeigen"
+    "Show Billing": "Rechnung anzeigen",
+    "Checkout Successfull": "Zahlung erfolgreich"
 }
