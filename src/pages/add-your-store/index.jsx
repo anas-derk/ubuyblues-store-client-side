@@ -311,27 +311,27 @@ export default function AddYourStore() {
                                 </section>
                                 {!isWaitStatus && !successMsg && !errorMsg && <button
                                     type="submit"
-                                    className="btn btn-success w-50 d-block mx-auto p-2 global-button"
+                                    className="btn btn-success w-50 d-block mx-auto p-3 global-button"
                                 >
                                     {t("Add Now")}
                                 </button>}
                                 {isWaitStatus && <button
                                     type="button"
-                                    className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
+                                    className="btn btn-danger w-50 d-block mx-auto p-3 global-button"
                                     disabled
                                 >
                                     {t("Waiting Add New Store")} ...
                                 </button>}
                                 {errorMsg && <button
                                     type="button"
-                                    className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
+                                    className="btn btn-danger w-50 d-block mx-auto p-3 global-button"
                                     disabled
                                 >
                                     {t(errorMsg)}
                                 </button>}
                                 {successMsg && <button
                                     type="button"
-                                    className="btn btn-success w-75 d-block mx-auto p-2 global-button"
+                                    className="btn btn-success w-75 d-block mx-auto p-3 global-button"
                                     disabled
                                 >
                                     {t(successMsg)}

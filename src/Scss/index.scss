@@ -622,6 +622,7 @@ textarea{
     width: 50%;
     @media (max-width: 767px) {
         width: 100%;
+        padding: 1rem !important;
     }
     @media (min-width: 768px) and (max-width: 1199px) {
         width: 75%;

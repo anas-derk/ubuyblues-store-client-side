@@ -764,6 +764,7 @@ textarea {
 @media (max-width: 767px) {
   .public-form {
     width: 100%;
+    padding: 1rem !important;
   }
 }
 
