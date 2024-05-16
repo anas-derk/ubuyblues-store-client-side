@@ -13,7 +13,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails, getProductQuantity, calcTotalPrices } from "../../../public/global_functions/popular";
+import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
 
