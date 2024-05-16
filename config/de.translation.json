@@ -445,5 +445,6 @@
     "Show Product Details": "Produktdetails anzeigen",
     "Sorry, This Name Is Not Valid !!": "Entschuldigung, dieser Name ist ungültig!!",
     "Show Billing": "Rechnung anzeigen",
-    "Checkout Successfull": "Zahlung erfolgreich"
+    "Checkout Successfull": "Zahlung erfolgreich",
+    "Sorry, This Email Is Already Exist !!": "Entschuldigung, diese E-Mail existiert bereits !!"
 }

@@ -201,7 +201,6 @@ export default function AddYourStore() {
             }
         }
         catch (err) {
-            console.log(err)
             setIsWaitStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -268,7 +267,7 @@ export default function AddYourStore() {
                                     />
                                     {formValidationErrors["ownerEmail"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{formValidationErrors["ownerEmail"]}</span>
+                                        <span>{t(formValidationErrors["ownerEmail"])}</span>
                                     </p>}
                                 </section>
                                 <section className="store-products-type mb-4">

@@ -446,5 +446,6 @@
     "Show Product Details": "Ürün Detaylarını Göster",
     "Sorry, This Name Is Not Valid !!": "Üzgünüm, Bu İsim Geçerli Değil !!",
     "Show Billing": "Faturayı Göster",
-    "Checkout Successfull": "Ödeme Başarılı"
+    "Checkout Successfull": "Ödeme Başarılı",
+    "Sorry, This Email Is Already Exist !!": "Üzgünüz, Bu E-posta Adresi Zaten Mevcut !!"
 }
