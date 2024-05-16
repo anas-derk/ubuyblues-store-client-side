@@ -59,6 +59,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                     setOrderDetails(result);
                     const tempTotalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(result.order_products);
                     const tempTotalDiscount = calcTotalOrderDiscount(result.order_products);
+                    console.log(tempTotalPriceBeforeDiscount, tempTotalDiscount)
                     setPricesDetailsSummary({
                         totalPriceBeforeDiscount: tempTotalPriceBeforeDiscount,
                         totalDiscount: tempTotalDiscount,
