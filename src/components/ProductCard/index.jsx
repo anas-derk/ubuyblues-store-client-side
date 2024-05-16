@@ -264,25 +264,25 @@ export default function ProductCard({
                 <h4 className="fw-bold mb-4 border border-4 border-danger p-2">{productDetails.offerDescription}</h4>
                 <div className="row mb-4">
                     <div className="col-3">
-                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                        <div className="remaining-time w-100 text-white bg-dark d-flex flex-column justify-content-center align-items-center">
                             <span>{remainingTimeForDiscountOffer.days}</span>
-                            <h6 className="mb-0">{t("Days")}</h6>
+                            <h6 className="mb-0">{t("Day")}</h6>
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                        <div className="remaining-time w-100 text-white bg-dark d-flex flex-column justify-content-center align-items-center">
                             <span>{remainingTimeForDiscountOffer.hours}</span>
-                            <h6 className="mb-0">{t("Hours")}</h6>
+                            <h6 className="mb-0">{t("Hour")}</h6>
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                        <div className="remaining-time w-100 text-white bg-dark d-flex flex-column justify-content-center align-items-center">
                             <span>{remainingTimeForDiscountOffer.minutes}</span>
                             <h6 className="mb-0">{t("Min")}</h6>
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="remaining-time w-100 text-white bg-dark p-3">
+                        <div className="remaining-time w-100 text-white bg-dark d-flex flex-column justify-content-center align-items-center">
                             <span>{remainingTimeForDiscountOffer.seconds}</span>
                             <h6 className="mb-0">{t("Sec")}</h6>
                         </div>
