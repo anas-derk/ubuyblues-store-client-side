@@ -7,7 +7,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getStoreDetails } from "../../../../public/global_functions/popular";
+import { getStoreDetails, calc } from "../../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 
 export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
@@ -29,6 +29,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
         totalPriceBeforeDiscount: 0,
         totalDiscount: 0,
+        totalPriceAfterDiscount: 0
     });
 
     const { t, i18n } = useTranslation();
@@ -42,7 +43,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -56,9 +57,12 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 let result = res.data;
                 if (!res.error) {
                     setOrderDetails(result);
+                    const tempTotalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(result.order_products);
+                    const tempTotalDiscount = calcTotalOrderDiscount(result.order_products);
                     setPricesDetailsSummary({
-                        totalPriceBeforeDiscount: calcTotalOrderPriceBeforeDiscount(result.order_products),
-                        totalDiscount: calcTotalOrderDiscount(result.order_products),
+                        totalPriceBeforeDiscount: tempTotalPriceBeforeDiscount,
+                        totalDiscount: tempTotalDiscount,
+                        totalPriceAfterDiscount: tempTotalPriceBeforeDiscount - tempTotalDiscount
                     });
                     result = await getStoreDetails(result.storeId);
                     setStoreDetails(result.data);

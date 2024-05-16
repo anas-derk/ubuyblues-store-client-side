@@ -229,5 +229,6 @@ export {
     getDateInUTCFormat,
     isExistOfferOnProduct,
     getFavoriteProductsByProductsIdsAndUserId,
-    isFavoriteProductForUser
+    isFavoriteProductForUser,
+    calcTotalOrderPriceAfterDiscount
 }
