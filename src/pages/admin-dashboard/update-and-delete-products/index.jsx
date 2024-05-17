@@ -100,8 +100,7 @@ export default function UpdateAndDeleteProducts() {
                             setAllCategories((await getAllCategories(getFilteringString(tempFilters))).data);
                             result = await getProductsCount(getFilteringString(tempFilters));
                             if (result.data > 0) {
-                                let tempAllProductsInsideThePage = (await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data;
-                                setAllProductsInsideThePage(tempAllProductsInsideThePage);
+                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
                             setIsLoadingPage(false);
