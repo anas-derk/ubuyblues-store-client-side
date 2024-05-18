@@ -22,13 +22,9 @@ import "../components/ProductCard/product_card.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../../config/i18n";
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import Head from "next/head";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function App({ Component, pageProps }) {
-  <Head>
-    <link rel="manifest" href="/manifest.json" />
-  </Head>
   return (
     <GoogleOAuthProvider clientId={"665697657851-ajm9qfeko4lcero0hj8jh7eqvds9eg18.apps.googleusercontent.com"}>
       <Component {...pageProps} />
