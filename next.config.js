@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "development",
+  },
   env: {
     BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
     WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
@@ -30,4 +34,11 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig;
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+});
+
+module.exports = withPWA(nextConfig);
