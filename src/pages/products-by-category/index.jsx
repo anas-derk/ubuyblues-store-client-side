@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import { useState, useEffect } from "react";
 import { getUserInfo } from "../../../public/global_functions/validations";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
-import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser } from "../../../public/global_functions/popular";
+import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
 import { useTranslation } from "react-i18next";
@@ -33,11 +33,17 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
+    const [currentDate, setCurrentDate] = useState("");
+
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
+
+    const [sharingName, setSharingName] = useState("");
+
+    const [sharingURL, setSharingURL] = useState("");
 
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
@@ -100,17 +106,18 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         getProductsCount(getFiltersAsQuery({ categoryId: categoryIdAsProperty }))
             .then(async (result) => {
                 if (result.data > 0) {
-                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
-                    setAllProductsInsideThePage(result);
                     setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
+                    setAllProductsInsideThePage(result.products);
+                    setCurrentDate(result.currentDate);
                     const userToken = localStorage.getItem("asfour-store-user-token");
                     if (userToken) {
-                        setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result.map((product) => product._id))).data);
+                        setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result.products.map((product) => product._id))).data);
                     }
                 }
                 setIsGetProducts(false);
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -229,7 +236,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
                 </div>
                 {/* Start Share Options Box */}
-                {isDisplayShareOptionsBox && <ShareOptionsBox setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox} />}
+                {isDisplayShareOptionsBox && <ShareOptionsBox
+                    setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                    sharingName={sharingName}
+                    sharingURL={sharingURL}
+                />}
                 {/* End Share Options Box */}
                 <div className="page-content page">
                     <div className="container-fluid">
@@ -288,6 +299,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                             currencyNameByCountry={currencyNameByCountry}
                                             isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
                                             isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
+                                            setSharingName={setSharingName}
+                                            setSharingURL={setSharingURL}
+                                            currentDateAsString={currentDate}
+                                            isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
                                         />
                                     </div>
                                 )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}

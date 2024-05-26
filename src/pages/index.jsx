@@ -111,7 +111,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const { i18n, t } = useTranslation();
 
-    const pageSize = 8;
+    const pageSize = 3;
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -234,10 +234,10 @@ export default function Home({ countryAsProperty, storeId }) {
                     result = await getProductsCount(filtersAsString);
                     if (result.data > 0) {
                         let result1 = (await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data;
-                        setAllProductsInsideThePage(result1);
+                        setAllProductsInsideThePage(result1.products);
                         totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                         if (userToken) {
-                            result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.map((product) => product._id));
+                            result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id));
                             result1.data.forEach((favoriteProduct) => {
                                 if (!tempFavoriteProductsListForUser.includes(favoriteProduct.productId)) {
                                     tempFavoriteProductsListForUser.push(favoriteProduct);
@@ -253,7 +253,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     setIsGetProducts(false);
                 }
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -347,7 +347,7 @@ export default function Home({ countryAsProperty, storeId }) {
         if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
@@ -364,7 +364,7 @@ export default function Home({ countryAsProperty, storeId }) {
         if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
@@ -379,7 +379,7 @@ export default function Home({ countryAsProperty, storeId }) {
         }
         if (section === "products") {
             setIsGetProducts(true);
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: pageNumber });
             setIsGetProducts(false);
         }
