@@ -235,7 +235,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 {/* End Share Options Box */}
                 <div className="page-content page">
                     <div className="container-fluid">
-                        {/* Start Last Added Products By Category Name */}
+                        {/* Start Last Added Products By Category Id */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products By Category Name")} : { categoryIdAsProperty }</h2>
                             <div className="row filters-and-sorting-box mb-4">
@@ -307,7 +307,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                     />}
                             </div>
                         </section>
-                        {/* End Last Added Products By Category Name */}
+                        {/* End Last Added Products By Category Id */}
                     </div>
                     <Footer />
                 </div>
