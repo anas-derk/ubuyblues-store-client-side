@@ -24,6 +24,7 @@ export default function AddNewProduct() {
         price: "",
         description: "",
         category: "",
+        categoryId: "",
         discount: "",
         image: null,
         galleryImages: [],
@@ -104,15 +105,11 @@ export default function AddNewProduct() {
         }
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const addNewProduct = async (e, productData) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            let errorsObject = inputValuesValidation([
                 {
                     name: "name",
                     value: productData.name,
@@ -190,6 +187,7 @@ export default function AddNewProduct() {
                 formData.append("price", productData.price);
                 formData.append("description", productData.description);
                 formData.append("category", productData.category);
+                formData.append("categoryId", productData.categoryId);
                 formData.append("discount", productData.discount);
                 formData.append("productImage", productData.image);
                 formData.append("galleryImages", productData.galleryImages[0]);
@@ -207,10 +205,10 @@ export default function AddNewProduct() {
                     let successTimeout = setTimeout(() => {
                         setSuccessMsg("");
                         setProductData({
+                            ...productData,
                             name: "",
                             price: "",
                             description: "",
-                            category: productData.category,
                             discount: "",
                             image: null,
                             galleryImages: [],
@@ -229,6 +227,7 @@ export default function AddNewProduct() {
             }
         }
         catch (err) {
+            console.log(err)
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 localStorage.removeItem("asfour-store-admin-user-token");
                 await router.push("/admin-dashboard/login");
@@ -301,11 +300,15 @@ export default function AddNewProduct() {
                         <section className="category mb-4">
                             <select
                                 className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setProductData({ ...productData, category: e.target.value })}
+                                onChange={(e) => {
+                                    const categoryNameAndCategoryId = e.target.value.split("-");
+                                    console.log(categoryNameAndCategoryId)
+                                    setProductData({ ...productData, category: categoryNameAndCategoryId[0], categoryId: categoryNameAndCategoryId[1] })
+                                }}
                             >
                                 <option defaultValue="" hidden>Please Select Your Category</option>
                                 {allCategories.map((category) => (
-                                    <option value={category.name} key={category._id}>{category.name}</option>
+                                    <option value={`${category.name}-${category._id}`} key={category._id}>{category.name}</option>
                                 ))}
                             </select>
                             {formValidationErrors["category"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
