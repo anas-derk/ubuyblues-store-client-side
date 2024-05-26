@@ -58,7 +58,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isGetStores, setIsGetStores] = useState(true);
 
-    const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
+    const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
 
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
@@ -226,9 +226,7 @@ export default function Home({ countryAsProperty, storeId }) {
                         setCurrentDate(result1.currentDate);
                         totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
                         if (userToken) {
-                            result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id));
-                            tempFavoriteProductsListForUser = result1.data; 
-                            setFavoriteProductsListForUser(tempFavoriteProductsListForUser);
+                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id))).data);
                         }
                     }
                     setIsGetFlashProducts(false);
@@ -245,7 +243,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     tempFavoriteProductsListForUser.push(favoriteProduct);
                                 }
                             });
-                            setFavoriteProductsListForUser(result1.data);
+                            setFavoriteProductsListForUserByProductsIdsAndUserId(result1.data);
                         }
                     }
                     setIsGetProducts(false);
@@ -537,7 +535,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                                 usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                                 currencyNameByCountry={currencyNameByCountry}
-                                                isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                                isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
@@ -616,7 +614,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                                 usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                                 currencyNameByCountry={currencyNameByCountry}
-                                                isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                                isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}

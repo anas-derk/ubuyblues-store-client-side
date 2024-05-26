@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import { useState, useEffect } from "react";
 import { getUserInfo } from "../../../public/global_functions/validations";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
-import { getProductsCount, getAllProductsInsideThePage } from "../../../public/global_functions/popular";
+import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
 import { useTranslation } from "react-i18next";
@@ -29,7 +29,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [isGetProducts, setIsGetProducts] = useState(true);
 
-    const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
+    const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
@@ -75,9 +75,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         const userToken = localStorage.getItem("asfour-store-user-token");
         if (userToken) {
             getUserInfo()
-            .then((result) => {
-                if (!result.error) {
-                        setFavoriteProductsListForUser(result.data.favorite_products_list);
+                .then(async (result) => {
+                    if (result.error) {
+                        localStorage.removeItem("asfour-store-user-token");
                     }
                     setIsGetUserInfo(false);
                 })
@@ -100,8 +100,13 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         getProductsCount(getFiltersAsQuery({ categoryId: categoryIdAsProperty }))
             .then(async (result) => {
                 if (result.data > 0) {
-                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data);
+                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
+                    setAllProductsInsideThePage(result);
                     setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    const userToken = localStorage.getItem("asfour-store-user-token");
+                    if (userToken) {
+                        setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result.map((product) => product._id))).data);
+                    }
                 }
                 setIsGetProducts(false);
             })
@@ -148,17 +153,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         }
     }
 
-    const isFavoriteProductForUser = (favorite_products_list, productId) => {
-        for (let i = 0; i < favorite_products_list.length; i++) {
-            if (favorite_products_list[i]._id === productId) return true;
-        }
-        return false;
-    }
-
     const getFiltersAsQuery = (filters) => {
         let filtersAsQuery = "";
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
-        if (filters.category) filtersAsQuery += `category=${filters.category}&`;
+        if (filters.categoryId) filtersAsQuery += `categoryId=${filters.categoryId}&`;
         if (filtersAsQuery) filtersAsQuery = filtersAsQuery.substring(0, filtersAsQuery.length - 1);
         return filtersAsQuery;
     }
@@ -237,7 +235,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products By Category Name")} : { categoryIdAsProperty }</h2>
+                            <h2 className="section-name text-center mt-4 mb-5 text-white">{t("Last Added Products By Category Name")} : {categoryIdAsProperty}</h2>
                             <div className="row filters-and-sorting-box mb-4">
                                 <div className="col-xs-12 col-md-6">
                                     <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
@@ -282,13 +280,14 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                             </div>
                             <div className="row products-box pt-4 pb-4">
                                 {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
-                                    <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                    <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
                                         <ProductCard
                                             productDetails={product}
                                             setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                             usdPriceAgainstCurrency={usdPriceAgainstCurrency}
                                             currencyNameByCountry={currencyNameByCountry}
-                                            isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
+                                            isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
+                                            isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
                                         />
                                     </div>
                                 )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
