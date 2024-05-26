@@ -467,10 +467,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }
 
-    const createPaymentOrderByTap = async () => {
+    const createPaymentOrder = async (paymentName) => {
         try{
             setIsWaitCreateNewOrder(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-tap?country=${countryAsProperty}`, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, {
                 storeId,
                 customerId: userInfo ? userInfo._id : "",
                 order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
@@ -511,7 +511,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
             });
             const result = res.data;
             if (!result.error) {
-                await router.push(result.data.transaction.url);
+                if (paymentName === "tap") {
+                    await router.push(result.data.transaction.url);
+                } else if (paymentMethod === "pilisio") {
+                    await router.push(result.data.data.invoice_url);
+                }
             }
         }
         catch(err) {
@@ -1000,6 +1004,22 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <FaTape className="icon tap-icon" />
                                                 </div>
                                             </div>
+                                            <div className={`row align-items-center pt-3 ${paymentMethod === "pilisio" ? "mb-3" : ""}`}>
+                                                <div className="col-md-6 text-start">
+                                                    <input
+                                                        type="radio"
+                                                        checked={paymentMethod === "pilisio"}
+                                                        id="tap-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup"
+                                                        onChange={() => setPaymentMethod("pilisio")}
+                                                    />
+                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("pilisio")}>{t("Pilisio")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <FaTape className="icon tap-icon" />
+                                                </div>
+                                            </div>
                                             {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button
                                                 className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={handleSelectPaypalPayment}
@@ -1008,7 +1028,19 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             </button>}
                                             {paymentMethod === "tap" && !isWaitCreateNewOrder && <button
                                                 className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={createPaymentOrderByTap}
+                                                onClick={() => createPaymentOrder("tap")}
+                                            >
+                                                {t("Confirm Request")}
+                                            </button>}
+                                            {isWaitCreateNewOrder && <button
+                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                disabled
+                                            >
+                                                {t("Please Waiting ...")}
+                                            </button>}
+                                            {paymentMethod === "pilisio" && !isWaitCreateNewOrder && <button
+                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                onClick={() => createPaymentOrder("pilisio")}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}

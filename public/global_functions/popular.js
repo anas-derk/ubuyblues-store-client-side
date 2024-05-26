@@ -13,8 +13,7 @@ const getFlashProductsCount = async (filters) => {
 const getProductsCount = async (filters) => {
     try {
         const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`);
-        const result = await res.data;
-        return result;
+        return res.data;
     }
     catch (err) {
         throw Error(err);

@@ -15,7 +15,7 @@ import PaginationBar from "@/components/PaginationBar";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 
-export default function ProductByCategory({ countryAsProperty, categoryNameAsProperty }) {
+export default function ProductByCategory({ countryAsProperty, categoryIdAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -42,7 +42,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
     const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [filters, setFilters] = useState({
-        category: "",
+        categoryId: "",
     });
 
     const [sortDetails, setSortDetails] = useState({
@@ -97,10 +97,10 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // =============================================================================
-        getProductsCount(getFiltersAsQuery({ category: categoryNameAsProperty }))
+        getProductsCount(getFiltersAsQuery({ categoryId: categoryIdAsProperty }))
             .then(async (result) => {
                 if (result.data > 0) {
-                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ category: categoryNameAsProperty }))).data);
+                    setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data);
                     setTotalPagesCount(Math.ceil(result.data / pageSize));
                 }
                 setIsGetProducts(false);
@@ -114,7 +114,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
 
     useEffect(() => {
         if (!isGetUserInfo && !isGetProducts) {
-            setFilters({ ...filters, category: categoryNameAsProperty });
+            setFilters({ ...filters, categoryId: categoryIdAsProperty });
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetProducts]);
@@ -237,7 +237,7 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Name */}
                         <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products By Category Name")} : { categoryNameAsProperty }</h2>
+                            <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products By Category Name")} : { categoryIdAsProperty }</h2>
                             <div className="row filters-and-sorting-box mb-4">
                                 <div className="col-xs-12 col-md-6">
                                     <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
@@ -319,44 +319,44 @@ export default function ProductByCategory({ countryAsProperty, categoryNameAsPro
 }
 
 export async function getServerSideProps({ query }) {
-    if (query.category) {
+    if (query.categoryId) {
         const allowedCountries = ["kuwait", "germany", "turkey"];
         if (query.country) {
             if (!allowedCountries.includes(query.country)) {
                 return {
                     redirect: {
                         permanent: false,
-                        destination: `/product-by-category?category=${query.category}`,
+                        destination: `/product-by-category?categoryId=${query.categoryId}`,
                     },
                     props: {
                         countryAsProperty: "kuwait",
-                        categoryNameAsProperty: query.category,
+                        categoryIdAsProperty: query.categoryId,
                     },
                 }
             }
-            if (Object.keys(query).filter((key) => key !== "country" && key !== "category").length > 2) {
+            if (Object.keys(query).filter((key) => key !== "country" && key !== "categoryId").length > 2) {
                 return {
                     redirect: {
                         permanent: false,
-                        destination: `/?country=${query.country}&category=${query.category}`,
+                        destination: `/?country=${query.country}&categoryId=${query.categoryId}`,
                     },
                     props: {
                         countryAsProperty: query.country,
-                        categoryNameAsProperty: query.category,
+                        categoryIdAsProperty: query.categoryId,
                     },
                 }
             }
             return {
                 props: {
                     countryAsProperty: query.country,
-                    categoryNameAsProperty: query.categoryNameAsProperty,
+                    categoryIdAsProperty: query.categoryId,
                 },
             }
         }
         return {
             props: {
                 countryAsProperty: "kuwait",
-                categoryNameAsProperty: query.category,
+                categoryIdAsProperty: query.categoryId,
             },
         }
     }
