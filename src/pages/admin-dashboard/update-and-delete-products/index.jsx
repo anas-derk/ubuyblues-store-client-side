@@ -100,7 +100,7 @@ export default function UpdateAndDeleteProducts() {
                             setAllCategories((await getAllCategories(getFilteringString(tempFilters))).data);
                             result = await getProductsCount(getFilteringString(tempFilters));
                             if (result.data > 0) {
-                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data);
+                                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, getFilteringString(tempFilters))).data.products);
                                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                             }
                             setIsLoadingPage(false);
@@ -137,7 +137,7 @@ export default function UpdateAndDeleteProducts() {
     const getPreviousPage = async () => {
         setIsFilteringProductsStatus(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products);
         setCurrentPage(newCurrentPage);
         setIsFilteringProductsStatus(false);
     }
@@ -145,14 +145,14 @@ export default function UpdateAndDeleteProducts() {
     const getNextPage = async () => {
         setIsFilteringProductsStatus(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products);
         setCurrentPage(newCurrentPage);
         setIsFilteringProductsStatus(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsFilteringProductsStatus(true);
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.products);
         setCurrentPage(pageNumber);
         setIsFilteringProductsStatus(false);
     }
@@ -203,7 +203,13 @@ export default function UpdateAndDeleteProducts() {
             tempNewValue = getDateInUTCFormat(newValue);
         }
         let productsDataTemp = allProductsInsideThePage;
-        productsDataTemp[productIndex][fieldName] = tempNewValue;
+        if (fieldName === "category") {
+            const categoryNameAndCategoryId = newValue.split("-");
+            productsDataTemp[productIndex][fieldName] = categoryNameAndCategoryId[0];
+            productsDataTemp[productIndex]["categoryId"] = categoryNameAndCategoryId[1];
+        } else {
+            productsDataTemp[productIndex][fieldName] = newValue;
+        }
         setAllProductsInsideThePage(productsDataTemp);
     }
 
@@ -350,6 +356,7 @@ export default function UpdateAndDeleteProducts() {
                     description: allProductsInsideThePage[productIndex].description,
                     discount: allProductsInsideThePage[productIndex].discount,
                     category: allProductsInsideThePage[productIndex].category,
+                    categoryId: allProductsInsideThePage[productIndex].categoryId,
                     startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
                     endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
                     discountInOfferPeriod: allProductsInsideThePage[productIndex].discountInOfferPeriod,
@@ -842,7 +849,7 @@ export default function UpdateAndDeleteProducts() {
                                             >
                                                 <option defaultValue="" hidden>Please Select Your Category</option>
                                                 {allCategories.map((category) => (
-                                                    <option value={category.name} key={category._id}>{category.name}</option>
+                                                    <option value={`${category.name}-${category._id}`} key={category._id}>{category.name}</option>
                                                 ))}
                                             </select>
                                         </td>

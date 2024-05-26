@@ -302,7 +302,6 @@ export default function AddNewProduct() {
                                 className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
                                 onChange={(e) => {
                                     const categoryNameAndCategoryId = e.target.value.split("-");
-                                    console.log(categoryNameAndCategoryId)
                                     setProductData({ ...productData, category: categoryNameAndCategoryId[0], categoryId: categoryNameAndCategoryId[1] })
                                 }}
                             >
