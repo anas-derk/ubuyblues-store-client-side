@@ -80,17 +80,17 @@ export default function UpdateAndDeleteProducts() {
     const pageSize = 2;
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
             getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
                         if (adminDetails.isBlocked) {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         }
                         else {
@@ -109,7 +109,7 @@ export default function UpdateAndDeleteProducts() {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -119,10 +119,6 @@ export default function UpdateAndDeleteProducts() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
-
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
 
     const getAllCategories = async (filters) => {
         try {
@@ -216,7 +212,7 @@ export default function UpdateAndDeleteProducts() {
     const updateProductImage = async (productIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "image",
                     value: allProductsInsideThePage[productIndex].image,
@@ -238,7 +234,7 @@ export default function UpdateAndDeleteProducts() {
                 formData.append("productImage", allProductsInsideThePage[productIndex].image);
                 const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = res.data;
@@ -257,7 +253,7 @@ export default function UpdateAndDeleteProducts() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -274,7 +270,7 @@ export default function UpdateAndDeleteProducts() {
     const updateProductData = async (productIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "name",
                     value: allProductsInsideThePage[productIndex].name,
@@ -363,10 +359,10 @@ export default function UpdateAndDeleteProducts() {
                     offerDescription: allProductsInsideThePage[productIndex].offerDescription,
                 }, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
@@ -380,7 +376,7 @@ export default function UpdateAndDeleteProducts() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -399,10 +395,10 @@ export default function UpdateAndDeleteProducts() {
             setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/products/${productId}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
-            const result = await res.data;
+            const result = res.data;
             setIsWaitStatus(false);
             if (!result.error) {
                 setSuccessMsg(result.msg);
@@ -425,7 +421,7 @@ export default function UpdateAndDeleteProducts() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -443,7 +439,7 @@ export default function UpdateAndDeleteProducts() {
             setIsDeleteProductGalleryImage(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/products/gallery-images/${allProductsInsideThePage[productIndex]._id}?galleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
             const result = res.data;
@@ -460,7 +456,7 @@ export default function UpdateAndDeleteProducts() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -482,7 +478,7 @@ export default function UpdateAndDeleteProducts() {
     const updateProductGalleryImage = async (productGalleryImageIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "galleryImage",
                     value: newProductGalleryImageFiles[productGalleryImageIndex],
@@ -504,10 +500,10 @@ export default function UpdateAndDeleteProducts() {
                 formData.append("productGalleryImage", newProductGalleryImageFiles[productGalleryImageIndex]);
                 const res = await axios.put(`${process.env.BASE_API_URL}/products/update-product-gallery-image/${allProductsInsideThePage[productIndex]._id}?oldGalleryImagePath=${allProductsInsideThePage[productIndex].galleryImagesPaths[productGalleryImageIndex]}`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 if (!result.error) {
                     setIsWaitChangeProductGalleryImage(false);
                     setSuccessChangeProductGalleryImageMsg(result.msg);
@@ -521,7 +517,7 @@ export default function UpdateAndDeleteProducts() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -539,7 +535,7 @@ export default function UpdateAndDeleteProducts() {
         try {
             console.log(newProductGalleryImageFiles)
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "newGalleryImages",
                     value: newProductGalleryImageFiles,
@@ -559,10 +555,10 @@ export default function UpdateAndDeleteProducts() {
                 }
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/adding-new-images-to-product-gallery/${allProductsInsideThePage[productIndex]._id}`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsAddingNewImagesToProductGallery(false);
                 if (!result.error) {
                     setIsAddingNewImagesToProductGallery(false);
@@ -577,7 +573,7 @@ export default function UpdateAndDeleteProducts() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

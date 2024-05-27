@@ -34,17 +34,17 @@ export default function AddNewBrand() {
     const router = useRouter();
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
             getAdminInfo(adminToken)
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
                         if (adminDetails.isBlocked) {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         }
                         else {
@@ -55,7 +55,7 @@ export default function AddNewBrand() {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -66,15 +66,11 @@ export default function AddNewBrand() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const addNewBrand = async (e, brandTitle) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "brandImage",
                     value: brandImage,
@@ -106,7 +102,7 @@ export default function AddNewBrand() {
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/brands/add-new-brand`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = await res.data;
@@ -132,7 +128,7 @@ export default function AddNewBrand() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

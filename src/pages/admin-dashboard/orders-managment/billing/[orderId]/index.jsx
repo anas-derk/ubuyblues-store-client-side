@@ -30,17 +30,17 @@ export default function ShowBilling({ orderId }) {
         if (orderId) {
             const userLanguage = localStorage.getItem("asfour-store-language");
             handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-            const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+            const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
             if (adminToken) {
-                getAdminInfo(adminToken)
+                getAdminInfo()
                     .then(async (result) => {
                         if (result.error) {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         } else {
                             const adminDetails = result.data;
                             if (adminDetails.isBlocked) {
-                                localStorage.removeItem("asfour-store-admin-user-token");
+                                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                                 await router.push("/admin-dashboard/login");
                             } else {
                                 result = await getOrderDetails(orderId);
@@ -57,7 +57,7 @@ export default function ShowBilling({ orderId }) {
                     })
                     .catch(async (err) => {
                         if (err?.response?.data?.msg === "Unauthorized Error") {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         }
                         else {

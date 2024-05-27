@@ -51,17 +51,17 @@ export default function UpdateAndDeleteBrands() {
     const pageSize = 10;
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
-            getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
                         if (adminDetails.isBlocked) {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         }
                         else {
@@ -79,7 +79,7 @@ export default function UpdateAndDeleteBrands() {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -89,10 +89,6 @@ export default function UpdateAndDeleteBrands() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
-
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
 
     const getFilteringString = (filters) => {
         let filteringString = "";
@@ -153,7 +149,7 @@ export default function UpdateAndDeleteBrands() {
     const changeBrandImage = async (brandIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "image",
                     value: allBrandsInsideThePage[brandIndex].image,
@@ -175,7 +171,7 @@ export default function UpdateAndDeleteBrands() {
                 formData.append("brandImage", allBrandsInsideThePage[brandIndex].image);
                 const res = await axios.put(`${process.env.BASE_API_URL}/brands/change-brand-image/${allBrandsInsideThePage[brandIndex]._id}`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = res.data;
@@ -193,7 +189,7 @@ export default function UpdateAndDeleteBrands() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -210,7 +206,7 @@ export default function UpdateAndDeleteBrands() {
     const updateBrandInfo = async (brandIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "title",
                     value: allBrandsInsideThePage[brandIndex].title,
@@ -229,10 +225,10 @@ export default function UpdateAndDeleteBrands() {
                     newBrandTitle: allBrandsInsideThePage[brandIndex].title,
                 }, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
-                const result = await res.data;
+                const result = res.data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
@@ -246,7 +242,7 @@ export default function UpdateAndDeleteBrands() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -265,10 +261,10 @@ export default function UpdateAndDeleteBrands() {
             setIsWaitStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/brands/${brandId}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
-            const result = await res.data;
+            const result = res.data;
             setIsWaitStatus(false);
             if (!result.error) {
                 setSuccessMsg(result.msg);
@@ -291,7 +287,7 @@ export default function UpdateAndDeleteBrands() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

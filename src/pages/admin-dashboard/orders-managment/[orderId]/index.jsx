@@ -28,17 +28,17 @@ export default function OrderDetails({ orderId }) {
     const router = useRouter();
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
-            getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
                         if (adminDetails.isBlocked) {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         } else {
                             setAdminInfo(adminDetails);
@@ -52,7 +52,7 @@ export default function OrderDetails({ orderId }) {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -89,7 +89,7 @@ export default function OrderDetails({ orderId }) {
                 unit_price: orderDetails.order_products[orderProductIndex].unit_price,
             }, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
             const result = res.data;
@@ -104,7 +104,7 @@ export default function OrderDetails({ orderId }) {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -122,7 +122,7 @@ export default function OrderDetails({ orderId }) {
             setIsDeletingStatus(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/orders/products/delete-product/${orderDetails._id}/${orderDetails.order_products[orderProductIndex].productId}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
             const result = await res.data;
@@ -138,7 +138,7 @@ export default function OrderDetails({ orderId }) {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

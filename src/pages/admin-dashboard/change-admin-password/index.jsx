@@ -45,12 +45,12 @@ export default function ChangeBussinessEmailPassword() {
     const router = useRouter();
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
             getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
@@ -68,7 +68,7 @@ export default function ChangeBussinessEmailPassword() {
                         setIsErrorMsgOnLoadingThePage(true);
                     }
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -79,14 +79,10 @@ export default function ChangeBussinessEmailPassword() {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);;
-    }
-
     const changeAdminPassword = async (e) => {
         try {
             e.preventDefault();
-            const errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "websiteOwnerEmail",
                     value: websiteOwnerEmail,
@@ -161,7 +157,7 @@ export default function ChangeBussinessEmailPassword() {
                 setIsWaitStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/admins/change-admin-password?websiteOwnerEmail=${websiteOwnerEmail}&websiteOwnerPassword=${websiteOwnerPassword}&adminEmail=${adminEmail}&newAdminPassword=${newAdminPassword}`, undefined, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     },
                 });
                 const result = await res.data;
@@ -188,7 +184,7 @@ export default function ChangeBussinessEmailPassword() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

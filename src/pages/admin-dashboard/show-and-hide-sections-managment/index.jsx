@@ -27,12 +27,12 @@ export default function ShowAndHideSections() {
     const router = useRouter();
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
-            getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
@@ -51,7 +51,7 @@ export default function ShowAndHideSections() {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -73,10 +73,10 @@ export default function ShowAndHideSections() {
                 sectionsStatus: allSections.map((section) => ({ _id: section._id, isAppeared: section.isAppeared })),
             }, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
-            const result = await res.data;
+            const result = res.data;
             setIsWaitStatus(false);
             if (!result.error) {
                 setSuccessMsg(result.msg);
@@ -88,7 +88,7 @@ export default function ShowAndHideSections() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

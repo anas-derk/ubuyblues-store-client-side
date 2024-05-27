@@ -40,12 +40,12 @@ export default function StoreDetails({ storeId }) {
     const router = useRouter();
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
-            getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
@@ -67,7 +67,7 @@ export default function StoreDetails({ storeId }) {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -78,14 +78,10 @@ export default function StoreDetails({ storeId }) {
         } else router.push("/admin-dashboard/login");
     }, []);
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const updateStoreData = async (storeId) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "name",
                     value: storeDetails.name,
@@ -153,7 +149,7 @@ export default function StoreDetails({ storeId }) {
                     productsDescription: storeDetails.productsDescription,
                 }, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = await res.data;
@@ -169,6 +165,7 @@ export default function StoreDetails({ storeId }) {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -184,7 +181,7 @@ export default function StoreDetails({ storeId }) {
     const changeStoreImage = async (storeId) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "image",
                     value: storeDetails.image,
@@ -205,7 +202,7 @@ export default function StoreDetails({ storeId }) {
                 formData.append("storeImage", storeDetails.image);
                 const res = await axios.put(`${process.env.BASE_API_URL}/stores/change-store-image/${storeId}`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = res.data;
@@ -223,6 +220,7 @@ export default function StoreDetails({ storeId }) {
         }
         catch (err) {
             if (err.response.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }

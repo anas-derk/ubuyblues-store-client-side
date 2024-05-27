@@ -34,18 +34,18 @@ export default function AdminLogin() {
     const router = useRouter();
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
             getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsLoadingPage(false);
                     } else await router.push("/admin-dashboard");
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsLoadingPage(false);
                     }
                     else {
@@ -56,15 +56,11 @@ export default function AdminLogin() {
         } else setIsLoadingPage(false);
     }, []);
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const adminLogin = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "email",
                     value: email,
@@ -102,7 +98,7 @@ export default function AdminLogin() {
                         setErrorMsg("");
                     }, 4000);
                 } else {
-                    localStorage.setItem("asfour-store-admin-user-token", result.data.token);
+                    localStorage.setItem(process.env.adminTokenNameInLocalStorage, result.data.token);
                     await router.push("/admin-dashboard");
                 }
             }

@@ -54,17 +54,17 @@ export default function OrdersManagment() {
     const pageSize = 3;
 
     useEffect(() => {
-        const adminToken = localStorage.getItem("asfour-store-admin-user-token");
+        const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
         if (adminToken) {
-            getAdminInfo(adminToken)
+            getAdminInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     } else {
                         const adminDetails = result.data;
                         if (adminDetails.isBlocked) {
-                            localStorage.removeItem("asfour-store-admin-user-token");
+                            localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                             await router.push("/admin-dashboard/login");
                         } else {
                             setAdminInfo(adminDetails);
@@ -81,7 +81,7 @@ export default function OrdersManagment() {
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-admin-user-token");
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.push("/admin-dashboard/login");
                     }
                     else {
@@ -91,10 +91,6 @@ export default function OrdersManagment() {
                 });
         } else router.push("/admin-dashboard/login");
     }, []);
-
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
 
     const getFilteringString = (filters) => {
         let filteringString = "";
@@ -190,7 +186,7 @@ export default function OrdersManagment() {
     const updateOrderData = async (orderIndex) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "totalAmount",
                     value: allOrdersInsideThePage[orderIndex].order_amount,
@@ -214,7 +210,7 @@ export default function OrdersManagment() {
                     status: allOrdersInsideThePage[orderIndex].status,
                 }, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = await res.data;
@@ -231,7 +227,7 @@ export default function OrdersManagment() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
@@ -251,7 +247,7 @@ export default function OrdersManagment() {
             setSelectedOrderIndex(orderIndex);
             const res = await axios.delete(`${process.env.BASE_API_URL}/orders/delete-order/${allOrdersInsideThePage[orderIndex]._id}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
             const result = res.data;
@@ -278,7 +274,7 @@ export default function OrdersManagment() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem("asfour-store-admin-user-token");
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.push("/admin-dashboard/login");
                 return;
             }
