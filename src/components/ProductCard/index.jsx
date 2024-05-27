@@ -87,7 +87,7 @@ export default function ProductCard({
             setIsWaitAddProductToFavoriteUserProductsList(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
             const result = res.data;
@@ -115,7 +115,7 @@ export default function ProductCard({
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
             const result = res.data;
