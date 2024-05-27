@@ -319,55 +319,70 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
     }
 
-    const addToCart = (id, name, price, description, category, discount, imagePath) => {
+    const addToCart = (productId) => {
         try {
             setIsWaitAddToCart(true);
-            let allProductsData = JSON.parse(localStorage.getItem("asfour-store-user-cart"));
-            if (allProductsData) {
-                allProductsData.push({
-                    id,
-                    name,
-                    price,
-                    description,
-                    category,
-                    discount,
-                    imagePath,
-                    quantity: 1,
-                });
-                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
-                setIsWaitAddToCart(false);
-                setIsSuccessAddToCart(true);
-                let successAddToCartTimeout = setTimeout(() => {
-                    setIsSuccessAddToCart(false);
-                    clearTimeout(successAddToCartTimeout);
-                }, 1500);
+            const userCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+            if (Array.isArray(userCart)) {
+                if (userCart.length > 0) {
+                    const productIndex = userCart.findIndex((product) => product._id === productId);
+                    if (productIndex === -1) {
+                        userCart.push({
+                            _id: productId,
+                            quantity: 1,
+                        });
+                        localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
+                        setIsWaitAddToCart(false);
+                        setIsSuccessAddToCart(true);
+                        let successAddToCartTimeout = setTimeout(() => {
+                            setIsSuccessAddToCart(false);
+                            clearTimeout(successAddToCartTimeout);
+                        }, 3000);
+                    } else {
+                        setIsWaitAddToCart(false);
+                        setErrorInAddToCart("Sorry, This Product Is Already Exist In Your Cart !!");
+                        let errorInAddToCartTimeout = setTimeout(() => {
+                            setErrorInAddToCart("");
+                            clearTimeout(errorInAddToCartTimeout);
+                        }, 3000);
+                    }
+                }
+                else {
+                    let allProductsData = [];
+                    allProductsData.push({
+                        _id: productId,
+                        quantity: 1,
+                    });
+                    localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
+                    setIsWaitAddToCart(false);
+                    setIsSuccessAddToCart(true);
+                    let successAddToCartTimeout = setTimeout(() => {
+                        setIsSuccessAddToCart(false);
+                        clearTimeout(successAddToCartTimeout);
+                    }, 3000);
+                }
             } else {
                 let allProductsData = [];
                 allProductsData.push({
-                    id,
-                    name,
-                    price,
-                    description,
-                    category,
-                    discount,
-                    imagePath,
+                    _id: productId,
                     quantity: 1,
                 });
-                localStorage.setItem("asfour-store-user-cart", JSON.stringify(allProductsData));
+                localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddToCart(false);
                     clearTimeout(successAddToCartTimeout);
-                }, 1500);
+                }, 3000);
             }
         }
         catch (err) {
-            setErrorInAddToCart("Error");
+            setIsWaitAddToCart(false);
+            setErrorInAddToCart("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorInAddToCartTimeout = setTimeout(() => {
-                setIsSuccessAddToCart(false);
+                setErrorInAddToCart(false);
                 clearTimeout(errorInAddToCartTimeout);
-            }, 1500);
+            }, 3000);
         }
     }
 
@@ -624,9 +639,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             </div>
                                             <div className={`add-to-cart row align-items-center mb-4 ${i18n.language !== "ar" && windowInnerWidth > 767 && "me-2"} ${i18n.language === "ar" && windowInnerWidth > 767 && "ms-2"}`}>
                                                 <div className="add-to-cart-managment-btns-box col-md-8">
-                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id, productInfo.name, productInfo.price, productInfo.description, productInfo.category, productInfo.discount, productInfo.imagePath)}>{t("Add To Cart")}</button>}
+                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id)}>{t("Add To Cart")}</button>}
                                                     {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>{t("Waiting In Add To Cart ...")}</button>}
-                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>{t("Sorry, Something Went Wrong !!")}</button>}
+                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>{t(errorInAddToCart)}</button>}
                                                     {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>{t("Display Your Cart")}</Link>}
                                                 </div>
                                                 <div className="select-product-quantity-box p-3 col-md-4">
