@@ -84,17 +84,13 @@ export default function UserAuth() {
         document.body.lang = userLanguage;
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const userLogin = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
             setErrorMsg("");
             setSuccessMsg("");
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "emailForLogin",
                     value: emailForLogin,
@@ -156,7 +152,7 @@ export default function UserAuth() {
             setErrorMsg("");
             setSuccessMsg("");
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "emailForSignup",
                     value: emailForSignup,

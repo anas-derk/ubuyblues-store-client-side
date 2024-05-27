@@ -411,15 +411,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         return count;
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const addNewReferal = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            const errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "name",
                     value: referalDetails.name,

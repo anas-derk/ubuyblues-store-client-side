@@ -76,15 +76,11 @@ export default function AddYourStore() {
         }
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const createNewStore = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "name",
                     value: storeData.name,

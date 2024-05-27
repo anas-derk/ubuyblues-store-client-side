@@ -78,14 +78,10 @@ export default function CustomerBillingAddress() {
         }
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const updateShippingAddressInfoForUser = async (e) => {
         try {
             e.preventDefault();
-            const errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "first_name",
                     value: userInfo.shipping_address.first_name,

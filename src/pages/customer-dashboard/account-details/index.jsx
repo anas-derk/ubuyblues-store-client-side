@@ -84,16 +84,12 @@ export default function CustomerAccountDetails() {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
     }
-    
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
 
     const updateUserInfo = async (e) => {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            const errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "first_name",
                     value: userInfo.first_name,

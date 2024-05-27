@@ -150,7 +150,7 @@ export default function AccountVerification({ email }) {
             const result = res.data;
             if (!result.error) {
                 localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
-                router.push("/");
+                await router.replace("/");
             } else {
                 let checkAccountVerificationCodeTimeout = setTimeout(() => {
                     setIsWaitCheckingStatus(false);

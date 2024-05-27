@@ -189,10 +189,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const createNewOrder = async (orderDetails) => {
         try {
             const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
@@ -204,7 +200,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     const handleSelectPaypalPayment = () => {
-        const errorsObject = validateFormFields([
+        const errorsObject = inputValuesValidation([
             {
                 name: "first_name_for_billing_address",
                 value: userInfo ? userInfo.billing_address.first_name : "",
@@ -463,7 +459,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             setIsWaitApproveOnPayPalOrder(false);
-            throw Error(err);
         }
     }
 
@@ -520,7 +515,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch(err) {
             setIsWaitCreateNewOrder(false);
-            throw Error(err);
         }
     }
 
