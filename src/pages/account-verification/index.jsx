@@ -34,7 +34,7 @@ export default function AccountVerification({ email }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         if (userToken) {
@@ -44,12 +44,12 @@ export default function AccountVerification({ email }) {
                     if (!result.error) {
                         await router.push("/");
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     }
                 }).catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     } else {
                         setIsLoadingPage(false);
@@ -149,7 +149,7 @@ export default function AccountVerification({ email }) {
             const res = await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}&code=${accountVerificationCodeCharactersList.join("")}`);
             const result = res.data;
             if (!result.error) {
-                localStorage.setItem("asfour-store-user-token", result.data.token);
+                localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
                 router.push("/");
             } else {
                 let checkAccountVerificationCodeTimeout = setTimeout(() => {

@@ -65,7 +65,7 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -83,13 +83,13 @@ export default function CustomerOrders({ countryAsProperty }) {
                         });
                         setIsFilteringOrdersStatus(false);
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -190,10 +190,6 @@ export default function CustomerOrders({ countryAsProperty }) {
             }
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/auth");
-                return;
-            }
             setIsFilteringOrdersStatus(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorTimeout = setTimeout(() => {

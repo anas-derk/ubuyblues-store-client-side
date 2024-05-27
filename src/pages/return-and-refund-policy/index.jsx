@@ -18,18 +18,18 @@ export default function PolicesTermsAndConditions() {
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then((result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     }
                     setIsLoadingPage(false);
                 })
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     } else {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);

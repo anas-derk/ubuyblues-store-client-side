@@ -82,7 +82,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getStoreDetails(storeId)
             .then(async (result) => {
@@ -94,7 +94,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                             if (!result.error) {
                                 setUserInfo(result.data);
                             } else {
-                                localStorage.removeItem("asfour-store-user-token");
+                                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                                 await router.push("/auth");
                             }
                         } else {
@@ -148,7 +148,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             })
             .catch(async (err) => {
                 if (err?.response?.data?.msg === "Unauthorized Error") {
-                    localStorage.removeItem("asfour-store-user-token");
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     await router.push("/auth");
                 } else {
                     setIsLoadingPage(false);

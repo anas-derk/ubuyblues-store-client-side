@@ -52,7 +52,7 @@ export default function CustomerAccountDetails() {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -61,13 +61,13 @@ export default function CustomerAccountDetails() {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -192,7 +192,7 @@ export default function CustomerAccountDetails() {
                 setIsWaitStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, newUserInfo, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-user-token"),
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
                 });
                 const result = res.data;
@@ -214,6 +214,7 @@ export default function CustomerAccountDetails() {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 await router.push("/auth");
                 return;
             }

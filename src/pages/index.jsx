@@ -129,17 +129,17 @@ export default function Home({ countryAsProperty, storeId }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then((result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     }
                 })
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     } else {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -217,7 +217,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetCategories(false);
                     // =============================================================================
-                    const userToken = localStorage.getItem("asfour-store-user-token");
+                    const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                     result = await getFlashProductsCount(filtersAsString);
                     let tempFavoriteProductsListForUser = [];
                     if (result.data > 0) {
@@ -226,7 +226,7 @@ export default function Home({ countryAsProperty, storeId }) {
                         setCurrentDate(result1.currentDate);
                         totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
                         if (userToken) {
-                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id))).data);
+                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(result1.products.map((product) => product._id))).data);
                         }
                     }
                     setIsGetFlashProducts(false);
@@ -237,7 +237,7 @@ export default function Home({ countryAsProperty, storeId }) {
                         setAllProductsInsideThePage(result1.products);
                         totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                         if (userToken) {
-                            result1 = await getFavoriteProductsByProductsIdsAndUserId(userToken, result1.products.map((product) => product._id));
+                            result1 = await getFavoriteProductsByProductsIdsAndUserId(result1.products.map((product) => product._id));
                             result1.data.forEach((favoriteProduct) => {
                                 if (!tempFavoriteProductsListForUser.includes(favoriteProduct.productId)) {
                                     tempFavoriteProductsListForUser.push(favoriteProduct);

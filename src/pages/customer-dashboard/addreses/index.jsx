@@ -22,7 +22,7 @@ export default function CustomerAddreses() {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -30,13 +30,13 @@ export default function CustomerAddreses() {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");

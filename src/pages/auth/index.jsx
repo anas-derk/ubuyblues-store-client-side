@@ -50,7 +50,7 @@ export default function UserAuth() {
     const router = useRouter();
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         const userLanguage = localStorage.getItem("asfour-store-language");
         if (userToken) {
             getUserInfo()
@@ -59,14 +59,14 @@ export default function UserAuth() {
                     if (!result.error) {
                         await router.push("/");
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
                 }).catch((err) => {
                     handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         setIsLoadingPage(false);
                     } else {
                         setIsLoadingPage(false);
@@ -124,7 +124,7 @@ export default function UserAuth() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsLoginingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`);
-                const result = await res.data;
+                const result = res.data;
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
@@ -134,7 +134,7 @@ export default function UserAuth() {
                     }, 5000);
                 } else {
                     if (result.data.isVerified) {
-                        localStorage.setItem("asfour-store-user-token", result.data.token);
+                        localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
                         await router.push("/");
                     } else await router.push(`/account-verification?email=${emailForLogin}`);
                 }
@@ -231,7 +231,7 @@ export default function UserAuth() {
                 }, 5000);
             } else {
                 if (result.data.isVerified) {
-                    localStorage.setItem("asfour-store-user-token", result.data.token);
+                    localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
                     await router.push("/");
                 } else await router.push(`/account-verification?email=${emailForLogin}`);
             }

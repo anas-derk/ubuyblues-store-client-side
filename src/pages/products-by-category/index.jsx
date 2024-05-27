@@ -81,18 +81,18 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
                     if (result.error) {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     }
                     setIsGetUserInfo(false);
                 })
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     } else {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -116,9 +116,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
                         setAllProductsInsideThePage(result.products);
                         setCurrentDate(result.currentDate);
-                        const userToken = localStorage.getItem("asfour-store-user-token");
+                        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                         if (userToken) {
-                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result.products.map((product) => product._id))).data);
+                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(result.products.map((product) => product._id))).data);
                         }
                     }
                 }

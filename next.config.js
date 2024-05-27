@@ -8,6 +8,8 @@ const nextConfig = {
   env: {
     BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
     WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
+    userTokenNameInLocalStorage: "as-s-u-t",
+    adminTokenNameInLocalStorage: "as-s-a-t"
   },
   async headers() {
     return [

@@ -59,6 +59,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
+    const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(false);
+
     const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
 
     const [isSuccessAddToCart, setIsSuccessAddToCart] = useState(false);
@@ -141,7 +143,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         window.addEventListener("resize", function () {
             setWindowInnerWidth(this.innerWidth);
         });
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then((result) => {
@@ -152,7 +154,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 })
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         setIsLoadingPage(false);
                     } else {
                         setIsLoadingPage(false);
@@ -264,20 +266,18 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitAddProductToFavoriteUserProductsList(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/add-favorite-product?productId=${productId}`, undefined, {
+            const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
-            const result = await res.data;
+            const result = res.data;
+            setIsWaitAddProductToFavoriteUserProductsList(false);
             if (!result.error) {
-                let tempFavoriteProductsForUser = favoriteProductsListForUser;
-                tempFavoriteProductsForUser.push(productInfo);
-                setFavoriteProductsListForUser(tempFavoriteProductsForUser);
-                setIsWaitAddProductToFavoriteUserProductsList(false);
                 setIsSuccessAddProductToFavoriteUserProductsList(true);
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddProductToFavoriteUserProductsList(false);
+                    setIsFavoriteProductForUser(true);
                     clearTimeout(successAddToCartTimeout);
                 }, 3000);
             }
@@ -288,28 +288,24 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 return;
             }
             setIsWaitAddProductToFavoriteUserProductsList(false);
-            let errorInAddToCartTimeout = setTimeout(() => {
-                setErrorAddProductToFavoriteUserProductsList("Error");
-                clearTimeout(errorInAddToCartTimeout);
-            }, 3000);
         }
     }
 
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/users/favorite-product?productId=${productId}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token")
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
-            const result = await res.data;
-            if (result.msg === "Ok !!, Deleting Favorite Product From This User Is Successfuly !!") {
-                setFavoriteProductsListForUser(result.newFavoriteProductsList);
+            const result = res.data;
+            if (!result.error) {
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
                 let successDeleteToCartTimeout = setTimeout(() => {
                     setIsSuccessDeleteProductToFavoriteUserProductsList(false);
+                    setIsFavoriteProductForUser(false);
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
             }

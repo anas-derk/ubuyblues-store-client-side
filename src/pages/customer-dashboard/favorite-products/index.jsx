@@ -8,7 +8,6 @@ import { BsTrash, BsClock } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
-import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
@@ -70,7 +69,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -88,13 +87,13 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                         });
                         setIsWaitGetFavoriteProductsStatus(false);
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -122,7 +121,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
             return res.data;
@@ -136,7 +135,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
             return res.data;
@@ -181,7 +180,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setIsDeletingFavoriteProduct(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token")
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
             })
             setIsDeletingFavoriteProduct(false);

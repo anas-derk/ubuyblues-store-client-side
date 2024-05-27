@@ -85,8 +85,7 @@ export default function Cart({ countryAsProperty }) {
                         });
                         setIsGetGroupedProductsByStoreId(false);
                     })
-                    .catch((err) => {
-                        console.log(err)
+                    .catch(() => {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     });

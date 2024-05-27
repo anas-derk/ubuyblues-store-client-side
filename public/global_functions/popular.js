@@ -189,13 +189,13 @@ const isExistOfferOnProduct = (currentDateAsString, startDateAsString, endDateAs
     return false;
 }
 
-const getFavoriteProductsByProductsIdsAndUserId = async (userToken, productsIds) => {
+const getFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
     try{
         const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/favorite-products-by-products-ids-and-user-id`, {
             productsIds
         }, {
             headers: {
-                Authorization: userToken,
+                Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
             }
         });
         return res.data;

@@ -9,7 +9,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { FaCode } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
-import { inputValuesValidation } from "../../../public/global_functions/validations";
+import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function ForgetPassword() {
 
@@ -44,16 +44,16 @@ export default function ForgetPassword() {
     const router = useRouter();
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         const userLanguage = localStorage.getItem("asfour-store-language");
         if (userToken) {
-            validations.getUserInfo(userToken)
+            getUserInfo()
                 .then(async (res) => {
                     const result = res.data;
                     if (!result.error) {
                         await router.push("/");
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
@@ -79,7 +79,7 @@ export default function ForgetPassword() {
             setFormValidationErrors({});
             setErrorMsg("");
             setSuccessMsg("");
-            let errorsObject = inputValuesValidation([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "email",
                     value: email,
@@ -97,7 +97,7 @@ export default function ForgetPassword() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsCheckingStatus(true);
                 const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}`);
-                const result = await res.data;
+                const result = res.data;
                 if (result.error) {
                     setIsCheckingStatus(false);
                     setErrorMsg(result.msg);
@@ -114,7 +114,6 @@ export default function ForgetPassword() {
                         }, 5000);
                     }
                 } else {
-                    setUserId(result.data._id);
                     setIsDisplayResetPasswordForm(true);
                 }
             }
@@ -135,7 +134,7 @@ export default function ForgetPassword() {
             setFormValidationErrors({});
             setErrorMsg("");
             setSuccessMsg("");
-            let errorsObject = inputValuesValidation([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "typedUserCode",
                     value: typedUserCode,

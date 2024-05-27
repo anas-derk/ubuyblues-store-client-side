@@ -24,7 +24,7 @@ export default function Header() {
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             setToken(userToken);
         }
@@ -45,7 +45,7 @@ export default function Header() {
     }
 
     const userLogout = async () => {
-        localStorage.removeItem("asfour-store-user-token");
+        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
         await router.push("/auth");
     }
 

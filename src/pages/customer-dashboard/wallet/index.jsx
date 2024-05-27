@@ -8,7 +8,6 @@ import { BsTrash, BsClock } from "react-icons/bs";
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
-import { PiSmileySad } from "react-icons/pi";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
@@ -26,8 +25,6 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
-
-    const [token, setToken] = useState(false);
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
@@ -72,12 +69,11 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem("asfour-store-user-token");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
-                        setToken(userToken);
                         setFilters({ ...filters, customerId: result.data._id });
                         const result2 = await getWalletProductsCount(`customerId=${result.data._id}`);
                         if (result2.data > 0) {
@@ -91,13 +87,13 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                         });
                         setIsWaitGetWalletProductsStatus(false);
                     } else {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem("asfour-store-user-token");
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.push("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -120,7 +116,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/wallet/wallet-products-count?${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
             return res.data;
@@ -134,7 +130,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         try {
             const res = await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem("asfour-store-user-token"),
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
             return res.data;
@@ -184,7 +180,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             setIsDeletingWalletProduct(true);
             const res = await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
                 headers: {
-                    Authorization: token,
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             })
             setIsDeletingWalletProduct(false);
