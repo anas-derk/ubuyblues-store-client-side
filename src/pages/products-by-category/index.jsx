@@ -14,6 +14,7 @@ import Footer from "@/components/Footer";
 import PaginationBar from "@/components/PaginationBar";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
+import axios from "axios";
 
 export default function ProductByCategory({ countryAsProperty, categoryIdAsProperty }) {
 
@@ -28,6 +29,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
     const [isGetProducts, setIsGetProducts] = useState(true);
+
+    const [categoryInfo, setCategoryInfo] = useState({});
 
     const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
 
@@ -103,21 +106,25 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // =============================================================================
-        getProductsCount(getFiltersAsQuery({ categoryId: categoryIdAsProperty }))
+        getCategoryInfo(categoryIdAsProperty)
             .then(async (result) => {
-                if (result.data > 0) {
-                    setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
-                    setAllProductsInsideThePage(result.products);
-                    setCurrentDate(result.currentDate);
-                    const userToken = localStorage.getItem("asfour-store-user-token");
-                    if (userToken) {
-                        setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result.products.map((product) => product._id))).data);
+                if (Object.keys(result.data).length > 0) {
+                    setCategoryInfo(result.data);
+                    result = await getProductsCount(getFiltersAsQuery({ categoryId: categoryIdAsProperty }));
+                    if (result.data > 0) {
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
+                        setAllProductsInsideThePage(result.products);
+                        setCurrentDate(result.currentDate);
+                        const userToken = localStorage.getItem("asfour-store-user-token");
+                        if (userToken) {
+                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(userToken, result.products.map((product) => product._id))).data);
+                        }
                     }
                 }
                 setIsGetProducts(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -130,6 +137,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetProducts]);
+
+    const getCategoryInfo = async (categoryId) => {
+        return (await axios.get(`${process.env.BASE_API_URL}/categories/category-info/${categoryId}`)).data;
+    }
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -245,8 +256,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 <div className="page-content page">
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
-                        <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h2 className="section-name text-center mt-4 mb-5 text-white">{t("Last Added Products By Category Name")} : {categoryIdAsProperty}</h2>
+                        {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
+                            <h2 className="section-name text-center mt-4 mb-5 text-white">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h2>
                             <div className="row filters-and-sorting-box mb-4">
                                 <div className="col-xs-12 col-md-6">
                                     <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
@@ -320,7 +331,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                         section="products"
                                     />}
                             </div>
-                        </section>
+                        </section> : <NotFoundError errorMsg={t("Sorry, This Category Is Not Exist !!")} />}
                         {/* End Last Added Products By Category Id */}
                     </div>
                     <Footer />

@@ -449,5 +449,6 @@
     "Sorry, This Name Is Not Valid !!": "عذراً ، هذا الاسم غير صحيح !!",
     "Show Billing": "عرض الفاتورة",
     "Checkout Successfull": "اكتمال التحقق",
-    "Sorry, This Email Is Already Exist !!": "عذراً ، هذا الإيميل موجود مسبقاً !!"
+    "Sorry, This Email Is Already Exist !!": "عذراً ، هذا الإيميل موجود مسبقاً !!",
+    "Sorry, This Category Is Not Exist !!": "عذراً ، هذا التصنيف غير موجود !!"
 }

@@ -446,5 +446,6 @@
     "Sorry, This Name Is Not Valid !!": "Entschuldigung, dieser Name ist ungültig!!",
     "Show Billing": "Rechnung anzeigen",
     "Checkout Successfull": "Zahlung erfolgreich",
-    "Sorry, This Email Is Already Exist !!": "Entschuldigung, diese E-Mail existiert bereits !!"
+    "Sorry, This Email Is Already Exist !!": "Entschuldigung, diese E-Mail existiert bereits !!",
+    "Sorry, This Category Is Not Exist !!": "Entschuldigung, diese Kategorie existiert nicht !!"
 }
