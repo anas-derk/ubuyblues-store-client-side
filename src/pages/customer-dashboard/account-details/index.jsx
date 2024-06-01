@@ -145,6 +145,9 @@ export default function CustomerAccountDetails() {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
                     }
                 } : null,
                 (currentPassword || confirmNewPassword) ? {
@@ -158,6 +161,9 @@ export default function CustomerAccountDetails() {
                             value: confirmNewPassword,
                             msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
                         },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
+                        },
                     }
                 } : null,
                 (currentPassword || newPassword) ? {
@@ -170,6 +176,9 @@ export default function CustomerAccountDetails() {
                         isMatch: {
                             value: newPassword,
                             msg: "Sorry, There Is No Match Between New Password And Confirm It !!",
+                        },
+                        isValidPassword: {
+                            msg: "Sorry, The Password Must Be At Least 8 Characters Long, With At Least One Number, At Least One Lowercase Letter, And At Least One Uppercase Letter."
                         },
                     }
                 } : null,
