@@ -187,29 +187,38 @@ export default function UpdateAndDeleteAdmins() {
             setFormValidationErrors({});
             const errorsObject = inputValuesValidation([
                 {
-                    name: "name",
-                    value: allAdminsInsideThePage[adminIndex].name,
+                    name: "firstName",
+                    value: allAdminsInsideThePage[adminIndex].firstName,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        },
                     },
                 },
                 {
-                    name: "ownerEmail",
-                    value: allAdminsInsideThePage[adminIndex].ownerEmail,
+                    name: "lastName",
+                    value: allAdminsInsideThePage[adminIndex].lastName,
                     rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isName: {
+                            msg: "Sorry, This Name Is Not Valid !!",
+                        },
+                    },
+                },
+                {
+                    name: "email",
+                    value: allAdminsInsideThePage[adminIndex].email,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
                         isEmail: {
                             msg: "Sorry, Invalid Email !!",
-                        },
-                    },
-                },
-                {
-                    name: "productsType",
-                    value: allAdminsInsideThePage[adminIndex].productsType,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
                         },
                     },
                 },
@@ -218,10 +227,10 @@ export default function UpdateAndDeleteAdmins() {
             setSelectedAdminIndex(adminIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setIsUpdatingStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/stores/update-store-info/${allAdminsInsideThePage[adminIndex]._id}`, {
-                    name: allAdminsInsideThePage[adminIndex].name,
-                    ownerEmail: allAdminsInsideThePage[adminIndex].ownerEmail,
-                    productsType: allAdminsInsideThePage[adminIndex].productsType,
+                const res = await axios.put(`${process.env.BASE_API_URL}/admins/update-admin-info/${allAdminsInsideThePage[adminIndex]._id}`, {
+                    firstName: allAdminsInsideThePage[adminIndex].firstName,
+                    lastName: allAdminsInsideThePage[adminIndex].lastName,
+                    email: allAdminsInsideThePage[adminIndex].email,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
@@ -259,7 +268,7 @@ export default function UpdateAndDeleteAdmins() {
         try {
             setIsDeletingStatus(true);
             setSelectedAdminIndex(adminIndex);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/stores/delete-store/${allAdminsInsideThePage[adminIndex]._id}`, {
+            const res = await axios.delete(`${process.env.BASE_API_URL}/admins/delete-admin/${allAdminsInsideThePage[adminIndex]._id}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
