@@ -11,7 +11,7 @@ export default function AdminPanelHeader({ isWebsiteOwner = false }) {
     const router = useRouter();
 
     const adminLogout = async () => {
-        localStorage.removeItem("asfour-store-admin-user-token");
+        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
         await router.push("/admin-dashboard/login");
     }
 
