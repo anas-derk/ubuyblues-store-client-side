@@ -125,7 +125,7 @@ export default function OrderDetails({ orderId }) {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
             });
-            const result = await res.data;
+            const result = res.data;
             if (!result.error) {
                 setIsDeletingStatus(false);
                 setSuccessMsg(result.msg);

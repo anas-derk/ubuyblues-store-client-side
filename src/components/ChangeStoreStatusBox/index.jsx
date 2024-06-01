@@ -35,14 +35,10 @@ export default function ChangeStoreStatusBox({
         setStoreAction("");
     }
 
-    const validateFormFields = (validateDetailsList) => {
-        return inputValuesValidation(validateDetailsList);
-    }
-
     const approveStoreCreate = async (storeId) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "adminPassword",
                     value: adminPassword,
@@ -62,7 +58,7 @@ export default function ChangeStoreStatusBox({
                 const res = await axios.post(`${process.env.BASE_API_URL}/stores/approve-store/${storeId}?password=${adminPassword}`, undefined,
                     {
                         headers: {
-                            Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                            Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                         }
                     }
                 );
@@ -99,7 +95,7 @@ export default function ChangeStoreStatusBox({
             const res = await axios.delete(`${process.env.BASE_API_URL}/stores/reject-store/${storeId}`,
                 {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 }
             );
@@ -132,7 +128,7 @@ export default function ChangeStoreStatusBox({
     const blockingStore = async (storeId, changeStatusReason) => {
         try {
             setFormValidationErrors({});
-            let errorsObject = validateFormFields([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "changeStatusReason",
                     value: changeStatusReason,
@@ -149,7 +145,7 @@ export default function ChangeStoreStatusBox({
                 const res = await axios.put(`${process.env.BASE_API_URL}/stores/blocking-store/${storeId}?blockingReason=${changeStatusReason}`, undefined,
                     {
                         headers: {
-                            Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                            Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                         }
                     }
                 );
@@ -186,7 +182,7 @@ export default function ChangeStoreStatusBox({
             const res = await axios.put(`${process.env.BASE_API_URL}/stores/cancel-blocking/${storeId}`, undefined,
                 {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 }
             );

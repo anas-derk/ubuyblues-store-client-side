@@ -204,7 +204,7 @@ export default function UpdateAndDeleteProducts() {
             productsDataTemp[productIndex][fieldName] = categoryNameAndCategoryId[0];
             productsDataTemp[productIndex]["categoryId"] = categoryNameAndCategoryId[1];
         } else {
-            productsDataTemp[productIndex][fieldName] = newValue;
+            productsDataTemp[productIndex][fieldName] = tempNewValue;
         }
         setAllProductsInsideThePage(productsDataTemp);
     }
