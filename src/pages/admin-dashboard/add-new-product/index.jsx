@@ -108,7 +108,7 @@ export default function AddNewProduct() {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = inputValuesValidation([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "name",
                     value: productData.name,
@@ -194,7 +194,7 @@ export default function AddNewProduct() {
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/products/add-new-product`, formData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = res.data;

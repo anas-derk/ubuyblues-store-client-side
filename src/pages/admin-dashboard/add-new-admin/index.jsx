@@ -22,7 +22,6 @@ export default function AddNewAdmin() {
         lastName: "",
         email: "",
         password: "",
-        storeId: "",
     });
 
     const [isWaitStatus, setIsWaitStatus] = useState(false);
@@ -75,7 +74,7 @@ export default function AddNewAdmin() {
         try {
             e.preventDefault();
             setFormValidationErrors({});
-            let errorsObject = inputValuesValidation([
+            const errorsObject = inputValuesValidation([
                 {
                     name: "firstName",
                     value: adminData.firstName,
@@ -127,16 +126,10 @@ export default function AddNewAdmin() {
             ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
-                let formData = new FormData();
-                formData.append("firstName", adminData.firstName);
-                formData.append("lastName", adminData.lastName);
-                formData.append("email", adminData.email);
-                formData.append("password", adminData.password);
-                formData.append("storeId", adminInfo.storeId);
                 setIsWaitStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/admins/add-new-admin`, formData, {
+                const res = await axios.post(`${process.env.BASE_API_URL}/admins/add-new-admin`, adminData, {
                     headers: {
-                        Authorization: localStorage.getItem("asfour-store-admin-user-token"),
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
                 });
                 const result = res.data;
