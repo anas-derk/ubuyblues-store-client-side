@@ -39,6 +39,13 @@ export default function AdminPanelHeader({ isWebsiteOwner = false }) {
                                     </NavDropdown.Item>
                                 </NavDropdown>
                             </>}
+                            <NavDropdown title="Admins" id="admins-nav-dropdown">
+                                <NavDropdown.Item href="/admin-dashboard/add-new-admin" as={Link}>Add New</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="/admin-dashboard/update-and-delete-admins" as={Link}>
+                                    Update / Delete
+                                </NavDropdown.Item>
+                            </NavDropdown>
                             <NavDropdown title="Products" id="products-nav-dropdown">
                                 <NavDropdown.Item href="/admin-dashboard/add-new-product" as={Link}>Add New</NavDropdown.Item>
                                 <NavDropdown.Divider />

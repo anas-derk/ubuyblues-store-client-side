@@ -71,7 +71,6 @@ export default function AddNewProduct() {
                     }
                 })
                 .catch(async (err) => {
-                    console.log(err)
                     if (err?.message === "Network Error") {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -227,7 +226,6 @@ export default function AddNewProduct() {
             }
         }
         catch (err) {
-            console.log(err)
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 localStorage.removeItem("asfour-store-admin-user-token");
                 await router.push("/admin-dashboard/login");
