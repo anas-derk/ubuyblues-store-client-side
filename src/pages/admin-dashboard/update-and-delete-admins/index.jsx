@@ -2,14 +2,12 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Link from "next/link";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import PaginationBar from "@/components/PaginationBar";
 import { getAdminInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import ChangeStoreStatusBox from "@/components/ChangeStoreStatusBox";
 
 export default function UpdateAndDeleteAdmins() {
 
@@ -38,19 +36,13 @@ export default function UpdateAndDeleteAdmins() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [filters, setFilters] = useState({
-        storeId: "",
+        _id: "",
         firstName: "",
         lastName: "",
         email: "",
     });
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
-
-    const [isDisplayChangeStoreStatusBox, setIsDisplayChangeStoreStatusBox] = useState(false);
-
-    const [storeAction, setStoreAction] = useState("");
-
-    const [selectedAdminId, setSelectedAdminId] = useState("");
 
     const router = useRouter();
 
@@ -94,7 +86,11 @@ export default function UpdateAndDeleteAdmins() {
 
     const getAdminsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/admins/admins-count?${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage)
+                }
+            });
             return res.data;
         }
         catch (err) {
@@ -104,7 +100,11 @@ export default function UpdateAndDeleteAdmins() {
 
     const getAllAdminsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/admins/all-admins-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage)
+                }
+            });
             return res.data;
         }
         catch (err) {
@@ -147,7 +147,7 @@ export default function UpdateAndDeleteAdmins() {
         return filteringString;
     }
 
-    const filterStores = async (filters) => {
+    const filterAdmins = async (filters) => {
         try {
             setIsFilteringStoresStatus(true);
             setCurrentPage(1);
@@ -176,12 +176,6 @@ export default function UpdateAndDeleteAdmins() {
                 clearTimeout(errorTimeout);
             }, 1500);
         }
-    }
-
-    const handleDisplayChangeStoreStatusBox = (storeId, storeAction) => {
-        setStoreAction(storeAction);
-        setSelectedAdminId(storeId);
-        setIsDisplayChangeStoreStatusBox(true);
     }
 
     const changeAdminData = (adminIndex, fieldName, newValue) => {
@@ -305,98 +299,33 @@ export default function UpdateAndDeleteAdmins() {
         }
     }
 
-    const handleChangeAdminStatus = async (newStatus) => {
-        try {
-            switch (newStatus) {
-                case "approving": {
-                    setIsFilteringStoresStatus(true);
-                    const filteringString = getFilteringString(filters);
-                    setAllAdminsInsideThePage((await getAllAdminsInsideThePage(1, pageSize, filteringString)).data);
-                    setCurrentPage(currentPage);
-                    setIsFilteringStoresStatus(false);
-                    return;
-                }
-                case "rejecting": {
-                    setIsFilteringStoresStatus(true);
-                    const filteringString = getFilteringString(filters);
-                    const result = await getAdminsCount(filteringString);
-                    if (result.data > 0) {
-                        setAllAdminsInsideThePage((await getAllAdminsInsideThePage(1, pageSize)).data);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    }
-                    setCurrentPage(1);
-                    setIsFilteringStoresStatus(false);
-                    return;
-                }
-                case "blocking": {
-                    setIsFilteringStoresStatus(true);
-                    const filteringString = getFilteringString(filters);
-                    setAllAdminsInsideThePage((await getAllAdminsInsideThePage(1, pageSize, filteringString)).data);
-                    setCurrentPage(currentPage);
-                    setIsFilteringStoresStatus(false);
-                    return;
-                }
-            }
-        }
-        catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/admin-dashboard/login");
-                return;
-            }
-            setIsFilteringStoresStatus(false);
-            setIsErrorStatus(true);
-            let errorTimeout = setTimeout(() => {
-                setIsErrorStatus(false);
-                clearTimeout(errorTimeout);
-            }, 3000);
-        }
-    }
-
     return (
-        <div className="stores-managment admin-dashboard">
+        <div className="admins-managment admin-dashboard">
             <Head>
-                <title>Ubuyblues Store - Stores Managment</title>
+                <title>Ubuyblues Store - Admins Managment</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 {/* Start Admin Dashboard Side Bar */}
                 <AdminPanelHeader isWebsiteOwner={adminInfo.isWebsiteOwner} />
                 {/* Start Admin Dashboard Side Bar */}
-                {/* Start Share Options Box */}
-                {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox
-                    setIsDisplayChangeStoreStatusBox={setIsDisplayChangeStoreStatusBox}
-                    setStoreAction={setStoreAction}
-                    storeId={selectedAdminId}
-                    storeAction={storeAction}
-                    handleChangeAdminStatus={handleChangeAdminStatus}
-                />}
-                {/* End Share Options Box */}
                 {/* Start Content Section */}
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Stores Managment</h1>
+                        <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Admins Managment</h1>
                         <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
                             <div className="row mb-4">
-                                <div className="col-md-4">
-                                    <h6 className="me-2 fw-bold text-center">First Name</h6>
+                                <div className="col-md-6">
+                                    <h6 className="me-2 fw-bold text-center">Admin Id</h6>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Pleae Enter First Name"
-                                        onChange={(e) => setFilters({ ...filters, firstName: e.target.value.trim() })}
+                                        placeholder="Pleae Enter Admin Id"
+                                        onChange={(e) => setFilters({ ...filters, _id: e.target.value.trim() })}
                                     />
                                 </div>
-                                <div className="col-md-4">
-                                    <h6 className="me-2 fw-bold text-center">Last Name</h6>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Pleae Enter Last Name"
-                                        onChange={(e) => setFilters({ ...filters, lastName: e.target.value.trim() })}
-                                    />
-                                </div>
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <h6 className="me-2 fw-bold text-center">Email</h6>
                                     <input
                                         type="email"
@@ -405,10 +334,28 @@ export default function UpdateAndDeleteAdmins() {
                                         onChange={(e) => setFilters({ ...filters, email: e.target.value.trim() })}
                                     />
                                 </div>
+                                <div className="col-md-6 mt-3">
+                                    <h6 className="me-2 fw-bold text-center">First Name</h6>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Pleae Enter First Name"
+                                        onChange={(e) => setFilters({ ...filters, firstName: e.target.value.trim() })}
+                                    />
+                                </div>
+                                <div className="col-md-6 mt-3">
+                                    <h6 className="me-2 fw-bold text-center">Last Name</h6>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Pleae Enter Last Name"
+                                        onChange={(e) => setFilters({ ...filters, lastName: e.target.value.trim() })}
+                                    />
+                                </div>
                             </div>
                             {!isFilteringAdminsStatus && <button
                                 className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
-                                onClick={() => filterStores(filters)}
+                                onClick={() => filterAdmins(filters)}
                             >
                                 Filter
                             </button>}
@@ -423,16 +370,17 @@ export default function UpdateAndDeleteAdmins() {
                             <table className="admins-data-table mb-4 managment-table bg-white admin-dashbboard-data-table">
                                 <thead>
                                     <tr>
+                                        <th>Admin Id</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
-                                        <th>Password</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {allAdminsInsideThePage.map((admin, adminIndex) => (
                                         <tr key={admin._id}>
+                                            <td>{admin._id}</td>
                                             <td>
                                                 <section className="first-name mb-4">
                                                     <input
@@ -475,21 +423,6 @@ export default function UpdateAndDeleteAdmins() {
                                                     {formValidationErrors["email"] && adminIndex === selectedAdminIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                         <span>{formValidationErrors["email"]}</span>
-                                                    </p>}
-                                                </section>
-                                            </td>
-                                            <td>
-                                                <section className="password mb-4">
-                                                    <input
-                                                        type="text"
-                                                        defaultValue={admin.password}
-                                                        className={`form-control d-block mx-auto p-2 border-2 email-field ${formValidationErrors["password"] && adminIndex === selectedAdminIndex ? "border-danger mb-3" : "mb-4"}`}
-                                                        placeholder="Pleae Enter New Password"
-                                                        onChange={(e) => changeAdminData(adminIndex, "password", e.target.value)}
-                                                    />
-                                                    {formValidationErrors["password"] && adminIndex === selectedAdminIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{formValidationErrors["password"]}</span>
                                                     </p>}
                                                 </section>
                                             </td>
