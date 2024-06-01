@@ -36,7 +36,7 @@ export default function UpdateAndDeleteAdmins() {
     const [totalPagesCount, setTotalPagesCount] = useState(0);
 
     const [filters, setFilters] = useState({
-        _id: "",
+        adminId: "",
         firstName: "",
         lastName: "",
         email: "",
@@ -137,12 +137,10 @@ export default function UpdateAndDeleteAdmins() {
 
     const getFilteringString = (filters) => {
         let filteringString = "";
-        if (filters.storeId) filteringString += `_id=${filters.storeId}&`;
-        if (filters.name) filteringString += `name=${filters.name}&`;
-        if (filters.status) filteringString += `status=${filters.status}&`;
-        if (filters.ownerFirstName) filteringString += `ownerFirstName=${filters.ownerFirstName}&`;
-        if (filters.ownerLastName) filteringString += `ownerLastName=${filters.ownerLastName}&`;
-        if (filters.ownerEmail) filteringString += `ownerEmail=${filters.ownerEmail}&`;
+        if (filters.adminId) filteringString += `_id=${filters.adminId}&`;
+        if (filters.firstName) filteringString += `firstName=${filters.firstName}&`;
+        if (filters.lastName) filteringString += `lastName=${filters.lastName}&`;
+        if (filters.email) filteringString += `email=${filters.email}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
     }
@@ -152,6 +150,7 @@ export default function UpdateAndDeleteAdmins() {
             setIsFilteringStoresStatus(true);
             setCurrentPage(1);
             const filteringString = getFilteringString(filters);
+            console.log(filteringString)
             const result = await getAdminsCount(filteringString);
             if (result.data > 0) {
                 setAllAdminsInsideThePage((await getAllAdminsInsideThePage(1, pageSize, filteringString)).data);
@@ -331,7 +330,7 @@ export default function UpdateAndDeleteAdmins() {
                                         type="text"
                                         className="form-control"
                                         placeholder="Pleae Enter Admin Id"
-                                        onChange={(e) => setFilters({ ...filters, _id: e.target.value.trim() })}
+                                        onChange={(e) => setFilters({ ...filters, adminId: e.target.value.trim() })}
                                     />
                                 </div>
                                 <div className="col-md-6">
@@ -465,6 +464,7 @@ export default function UpdateAndDeleteAdmins() {
                                                     !isDeletingStatus &&
                                                     !isSuccessStatus &&
                                                     !isErrorStatus &&
+                                                    !admin.isMerchant &&
                                                     <button
                                                         className="btn btn-danger d-block mx-auto mb-3 global-button"
                                                         onClick={() => deleteAdmin(adminIndex)}
