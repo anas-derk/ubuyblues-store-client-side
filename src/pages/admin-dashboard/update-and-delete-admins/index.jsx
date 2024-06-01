@@ -39,10 +39,8 @@ export default function UpdateAndDeleteAdmins() {
 
     const [filters, setFilters] = useState({
         storeId: "",
-        name: "",
-        status: "",
-        ownerFirstName: "",
-        ownerLastName: "",
+        firstName: "",
+        lastName: "",
         email: "",
     });
 
@@ -52,11 +50,11 @@ export default function UpdateAndDeleteAdmins() {
 
     const [storeAction, setStoreAction] = useState("");
 
-    const [selectedStoreId, setSelectedStoreId] = useState("");
+    const [selectedAdminId, setSelectedAdminId] = useState("");
 
     const router = useRouter();
 
-    const pageSize = 3;
+    const pageSize = 5;
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -182,7 +180,7 @@ export default function UpdateAndDeleteAdmins() {
 
     const handleDisplayChangeStoreStatusBox = (storeId, storeAction) => {
         setStoreAction(storeAction);
-        setSelectedStoreId(storeId);
+        setSelectedAdminId(storeId);
         setIsDisplayChangeStoreStatusBox(true);
     }
 
@@ -367,7 +365,7 @@ export default function UpdateAndDeleteAdmins() {
                 {isDisplayChangeStoreStatusBox && <ChangeStoreStatusBox
                     setIsDisplayChangeStoreStatusBox={setIsDisplayChangeStoreStatusBox}
                     setStoreAction={setStoreAction}
-                    storeId={selectedStoreId}
+                    storeId={selectedAdminId}
                     storeAction={storeAction}
                     handleChangeAdminStatus={handleChangeAdminStatus}
                 />}
@@ -404,7 +402,7 @@ export default function UpdateAndDeleteAdmins() {
                                         type="email"
                                         className="form-control"
                                         placeholder="Pleae Enter Email"
-                                        onChange={(e) => setFilters({ ...filters, ownerEmail: e.target.value.trim() })}
+                                        onChange={(e) => setFilters({ ...filters, email: e.target.value.trim() })}
                                     />
                                 </div>
                             </div>
