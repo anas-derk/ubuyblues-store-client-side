@@ -376,65 +376,34 @@ export default function UpdateAndDeleteAdmins() {
                 <section className="page-content d-flex justify-content-center align-items-center flex-column text-center pt-5 pb-5">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-4 fw-bold pb-3 mx-auto">Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Stores Managment</h1>
-                        {/* <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
+                        <section className="filters mb-3 bg-white border-3 border-info p-3 text-start">
                             <h5 className="section-name fw-bold text-center">Filters: </h5>
                             <hr />
                             <div className="row mb-4">
                                 <div className="col-md-4">
-                                    <h6 className="me-2 fw-bold text-center">Store Id</h6>
+                                    <h6 className="me-2 fw-bold text-center">First Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Pleae Enter Store Id"
-                                        onChange={(e) => setFilters({ ...filters, storeId: e.target.value.trim() })}
+                                        placeholder="Pleae Enter First Name"
+                                        onChange={(e) => setFilters({ ...filters, firstName: e.target.value.trim() })}
                                     />
                                 </div>
                                 <div className="col-md-4">
-                                    <h6 className="me-2 fw-bold text-center">Store Name</h6>
+                                    <h6 className="me-2 fw-bold text-center">Last Name</h6>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Pleae Enter Store Name"
-                                        onChange={(e) => setFilters({ ...filters, name: e.target.value.trim() })}
+                                        placeholder="Pleae Enter Last Name"
+                                        onChange={(e) => setFilters({ ...filters, lastName: e.target.value.trim() })}
                                     />
                                 </div>
                                 <div className="col-md-4">
-                                    <h6 className="me-2 fw-bold text-center">Status</h6>
-                                    <select
-                                        className="select-store-status form-select"
-                                        onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                                    >
-                                        <option value="" hidden>Pleae Enter Status</option>
-                                        <option value="">All</option>
-                                        {storeStatusList.map((status, index) => (
-                                            <option value={status} key={index}>{status}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="col-md-4 mt-5">
-                                    <h6 className="me-2 fw-bold text-center">Owner First Name</h6>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Pleae Enter Owner First Name"
-                                        onChange={(e) => setFilters({ ...filters, ownerFirstName: e.target.value.trim() })}
-                                    />
-                                </div>
-                                <div className="col-md-4 mt-5">
-                                    <h6 className="me-2 fw-bold text-center">Owner Last Name</h6>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Pleae Enter Owner Last Name"
-                                        onChange={(e) => setFilters({ ...filters, ownerLastName: e.target.value.trim() })}
-                                    />
-                                </div>
-                                <div className="col-md-4 mt-5">
-                                    <h6 className="me-2 fw-bold text-center">Owner Email</h6>
+                                    <h6 className="me-2 fw-bold text-center">Email</h6>
                                     <input
                                         type="email"
                                         className="form-control"
-                                        placeholder="Pleae Enter Owner Email"
+                                        placeholder="Pleae Enter Email"
                                         onChange={(e) => setFilters({ ...filters, ownerEmail: e.target.value.trim() })}
                                     />
                                 </div>
@@ -451,7 +420,7 @@ export default function UpdateAndDeleteAdmins() {
                             >
                                 Filtering ...
                             </button>}
-                        </section> */}
+                        </section>
                         {allAdminsInsideThePage.length > 0 && !isFilteringAdminsStatus && <section className="admins-data-box p-3 data-box admin-dashbboard-data-box">
                             <table className="admins-data-table mb-4 managment-table bg-white admin-dashbboard-data-table">
                                 <thead>
