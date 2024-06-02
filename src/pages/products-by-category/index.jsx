@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useState, useEffect } from "react";
-import { getUserInfo } from "../../../public/global_functions/validations";
+import { getUserInfo } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
