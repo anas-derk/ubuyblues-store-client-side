@@ -13,9 +13,9 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct } from "../../../public/global_functions/popular";
+import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
-import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
+import { inputValuesValidation } from "../../../public/global_functions/validations";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -23,13 +23,13 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
-    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
-
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [storeDetails, setStoreDetails] = useState({});
+
+    const [isGetStoreDetails, setIsGetStoreDetails] = useState(true);
 
     const [allProductsData, setAllProductsData] = useState([]);
 
@@ -42,6 +42,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
     });
 
     const [userInfo, setUserInfo] = useState("");
+
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
     const [requestNotes, setRequestNotes] = useState("");
 
@@ -70,7 +72,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isGetUserInfo) {
+            if (!isGetUserInfo && !isGetStoreDetails) {
                 setIsLoadingPage(false);
             }
         })
@@ -82,55 +84,12 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getStoreDetails(storeId)
             .then(async (result) => {
                 if (!result.error) {
                     if (result.data?.status === "approving") {
                         setStoreDetails(result.data);
-                        if (userToken) {
-                            result = await getUserInfo();
-                            if (!result.error) {
-                                setUserInfo(result.data);
-                            } else {
-                                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                                await router.push("/auth");
-                            }
-                        } else {
-                            const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
-                            if (userAddresses) {
-                                setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
-                                setIsSavePaymentInfo(true);
-                            } else {
-                                setUserInfo({
-                                    billing_address: {
-                                        first_name: "",
-                                        last_name: "",
-                                        company_name: "",
-                                        country: "Kuwait",
-                                        street_address: "",
-                                        apartment_number: 1,
-                                        city: "",
-                                        postal_code: 1,
-                                        phone_number: "0096560048235",
-                                        email: "",
-                                    },
-                                    shipping_address: {
-                                        first_name: "",
-                                        last_name: "",
-                                        company_name: "",
-                                        country: "Kuwait",
-                                        street_address: "",
-                                        apartment_number: 1,
-                                        city: "",
-                                        postal_code: 1,
-                                        phone_number: "0096560048235",
-                                        email: "",
-                                    },
-                                });
-                            }
-                        }
                         const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
                         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
                             if (tempAllProductsDataInsideTheCart.length > 0) {
@@ -144,24 +103,67 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         }
                     }
                 }
-                setIsGetUserInfo(false);
+                setIsGetStoreDetails(false);
             })
-            .catch(async (err) => {
-                if (err?.response?.data?.msg === "Unauthorized Error") {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                    await router.push("/auth");
-                } else {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
-                }
+            .catch(async () => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
             });
     }, [storeId]);
 
     useEffect(() => {
-        if (!isGetUserInfo) {
+        async function fetchData() {
+            if (userToken) {
+                result = await getUserInfo();
+                if (!result.error) {
+                    setUserInfo(result.data);
+                } else {
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                }
+            } else {
+                const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
+                if (userAddresses) {
+                    setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
+                    setIsSavePaymentInfo(true);
+                } else {
+                    setUserInfo({
+                        billing_address: {
+                            first_name: "",
+                            last_name: "",
+                            company_name: "",
+                            country: "Kuwait",
+                            street_address: "",
+                            apartment_number: 1,
+                            city: "",
+                            postal_code: 1,
+                            phone_number: "0096560048235",
+                            email: "",
+                        },
+                        shipping_address: {
+                            first_name: "",
+                            last_name: "",
+                            company_name: "",
+                            country: "Kuwait",
+                            street_address: "",
+                            apartment_number: 1,
+                            city: "",
+                            postal_code: 1,
+                            phone_number: "0096560048235",
+                            email: "",
+                        },
+                    });
+                }
+            }
+            setIsGetUserInfo(true);
+        }
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        if (!isGetUserInfo && !isGetStoreDetails) {
             setIsLoadingPage(false);
         }
-    }, [isGetUserInfo]);
+    }, [isGetUserInfo, isGetStoreDetails]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -463,7 +465,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     const createPaymentOrder = async (paymentName) => {
-        try{
+        try {
             setIsWaitCreateNewOrder(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, {
                 storeId,
@@ -513,7 +515,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 }
             }
         }
-        catch(err) {
+        catch (err) {
             setIsWaitCreateNewOrder(false);
         }
     }

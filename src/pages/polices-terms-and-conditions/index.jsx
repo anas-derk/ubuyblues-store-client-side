@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getUserInfo } from "../../../public/global_functions/validations";
+import { getUserInfo } from "../../../public/global_functions/popular";
 import Footer from "@/components/Footer";
 
 export default function PolicesTermsAndConditions() {

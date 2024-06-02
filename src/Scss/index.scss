@@ -381,58 +381,6 @@ textarea{
     }
 }
 
-.admin-dashboard{
-    background-color: #FFF;
-    .page-content{
-        min-height: 100vh;
-        background-color: #EEE;
-        h1{
-            font-size: 30px;
-            text-align: center;
-        }
-        .filters{
-            .row{
-                row-gap: 20px;
-                > div{
-                    @media (min-width: 1199px) {
-                        display: flex;
-                        align-items: center;
-                    }
-                    h6{
-                        @media (max-width: 1199px) {
-                            margin-bottom: 15px;
-                        }
-                        @media (min-width: 1200px) {
-                            margin-bottom: 0;
-                        }
-                    }
-                }
-            }
-        }
-        .admin-dashbboard-form{
-            width: 50%;
-            @media (max-width: 767px) {
-                width: 100%;
-            }
-            @media (min-width: 768px) and (max-width: 1199px) {
-                width: 75%;
-            }
-        }
-        .admin-dashbboard-data-box{
-            overflow-x: auto;
-            @media (max-width: 991px) {
-                margin-bottom: 30px;
-            }
-        }
-        .admin-dashbboard-data-table{
-            width: 100%;
-            @media (max-width: 991px) {
-                width: 300%;
-            }
-        }
-    }
-}
-
 .customer-billing-address, .customer-shipping-address{
     .edit-customer-billing-address-form, .edit-customer-shipping-address-form{
         color: #FFF;

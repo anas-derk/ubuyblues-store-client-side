@@ -7,7 +7,8 @@ import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import { getUserInfo, isEmail } from "../../../public/global_functions/validations";
+import { isEmail } from "../../../public/global_functions/validations";
+import { getUserInfo } from "../../../public/global_functions/popular";
 
 export default function AccountVerification({ email }) {
 
@@ -34,9 +35,9 @@ export default function AccountVerification({ email }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {

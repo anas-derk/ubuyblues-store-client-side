@@ -13,7 +13,8 @@ import Link from "next/link";
 import { GoogleLogin } from '@react-oauth/google';
 import { decode } from "jsonwebtoken";
 import Footer from "@/components/Footer";
-import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
+import { inputValuesValidation } from "../../../public/global_functions/validations";
+import { getUserInfo } from "../../../public/global_functions/popular";
 
 export default function UserAuth() {
 
@@ -57,7 +58,7 @@ export default function UserAuth() {
                 .then(async (res) => {
                     const result = res.data;
                     if (!result.error) {
-                        await router.push("/");
+                        await router.replace("/");
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -131,8 +132,8 @@ export default function UserAuth() {
                 } else {
                     if (result.data.isVerified) {
                         localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
-                        await router.push("/");
-                    } else await router.push(`/account-verification?email=${emailForLogin}`);
+                        await router.replace("/");
+                    } else await router.replace(`/account-verification?email=${emailForLogin}`);
                 }
             }
         }
@@ -228,8 +229,8 @@ export default function UserAuth() {
             } else {
                 if (result.data.isVerified) {
                     localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
-                    await router.push("/");
-                } else await router.push(`/account-verification?email=${emailForLogin}`);
+                    await router.replace("/");
+                } else await router.replace(`/account-verification?email=${emailForLogin}`);
             }
         }
         catch (err) {

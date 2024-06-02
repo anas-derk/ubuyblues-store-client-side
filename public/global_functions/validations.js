@@ -165,33 +165,5 @@ function inputValuesValidation(inputs) {
     return errorsObject;
 }
 
-async function getAdminInfo() {
-    try{
-        const res = await axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
-            headers: {
-                Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
-            },
-        });
-        return res.data;
-    }
-    catch(err) {
-        throw err;
-    }
-}
-
-async function getUserInfo() {
-    try{
-        const res = await axios.get(`${process.env.BASE_API_URL}/users/user-info`, {
-            headers: {
-                Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
-            },
-        });
-        return res.data;
-    }
-    catch(err) {
-        throw err;
-    }
-}
-
 // تصدير الدوال المطلوبة
-export { isEmail, inputValuesValidation, getAdminInfo, getUserInfo };
+export { isEmail, inputValuesValidation };

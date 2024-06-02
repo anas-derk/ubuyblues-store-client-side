@@ -10,7 +10,8 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getUserInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
+import { inputValuesValidation } from "../../../../public/global_functions/validations";
+import { getUserInfo } from "../../../../public/global_functions/popular";
 
 export default function CustomerAccountDetails() {
 
@@ -62,13 +63,13 @@ export default function CustomerAccountDetails() {
                         setIsLoadingPage(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
@@ -76,7 +77,7 @@ export default function CustomerAccountDetails() {
                     }
                 });
         } else {
-            router.push("/auth");
+            router.replace("/auth");
         }
     }, []);
 
@@ -220,7 +221,7 @@ export default function CustomerAccountDetails() {
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                await router.push("/auth");
+                await router.replace("/auth");
                 return;
             }
             setIsWaitStatus(false);

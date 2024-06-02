@@ -7,7 +7,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getStoreDetails } from "../../../../public/global_functions/popular";
+import { getStoreDetails, getUserInfo } from "../../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 
 export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
@@ -19,6 +19,8 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
+
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
     const [isGetOrderInfo, setIsGetOrderInfo] = useState(true);
 
@@ -39,7 +41,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isGetOrderInfo) {
+            if (!isGetUserInfo && !isGetOrderInfo) {
                 setIsLoadingPage(false);
             }
         })
@@ -52,6 +54,30 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            getUserInfo()
+                .then((result) => {
+                    if (result.error) {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    }
+                    setIsGetUserInfo(false);
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        setIsGetUserInfo(false);
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else {
+            setIsLoadingPage(false);
+        }
+    }, []);
+
+    useEffect(() => {
         getOrderDetails(orderIdAsProperty)
             .then(async (res) => {
                 let result = res.data;

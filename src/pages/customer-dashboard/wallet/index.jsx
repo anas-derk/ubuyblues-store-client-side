@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo } from "../../../../public/global_functions/validations";
+import { getUserInfo } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 
 export default function CustomerWalletProductsList({ countryAsProperty }) {
@@ -88,13 +88,13 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                         setIsWaitGetWalletProductsStatus(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
@@ -102,7 +102,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                     }
                 });
         } else {
-            router.push("/auth");
+            router.replace("/auth");
         }
     }, []);
 
@@ -178,7 +178,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const deleteProductFromUserProductsWallet = async (walletProductIndex) => {
         try {
             setIsDeletingWalletProduct(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
+            await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
@@ -200,7 +200,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/auth");
+                await router.replace("/auth");
                 return;
             }
             setIsDeletingWalletProduct(false);

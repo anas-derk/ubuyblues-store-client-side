@@ -29,12 +29,12 @@ import {
     getAllFlashProductsInsideThePage,
     isExistOfferOnProduct,
     getFavoriteProductsByProductsIdsAndUserId,
-    isFavoriteProductForUser
+    isFavoriteProductForUser,
+    getUserInfo
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 import StoreCard from "@/components/StoreCard";
-import { getUserInfo } from "../../public/global_functions/validations";
 
 export default function Home({ countryAsProperty, storeId }) {
 

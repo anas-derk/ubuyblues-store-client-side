@@ -9,7 +9,8 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { FaCode } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
-import { getUserInfo, inputValuesValidation } from "../../../public/global_functions/validations";
+import { inputValuesValidation } from "../../../public/global_functions/validations";
+import { getUserInfo } from "../../../public/global_functions/popular";
 
 export default function ForgetPassword() {
 
@@ -51,7 +52,7 @@ export default function ForgetPassword() {
                 .then(async (res) => {
                     const result = res.data;
                     if (!result.error) {
-                        await router.push("/");
+                        await router.replace("/");
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
@@ -182,7 +183,7 @@ export default function ForgetPassword() {
                 if(!result.error) {
                     setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
                     let successTimeout = setTimeout(async () => {
-                        await router.push(`/auth`);
+                        await router.push("/auth");
                         clearTimeout(successTimeout);
                     }, 6000);
                 } else {        

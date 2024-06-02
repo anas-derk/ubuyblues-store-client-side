@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo } from "../../../../public/global_functions/validations";
+import { getUserInfo } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 
 export default function CustomerOrders({ countryAsProperty }) {
@@ -84,13 +84,13 @@ export default function CustomerOrders({ countryAsProperty }) {
                         setIsFilteringOrdersStatus(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
@@ -98,7 +98,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                     }
                 });
         } else {
-            router.push("/auth");
+            router.replace("/auth");
         }
     }, []);
 

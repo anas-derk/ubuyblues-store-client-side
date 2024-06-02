@@ -10,7 +10,7 @@ import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import axios from "axios";
-import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct } from "../../../public/global_functions/popular";
+import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 
 export default function Cart({ countryAsProperty }) {
@@ -24,6 +24,8 @@ export default function Cart({ countryAsProperty }) {
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [isGetGroupedProductsByStoreId, setIsGetGroupedProductsByStoreId] = useState(true);
+    
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
     const [allProductsData, setAllProductsData] = useState([]);
 
@@ -53,6 +55,27 @@ export default function Cart({ countryAsProperty }) {
                 setIsErrorMsgOnLoadingThePage(true);
             });
     }, [countryAsProperty]);
+
+    useEffect(() => {
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            getUserInfo()
+                .then((result) => {
+                    if (result.error) {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    }
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        setIsGetUserInfo(false);
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        }
+    }, []);
 
     useEffect(() => {
         let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
@@ -99,10 +122,10 @@ export default function Cart({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        if (!isGetGroupedProductsByStoreId) {
+        if (!isGetGroupedProductsByStoreId && !isGetUserInfo) {
             setIsLoadingPage(false);
         }
-    }, [isGetGroupedProductsByStoreId]);
+    }, [isGetGroupedProductsByStoreId, isGetUserInfo]);
 
     const getProductsByIds = async (productsIds) => {
         try {

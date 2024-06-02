@@ -9,12 +9,17 @@ import axios from "axios";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
+import { getUserInfo } from "../../../public/global_functions/popular";
 
 export default function AddYourStore() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
+    const [isGetUserInfo, setIsGetUserInfo] = useState(true);
+
+    const [isGetAppearedSections, setIsGetAppearedSections] = useState(true);
 
     const [isServiceAvailable, setIsServiceAvailable] = useState(false);
 
@@ -43,6 +48,32 @@ export default function AddYourStore() {
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            getUserInfo()
+                .then((result) => {
+                    if (result.error) {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    }
+                    setIsGetUserInfo(false);
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        setIsGetUserInfo(false);
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else {
+            setIsLoadingPage(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getAppearedSections()
             .then(async (result) => {
                 const appearedSectionsLength = result.data.length;
@@ -53,13 +84,19 @@ export default function AddYourStore() {
                         }
                     }
                 }
-                setIsLoadingPage(false);
+                setIsGetAppearedSections(false);
             })
             .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
     }, []);
+
+    useEffect(() => {
+        if (!isGetUserInfo && !isGetAppearedSections) {
+            setIsLoadingPage(false);
+        }
+    }, [isGetUserInfo, isGetAppearedSections]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);

@@ -4,17 +4,41 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
+import { getUserInfo } from "../../../public/global_functions/popular";
+import LoaderPage from "@/components/LoaderPage";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function PageNotFound() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-        setIsLoadingPage(false);
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            getUserInfo()
+                .then((result) => {
+                    if (result.error) {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    }
+                    setIsLoadingPage(false);
+                })
+                .catch((err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    } else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else {
+            setIsLoadingPage(false);
+        }
     }, []);
 
     const handleSelectUserLanguage = (userLanguage) => {
@@ -27,7 +51,7 @@ export default function PageNotFound() {
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Page Not Found")}</title>
             </Head>
-            {!isLoadingPage && <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content page d-flex align-items-center justify-content-center flex-column">
                     <BiError className="error-404-icon" />
@@ -38,6 +62,8 @@ export default function PageNotFound() {
                     <Link href="/" className="home-page-link">{t("Or Go To Home Page")}</Link>
                 </div>
             </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

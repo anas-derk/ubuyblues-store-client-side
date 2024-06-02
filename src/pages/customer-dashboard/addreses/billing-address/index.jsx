@@ -11,7 +11,8 @@ import { countries, getCountryCode } from "countries-list";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getUserInfo, inputValuesValidation } from "../../../../../public/global_functions/validations";
+import { inputValuesValidation } from "../../../../../public/global_functions/validations";
+import { getUserInfo } from "../../../../../public/global_functions/popular";
 
 export default function CustomerBillingAddress() {
 
@@ -47,13 +48,13 @@ export default function CustomerBillingAddress() {
                         setIsLoadingPage(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
+                        await router.replace("/auth");
                     } else {
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
@@ -61,7 +62,7 @@ export default function CustomerBillingAddress() {
                     }
                 });
         } else {
-            router.push("/auth");
+            router.replace("/auth");
         }
     }, []);
 
@@ -205,7 +206,7 @@ export default function CustomerBillingAddress() {
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                await router.push("/auth");
+                await router.replace("/auth");
                 return;
             }
             setIsWaitStatus(false);

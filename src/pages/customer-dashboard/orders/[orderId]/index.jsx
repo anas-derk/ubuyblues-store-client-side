@@ -7,7 +7,7 @@ import LoaderPage from "@/components/LoaderPage";
 import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
-import { getUserInfo } from "../../../../../public/global_functions/validations";
+import { getUserInfo } from "../../../../../public/global_functions/popular";
 
 export default function OrderDetails() {
 
@@ -36,7 +36,7 @@ export default function OrderDetails() {
                         let result = res.data;
                         if (result.error) {
                             localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                            await router.push("/auth");
+                            await router.replace("/auth");
                         } else {
                             result = await getOrderDetails(orderId);
                             if (!result.error) {
@@ -52,14 +52,14 @@ export default function OrderDetails() {
                     .catch(async (err) => {
                         if (err?.response?.data?.msg === "Unauthorized Error") {
                             localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                            await router.push("/auth");
+                            await router.replace("/auth");
                         }
                         else {
                             setIsLoadingPage(false);
                             setIsErrorMsgOnLoadingThePage(true);
                         }
                     });
-            } else router.push("/auth");
+            } else router.replace("/auth");
         }
     }, [orderId]);
 

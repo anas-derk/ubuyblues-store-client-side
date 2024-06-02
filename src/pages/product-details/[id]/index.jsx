@@ -20,8 +20,8 @@ import { PiShareFatLight } from "react-icons/pi";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo, inputValuesValidation } from "../../../../public/global_functions/validations";
-import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, isFavoriteProductForUser } from "../../../../public/global_functions/popular";
+import { inputValuesValidation } from "../../../../public/global_functions/validations";
+import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo } from "../../../../public/global_functions/popular";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -155,7 +155,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        setIsLoadingPage(false);
+                        setIsGetUserInfo(false);
                     } else {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -477,7 +477,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
         }
         catch (err) {
-            console.log(err);
             setWaitAddNewReferalMsg("");
             setErrorAddNewReferalMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
