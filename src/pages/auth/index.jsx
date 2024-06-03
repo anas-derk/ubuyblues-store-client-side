@@ -248,7 +248,7 @@ export default function UserAuth() {
     }
 
     return (
-        <div className="auth d-flex flex-column justify-content-center">
+        <div className="auth">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("User Auth")}</title>
             </Head>
