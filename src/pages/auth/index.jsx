@@ -229,7 +229,6 @@ export default function UserAuth() {
             } else {
                 if (result.data.isVerified) {
                     localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
-                    i18n.changeLanguage("en");
                     await router.replace("/");
                 } else await router.replace(`/account-verification?email=${emailForLogin}`);
             }
