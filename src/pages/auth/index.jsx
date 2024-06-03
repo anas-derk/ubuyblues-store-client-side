@@ -213,7 +213,7 @@ export default function UserAuth() {
         }
     }
 
-    const loginingSuccessWithGoogle = async (credentialResponse) => {
+    const successLoginingWithGoogle = async (credentialResponse) => {
         try {
             setIsLoginingStatus(true);
             let result = decode(credentialResponse.credential);
@@ -315,7 +315,7 @@ export default function UserAuth() {
                                                 <li className="external-auth-site-item">
                                                     <GoogleLogin
                                                         type="icon"
-                                                        onSuccess={loginingSuccessWithGoogle}
+                                                        onSuccess={successLoginingWithGoogle}
                                                         onError={loginingFailedWithGoogle}
                                                     />
                                                 </li>
@@ -366,7 +366,7 @@ export default function UserAuth() {
                                                 <li className="external-auth-site-item">
                                                     <GoogleLogin
                                                         type="icon"
-                                                        onSuccess={loginingSuccessWithGoogle}
+                                                        onSuccess={successLoginingWithGoogle}
                                                         onError={loginingFailedWithGoogle}
                                                     />
                                                 </li>
