@@ -6,7 +6,6 @@
 
 body {
   background-color: var(--main-color-one);
-  overflow-x: hidden;
 }
 
 body[lang="en"], body[lang="tr"], body[lang="de"] {
