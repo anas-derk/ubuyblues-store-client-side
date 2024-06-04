@@ -204,6 +204,7 @@ export default function AddYourStore() {
                 formData.append("productsType", storeData.productsType);
                 formData.append("productsDescription", storeData.productsDescription);
                 formData.append("storeImg", storeData.image);
+                formData.append("language", i18n.language);
                 setIsWaitStatus(true);
                 const res = await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData);
                 const result = res.data;
