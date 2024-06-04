@@ -67,7 +67,7 @@ export default function AddYourStore() {
                     }
                 });
         } else {
-            setIsLoadingPage(false);
+            setIsGetUserInfo(false);
         }
     }, []);
 
