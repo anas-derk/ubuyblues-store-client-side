@@ -262,6 +262,7 @@ export default function AddYourStore() {
                                         className={`form-control p-3 border-2 store-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Store Name")}
                                         onChange={(e) => setStoreData({ ...storeData, name: e.target.value })}
+                                        value={storeData.name}
                                     />
                                     {formValidationErrors["name"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -274,6 +275,7 @@ export default function AddYourStore() {
                                         className={`form-control p-3 border-2 store-owner-first-name-field ${formValidationErrors["ownerFirstName"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your First Name")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerFirstName: e.target.value })}
+                                        value={storeData.ownerFirstName}
                                     />
                                     {formValidationErrors["ownerFirstName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -286,6 +288,7 @@ export default function AddYourStore() {
                                         className={`form-control p-3 border-2 store-owner-last-name-field ${formValidationErrors["ownerLastName"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Last Name")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerLastName: e.target.value })}
+                                        value={storeData.ownerLastName}
                                     />
                                     {formValidationErrors["ownerLastName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -298,6 +301,7 @@ export default function AddYourStore() {
                                         className={`form-control p-3 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Email")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerEmail: e.target.value })}
+                                        value={storeData.ownerEmail}
                                     />
                                     {formValidationErrors["ownerEmail"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -310,6 +314,7 @@ export default function AddYourStore() {
                                         className={`form-control p-3 border-2 store-products-type-field ${formValidationErrors["productsType"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Products Type")}
                                         onChange={(e) => setStoreData({ ...storeData, productsType: e.target.value })}
+                                        value={storeData.productsType}
                                     />
                                     {formValidationErrors["productsType"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -322,6 +327,7 @@ export default function AddYourStore() {
                                         className={`form-control p-3 border-2 store-products-description-field ${formValidationErrors["productsDescription"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Products Description")}
                                         onChange={(e) => setStoreData({ ...storeData, productsDescription: e.target.value })}
+                                        value={storeData.productsDescription}
                                     />
                                     {formValidationErrors["productsDescription"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
