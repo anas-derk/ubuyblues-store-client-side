@@ -154,7 +154,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     });
                 }
             }
-            setIsGetUserInfo(true);
+            setIsGetUserInfo(false);
         }
         fetchData();
     }, []);
