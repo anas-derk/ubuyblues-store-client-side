@@ -105,7 +105,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 }
                 setIsGetStoreDetails(false);
             })
-            .catch(async () => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -113,6 +113,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         async function fetchData() {
+            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
             if (userToken) {
                 result = await getUserInfo();
                 if (!result.error) {
