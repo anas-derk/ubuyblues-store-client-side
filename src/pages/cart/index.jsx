@@ -64,6 +64,7 @@ export default function Cart({ countryAsProperty }) {
                     if (result.error) {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     }
+                    setIsGetUserInfo(false);
                 })
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
@@ -74,6 +75,8 @@ export default function Cart({ countryAsProperty }) {
                         setIsErrorMsgOnLoadingThePage(true);
                     }
                 });
+        } else {
+            setIsGetUserInfo(false);
         }
     }, []);
 
