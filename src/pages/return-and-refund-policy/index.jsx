@@ -72,7 +72,7 @@ export default function PolicesTermsAndConditions() {
                                 <li className="mb-3">{t("If a cancellation of an online payment order is requested before shipping, we will complete the refund process within 5 business days. A 5% deduction from the refunded amount will be applied to cover payment processing fees charged by the payment company")} .</li>
                                 <li className="mb-3">{t("Orders paid online will be refunded within 5 business days due to stock depletion, damage, or deviation from the confirmed sample, without processing fees. The refund will be transferred via the original payment method")} .</li>
                                 <li className="mb-3">{t("In case of illegal conflicts with regular payments, certain fees will be imposed according to the severity of the situation")} .</li>
-                                <li className="mb-3">{t("14SERCEGILLER reserves the right to the final interpretation")} .</li>
+                                <li className="mb-3">{t("Ubuyblues reserves the right to the final interpretation")} .</li>
                             </ol>
                             Email: <a href="mailto:info@ubuyblues.com" className="text-white border-bottom border-2 pb-2 mb-3 d-block w-fit">info@ubuyblues.com</a>
                             <p className="mb-3">{t("If you have a return or replacement request, please follow the steps below, and we will assist you with sincerity")}</p>
