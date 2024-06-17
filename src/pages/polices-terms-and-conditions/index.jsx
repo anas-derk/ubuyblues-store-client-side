@@ -73,17 +73,17 @@ export default function PolicesTermsAndConditions() {
                                 <li className="mb-4">{t("'It' refers to the products and services offered by Ubuyblues online on this website, or the services and call centers that are referenced in this privacy notice")} .</li>
                             </ul>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("What personal data do we collect ?")}</h2>
-                            <p className="mb-4">{t("We collect your personal data to provide and continually improve the services of International Asfour. We gather various types of personal data")} .</p>
+                            <p className="mb-4">{t("We collect your personal data to provide and continually improve the services of ubuyblues. We gather various types of personal data")} .</p>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("The personal data provided by the data subject")}</h2>
                             <ul>
-                                <li className="mb-4">{t("To provide a seamless customer experience, we receive and store your personal data related to the services of International Asfour, including, but not limited to")} .</li>
+                                <li className="mb-4">{t("To provide a seamless customer experience, we receive and store your personal data related to the services of ubuyblues, including, but not limited to")} .</li>
                                 <li className="mb-4">{t("The name, address, and phone numbers")} .</li>
                                 <li className="mb-4">{t("Payment information")} .</li>
                                 <li className="mb-4">{t("age")} .</li>
                                 <li className="mb-4">{t("personal description, and photographic image in your profile")} .</li>
                                 <li className="mb-4">{t("Identity-related information and documents, including civil ID numbers, national ID, and driver's license")} .</li>
                             </ul>
-                            <p className="fw-bold mb-4 h5 border-bottom border-2 w-fit pb-2">{t("We automatically collect and store certain types of personal data about your use of International Asfour services. We use 'cookies' and other unique identifiers, obtaining specific types of personal data when your web browser or device accesses International Asfour services. We may collect automatic personal data from, including but not limited to")}</p>
+                            <p className="fw-bold mb-4 h5 border-bottom border-2 w-fit pb-2">{t("We automatically collect and store certain types of personal data about your use of ubuyblues services. We use 'cookies' and other unique identifiers, obtaining specific types of personal data when your web browser or device accesses ubuyblues services. We may collect automatic personal data from, including but not limited to")}</p>
                             <ul>
                                 <li className="mb-4">{t("The Internet Protocol (IP) address used to connect your computer to the internet")} .</li>
                                 <li className="mb-4">{t("Login information, email address, and password")} .</li>
@@ -92,29 +92,31 @@ export default function PolicesTermsAndConditions() {
                                 <li className="mb-4">{t("Date of purchase")} .</li>
                                 <li className="mb-4">{t("Information from other sources")} .</li>
                             </ul>
-                            <p className="fw-bold mb-4 h5 border-bottom border-2 w-fit pb-2">{t("We may receive personal data about you from third-party sources, including International Asfour and affiliates, such as delivery and address information updated by our transportation companies, which we use to correct our records and facilitate the next purchase delivery. However, we are not responsible for the privacy practices of third-party sites that we do not own, operate, or control. We may collect personal data from other sources, including but not limited to")}</p>
+                            <p className="fw-bold mb-4 h5 border-bottom border-2 w-fit pb-2">{t("We may receive personal data about you from third-party sources, including ubuyblues and affiliates, such as delivery and address information updated by our transportation companies, which we use to correct our records and facilitate the next purchase delivery. However, we are not responsible for the privacy practices of third-party sites that we do not own, operate, or control. We may collect personal data from other sources, including but not limited to")}</p>
                             <ul>
                                 <li className="mb-4">{t("Delivery information and updated address from third parties")} .</li>
                                 <li className="mb-4">{t("Search results and links, including paid listings")} .</li>
                                 <li className="mb-4">{t("Third-party applications or websites that allow us to collect, share, and/or use your personal data")} .</li>
-                                <li className="mb-4">{t("Third-party sources providing marketing or demographic information about you to enhance our ability to tailor our content and provide International Asfour services that we believe may interest you")} .</li>
+                                <li className="mb-4">{t("Third-party sources providing marketing or demographic information about you to enhance our ability to tailor our content and provide ubuyblues services that we believe may interest you")} .</li>
                             </ul>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("The purposes for which we use your personal data")}</h2>
-                            <p className="mb-4">{t("International Asfour uses your personal data to operate, provide, develop, and improve the services of the International Asfour website and application, including but not limited to")} :</p>
+                            <p className="mb-4">{t("ubuyblues uses your personal data to operate, provide, develop, and improve the services of the ubuyblues website and application, including but not limited to")} :</p>
                             <h6 className="fw-bold mb-4">{t("Purchasing, delivery, and promotion")}</h6>
-                            <p className="mb-4">{t("International Asfour uses your personal data to receive and process orders, provide products and services, process payments, and communicate with you regarding orders, products, services, and promotional offers from International Asfour")} .</p>
-                            <h6 className="fw-bold mb-4">{t("Providing error detection and correction features and improving the services of International Asfour")}</h6>
-                            <p className="mb-4">{t("International Asfour uses your personal data to provide operational functions, analyze performance, troubleshoot errors, and enhance the usability and effectiveness of International Asfour services")} .</p>
+                            <p className="mb-4">{t("ubuyblues uses your personal data to receive and process orders, provide products and services, process payments, and communicate with you regarding orders, products, services, and promotional offers from ubuyblues")} .</p>
+                            <h6 className="fw-bold mb-4">{t("Providing error detection and correction features and improving the services of ubuyblues")}</h6>
+                            <p className="mb-4">{t("ubuyblues uses your personal data to provide operational functions, analyze performance, troubleshoot errors, and enhance the usability and effectiveness of ubuyblues services")} .</p>
                             <h6 className="fw-bold mb-4">{t("Recommendations and customization")}</h6>
-                            <p className="mb-4">{t("International Asfour uses your personal data to recommend products and services that may interest you, identify your preferences, and personalize your experience with International Asfour")} .</p>
+                            <p className="mb-4">{t("ubuyblues uses your personal data to recommend products and services that may interest you, identify your preferences, and personalize your experience with ubuyblues")} .</p>
                             <h6 className="fw-bold mb-4">{t("Compliance with legal obligations")}</h6>
-                            <p className="mb-4">{t("In some cases, International Asfour collects your personal data and uses it to comply with applicable laws")} .</p>
+                            <p className="mb-4">{t("In some cases, ubuyblues collects your personal data and uses it to comply with applicable laws")} .</p>
+                            <h6 className="fw-bold mb-4">{t("Communication")}</h6>
+                            <p className="mb-4">{t("Ubuyblues utilizes your personal data to communicate with you regarding application services through various channels (e.g., phone and email) .")}</p>
                             <h6 className="fw-bold mb-4">{t("Advertisements")}</h6>
-                            <p className="mb-4">{t("International Asfour uses your personal data to display interest-based advertisements for features, products, and services that may be of interest to you. International Asfour does not use personally identifiable information to display interest-based ads")} .</p>
+                            <p className="mb-4">{t("ubuyblues uses your personal data to display interest-based advertisements for features, products, and services that may be of interest to you. ubuyblues does not use personally identifiable information to display interest-based ads")} .</p>
                             <h5 className="fw-bold mb-4">{t("Preventing fraud and credit risks")}</h5>
-                            <p className="mb-4">{t("International Asfour uses your personal data to prevent, detect, and investigate fraud and misuse in order to protect the security of International Asfour and its customers. International Asfour may also use scoring methods to assess and manage risks")} .</p>
+                            <p className="mb-4">{t("ubuyblues uses your personal data to prevent, detect, and investigate fraud and misuse in order to protect the security of ubuyblues and its customers. ubuyblues may also use scoring methods to assess and manage risks")} .</p>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Disclosure and sharing of your personal data")}</h2>
-                            <p className="mb-4">{t("We may share your personal data within International Asfour to provide you access to the services of the website and the application. International Asfour may market website and application services to you as a result of such sharing unless you explicitly unsubscribe")} .</p>
+                            <p className="mb-4">{t("We may share your personal data within ubuyblues to provide you access to the services of the website and the application. ubuyblues may market website and application services to you as a result of such sharing unless you explicitly unsubscribe")} .</p>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Data subject rights")}</h2>
                             <p className="mb-4">{t("When we process your personal data, you have several rights regarding how the personal data is processed, and you can exercise these rights at any time. We have provided an overview of those rights below along with what it entails for you. You can exercise your rights by submitting a data subject rights request form available on this website")} .</p>
                             <h5 className="fw-bold mb-4">{t("Right to access information")}</h5>
