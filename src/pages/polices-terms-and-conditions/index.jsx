@@ -139,11 +139,11 @@ export default function PolicesTermsAndConditions() {
                             <h6 className="fw-bold mb-4">{t("The right to withdraw consent")}</h6>
                             <p className="mb-4">{t("Your consent to the privacy policy below is the legal basis for Ubuyblues to process your personal data. However, you have the right to withdraw your consent at any time. It is important to note that withdrawing consent does not affect the legality of processing your personal data prior to the successful withdrawal. You can withdraw your consent for the processing of your personal data at any time by contacting us at")} <a href="mailto:info@ubuyblues.com">info@ubuyblues.com</a></p>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Rights Related to Automated Decision Making and Profiling")} .</h2>
-                            <p className="mb-4">{t("You have the right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects or similarly significant effects on you")} :</p>
+                            <p className="mb-4">{t("You have the right to lodge a complaint with the relevant data protection authority if you believe that the processing of your personal data violates any of your rights or applicable legal provisions")} :</p>
                             <ul>
                                 <li className="mb-4">{t("Express your opinion")} .</li>
                                 <li className="mb-4">{t("Obtain an explanation of the decision reached after an assessment")} .</li>
-                                <li className="mb-4">{t("The right to lodge a complaint with the relevant data protection authority")} .`</li>
+                                <li className="mb-4">{t("The right to lodge a complaint with the relevant data protection authority")} .</li>
                                 <li className="mb-4">{t("You have the right to file a complaint with the appropriate data protection authority if you believe that the processing of your personal data violates any of your rights or the provisions of applicable laws")} .</li>
                             </ul>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Excessive or unreasonable request fees")}</h2>
