@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import { getUserInfo } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import Footer from "@/components/Footer";
 
 export default function AboutUs() {
 
@@ -29,6 +30,7 @@ export default function AboutUs() {
                 .catch((err) => {
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        setIsLoadingPage(false);
                     } else {
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
@@ -51,7 +53,7 @@ export default function AboutUs() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white ps-4 pe-4 page">
+                <div className="page-content text-white ps-4 pe-4 pb-5 page">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("About Us")}</h1>
                         <div className="content">
@@ -63,6 +65,7 @@ export default function AboutUs() {
                         </div>
                     </div>
                 </div>
+                <Footer />
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
