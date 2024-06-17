@@ -74,10 +74,10 @@ export default function PolicesTermsAndConditions() {
                                 <li className="mb-3">{t("In case of illegal conflicts with regular payments, certain fees will be imposed according to the severity of the situation")} .</li>
                                 <li className="mb-3">{t("14SERCEGILLER reserves the right to the final interpretation")} .</li>
                             </ol>
-                            Email: <a href="mailto:info@asfourintlco.com" className="text-white border-bottom border-2 pb-2 mb-3 d-block w-fit">info@asfourintlco.com</a>
+                            Email: <a href="mailto:info@ubuyblues.com" className="text-white border-bottom border-2 pb-2 mb-3 d-block w-fit">info@ubuyblues.com</a>
                             <p className="mb-3">{t("If you have a return or replacement request, please follow the steps below, and we will assist you with sincerity")}</p>
                             <ol>
-                                <li className="mb-3">{t("If you wish to return your order, please send the return request to info@asfourintlco.com via email. Provide information about the returned items, reasons for the return, and photos of the original packaging")} .</li>
+                                <li className="mb-3">{t("If you wish to return your order, please send the return request to info@ubuyblues.com via email. Provide information about the returned items, reasons for the return, and photos of the original packaging")} .</li>
                                 <li className="mb-3">{t("Our team will review your request within 5 business days")} .</li>
                             </ol>
                             <p className="mb-3">{t("After verification, our service team will inform you of the refund amount and the next steps. (Refund amount = Value of returned items - Return shipping fees)")} .</p>
