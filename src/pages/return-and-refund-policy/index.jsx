@@ -52,7 +52,7 @@ export default function PolicesTermsAndConditions() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white page p-4">
+                <div className="page-content text-white page ps-4 pe-4 pb-5">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Return & Refund Policy")}</h1>
                         <div className="content">
