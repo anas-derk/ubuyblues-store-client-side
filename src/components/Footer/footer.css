@@ -25,3 +25,11 @@ footer .title {
 footer .payment-methods-list .payment-method-item span {
   font-size: 16px;
 }
+
+footer .payment-methods-list .payment-method-item .icon {
+  font-size: 20px;
+}
+
+footer .payment-methods-list .payment-method-item .knet-icon {
+  width: 20px;
+}

@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { FaLongArrowAltRight, FaLongArrowAltLeft, FaCcPaypal, FaInstagram, FaTiktok } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { LiaCcVisa } from "react-icons/lia";
+import { FaCcMastercard } from "react-icons/fa";
+import KnetLogo from "../../../public/images/knet-logo.png";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import axios from "axios";
@@ -141,6 +144,18 @@ export default function Footer() {
                             <li className="payment-method-item fw-bold mb-3">
                                 <FaCcPaypal className={`icon paypal-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 <span>{t("PayPal")}</span>
+                            </li>
+                            <li className="payment-method-item fw-bold mb-3">
+                                <LiaCcVisa className={`icon visa-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <span>{t("Visa Card")}</span>
+                            </li>
+                            <li className="payment-method-item fw-bold mb-3">
+                                <FaCcMastercard className={`icon visa-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <span>{t("Master Card")}</span>
+                            </li>
+                            <li className="payment-method-item fw-bold mb-3">
+                                <img src={KnetLogo.src} alt="Knet Logo" className={`knet-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <span>{t("Knet")}</span>
                             </li>
                         </ul>
                         <h5 className="fw-bold mb-3 border-bottom border-dark border-2 pb-2 title">{t("Subscription").toUpperCase()}</h5>
