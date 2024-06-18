@@ -189,15 +189,15 @@ export default function PolicesTermsAndConditions() {
                             <p className="mb-4">{t("At Ubuyblues, customer satisfaction is our top priority, and we strive to resolve all customer issues in a professional and friendly manner. However, we will not tolerate any unacceptable or unreasonable behavior towards our customer service team members")} .</p>
                             <p className="mb-4">{t("Unacceptable behavior towards Ubuyblues's customer service employees may include, for example")} :</p>
                             <ul>
-                                <li>{t("Submitting repetitive or consistently malicious complaints, despite the matter being fully addressed; similarly, ongoing repetition of complaints despite reasonable and fair solutions provided according to our policies")} .</li>
-                                <li>{t("Demanding or expecting employees to violate the company's applicable policy guidelines")} .</li>
-                                <li>{t("A large number of complaints compared to the total purchase value over time")} .</li>
+                                <li className="mb-2">{t("Submitting repetitive or consistently malicious complaints, despite the matter being fully addressed; similarly, ongoing repetition of complaints despite reasonable and fair solutions provided according to our policies")} .</li>
+                                <li className="mb-2">{t("Demanding or expecting employees to violate the company's applicable policy guidelines")} .</li>
+                                <li className="mb-2">{t("A high number of complaints compared to the total purchase value history")} .</li>
                             </ul>
                             <p className="mb-4">{t("For such behavior, complainants may be notified formally with the following")} :</p>
                             <ul>
-                                <li>{t("Their language is considered offensive, abusive, threatening, and entirely unacceptable")} .</li>
-                                <li>{t("They must refrain from using such language, abuse, and threats")} .</li>
-                                <li>{t("There will be no further exchange of correspondence on this matter if they continue this behavior")} .</li>
+                                <li className="mb-2">{t("Their language is considered offensive, abusive, threatening, and entirely unacceptable")} .</li>
+                                <li className="mb-2">{t("They must refrain from using such language, abuse, and threats")} .</li>
+                                <li className="mb-2">{t("There will be no further exchange of correspondence on this matter if they continue this behavior")} .</li>
                             </ul>
                             <p className="mb-4">{t("Ubuyblues reserves the right to refuse customer requests in the future without further notice")} .</p>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Complaint Escalation Process")}</h2>
