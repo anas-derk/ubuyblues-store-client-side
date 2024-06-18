@@ -98,10 +98,15 @@ export default function Footer() {
                                 {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/polices-terms-and-conditions" className="text-dark link-btn">{t("Polices-Terms & Conditions").toUpperCase()}</Link>
                             </li>
-                            <li className="link-item fw-bold">
+                            <li className="link-item fw-bold mb-3">
                                 {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
                                 {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/return-and-refund-policy" className="text-dark link-btn">{t("Return & Refund Policy").toUpperCase()}</Link>
+                            </li>
+                            <li className="link-item fw-bold">
+                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
+                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                                <Link href="/return-and-delivery-sheet" className="text-dark link-btn">{t("Return And Delivery Sheet").toUpperCase()}</Link>
                             </li>
                         </ul>
                     </div>
