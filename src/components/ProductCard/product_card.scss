@@ -1,7 +1,13 @@
 .product-card{
-    .flash-descount-description{
+    .flash-discount-description{
         .flash-icon{
             font-size: 50px;
+        }
+        h4, .remaining-time, button{
+            border: 4px solid var(--main-color-two);
+        }
+        .flash-icon, button{
+            background-color: var(--main-color-two);
         }
     }
     .product-managment-box{

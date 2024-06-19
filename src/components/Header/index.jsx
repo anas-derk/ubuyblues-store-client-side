@@ -59,6 +59,7 @@ export default function Header() {
         try {
             switch (country) {
                 case "kuwait": {
+                    localStorage.setItem("asfour-store-country", country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -66,10 +67,10 @@ export default function Header() {
                             country,
                         }
                     });
-                    localStorage.setItem("asfour-store-country", country);
                     return;
                 }
                 case "germany": {
+                    localStorage.setItem("asfour-store-country", country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -77,10 +78,10 @@ export default function Header() {
                             country,
                         }
                     });
-                    localStorage.setItem("asfour-store-country", country);
                     return;
                 }
                 case "turkey": {
+                    localStorage.setItem("asfour-store-country", country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -88,7 +89,6 @@ export default function Header() {
                             country,
                         }
                     });
-                    localStorage.setItem("asfour-store-country", country);
                     return
                 }
                 default: {
@@ -129,9 +129,9 @@ export default function Header() {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={() => handleChangeLanguage("en")}>{t("English")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleChangeLanguage("tr")}>{t("Turkey")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("tr")}>{t("Turkish")}</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => handleChangeLanguage("de")}>{t("Germany")}</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => handleChangeLanguage("de")}>{t("German")}</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title={t("Countries")} id="products-nav-dropdown">
                                 <NavDropdown.Item onClick={() => handleSelectCountry("kuwait")}>{t("KW")}</NavDropdown.Item>
