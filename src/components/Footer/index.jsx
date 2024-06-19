@@ -71,7 +71,7 @@ export default function Footer() {
             <div className="container-fluid">
                 <div className="row align-items-center mb-4">
                     <div className="col-xl-2 text-center">
-                        <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="asfour-logo-for-footer" />
+                        <img src={ubuybluesLogo.src} alt="ubuyblues logo for footer" className="ubuyblues-logo-for-footer" />
                     </div>
                     <div className="col-xl-3">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Our links").toUpperCase()}</h5>
@@ -122,19 +122,19 @@ export default function Footer() {
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <FaInstagram className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="https://www.instagram.com/asfourintl?igsh=MTluaXV1aG9yb2QwdQ==" target="_blank" className="text-dark link-btn">{t("Instagram").toUpperCase()}</Link>
+                                <Link href="https://www.instagram.com/ubuyblues" target="_blank" className="text-dark link-btn">{t("Instagram").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <FaXTwitter className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="https://x.com/AsfourIntl?t=TyZqHPOL5gf009kl4Iz69g&s=09" target="_blank" className="text-dark link-btn">{t("x").toUpperCase()}</Link>
+                                <Link href="https://x.com/ubuyblues" target="_blank" className="text-dark link-btn">{t("x").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <FaTiktok className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="https://www.tiktok.com/@asfourintl?_t=8kpQN2SnUBe&_r=1" target="_blank" className="text-dark link-btn">{t("Tiktok").toUpperCase()}</Link>
+                                <Link href="https://www.tiktok.com/@ubuyblues" target="_blank" className="text-dark link-btn">{t("Tiktok").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <MdEmail className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href="mailto:info@asfourintlco.com" className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
+                                <Link href="mailto:info@ubuyblues.com" className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
                             </li>
                         </ul>
                     </div>
