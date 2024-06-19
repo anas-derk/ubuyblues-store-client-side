@@ -46,6 +46,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
+    const [isGetStoreDetails, setIsGetStoreDetails] = useState(true);
+
     const [isGetCategories, setIsGetCategories] = useState(true);
 
     const [isGetProducts, setIsGetProducts] = useState(true);
@@ -111,14 +113,14 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const { i18n, t } = useTranslation();
 
-    const pageSize = 3;
+    const pageSize = 1;
 
     useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isGetCategories && !isGetProducts && !isGetFlashProducts) {
+            if (!isGetStoreDetails) {
                 setIsLoadingPage(false);
             }
         })
@@ -181,35 +183,11 @@ export default function Home({ countryAsProperty, storeId }) {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // ==========================================================================================
-        getAppearedSections()
-            .then(async (result) => {
-                const appearedSectionsLength = result.data.length;
-                setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
-                if (appearedSectionsLength > 0) {
-                    for (let i = 0; i < appearedSectionsLength; i++) {
-                        if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                            setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
-                        }
-                        if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
-                            const storesCount = await getStoresCount(filtersAsString);
-                            if (storesCount.data > 0) {
-                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filtersAsString)).data);
-                                totalPagesCount.forStores = Math.ceil(storesCount.data / pageSize);
-                            }
-                            setIsGetStores(false);
-                        }
-                    }
-                }
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-        // =============================================================================
         getStoreDetails(storeId)
             .then(async (result) => {
                 if (!result.error && result.data?.status === "approving") {
                     setStoreDetails(result.data);
+                    setIsGetStoreDetails(false);
                     result = await getCategoriesCount(filtersAsString);
                     if (result.data > 0) {
                         setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
@@ -257,13 +235,38 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
+        getAppearedSections()
+            .then(async (result) => {
+                const appearedSectionsLength = result.data.length;
+                setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
+                if (appearedSectionsLength > 0) {
+                    for (let i = 0; i < appearedSectionsLength; i++) {
+                        if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
+                            setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
+                        }
+                        if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
+                            const storesCount = await getStoresCount(filtersAsString);
+                            if (storesCount.data > 0) {
+                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filtersAsString)).data);
+                                totalPagesCount.forStores = Math.ceil(storesCount.data / pageSize);
+                            }
+                            setIsGetStores(false);
+                        }
+                    }
+                }
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+        // =============================================================================
     }, [storeId]);
 
     useEffect(() => {
-        if (!isGetCategories && !isGetFlashProducts && !isGetProducts && !isGetStores) {
+        if (!isGetStoreDetails) {
             setIsLoadingPage(false);
         }
-    }, [isGetCategories, isGetFlashProducts, isGetProducts, isGetStores]);
+    }, [isGetStoreDetails]);
 
     const getAppearedSections = async () => {
         try {
