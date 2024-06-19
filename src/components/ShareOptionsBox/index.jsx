@@ -24,22 +24,22 @@ export default function ShareOptionsBox({ setIsDisplayShareOptionsBox, sharingNa
                 <h2 className="mb-3 pb-3 border-bottom border-white">{t(`Share Your Favorite ${sharingName} With Your Friends`)}</h2>
                 <div className="row">
                     <div className="col-md-3">
-                        <WhatsappShareButton url={sharingURL} title="تحقق من هذا المنتج">
+                        <WhatsappShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
                             <WhatsappIcon size={45} round />
                         </WhatsappShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookShareButton url={sharingURL} title="تحقق من هذا المنتج">
+                        <FacebookShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
                             <FacebookIcon size={45} round />
                         </FacebookShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookMessengerShareButton url={sharingURL} title="تحقق من هذا المنتج">
+                        <FacebookMessengerShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
                             <FacebookMessengerIcon size={45} round />
                         </FacebookMessengerShareButton>
                     </div>
                     <div className="col-md-3">
-                        <TelegramShareButton url={sharingURL} title="تحقق من هذا المنتج">
+                        <TelegramShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
                             <TelegramIcon size={45} round />
                         </TelegramShareButton>
                     </div>

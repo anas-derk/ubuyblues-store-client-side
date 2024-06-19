@@ -309,7 +309,7 @@ export default function ProductCard({
                     <div className="product-managment-buttons managment-buttons p-2">
                         <PiShareFatLight
                             className="product-managment-icon d-block mb-2"
-                            onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/${productDetails._id}`)}
+                            onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/product-details/${productDetails._id}`)}
                         />
                         {
                             !isWaitAddProductToFavoriteUserProductsList &&
