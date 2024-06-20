@@ -58,6 +58,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [storeDetails, setStoreDetails] = useState({});
 
+    const [isGetBrands, setIsGetBrands] = useState(true);
+
     const [isGetStores, setIsGetStores] = useState(true);
 
     const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
@@ -169,10 +171,10 @@ export default function Home({ countryAsProperty, storeId }) {
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // ==========================================================================================
         getStoreDetails(storeId)
-            .then(async (result) => {
+            .then(async (storeDetailsResult) => {
                 setIsGetStoreDetails(false);
-                if (!result.error && result.data?.status === "approving") {
-                    setStoreDetails(result.data);
+                if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
+                    setStoreDetails(storeDetailsResult.data);
                     // =============================================================================
                     await handleGetAndSetCategories(filtersAsString);
                     setIsGetCategories(false);
@@ -190,28 +192,19 @@ export default function Home({ countryAsProperty, storeId }) {
                         )
                     );
                     // =============================================================================
-                }
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-        getAppearedSections()
-            .then(async (result) => {
-                const appearedSectionsLength = result.data.length;
-                setAppearedSections(appearedSectionsLength > 0 ? result.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
-                if (appearedSectionsLength > 0) {
-                    for (let i = 0; i < appearedSectionsLength; i++) {
-                        if (result.data[i].sectionName === "brands" && result.data[i].isAppeared) {
-                            setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
-                        }
-                        if (result.data[i].sectionName === "stores" && result.data[i].isAppeared) {
-                            const storesCount = await getStoresCount(filtersAsString);
-                            if (storesCount.data > 0) {
-                                setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filtersAsString)).data);
-                                totalPagesCount.forStores = Math.ceil(storesCount.data / pageSize);
+                    const appearedSectionsResult = await getAppearedSections();
+                    const appearedSectionsLength = appearedSectionsResult.data.length;
+                    setAppearedSections(appearedSectionsLength > 0 ? appearedSectionsResult.data.map((appearedSection) => appearedSection.isAppeared ? appearedSection.sectionName : "") : []);
+                    if (appearedSectionsLength > 0) {
+                        for (let i = 0; i < appearedSectionsLength; i++) {
+                            if (appearedSectionsResult.data[i].sectionName === "brands" && appearedSectionsResult.data[i].isAppeared) {
+                                setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
+                                setIsGetBrands(false);
                             }
-                            setIsGetStores(false);
+                            if (appearedSectionsResult.data[i].sectionName === "stores" && appearedSectionsResult.data[i].isAppeared) {
+                                await handleGetAndSetStores(filtersAsString);
+                                setIsGetStores(false);
+                            }
                         }
                     }
                 }
@@ -253,6 +246,7 @@ export default function Home({ countryAsProperty, storeId }) {
         setIsGetCategories(true);
         setIsGetProducts(true);
         setIsGetFlashProducts(true);
+        setIsGetBrands(true);
         setIsGetStores(true);
     }
 
@@ -260,10 +254,7 @@ export default function Home({ countryAsProperty, storeId }) {
         const result = await getCategoriesCount(filtersAsString);
         if (result.data > 0) {
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forCategories: Math.ceil(result.data / pageSize)
-            });
+            totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
         }
     }
 
@@ -273,10 +264,7 @@ export default function Home({ countryAsProperty, storeId }) {
             const result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
             setAllFlashProductsInsideThePage(result1.products);
             setCurrentDate(result1.currentDate);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forFlashProducts: Math.ceil(result.data / pageSize),
-            });
+            totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
             return result1.products;
         }
         return [];
@@ -287,10 +275,7 @@ export default function Home({ countryAsProperty, storeId }) {
         if (result.data > 0) {
             const result1 = (await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data;
             setAllProductsInsideThePage(result1.products);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forProducts: Math.ceil(result.data / pageSize)
-            });
+            totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
             return result1.products;
         }
         return [];
@@ -304,6 +289,17 @@ export default function Home({ countryAsProperty, storeId }) {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)));
+        }
+    }
+
+    const handleGetAndSetStores = async (filtersAsString) => {
+        const storesCount = await getStoresCount(filtersAsString);
+        if (storesCount.data > 0) {
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filtersAsString)).data);
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forStores: Math.ceil(storesCount.data / pageSize)
+            });
         }
     }
 
