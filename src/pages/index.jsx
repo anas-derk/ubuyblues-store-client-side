@@ -161,11 +161,7 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         setIsLoadingPage(true);
         handleResetAllHomeData();
-        setIsGetStoreDetails(true);
-        setIsGetCategories(true);
-        setIsGetProducts(true);
-        setIsGetFlashProducts(true);
-        setIsGetStores(true);
+        handleIsGetAllHomeData();
         const tempFilters = { ...filters, storeId };
         setFilters(tempFilters);
         const filtersAsString = getFiltersAsQuery(tempFilters);
@@ -177,43 +173,22 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsGetStoreDetails(false);
                 if (!result.error && result.data?.status === "approving") {
                     setStoreDetails(result.data);
-                    result = await getCategoriesCount(filtersAsString);
-                    if (result.data > 0) {
-                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
-                        totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
-                    }
+                    // =============================================================================
+                    await handleGetAndSetCategories(filtersAsString);
                     setIsGetCategories(false);
                     // =============================================================================
-                    const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-                    result = await getFlashProductsCount(filtersAsString);
-                    let tempFavoriteProductsListForUser = [];
-                    if (result.data > 0) {
-                        let result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
-                        setAllFlashProductsInsideThePage(result1.products);
-                        setCurrentDate(result1.currentDate);
-                        totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
-                        if (userToken) {
-                            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(result1.products.map((product) => product._id))).data);
-                        }
-                    }
+                    const flashProductsData = await handleGetAndSetFlashProducts(filtersAsString);
                     setIsGetFlashProducts(false);
                     // =============================================================================
-                    result = await getProductsCount(filtersAsString);
-                    if (result.data > 0) {
-                        let result1 = (await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data;
-                        setAllProductsInsideThePage(result1.products);
-                        totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
-                        if (userToken) {
-                            result1 = await getFavoriteProductsByProductsIdsAndUserId(result1.products.map((product) => product._id));
-                            result1.data.forEach((favoriteProduct) => {
-                                if (!tempFavoriteProductsListForUser.includes(favoriteProduct.productId)) {
-                                    tempFavoriteProductsListForUser.push(favoriteProduct);
-                                }
-                            });
-                            setFavoriteProductsListForUserByProductsIdsAndUserId(result1.data);
-                        }
-                    }
+                    const productsData = await handleGetAndSetProducts(filtersAsString);
                     setIsGetProducts(false);
+                    // =============================================================================
+                    await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
+                        handleCreateProductsIdsToGetFavoriteProductsForUser(
+                            flashProductsData.map((flashProduct) => flashProduct._id),
+                            productsData.map((product) => product._id)
+                        )
+                    );
                     // =============================================================================
                 }
             })
@@ -271,6 +246,65 @@ export default function Home({ countryAsProperty, storeId }) {
             forProducts: 1,
             forStores: 1
         });
+    }
+
+    const handleIsGetAllHomeData = () => {
+        setIsGetStoreDetails(true);
+        setIsGetCategories(true);
+        setIsGetProducts(true);
+        setIsGetFlashProducts(true);
+        setIsGetStores(true);
+    }
+
+    const handleGetAndSetCategories = async (filtersAsString) => {
+        const result = await getCategoriesCount(filtersAsString);
+        if (result.data > 0) {
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forCategories: Math.ceil(result.data / pageSize)
+            });
+        }
+    }
+
+    const handleGetAndSetFlashProducts = async (filtersAsString) => {
+        const result = await getFlashProductsCount(filtersAsString);
+        if (result.data > 0) {
+            const result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
+            setAllFlashProductsInsideThePage(result1.products);
+            setCurrentDate(result1.currentDate);
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forFlashProducts: Math.ceil(result.data / pageSize),
+            });
+            return result1.products;
+        }
+        return [];
+    }
+
+    const handleGetAndSetProducts = async (filtersAsString) => {
+        const result = await getProductsCount(filtersAsString);
+        if (result.data > 0) {
+            const result1 = (await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data;
+            setAllProductsInsideThePage(result1.products);
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forProducts: Math.ceil(result.data / pageSize)
+            });
+            return result1.products;
+        }
+        return [];
+    }
+
+    const handleCreateProductsIdsToGetFavoriteProductsForUser = (flashProductsIds, productsIds) => {
+        return Array.from(new Set(flashProductsIds.concat(productsIds)));
+    }
+
+    const handleGetAndSetFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)));
+        }
     }
 
     const getAppearedSections = async () => {
