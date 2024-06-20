@@ -82,9 +82,9 @@ export default function Home({ countryAsProperty, storeId }) {
     });
 
     const [totalPagesCount, setTotalPagesCount] = useState({
+        forCategories: 0,
         forFlashProducts: 0,
         forProducts: 0,
-        forCategories: 0,
         forStores: 0,
     });
 
@@ -151,23 +151,16 @@ export default function Home({ countryAsProperty, storeId }) {
     }, []);
 
     useEffect(() => {
+        window.onscroll = function () { handleScrollToUpAndDown(this) };
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", function () {
+            setWindowInnerWidth(this.innerWidth);
+        });
+    }, []);
+
+    useEffect(() => {
         setIsLoadingPage(true);
-        setAllCategoriesInsideThePage([]);
-        setAllFlashProductsInsideThePage([]);
-        setAllProductsInsideThePage([]);
-        setAllBrands([]);
-        setAllStoresInsideThePage([]);
-        setTotalPagesCount({
-            forCategories: 0,
-            forProducts: 0,
-            forStores: 0,
-        });
-        setCurrentPage({
-            forCategories: 1,
-            forFlashProducts: 1,
-            forProducts: 1,
-            forStores: 1
-        });
+        handleResetAllHomeData();
         setIsGetCategories(true);
         setIsGetProducts(true);
         setIsGetFlashProducts(true);
@@ -175,11 +168,6 @@ export default function Home({ countryAsProperty, storeId }) {
         const tempFilters = { ...filters, storeId };
         setFilters(tempFilters);
         const filtersAsString = getFiltersAsQuery(tempFilters);
-        window.onscroll = function () { handleScrollToUpAndDown(this) };
-        setWindowInnerWidth(window.innerWidth);
-        window.addEventListener("resize", function () {
-            setWindowInnerWidth(this.innerWidth);
-        });
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // ==========================================================================================
@@ -188,6 +176,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 if (!result.error && result.data?.status === "approving") {
                     setStoreDetails(result.data);
                     setIsGetStoreDetails(false);
+
                     result = await getCategoriesCount(filtersAsString);
                     if (result.data > 0) {
                         setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
@@ -267,6 +256,25 @@ export default function Home({ countryAsProperty, storeId }) {
             setIsLoadingPage(false);
         }
     }, [isGetStoreDetails]);
+
+    const handleResetAllHomeData = () => {
+        setAllCategoriesInsideThePage([]);
+        setAllFlashProductsInsideThePage([]);
+        setAllProductsInsideThePage([]);
+        setAllBrands([]);
+        setAllStoresInsideThePage([]);
+        setTotalPagesCount({
+            forCategories: 0,
+            forProducts: 0,
+            forStores: 0,
+        });
+        setCurrentPage({
+            forCategories: 1,
+            forFlashProducts: 1,
+            forProducts: 1,
+            forStores: 1
+        });
+    }
 
     const getAppearedSections = async () => {
         try {
