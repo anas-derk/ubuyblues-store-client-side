@@ -161,6 +161,7 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         setIsLoadingPage(true);
         handleResetAllHomeData();
+        setIsGetStoreDetails(true);
         setIsGetCategories(true);
         setIsGetProducts(true);
         setIsGetFlashProducts(true);
@@ -173,10 +174,9 @@ export default function Home({ countryAsProperty, storeId }) {
         // ==========================================================================================
         getStoreDetails(storeId)
             .then(async (result) => {
+                setIsGetStoreDetails(false);
                 if (!result.error && result.data?.status === "approving") {
                     setStoreDetails(result.data);
-                    setIsGetStoreDetails(false);
-
                     result = await getCategoriesCount(filtersAsString);
                     if (result.data > 0) {
                         setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
@@ -215,9 +215,6 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetProducts(false);
                     // =============================================================================
-                } else {
-                    setIsGetCategories(false);
-                    setIsGetProducts(false);
                 }
             })
             .catch(() => {
