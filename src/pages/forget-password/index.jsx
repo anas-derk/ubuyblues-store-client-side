@@ -184,11 +184,19 @@ export default function ForgetPassword({ userType }) {
                 const result = res.data;
                 setIsResetingPasswordStatus(false);
                 if(!result.error) {
-                    setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
-                    let successTimeout = setTimeout(async () => {
-                        await router.push("/auth");
-                        clearTimeout(successTimeout);
-                    }, 6000);
+                    if (userType === "user") {
+                        setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
+                        let successTimeout = setTimeout(async () => {
+                            await router.push("/auth");
+                            clearTimeout(successTimeout);
+                        }, 6000);
+                    } else {
+                        setSuccessMsg(result.msg);
+                        let successTimeout = setTimeout(async () => {
+                            setSuccessMsg("");
+                            clearTimeout(successTimeout);
+                        }, 6000);
+                    }
                 } else {        
                     setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
