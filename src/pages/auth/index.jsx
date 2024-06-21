@@ -372,7 +372,7 @@ export default function UserAuth() {
                                                 </li>
                                             </ul>
                                         </form>
-                                        <Link href="/forget-password" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
+                                        <Link href="/forget-password?userType=user" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
                                     </div>
                                 </div>}
                             </div>

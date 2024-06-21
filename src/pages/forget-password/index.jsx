@@ -11,10 +11,13 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { getUserInfo } from "../../../public/global_functions/popular";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
-export default function ForgetPassword() {
+export default function ForgetPassword({ userType }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
@@ -97,7 +100,7 @@ export default function ForgetPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsCheckingStatus(true);
-                const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}`);
+                const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userType}`);
                 const result = res.data;
                 if (result.error) {
                     setIsCheckingStatus(false);
@@ -177,7 +180,7 @@ export default function ForgetPassword() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}`);
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}`);
                 const result = res.data;
                 setIsResetingPasswordStatus(false);
                 if(!result.error) {
@@ -210,7 +213,7 @@ export default function ForgetPassword() {
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Forget Password")}</title>
             </Head>
-            {!isLoadingPage && <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content text-white page ps-4 pe-4 text-center">
                     <div className="container-fluid">
@@ -290,7 +293,50 @@ export default function ForgetPassword() {
                     </div>
                 </div>
             </>}
-            {isLoadingPage && <LoaderPage />}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query }) {
+    const allowedUserTypes = ["user", "admin"];
+    if (query.userType) {
+        if (!allowedUserTypes.includes(query.userType)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/forget-password?userType=user`,
+                },
+                props: {
+                    userType: query.userType,
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "userType").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/?userType=${query.userType}`,
+                },
+                props: {
+                    userType: query.userType,
+                },
+            }
+        }
+        return {
+            props: {
+                userType: query.userType,
+            },
+        }
+    }
+    return {
+        redirect: {
+            permanent: false,
+            destination: `/forget-password?userType=user`,
+        },
+        props: {
+            userType: query.userType,
+        },
+    }
 }
