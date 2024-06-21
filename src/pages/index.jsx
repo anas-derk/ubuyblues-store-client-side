@@ -724,9 +724,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         </div>
                                     )) : <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
                                 </div>
-                            </section>}
-                            {/* End Stores Section */}
-                            {totalPagesCount.forStores > 1 && !isGetStores &&
+                                {totalPagesCount.forStores > 1 && !isGetStores &&
                                 <PaginationBar
                                     totalPagesCount={totalPagesCount.forStores}
                                     currentPage={currentPage.forStores}
@@ -739,6 +737,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                     activePaginationButtonBackgroundColor={"#FFF"}
                                     section="stores"
                                 />}
+                            </section>}
+                            {/* End Stores Section */}
                         </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
