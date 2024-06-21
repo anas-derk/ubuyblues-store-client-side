@@ -474,5 +474,8 @@
     "Sorry, This Email Is Already Exist !!": "Üzgünüz, Bu E-posta Adresi Zaten Mevcut !!",
     "Sorry, This Category Is Not Exist !!": "Üzgünüz, Bu Kategori Mevcut Değil !!",
     "Sharing Your Favorite Product On Ubuyblues": "Favori Ürününüzü Ubuyblues'te Paylaşın",
-    "Sharing Your Favorite Store On Ubuyblues": "Favori Mağazanızı Ubuyblues'te Paylaşın"
+    "Sharing Your Favorite Store On Ubuyblues": "Favori Mağazanızı Ubuyblues'te Paylaşın",
+    "Pleae Select User Type": "Lütfen Kullanıcı Türünü Seçin",
+    "Normal User": "Normal Kullanıcı",
+    "Admin": "Yönetici"
 }

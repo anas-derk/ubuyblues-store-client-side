@@ -13,7 +13,7 @@ import { inputValuesValidation } from "../../../public/global_functions/validati
 import { getUserInfo } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
-export default function ForgetPassword({ userType }) {
+export default function ForgetPassword({ userTypeAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -100,7 +100,7 @@ export default function ForgetPassword({ userType }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsCheckingStatus(true);
-                const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userType}`);
+                const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userTypeAsProperty}`);
                 const result = res.data;
                 if (result.error) {
                     setIsCheckingStatus(false);
@@ -180,11 +180,11 @@ export default function ForgetPassword({ userType }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}`);
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userTypeAsProperty}`);
                 const result = res.data;
                 setIsResetingPasswordStatus(false);
-                if(!result.error) {
-                    if (userType === "user") {
+                if (!result.error) {
+                    if (userTypeAsProperty === "user") {
                         setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
                         let successTimeout = setTimeout(async () => {
                             await router.push("/auth");
@@ -197,7 +197,7 @@ export default function ForgetPassword({ userType }) {
                             clearTimeout(successTimeout);
                         }, 6000);
                     }
-                } else {        
+                } else {
                     setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
                         setErrorMsg("");
@@ -227,6 +227,16 @@ export default function ForgetPassword({ userType }) {
                     <div className="container-fluid">
                         <h1 className="h3 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
                         {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>
+                            <div className="email-field-box">
+                                <select
+                                    className={`select-user-type form-select mb-5 p-3 border-2 ${i18n.language === "ar" ? "ar" : ""}`}
+                                    onChange={(e) => router.replace(`/forget-password?userType=${e.target.value}`)}
+                                >
+                                    <option value="" hidden>{t("Pleae Select User Type")}</option>
+                                    <option value="user">{t("Normal User")}</option>
+                                    <option value="admin">{t("Admin")}</option>
+                                </select>
+                            </div>
                             <div className="email-field-box">
                                 <input
                                     type="text"
@@ -317,7 +327,7 @@ export async function getServerSideProps({ query }) {
                     destination: `/forget-password?userType=user`,
                 },
                 props: {
-                    userType: query.userType,
+                    userTypeAsProperty: query.userType,
                 },
             }
         }
@@ -328,13 +338,13 @@ export async function getServerSideProps({ query }) {
                     destination: `/?userType=${query.userType}`,
                 },
                 props: {
-                    userType: query.userType,
+                    userTypeAsProperty: query.userType,
                 },
             }
         }
         return {
             props: {
-                userType: query.userType,
+                userTypeAsProperty: query.userType,
             },
         }
     }
@@ -344,7 +354,7 @@ export async function getServerSideProps({ query }) {
             destination: `/forget-password?userType=user`,
         },
         props: {
-            userType: query.userType,
+            userTypeAsProperty: query.userType,
         },
     }
 }

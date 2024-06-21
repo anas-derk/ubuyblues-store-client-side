@@ -47,6 +47,10 @@ input:focus, textarea:focus, select:focus, .checkbox:focus {
   border-color: #00F;
 }
 
+select.ar {
+  text-indent: 20px;
+}
+
 textarea {
   height: 120px;
   resize: none;
