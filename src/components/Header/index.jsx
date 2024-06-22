@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { AiOutlineHome } from "react-icons/ai";
+import { AiOutlineAppstoreAdd, AiOutlineHome } from "react-icons/ai";
 import { BsFillSuitHeartFill, BsFillPersonFill, BsPersonVcard } from "react-icons/bs";
 import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
@@ -121,7 +121,7 @@ export default function Header() {
                                 {t("Login / Register")}
                             </Nav.Link>}
                             <Nav.Link href="/add-your-store" as={Link}>
-                                <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                <AiOutlineAppstoreAdd className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Add Your Store")}
                             </Nav.Link>
                             <NavDropdown title={t("Languages")} id="products-nav-dropdown">
