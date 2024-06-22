@@ -519,7 +519,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             <section className="categories mb-5 pb-5" id="categories">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
                                 {isGetCategories && <SectionLoader />}
-                                {!isGetCategories && allProductsInsideThePage.length > 0 && <div className="row mb-5">
+                                {!isGetCategories && allCategoriesInsideThePage.length > 0 && <div className="row mb-5">
                                     {allCategoriesInsideThePage.map((category) => (
                                         <div className="col-md-3" key={category._id}>
                                             <div className="category-details p-3">
