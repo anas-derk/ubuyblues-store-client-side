@@ -347,14 +347,14 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const navigateToUpOrDown = (navigateOrientation) => {
-        if (navigateOrientation === "up") {
+    const navigateToUpOrDown = () => {
+        if (appearedNavigateIcon === "up") {
             window.scrollTo({
                 behavior: "smooth",
                 top: 0,
                 left: 0,
             });
-        } else if (navigateOrientation === "down") {
+        } else {
             window.scrollTo({
                 behavior: "smooth",
                 top: document.querySelector("footer").offsetTop,
@@ -488,9 +488,11 @@ export default function Home({ countryAsProperty, storeId }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="navigate-to-up-button">
-                    {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
-                    {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
+                <div
+                    className="navigate-to-up-button"
+                    onClick={navigateToUpOrDown}
+                >
+                    {appearedNavigateIcon === "up" ? <RiArrowUpDoubleFill className="arrow-up arrow-icon" /> : <RiArrowDownDoubleFill className="arrow-down arrow-icon" />}
                 </div>
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox
