@@ -1,3 +1,7 @@
+.section-loader {
+  height: 200px;
+}
+
 .section-loader .loader-component {
   color: #FFF;
   font-size: 7px;
