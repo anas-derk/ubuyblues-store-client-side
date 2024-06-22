@@ -35,6 +35,7 @@ import {
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 import StoreCard from "@/components/StoreCard";
+import SectionLoader from "@/components/SectionLoader";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -176,8 +177,8 @@ export default function Home({ countryAsProperty, storeId }) {
                 if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
                     setStoreDetails(storeDetailsResult.data);
                     // =============================================================================
-                    await handleGetAndSetCategories(filtersAsString);
-                    setIsGetCategories(false);
+                    // await handleGetAndSetCategories(filtersAsString);
+                    // setIsGetCategories(false);
                     // =============================================================================
                     const flashProductsData = await handleGetAndSetFlashProducts(filtersAsString);
                     setIsGetFlashProducts(false);
@@ -505,12 +506,10 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>
                             {/* End Store Details Section */}
                             {/* Start Categories Section */}
-                            {allCategoriesInsideThePage.length > 0 ? <section className="categories mb-5 pb-5" id="categories">
+                            <section className="categories mb-5 pb-5" id="categories">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
-                                {isGetCategories && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
-                                    <span className="loader-table-data"></span>
-                                </div>}
-                                <div className="row mb-5">
+                                {isGetCategories && <SectionLoader />}
+                                {!isGetCategories && allProductsInsideThePage.length > 0 && <div className="row mb-5">
                                     {allCategoriesInsideThePage.map((category) => (
                                         <div className="col-md-3" key={category._id}>
                                             <div className="category-details p-3">
@@ -521,7 +520,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                             </div>
                                         </div>
                                     ))}
-                                </div>
+                                </div>}
+                                {allCategoriesInsideThePage.length === 0 && !isGetCategories && <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
                                 {totalPagesCount.forCategories > 1 && !isGetCategories &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forCategories}
@@ -538,7 +538,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         section="categories"
                                     />
                                 }
-                            </section> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
+                            </section>
                             {/* End Categories Section */}
                             {/* Start Last Added Flash Products */}
                             <section className="last-added-flash-products mb-5 pb-3" id="latest-added-products">

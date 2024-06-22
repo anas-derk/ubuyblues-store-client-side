@@ -17,6 +17,7 @@ import "../pages/product-details/[id]/product_details.css";
 import "../components/ProductCard/product_card.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "../components/SectionLoader/section_loader.css";
 import "../../config/i18n";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
