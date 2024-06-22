@@ -67,9 +67,13 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
+    const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
+    
+    const [isExistFlashProductsInDBInGeneral, setIsExistFlashProductsInDBInGeneral] = useState(false);
+
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
-    const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
+    const [isExistProductsInDBInGeneral, setIsExistProductsInDBInGeneral] = useState(false);
 
     const [currentDate, setCurrentDate] = useState("");
 
@@ -177,13 +181,19 @@ export default function Home({ countryAsProperty, storeId }) {
                 if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
                     setStoreDetails(storeDetailsResult.data);
                     // =============================================================================
-                    // await handleGetAndSetCategories(filtersAsString);
-                    // setIsGetCategories(false);
+                    await handleGetAndSetCategories(filtersAsString);
+                    setIsGetCategories(false);
                     // =============================================================================
                     const flashProductsData = await handleGetAndSetFlashProducts(filtersAsString);
+                    if (flashProductsData.length > 0) {
+                        setIsExistFlashProductsInDBInGeneral(true);
+                    }
                     setIsGetFlashProducts(false);
                     // =============================================================================
                     const productsData = await handleGetAndSetProducts(filtersAsString);
+                    if (productsData.length > 0) {
+                        setIsExistProductsInDBInGeneral(true);
+                    }
                     setIsGetProducts(false);
                     // =============================================================================
                     await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
@@ -521,7 +531,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         </div>
                                     ))}
                                 </div>}
-                                {allCategoriesInsideThePage.length === 0 && !isGetCategories && <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
+                                {!isGetCategories && allCategoriesInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
                                 {totalPagesCount.forCategories > 1 && !isGetCategories &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forCategories}
@@ -543,7 +553,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Last Added Flash Products */}
                             <section className="last-added-flash-products mb-5 pb-3" id="latest-added-products">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Flash Products")}</h2>
-                                <div className="row filters-and-sorting-box mb-4">
+                                {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
                                         <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
                                             <div className="product-name-field-box">
@@ -584,9 +594,10 @@ export default function Home({ countryAsProperty, storeId }) {
                                             </div>
                                         </form>
                                     </div>
-                                </div>
+                                </div>}
+                                {isGetFlashProducts && <SectionLoader />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
-                                    {allFlashProductsInsideThePage.length > 0 ? allFlashProductsInsideThePage.map((product) => (
+                                    {!isGetFlashProducts && allFlashProductsInsideThePage.length > 0 && allFlashProductsInsideThePage.map((product) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                             <ProductCard
                                                 productDetails={product}
@@ -602,7 +613,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 isDisplayCountdown={true}
                                             />
                                         </div>
-                                    )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
+                                    ))}
+                                    {!isGetFlashProducts && allFlashProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
                                     {totalPagesCount.forFlashProducts > 1 && !isGetFlashProducts &&
                                         <PaginationBar
                                             totalPagesCount={totalPagesCount.forFlashProducts}
@@ -622,7 +634,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Last Added Products */}
                             <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
-                                <div className="row filters-and-sorting-box mb-4">
+                                {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
                                         <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
                                             <div className="product-name-field-box">
@@ -663,9 +675,10 @@ export default function Home({ countryAsProperty, storeId }) {
                                             </div>
                                         </form>
                                     </div>
-                                </div>
+                                </div>}
+                                {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
-                                    {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
+                                    {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
                                             <ProductCard
                                                 productDetails={product}
@@ -680,7 +693,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
                                             />
                                         </div>
-                                    )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
+                                    ))}
                                     {totalPagesCount.forProducts > 1 && !isGetProducts &&
                                         <PaginationBar
                                             totalPagesCount={totalPagesCount.forProducts}
