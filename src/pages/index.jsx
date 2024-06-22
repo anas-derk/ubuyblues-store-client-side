@@ -120,7 +120,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const { i18n, t } = useTranslation();
 
-    const pageSize = 1;
+    const pageSize = 5;
 
     useEffect(() => {
         setIsLoadingPage(true);
