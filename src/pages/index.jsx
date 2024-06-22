@@ -462,7 +462,7 @@ export default function Home({ countryAsProperty, storeId }) {
             let filtersAsQuery = getFiltersAsQuery(filters);
             const result = await getProductsCount(filtersAsQuery);
             if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data);
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
                 totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
                 setIsGetProducts(false);
             } else {
@@ -532,7 +532,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     ))}
                                 </div>}
                                 {!isGetCategories && allCategoriesInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
-                                {totalPagesCount.forCategories > 1 && !isGetCategories &&
+                                {totalPagesCount.forCategories > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forCategories}
                                         currentPage={currentPage.forCategories}
@@ -615,7 +615,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         </div>
                                     ))}
                                     {!isGetFlashProducts && allFlashProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
-                                    {totalPagesCount.forFlashProducts > 1 && !isGetFlashProducts &&
+                                    {totalPagesCount.forFlashProducts > 1 &&
                                         <PaginationBar
                                             totalPagesCount={totalPagesCount.forFlashProducts}
                                             currentPage={currentPage.forFlashProducts}
@@ -676,6 +676,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         </form>
                                     </div>
                                 </div>}
+                                {isGetProducts && <SectionLoader />}
                                 {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
                                     {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
@@ -694,7 +695,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                             />
                                         </div>
                                     ))}
-                                    {totalPagesCount.forProducts > 1 && !isGetProducts &&
+                                    {totalPagesCount.forProducts > 1 &&
                                         <PaginationBar
                                             totalPagesCount={totalPagesCount.forProducts}
                                             currentPage={currentPage.forProducts}
