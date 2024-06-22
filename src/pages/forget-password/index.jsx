@@ -23,6 +23,8 @@ export default function ForgetPassword({ userTypeAsProperty }) {
 
     const [isResetingPasswordStatus, setIsResetingPasswordStatus] = useState(false);
 
+    const [userType, setUserType] = useState("");
+
     const [email, setEmail] = useState("");
 
     const [errMsg, setErrorMsg] = useState("");
@@ -77,6 +79,11 @@ export default function ForgetPassword({ userTypeAsProperty }) {
         document.body.lang = userLanguage;
     }
 
+    const handleSelectUserType = (userType) => {
+        setUserType(userType);
+        router.replace(`/forget-password?userType=${userType}`);
+    }
+
     const forgetPassword = async (e) => {
         try {
             e.preventDefault();
@@ -84,6 +91,15 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setErrorMsg("");
             setSuccessMsg("");
             const errorsObject = inputValuesValidation([
+                {
+                    name: "userType",
+                    value: userType,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
                 {
                     name: "email",
                     value: email,
@@ -100,7 +116,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsCheckingStatus(true);
-                const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userTypeAsProperty}`);
+                const res = await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userType}`);
                 const result = res.data;
                 if (result.error) {
                     setIsCheckingStatus(false);
@@ -180,7 +196,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userTypeAsProperty}`);
+                const res = await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}`);
                 const result = res.data;
                 setIsResetingPasswordStatus(false);
                 if (!result.error) {
@@ -227,16 +243,17 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                     <div className="container-fluid">
                         <h1 className="h3 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
                         {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>
-                            <div className="email-field-box">
+                            <div className="select-user-type-field-box">
                                 <select
-                                    className={`select-user-type form-select mb-5 p-3 border-2 ${i18n.language === "ar" ? "ar" : ""}`}
-                                    onChange={(e) => router.replace(`/forget-password?userType=${e.target.value}`)}
+                                    className={`select-user-type form-select p-3 border-2 ${i18n.language === "ar" ? "ar" : ""} ${formValidationErrors["userType"] ? "border-danger mb-3" : "mb-5"}`}
+                                    onChange={(e) => handleSelectUserType(e.target.value)}
                                 >
                                     <option value="" hidden>{t("Pleae Select User Type")}</option>
                                     <option value="user">{t("Normal User")}</option>
                                     <option value="admin">{t("Admin")}</option>
                                 </select>
                             </div>
+                            {formValidationErrors["userType"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["userType"])}</p>}
                             <div className="email-field-box">
                                 <input
                                     type="text"
