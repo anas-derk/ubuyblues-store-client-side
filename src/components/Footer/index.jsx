@@ -177,7 +177,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <p className="mb-0 text-center fw-bold">
-                    {t("All Rights Reserved For")} <Link href="/" className="text-danger">{t("Ubuyblues")}</Link>
+                    {t("All Rights Reserved For")} <Link href="/" className="text-danger">Ubuyblues</Link>
                 </p>
             </div>
         </footer>
