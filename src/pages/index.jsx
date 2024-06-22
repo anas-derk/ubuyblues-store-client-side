@@ -382,12 +382,19 @@ export default function Home({ countryAsProperty, storeId }) {
             setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
             setIsGetCategories(false);
         }
-        if (section === "products") {
+        else if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts - 1;
             setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
+        }
+        else {
+            setIsGetStores(true);
+            const newCurrentPage = currentPage.forStores - 1;
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters))).data);
+            setCurrentPage({ ...currentPage, forStores: newCurrentPage });
+            setIsGetStores(false);
         }
     }
 
@@ -399,12 +406,19 @@ export default function Home({ countryAsProperty, storeId }) {
             setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
             setIsGetCategories(false);
         }
-        if (section === "products") {
+        else if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts + 1;
             setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
+        }
+        else {
+            setIsGetStores(true);
+            const newCurrentPage = currentPage.forStores + 1;
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters))).data);
+            setCurrentPage({ ...currentPage, forStores: newCurrentPage });
+            setIsGetStores(false);
         }
     }
 
@@ -415,11 +429,17 @@ export default function Home({ countryAsProperty, storeId }) {
             setCurrentPage({ ...currentPage, forCategories: pageNumber });
             setIsGetCategories(false);
         }
-        if (section === "products") {
+        else if (section === "products") {
             setIsGetProducts(true);
             setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: pageNumber });
             setIsGetProducts(false);
+        }
+        else {
+            setIsGetStores(true);
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters))).data);
+            setCurrentPage({ ...currentPage, forStores: pageNumber });
+            setIsGetStores(false);
         }
     }
 
@@ -725,18 +745,18 @@ export default function Home({ countryAsProperty, storeId }) {
                                     )) : <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
                                 </div>
                                 {totalPagesCount.forStores > 1 && !isGetStores &&
-                                <PaginationBar
-                                    totalPagesCount={totalPagesCount.forStores}
-                                    currentPage={currentPage.forStores}
-                                    getPreviousPage={getPreviousPage}
-                                    getNextPage={getNextPage}
-                                    getSpecificPage={getSpecificPage}
-                                    paginationButtonTextColor={"#FFF"}
-                                    paginationButtonBackgroundColor={"transparent"}
-                                    activePaginationButtonColor={"#000"}
-                                    activePaginationButtonBackgroundColor={"#FFF"}
-                                    section="stores"
-                                />}
+                                    <PaginationBar
+                                        totalPagesCount={totalPagesCount.forStores}
+                                        currentPage={currentPage.forStores}
+                                        getPreviousPage={getPreviousPage}
+                                        getNextPage={getNextPage}
+                                        getSpecificPage={getSpecificPage}
+                                        paginationButtonTextColor={"#FFF"}
+                                        paginationButtonBackgroundColor={"transparent"}
+                                        activePaginationButtonColor={"#000"}
+                                        activePaginationButtonBackgroundColor={"#FFF"}
+                                        section="stores"
+                                    />}
                             </section>}
                             {/* End Stores Section */}
                         </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
