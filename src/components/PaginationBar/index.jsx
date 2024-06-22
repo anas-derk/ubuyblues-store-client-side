@@ -31,6 +31,32 @@ export default function PaginationBar({
         document.body.lang = userLanguage;
     }
 
+    const getSuitableArrow = (arrowDirection) => {
+        if (arrowDirection === "to-previous") {
+            if (i18n.language !== "ar") {
+                return (<BsArrowLeftSquare
+                    className="previous-page-icon pagination-icon me-3"
+                    onClick={async () => await getPreviousPage(section)}
+                />);
+            }
+            return (<BsArrowRightSquare
+                className="previous-page-icon pagination-icon me-3"
+                onClick={async () => await getPreviousPage(section)}
+            />);
+        } else {
+            if (i18n.language !== "ar") {
+                return (<BsArrowRightSquare
+                    className="next-page-icon pagination-icon me-3"
+                    onClick={async () => await getNextPage(section)}
+                />);
+            }
+            return (<BsArrowLeftSquare
+                className="next-page-icon pagination-icon me-3"
+                onClick={async () => await getNextPage(section)}
+            />);
+        }
+    }
+
     const getPaginationButtons = () => {
         const paginationButtons = [];
         for (let i = 1; i <= totalPagesCount; i++) {
@@ -66,15 +92,9 @@ export default function PaginationBar({
         }
         return (
             <>
-                {currentPage !== 1 && <BsArrowLeftSquare
-                    className="previous-page-icon pagination-icon me-3"
-                    onClick={async () => await getPreviousPage(section)}
-                />}
+                {currentPage !== 1 && getSuitableArrow("to-previous")}
                 {paginationButtons}
-                {currentPage !== totalPagesCount && <BsArrowRightSquare
-                    className={"next-page-icon pagination-icon me-3"}
-                    onClick={async () => await getNextPage(section)}
-                />}
+                {currentPage !== totalPagesCount && getSuitableArrow("to-next")}
                 {isDisplayCurrentPageNumberAndCountOfPages && <span className={`current-page-number-and-count-of-pages p-2 ps-3 pe-3 bg-secondary text-white ${i18n.language !== "ar" ? "me-3" : "ms-3 me-3"}`}>{t("The Page")} {currentPage} {t("of")} {totalPagesCount} {t("Pages")}</span>}
                 {isDisplayNavigateToSpecificPageForm && <form
                     className="navigate-to-specific-page-form w-25"
