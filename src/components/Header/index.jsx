@@ -141,10 +141,12 @@ export default function Header() {
                                 <NavDropdown.Item onClick={() => handleSelectCountry("turkey")}>{t("TR")}</NavDropdown.Item>
                             </NavDropdown>
                             <Nav.Link href="/cart" as={Link}>
-                                <FaShoppingCart className="cart-icon link-icon" />
+                                <FaShoppingCart className={`cart-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Cart")}
                             </Nav.Link>
                             <Nav.Link href="/customer-dashboard/favorite-products" as={Link}>
-                                <BsFillSuitHeartFill className="cart-icon link-icon" />
+                                <BsFillSuitHeartFill className={`favorite-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                {t("Favorite Products")}
                             </Nav.Link>
                             {lightMode == "sunny" ?
                                 <MdOutlineDarkMode
@@ -157,7 +159,8 @@ export default function Header() {
                                 />}
                             {token && <>
                                 <Nav.Link href="/customer-dashboard" as={Link}>
-                                    <BsPersonVcard className="user-icon link-icon" />
+                                    <BsPersonVcard className={`user-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                    {t("Profile")}
                                 </Nav.Link>
                                 <button className="btn btn-danger logout-btn" onClick={userLogout}>
                                     <MdOutlineLogout className={i18n.language !== "ar" ? "me-2" : "ms-2"} />
