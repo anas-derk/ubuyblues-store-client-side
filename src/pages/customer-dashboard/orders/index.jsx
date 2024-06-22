@@ -13,6 +13,7 @@ import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
+import SectionLoader from "@/components/SectionLoader";
 
 export default function CustomerOrders({ countryAsProperty }) {
 
@@ -27,6 +28,8 @@ export default function CustomerOrders({ countryAsProperty }) {
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
+    
+    const [isExistOrdersForThisUserInDBInGeneral, setIsExistOrdersForThisUserInDBInGeneral] = useState(false);
 
     const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(true);
 
@@ -75,6 +78,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                         if (result2.data > 0) {
                             setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
+                            setIsExistOrdersForThisUserInDBInGeneral(true);
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
@@ -214,7 +218,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                             </div>
                             <div className="col-xl-9">
                                 <div className="customer-orders">
-                                    <section className="filters mb-3 border-3 border-white p-3 text-start text-white">
+                                    {isExistOrdersForThisUserInDBInGeneral && <section className="filters mb-3 border-3 border-white p-3 text-start text-white">
                                         <h5 className="section-name fw-bold text-center">{t("Filters")} : </h5>
                                         <hr />
                                         <div className="row mb-4">
@@ -253,7 +257,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                         >
                                             {t("Filtering")} ...
                                         </button>}
-                                    </section>
+                                    </section>}
                                     {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && !errMsg && <section className="orders-data-box p-3 data-box">
                                         {windowInnerWidth > 991 ? <table className="orders-data-table customer-table data-table mb-4 w-100">
                                             <thead>
@@ -348,9 +352,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                     </section>}
                                     {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && !errMsg && <NotFoundError errorMsg={t("Sorry, Can't Find Any Orders")} />}
                                     {errMsg && <p className="alert alert-danger">{t(errMsg)}</p>}
-                                    {isFilteringOrdersStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
-                                        <span className="loader-table-data"></span>
-                                    </div>}
+                                    {isFilteringOrdersStatus && <SectionLoader />}
                                 </div>
                                 {totalPagesCount > 1 && !isFilteringOrdersStatus &&
                                     <PaginationBar
