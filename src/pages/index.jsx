@@ -714,7 +714,8 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Brands Section */}
                             {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
-                                <div className="container-fluid">
+                                {isGetBrands && <SectionLoader />}
+                                {!isGetBrands && allBrands.length > 0 && <div className="container-fluid">
                                     <Slider
                                         dots={true}
                                         arrows={false}
@@ -740,14 +741,16 @@ export default function Home({ countryAsProperty, storeId }) {
                                             </div>
                                         ))}
                                     </Slider>
-                                </div>
+                                </div>}
+                                {!isGetBrands && allBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}
                             {appearedSections.includes("stores") && <section className="stores mb-5">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
                                 <div className="row stores-box section-data-box pt-4 pb-4">
-                                    {allStoresInsideThePage.length > 0 ? allStoresInsideThePage.map((store) => (
+                                    {isGetStores && <SectionLoader />}
+                                    {!isGetStores && allStoresInsideThePage.length > 0 && allStoresInsideThePage.map((store) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={store._id}>
                                             <StoreCard
                                                 storeDetails={store}
@@ -756,7 +759,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setSharingURL={setSharingURL}
                                             />
                                         </div>
-                                    )) : <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
+                                    ))}
+                                    {!isGetStores && allStoresInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
                                 </div>
                                 {totalPagesCount.forStores > 1 && !isGetStores &&
                                     <PaginationBar
