@@ -15,6 +15,7 @@ import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
+import SectionLoader from "@/components/SectionLoader";
 
 export default function CustomerWalletProductsList({ countryAsProperty }) {
 
@@ -309,10 +310,8 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                     </div>}
                                 </section>}
                                 {allWalletProductsInsideThePage.length === 0 && !isWaitGetWalletProductsStatus && <NotFoundError errorMsg={t("Sorry, Can't Find Any Previous Products In Your History Wallet !!")} />}
-                                {isWaitGetWalletProductsStatus && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
-                                    <span className="loader-table-data"></span>
-                                </div>}
-                                {totalPagesCount > 1 && !isWaitGetWalletProductsStatus &&
+                                {isWaitGetWalletProductsStatus && <SectionLoader />}
+                                {totalPagesCount > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
                                         currentPage={currentPage}
