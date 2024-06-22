@@ -194,7 +194,6 @@ export default function Home({ countryAsProperty, storeId }) {
                     if (productsData.length > 0) {
                         setIsExistProductsInDBInGeneral(true);
                     }
-                    setIsGetProducts(false);
                     // =============================================================================
                     await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
                         handleCreateProductsIdsToGetFavoriteProductsForUser(
@@ -202,6 +201,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             productsData.map((product) => product._id)
                         )
                     );
+                    setIsGetProducts(false);
                     // =============================================================================
                     const appearedSectionsResult = await getAppearedSections();
                     const appearedSectionsLength = appearedSectionsResult.data.length;
@@ -299,7 +299,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const handleGetAndSetFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
-            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)));
+            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)).data);
         }
     }
 
