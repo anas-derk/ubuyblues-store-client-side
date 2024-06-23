@@ -77,38 +77,27 @@ export default function Footer() {
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Our links").toUpperCase()}</h5>
                         <ul className="links-list">
                             <li className="link-item fw-bold mb-3">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                                {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/" className="text-dark link-btn">{t("Main").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                                {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/auth" className="text-dark link-btn">{t("login").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                                {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/about-us" className="text-dark link-btn">{t("About Us").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
-                                <Link href="/contact-us" className="text-dark link-btn">{t("Contact Us").toUpperCase()}</Link>
-                            </li>
-                            <li className="link-item fw-bold mb-3">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                                {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/polices-terms-and-conditions" className="text-dark link-btn">{t("Polices-Terms & Conditions").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                            {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/return-and-refund-policy" className="text-dark link-btn">{t("Return & Refund Policy").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold">
-                                {i18n.language !== "ar" && <FaLongArrowAltRight className="me-2" />}
-                                {i18n.language === "ar" && <FaLongArrowAltLeft className="ms-2" />}
+                            {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/return-and-delivery-sheet" className="text-dark link-btn">{t("Return And Delivery Sheet").toUpperCase()}</Link>
                             </li>
                         </ul>
