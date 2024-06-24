@@ -474,11 +474,23 @@ export default function Home({ countryAsProperty, storeId }) {
             e.preventDefault();
             if (productType === "normal") {
                 setIsGetProducts(true);
-                await handleGetAndSetProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                const productsData = await handleGetAndSetProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
+                    handleCreateProductsIdsToGetFavoriteProductsForUser(
+                        allFlashProductsInsideThePage.map((flashProduct) => flashProduct._id),
+                        productsData.map((product) => product._id)
+                    )
+                );
                 setIsGetProducts(false);
             } else {
                 setIsGetFlashProducts(true);
-                await handleGetAndSetFlashProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                const flashProductsData = await handleGetAndSetFlashProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
+                    handleCreateProductsIdsToGetFavoriteProductsForUser(
+                        flashProductsData.map((flashProduct) => flashProduct._id),
+                        allProductsInsideThePage.map((product) => product._id)
+                    )
+                );
                 setIsGetFlashProducts(false);
             }
         }
