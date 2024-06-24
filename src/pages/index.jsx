@@ -43,6 +43,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [errorMsg, setErrorMsg] = useState("");
+
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
@@ -463,12 +465,12 @@ export default function Home({ countryAsProperty, storeId }) {
         try {
             e.preventDefault();
             setIsGetProducts(true);
-            setCurrentPage({ ...currentPage, forProducts: 1 });
             let filtersAsQuery = getFiltersAsQuery(filters);
             const result = await getProductsCount(filtersAsQuery);
             if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
-                totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
+                totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
+                setCurrentPage({ ...currentPage, forProducts: 1 });
                 setIsGetProducts(false);
             } else {
                 setAllProductsInsideThePage([]);
