@@ -294,6 +294,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetAndSetProducts = async (filtersAsString, sortDetailsAsString) => {
         const result = await getProductsCount(filtersAsString);
+        setAllProductsInsideThePage([]);
+        totalPagesCount.forProducts = 0;
         setCurrentPage({ ...currentPage, forProducts: 1 });
         if (result.data > 0) {
             const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
@@ -301,8 +303,6 @@ export default function Home({ countryAsProperty, storeId }) {
             totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
             return result1.products;
         }
-        setAllProductsInsideThePage([]);
-        totalPagesCount.forProducts = 0;
         return [];
     }
 
