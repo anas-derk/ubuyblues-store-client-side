@@ -120,7 +120,12 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const { i18n, t } = useTranslation();
 
-    const pageSize = 5;
+    const pageSizes = {
+        forCategories: 16,
+        forFlashProducts: 9,
+        forProducts: 9,
+        forStores: 9,
+    };
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -264,18 +269,18 @@ export default function Home({ countryAsProperty, storeId }) {
     const handleGetAndSetCategories = async (filtersAsString) => {
         const result = await getCategoriesCount(filtersAsString);
         if (result.data > 0) {
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSize, filtersAsString)).data);
-            totalPagesCount.forCategories = Math.ceil(result.data / pageSize);
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
+            totalPagesCount.forCategories = Math.ceil(result.data / pageSizes.forCategories);
         }
     }
 
     const handleGetAndSetFlashProducts = async (filtersAsString) => {
         const result = await getFlashProductsCount(filtersAsString);
         if (result.data > 0) {
-            const result1 = (await getAllFlashProductsInsideThePage(1, pageSize, filtersAsString)).data;
+            const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString)).data;
             setAllFlashProductsInsideThePage(result1.products);
             setCurrentDate(result1.currentDate);
-            totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSize);
+            totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSizes.forFlashProducts);
             return result1.products;
         }
         return [];
@@ -284,9 +289,9 @@ export default function Home({ countryAsProperty, storeId }) {
     const handleGetAndSetProducts = async (filtersAsString) => {
         const result = await getProductsCount(filtersAsString);
         if (result.data > 0) {
-            const result1 = (await getAllProductsInsideThePage(1, pageSize, filtersAsString)).data;
+            const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString)).data;
             setAllProductsInsideThePage(result1.products);
-            totalPagesCount.forProducts = Math.ceil(result.data / pageSize);
+            totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
             return result1.products;
         }
         return [];
@@ -306,10 +311,10 @@ export default function Home({ countryAsProperty, storeId }) {
     const handleGetAndSetStores = async (filtersAsString) => {
         const storesCount = await getStoresCount(filtersAsString);
         if (storesCount.data > 0) {
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSize, filtersAsString)).data);
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data);
             setTotalPagesCount({
                 ...totalPagesCount,
-                forStores: Math.ceil(storesCount.data / pageSize)
+                forStores: Math.ceil(storesCount.data / pageSizes.forStores)
             });
         }
     }
@@ -389,21 +394,21 @@ export default function Home({ countryAsProperty, storeId }) {
         if (section === "categories") {
             setIsGetCategories(true);
             const newCurrentPage = currentPage.forCategories - 1;
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
             setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
             setIsGetCategories(false);
         }
         else if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
         else {
             setIsGetStores(true);
             const newCurrentPage = currentPage.forStores - 1;
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters))).data);
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
             setCurrentPage({ ...currentPage, forStores: newCurrentPage });
             setIsGetStores(false);
         }
@@ -413,21 +418,21 @@ export default function Home({ countryAsProperty, storeId }) {
         if (section === "categories") {
             setIsGetCategories(true);
             const newCurrentPage = currentPage.forCategories + 1;
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSize)).data);
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
             setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
             setIsGetCategories(false);
         }
         else if (section === "products") {
             setIsGetProducts(true);
             const newCurrentPage = currentPage.forProducts + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
             setIsGetProducts(false);
         }
         else {
             setIsGetStores(true);
             const newCurrentPage = currentPage.forStores + 1;
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters))).data);
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
             setCurrentPage({ ...currentPage, forStores: newCurrentPage });
             setIsGetStores(false);
         }
@@ -436,19 +441,19 @@ export default function Home({ countryAsProperty, storeId }) {
     const getSpecificPage = async (pageNumber, section) => {
         if (section === "categories") {
             setIsGetCategories(true);
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSize)).data);
+            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data);
             setCurrentPage({ ...currentPage, forCategories: pageNumber });
             setIsGetCategories(false);
         }
         else if (section === "products") {
             setIsGetProducts(true);
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
             setCurrentPage({ ...currentPage, forProducts: pageNumber });
             setIsGetProducts(false);
         }
         else {
             setIsGetStores(true);
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters))).data);
+            setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSizes.forStores, getFiltersAsQuery(filters))).data);
             setCurrentPage({ ...currentPage, forStores: pageNumber });
             setIsGetStores(false);
         }
