@@ -279,6 +279,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetAndSetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
         const result = await getFlashProductsCount(filtersAsString);
+        setAllProductsInsideThePage([]);
+        totalPagesCount.forProducts = 0;
         setCurrentPage({ ...currentPage, forFlashProducts: 1 });
         if (result.data > 0) {
             const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
@@ -287,8 +289,6 @@ export default function Home({ countryAsProperty, storeId }) {
             totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSizes.forFlashProducts);
             return result1.products;
         }
-        setAllProductsInsideThePage([]);
-        totalPagesCount.forProducts = 0;
         return [];
     }
 
