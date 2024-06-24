@@ -1,4 +1,4 @@
-.home .store-details {
+.home .store-details, .home .categories, .home .last-added-flash-products, .home .brands {
   border-bottom: 2px solid var(--main-color-two);
 }
 
