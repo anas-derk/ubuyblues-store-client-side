@@ -292,8 +292,8 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetAndSetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
-        setAllProductsInsideThePage([]);
-        totalPagesCount.forProducts = 0;
+        setAllFlashProductsInsideThePage([]);
+        totalPagesCount.forFlashProducts = 0;
         setCurrentPage({ ...currentPage, forFlashProducts: 1 });
         const result = await getFlashProductsCount(filtersAsString);
         if (result.data > 0) {
