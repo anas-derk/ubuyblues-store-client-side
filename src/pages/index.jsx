@@ -70,7 +70,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
 
     const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
-    
+
     const [isExistFlashProductsInDBInGeneral, setIsExistFlashProductsInDBInGeneral] = useState(false);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
@@ -98,15 +98,26 @@ export default function Home({ countryAsProperty, storeId }) {
     });
 
     const [filters, setFilters] = useState({
-        name: "",
-        offerDescription: "",
+        forFlashProducts: {
+            name: "",
+            offerDescription: "",
+        },
+        forProducts: {
+            name: "",
+        },
         storeId: "",
         status: "approving"
     });
 
     const [sortDetails, setSortDetails] = useState({
-        by: "",
-        type: 1,
+        forFlashProducts: {
+            by: "",
+            type: 1,
+        },
+        forProducts: {
+            by: "",
+            type: 1,
+        },
     });
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
@@ -270,6 +281,9 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetAndSetCategories = async (filtersAsString) => {
+        setAllCategoriesInsideThePage([]);
+        totalPagesCount.forCategories = 0;
+        setCurrentPage({ ...currentPage, forCategories: 1 });
         const result = await getCategoriesCount(filtersAsString);
         if (result.data > 0) {
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
@@ -278,10 +292,10 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetAndSetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
-        const result = await getFlashProductsCount(filtersAsString);
         setAllProductsInsideThePage([]);
         totalPagesCount.forProducts = 0;
         setCurrentPage({ ...currentPage, forFlashProducts: 1 });
+        const result = await getFlashProductsCount(filtersAsString);
         if (result.data > 0) {
             const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
             setAllFlashProductsInsideThePage(result1.products);
@@ -293,10 +307,10 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetAndSetProducts = async (filtersAsString, sortDetailsAsString) => {
-        const result = await getProductsCount(filtersAsString);
         setAllProductsInsideThePage([]);
         totalPagesCount.forProducts = 0;
         setCurrentPage({ ...currentPage, forProducts: 1 });
+        const result = await getProductsCount(filtersAsString);
         if (result.data > 0) {
             const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
             setAllProductsInsideThePage(result1.products);
@@ -318,6 +332,12 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetAndSetStores = async (filtersAsString) => {
+        setAllStoresInsideThePage([]);
+        setTotalPagesCount({
+            ...totalPagesCount,
+            forStores: 0
+        });
+        setCurrentPage({ ...currentPage, forStores: 1 });
         const storesCount = await getStoresCount(filtersAsString);
         if (storesCount.data > 0) {
             setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data);
@@ -469,6 +489,52 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
+    const handleChangeFilters = (e, section) => {
+        e.preventDefault();
+        if (section === "flash-products") {
+            const tempFilters = {
+                ...filters,
+                forFlashProducts: {
+                    ...filters.forFlashProducts,
+                    name: e.target.value.trim(),
+                }
+            };
+            setFilters(tempFilters);
+            searchOnProduct(e, "flash", tempFilters.forFlashProducts, sortDetails.forFlashProducts);
+        } else {
+            const tempFilters = {
+                ...filters,
+                forProducts: {
+                    ...filters.forProducts,
+                    name: e.target.value.trim(),
+                }
+            };
+            setFilters(tempFilters);
+            searchOnProduct(e, "normal", tempFilters.forProducts, sortDetails.forProducts);
+        }
+    }
+
+    const handleChangeSorts = (e, section) => {
+        e.preventDefault();
+        if (section === "flash-products") {
+            const sortDetailsArray = e.target.value.split(",");
+            const tempSortDetails = {
+                ...sortDetails,
+                forFlashProducts: { by: sortDetailsArray[0], type: sortDetailsArray[1] }
+            };
+            setSortDetails(tempSortDetails);
+            searchOnProduct(e, "flash", filters.forFlashProducts, tempSortDetails.forFlashProducts);
+        } else {
+            const sortDetailsArray = e.target.value.split(",");
+            const tempSortDetails = {
+                ...sortDetails,
+                forProducts: { by: sortDetailsArray[0], type: sortDetailsArray[1] }
+            };
+            setSortDetails(tempSortDetails);
+            searchOnProduct(e, "normal", filters.forProducts, tempSortDetails.forProducts);
+        }
+    }
+
     const searchOnProduct = async (e, productType, filters, sortDetails) => {
         try {
             e.preventDefault();
@@ -581,35 +647,26 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, "flash", filters, sortDetails)}>
+                                        <form className="search-form">
                                             <div className="product-name-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
                                                     className={`form-control p-3 border-2`}
-                                                    onChange={(e) => {
-                                                        const tempFilters = { ...filters, name: e.target.value.trim() };
-                                                        setFilters(tempFilters);
-                                                        searchOnProduct(e, "flash", tempFilters, sortDetails);
-                                                    }}
+                                                    onChange={(e) => handleChangeFilters(e, "flash-products")}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                    <FaSearch className="icon" onClick={(e) => searchOnProduct(e, "flash", filters, sortDetails)} />
+                                                    <FaSearch className="icon" onClick={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)} />
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "flash", filters)}>
+                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)}>
                                             <div className="select-sort-type-box">
                                                 <select
                                                     className="select-sort-type form-select p-3"
-                                                    onChange={(e) => {
-                                                        const sortDetailsArray = e.target.value.split(",");
-                                                        const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
-                                                        setSortDetails(tempSortDetails);
-                                                        searchOnProduct(e, "flash", filters, tempSortDetails);
-                                                    }}
+                                                    onChange={(e) => handleChangeSorts(e, "flash-products")}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
                                                     <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
@@ -662,35 +719,26 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                                 {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, "normal", filters, sortDetails)}>
+                                        <form className="search-form">
                                             <div className="product-name-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
                                                     className={`form-control p-3 border-2`}
-                                                    onChange={(e) => {
-                                                        const tempFilters = { ...filters, name: e.target.value.trim() };
-                                                        setFilters(tempFilters);
-                                                        searchOnProduct(e, "normal", tempFilters, sortDetails);
-                                                    }}
+                                                    onChange={(e) => handleChangeFilters(e, "products")}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, "normal", filters, sortDetails)} />
+                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, "normal", filters.forProducts, sortDetails.forProducts)} />
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "normal", filters)}>
+                                        <form className="sort-form">
                                             <div className="select-sort-type-box">
                                                 <select
                                                     className="select-sort-type form-select p-3"
-                                                    onChange={(e) => {
-                                                        const sortDetailsArray = e.target.value.split(",");
-                                                        const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
-                                                        setSortDetails(tempSortDetails);
-                                                        searchOnProduct(e, "normal", filters, tempSortDetails);
-                                                    }}
+                                                    onChange={(e) => handleChangeSorts(e, "products")}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
                                                     <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
