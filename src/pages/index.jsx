@@ -99,6 +99,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [filters, setFilters] = useState({
         name: "",
+        offerDescription: "",
         storeId: "",
         status: "approving"
     });
@@ -276,26 +277,32 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const handleGetAndSetFlashProducts = async (filtersAsString) => {
+    const handleGetAndSetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
         const result = await getFlashProductsCount(filtersAsString);
+        setCurrentPage({ ...currentPage, forFlashProducts: 1 });
         if (result.data > 0) {
-            const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString)).data;
+            const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
             setAllFlashProductsInsideThePage(result1.products);
             setCurrentDate(result1.currentDate);
             totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSizes.forFlashProducts);
             return result1.products;
         }
+        setAllProductsInsideThePage([]);
+        totalPagesCount.forProducts = 0;
         return [];
     }
 
-    const handleGetAndSetProducts = async (filtersAsString) => {
+    const handleGetAndSetProducts = async (filtersAsString, sortDetailsAsString) => {
         const result = await getProductsCount(filtersAsString);
+        setCurrentPage({ ...currentPage, forProducts: 1 });
         if (result.data > 0) {
-            const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString)).data;
+            const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
             setAllProductsInsideThePage(result1.products);
             totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
             return result1.products;
         }
+        setAllProductsInsideThePage([]);
+        totalPagesCount.forProducts = 0;
         return [];
     }
 
@@ -380,6 +387,7 @@ export default function Home({ countryAsProperty, storeId }) {
     const getFiltersAsQuery = (filters) => {
         let filtersAsQuery = "";
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
+        if (filters.offerDescription) filtersAsQuery += `offerDescription=${filters.offerDescription}&`;
         if (filters.storeId) filtersAsQuery += `storeId=${filters.storeId}&`;
         if (filters.status) filtersAsQuery += `status=${filters.status}&`;
         if (filtersAsQuery) filtersAsQuery = filtersAsQuery.substring(0, filtersAsQuery.length - 1);
@@ -461,24 +469,21 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const searchOnProduct = async (e, filters, sortDetails) => {
+    const searchOnProduct = async (e, productType, filters, sortDetails) => {
         try {
             e.preventDefault();
-            setIsGetProducts(true);
-            let filtersAsQuery = getFiltersAsQuery(filters);
-            const result = await getProductsCount(filtersAsQuery);
-            if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
-                totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
-                setCurrentPage({ ...currentPage, forProducts: 1 });
+            if (productType === "normal") {
+                setIsGetProducts(true);
+                await handleGetAndSetProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
                 setIsGetProducts(false);
             } else {
-                setAllProductsInsideThePage([]);
-                totalPagesCount.forProducts = 0;
-                setIsGetProducts(false);
+                setIsGetFlashProducts(true);
+                await handleGetAndSetFlashProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                setIsGetFlashProducts(false);
             }
         }
         catch (err) {
+            setIsGetFlashProducts(false);
             setIsGetProducts(false);
             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
@@ -564,7 +569,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, "flash", filters, sortDetails)}>
                                             <div className="product-name-field-box">
                                                 <input
                                                     type="text"
@@ -573,17 +578,17 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     onChange={(e) => {
                                                         const tempFilters = { ...filters, name: e.target.value.trim() };
                                                         setFilters(tempFilters);
-                                                        searchOnProduct(e, tempFilters, sortDetails);
+                                                        searchOnProduct(e, "flash", tempFilters, sortDetails);
                                                     }}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                    <FaSearch className="icon" onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                    <FaSearch className="icon" onClick={(e) => searchOnProduct(e, "flash", filters, sortDetails)} />
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "flash", filters)}>
                                             <div className="select-sort-type-box">
                                                 <select
                                                     className="select-sort-type form-select p-3"
@@ -591,7 +596,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                         const sortDetailsArray = e.target.value.split(",");
                                                         const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
                                                         setSortDetails(tempSortDetails);
-                                                        searchOnProduct(e, filters, tempSortDetails);
+                                                        searchOnProduct(e, "flash", filters, tempSortDetails);
                                                     }}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
@@ -645,7 +650,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
                                 {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                        <form className="search-form" onSubmit={(e) => searchOnProduct(e, "normal", filters, sortDetails)}>
                                             <div className="product-name-field-box">
                                                 <input
                                                     type="text"
@@ -654,17 +659,17 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     onChange={(e) => {
                                                         const tempFilters = { ...filters, name: e.target.value.trim() };
                                                         setFilters(tempFilters);
-                                                        searchOnProduct(e, tempFilters, sortDetails);
+                                                        searchOnProduct(e, "normal", tempFilters, sortDetails);
                                                     }}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                    <FaSearch className='icon' onClick={(e) => searchOnProduct(e, "normal", filters, sortDetails)} />
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "normal", filters)}>
                                             <div className="select-sort-type-box">
                                                 <select
                                                     className="select-sort-type form-select p-3"
@@ -672,7 +677,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                         const sortDetailsArray = e.target.value.split(",");
                                                         const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
                                                         setSortDetails(tempSortDetails);
-                                                        searchOnProduct(e, filters, tempSortDetails);
+                                                        searchOnProduct(e, "normal", filters, tempSortDetails);
                                                     }}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
