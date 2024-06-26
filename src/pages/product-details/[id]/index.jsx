@@ -5,7 +5,6 @@ import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import Footer from "@/components/Footer";
 import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
@@ -21,7 +20,7 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo } from "../../../../public/global_functions/popular";
+import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser } from "../../../../public/global_functions/popular";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
@@ -59,8 +58,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
-
-    const [isFavoriteProductForUser, setIsFavoriteProductForUser] = useState(false);
 
     const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
 
@@ -689,7 +686,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     </div>
                                                 ))}
                                             </div>}
-                                            {totalPagesCount > 1 && !isGetProductReferals &&
+                                            {totalPagesCount > 1 &&
                                                 <PaginationBar
                                                     totalPagesCount={totalPagesCount}
                                                     currentPage={currentPage}
@@ -794,7 +791,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 </div>}
                                 <section className="related-products-box">
                                     <h2 className="text-center mb-4">{t("Related Products")}</h2>
-                                    {sampleFromRelatedProductsInProduct.length > 0 ? <div className="row products-box pt-4 pb-4">
+                                    {sampleFromRelatedProductsInProduct.length > 0 ? <div className="row products-box section-data-box pt-4 pb-4">
                                         {sampleFromRelatedProductsInProduct.map((product) => (
                                             product._id !== productIdAsProperty && <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
                                                 <ProductCard
