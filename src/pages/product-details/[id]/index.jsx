@@ -138,6 +138,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         window.addEventListener("resize", function () {
             setWindowInnerWidth(this.innerWidth);
         });
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -157,46 +160,38 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     }
                 });
         } else setIsGetUserInfo(false);
+    }, []);
+
+    useEffect(() => {
         getProductInfo(productIdAsProperty)
-            .then((res) => {
+            .then(async (res) => {
                 let result = res.data;
                 setIsGetProductInfo(false);
                 if (Object.keys(result).length > 0) {
                     setProductInfo(result.productDetails);
                     setCurrentDate(result.currentDate);
-                    getProductReferalsCount(productIdAsProperty)
-                        .then(async (result) => {
-                            setAllProductReferalsCount(result.data);
-                            if (result.data > 0) {
-                                setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
-                                setTotalPagesCount(Math.ceil(result.data / pageSize));
-                            }
-                            const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
-                            if (referalWriterInfo) {
-                                setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
-                                setIsSaveReferalWriterInfo(true);
-                            } else {
-                                setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
-                            }
-                            setIsGetProductReferals(false);
-                        })
-                        .catch(() => {
-                            setIsLoadingPage(false);
-                            setIsErrorMsgOnLoadingThePage(true);
-                        });
-                    getSampleFromRelatedProductsInProduct(productIdAsProperty)
-                        .then(async (result) => {
-                            const relatedProducts = result.data;
-                            setSampleFromRelatedProductsInProduct(relatedProducts);
-                            if (userToken) {
-                                setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId(userToken, [productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data)
-                            }
-                            setIsGetSampleFromRelatedProductsInProduct(false);
-                        })
-                        .catch(() => {
-                            setIsLoadingPage(false);
-                            setIsErrorMsgOnLoadingThePage(true);
-                        });
+                    result = await getProductReferalsCount(productIdAsProperty);
+                    setAllProductReferalsCount(result.data);
+                    if (result.data > 0) {
+                        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                    }
+                    const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
+                    if (referalWriterInfo) {
+                        setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
+                        setIsSaveReferalWriterInfo(true);
+                    } else {
+                        setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
+                    }
+                    setIsGetProductReferals(false);
+                    result = await getSampleFromRelatedProductsInProduct(productIdAsProperty);
+                    const relatedProducts = result.data;
+                    setSampleFromRelatedProductsInProduct(relatedProducts);
+                    const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+                    if (userToken) {
+                        setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId(userToken, [productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data);
+                    }
+                    setIsGetSampleFromRelatedProductsInProduct(false);
                 } else {
                     setIsGetProductReferals(false);
                     setIsGetSampleFromRelatedProductsInProduct(false);
