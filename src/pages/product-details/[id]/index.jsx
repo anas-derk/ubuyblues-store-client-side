@@ -189,7 +189,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     setSampleFromRelatedProductsInProduct(relatedProducts);
                     const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                     if (userToken) {
-                        setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId(userToken, [productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data);
+                        setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId([productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data);
                     }
                     setIsGetSampleFromRelatedProductsInProduct(false);
                 } else {
