@@ -36,6 +36,7 @@ import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 import StoreCard from "@/components/StoreCard";
 import SectionLoader from "@/components/SectionLoader";
+import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -80,8 +81,6 @@ export default function Home({ countryAsProperty, storeId }) {
     const [currentDate, setCurrentDate] = useState("");
 
     const [allStoresInsideThePage, setAllStoresInsideThePage] = useState([]);
-
-    const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [currentPage, setCurrentPage] = useState({
         forCategories: 1,
@@ -177,7 +176,6 @@ export default function Home({ countryAsProperty, storeId }) {
     }, []);
 
     useEffect(() => {
-        window.onscroll = function () { handleScrollToUpAndDown(this) };
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", function () {
             setWindowInnerWidth(this.innerWidth);
@@ -373,30 +371,6 @@ export default function Home({ countryAsProperty, storeId }) {
         document.body.lang = userLanguage;
     }
 
-    const handleScrollToUpAndDown = (window) => {
-        if (window.scrollY > 500) {
-            setAppearedNavigateIcon("up");
-        } else {
-            setAppearedNavigateIcon("down");
-        }
-    }
-
-    const navigateToUpOrDown = () => {
-        if (appearedNavigateIcon === "up") {
-            window.scrollTo({
-                behavior: "smooth",
-                top: 0,
-                left: 0,
-            });
-        } else {
-            window.scrollTo({
-                behavior: "smooth",
-                top: document.querySelector("footer").offsetTop,
-                left: 0,
-            });
-        }
-    }
-
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
         if (windowInnerWidth < 767) return 1;
         if (windowInnerWidth >= 767 && windowInnerWidth < 1199 && count >= 2) return 2;
@@ -578,18 +552,13 @@ export default function Home({ countryAsProperty, storeId }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div
-                    className="navigate-to-up-button"
-                    onClick={navigateToUpOrDown}
-                >
-                    {appearedNavigateIcon === "up" ? <RiArrowUpDoubleFill className="arrow-up arrow-icon" /> : <RiArrowDownDoubleFill className="arrow-down arrow-icon" />}
-                </div>
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox
                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                     sharingName={sharingName}
                     sharingURL={sharingURL}
                 />}
+                <NavigateToUpOrDown />
                 {/* End Share Options Box */}
                 <div className="page-content page">
                     <div className="container-fluid">

@@ -22,6 +22,7 @@ import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
 import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo } from "../../../../public/global_functions/popular";
+import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -76,8 +77,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
-
-    const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
 
     const [productQuantity, setProductQuantity] = useState(1);
 
@@ -138,7 +137,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }, [countryAsProperty]);
 
     useEffect(() => {
-        window.onscroll = function () { handleScrollToUpAndDown(this) };
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", function () {
             setWindowInnerWidth(this.innerWidth);
@@ -236,30 +234,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             throw Error(err);
-        }
-    }
-
-    const handleScrollToUpAndDown = (window) => {
-        if (window.scrollY > 500) {
-            setAppearedNavigateIcon("up");
-        } else {
-            setAppearedNavigateIcon("down");
-        }
-    }
-
-    const navigateToUpOrDown = (navigateOrientation) => {
-        if (navigateOrientation === "up") {
-            window.scrollTo({
-                behavior: "smooth",
-                top: 0,
-                left: 0,
-            });
-        } else if (navigateOrientation === "down") {
-            window.scrollTo({
-                behavior: "smooth",
-                top: document.querySelector("footer").offsetTop,
-                left: 0,
-            });
         }
     }
 
@@ -543,10 +517,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="navigate-to-up-button">
-                    {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
-                    {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
-                </div>
+                <NavigateToUpOrDown />
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox
                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
