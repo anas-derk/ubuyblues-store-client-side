@@ -7,7 +7,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
-import { FaRegStar } from "react-icons/fa";
+import { FaCheck, FaRegStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
@@ -258,8 +258,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             if (!result.error) {
                 setIsSuccessAddProductToFavoriteUserProductsList(true);
                 let successAddToCartTimeout = setTimeout(() => {
+                    setFavoriteProductsListForUser([...favoriteProductsListForUser, result.data]);
                     setIsSuccessAddProductToFavoriteUserProductsList(false);
-                    setIsFavoriteProductForUser(true);
                     clearTimeout(successAddToCartTimeout);
                 }, 3000);
             }
@@ -282,12 +282,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 }
             });
             const result = res.data;
+            setIsWaitDeleteProductToFavoriteUserProductsList(false);
             if (!result.error) {
-                setIsWaitDeleteProductToFavoriteUserProductsList(false);
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
                 let successDeleteToCartTimeout = setTimeout(() => {
+                    setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favoriteProduct) => favoriteProduct.productId !== productId));
                     setIsSuccessDeleteProductToFavoriteUserProductsList(false);
-                    setIsFavoriteProductForUser(false);
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
             }
@@ -597,13 +597,21 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     className={`product-managment-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`}
                                                     onClick={() => setIsDisplayShareOptionsBox(true)}
                                                 />
-                                                {Object.keys(userInfo).length > 0 && isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
-                                                    className="product-managment-icon"
-                                                    onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
-                                                /> : <BsSuitHeart
-                                                    className="product-managment-icon"
-                                                    onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
-                                                />}
+                                                {
+                                                    !isWaitAddProductToFavoriteUserProductsList &&
+                                                        !isWaitDeleteProductToFavoriteUserProductsList &&
+                                                        !isSuccessAddProductToFavoriteUserProductsList &&
+                                                        !isSuccessDeleteProductToFavoriteUserProductsList ? (
+                                                        Object.keys(userInfo).length > 0 &&
+                                                            isFavoriteProductForUser(favoriteProductsListForUser, productInfo._id) ? <BsFillSuitHeartFill
+                                                            className="product-managment-icon"
+                                                            onClick={() => deleteProductFromFavoriteUserProducts(productInfo._id)}
+                                                        /> : <BsSuitHeart
+                                                            className="product-managment-icon"
+                                                            onClick={() => addProductToFavoriteUserProducts(productInfo._id)}
+                                                        />
+                                                    ) : null
+                                                }
                                                 {(isWaitAddProductToFavoriteUserProductsList || isWaitDeleteProductToFavoriteUserProductsList) && <BsClock className="product-managment-icon" />}
                                                 {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                                             </div>
