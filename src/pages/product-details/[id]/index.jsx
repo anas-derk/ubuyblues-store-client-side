@@ -163,6 +163,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }, []);
 
     useEffect(() => {
+        setIsLoadingPage(true);
+        handleResetAllProductData();
+        handleIsGetAllProductData();
         getProductInfo(productIdAsProperty)
             .then(async (res) => {
                 let result = res.data;
@@ -201,13 +204,26 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
-    }, []);
+    }, [productIdAsProperty]);
 
     useEffect(() => {
         if (!isGetUserInfo && !isGetProductInfo && !isGetProductReferals && !isGetSampleFromRelatedProductsInProduct) {
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetProductInfo, isGetProductReferals, isGetSampleFromRelatedProductsInProduct]);
+
+    const handleResetAllProductData = () => {
+        setProductInfo("");
+        setAllProductReferalsInsideThePage([]);
+        setSampleFromRelatedProductsInProduct([]);
+        setFavoriteProductsListForUser([]);
+    }
+
+    const handleIsGetAllProductData = () => {
+        setIsGetProductInfo(true);
+        setIsGetProductReferals(true);
+        setIsGetSampleFromRelatedProductsInProduct(true);
+    }
 
     const getProductInfo = async (productId) => {
         try {
