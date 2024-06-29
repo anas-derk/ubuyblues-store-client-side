@@ -128,7 +128,8 @@
   color: #000;
 }
 
-.product-details .product-details-box .product-description-and-referrals .product-referrals .rating-box .star-icon {
+.product-details .product-details-box .product-referrals .rating-box .star-icon {
+  font-size: 25px;
   cursor: pointer;
 }
 

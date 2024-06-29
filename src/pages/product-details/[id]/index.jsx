@@ -7,7 +7,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
-import { FaCheck, FaRegStar } from "react-icons/fa";
+import { FaCheck, FaRegStar, FaStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
@@ -80,6 +80,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
 
     const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
+
+    const [starNumber, setStartNumber] = useState(0);
 
     const [referalDetails, setReferalDetails] = useState({
         name: "",
@@ -364,20 +366,51 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
     }
 
+    const handleSelectRating = (starNumber) => {
+        setStartNumber(starNumber);
+    }
+
     const getRatingStars = () => {
-        let starsIconsArray = [
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar className="me-2 star-icon" />,
-            <FaRegStar />
-        ];
+        const ratingStarIcons = [];
+        for (let i = 1; i <= 5; i++) {
+            if (i === 1) {
+                if (starNumber >= i) {
+                    ratingStarIcons.push(
+                        <FaStar className={`me-3 star-icon ${i18n.language === "ar" ? "ms-3" : ""}`} onClick={() => handleSelectRating(i)} />
+                    );
+                } else {
+                    ratingStarIcons.push(
+                        <FaRegStar className={`me-3 star-icon ${i18n.language === "ar" ? "ms-3" : ""}`} onClick={() => handleSelectRating(i)} />
+                    );
+                }
+            }
+            else if (i < 5) {
+                if (starNumber >= i)
+                    ratingStarIcons.push(
+                        <FaStar className={`star-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} onClick={() => handleSelectRating(i)} />
+                    );
+                else {
+                    ratingStarIcons.push(
+                        <FaRegStar className={`star-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} onClick={() => handleSelectRating(i)} />
+                    );
+                }
+            }
+            else {
+                if (starNumber >= i)
+                    ratingStarIcons.push(
+                        <FaStar className="star-icon" onClick={() => handleSelectRating(i)} />
+                    );
+                else {
+                    ratingStarIcons.push(
+                        <FaRegStar className="star-icon" onClick={() => handleSelectRating(5)} />
+                    );
+                }
+            }
+        }
         return (
             <div className="rating-box mb-4">
                 <span className="me-3">{t("Your rating")} *</span>
-                {starsIconsArray.map((starIcon, starIndex) => <Fragment key={starIndex}>
-                    {starIcon}
-                </Fragment>)}
+                {ratingStarIcons}
             </div>
         );
     }

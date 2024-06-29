@@ -121,11 +121,12 @@ $height: 400px;
                     color: #000;
                 }
             }
-            .product-referrals {
-                .rating-box {
-                    .star-icon {
-                        cursor: pointer;
-                    }
+        }
+        .product-referrals {
+            .rating-box {
+                .star-icon {
+                    font-size: 25px;
+                    cursor: pointer;
                 }
             }
         }
