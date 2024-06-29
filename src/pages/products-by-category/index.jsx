@@ -15,6 +15,8 @@ import PaginationBar from "@/components/PaginationBar";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
 import axios from "axios";
+import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
+import SectionLoader from "@/components/SectionLoader";
 
 export default function ProductByCategory({ countryAsProperty, categoryIdAsProperty }) {
 
@@ -35,6 +37,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
+
+    const [isExistProductsInDBInGeneral, setIsExistProductsInDBInGeneral] = useState(false);
 
     const [currentDate, setCurrentDate] = useState("");
 
@@ -103,9 +107,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }, []);
 
     useEffect(() => {
-        window.onscroll = function () { handleScrollToUpAndDown(this) };
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+    }, []);
+
+    useEffect(() => {
         // =============================================================================
         getCategoryInfo(categoryIdAsProperty)
             .then(async (result) => {
@@ -117,6 +123,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
                         setAllProductsInsideThePage(result.products);
                         setCurrentDate(result.currentDate);
+                        if (result.products.length > 0) {
+                            setIsExistProductsInDBInGeneral(true);
+                        }
                         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                         if (userToken) {
                             setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(result.products.map((product) => product._id))).data);
@@ -148,30 +157,6 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         document.body.lang = userLanguage;
     }
 
-    const handleScrollToUpAndDown = (window) => {
-        if (window.scrollY > 500) {
-            setAppearedNavigateIcon("up");
-        } else {
-            setAppearedNavigateIcon("down");
-        }
-    }
-
-    const navigateToUpOrDown = (navigateOrientation) => {
-        if (navigateOrientation === "up") {
-            window.scrollTo({
-                behavior: "smooth",
-                top: 0,
-                left: 0,
-            });
-        } else if (navigateOrientation === "down") {
-            window.scrollTo({
-                behavior: "smooth",
-                top: document.querySelector("footer").offsetTop,
-                left: 0,
-            });
-        }
-    }
-
     const getFiltersAsQuery = (filters) => {
         let filtersAsQuery = "";
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
@@ -189,7 +174,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     const getPreviousPage = async () => {
         setIsGetProducts(true);
         const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
         setCurrentPage(newCurrentPage);
         setIsGetProducts(false);
     }
@@ -197,14 +182,14 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     const getNextPage = async () => {
         setIsGetProducts(true);
         const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
         setCurrentPage(newCurrentPage);
         setIsGetProducts(false);
     }
 
     const getSpecificPage = async (pageNumber) => {
         setIsGetProducts(true);
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data);
+        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
         setCurrentPage(pageNumber);
         setIsGetProducts(false);
     }
@@ -217,7 +202,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             let filtersAsQuery = getFiltersAsQuery(filters);
             const result = await getProductsCount(filtersAsQuery);
             if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data);
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
                 setTotalPagesCount(Math.ceil(result.data / pageSize));
                 setIsGetProducts(false);
             } else {
@@ -243,10 +228,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="navigate-to-up-button">
-                    {appearedNavigateIcon === "up" && <RiArrowUpDoubleFill className="arrow-up arrow-icon" onClick={() => navigateToUpOrDown("up")} />}
-                    {appearedNavigateIcon === "down" && <RiArrowDownDoubleFill className="arrow-down arrow-icon" onClick={() => navigateToUpOrDown("down")} />}
-                </div>
+                <NavigateToUpOrDown />
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox
                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -259,9 +241,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h2 className="section-name text-center mt-4 mb-5 text-white">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h2>
-                            <div className="row filters-and-sorting-box mb-4">
+                            {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                 <div className="col-xs-12 col-md-6">
-                                    <form className="search-form" onSubmit={(e) => searchOnProduct(e, filters, sortDetails)}>
+                                    <form className="search-form">
                                         <div className="product-name-field-box">
                                             <input
                                                 type="text"
@@ -280,7 +262,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                     </form>
                                 </div>
                                 <div className="col-xs-12 col-md-6">
-                                    <form className="sort-form" onSubmit={(e) => searchOnProduct(e, filters)}>
+                                    <form className="sort-form">
                                         <div className="select-sort-type-box">
                                             <select
                                                 className="select-sort-type form-select p-3"
@@ -300,9 +282,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                         </div>
                                     </form>
                                 </div>
-                            </div>
+                            </div>}
+                            {isGetProducts && <SectionLoader />}
+                            {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
                             <div className="row products-box pt-4 pb-4">
-                                {allProductsInsideThePage.length > 0 ? allProductsInsideThePage.map((product) => (
+                                {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
                                         <ProductCard
                                             productDetails={product}
@@ -317,8 +301,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                             isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
                                         />
                                     </div>
-                                )) : <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
-                                {totalPagesCount > 1 && !isGetProducts &&
+                                ))}
+                                {totalPagesCount > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
                                         currentPage={currentPage}
