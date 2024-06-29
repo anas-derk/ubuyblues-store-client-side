@@ -566,6 +566,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         return filteringString;
     }
 
+    const handleDisplayShareOptionsBox = (sharingURL) => {
+        setIsDisplayShareOptionsBox(true);
+        setSharingName("Product");
+        setSharingURL(sharingURL);
+    }
+
     return (
         <div className="product-details">
             <Head>
@@ -647,7 +653,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             <div className="product-managment-buttons mb-3">
                                                 <PiShareFatLight
                                                     className={`product-managment-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`}
-                                                    onClick={() => setIsDisplayShareOptionsBox(true)}
+                                                    onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/product-details/${productInfo._id}`)}
                                                 />
                                                 {
                                                     !isWaitAddProductToFavoriteUserProductsList &&
