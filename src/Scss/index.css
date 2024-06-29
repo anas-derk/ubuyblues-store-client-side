@@ -490,6 +490,17 @@ textarea {
   }
 }
 
+.popup-box .content-box .login-btn {
+  width: 50%;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .popup-box .content-box .login-btn {
+    width: 100%;
+  }
+}
+
 .popup-box .close-popup-box-icon {
   position: absolute;
   right: -20px;

@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import Footer from "@/components/Footer";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
@@ -22,6 +22,7 @@ import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../.
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
 import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser } from "../../../../public/global_functions/popular";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
+import ErrorPopup from "@/components/ErrorPopup";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -56,6 +57,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [currentDate, setCurrentDate] = useState("");
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
+
+    const [isDisplayErrorPopup, setIsDisplayErrorPopup] = useState(false);
 
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
@@ -367,7 +370,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const handleSelectRating = (starNumber) => {
-        setStartNumber(starNumber);
+        if (Object.keys(userInfo).length === 0) {
+            setIsDisplayErrorPopup(true);
+        } else {
+            setStartNumber(starNumber);
+        }
     }
 
     const getRatingStars = () => {
@@ -564,6 +571,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                     sharingName={sharingName}
                     sharingURL={sharingURL}
+                />}
+                {isDisplayErrorPopup && <ErrorPopup
+                    setIsDisplayErrorPopup={setIsDisplayErrorPopup}
+                    errorType="user-not-logged-in"
                 />}
                 {/* End Share Options Box */}
                 <div className="page-content page">
