@@ -21,12 +21,12 @@ export default function ErrorPopup({ setIsDisplayErrorPopup, errorType }) {
         <div className="error-popup popup-box">
             <div className="error-box content-box d-flex align-items-center justify-content-center text-white flex-column p-4 text-center">
                 <GrFormClose className="close-error-popup-icon close-popup-box-icon" onClick={() => setIsDisplayErrorPopup(false)} />
-                {errorType === "user-not-logged-in" && <>
-                    <h2 className="mb-5 pb-3 border-bottom border-white">{t(`Sorry, You Are Not Logged In !!`)}</h2>
+                {(errorType === "user-not-logged-in-for-rating" || errorType === "user-not-logged-in-for-add-product-to-favourite-products-list") && <>
+                    <h2 className="mb-5 pb-3 border-bottom border-white">{t("Sorry, You Are Not Logged In !!")}</h2>
                     <div className="row">
-                        <h4 className="mb-4">{t("In order to rate, please log in first")} .</h4>
-                        <h5 className="mb-5">{t("You can log in by clicking the following button")} .</h5>
-                        <Link href="/auth" className="btn btn-success login-btn">{t("Log in")}</Link>
+                        <h4 className="mb-4">{errorType === "user-not-logged-in-for-rating" ? t("In Order To Rate, Please Log In First") : t("In Order To Add The Product To Your Favorites List, Please Log In First")} .</h4>
+                        <h5 className="mb-5">{t("You Can Log In By Clicking The Following Button")} .</h5>
+                        <Link href="/auth" className="btn btn-success login-btn">{t("Log In")}</Link>
                     </div>
                 </>}
             </div>

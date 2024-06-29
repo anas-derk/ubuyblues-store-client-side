@@ -60,6 +60,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isDisplayErrorPopup, setIsDisplayErrorPopup] = useState(false);
 
+    const [errorType, setErrorType] = useState("");
+
     const [favoriteProductsListForUser, setFavoriteProductsListForUser] = useState([]);
 
     const [isWaitAddToCart, setIsWaitAddToCart] = useState(false);
@@ -252,21 +254,26 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
-            setIsWaitAddProductToFavoriteUserProductsList(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+            if (Object.keys(userInfo).length === 0) {
+                setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
+                setIsDisplayErrorPopup(true);
+            } else {
+                setIsWaitAddProductToFavoriteUserProductsList(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    }
+                });
+                const result = res.data;
+                setIsWaitAddProductToFavoriteUserProductsList(false);
+                if (!result.error) {
+                    setIsSuccessAddProductToFavoriteUserProductsList(true);
+                    let successAddToCartTimeout = setTimeout(() => {
+                        setFavoriteProductsListForUser([...favoriteProductsListForUser, result.data]);
+                        setIsSuccessAddProductToFavoriteUserProductsList(false);
+                        clearTimeout(successAddToCartTimeout);
+                    }, 3000);
                 }
-            });
-            const result = res.data;
-            setIsWaitAddProductToFavoriteUserProductsList(false);
-            if (!result.error) {
-                setIsSuccessAddProductToFavoriteUserProductsList(true);
-                let successAddToCartTimeout = setTimeout(() => {
-                    setFavoriteProductsListForUser([...favoriteProductsListForUser, result.data]);
-                    setIsSuccessAddProductToFavoriteUserProductsList(false);
-                    clearTimeout(successAddToCartTimeout);
-                }, 3000);
             }
         }
         catch (err) {
@@ -371,6 +378,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const handleSelectRating = (starNumber) => {
         if (Object.keys(userInfo).length === 0) {
+            setErrorType("user-not-logged-in-for-rating");
             setIsDisplayErrorPopup(true);
         } else {
             setStartNumber(starNumber);
@@ -574,7 +582,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 />}
                 {isDisplayErrorPopup && <ErrorPopup
                     setIsDisplayErrorPopup={setIsDisplayErrorPopup}
-                    errorType="user-not-logged-in"
+                    errorType={errorType}
                 />}
                 {/* End Share Options Box */}
                 <div className="page-content page">
