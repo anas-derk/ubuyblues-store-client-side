@@ -127,7 +127,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [appearedSections, setAppearedSections] = useState([]);
 
-    const [allBrands, setAllBrands] = useState([]);
+    const [lastSevenBrands, setLastSevenBrands] = useState([]);
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
@@ -226,7 +226,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     if (appearedSectionsLength > 0) {
                         for (let i = 0; i < appearedSectionsLength; i++) {
                             if (appearedSectionsResult.data[i].sectionName === "brands" && appearedSectionsResult.data[i].isAppeared) {
-                                setAllBrands((await getAllBrandsByStoreId(filtersAsString)).data);
+                                setLastSevenBrands((await getLastSevenBrandsByStoreId(filtersAsString)).data);
                                 setIsGetBrands(false);
                             }
                             if (appearedSectionsResult.data[i].sectionName === "stores" && appearedSectionsResult.data[i].isAppeared) {
@@ -254,7 +254,7 @@ export default function Home({ countryAsProperty, storeId }) {
         setAllCategoriesInsideThePage([]);
         setAllFlashProductsInsideThePage([]);
         setAllProductsInsideThePage([]);
-        setAllBrands([]);
+        setLastSevenBrands([]);
         setAllStoresInsideThePage([]);
         setTotalPagesCount({
             forCategories: 0,
@@ -356,9 +356,9 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const getAllBrandsByStoreId = async (filters) => {
+    const getLastSevenBrandsByStoreId = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-by-store-id?${filters ? filters : ""}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/brands/last-seven-brands-by-store-id?${filters ? filters : ""}`);
             return res.data;
         }
         catch (err) {
@@ -755,19 +755,19 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>
                             {/* End Last Added Products */}
                             {/* Start Brands Section */}
-                            {appearedSections.includes("brands") && allBrands.length > 0 && <section className="brands mb-5">
+                            {appearedSections.includes("brands") && lastSevenBrands.length > 0 && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
                                 {isGetBrands && <SectionLoader />}
-                                {!isGetBrands && allBrands.length > 0 && <div className="container-fluid">
+                                {!isGetBrands && lastSevenBrands.length > 0 && <div className="container-fluid">
                                     <Slider
                                         dots={true}
                                         arrows={false}
                                         infinite={false}
                                         speed={500}
-                                        slidesToShow={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
-                                        slidesToScroll={getAppearedSlidesCount(windowInnerWidth, allBrands.length)}
+                                        slidesToShow={getAppearedSlidesCount(windowInnerWidth, lastSevenBrands.length)}
+                                        slidesToScroll={getAppearedSlidesCount(windowInnerWidth, lastSevenBrands.length)}
                                     >
-                                        {allBrands.map((brand) => (
+                                        {lastSevenBrands.map((brand) => (
                                             <div className="brand-box mb-4" key={brand._id}>
                                                 <div className="brand-image-box mb-4">
                                                     <a
@@ -785,8 +785,9 @@ export default function Home({ countryAsProperty, storeId }) {
                                         ))}
                                     </Slider>
                                 </div>}
-                                {!isGetBrands && allBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                             </section>}
+                            {!isGetBrands && lastSevenBrands.length !== 0 && <Link href="/all-brands" className="mb-4 d-block mx-auto text-center show-all-brands-btn p-3">{t("Show All Brands")}</Link>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}
                             {appearedSections.includes("stores") && <section className="stores mb-5 pt-5">
