@@ -37,6 +37,7 @@ import NotFoundError from "@/components/NotFoundError";
 import StoreCard from "@/components/StoreCard";
 import SectionLoader from "@/components/SectionLoader";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
+import BrandCard from "@/components/BrandCard";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -757,37 +758,18 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Brands Section */}
                             {appearedSections.includes("brands") && lastSevenBrands.length > 0 && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
-                                {isGetBrands && <SectionLoader />}
-                                {!isGetBrands && lastSevenBrands.length > 0 && <div className="container-fluid">
-                                    <Slider
-                                        dots={true}
-                                        arrows={false}
-                                        infinite={false}
-                                        speed={500}
-                                        slidesToShow={getAppearedSlidesCount(windowInnerWidth, lastSevenBrands.length)}
-                                        slidesToScroll={getAppearedSlidesCount(windowInnerWidth, lastSevenBrands.length)}
-                                    >
-                                        {lastSevenBrands.map((brand) => (
-                                            <div className="brand-box mb-4" key={brand._id}>
-                                                <div className="brand-image-box mb-4">
-                                                    <a
-                                                        href="https://google.com"
-                                                        target="_blank"
-                                                    >
-                                                        <img
-                                                            src={`${process.env.BASE_API_URL}/${brand.imagePath}`}
-                                                            alt={`${brand.title} Brand Image`}
-                                                        />
-                                                    </a>
-                                                </div>
-                                                <h2 className="text-white text-center">{brand.title}</h2>
-                                            </div>
-                                        ))}
-                                    </Slider>
-                                </div>}
-                                {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                <div className="row stores-box section-data-box pt-4 pb-4">
+                                    {isGetBrands && <SectionLoader />}
+                                    {!isGetBrands && lastSevenBrands.length > 0 && lastSevenBrands.map((brand) => (
+                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
+                                            <BrandCard
+                                                brandDetails={brand}
+                                            />
+                                        </div>
+                                    ))}
+                                    {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                </div>
                             </section>}
-                            {!isGetBrands && lastSevenBrands.length !== 0 && <Link href="/all-brands" className="mb-4 d-block mx-auto text-center show-all-brands-btn p-3">{t("Show All Brands")}</Link>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}
                             {appearedSections.includes("stores") && <section className="stores mb-5 pt-5">
@@ -806,7 +788,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     ))}
                                     {!isGetStores && allStoresInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
                                 </div>
-                                {totalPagesCount.forStores > 1 && !isGetStores &&
+                                {totalPagesCount.forStores > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount.forStores}
                                         currentPage={currentPage.forStores}

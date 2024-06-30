@@ -570,6 +570,9 @@ textarea{
         border-bottom-right-radius: 8px;
         border-bottom-left-radius: 8px;
         min-height: 142px;
+        &.brand-details{
+            min-height: 70px;
+        }
     }
 }
 

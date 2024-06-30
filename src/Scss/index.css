@@ -695,6 +695,10 @@ textarea {
   min-height: 142px;
 }
 
+.card-box .details-box.brand-details {
+  min-height: 70px;
+}
+
 .section-data-box {
   row-gap: 40px;
 }
