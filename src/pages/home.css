@@ -1,5 +1,9 @@
-.home .store-details, .home .categories, .home .last-added-flash-products, .home .brands {
+.home .store-details, .home .categories, .home .last-added-flash-products {
   border-bottom: 2px solid var(--main-color-two);
+}
+
+.home .stores {
+  border-top: 2px solid var(--main-color-two);
 }
 
 .home .welcome-msg {

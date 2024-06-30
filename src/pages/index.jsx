@@ -789,7 +789,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}
-                            {appearedSections.includes("stores") && <section className="stores mb-5">
+                            {appearedSections.includes("stores") && <section className="stores mb-5 pt-5">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
                                 <div className="row stores-box section-data-box pt-4 pb-4">
                                     {isGetStores && <SectionLoader />}

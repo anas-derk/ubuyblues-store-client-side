@@ -1,6 +1,9 @@
 .home{
-    .store-details, .categories, .last-added-flash-products, .brands{
+    .store-details, .categories, .last-added-flash-products{
         border-bottom: 2px solid var(--main-color-two);
+    }
+    .stores{
+        border-top: 2px solid var(--main-color-two);
     }
     .welcome-msg{
         width: fit-content;
