@@ -5,10 +5,8 @@ import { MdKeyboardArrowRight, MdOutlineMail } from "react-icons/md";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { RiArrowUpDoubleFill, RiArrowDownDoubleFill } from "react-icons/ri";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import LoaderPage from "@/components/LoaderPage";
-import Slider from "react-slick";
 import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
 import { useTranslation } from "react-i18next";
@@ -58,8 +56,6 @@ export default function Home({ countryAsProperty, storeId }) {
     const [isGetProducts, setIsGetProducts] = useState(true);
 
     const [isGetFlashProducts, setIsGetFlashProducts] = useState(true);
-
-    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [storeDetails, setStoreDetails] = useState({});
 
@@ -174,13 +170,6 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                 });
         }
-    }, []);
-
-    useEffect(() => {
-        setWindowInnerWidth(window.innerWidth);
-        window.addEventListener("resize", function () {
-            setWindowInnerWidth(this.innerWidth);
-        });
     }, []);
 
     useEffect(() => {
@@ -370,13 +359,6 @@ export default function Home({ countryAsProperty, storeId }) {
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
-    }
-
-    const getAppearedSlidesCount = (windowInnerWidth, count) => {
-        if (windowInnerWidth < 767) return 1;
-        if (windowInnerWidth >= 767 && windowInnerWidth < 1199 && count >= 2) return 2;
-        if (windowInnerWidth >= 1199 && count >= 3) return 3;
-        return count;
     }
 
     const getFiltersAsQuery = (filters) => {
@@ -758,7 +740,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Brands Section */}
                             {appearedSections.includes("brands") && lastSevenBrands.length > 0 && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
-                                <div className="row stores-box section-data-box pt-4 pb-4">
+                                <div className="row brands-box section-data-box pt-4 pb-4">
                                     {isGetBrands && <SectionLoader />}
                                     {!isGetBrands && lastSevenBrands.length > 0 && lastSevenBrands.map((brand) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
@@ -769,6 +751,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     ))}
                                     {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                                 </div>
+                                {!isGetBrands && lastSevenBrands.length !== 0 && <Link href={`/all-brands?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-all-brands-btn p-3">{t("Show All Brands")}</Link>}
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}

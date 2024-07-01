@@ -209,20 +209,6 @@ const isFavoriteProductForUser = (favorite_products_list, productId) => {
     return favorite_products_list.findIndex((favorite_product) => favorite_product.productId === productId) > -1 ? true : false;
 }
 
-async function getAdminInfo() {
-    try{
-        const res = await axios.get(`${process.env.BASE_API_URL}/admins/user-info`, {
-            headers: {
-                Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
-            },
-        });
-        return res.data;
-    }
-    catch(err) {
-        throw err;
-    }
-}
-
 async function getUserInfo() {
     try{
         const res = await axios.get(`${process.env.BASE_API_URL}/users/user-info`, {
@@ -258,6 +244,5 @@ export {
     getFavoriteProductsByProductsIdsAndUserId,
     isFavoriteProductForUser,
     calcTotalOrderPriceAfterDiscount,
-    getAdminInfo,
     getUserInfo
 }
