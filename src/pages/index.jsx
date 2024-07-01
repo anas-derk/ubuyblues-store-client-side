@@ -751,7 +751,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     ))}
                                     {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                                 </div>
-                                {!isGetBrands && lastSevenBrands.length !== 0 && <Link href={`/all-brands-of-the-store?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-all-brands-btn p-3">{t("Show All Brands")}</Link>}
+                                {!isGetBrands && lastSevenBrands.length !== 0 && <Link href={`/all-brands-of-the-store?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-btn p-3">{t("Show All Brands")}</Link>}
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}

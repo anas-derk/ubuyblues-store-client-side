@@ -720,6 +720,20 @@ textarea {
   }
 }
 
+.show-btn {
+  background-color: var(--main-color-two);
+  width: 25%;
+  border-radius: 10px;
+  color: #000;
+  font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .show-btn {
+    width: 100%;
+  }
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

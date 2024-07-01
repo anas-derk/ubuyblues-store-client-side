@@ -63,14 +63,4 @@
             }
         }
     }
-    .show-all-brands-btn{
-        background-color: var(--main-color-two);
-        width: 25%;
-        border-radius: 10px;
-        color: #000;
-        font-weight: bold;
-        @media (max-width: 767px) {
-            width: 100%;
-        }
-    }
 }

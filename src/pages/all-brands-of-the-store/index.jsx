@@ -21,7 +21,10 @@ export default function AllBrands({ storeId }) {
 
     const [isGetBrands, setIsGetBrands] = useState(true);
 
-    const [storeName, setStoreName] = useState("");
+    const [storeDetails, setStoreDetails] = useState({
+        _id: "",
+        name: "",
+    });
 
     const [allBrandsInsideThePage, setAllBrandsInsideThePage] = useState([]);
 
@@ -66,7 +69,10 @@ export default function AllBrands({ storeId }) {
         getStoreDetails(storeId)
             .then(async (storeDetailsResult) => {
                 if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
-                    setStoreName(storeDetailsResult.data.name);
+                    setStoreDetails({
+                        _id: storeDetailsResult.data._id,
+                        name: storeDetailsResult.data.name
+                    });
                     const result = await getBrandsCount(`storeId=${storeDetailsResult.data._id}`);
                     if (result.data > 0) {
                         setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, `storeId=${storeDetailsResult.data._id}`)).data);
@@ -113,11 +119,11 @@ export default function AllBrands({ storeId }) {
     }
 
     const getNextPage = async () => {
-        setIsWaitGetBrandsStatus(true);
+        setIsGetBrands(true);
         const newCurrentPage = currentPage + 1;
-        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize)).data);
+        setAllBrandsInsideThePage([...allBrandsInsideThePage, ...(await getAllBrandsInsideThePage(newCurrentPage, pageSize, `storeId=${storeDetails._id}`)).data]);
         setCurrentPage(newCurrentPage);
-        setIsWaitGetBrandsStatus(false);
+        setIsGetBrands(false);
     }
 
     return (
@@ -129,19 +135,20 @@ export default function AllBrands({ storeId }) {
                 <Header />
                 <div className="page-content page pb-5">
                     <div className="container-fluid">
-                        {storeName ? <>
-                            <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeName}</h1>
-                            <div className="row brands-box section-data-box">
-                                {isGetBrands && <SectionLoader />}
-                                {!isGetBrands && allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
+                        {Object.keys(storeDetails).length > 0 ? <>
+                            <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeDetails.name}</h1>
+                            <div className="row brands-box section-data-box mb-5">
+                                {allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
                                         <BrandCard
                                             brandDetails={brand}
                                         />
                                     </div>
                                 ))}
-                                {!isGetBrands && allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                {allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                {isGetBrands && <SectionLoader />}
                             </div>
+                            {!isGetBrands && currentPage < totalPagesCount && <button className="mb-4 d-block mx-auto text-center show-btn p-3" onClick={getNextPage}>Show More</button>}
                         </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                     </div>
                 </div>
