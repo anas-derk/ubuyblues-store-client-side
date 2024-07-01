@@ -63,39 +63,22 @@ export default function AllBrands({ storeId }) {
     }, []);
 
     useEffect(() => {
-        if (storeId) {
-            getStoreDetails(storeId)
-                .then(async (storeDetailsResult) => {
-                    if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
-                        setStoreName(storeDetailsResult.data.name);
-                        const result = await getBrandsCount(`storeId=${storeId}`);
-                        if (result.data > 0) {
-                            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, `storeId=${storeId}`)).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        }
+        getStoreDetails(storeId)
+            .then(async (storeDetailsResult) => {
+                if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
+                    setStoreName(storeDetailsResult.data.name);
+                    const result = await getBrandsCount(`storeId=${storeDetailsResult.data._id}`);
+                    if (result.data > 0) {
+                        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, `storeId=${storeDetailsResult.data._id}`)).data);
+                        setTotalPagesCount(Math.ceil(result.data / pageSize));
                     }
-                    setIsGetBrands(false);
-                })
-                .catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
-                });
-        } else {
-            getStoreDetails(storeId)
-                .then(async (storeDetailsResult) => {
-                    if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
-                        const result = await getBrandsCount(`storeId=${storeId}`);
-                        if (result.data > 0) {
-                            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, `storeId=${storeId}`)).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        }
-                    }
-                })
-                .catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
-                });
-        }
+                }
+                setIsGetBrands(false);
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
     }, []);
 
     useEffect(() => {
@@ -146,7 +129,7 @@ export default function AllBrands({ storeId }) {
                 <Header />
                 <div className="page-content page pb-5">
                     <div className="container-fluid">
-                        {Object.keys(storeDetails).length > 0 ? <>
+                        {storeName ? <>
                             <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeName}</h1>
                             <div className="row brands-box section-data-box">
                                 {isGetBrands && <SectionLoader />}
