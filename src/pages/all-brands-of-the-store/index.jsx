@@ -146,18 +146,20 @@ export default function AllBrands({ storeId }) {
                 <Header />
                 <div className="page-content page pb-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeName}</h1>
-                        <div className="row brands-box section-data-box">
-                            {isGetBrands && <SectionLoader />}
-                            {!isGetBrands && allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
-                                <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
-                                    <BrandCard
-                                        brandDetails={brand}
-                                    />
-                                </div>
-                            ))}
-                            {!isGetBrands && allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
-                        </div>
+                        {Object.keys(storeDetails).length > 0 ? <>
+                            <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeName}</h1>
+                            <div className="row brands-box section-data-box">
+                                {isGetBrands && <SectionLoader />}
+                                {!isGetBrands && allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
+                                    <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
+                                        <BrandCard
+                                            brandDetails={brand}
+                                        />
+                                    </div>
+                                ))}
+                                {!isGetBrands && allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                            </div>
+                        </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                     </div>
                 </div>
                 <Footer />
