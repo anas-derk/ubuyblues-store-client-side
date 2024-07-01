@@ -529,7 +529,7 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     return (
-        <div className="home">
+        <div className="home page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Home")}</title>
             </Head>
@@ -543,7 +543,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 />}
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
-                <div className="page-content page">
+                <div className="page-content">
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             {/* Start Store Details Section */}

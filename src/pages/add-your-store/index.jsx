@@ -245,13 +245,13 @@ export default function AddYourStore() {
     }
 
     return (
-        <div className="add-your-store">
+        <div className="add-your-store page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Add Your Store")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content page">
+                <div className="page-content">
                     <div className="container-fluid">
                         {isServiceAvailable ? <section className="add-your-store pb-5">
                             <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>

@@ -47,13 +47,13 @@ export default function PageNotFound() {
     }
 
     return (
-        <div className="page-not-found pb-5 page">
+        <div className="page-not-found pb-5 page d-flex align-items-center justify-content-center flex-column text-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Page Not Found")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content page d-flex align-items-center justify-content-center flex-column">
+                <div className="page-content pt-5 pb-5">
                     <BiError className="error-404-icon" />
                     <h1 className="mb-3">{t("Sorry,")}</h1>
                     <h2 className="mb-3">{t("this page could not be found.")}</h2>

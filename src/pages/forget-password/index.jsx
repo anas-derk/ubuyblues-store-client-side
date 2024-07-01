@@ -233,13 +233,13 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     }
 
     return (
-        <div className="forget-password">
+        <div className="forget-password page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Forget Password")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white page ps-4 pe-4 text-center">
+                <div className="page-content text-white ps-4 pe-4 text-center">
                     <div className="container-fluid">
                         <h1 className="h3 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
                         {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>

@@ -5,7 +5,6 @@ import { getUserInfo } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
-import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -222,7 +221,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }
 
     return (
-        <div className="home">
+        <div className="home page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Products By Category")}</title>
             </Head>
@@ -236,7 +235,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     sharingURL={sharingURL}
                 />}
                 {/* End Share Options Box */}
-                <div className="page-content page">
+                <div className="page-content">
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">

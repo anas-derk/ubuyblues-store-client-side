@@ -127,13 +127,13 @@ export default function AllBrands({ storeId }) {
     }
 
     return (
-        <div className="all-brands">
+        <div className="all-brands page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("All The Brands Of The Store")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content page pb-5">
+                <div className="page-content pb-5">
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeDetails.name}</h1>

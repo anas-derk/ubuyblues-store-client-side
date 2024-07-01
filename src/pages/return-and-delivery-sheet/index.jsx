@@ -46,13 +46,13 @@ export default function ReturnAndDeliverySheet() {
     }
 
     return (
-        <div className="return-and-delivery-sheet caption-page">
+        <div className="return-and-delivery-sheet caption-page page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Return And Delivery Sheet")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white page ps-4 pe-4 pb-5">
+                <div className="page-content text-white ps-4 pe-4 pb-5">
                     <div className="container-fluid">
                         <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("Return And Delivery Sheet")}</h1>
                         <div className="content">
