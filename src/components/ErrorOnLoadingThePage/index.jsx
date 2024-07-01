@@ -24,7 +24,7 @@ export default function ErrorOnLoadingThePage() {
         <div className="error-on-loading-component">
             {!isLoadingPage && <>
                 <Header />
-                <div className="error-msg-on-loading-the-page d-flex flex-column justify-content-center align-items-center text-white">
+                <div className="error-msg-on-loading-the-page text-center text-white">
                     <PiSmileySad className="error-icon mb-5" />
                     <p className="error-msg-on-loading-box">{t("Sorry, Something Went Wrong, Please Try Again !")}</p>
                 </div>

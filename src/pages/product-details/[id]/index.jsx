@@ -84,7 +84,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
 
-    const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
+    const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("referrals");
 
     const [starNumber, setStartNumber] = useState(0);
 
@@ -376,12 +376,22 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
     }
 
-    const handleSelectRating = (starNumber) => {
+    const handleSelectRating = async (starNumber) => {
         if (Object.keys(userInfo).length === 0) {
             setErrorType("user-not-logged-in-for-rating");
             setIsDisplayErrorPopup(true);
         } else {
             setStartNumber(starNumber);
+            const res = await axios.post(`${process.env.BASE_API_URL}/ratings/add-new-product-rating`, {
+                productId: productInfo._id,
+                rating: starNumber
+            }, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                }
+            });
+            const result = res.data;
+            console.log(result)
         }
     }
 
@@ -573,7 +583,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     return (
-        <div className="product-details">
+        <div className="product-details page d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Product Details")}</title>
             </Head>
@@ -591,7 +601,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     errorType={errorType}
                 />}
                 {/* End Share Options Box */}
-                <div className="page-content page">
+                <div className="page-content pt-5">
                     <div className="container-fluid">
                         {Object.keys(productInfo).length > 0 ?
                             <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>

@@ -103,7 +103,7 @@ export default function Header() {
     }
 
     return (
-        <header className="global-header">
+        <header className="global-header mb-5">
             <Navbar expand="lg" className="bg-body-tertiary bg-white" fixed="top">
                 <Container fluid>
                     <Navbar.Brand href="/" as={Link}>

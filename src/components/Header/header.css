@@ -1,3 +1,7 @@
+.global-header {
+  min-height: 100px;
+}
+
 .global-header .navbar .navbar-nav {
   align-items: center;
 }
