@@ -621,7 +621,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     errorType={errorType}
                 />}
                 {/* End Share Options Box */}
-                <div className="page-content pt-5">
+                <div className="page-content">
                     <div className="container-fluid">
                         {Object.keys(productInfo).length > 0 ?
                             <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
