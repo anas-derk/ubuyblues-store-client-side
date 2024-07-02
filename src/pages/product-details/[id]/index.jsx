@@ -281,7 +281,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/auth");
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
+                setIsDisplayErrorPopup(true);
                 return;
             }
             setIsWaitAddProductToFavoriteUserProductsList(false);
@@ -394,14 +396,18 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                     }
                 });
-                const result = res.data;
                 setIsSelectProductRating(false);
                 setStartNumber(starNumber);
             }
         }
         catch(err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                setErrorType("user-not-logged-in-for-rating");
+                setIsDisplayErrorPopup(true);
+                return;
+            }
             setIsSelectProductRating(false);
-            console.log(err);
         }
     }
 
