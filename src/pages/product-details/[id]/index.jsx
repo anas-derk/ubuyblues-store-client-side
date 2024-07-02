@@ -123,9 +123,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const pageSize = 3;
 
     const { i18n, t } = useTranslation();
-
-    const router = useRouter();
-
+    
     const sliderRef = useRef();
 
     useEffect(() => {
