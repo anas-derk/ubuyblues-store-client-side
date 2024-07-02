@@ -87,7 +87,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [productGalleryImageIndex, setProductGalleryImageIndex] = useState(-1);
 
-    const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("referrals");
+    const [appearedProductDetailsBoxName, setAppearedProductDetailsBoxName] = useState("description");
 
     const [starNumber, setStartNumber] = useState(0);
 
