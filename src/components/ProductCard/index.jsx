@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { PiShareFatLight } from "react-icons/pi";
-import { FaCheck, FaCartPlus } from "react-icons/fa";
+import { FaCheck, FaCartPlus, FaStar, FaRegStar } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
@@ -249,6 +249,36 @@ export default function ProductCard({
         setIsDisplayProduct(true);
     }
 
+    const getSuitableRatingByRatingsCount = (ratings) => {
+        let sumRatings = 0, ratingsCount = 0;
+        for (let i = 1; i <= 5; i++) {
+            sumRatings += i * ratings[i];
+            ratingsCount += ratings[i];
+        }
+        return ratingsCount > 0 ? Math.round(sumRatings / ratingsCount) : 0;
+    }
+
+    const getRatingResult = () => {
+        const rating = getSuitableRatingByRatingsCount(productDetails.ratings);
+        const ratingStarIcons = [];
+        for (let i = 1; i <= 5; i++) {
+            if (rating >= i) {
+                ratingStarIcons.push(
+                    <FaStar className={`me-3 star-icon ${i18n.language === "ar" ? "ms-3" : ""}`} />
+                );
+            } else {
+                ratingStarIcons.push(
+                    <FaRegStar className={`me-3 star-icon ${i18n.language === "ar" ? "ms-3" : ""}`} />
+                );
+            }
+        }
+        return (
+            <div className="rating-result-box mb-4">
+                {ratingStarIcons}
+            </div>
+        );
+    }
+
     return (
         <div className="product-card card-box">
             {!isDisplayProduct && <div className="flash-discount-description bg-white text-dark p-4 text-center">
@@ -256,9 +286,9 @@ export default function ProductCard({
                 <h4 className="fw-bold mb-4 p-2">
                     {
                         remainingTimeForDiscountOffer.days > 0 ||
-                        remainingTimeForDiscountOffer.hours > 0 ||
-                        remainingTimeForDiscountOffer.minutes > 0 ||
-                        remainingTimeForDiscountOffer.seconds > 0 ? t("Time Is Running Out !!") : t("Expired !!")
+                            remainingTimeForDiscountOffer.hours > 0 ||
+                            remainingTimeForDiscountOffer.minutes > 0 ||
+                            remainingTimeForDiscountOffer.seconds > 0 ? t("Time Is Running Out !!") : t("Expired !!")
                     }
                 </h4>
                 <h4 className="fw-bold mb-4 p-2">{productDetails.offerDescription}</h4>
@@ -347,6 +377,7 @@ export default function ProductCard({
                     </div>
                 </div>
                 <div className="product-details details-box p-3 text-center">
+                    {getRatingResult()}
                     <h4 className="product-name fw-bold">{productDetails.name}</h4>
                     <h5 className="product-category">{productDetails.category}</h5>
                     <h5 className={`product-price ${(productDetails.discount !== 0 || productDetails.discountInOfferPeriod !== 0) ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>

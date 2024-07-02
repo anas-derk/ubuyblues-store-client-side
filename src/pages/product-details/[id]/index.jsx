@@ -5,7 +5,6 @@ import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import Footer from "@/components/Footer";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { FaCheck, FaRegStar, FaStar } from "react-icons/fa";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -415,37 +414,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
     }
 
-    const getSuitableRatingByRatingsCount = (ratings) => {
-        let sumRatings = 0, ratingsCount = 0;
-        for(let i = 1; i <= 5; i++) {
-            sumRatings += i * ratings[i];
-            ratingsCount += ratings[i];
-        }
-        return Math.round(sumRatings / ratingsCount);
-    }
-
-    const getRatingResult = () => {
-        const rating = getSuitableRatingByRatingsCount(productInfo.ratings);
-        console.log(rating)
-        const ratingStarIcons = [];
-        for (let i = 1; i <= 5; i++) {
-            if (rating >= i) {
-                ratingStarIcons.push(
-                    <FaStar className={`me-3 star-icon ${i18n.language === "ar" ? "ms-3" : ""}`} onClick={() => handleSelectRating(i)} />
-                );
-            } else {
-                ratingStarIcons.push(
-                    <FaRegStar className={`me-3 star-icon ${i18n.language === "ar" ? "ms-3" : ""}`} onClick={() => handleSelectRating(i)} />
-                );
-            }
-        }
-        return (
-            <div className="rating-result-box mb-4">
-                {ratingStarIcons}
-            </div>
-        );
-    }
-
     const getRatingStars = () => {
         const ratingStarIcons = [];
         for (let i = 1; i <= 5; i++) {
@@ -697,7 +665,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 <span className="fw-bold">{t("Category")}: </span>
                                                 <span>{productInfo.category}</span>
                                             </h5>
-                                            {getRatingResult()}
                                             <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                                             {
                                                 productInfo.discount > 0 &&
