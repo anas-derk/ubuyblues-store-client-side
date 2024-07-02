@@ -151,28 +151,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-        if (userToken) {
-            getUserInfo()
-                .then((result) => {
-                    if (!result.error) {
-                        setUserInfo(result.data);
-                        setIsGetUserInfo(false);
-                    }
-                })
-                .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        setIsGetUserInfo(false);
-                    } else {
-                        setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
-                    }
-                });
-        } else setIsGetUserInfo(false);
-    }, []);
-
-    useEffect(() => {
         setIsLoadingPage(true);
         handleResetAllProductData();
         handleIsGetAllProductData();
@@ -189,10 +167,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
                         setTotalPagesCount(Math.ceil(result.data / pageSize));
                     }
-                    result = await getProductRatingByUserId(productIdAsProperty);
-                    if (!result.error && result?.data > 0) {
-                        setStartNumber(result.data);
-                    }
                     const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
                     if (referalWriterInfo) {
                         setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
@@ -204,19 +178,33 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     result = await getSampleFromRelatedProductsInProduct(productIdAsProperty);
                     const relatedProducts = result.data;
                     setSampleFromRelatedProductsInProduct(relatedProducts);
+                    setIsGetSampleFromRelatedProductsInProduct(false);
                     const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                     if (userToken) {
-                        setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId([productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data);
+                        result = await getUserInfo();
+                        if (!result.error) {
+                            setUserInfo(result.data);
+                            result = await getProductRatingByUserId(productIdAsProperty);
+                            if (!result.error && result?.data > 0) {
+                                setStartNumber(result.data);
+                            }
+                            setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId([productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data);
+                        }
                     }
-                    setIsGetSampleFromRelatedProductsInProduct(false);
+                    setIsGetUserInfo(false);
                 } else {
                     setIsGetProductReferals(false);
                     setIsGetSampleFromRelatedProductsInProduct(false);
                 }
             })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+            .catch((err) => {
+                if (err?.response?.data?.msg === "Unauthorized Error") {
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    setIsGetUserInfo(false);
+                } else {
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
+                }
             });
     }, [productIdAsProperty]);
 
@@ -250,7 +238,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const getProductRatingByUserId = async (productId) => {
-        try{
+        try {
             const res = await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
@@ -258,7 +246,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             });
             return res.data;
         }
-        catch(err) {
+        catch (err) {
             throw Error(err);
         }
     }
@@ -400,7 +388,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const handleSelectRating = async (starNumber) => {
-        try{
+        try {
             if (Object.keys(userInfo).length === 0) {
                 setErrorType("user-not-logged-in-for-rating");
                 setIsDisplayErrorPopup(true);
@@ -418,7 +406,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setStartNumber(starNumber);
             }
         }
-        catch(err) {
+        catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
                 localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 setErrorType("user-not-logged-in-for-rating");
