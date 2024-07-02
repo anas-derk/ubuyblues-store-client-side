@@ -415,6 +415,15 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
     }
 
+    const getSuitableRatingByRatingsCount = (ratings) => {
+        let sumRatings = 0, ratingsCount = 0;
+        for(let i = 1; i <= 5; i++) {
+            sumRatings += i * ratings[i];
+            ratingsCount += ratings[i];
+        }
+        return Math.round(sumRatings / ratingsCount);
+    }
+
     const getRatingStars = () => {
         const ratingStarIcons = [];
         for (let i = 1; i <= 5; i++) {
@@ -454,7 +463,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         return (
             <div className="rating-box mb-4">
-                <span className="me-3">{t("Your rating")} *</span>
+                <span className="me-3">{t("Your Rating")} *</span>
                 {ratingStarIcons}
             </div>
         );
@@ -666,6 +675,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 <span className="fw-bold">{t("Category")}: </span>
                                                 <span>{productInfo.category}</span>
                                             </h5>
+                                            {getRatingStars()}
                                             <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                                             {
                                                 productInfo.discount > 0 &&
