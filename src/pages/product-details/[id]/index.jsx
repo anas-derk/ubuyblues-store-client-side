@@ -189,6 +189,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
                         setTotalPagesCount(Math.ceil(result.data / pageSize));
                     }
+                    result = await getProductRatingByUserId(productIdAsProperty);
+                    if (!result.error && result?.data > 0) {
+                        setStartNumber(result.data);
+                    }
                     const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
                     if (referalWriterInfo) {
                         setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
@@ -241,6 +245,20 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             return res.data;
         }
         catch (err) {
+            throw Error(err);
+        }
+    }
+
+    const getProductRatingByUserId = async (productId) => {
+        try{
+            const res = await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}`, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                }
+            });
+            return res.data;
+        }
+        catch(err) {
             throw Error(err);
         }
     }
