@@ -23,6 +23,7 @@ import { inputValuesValidation } from "../../../../public/global_functions/valid
 import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser } from "../../../../public/global_functions/popular";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import ErrorPopup from "@/components/ErrorPopup";
+import SectionLoader from "@/components/SectionLoader";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -79,6 +80,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
+
+    const [isSelectProductRating, setIsSelectProductRating] = useState(false);
 
     const [productQuantity, setProductQuantity] = useState(1);
 
@@ -377,21 +380,28 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const handleSelectRating = async (starNumber) => {
-        if (Object.keys(userInfo).length === 0) {
-            setErrorType("user-not-logged-in-for-rating");
-            setIsDisplayErrorPopup(true);
-        } else {
-            setStartNumber(starNumber);
-            const res = await axios.post(`${process.env.BASE_API_URL}/ratings/add-new-product-rating`, {
-                productId: productInfo._id,
-                rating: starNumber
-            }, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
-                }
-            });
-            const result = res.data;
-            console.log(result)
+        try{
+            if (Object.keys(userInfo).length === 0) {
+                setErrorType("user-not-logged-in-for-rating");
+                setIsDisplayErrorPopup(true);
+            } else {
+                setIsSelectProductRating(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/ratings/select-product-rating`, {
+                    productId: productInfo._id,
+                    rating: starNumber
+                }, {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                    }
+                });
+                const result = res.data;
+                setIsSelectProductRating(false);
+                setStartNumber(starNumber);
+            }
+        }
+        catch(err) {
+            setIsSelectProductRating(false);
+            console.log(err);
         }
     }
 
@@ -792,7 +802,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                         <div className="col-lg-6">
                                             <h6 className="mb-4">{t("Be the first to review")} .</h6>
                                             <h6 className="mb-4 note">{t("your e-mail address will not be published. Required fields are marked")} *</h6>
-                                            {getRatingStars()}
+                                            {!isSelectProductRating && getRatingStars()}
+                                            {isSelectProductRating && <SectionLoader />}
                                             <form className="referral-form mb-4" onSubmit={addNewReferal}>
                                                 <textarea
                                                     className={`p-2 mb-3 ${formValidationErrors.name ? "border-3 border-danger" : ""}`}
