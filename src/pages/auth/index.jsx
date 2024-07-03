@@ -185,6 +185,7 @@ export default function UserAuth() {
                 const res = await axios.post(`${process.env.BASE_API_URL}/users/create-new-user`, {
                     email: emailForSignup,
                     password: passwordForSignup,
+                    language : i18n.language
                 });
                 const result = res.data;
                 setIsSignupStatus(false);
