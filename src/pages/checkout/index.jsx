@@ -115,7 +115,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         async function fetchData() {
             const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
             if (userToken) {
-                result = await getUserInfo();
+                const result = await getUserInfo();
                 if (!result.error) {
                     setUserInfo(result.data);
                 } else {
@@ -469,9 +469,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
         try {
             setIsWaitCreateNewOrder(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, {
-                storeId,
+                // storeId,
                 customerId: userInfo ? userInfo._id : "",
-                order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
+                // order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
                 billing_address: {
                     first_name: userInfo.billing_address.first_name,
                     last_name: userInfo.billing_address.last_name,
@@ -498,12 +498,12 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 },
                 order_products: allProductsData.map((product) => ({
                     productId: product._id,
-                    name: product.name,
-                    unit_price: product.price,
-                    discount: isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) ? product.discountInOfferPeriod : product.discount,
-                    total_amount: product.price * getProductQuantity(product._id),
+                    // name: product.name,
+                    // unit_price: product.price,
+                    // discount: isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) ? product.discountInOfferPeriod : product.discount,
+                    // total_amount: product.price * getProductQuantity(product._id),
                     quantity: getProductQuantity(product._id),
-                    image_path: product.imagePath,
+                    // image_path: product.imagePath,
                 })),
                 requestNotes
             });
