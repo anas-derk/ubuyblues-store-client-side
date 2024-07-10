@@ -24,7 +24,7 @@ export default function Cart({ countryAsProperty }) {
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
     const [isGetGroupedProductsByStoreId, setIsGetGroupedProductsByStoreId] = useState(true);
-    
+
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
     const [allProductsData, setAllProductsData] = useState([]);
@@ -81,9 +81,24 @@ export default function Cart({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", () => {
+            setWindowInnerWidth(window.innerWidth);
+        });
+        window.addEventListener("scroll", function () {
+            if (this.innerWidth < 991) {
+                let cartTotalBtnBox = document.querySelector(".products .cart-total-btn-box");
+                if (this.scrollY < 613) {
+                    cartTotalBtnBox.style.display = "block";
+                } else cartTotalBtnBox.style.display = "none";
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             if (tempAllProductsDataInsideTheCart.length > 0) {
                 getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
@@ -97,18 +112,6 @@ export default function Cart({ countryAsProperty }) {
                             setPricesDetailsSummary(tempPricesDetailsSummary);
                             setAllProductsData(result.data.productByIds);
                         }
-                        setWindowInnerWidth(window.innerWidth);
-                        window.addEventListener("resize", () => {
-                            setWindowInnerWidth(window.innerWidth);
-                        });
-                        window.addEventListener("scroll", function () {
-                            if (this.innerWidth < 991) {
-                                let cartTotalBtnBox = document.querySelector(".products .cart-total-btn-box");
-                                if (this.scrollY < 613) {
-                                    cartTotalBtnBox.style.display = "block";
-                                } else cartTotalBtnBox.style.display = "none";
-                            }
-                        });
                         setIsGetGroupedProductsByStoreId(false);
                     })
                     .catch(() => {
@@ -249,7 +252,7 @@ export default function Cart({ countryAsProperty }) {
                                                                             {
                                                                                 product.discount > 0 &&
                                                                                 !isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
-                                                                                <h6 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                                <h6 className="product-price-before-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                             }
                                                                             {
                                                                                 product.discountInOfferPeriod > 0 &&
