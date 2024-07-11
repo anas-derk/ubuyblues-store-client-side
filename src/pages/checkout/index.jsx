@@ -373,7 +373,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         companyName: userInfo ? userInfo.billingAddress.companyName : "",
                         country: userInfo.billingAddress.country,
                         streetAddress: userInfo ? userInfo.billingAddress.streetAddress : "",
-                        apartment_number: userInfo.billingAddress.apartment_number,
+                        apartmentNumber: userInfo.billingAddress.apartmentNumber,
                         city: userInfo ? userInfo.billingAddress.city : "",
                         postalCode: userInfo.billingAddress.postalCode,
                         phoneNumber: userInfo.billingAddress.phoneNumber,
@@ -385,7 +385,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         companyName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
                         country: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
                         streetAddress: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                        apartment_number: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.apartment_number : userInfo.billingAddress.apartment_number,
+                        apartmentNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
                         city: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
                         postalCode: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
                         phoneNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
@@ -426,7 +426,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     companyName: userInfo.billingAddress.companyName,
                     country: userInfo.billingAddress.country,
                     streetAddress: userInfo.billingAddress.streetAddress,
-                    apartment_number: userInfo.billingAddress.apartment_number,
+                    apartmentNumber: userInfo.billingAddress.apartmentNumber,
                     city: userInfo.billingAddress.city,
                     postalCode: userInfo.billingAddress.postalCode,
                     phone: userInfo.billingAddress.phoneNumber,
@@ -438,7 +438,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     companyName: isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
                     country: isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
                     streetAddress: isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                    apartment_number: isShippingToOtherAddress ? userInfo.shippingAddress.apartment_number : userInfo.billingAddress.apartment_number,
+                    apartmentNumber: isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
                     city: isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
                     postalCode: isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
                     phone: isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
@@ -478,7 +478,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     companyName: userInfo.billingAddress.companyName,
                     country: userInfo.billingAddress.country,
                     streetAddress: userInfo.billingAddress.streetAddress,
-                    apartment_number: userInfo.billingAddress.apartment_number,
+                    apartmentNumber: userInfo.billingAddress.apartmentNumber,
                     city: userInfo.billingAddress.city,
                     postalCode: userInfo.billingAddress.postalCode,
                     phone: userInfo.billingAddress.phoneNumber,
@@ -490,7 +490,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     companyName: isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
                     country: isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
                     streetAddress: isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                    apartment_number: isShippingToOtherAddress ? userInfo.shippingAddress.apartment_number : userInfo.billingAddress.apartment_number,
+                    apartmentNumber: isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
                     city: isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
                     postalCode: isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
                     phone: isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
@@ -634,8 +634,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="number"
                                                 className="p-2"
                                                 placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
-                                                defaultValue={userInfo ? userInfo.billingAddress.apartment_number : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.apartmentNumber : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartmentNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                         </section>
                                         <section className="city-number mb-4">
@@ -825,8 +825,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="number"
                                                 className="p-2"
                                                 placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
-                                                defaultValue={userInfo ? userInfo.shippingAddress.apartment_number.toString() : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.shippingAddress.apartmentNumber.toString() : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                         </section>
                                         <section className="city-number mb-4">
