@@ -214,14 +214,16 @@ export default function UserAuth() {
         }
     }
 
-    const successLoginingWithGoogle = async (credentialResponse) => {
+    const authWithGoogle = async (credentialResponse, authType) => {
         try {
-            setIsLoginingStatus(true);
+            if (authType === "sign-up") setIsSignupStatus(true);
+            else setIsLoginingStatus(true);
             let result = decode(credentialResponse.credential);
             const res = await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&firstName=${result.given_name}&lastName=${result.family_name}&previewName=${result.name}`);
             result = res.data;
             if (result.error) {
-                setIsLoginingStatus(false);
+                if (authType === "sign-up") setIsSignupStatus(true);
+                else setIsLoginingStatus(true);
                 setErrorMsg(result.msg);
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
@@ -235,7 +237,8 @@ export default function UserAuth() {
             }
         }
         catch (err) {
-            setIsLoginingStatus(false);
+            if (authType === "sign-up") setIsSignupStatus(true);
+            else setIsLoginingStatus(true);
             setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
@@ -316,7 +319,7 @@ export default function UserAuth() {
                                                 <li className="external-auth-site-item">
                                                     <GoogleLogin
                                                         type="icon"
-                                                        onSuccess={successLoginingWithGoogle}
+                                                        onSuccess={(credentialResponse) => authWithGoogle(credentialResponse, "sign-up")}
                                                         onError={loginingFailedWithGoogle}
                                                     />
                                                 </li>
@@ -367,7 +370,7 @@ export default function UserAuth() {
                                                 <li className="external-auth-site-item">
                                                     <GoogleLogin
                                                         type="icon"
-                                                        onSuccess={successLoginingWithGoogle}
+                                                        onSuccess={(credentialResponse) => authWithGoogle(credentialResponse, "login")}
                                                         onError={loginingFailedWithGoogle}
                                                     />
                                                 </li>
