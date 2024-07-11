@@ -84,8 +84,8 @@ export default function CustomerBillingAddress() {
             e.preventDefault();
             const errorsObject = inputValuesValidation([
                 {
-                    name: "first_name",
-                    value: userInfo.shipping_address.first_name,
+                    name: "firstName",
+                    value: userInfo.shippingAddress.firstName,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -96,8 +96,8 @@ export default function CustomerBillingAddress() {
                     },
                 },
                 {
-                    name: "last_name",
-                    value: userInfo.shipping_address.last_name,
+                    name: "lastName",
+                    value: userInfo.shippingAddress.lastName,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -109,7 +109,7 @@ export default function CustomerBillingAddress() {
                 },
                 {
                     name: "country",
-                    value: userInfo.shipping_address.country,
+                    value: userInfo.shippingAddress.country,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -120,8 +120,8 @@ export default function CustomerBillingAddress() {
                     },
                 },
                 {
-                    name: "street_address",
-                    value: userInfo.shipping_address.street_address,
+                    name: "streetAddress",
+                    value: userInfo.shippingAddress.streetAddress,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -130,7 +130,7 @@ export default function CustomerBillingAddress() {
                 },
                 {
                     name: "city",
-                    value: userInfo.shipping_address.city,
+                    value: userInfo.shippingAddress.city,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -141,8 +141,8 @@ export default function CustomerBillingAddress() {
                     },
                 },
                 {
-                    name: "postal_code",
-                    value: userInfo.shipping_address.postal_code,
+                    name: "postalCode",
+                    value: userInfo.shippingAddress.postalCode,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -150,21 +150,21 @@ export default function CustomerBillingAddress() {
                     },
                 },
                 {
-                    name: "phone_number",
-                    value: userInfo.shipping_address.phone_number,
+                    name: "phoneNumber",
+                    value: userInfo.shippingAddress.phoneNumber,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
                         },
                         isValidMobilePhone: {
                             msg: "Sorry, Invalid Mobile Phone !!",
-                            countryCode: getCountryCode(userInfo.shipping_address.country),
+                            countryCode: getCountryCode(userInfo.shippingAddress.country),
                         },
                     },
                 },
                 {
                     name: "email",
-                    value: userInfo.shipping_address.email,
+                    value: userInfo.shippingAddress.email,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -179,7 +179,7 @@ export default function CustomerBillingAddress() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
                 const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
-                    shipping_address: userInfo.shipping_address,
+                    shippingAddress: userInfo.shippingAddress,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
@@ -238,28 +238,28 @@ export default function CustomerBillingAddress() {
                                                 <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.first_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.firstName ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New First Name Here")}
-                                                    defaultValue={userInfo.shipping_address.first_name}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, first_name: e.target.value.trim() } })}
+                                                    defaultValue={userInfo.shippingAddress.firstName}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, firstName: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.first_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.firstName && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.first_name)}</span>
+                                                    <span>{t(formValidationErrors.firstName)}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
                                                 <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.last_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.lastName ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New Last Name Here")}
-                                                    defaultValue={userInfo.shipping_address.last_name}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, last_name: e.target.value.trim() } })}
+                                                    defaultValue={userInfo.shippingAddress.lastName}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, lastName: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.last_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.lastName && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.last_name)}</span>
+                                                    <span>{t(formValidationErrors.lastName)}</span>
                                                 </p>}
                                             </div>
                                         </div>
@@ -270,8 +270,8 @@ export default function CustomerBillingAddress() {
                                             type="text"
                                             className="p-2"
                                             placeholder={t("Please Enter New Company Name Here")}
-                                            defaultValue={userInfo.shipping_address.company_name}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, company_name: e.target.value.trim() } })}
+                                            defaultValue={userInfo.shippingAddress.companyName}
+                                            onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, companyName: e.target.value.trim() } })}
                                         />
                                     </section>
                                     <section className="country mb-4">
@@ -282,10 +282,10 @@ export default function CustomerBillingAddress() {
                                                 const countryCode = getCountryCode(e.target.value);
                                                 setUserInfo({
                                                     ...userInfo,
-                                                    shipping_address: {
-                                                        ...userInfo.shipping_address,
+                                                    shippingAddress: {
+                                                        ...userInfo.shippingAddress,
                                                         country: e.target.value,
-                                                        phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shipping_address.phone_number, countryCode),
+                                                        phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, countryCode),
                                                     },
                                                 })
                                             }}
@@ -293,7 +293,7 @@ export default function CustomerBillingAddress() {
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
                                         >
-                                            <option value={countries[getCountryCode(userInfo.shipping_address.country)].name} hidden>{userInfo.shipping_address.country}</option>
+                                            <option value={countries[getCountryCode(userInfo.shippingAddress.country)].name} hidden>{userInfo.shippingAddress.country}</option>
                                             {countryList.map((country) => (
                                                 <option key={country.name} value={country.name}>
                                                     {country.name}
@@ -309,14 +309,14 @@ export default function CustomerBillingAddress() {
                                         <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.street_address ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.streetAddress ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder={t("Please Enter New Street Address / Neighborhood Here")}
-                                            defaultValue={userInfo.shipping_address.street_address}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, street_address: e.target.value.trim() } })}
+                                            defaultValue={userInfo.shippingAddress.streetAddress}
+                                            onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, streetAddress: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.street_address && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.streetAddress && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.street_address)}</span>
+                                            <span>{t(formValidationErrors.streetAddress)}</span>
                                         </p>}
                                     </section>
                                     <section className="apartment-number mb-4">
@@ -325,8 +325,8 @@ export default function CustomerBillingAddress() {
                                             type="number"
                                             className="p-2"
                                             placeholder={t("Please Enter New Apartment Number, Ward, Unit, Etc Here")}
-                                            defaultValue={userInfo.shipping_address.apartment_number.toString()}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, apartment_number: e.target.value } })}
+                                            defaultValue={userInfo.shippingAddress.apartmentNumber.toString()}
+                                            onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } })}
                                         />
                                     </section>
                                     <section className="city-number mb-4">
@@ -335,8 +335,8 @@ export default function CustomerBillingAddress() {
                                             type="text"
                                             className={`p-2 ${formValidationErrors.city ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder={t("Please Enter New City Name Here")}
-                                            defaultValue={userInfo.shipping_address.city}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, city: e.target.value.trim() } })}
+                                            defaultValue={userInfo.shippingAddress.city}
+                                            onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, city: e.target.value.trim() } })}
                                         />
                                         {formValidationErrors.city && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -347,14 +347,14 @@ export default function CustomerBillingAddress() {
                                         <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="number"
-                                            className={`p-2 ${formValidationErrors.postal_code ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.postalCode ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder={t("Please Enter New Postal Code / Zip Here")}
-                                            defaultValue={userInfo.shipping_address.postal_code.toString()}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, postal_code: e.target.value } })}
+                                            defaultValue={userInfo.shippingAddress.postalCode.toString()}
+                                            onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, postalCode: e.target.value } })}
                                         />
-                                        {formValidationErrors.postal_code && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.postalCode && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.postal_code)}</span>
+                                            <span>{t(formValidationErrors.postalCode)}</span>
                                         </p>}
                                     </section>
                                     <section className="phone-number mb-4">
@@ -365,22 +365,22 @@ export default function CustomerBillingAddress() {
                                                     type="text"
                                                     className="p-2 text-center"
                                                     disabled
-                                                    value={"00" + countries[getCountryCode(userInfo.shipping_address.country)].phone}
+                                                    value={"00" + countries[getCountryCode(userInfo.shippingAddress.country)].phone}
                                                 />
                                             </div>
                                             <div className="col-md-10">
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.phone_number ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.phoneNumber ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New Phone Number Here")}
-                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shipping_address.phone_number, getCountryCode(userInfo.shipping_address.country)) : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, phone_number: "00" + countries[getCountryCode(userInfo.shipping_address.country)].phone + e.target.value } })}
+                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, getCountryCode(userInfo.shippingAddress.country)) : ""}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, phoneNumber: "00" + countries[getCountryCode(userInfo.shippingAddress.country)].phone + e.target.value } })}
                                                 />
                                             </div>
                                         </div>
-                                        {formValidationErrors.phone_number && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.phoneNumber && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.phone_number)}</span>
+                                            <span>{t(formValidationErrors.phoneNumber)}</span>
                                         </p>}
                                     </section>
                                     <section className="email mb-4">
@@ -389,8 +389,8 @@ export default function CustomerBillingAddress() {
                                             type="text"
                                             className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder={t("Please Enter New Email Here")}
-                                            defaultValue={userInfo.shipping_address.email}
-                                            onChange={(e) => setUserInfo({ ...userInfo, shipping_address: { ...userInfo.shipping_address, email: e.target.value.trim() } })}
+                                            defaultValue={userInfo.shippingAddress.email}
+                                            onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, email: e.target.value.trim() } })}
                                         />
                                         {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>

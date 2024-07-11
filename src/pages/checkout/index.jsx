@@ -41,7 +41,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         totalPriceAfterDiscount: 0,
     });
 
-    const [userInfo, setUserInfo] = useState("");
+    const [userInfo, setUserInfo] = useState({});
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
@@ -124,32 +124,32 @@ export default function Checkout({ countryAsProperty, storeId }) {
             } else {
                 const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
                 if (userAddresses) {
-                    setUserInfo({ billing_address: userAddresses.billing_address, shipping_address: userAddresses.shipping_address });
+                    setUserInfo({ billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress });
                     setIsSavePaymentInfo(true);
                 } else {
                     setUserInfo({
-                        billing_address: {
-                            first_name: "",
-                            last_name: "",
-                            company_name: "",
+                        billingAddress: {
+                            firstName: "",
+                            lastName: "",
+                            companyName: "",
                             country: "Kuwait",
-                            street_address: "",
-                            apartment_number: 1,
+                            streetAddress: "",
+                            apartmentNumber: 1,
                             city: "",
-                            postal_code: 1,
-                            phone_number: "0096560048235",
+                            postalCode: 1,
+                            phoneNumber: "0096560048235",
                             email: "",
                         },
                         shipping_address: {
-                            first_name: "",
-                            last_name: "",
-                            company_name: "",
+                            firstName: "",
+                            lastName: "",
+                            companyName: "",
                             country: "Kuwait",
-                            street_address: "",
-                            apartment_number: 1,
+                            streetAddress: "",
+                            apartmentNumber: 1,
                             city: "",
-                            postal_code: 1,
-                            phone_number: "0096560048235",
+                            postalCode: 1,
+                            phoneNumber: "0096560048235",
                             email: "",
                         },
                     });
@@ -206,7 +206,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         const errorsObject = inputValuesValidation([
             {
                 name: "first_name_for_billing_address",
-                value: userInfo ? userInfo.billing_address.first_name : "",
+                value: userInfo ? userInfo.billingAddress.first_name : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, First Name Field Can't Be Empty !!",
@@ -215,7 +215,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             },
             {
                 name: "last_name_for_billing_address",
-                value: userInfo ? userInfo.billing_address.last_name : "",
+                value: userInfo ? userInfo.billingAddress.last_name : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -224,7 +224,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             },
             {
                 name: "country_for_billing_address",
-                value: userInfo ? userInfo.billing_address.country : "",
+                value: userInfo ? userInfo.billingAddress.country : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -233,7 +233,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             },
             {
                 name: "street_address_for_billing_address",
-                value: userInfo ? userInfo.billing_address.street_address : "",
+                value: userInfo ? userInfo.billingAddress.street_address : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -242,7 +242,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             },
             {
                 name: "city_for_billing_address",
-                value: userInfo ? userInfo.billing_address.city : "",
+                value: userInfo ? userInfo.billingAddress.city : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -251,7 +251,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             },
             {
                 name: "postal_code_for_billing_address",
-                value: userInfo ? userInfo.billing_address.postal_code : "",
+                value: userInfo ? userInfo.billingAddress.postal_code : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
@@ -260,20 +260,20 @@ export default function Checkout({ countryAsProperty, storeId }) {
             },
             {
                 name: "phone_number_for_billing_address",
-                value: userInfo.billing_address.phone_number,
+                value: userInfo.billingAddress.phone_number,
                 rules: {
                     isRequired: {
                         msg: "Sorry, Last Name Field Can't Be Empty !!",
                     },
                     isValidMobilePhone: {
                         msg: "Sorry, Invalid Mobile Phone !!",
-                        countryCode: getCountryCode(userInfo.billing_address.country),
+                        countryCode: getCountryCode(userInfo.billingAddress.country),
                     },
                 },
             },
             {
                 name: "email_for_billing_address",
-                value: userInfo ? userInfo.billing_address.email : "",
+                value: userInfo ? userInfo.billingAddress.email : "",
                 rules: {
                     isRequired: {
                         msg: "Sorry, Email Field Can't Be Empty !!",
@@ -367,29 +367,29 @@ export default function Checkout({ countryAsProperty, storeId }) {
         if (Object.keys(errorsObject).length == 0) {
             if (isSavePaymentInfo) {
                 localStorage.setItem("asfour-store-user-addresses", JSON.stringify({
-                    billing_address: {
-                        first_name: userInfo ? userInfo.billing_address.first_name : "",
-                        last_name: userInfo ? userInfo.billing_address.last_name : "",
-                        company_name: userInfo ? userInfo.billing_address.company_name : "",
-                        country: userInfo.billing_address.country,
-                        street_address: userInfo ? userInfo.billing_address.street_address : "",
-                        apartment_number: userInfo.billing_address.apartment_number,
-                        city: userInfo ? userInfo.billing_address.city : "",
-                        postal_code: userInfo.billing_address.postal_code,
-                        phone_number: userInfo.billing_address.phone_number,
-                        email: userInfo ? userInfo.billing_address.email : "",
+                    billingAddress: {
+                        first_name: userInfo ? userInfo.billingAddress.first_name : "",
+                        last_name: userInfo ? userInfo.billingAddress.last_name : "",
+                        company_name: userInfo ? userInfo.billingAddress.company_name : "",
+                        country: userInfo.billingAddress.country,
+                        street_address: userInfo ? userInfo.billingAddress.street_address : "",
+                        apartment_number: userInfo.billingAddress.apartment_number,
+                        city: userInfo ? userInfo.billingAddress.city : "",
+                        postal_code: userInfo.billingAddress.postal_code,
+                        phone_number: userInfo.billingAddress.phone_number,
+                        email: userInfo ? userInfo.billingAddress.email : "",
                     },
                     shipping_address: {
-                        first_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
-                        last_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
-                        company_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
-                        country: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
-                        street_address: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
-                        apartment_number: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
-                        city: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
-                        postal_code: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
-                        phone_number: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
-                        email: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
+                        first_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billingAddress.first_name,
+                        last_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billingAddress.last_name,
+                        company_name: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billingAddress.company_name,
+                        country: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billingAddress.country,
+                        street_address: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billingAddress.street_address,
+                        apartment_number: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billingAddress.apartment_number,
+                        city: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billingAddress.city,
+                        postal_code: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billingAddress.postal_code,
+                        phone_number: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billingAddress.phone_number,
+                        email: userInfo && isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billingAddress.email,
                     },
                 }));
             } else {
@@ -420,29 +420,29 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 customerId: userInfo ? userInfo._id : "",
                 order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
                 checkout_status: "checkout_successful",
-                billing_address: {
-                    first_name: userInfo.billing_address.first_name,
-                    last_name: userInfo.billing_address.last_name,
-                    company_name: userInfo.billing_address.company_name,
-                    country: userInfo.billing_address.country,
-                    street_address: userInfo.billing_address.street_address,
-                    apartment_number: userInfo.billing_address.apartment_number,
-                    city: userInfo.billing_address.city,
-                    postal_code: userInfo.billing_address.postal_code,
-                    phone: userInfo.billing_address.phone_number,
-                    email: userInfo.billing_address.email,
+                billingAddress: {
+                    first_name: userInfo.billingAddress.first_name,
+                    last_name: userInfo.billingAddress.last_name,
+                    company_name: userInfo.billingAddress.company_name,
+                    country: userInfo.billingAddress.country,
+                    street_address: userInfo.billingAddress.street_address,
+                    apartment_number: userInfo.billingAddress.apartment_number,
+                    city: userInfo.billingAddress.city,
+                    postal_code: userInfo.billingAddress.postal_code,
+                    phone: userInfo.billingAddress.phone_number,
+                    email: userInfo.billingAddress.email,
                 },
                 shipping_address: {
-                    first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
-                    last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
-                    company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
-                    country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
-                    street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
-                    apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
-                    city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
-                    postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
-                    phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
-                    email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
+                    first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billingAddress.first_name,
+                    last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billingAddress.last_name,
+                    company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billingAddress.company_name,
+                    country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billingAddress.country,
+                    street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billingAddress.street_address,
+                    apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billingAddress.apartment_number,
+                    city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billingAddress.city,
+                    postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billingAddress.postal_code,
+                    phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billingAddress.phone_number,
+                    email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billingAddress.email,
                 },
                 order_products: allProductsData.map((product) => ({
                     productId: product._id,
@@ -472,31 +472,31 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 // storeId,
                 customerId: userInfo ? userInfo._id : "",
                 // order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
-                billing_address: {
-                    first_name: userInfo.billing_address.first_name,
-                    last_name: userInfo.billing_address.last_name,
-                    company_name: userInfo.billing_address.company_name,
-                    country: userInfo.billing_address.country,
-                    street_address: userInfo.billing_address.street_address,
-                    apartment_number: userInfo.billing_address.apartment_number,
-                    city: userInfo.billing_address.city,
-                    postal_code: userInfo.billing_address.postal_code,
-                    phone: userInfo.billing_address.phone_number,
-                    email: userInfo.billing_address.email,
+                billingAddress: {
+                    first_name: userInfo.billingAddress.first_name,
+                    last_name: userInfo.billingAddress.last_name,
+                    company_name: userInfo.billingAddress.company_name,
+                    country: userInfo.billingAddress.country,
+                    street_address: userInfo.billingAddress.street_address,
+                    apartment_number: userInfo.billingAddress.apartment_number,
+                    city: userInfo.billingAddress.city,
+                    postal_code: userInfo.billingAddress.postal_code,
+                    phone: userInfo.billingAddress.phone_number,
+                    email: userInfo.billingAddress.email,
                 },
                 shipping_address: {
-                    first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billing_address.first_name,
-                    last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billing_address.last_name,
-                    company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billing_address.company_name,
-                    country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billing_address.country,
-                    street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billing_address.street_address,
-                    apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billing_address.apartment_number,
-                    city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billing_address.city,
-                    postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billing_address.postal_code,
-                    phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billing_address.phone_number,
-                    email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billing_address.email,
+                    first_name: isShippingToOtherAddress ? userInfo.shipping_address.first_name : userInfo.billingAddress.first_name,
+                    last_name: isShippingToOtherAddress ? userInfo.shipping_address.last_name : userInfo.billingAddress.last_name,
+                    company_name: isShippingToOtherAddress ? userInfo.shipping_address.company_name : userInfo.billingAddress.company_name,
+                    country: isShippingToOtherAddress ? userInfo.shipping_address.country : userInfo.billingAddress.country,
+                    street_address: isShippingToOtherAddress ? userInfo.shipping_address.street_address : userInfo.billingAddress.street_address,
+                    apartment_number: isShippingToOtherAddress ? userInfo.shipping_address.apartment_number : userInfo.billingAddress.apartment_number,
+                    city: isShippingToOtherAddress ? userInfo.shipping_address.city : userInfo.billingAddress.city,
+                    postal_code: isShippingToOtherAddress ? userInfo.shipping_address.postal_code : userInfo.billingAddress.postal_code,
+                    phone: isShippingToOtherAddress ? userInfo.shipping_address.phone_number : userInfo.billingAddress.phone_number,
+                    email: isShippingToOtherAddress ? userInfo.shipping_address.email : userInfo.billingAddress.email,
                 },
-                order_products: allProductsData.map((product) => ({
+                products: allProductsData.map((product) => ({
                     productId: product._id,
                     // name: product.name,
                     // unit_price: product.price,
@@ -548,8 +548,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className={`p-2 ${formValidationErrors.first_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter First Name Here")}
-                                                        defaultValue={userInfo ? userInfo.billing_address.first_name : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, first_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
+                                                        defaultValue={userInfo ? userInfo.billingAddress.first_name : ""}
+                                                        onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, first_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                     />
                                                     {formValidationErrors.first_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -562,8 +562,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className={`p-2 ${formValidationErrors.last_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Last Name Here")}
-                                                        defaultValue={userInfo ? userInfo.billing_address.last_name : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, last_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
+                                                        defaultValue={userInfo ? userInfo.billingAddress.last_name : ""}
+                                                        onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, last_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                     />
                                                     {formValidationErrors.last_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -578,8 +578,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="text"
                                                 className="p-2"
                                                 placeholder={t("Please Enter Company Name Here")}
-                                                defaultValue={userInfo ? userInfo.billing_address.company_name : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, company_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.company_name : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, company_name: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                         </section>
                                         <section className="country mb-4">
@@ -590,10 +590,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     const countryCode = getCountryCode(e.target.value);
                                                     setUserInfo({
                                                         ...userInfo,
-                                                        billing_address: {
-                                                            ...userInfo.billing_address,
+                                                        billingAddress: {
+                                                            ...userInfo.billingAddress,
                                                             country: e.target.value,
-                                                            phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billing_address.phone_number, countryCode),
+                                                            phone_number: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billingAddress.phone_number, countryCode),
                                                         },
                                                     });
                                                     setIsDisplayPaypalPaymentButtons(false);
@@ -602,7 +602,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     backgroundColor: "var(--main-color-one)",
                                                 }}
                                             >
-                                                <option value={countries[getCountryCode(userInfo.billing_address.country)].name} hidden>{userInfo.billing_address.country}</option>
+                                                <option value={countries[getCountryCode(userInfo.billingAddress.country)].name} hidden>{userInfo.billingAddress.country}</option>
                                                 {countryList.map((country) => (
                                                     <option key={country.name} value={country.name}>
                                                         {country.name}
@@ -620,8 +620,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="text"
                                                 className={`p-2 ${formValidationErrors.street_address_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Street Address / Neighborhood Here")}
-                                                defaultValue={userInfo ? userInfo.billing_address.street_address : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, street_address: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.street_address : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, street_address: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                             {formValidationErrors.street_address_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -634,8 +634,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="number"
                                                 className="p-2"
                                                 placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
-                                                defaultValue={userInfo ? userInfo.billing_address.apartment_number : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.apartment_number : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartment_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                         </section>
                                         <section className="city-number mb-4">
@@ -644,8 +644,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="text"
                                                 className={`p-2 ${formValidationErrors.city_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter City Name Here")}
-                                                defaultValue={userInfo ? userInfo.billing_address.city : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.city : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                             {formValidationErrors.city_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -658,8 +658,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="number"
                                                 className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Postal Code / Zip Here")}
-                                                defaultValue={userInfo ? userInfo.billing_address.postal_code : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, postal_code: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.postal_code : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, postal_code: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                             {formValidationErrors.postal_code_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
@@ -674,7 +674,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className="p-2 text-center"
                                                         disabled
-                                                        value={"00" + countries[getCountryCode(userInfo.billing_address.country)].phone}
+                                                        value={"00" + countries[getCountryCode(userInfo.billingAddress.country)].phone}
                                                     />
                                                 </div>
                                                 <div className="col-md-10">
@@ -682,8 +682,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Phone Number")}
-                                                        defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billing_address.phone_number, getCountryCode(userInfo.billing_address.country)) : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                        defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billingAddress.phone_number, getCountryCode(userInfo.billingAddress.country)) : ""}
+                                                        onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, phone_number: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                     />
                                                 </div>
                                             </div>
@@ -698,8 +698,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 type="text"
                                                 className={`p-2 ${formValidationErrors.email_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Email Here")}
-                                                defaultValue={userInfo ? userInfo.billing_address.email : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billing_address: { ...userInfo.billing_address, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                defaultValue={userInfo ? userInfo.billingAddress.email : ""}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
                                             {formValidationErrors.email_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>

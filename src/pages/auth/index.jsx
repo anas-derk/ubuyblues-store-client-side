@@ -218,7 +218,7 @@ export default function UserAuth() {
         try {
             setIsLoginingStatus(true);
             let result = decode(credentialResponse.credential);
-            const res = await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&first_name=${result.given_name}&last_name=${result.family_name}&preview_name=${result.name}`);
+            const res = await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&firstName=${result.given_name}&lastName=${result.family_name}&previewName=${result.name}`);
             result = res.data;
             if (result.error) {
                 setIsLoginingStatus(false);

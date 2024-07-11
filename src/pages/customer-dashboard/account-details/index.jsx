@@ -22,9 +22,9 @@ export default function CustomerAccountDetails() {
     const [userInfo, setUserInfo] = useState({
         email: "",
         password: "",
-        first_name: "",
-        last_name: "",
-        preview_name: "",
+        firstName: "",
+        lastName: "",
+        previewName: "",
     });
 
     const [currentPassword, setCurrentPassword] = useState("");
@@ -92,8 +92,8 @@ export default function CustomerAccountDetails() {
             setFormValidationErrors({});
             const errorsObject = inputValuesValidation([
                 {
-                    name: "first_name",
-                    value: userInfo.first_name,
+                    name: "firstName",
+                    value: userInfo.firstName,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -104,8 +104,8 @@ export default function CustomerAccountDetails() {
                     },
                 },
                 {
-                    name: "last_name",
-                    value: userInfo.last_name,
+                    name: "lastName",
+                    value: userInfo.lastName,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -116,8 +116,8 @@ export default function CustomerAccountDetails() {
                     },
                 },
                 {
-                    name: "preview_name",
-                    value: userInfo.preview_name,
+                    name: "previewName",
+                    value: userInfo.previewName,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -188,9 +188,9 @@ export default function CustomerAccountDetails() {
             if (Object.keys(errorsObject).length == 0) {
                 let newUserInfo = {
                     email: userInfo.email,
-                    first_name: userInfo.first_name,
-                    last_name: userInfo.last_name,
-                    preview_name: userInfo.preview_name,
+                    firstName: userInfo.firstName,
+                    lastName: userInfo.lastName,
+                    previewName: userInfo.previewName,
                 };
                 if (currentPassword && newPassword && confirmNewPassword) {
                     newUserInfo = { ...newUserInfo, password: currentPassword, newPassword: newPassword };
@@ -254,28 +254,28 @@ export default function CustomerAccountDetails() {
                                                 <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.first_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.firstName ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New First Name Here")}
-                                                    defaultValue={userInfo.first_name}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, first_name: e.target.value.trim() })}
+                                                    defaultValue={userInfo.firstName}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value.trim() })}
                                                 />
-                                                {formValidationErrors.first_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.firstName && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.first_name)}</span>
+                                                    <span>{t(formValidationErrors.firstName)}</span>
                                                 </p>}
                                             </div>
                                             <div className="col-md-6">
                                                 <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
-                                                    className={`p-2 ${formValidationErrors.last_name ? "border-3 border-danger mb-3" : ""}`}
+                                                    className={`p-2 ${formValidationErrors.lastName ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New Last Name Here")}
-                                                    defaultValue={userInfo.last_name}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, last_name: e.target.value.trim() })}
+                                                    defaultValue={userInfo.lastName}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value.trim() })}
                                                 />
-                                                {formValidationErrors.last_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                                {formValidationErrors.lastName && <p className="bg-danger p-2 form-field-error-box m-0">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.last_name)}</span>
+                                                    <span>{t(formValidationErrors.lastName)}</span>
                                                 </p>}
                                             </div>
                                         </div>
@@ -284,14 +284,14 @@ export default function CustomerAccountDetails() {
                                         <h6>{t("Preview Name")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
-                                            className={`p-2 ${formValidationErrors.preview_name ? "border-3 border-danger mb-3" : ""}`}
+                                            className={`p-2 ${formValidationErrors.previewName ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder={t("Please Enter New Preview Name Here")}
-                                            defaultValue={userInfo.preview_name}
-                                            onChange={(e) => setUserInfo({ ...userInfo, preview_name: e.target.value.trim() })}
+                                            defaultValue={userInfo.previewName}
+                                            onChange={(e) => setUserInfo({ ...userInfo, previewName: e.target.value.trim() })}
                                         />
-                                        {formValidationErrors.preview_name && <p className="bg-danger p-2 form-field-error-box m-0">
+                                        {formValidationErrors.previewName && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.preview_name)}</span>
+                                            <span>{t(formValidationErrors.previewName)}</span>
                                         </p>}
                                         <h6 className="note mt-2">{t("This way your name will be displayed in the accounts section and in reviews")}</h6>
                                     </section>
