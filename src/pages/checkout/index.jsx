@@ -59,6 +59,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [isWaitCreateNewOrder, setIsWaitCreateNewOrder] = useState(false);
 
+    const [errorMsg, setErrorMsg] = useState("");
+
     const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
 
     const countryList = Object.values(countries);
@@ -469,16 +471,34 @@ export default function Checkout({ countryAsProperty, storeId }) {
             setIsWaitCreateNewOrder(true);
             const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating());
             const result = res.data;
+            console.log(result)
             if (!result.error) {
                 if (paymentName === "tap") {
                     await router.push(result.data.transaction.url);
                 } else if (paymentMethod === "pilisio") {
                     await router.push(result.data.data.invoice_url);
                 }
+            } else {
+                setIsWaitCreateNewOrder(false);
+                setErrorMsg(result.msg);
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 2000);
             }
         }
         catch (err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                await router.replace("/auth");
+                return;
+            }
             setIsWaitCreateNewOrder(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
         }
     }
 
@@ -979,34 +999,28 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 </div>
                                             </div>
                                             {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button
-                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={handleSelectPaypalPayment}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}
-                                            {paymentMethod === "tap" && !isWaitCreateNewOrder && <button
-                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                            {paymentMethod === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={() => createPaymentOrder("tap")}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}
                                             {isWaitCreateNewOrder && <button
-                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 disabled
                                             >
                                                 {t("Please Waiting ...")}
                                             </button>}
-                                            {paymentMethod === "pilisio" && !isWaitCreateNewOrder && <button
-                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={() => createPaymentOrder("pilisio")}
-                                            >
-                                                {t("Confirm Request")}
-                                            </button>}
-                                            {isWaitCreateNewOrder && <button
-                                                className="checkout-link p-2 w-50 mx-auto d-block text-center fw-bold mt-3"
+                                            {errorMsg && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
                                                 disabled
                                             >
-                                                {t("Please Waiting ...")}
+                                                {t(errorMsg)}
                                             </button>}
                                         </section>
                                         {/* End Payement Methods Section */}
