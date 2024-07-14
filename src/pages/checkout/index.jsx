@@ -480,7 +480,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const createPaymentOrder = async (paymentName) => {
         try {
             setIsWaitCreateNewOrder(true);
-            console.log(getOrderDetailsForCreating())
             const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating());
             const result = res.data;
             if (!result.error) {
