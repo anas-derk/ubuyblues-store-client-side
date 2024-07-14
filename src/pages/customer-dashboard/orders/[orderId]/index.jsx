@@ -122,7 +122,7 @@ export default function OrderDetails() {
                                                     </td>
                                                     <td>
                                                         <img
-                                                            src={`${process.env.BASE_API_URL}/${orderProduct.image_path}`}
+                                                            src={`${process.env.BASE_API_URL}/${orderProduct.imagePath}`}
                                                             alt="product Image !!"
                                                             width="100"
                                                             height="100"
@@ -161,7 +161,7 @@ export default function OrderDetails() {
                                                             <th>{t("Image")}</th>
                                                             <td>
                                                                 <img
-                                                                    src={`${process.env.BASE_API_URL}/${orderProduct.image_path}`}
+                                                                    src={`${process.env.BASE_API_URL}/${orderProduct.imagePath}`}
                                                                     alt="product Image !!"
                                                                     width="100"
                                                                     height="100"
