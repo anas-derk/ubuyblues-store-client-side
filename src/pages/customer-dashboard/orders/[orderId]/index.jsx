@@ -105,7 +105,7 @@ export default function OrderDetails() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {orderDetails.order_products.map((orderProduct) => (
+                                            {orderDetails.products.map((orderProduct) => (
                                                 <tr key={orderProduct._id}>
                                                     <td>{orderProduct._id}</td>
                                                     <td>
@@ -132,7 +132,7 @@ export default function OrderDetails() {
                                             ))}
                                         </tbody>
                                     </table> : <div className="order-products-for-user text-center">
-                                        {orderDetails.order_products.map((orderProduct, productIndex) => (
+                                        {orderDetails.products.map((orderProduct, productIndex) => (
                                             <div className="order-product-box" key={orderProduct._id}>
                                                 <h4 className="mb-3 text-white">{t("Product Details")} # {productIndex + 1}</h4>
                                                 <table className="order-data-table customer-table mb-5 w-100">
