@@ -92,7 +92,7 @@ export default function OrderDetails() {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {orderDetails.checkout_status === "checkout_successful" ? <div className="order-details-box p-3 data-box">
+                                {orderDetails?.checkoutStatus === "Checkout Successfull" ? <div className="order-details-box p-3 data-box">
                                     {windowInnerWidth > 991 ? <table className="order-data-table customer-table mb-5 w-100">
                                         <thead>
                                             <tr>
@@ -115,10 +115,10 @@ export default function OrderDetails() {
                                                         {orderProduct.name}
                                                     </td>
                                                     <td>
-                                                        {orderProduct.unit_price}
+                                                        {orderProduct.unitPrice}
                                                     </td>
                                                     <td>
-                                                        {orderProduct.total_amount}
+                                                        {orderProduct.totalAmount}
                                                     </td>
                                                     <td>
                                                         <img
@@ -151,11 +151,11 @@ export default function OrderDetails() {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{orderProduct.unit_price}</td>
+                                                            <td>{orderProduct.unitPrice}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Total")}</th>
-                                                            <td>{orderProduct.total_amount}</td>
+                                                            <td>{orderProduct.totalAmount}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Image")}</th>
@@ -179,28 +179,28 @@ export default function OrderDetails() {
                                                 <div className="billing-address-box p-3">
                                                     <h6 className="fw-bold">{t("Billing Address")}</h6>
                                                     <hr />
-                                                    <p className="city fw-bold info">{t("City")}: {orderDetails.billing_address.city}</p>
-                                                    <p className="email fw-bold info">{t("Email")}: {orderDetails.billing_address.email}</p>
-                                                    <p className="name fw-bold info">{t("Name")}: {orderDetails.billing_address.first_name}</p>
-                                                    <p className="family-name fw-bold info">{t("Last Name")}: {orderDetails.billing_address.last_name}</p>
-                                                    <p className="phone fw-bold info">{t("Phone Number")}: {orderDetails.billing_address.phone}</p>
-                                                    <p className="postal-code fw-bold info">{t("Postal Code")}: {orderDetails.billing_address.postal_code}</p>
-                                                    <p className="street-address fw-bold info">{t("Street Address")}: {orderDetails.billing_address.street_address}</p>
-                                                    <p className="apartment-number fw-bold info">{t("Apartment Number")}: {orderDetails.billing_address.apartment_number}</p>
+                                                    <p className="city fw-bold info">{t("City")}: {orderDetails.billingAddress.city}</p>
+                                                    <p className="email fw-bold info">{t("Email")}: {orderDetails.billingAddress.email}</p>
+                                                    <p className="name fw-bold info">{t("Name")}: {orderDetails.billingAddress.firstName}</p>
+                                                    <p className="family-name fw-bold info">{t("Last Name")}: {orderDetails.billingAddress.lastName}</p>
+                                                    <p className="phone fw-bold info">{t("Phone Number")}: {orderDetails.billingAddress.phone}</p>
+                                                    <p className="postal-code fw-bold info">{t("Postal Code")}: {orderDetails.billingAddress.postalCode}</p>
+                                                    <p className="street-address fw-bold info">{t("Street Address")}: {orderDetails.billingAddress.streetAddress}</p>
+                                                    <p className="apartment-number fw-bold info">{t("Apartment Number")}: {orderDetails.billingAddress.apartmentNumber}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 border border-1 border-white">
                                                 <div className="shipping-address-box p-3">
                                                     <h6 className="fw-bold">{t("Shipping Address")}</h6>
                                                     <hr />
-                                                    <p className="city fw-bold info">{t("City")}: {orderDetails.shipping_address.city}</p>
-                                                    <p className="email fw-bold info">{t("Email")}: {orderDetails.shipping_address.email}</p>
-                                                    <p className="name fw-bold info">{t("Name")}: {orderDetails.shipping_address.first_name}</p>
-                                                    <p className="family-name fw-bold info">{t("Last Name")}: {orderDetails.shipping_address.last_name}</p>
-                                                    <p className="phone fw-bold info">{t("Phone Number")}: {orderDetails.shipping_address.phone}</p>
-                                                    <p className="postal-code fw-bold info">{t("Postal Code")}: {orderDetails.shipping_address.postal_code}</p>
-                                                    <p className="street-address fw-bold info">{t("Street Address")}: {orderDetails.shipping_address.street_address}</p>
-                                                    <p className="apartment-number fw-bold info">{t("Apartment Number")}: {orderDetails.shipping_address.apartment_number}</p>
+                                                    <p className="city fw-bold info">{t("City")}: {orderDetails.shippingAddress.city}</p>
+                                                    <p className="email fw-bold info">{t("Email")}: {orderDetails.shippingAddress.email}</p>
+                                                    <p className="name fw-bold info">{t("Name")}: {orderDetails.shippingAddress.firstName}</p>
+                                                    <p className="family-name fw-bold info">{t("Last Name")}: {orderDetails.shippingAddress.lastName}</p>
+                                                    <p className="phone fw-bold info">{t("Phone Number")}: {orderDetails.shippingAddress.phone}</p>
+                                                    <p className="postal-code fw-bold info">{t("Postal Code")}: {orderDetails.shippingAddress.postalCode}</p>
+                                                    <p className="street-address fw-bold info">{t("Street Address")}: {orderDetails.shippingAddress.streetAddress}</p>
+                                                    <p className="apartment-number fw-bold info">{t("Apartment Number")}: {orderDetails.shippingAddress.apartmentNumber}</p>
                                                 </div>
                                             </div>
                                         </div>
