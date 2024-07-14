@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo } from "../../../../public/global_functions/popular";
+import { getDateFormated, getUserInfo } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 
@@ -135,15 +135,6 @@ export default function CustomerOrders({ countryAsProperty }) {
         catch (err) {
             throw Error(err);
         }
-    }
-
-    const getDateFormated = (orderedDate) => {
-        let orderedDateInDateFormat = new Date(orderedDate);
-        const year = orderedDateInDateFormat.getFullYear();
-        const month = orderedDateInDateFormat.getMonth() + 1;
-        const day = orderedDateInDateFormat.getDate();
-        orderedDateInDateFormat = `${year} / ${month} / ${day}`;
-        return orderedDateInDateFormat;
     }
 
     const getPreviousPage = async () => {
@@ -274,14 +265,14 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                 {allOrdersInsideThePage.map((order) => (
                                                     <tr key={order._id}>
                                                         <td>{order.orderNumber}</td>
-                                                        <td>{t(order.checkout_status)}</td>
+                                                        <td>{t(order.checkoutStatus)}</td>
                                                         <td className="fw-bold">
                                                             {t(order.status)}
                                                         </td>
                                                         <td>
-                                                            {order.order_amount * usdPriceAgainstCurrency} {t(currencyNameByCountry)}
+                                                            {order.orderAmount * usdPriceAgainstCurrency} {t(currencyNameByCountry)}
                                                         </td>
-                                                        <td>{getDateFormated(order.added_date)}</td>
+                                                        <td>{getDateFormated(order.addedDate)}</td>
                                                         <td>
                                                             <Link
                                                                 href={`/customer-dashboard/orders/${order._id}`}
@@ -310,7 +301,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                             <tr>
                                                                 <th>{t("Checkout Status")}</th>
                                                                 <td>
-                                                                    {t(order.checkout_status)}
+                                                                    {t(order.checkoutStatus)}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -322,13 +313,13 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                             <tr>
                                                                 <th>{t("Order Total Amount")}</th>
                                                                 <td>
-                                                                    {order.order_amount}
+                                                                    {order.orderAmount}
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <th>{t("Added Date")}</th>
                                                                 <td>
-                                                                    {getDateFormated(order.added_date)}
+                                                                    {getDateFormated(order.addedDate)}
                                                                 </td>
                                                             </tr>
                                                             <tr>

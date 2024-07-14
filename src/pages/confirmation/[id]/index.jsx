@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { getStoreDetails, getUserInfo } from "../../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
@@ -83,8 +84,8 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 let result = res.data;
                 if (!res.error) {
                     setOrderDetails(result);
-                    const tempTotalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(result.order_products);
-                    const tempTotalDiscount = calcTotalOrderDiscount(result.order_products);
+                    const tempTotalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(result.products);
+                    const tempTotalDiscount = calcTotalOrderDiscount(result.products);
                     setPricesDetailsSummary({
                         totalPriceBeforeDiscount: tempTotalPriceBeforeDiscount,
                         totalDiscount: tempTotalDiscount,
@@ -125,7 +126,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
         allProductsData.forEach((product) => {
-            tempTotalPriceBeforeDiscount += product.unit_price * product.quantity;
+            tempTotalPriceBeforeDiscount += product.unitPrice * product.quantity;
         });
         return tempTotalPriceBeforeDiscount;
     }
@@ -148,7 +149,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 <div className="page-content page">
                     <div className="container-fluid align-items-center pb-4 text-white">
                         <h1 className="welcome-msg text-center mb-5">{t("Welcome To You In Payment Confirmation Page")}</h1>
-                        <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
+                        {Object.keys(orderDetails).length > 0 ? <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
                             <h5 className="fw-bold mb-4 text-center">{t("Your Request")}</h5>
                             <div className="order-id-and-number border border-white border-2 p-4 mb-5">
                                 <h5 className="mb-4 text-center">{t("Order Id")} : {orderDetails._id}</h5>
@@ -172,7 +173,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                     {t("Sum")}
                                 </div>
                             </div>
-                            {orderDetails.order_products.map((product, productIndex) => (
+                            {orderDetails.products.map((product, productIndex) => (
                                 <div className="row total pb-3 mb-5" key={productIndex}>
                                     <div className="col-md-3 fw-bold p-0">
                                         {i18n.language !== "ar" ? <span>
@@ -182,13 +183,13 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                         </span>}
                                     </div>
                                     <div className="col-md-3 fw-bold p-0">
-                                        {(product.unit_price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                        {(product.unitPrice * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                     </div>
                                     <div className="col-md-3 fw-bold p-0">
                                         {(product.discount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                     </div>
                                     <div className="col-md-3 fw-bold p-0">
-                                        {((product.unit_price - product.discount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                        {((product.unitPrice - product.discount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                     </div>
                                 </div>
                             ))}
@@ -228,7 +229,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 width="150"
                                 height="150"
                             />
-                        </section>
+                        </section>: <NotFoundError errorMsg={t("Sorry, This Order Is Not Found !!")} />}
                     </div>
                     <Footer />
                 </div>
