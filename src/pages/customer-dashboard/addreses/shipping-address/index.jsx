@@ -346,7 +346,7 @@ export default function CustomerBillingAddress() {
                                     <section className="postal-code-number mb-4">
                                         <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                         <input
-                                            type="number"
+                                            type="text"
                                             className={`p-2 ${formValidationErrors.postalCode ? "border-3 border-danger mb-3" : ""}`}
                                             placeholder={t("Please Enter New Postal Code / Zip Here")}
                                             defaultValue={userInfo.shippingAddress.postalCode.toString()}
