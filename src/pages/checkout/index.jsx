@@ -399,6 +399,41 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }
 
+    const getOrderDetailsForCreating = () => {
+        return {
+            customerId: userInfo ? userInfo._id : "",
+            billingAddress: {
+                firstName: userInfo.billingAddress.firstName,
+                lastName: userInfo.billingAddress.lastName,
+                companyName: userInfo.billingAddress.companyName,
+                country: userInfo.billingAddress.country,
+                streetAddress: userInfo.billingAddress.streetAddress,
+                apartmentNumber: userInfo.billingAddress.apartmentNumber,
+                city: userInfo.billingAddress.city,
+                postalCode: userInfo.billingAddress.postalCode,
+                phone: userInfo.billingAddress.phoneNumber,
+                email: userInfo.billingAddress.email,
+            },
+            shippingAddress: {
+                firstName: isShippingToOtherAddress ? userInfo.shippingAddress.firstName : userInfo.billingAddress.firstName,
+                lastName: isShippingToOtherAddress ? userInfo.shippingAddress.lastName : userInfo.billingAddress.lastName,
+                companyName: isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
+                country: isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
+                streetAddress: isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
+                apartmentNumber: isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
+                city: isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
+                postalCode: isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
+                phone: isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
+                email: isShippingToOtherAddress ? userInfo.shippingAddress.email : userInfo.billingAddress.email,
+            },
+            products: allProductsData.map((product) => ({
+                productId: product._id,
+                quantity: getProductQuantity(product._id),
+            })),
+            requestNotes
+        }
+    }
+
     const createPayPalOrder = async (data, actions) => {
         return actions.order.create({
             purchase_units: [
@@ -416,44 +451,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
         try {
             setIsWaitApproveOnPayPalOrder(true);
             const result = await createNewOrder({
-                storeId,
-                customerId: userInfo ? userInfo._id : "",
-                order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
-                checkout_status: "checkout_successful",
-                billingAddress: {
-                    firstName: userInfo.billingAddress.firstName,
-                    lastName: userInfo.billingAddress.lastName,
-                    companyName: userInfo.billingAddress.companyName,
-                    country: userInfo.billingAddress.country,
-                    streetAddress: userInfo.billingAddress.streetAddress,
-                    apartmentNumber: userInfo.billingAddress.apartmentNumber,
-                    city: userInfo.billingAddress.city,
-                    postalCode: userInfo.billingAddress.postalCode,
-                    phone: userInfo.billingAddress.phoneNumber,
-                    email: userInfo.billingAddress.email,
-                },
-                shippingAddress: {
-                    firstName: isShippingToOtherAddress ? userInfo.shippingAddress.firstName : userInfo.billingAddress.firstName,
-                    lastName: isShippingToOtherAddress ? userInfo.shippingAddress.lastName : userInfo.billingAddress.lastName,
-                    companyName: isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
-                    country: isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
-                    streetAddress: isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                    apartmentNumber: isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
-                    city: isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
-                    postalCode: isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
-                    phone: isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
-                    email: isShippingToOtherAddress ? userInfo.shippingAddress.email : userInfo.billingAddress.email,
-                },
-                order_products: allProductsData.map((product) => ({
-                    productId: product._id,
-                    name: product.name,
-                    unit_price: product.price,
-                    discount: isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) ? product.discountInOfferPeriod : product.discount,
-                    total_amount: product.price * getProductQuantity(product._id),
-                    quantity: getProductQuantity(product._id),
-                    image_path: product.imagePath,
-                })),
-                requestNotes,
+                ...getOrderDetailsForCreating(),
+                checkoutStatus: "Checkout Successfull"
             });
             const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
             const orderProductsIds = allProductsData.map((product) => product._id);
@@ -468,45 +467,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const createPaymentOrder = async (paymentName) => {
         try {
             setIsWaitCreateNewOrder(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, {
-                // storeId,
-                customerId: userInfo ? userInfo._id : "",
-                // order_amount: pricesDetailsSummary.totalPriceAfterDiscount,
-                billingAddress: {
-                    firstName: userInfo.billingAddress.firstName,
-                    lastName: userInfo.billingAddress.lastName,
-                    companyName: userInfo.billingAddress.companyName,
-                    country: userInfo.billingAddress.country,
-                    streetAddress: userInfo.billingAddress.streetAddress,
-                    apartmentNumber: userInfo.billingAddress.apartmentNumber,
-                    city: userInfo.billingAddress.city,
-                    postalCode: userInfo.billingAddress.postalCode,
-                    phone: userInfo.billingAddress.phoneNumber,
-                    email: userInfo.billingAddress.email,
-                },
-                shippingAddress: {
-                    firstName: isShippingToOtherAddress ? userInfo.shippingAddress.firstName : userInfo.billingAddress.firstName,
-                    lastName: isShippingToOtherAddress ? userInfo.shippingAddress.lastName : userInfo.billingAddress.lastName,
-                    companyName: isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
-                    country: isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
-                    streetAddress: isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                    apartmentNumber: isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
-                    city: isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
-                    postalCode: isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
-                    phone: isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
-                    email: isShippingToOtherAddress ? userInfo.shippingAddress.email : userInfo.billingAddress.email,
-                },
-                products: allProductsData.map((product) => ({
-                    productId: product._id,
-                    // name: product.name,
-                    // unit_price: product.price,
-                    // discount: isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) ? product.discountInOfferPeriod : product.discount,
-                    // total_amount: product.price * getProductQuantity(product._id),
-                    quantity: getProductQuantity(product._id),
-                    // image_path: product.imagePath,
-                })),
-                requestNotes
-            });
+            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating());
             const result = res.data;
             if (!result.error) {
                 if (paymentName === "tap") {
