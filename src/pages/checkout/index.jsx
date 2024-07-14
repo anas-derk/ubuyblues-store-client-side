@@ -115,49 +115,60 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         async function fetchData() {
-            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-            if (userToken) {
-                const result = await getUserInfo();
-                if (!result.error) {
-                    setUserInfo(result.data);
+            try{
+                const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+                if (userToken) {
+                    const result = await getUserInfo();
+                    if (!result.error) {
+                        setUserInfo(result.data);
+                    } else {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    }
                 } else {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
+                    if (userAddresses) {
+                        setUserInfo({ billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress });
+                        setIsSavePaymentInfo(true);
+                    } else {
+                        setUserInfo({
+                            billingAddress: {
+                                firstName: "",
+                                lastName: "",
+                                companyName: "",
+                                country: "Kuwait",
+                                streetAddress: "",
+                                apartmentNumber: 1,
+                                city: "",
+                                postalCode: 1,
+                                phoneNumber: "0096560048235",
+                                email: "",
+                            },
+                            shippingAddress: {
+                                firstName: "",
+                                lastName: "",
+                                companyName: "",
+                                country: "Kuwait",
+                                streetAddress: "",
+                                apartmentNumber: 1,
+                                city: "",
+                                postalCode: 1,
+                                phoneNumber: "0096560048235",
+                                email: "",
+                            },
+                        });
+                    }
                 }
-            } else {
-                const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
-                if (userAddresses) {
-                    setUserInfo({ billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress });
-                    setIsSavePaymentInfo(true);
+                setIsGetUserInfo(false);
+            }
+            catch(err) {
+                if (err?.response?.data?.msg === "Unauthorized Error") {
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    setIsGetUserInfo(false);
                 } else {
-                    setUserInfo({
-                        billingAddress: {
-                            firstName: "",
-                            lastName: "",
-                            companyName: "",
-                            country: "Kuwait",
-                            streetAddress: "",
-                            apartmentNumber: 1,
-                            city: "",
-                            postalCode: 1,
-                            phoneNumber: "0096560048235",
-                            email: "",
-                        },
-                        shippingAddress: {
-                            firstName: "",
-                            lastName: "",
-                            companyName: "",
-                            country: "Kuwait",
-                            streetAddress: "",
-                            apartmentNumber: 1,
-                            city: "",
-                            postalCode: 1,
-                            phoneNumber: "0096560048235",
-                            email: "",
-                        },
-                    });
+                    setIsLoadingPage(false);
+                    setIsErrorMsgOnLoadingThePage(true);
                 }
             }
-            setIsGetUserInfo(false);
         }
         fetchData();
     }, []);
@@ -469,9 +480,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const createPaymentOrder = async (paymentName) => {
         try {
             setIsWaitCreateNewOrder(true);
+            console.log(getOrderDetailsForCreating())
             const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating());
             const result = res.data;
-            console.log(result)
             if (!result.error) {
                 if (paymentName === "tap") {
                     await router.push(result.data.transaction.url);
@@ -636,7 +647,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         <section className="postal-code-number mb-4">
                                             <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Postal Code / Zip Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.postalCode : ""}
@@ -827,7 +838,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         <section className="postal-code-number mb-4">
                                             <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 className={`p-2 ${formValidationErrors.postal_code_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder="Please Enter Postal Code / Zip Here"
                                                 defaultValue={userInfo ? userInfo.shippingAddress.postalCode.toString() : ""}
