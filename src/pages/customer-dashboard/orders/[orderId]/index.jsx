@@ -8,60 +8,84 @@ import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import { getUserInfo } from "../../../../../public/global_functions/popular";
+import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../../public/global_functions/prices";
 
-export default function OrderDetails() {
+export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
+    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+
+    const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
+
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
+
+    const [isGetOrderDetails, setIsGetOrderDetails] = useState(true);
 
     const [orderDetails, setOrderDetails] = useState({});
 
     const router = useRouter();
 
-    const { orderId } = router.query;
-
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        if (orderId) {
-            const userLanguage = localStorage.getItem("asfour-store-language");
-            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-            if (userToken) {
-                getUserInfo()
-                    .then(async (res) => {
-                        let result = res.data;
-                        if (result.error) {
-                            localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                            await router.replace("/auth");
-                        } else {
-                            result = await getOrderDetails(orderId);
-                            if (!result.error) {
-                                setOrderDetails(result.data);    
-                            }
+        setIsLoadingPage(true);
+        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            setUsdPriceAgainstCurrency(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
+            if (!isGetOrderDetails) {
+                setIsLoadingPage(false);
+            }
+        })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+    }, [countryAsProperty]);
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            getUserInfo()
+                .then(async (res) => {
+                    let result = res.data;
+                    if (result.error) {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        await router.replace("/auth");
+                    } else {
+                        result = await getOrderDetails(orderIdAsProperty);
+                        if (!result.error) {
+                            setOrderDetails(result.data);
+                        }
+                        setWindowInnerWidth(window.innerWidth);
+                        window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
-                            window.addEventListener("resize", () => {
-                                setWindowInnerWidth(window.innerWidth);
-                            });
-                            setIsLoadingPage(false);
-                        }
-                    })
-                    .catch(async (err) => {
-                        if (err?.response?.data?.msg === "Unauthorized Error") {
-                            localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                            await router.replace("/auth");
-                        }
-                        else {
-                            setIsLoadingPage(false);
-                            setIsErrorMsgOnLoadingThePage(true);
-                        }
-                    });
-            } else router.replace("/auth");
+                        });
+                        setIsGetOrderDetails(false);
+                    }
+                })
+                .catch(async (err) => {
+                    if (err?.response?.data?.msg === "Unauthorized Error") {
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        await router.replace("/auth");
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                });
+        } else router.replace("/auth");
+    }, [orderIdAsProperty]);
+
+    useEffect(() => {
+        if (!isGetOrderDetails) {
+            setIsLoadingPage(false);
         }
-    }, [orderId]);
+    }, [isGetOrderDetails]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
@@ -115,10 +139,10 @@ export default function OrderDetails() {
                                                         {orderProduct.name}
                                                     </td>
                                                     <td>
-                                                        {orderProduct.unitPrice}
+                                                        {(orderProduct.unitPrice * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                                     </td>
                                                     <td>
-                                                        {orderProduct.totalAmount}
+                                                        {(orderProduct.totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                                     </td>
                                                     <td>
                                                         <img
@@ -151,11 +175,11 @@ export default function OrderDetails() {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{orderProduct.unitPrice}</td>
+                                                            <td>{(orderProduct.unitPrice * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Total")}</th>
-                                                            <td>{orderProduct.totalAmount}</td>
+                                                            <td>{(orderProduct.totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Image")}</th>
@@ -216,4 +240,57 @@ export default function OrderDetails() {
             {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
+}
+
+export async function getServerSideProps({ query, params }) {
+    if (!params.orderId) {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/customer-dashboard/orders",
+            },
+            props: {
+                countryAsProperty: "kuwait",
+            },
+        }
+    }
+    const allowedCountries = ["kuwait", "germany", "turkey"];
+    if (query.country) {
+        if (!allowedCountries.includes(query.country)) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/customer-dashboard/orders/${params.orderId}`,
+                },
+                props: {
+                    countryAsProperty: "kuwait",
+                    orderIdAsProperty: params.orderId,
+                },
+            }
+        }
+        if (Object.keys(query).filter((key) => key !== "country").length > 1) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: `/customer-dashboard/orders/${params.orderId}?country=${query.country}`,
+                },
+                props: {
+                    countryAsProperty: query.country,
+                    orderIdAsProperty: params.orderId,
+                },
+            }
+        }
+        return {
+            props: {
+                countryAsProperty: query.country,
+                orderIdAsProperty: params.orderId,
+            },
+        }
+    }
+    return {
+        props: {
+            countryAsProperty: "kuwait",
+            orderIdAsProperty: params.orderId,
+        },
+    }
 }

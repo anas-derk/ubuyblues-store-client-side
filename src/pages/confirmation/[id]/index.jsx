@@ -23,7 +23,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
-    const [isGetOrderInfo, setIsGetOrderInfo] = useState(true);
+    const [isGetOrderDetails, setIsGetOrderDetails] = useState(true);
 
     const [orderDetails, setOrderDetails] = useState({});
 
@@ -42,7 +42,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isGetUserInfo && !isGetOrderInfo) {
+            if (!isGetUserInfo && !isGetOrderDetails) {
                 setIsLoadingPage(false);
             }
         })
@@ -93,7 +93,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                     });
                     result = await getStoreDetails(result.storeId);
                     setStoreDetails(result.data);
-                    setIsGetOrderInfo(false);
+                    setIsGetOrderDetails(false);
                 }
             })
             .catch(() => {
@@ -103,10 +103,10 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     }, [orderIdAsProperty]);
 
     useEffect(() => {
-        if (!isGetOrderInfo) {
+        if (!isGetOrderDetails) {
             setIsLoadingPage(false);
         }
-    }, [isGetOrderInfo]);
+    }, [isGetOrderDetails]);
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
