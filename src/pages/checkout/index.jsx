@@ -1024,7 +1024,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 disabled
                                             >
-                                                {t("Please Waiting ...")}
+                                                {t("Please Waiting")}
                                             </button>}
                                             {errorMsg && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
