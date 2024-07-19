@@ -21,7 +21,9 @@ export default function ProductCard({
     setSharingURL,
     currentDateAsString,
     isFlashProductAsProperty = false,
-    isDisplayCountdown = false
+    isDisplayCountdown = false,
+    setIsDisplayErrorPopup,
+    setErrorType
 }) {
 
     const [isFlashProduct, setIsFlashProduct] = useState(isFlashProductAsProperty);
@@ -84,26 +86,33 @@ export default function ProductCard({
 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
-            setIsWaitAddProductToFavoriteUserProductsList(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+            if (userToken) {
+                setIsWaitAddProductToFavoriteUserProductsList(true);
+                const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    }
+                });
+                const result = res.data;
+                setIsWaitAddProductToFavoriteUserProductsList(false);
+                if (!result.error) {
+                    setIsSuccessAddProductToFavoriteUserProductsList(true);
+                    let successAddToCartTimeout = setTimeout(() => {
+                        setIsSuccessAddProductToFavoriteUserProductsList(false);
+                        setIsFavoriteProductForUser(true);
+                        clearTimeout(successAddToCartTimeout);
+                    }, 3000);
                 }
-            });
-            const result = res.data;
-            setIsWaitAddProductToFavoriteUserProductsList(false);
-            if (!result.error) {
-                setIsSuccessAddProductToFavoriteUserProductsList(true);
-                let successAddToCartTimeout = setTimeout(() => {
-                    setIsSuccessAddProductToFavoriteUserProductsList(false);
-                    setIsFavoriteProductForUser(true);
-                    clearTimeout(successAddToCartTimeout);
-                }, 3000);
+            } else {
+                setIsDisplayErrorPopup(true);
+                setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
             }
         }
         catch (err) {
             if (err?.response?.data?.msg === "Unauthorized Error") {
-                await router.push("/auth");
+                setIsDisplayErrorPopup(true);
+                setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 return;
             }
             setIsWaitAddProductToFavoriteUserProductsList(false);

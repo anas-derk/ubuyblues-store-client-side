@@ -676,7 +676,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
                                                 <h4 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
                                             }
-                                            <h5 className="product-quantity">1 {t("Product Available In Store")}</h5>
+                                            <h5 className="product-quantity">{productInfo.quantity} {t("Product Available In Store")}</h5>
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
                                             <div className="product-managment-buttons mb-3">
@@ -706,7 +706,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 <div className="add-to-cart-managment-btns-box col-md-8">
                                                     {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id)}>{t("Add To Cart")}</button>}
                                                     {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>{t("Waiting In Add To Cart ...")}</button>}
-                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100" disabled>{t(errorInAddToCart)}</button>}
+                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100 bg-danger text-white" disabled>{t(errorInAddToCart)}</button>}
                                                     {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>{t("Display Your Cart")}</Link>}
                                                 </div>
                                                 <div className="select-product-quantity-box p-3 col-md-4">
@@ -912,6 +912,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     setSharingURL={setSharingURL}
                                                     currentDateAsString={currentDate}
                                                     isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
+                                                    setIsDisplayErrorPopup={setIsDisplayErrorPopup}
+                                                    setErrorType={errorType}
                                                 />
                                             </div>
                                         ))}

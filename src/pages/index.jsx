@@ -36,6 +36,7 @@ import StoreCard from "@/components/StoreCard";
 import SectionLoader from "@/components/SectionLoader";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import BrandCard from "@/components/BrandCard";
+import ErrorPopup from "@/components/ErrorPopup";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -44,6 +45,10 @@ export default function Home({ countryAsProperty, storeId }) {
     const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [errorMsg, setErrorMsg] = useState("");
+
+    const [isDisplayErrorPopup, setIsDisplayErrorPopup] = useState(false);
+
+    const [errorType, setErrorType] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -541,6 +546,10 @@ export default function Home({ countryAsProperty, storeId }) {
                     sharingName={sharingName}
                     sharingURL={sharingURL}
                 />}
+                {isDisplayErrorPopup && <ErrorPopup
+                    setIsDisplayErrorPopup={setIsDisplayErrorPopup}
+                    errorType={errorType}
+                />}
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
                 <div className="page-content">
@@ -646,6 +655,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 currentDateAsString={currentDate}
                                                 isFlashProductAsProperty={true}
                                                 isDisplayCountdown={true}
+                                                setIsDisplayErrorPopup={setIsDisplayErrorPopup}
+                                                setErrorType={setErrorType}
                                             />
                                         </div>
                                     ))}
@@ -718,6 +729,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setSharingURL={setSharingURL}
                                                 currentDateAsString={currentDate}
                                                 isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
+                                                setIsDisplayErrorPopup={setIsDisplayErrorPopup}
+                                                setErrorType={setErrorType}
                                             />
                                         </div>
                                     ))}
