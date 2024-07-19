@@ -63,6 +63,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
 
+    const [orderResult, setOrderResult] = useState({});
+
     const countryList = Object.values(countries);
 
     const router = useRouter();
@@ -207,208 +209,235 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const createNewOrder = async (orderDetails) => {
         try {
-            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order`, orderDetails);
-            return res.data;
+            return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}`, orderDetails)).data;
         }
         catch (err) {
             throw Error(err);
         }
     }
 
-    const handleSelectPaypalPayment = () => {
-        const errorsObject = inputValuesValidation([
-            {
-                name: "first_name_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.firstName : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, First Name Field Can't Be Empty !!",
+    const handleSelectPaypalPayment = async () => {
+        try{
+            setIsWaitCreateNewOrder(true);
+            const errorsObject = inputValuesValidation([
+                {
+                    name: "first_name_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.firstName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, First Name Field Can't Be Empty !!",
+                        },
                     },
                 },
-            },
-            {
-                name: "last_name_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.lastName : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                {
+                    name: "last_name_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.lastName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
                 },
-            },
-            {
-                name: "country_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.country : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                {
+                    name: "country_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.country : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
                 },
-            },
-            {
-                name: "street_address_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.streetAddress : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                {
+                    name: "street_address_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.streetAddress : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
                 },
-            },
-            {
-                name: "city_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.city : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                {
+                    name: "city_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.city : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
                 },
-            },
-            {
-                name: "postal_code_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.postalCode : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                {
+                    name: "postal_code_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.postalCode : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
                 },
-            },
-            {
-                name: "phone_number_for_billing_address",
-                value: userInfo.billingAddress.phoneNumber,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
-                    },
-                    isValidMobilePhone: {
-                        msg: "Sorry, Invalid Mobile Phone !!",
-                        countryCode: getCountryCode(userInfo.billingAddress.country),
-                    },
-                },
-            },
-            {
-                name: "email_for_billing_address",
-                value: userInfo ? userInfo.billingAddress.email : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Email Field Can't Be Empty !!",
-                    },
-                    isEmail: {
-                        msg: "Sorry, Invalid Email !!",
+                {
+                    name: "phone_number_for_billing_address",
+                    value: userInfo.billingAddress.phoneNumber,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                        isValidMobilePhone: {
+                            msg: "Sorry, Invalid Mobile Phone !!",
+                            countryCode: getCountryCode(userInfo.billingAddress.country),
+                        },
                     },
                 },
-            },
-            isShippingToOtherAddress ? {
-                name: "firstName_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.firstName : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, First Name Field Can't Be Empty !!",
+                {
+                    name: "email_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.email : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Email Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
                     },
                 },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "lastName_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.lastName : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                isShippingToOtherAddress ? {
+                    name: "firstName_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.firstName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, First Name Field Can't Be Empty !!",
+                        },
                     },
-                },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "country_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.country : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "lastName_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.lastName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
-                },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "streetAddress_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.streetAddress : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "country_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.country : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
-                },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "city_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.city : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "streetAddress_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.streetAddress : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
-                },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "postalCode_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.postalCode : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "city_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.city : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
-                },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "phoneNumber_for_shipping_address",
-                value: userInfo.shippingAddress.phoneNumber,
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Last Name Field Can't Be Empty !!",
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "postalCode_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.postalCode : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
                     },
-                    isValidMobilePhone: {
-                        msg: "Sorry, Invalid Mobile Phone !!",
-                        countryCode: getCountryCode(userInfo.shippingAddress.country),
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "phoneNumber_for_shipping_address",
+                    value: userInfo.shippingAddress.phoneNumber,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                        isValidMobilePhone: {
+                            msg: "Sorry, Invalid Mobile Phone !!",
+                            countryCode: getCountryCode(userInfo.shippingAddress.country),
+                        },
                     },
-                },
-            } : null,
-            isShippingToOtherAddress ? {
-                name: "email_for_shipping_address",
-                value: userInfo ? userInfo.shippingAddress.email : "",
-                rules: {
-                    isRequired: {
-                        msg: "Sorry, Email Field Can't Be Empty !!",
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "email_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.email : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Email Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
                     },
-                    isEmail: {
-                        msg: "Sorry, Invalid Email !!",
-                    },
-                },
-            } : null,
-        ]);
-        setFormValidationErrors(errorsObject);
-        if (Object.keys(errorsObject).length == 0) {
-            if (isSavePaymentInfo) {
-                localStorage.setItem("asfour-store-user-addresses", JSON.stringify({
-                    billingAddress: {
-                        firstName: userInfo ? userInfo.billingAddress.firstName : "",
-                        lastName: userInfo ? userInfo.billingAddress.lastName : "",
-                        companyName: userInfo ? userInfo.billingAddress.companyName : "",
-                        country: userInfo.billingAddress.country,
-                        streetAddress: userInfo ? userInfo.billingAddress.streetAddress : "",
-                        apartmentNumber: userInfo.billingAddress.apartmentNumber,
-                        city: userInfo ? userInfo.billingAddress.city : "",
-                        postalCode: userInfo.billingAddress.postalCode,
-                        phoneNumber: userInfo.billingAddress.phoneNumber,
-                        email: userInfo ? userInfo.billingAddress.email : "",
-                    },
-                    shippingAddress: {
-                        firstName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.firstName : userInfo.billingAddress.firstName,
-                        lastName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.lastName : userInfo.billingAddress.lastName,
-                        companyName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
-                        country: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
-                        streetAddress: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                        apartmentNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
-                        city: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
-                        postalCode: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
-                        phoneNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
-                        email: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.email : userInfo.billingAddress.email,
-                    },
-                }));
-            } else {
-                localStorage.removeItem("asfour-store-user-addresses");
+                } : null,
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                if (isSavePaymentInfo) {
+                    localStorage.setItem("asfour-store-user-addresses", JSON.stringify({
+                        billingAddress: {
+                            firstName: userInfo ? userInfo.billingAddress.firstName : "",
+                            lastName: userInfo ? userInfo.billingAddress.lastName : "",
+                            companyName: userInfo ? userInfo.billingAddress.companyName : "",
+                            country: userInfo.billingAddress.country,
+                            streetAddress: userInfo ? userInfo.billingAddress.streetAddress : "",
+                            apartmentNumber: userInfo.billingAddress.apartmentNumber,
+                            city: userInfo ? userInfo.billingAddress.city : "",
+                            postalCode: userInfo.billingAddress.postalCode,
+                            phoneNumber: userInfo.billingAddress.phoneNumber,
+                            email: userInfo ? userInfo.billingAddress.email : "",
+                        },
+                        shippingAddress: {
+                            firstName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.firstName : userInfo.billingAddress.firstName,
+                            lastName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.lastName : userInfo.billingAddress.lastName,
+                            companyName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
+                            country: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
+                            streetAddress: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
+                            apartmentNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
+                            city: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
+                            postalCode: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
+                            phoneNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
+                            email: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.email : userInfo.billingAddress.email,
+                        },
+                    }));
+                } else {
+                    localStorage.removeItem("asfour-store-user-addresses");
+                }
+                const result = await createNewOrder(getOrderDetailsForCreating());
+                setIsWaitCreateNewOrder(false);
+                if (!result.error) {
+                    setOrderResult(result.data);
+                    setIsDisplayPaypalPaymentButtons(true);
+                }
+                else {
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 2000);
+                }
             }
-            setIsDisplayPaypalPaymentButtons(true);
+        }
+        catch(err) {
+            if (err?.response?.data?.msg === "Unauthorized Error") {
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                await router.replace("/auth");
+                return;
+            }
+            setIsWaitCreateNewOrder(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
         }
     }
 
@@ -463,10 +492,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const approveOnPayPalOrder = async () => {
         try {
             setIsWaitApproveOnPayPalOrder(true);
-            const result = await createNewOrder({
-                ...getOrderDetailsForCreating(),
-                checkoutStatus: "Checkout Successfull"
-            });
+            const result = await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}`);
             const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
             const orderProductsIds = allProductsData.map((product) => product._id);
             localStorage.setItem("asfour-store-customer-cart", JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
