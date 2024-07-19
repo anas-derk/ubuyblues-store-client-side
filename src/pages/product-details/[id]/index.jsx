@@ -676,7 +676,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
                                                 <h4 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
                                             }
-                                            <h5 className="product-quantity">{productInfo.quantity} {t("Product Available In Store")}</h5>
+                                            {
+                                                productInfo.quantity > 0 ? <h5 className="product-quantity">{productInfo.quantity} {t("Product Available In Store")}</h5> :
+                                                <h5 className="product-not-available-error text-danger fw-bold">{t("Sorry, This Product Not Available Now !!")}</h5>
+                                            }
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
                                             <div className="product-managment-buttons mb-3">
