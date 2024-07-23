@@ -181,17 +181,15 @@ export default function Home({ countryAsProperty, storeId }) {
         setIsLoadingPage(true);
         handleResetAllHomeData();
         handleIsGetAllHomeData();
-        const tempFilters = { ...filters, storeId };
-        setFilters(tempFilters);
-        const filtersAsString = getFiltersAsQuery(tempFilters);
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         // ==========================================================================================
         getStoreDetails(storeId)
             .then(async (storeDetailsResult) => {
-                setIsGetStoreDetails(false);
                 if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
                     setStoreDetails(storeDetailsResult.data);
+                    setIsGetStoreDetails(false);
+                    const tempFilters = { ...filters, storeId: storeDetailsResult.data._id };
+                    setFilters(tempFilters);
+                    const filtersAsString = getFiltersAsQuery(tempFilters);
                     // =============================================================================
                     await handleGetAndSetCategories(filtersAsString);
                     setIsGetCategories(false);
@@ -244,6 +242,11 @@ export default function Home({ countryAsProperty, storeId }) {
             setIsLoadingPage(false);
         }
     }, [isGetStoreDetails]);
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+    }, []);
 
     const handleResetAllHomeData = () => {
         setAllCategoriesInsideThePage([]);
