@@ -184,9 +184,9 @@ export default function Home({ countryAsProperty, storeId }) {
         // ==========================================================================================
         getStoreDetails(storeId)
             .then(async (storeDetailsResult) => {
+                setIsGetStoreDetails(false);
                 if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
                     setStoreDetails(storeDetailsResult.data);
-                    setIsGetStoreDetails(false);
                     const tempFilters = { ...filters, storeId: storeDetailsResult.data._id };
                     setFilters(tempFilters);
                     const filtersAsString = getFiltersAsQuery(tempFilters);
