@@ -188,10 +188,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const getProductsByIdsAnsStoreId = async (storeId, productsIds) => {
         try {
-            const res = await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids-and-store-id?storeId=${storeId}`, {
+            return (await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids-and-store-id?storeId=${storeId}`, {
                 productsIds,
-            });
-            return res.data;
+            })).data;
         }
         catch (err) {
             throw Error(err);
@@ -492,7 +491,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const approveOnPayPalOrder = async () => {
         try {
             setIsWaitApproveOnPayPalOrder(true);
-            const result = await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}`);
+            const result = (await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}`)).data;
             const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
             const orderProductsIds = allProductsData.map((product) => product._id);
             localStorage.setItem("asfour-store-customer-cart", JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
@@ -506,8 +505,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const createPaymentOrder = async (paymentName) => {
         try {
             setIsWaitCreateNewOrder(true);
-            const res = await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating());
-            const result = res.data;
+            const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating())).data;
             if (!result.error) {
                 if (paymentName === "tap") {
                     await router.push(result.data.transaction.url);
