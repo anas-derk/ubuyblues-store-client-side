@@ -53,6 +53,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [paymentMethod, setPaymentMethod] = useState("tap");
 
+    const [shippingMethod, setShippingMethod] = useState({ forLocalProducts: "ubuyblues", forInternationalProducts: "normal" });
+
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
 
     const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
@@ -1059,13 +1061,77 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             </button>}
                                         </section>
                                         {/* End Payement Methods Section */}
-                                        {/* Start Payement Methods Section */}
+                                        {/* Start Shipping Methods Section */}
                                         <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
-                                            <h5 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h5>
+                                            <h5 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h5>
                                             <h6 className="text-center mb-5">{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} ) :</h6>
-                                            <h6 className="text-center">{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</h6>
+                                            <div className={`row align-items-center mb-5`}>
+                                                <div className="col-md-6">
+                                                    <input
+                                                        type="radio"
+                                                        checked={shippingMethod.forLocalProducts === "normal"}
+                                                        id="local-normal-shipping-method-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup1"
+                                                        onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}
+                                                    />
+                                                    <label htmlFor="local-normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}>{t("Normal")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <span className="p-3 border border-3">( 2 - 5 ) {t("Work Days")}</span>
+                                                </div>
+                                            </div>
+                                            <div className={`row align-items-center pt-4 mb-5`}>
+                                                <div className="col-md-6">
+                                                    <input
+                                                        type="radio"
+                                                        checked={shippingMethod.forLocalProducts === "ubuyblues"}
+                                                        id="ubuyblues-shipping-method-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup1"
+                                                        onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}
+                                                    />
+                                                    <label htmlFor="ubuyblues-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}>{t("Ubuyblues")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <span className="p-3 border border-3">( {(3 * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)} )</span>
+                                                </div>
+                                            </div>
+                                            <h6 className="text-center mb-5">{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</h6>
+                                            <div className={`row align-items-center pt-4 mb-5`}>
+                                                <div className="col-md-6">
+                                                    <input
+                                                        type="radio"
+                                                        checked={shippingMethod.forInternationalProducts === "normal"}
+                                                        id="international-normal-shipping-method-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup2"
+                                                        onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}
+                                                    />
+                                                    <label htmlFor="normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}>{t("Normal")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <span className="p-3 border border-3">( 10 - 15 ) {t("Work Days")}</span>
+                                                </div>
+                                            </div>
+                                            <div className={`row align-items-center pt-4 mb-5`}>
+                                                <div className="col-md-6">
+                                                    <input
+                                                        type="radio"
+                                                        checked={shippingMethod.forInternationalProducts === "fast"}
+                                                        id="international-fast-shipping-method-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup2"
+                                                        onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}
+                                                    />
+                                                    <label htmlFor="international-fast-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}>{t("Fast")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <span className="p-3 border border-3">( 6 - 9 ) {t("Work Days")}</span>
+                                                </div>
+                                            </div>
                                         </section>
-                                        {/* End Payement Methods Section */}
+                                        {/* End Shipping Methods Section */}
                                     </section>
                                 </div>
                             </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For This Store Your Cart !!")} />
