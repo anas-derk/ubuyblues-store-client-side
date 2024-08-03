@@ -483,5 +483,9 @@
     "Profile": "Profil",
     "Show All Brands": "Tüm Markaları Göster",
     "All The Brands Of The Store": "Mağazanın tüm markaları",
-    "Sorry, This Product Not Available Now !!": "Üzgünüz, bu ürün şu anda mevcut değil !!"
+    "Sorry, This Product Not Available Now !!": "Üzgünüz, bu ürün şu anda mevcut değil !!",
+    "For Local Products": "Yerel ürünler için",
+    "That Are Available Within The Country And Shipped Within The Same Country": "ülke içinde mevcut olan ve aynı ülke içinde gönderilen",
+    "For International Products": "Yurtdışı ürünler için",
+    "That Are Available Within One Country And Shipped To Another Country": "bir ülkede mevcut olan ve başka bir ülkeye gönderilen"
 }

@@ -493,5 +493,9 @@
     "Log In": "تسجيل الدخول",
     "Show All Brands": "عرض كل العلامات التجارية",
     "All The Brands Of The Store": "العلامات التجارية الخاصة بالمتجر",
-    "Sorry, This Product Not Available Now !!": "عذراً ، هذا المنتج غير متوفر الآن !!"
+    "Sorry, This Product Not Available Now !!": "عذراً ، هذا المنتج غير متوفر الآن !!",
+    "For Local Products": "بالنسبة للمنتجات المحلية",
+    "That Are Available Within The Country And Shipped Within The Same Country": "التي تتواجد بداخل الدولة والشحن لنفس الدولة",
+    "For International Products": "بالنسبة للمنتجات الخارجية",
+    "That Are Available Within One Country And Shipped To Another Country": "التي تتواجد بداخل دولة ما والشحن لدولة أخرى"
 }

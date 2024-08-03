@@ -1060,75 +1060,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         </section>
                                         {/* End Payement Methods Section */}
                                         {/* Start Payement Methods Section */}
-                                        <section className="payment-methods mb-4 border border-2 p-3 mb-4">
+                                        <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
                                             <h5 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h5>
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "paypal" ? "mb-3" : ""}`}>
-                                                <div className="col-md-6 text-start">
-                                                    <input
-                                                        type="radio"
-                                                        checked={paymentMethod === "paypal"}
-                                                        id="paypal-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup"
-                                                        onChange={() => setPaymentMethod("paypal")}
-                                                    />
-                                                    <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>{t("PayPal")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <FaCcPaypal className="icon paypal-icon" />
-                                                </div>
-                                            </div>
-                                            {paymentMethod === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
-                                                options={{
-                                                    clientId: "test",
-                                                    currency: "USD",
-                                                    intent: "capture",
-                                                }}
-                                            >
-                                                <PayPalButtons
-                                                    style={{ layout: "vertical" }}
-                                                    createOrder={createPayPalOrder}
-                                                    onApprove={approveOnPayPalOrder}
-                                                />
-                                            </PayPalScriptProvider>}
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "tap" ? "mb-3" : ""}`}>
-                                                <div className="col-md-6 text-start">
-                                                    <input
-                                                        type="radio"
-                                                        checked={paymentMethod === "tap"}
-                                                        id="tap-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup"
-                                                        onChange={() => setPaymentMethod("tap")}
-                                                    />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tap")}>{t("Tap")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <FaTape className="icon tap-icon" />
-                                                </div>
-                                            </div>
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "pilisio" ? "mb-3" : ""}`}>
-                                                <div className="col-md-6 text-start">
-                                                    <input
-                                                        type="radio"
-                                                        checked={paymentMethod === "pilisio"}
-                                                        id="tap-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup"
-                                                        onChange={() => setPaymentMethod("pilisio")}
-                                                    />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("pilisio")}>{t("Pilisio")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <FaTape className="icon tap-icon" />
-                                                </div>
-                                            </div>
-                                            {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={handleSelectPaypalPayment}
-                                            >
-                                                {t("Confirm Request")}
-                                            </button>}
+                                            <h6 className="text-center mb-5">{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} ) :</h6>
+                                            <h6 className="text-center">{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</h6>
                                         </section>
                                         {/* End Payement Methods Section */}
                                     </section>
