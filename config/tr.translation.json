@@ -491,5 +491,7 @@
     "Work Days": "İş günleri",
     "Normal": "Normal",
     "Fast": "Hızlı",
-    "Product Names": "Ürün Adları"
+    "Product Names": "Ürün Adları",
+    "Shipping Cost For Local Products": "Yerel Ürünler İçin Kargo Ücreti",
+    "Shipping Cost For International Products": "Uluslararası Ürünler İçin Kargo Ücreti"
 }

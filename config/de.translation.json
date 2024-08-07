@@ -492,5 +492,7 @@
     "Work Days": "Arbeitstage",
     "Normal": "Normal",
     "Fast": "Schnell",
-    "Product Names": "Produktnamen"
+    "Product Names": "Produktnamen",
+    "Shipping Cost For Local Products": "Versandkosten für lokale Produkte",
+    "Shipping Cost For International Products": "Versandkosten für internationale Produkte"
 }

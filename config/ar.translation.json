@@ -501,5 +501,7 @@
     "Work Days": "أيام عمل",
     "Normal": "عادي",
     "Fast": "سريع",
-    "Product Names": "أسماء المنتجات"
+    "Product Names": "أسماء المنتجات",
+    "Shipping Cost For Local Products": "تكلفة الشحن للمنتجات المحلية",
+    "Shipping Cost For International Products": "تكلفة الشحن للمنتجات الدولية"
 }
