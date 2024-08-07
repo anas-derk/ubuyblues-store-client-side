@@ -116,7 +116,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                     setUserInfo(userData);
                                     const localAndInternationlProductsTemp = getLocalAndInternationalProducts(result.data.products, isShippingToOtherAddress ? userData.shippingAddress.country : userData.billingAddress.country);
                                     setLocalAndInternationlProducts(localAndInternationlProductsTemp);
-                                    setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, totalPrices.totalPriceAfterDiscount));
+                                    setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod , totalPrices.totalPriceAfterDiscount));
                                     setIsGetUserInfo(false);
                                 }
                             }
@@ -214,7 +214,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         return { local, international };
     }
 
-    const getShippingCost = (localProductsLength, internationalProductsLength, totalPriceAfterDiscount) => {
+    const getShippingCost = (localProductsLength, internationalProductsLength, shippingMethod, totalPriceAfterDiscount) => {
         let tempShippingCost = { forLocalProducts: 0, forInternationalProducts: 0 };
         if (localProductsLength !== 0) {
             if (shippingMethod.forLocalProducts === "ubuyblues") {
@@ -279,7 +279,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         setUserInfo(newUserInfo);
         const localAndInternationlProductsTemp = getLocalAndInternationalProducts(allProductsData, isShippingToOtherAddress ? newUserInfo.shippingAddress.country : newUserInfo.billingAddress.country);
         setLocalAndInternationlProducts(localAndInternationlProductsTemp);
-        setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, pricesDetailsSummary.totalPriceAfterDiscount));
+        setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod, pricesDetailsSummary.totalPriceAfterDiscount));
     }
 
     const handleIsShippingToOtherAddress = (isShippingToOtherAddress) => {
@@ -287,7 +287,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         setIsDisplayPaypalPaymentButtons(false);
         const localAndInternationlProductsTemp = getLocalAndInternationalProducts(allProductsData, isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country);
         setLocalAndInternationlProducts(localAndInternationlProductsTemp);
-        setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, pricesDetailsSummary.totalPriceAfterDiscount));
+        setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod, pricesDetailsSummary.totalPriceAfterDiscount));
     }
 
     const createNewOrder = async (orderDetails) => {
@@ -618,6 +618,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 clearTimeout(errorTimeout);
             }, 2000);
         }
+    }
+
+    const handleSelectShippingMethod = (newShippingMethod) => {
+        setShippingMethod(newShippingMethod);
+        setShippingCost(getShippingCost(localAndInternationlProducts.local.length, localAndInternationlProducts.international.length, newShippingMethod, pricesDetailsSummary.totalPriceAfterDiscount));
     }
 
     return (
@@ -1066,9 +1071,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                             id="local-normal-shipping-method-radio"
                                                             className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                             name="radioGroup1"
-                                                            onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}
+                                                            onChange={() => handleSelectShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}
                                                         />
-                                                        <label htmlFor="local-normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}>{t("Normal")}</label>
+                                                        <label htmlFor="local-normal-shipping-method-radio" onClick={() => handleSelectShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}>{t("Normal")}</label>
                                                     </div>
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( 2 - 5 ) {t("Work Days")}</span>
@@ -1082,9 +1087,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                             id="ubuyblues-shipping-method-radio"
                                                             className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                             name="radioGroup1"
-                                                            onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}
+                                                            onChange={() => handleSelectShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}
                                                         />
-                                                        <label htmlFor="ubuyblues-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}>{t("Ubuyblues")}</label>
+                                                        <label htmlFor="ubuyblues-shipping-method-radio" onClick={() => handleSelectShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}>{t("Ubuyblues")}</label>
                                                     </div>
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( {(3 * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)} )</span>
@@ -1107,9 +1112,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                             id="international-normal-shipping-method-radio"
                                                             className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                             name="radioGroup2"
-                                                            onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}
+                                                            onChange={() => handleSelectShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}
                                                         />
-                                                        <label htmlFor="normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}>{t("Normal")}</label>
+                                                        <label htmlFor="normal-shipping-method-radio" onClick={() => handleSelectShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}>{t("Normal")}</label>
                                                     </div>
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( 10 - 15 ) {t("Work Days")}</span>
@@ -1123,9 +1128,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                             id="international-fast-shipping-method-radio"
                                                             className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                             name="radioGroup2"
-                                                            onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}
+                                                            onChange={() => handleSelectShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}
                                                         />
-                                                        <label htmlFor="international-fast-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}>{t("Fast")}</label>
+                                                        <label htmlFor="international-fast-shipping-method-radio" onClick={() => handleSelectShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}>{t("Fast")}</label>
                                                     </div>
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( 6 - 9 ) {t("Work Days")}</span>
