@@ -1031,22 +1031,22 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </div>
-                                        <div className="row shipping-cost-for-local-products total pb-3 mb-4">
+                                        {localAndInternationlProducts.local.length > 0 && <div className="row shipping-cost-for-local-products total pb-3 mb-4">
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
-                                                {t("Shipping Cost For Local Products")}
+                                                {t(localAndInternationlProducts.international.length > 0 ? "Shipping Cost For Local Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(shippingCost.forLocalProducts).toFixed(2)} {t("KWD")}
                                             </div>
-                                        </div>
-                                        <div className="row shipping-cost-for-international-products total pb-3 mb-4">
+                                        </div>}
+                                        {localAndInternationlProducts.international.length > 0 && <div className="row shipping-cost-for-international-products total pb-3 mb-4">
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
-                                                {t("Shipping Cost For International Products")}
+                                                {t(localAndInternationlProducts.local.length > 0 ? "Shipping Cost For International Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(shippingCost.forInternationalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>
+                                        </div>}
                                         {/* Start Shipping Methods Section */}
                                         <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
                                             <h5 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h5>
