@@ -125,7 +125,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 }
                 setIsGetStoreDetails(false);
             })
-            .catch(() => {
+            .catch((err) => {
                 if (err?.response?.data?.msg === "Unauthorized Error") {
                     localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     setIsGetUserInfo(false);
