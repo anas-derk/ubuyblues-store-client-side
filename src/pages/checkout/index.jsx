@@ -112,11 +112,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                     const totalPrices = calcTotalPrices(result.data.currentDate, result.data.products);
                                     setPricesDetailsSummary(totalPrices);
                                     setAllProductsData(result.data.products);
-                                    const userInfo = await getAndSetUserInfoData();
-                                    setUserInfo(userInfo);
-                                    const localAndInternationlProductsTemp = getLocalAndInternationalProducts(result.data.products, userInfo.shippingAddress.country);
+                                    const userData = await getAndSetUserInfoData();
+                                    setUserInfo(userData);
+                                    const localAndInternationlProductsTemp = getLocalAndInternationalProducts(result.data.products, isShippingToOtherAddress ? userData.shippingAddress.country : userData.billingAddress.country);
                                     setLocalAndInternationlProducts(localAndInternationlProductsTemp);
-                                    setShippingCost(getShippingCost(localAndInternationlProducts.local.length, localAndInternationlProducts.international.length, totalPrices.totalPriceAfterDiscount));
+                                    setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, totalPrices.totalPriceAfterDiscount));
                                     setIsGetUserInfo(false);
                                 }
                             }
@@ -257,6 +257,39 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }
 
+    const handleSelectCountry = (country, section) => {
+        setIsDisplayPaypalPaymentButtons(false);
+        const countryCode = getCountryCode(country);
+        const newUserInfo = {
+            ...userInfo,
+            ...(section === "billing" ? {
+                billingAddress: {
+                    ...userInfo.billingAddress,
+                    country,
+                    phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, countryCode),
+                }
+            } : {
+                shippingAddress: {
+                    ...userInfo.shippingAddress,
+                    country,
+                    phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, countryCode),
+                }
+            }),
+        };
+        setUserInfo(newUserInfo);
+        const localAndInternationlProductsTemp = getLocalAndInternationalProducts(allProductsData, isShippingToOtherAddress ? newUserInfo.shippingAddress.country : newUserInfo.billingAddress.country);
+        setLocalAndInternationlProducts(localAndInternationlProductsTemp);
+        setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, pricesDetailsSummary.totalPriceAfterDiscount));
+    }
+
+    const handleIsShippingToOtherAddress = (isShippingToOtherAddress) => {
+        setIsShippingToOtherAddress(isShippingToOtherAddress);
+        setIsDisplayPaypalPaymentButtons(false);
+        const localAndInternationlProductsTemp = getLocalAndInternationalProducts(allProductsData, isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country);
+        setLocalAndInternationlProducts(localAndInternationlProductsTemp);
+        setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, pricesDetailsSummary.totalPriceAfterDiscount));
+    }
+
     const createNewOrder = async (orderDetails) => {
         try {
             return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}`, orderDetails)).data;
@@ -268,7 +301,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const handleSelectPaypalPayment = async () => {
         try {
-            setIsWaitCreateNewOrder(true);
             const errorsObject = inputValuesValidation([
                 {
                     name: "first_name_for_billing_address",
@@ -431,6 +463,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
+                setIsWaitCreateNewOrder(true);
                 if (isSavePaymentInfo) {
                     localStorage.setItem("asfour-store-user-addresses", JSON.stringify({
                         billingAddress: {
@@ -652,18 +685,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                             <select
                                                 className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
-                                                onChange={(e) => {
-                                                    const countryCode = getCountryCode(e.target.value);
-                                                    setUserInfo({
-                                                        ...userInfo,
-                                                        billingAddress: {
-                                                            ...userInfo.billingAddress,
-                                                            country: e.target.value,
-                                                            phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, countryCode),
-                                                        },
-                                                    });
-                                                    setIsDisplayPaypalPaymentButtons(false);
-                                                }}
+                                                onChange={(e) => handleSelectCountry(e.target.value, "billing")}
                                                 style={{
                                                     backgroundColor: "var(--main-color-one)",
                                                 }}
@@ -790,7 +812,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             className="form-check-input"
                                             type="checkbox"
                                             id="flexCheckDefault"
-                                            onChange={(e) => { setIsShippingToOtherAddress(e.target.checked); setIsDisplayPaypalPaymentButtons(false); }}
+                                            onChange={(e) => handleIsShippingToOtherAddress(e.target.checked)}
                                         />
                                         <label className="form-check-label" htmlFor="flexCheckDefault">
                                             {t("Do You Want To Ship To A Different Address ?")}
@@ -843,18 +865,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                             <select
                                                 className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
-                                                onChange={(e) => {
-                                                    const countryCode = getCountryCode(e.target.value);
-                                                    setUserInfo({
-                                                        ...userInfo,
-                                                        shippingAddress: {
-                                                            ...userInfo.shippingAddress,
-                                                            country: e.target.value,
-                                                            phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, countryCode),
-                                                        },
-                                                    });
-                                                    setIsDisplayPaypalPaymentButtons(false);
-                                                }}
+                                                onChange={(e) => handleSelectCountry(e.target.value, "shipping")}
                                                 style={{
                                                     backgroundColor: "var(--main-color-one)",
                                                 }}
