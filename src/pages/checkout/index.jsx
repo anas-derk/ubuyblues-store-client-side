@@ -57,6 +57,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [localAndInternationlProducts, setLocalAndInternationlProducts] = useState({ local: [], international: [] });
 
+    const [shippingCost, setShippingCost] = useState({ forLocalProducts: 0, forInternationalProducts: 0 });
+
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
 
     const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
@@ -107,12 +109,15 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                 result = await getProductsByIdsAnsStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
                                 if (result.data.products.length > 0) {
                                     setCurrentDate(result.data.currentDate);
-                                    setPricesDetailsSummary(calcTotalPrices(result.data.currentDate, result.data.products));
+                                    const totalPrices = calcTotalPrices(result.data.currentDate, result.data.products);
+                                    setPricesDetailsSummary(totalPrices);
                                     setAllProductsData(result.data.products);
                                     const userInfo = await getAndSetUserInfoData();
                                     setUserInfo(userInfo);
+                                    const localAndInternationlProductsTemp = getLocalAndInternationalProducts(result.data.products, userInfo.shippingAddress.country);
+                                    setLocalAndInternationlProducts(localAndInternationlProductsTemp);
+                                    setShippingCost(getShippingCost(localAndInternationlProducts.local.length, localAndInternationlProducts.international.length, totalPrices.totalPriceAfterDiscount));
                                     setIsGetUserInfo(false);
-                                    setLocalAndInternationlProducts(getLocalAndInternationalProducts(result.data.products, userInfo.shippingAddress.country));
                                 }
                             }
                         }
@@ -207,6 +212,24 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
         });
         return { local, international };
+    }
+
+    const getShippingCost = (localProductsLength, internationalProductsLength, totalPriceAfterDiscount) => {
+        let tempShippingCost = { forLocalProducts: 0, forInternationalProducts: 0 };
+        if (localProductsLength !== 0) {
+            if (shippingMethod.forLocalProducts === "ubuyblues") {
+                tempShippingCost.forLocalProducts = 1;
+            }
+        }
+        if (internationalProductsLength !== 0) {
+            if (shippingMethod.forInternationalProducts === "normal") {
+                tempShippingCost.forInternationalProducts = totalPriceAfterDiscount * 0.15;
+            }
+            else {
+                tempShippingCost.forInternationalProducts = totalPriceAfterDiscount * 0.25;
+            }
+        }
+        return tempShippingCost;
     }
 
     const handleSelectUserLanguage = (userLanguage) => {
@@ -509,7 +532,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 {
                     amount: {
                         currency_code: "USD",
-                        value: pricesDetailsSummary.totalPriceAfterDiscount,
+                        value: pricesDetailsSummary.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts,
                     }
                 }
             ]
@@ -995,6 +1018,22 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                            </div>
+                                        </div>
+                                        <div className="row shipping-cost-for-local-products total pb-3 mb-4">
+                                            <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                {t("Shipping Cost For Local Products")}
+                                            </div>
+                                            <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                {(shippingCost.forLocalProducts).toFixed(2)} {t("KWD")}
+                                            </div>
+                                        </div>
+                                        <div className="row shipping-cost-for-international-products total pb-3 mb-4">
+                                            <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                {t("Shipping Cost For International Products")}
+                                            </div>
+                                            <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                {(shippingCost.forInternationalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </div>
                                         {/* Start Shipping Methods Section */}
