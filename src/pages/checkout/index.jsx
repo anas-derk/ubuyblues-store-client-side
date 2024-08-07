@@ -76,6 +76,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem("asfour-store-language");
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+    }, []);
+
+    useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
@@ -91,8 +96,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getStoreDetails(storeId)
             .then(async (result) => {
                 if (!result.error) {
@@ -106,7 +109,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                     setCurrentDate(result.data.currentDate);
                                     setPricesDetailsSummary(calcTotalPrices(result.data.currentDate, result.data.products));
                                     setAllProductsData(result.data.products);
-                                    setLocalAndInternationlProducts(getLocalAndInternationalProducts(result.data.products));
+                                    const userInfo = await getAndSetUserInfoData();
+                                    setUserInfo(userInfo);
+                                    setIsGetUserInfo(false);
+                                    setLocalAndInternationlProducts(getLocalAndInternationalProducts(result.data.products, userInfo.shippingAddress.country));
                                 }
                             }
                         }
@@ -114,60 +120,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 }
                 setIsGetStoreDetails(false);
             })
-            .catch((err) => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-    }, [storeId]);
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-                if (userToken) {
-                    const result = await getUserInfo();
-                    if (!result.error) {
-                        setUserInfo(result.data);
-                    } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                    }
-                } else {
-                    const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
-                    if (userAddresses) {
-                        setUserInfo({ billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress });
-                        setIsSavePaymentInfo(true);
-                    } else {
-                        setUserInfo({
-                            billingAddress: {
-                                firstName: "",
-                                lastName: "",
-                                companyName: "",
-                                country: "Kuwait",
-                                streetAddress: "",
-                                apartmentNumber: 1,
-                                city: "",
-                                postalCode: 1,
-                                phoneNumber: "0096560048235",
-                                email: "",
-                            },
-                            shippingAddress: {
-                                firstName: "",
-                                lastName: "",
-                                companyName: "",
-                                country: "Kuwait",
-                                streetAddress: "",
-                                apartmentNumber: 1,
-                                city: "",
-                                postalCode: 1,
-                                phoneNumber: "0096560048235",
-                                email: "",
-                            },
-                        });
-                    }
-                }
-                setIsGetUserInfo(false);
-            }
-            catch (err) {
+            .catch(() => {
                 if (err?.response?.data?.msg === "Unauthorized Error") {
                     localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     setIsGetUserInfo(false);
@@ -175,10 +128,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 }
-            }
-        }
-        fetchData();
-    }, []);
+            });
+    }, [storeId]);
 
     useEffect(() => {
         if (!isGetUserInfo && !isGetStoreDetails) {
@@ -186,10 +137,70 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }, [isGetUserInfo, isGetStoreDetails]);
 
-    const getLocalAndInternationalProducts = (products) => {
+    const getAndSetUserInfoAsGuest = () => {
+        const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
+        if (userAddresses) {
+            const userInfo = { billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress };
+            setUserInfo(userInfo);
+            setIsSavePaymentInfo(true);
+            return userInfo;
+        } else {
+            const userInfo = {
+                billingAddress: {
+                    firstName: "",
+                    lastName: "",
+                    companyName: "",
+                    country: "Kuwait",
+                    streetAddress: "",
+                    apartmentNumber: 1,
+                    city: "",
+                    postalCode: 1,
+                    phoneNumber: "0096560048235",
+                    email: "",
+                },
+                shippingAddress: {
+                    firstName: "",
+                    lastName: "",
+                    companyName: "",
+                    country: "Kuwait",
+                    streetAddress: "",
+                    apartmentNumber: 1,
+                    city: "",
+                    postalCode: 1,
+                    phoneNumber: "0096560048235",
+                    email: "",
+                },
+            };
+            setUserInfo(userInfo);
+            return userInfo;
+        }
+    }
+
+    async function getAndSetUserInfoData() {
+        try {
+            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+            if (userToken) {
+                const result = await getUserInfo();
+                if (!result.error) {
+                    setUserInfo(result.data);
+                    return result.data;
+                } else {
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    return getAndSetUserInfoAsGuest();
+                }
+            } else {
+                return getAndSetUserInfoAsGuest();
+            }
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
+    const getLocalAndInternationalProducts = (products, shippingCountry) => {
         let local = [], international = [];
         products.forEach((product) => {
-            if (countries[product.country].name === userInfo.shippingAddress?.country) {
+            if (countries[product.country].name === shippingCountry) {
                 local.push(product.name);
             } else {
                 international.push(product.name);
