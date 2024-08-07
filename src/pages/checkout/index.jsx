@@ -986,83 +986,91 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </div>
-                                                                                {/* Start Shipping Methods Section */}
-                                                                                <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
+                                        {/* Start Shipping Methods Section */}
+                                        <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
                                             <h5 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h5>
-                                            <h6 className="text-center mb-4">{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} )</h6>
-                                            <h6 className="text-center mb-3 fw-bold">{t("Product Names")} :</h6>
-                                            <ul className={`mb-5 border border-2 p-3`}>
-                                                {localAndInternationlProducts.local.map((product, productIndex) => <li key={productIndex}>{product} .</li>)}
-                                            </ul>
-                                            <div className={`row align-items-center mb-5`}>
-                                                <div className="col-md-6">
-                                                    <input
-                                                        type="radio"
-                                                        checked={shippingMethod.forLocalProducts === "normal"}
-                                                        id="local-normal-shipping-method-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup1"
-                                                        onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}
-                                                    />
-                                                    <label htmlFor="local-normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}>{t("Normal")}</label>
+                                            {localAndInternationlProducts.local.length > 0 && <>
+                                                {localAndInternationlProducts.international.length > 0 && <>
+                                                    <h6 className="text-center mb-4">{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} )</h6>
+                                                    <h6 className="text-center mb-3 fw-bold">{t("Product Names")} :</h6>
+                                                    <ul className={`mb-5 border border-2 p-3`}>
+                                                        {localAndInternationlProducts.local.map((product, productIndex) => <li key={productIndex}>{product} .</li>)}
+                                                    </ul>
+                                                </>}
+                                                <div className={`row align-items-center mb-5`}>
+                                                    <div className="col-md-6">
+                                                        <input
+                                                            type="radio"
+                                                            checked={shippingMethod.forLocalProducts === "normal"}
+                                                            id="local-normal-shipping-method-radio"
+                                                            className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                            name="radioGroup1"
+                                                            onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}
+                                                        />
+                                                        <label htmlFor="local-normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "normal" })}>{t("Normal")}</label>
+                                                    </div>
+                                                    <div className="col-md-6 text-md-end">
+                                                        <span className="p-3 border border-3">( 2 - 5 ) {t("Work Days")}</span>
+                                                    </div>
                                                 </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <span className="p-3 border border-3">( 2 - 5 ) {t("Work Days")}</span>
+                                                <div className={`row align-items-center pt-4 mb-5`}>
+                                                    <div className="col-md-6">
+                                                        <input
+                                                            type="radio"
+                                                            checked={shippingMethod.forLocalProducts === "ubuyblues"}
+                                                            id="ubuyblues-shipping-method-radio"
+                                                            className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                            name="radioGroup1"
+                                                            onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}
+                                                        />
+                                                        <label htmlFor="ubuyblues-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}>{t("Ubuyblues")}</label>
+                                                    </div>
+                                                    <div className="col-md-6 text-md-end">
+                                                        <span className="p-3 border border-3">( {(3 * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)} )</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className={`row align-items-center pt-4 mb-5`}>
-                                                <div className="col-md-6">
-                                                    <input
-                                                        type="radio"
-                                                        checked={shippingMethod.forLocalProducts === "ubuyblues"}
-                                                        id="ubuyblues-shipping-method-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup1"
-                                                        onChange={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}
-                                                    />
-                                                    <label htmlFor="ubuyblues-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}>{t("Ubuyblues")}</label>
+                                            </>}
+                                            {localAndInternationlProducts.international.length > 0 && <>
+                                                {localAndInternationlProducts.local.length > 0 && <>
+                                                    <h6 className="text-center mb-4 border-top pt-4">{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</h6>
+                                                    <h6 className="text-center mb-3 fw-bold">{t("Product Names")} :</h6>
+                                                    <ul className={`mb-5 border border-2 p-3`}>
+                                                        {localAndInternationlProducts.international.map((product, productIndex) => <li key={productIndex} className={`${productIndex !== localAndInternationlProducts.international.length - 1 ? "mb-3" : ""}`}>{product} .</li>)}
+                                                    </ul>
+                                                </>}
+                                                <div className={`row align-items-center pt-4 mb-5`}>
+                                                    <div className="col-md-6">
+                                                        <input
+                                                            type="radio"
+                                                            checked={shippingMethod.forInternationalProducts === "normal"}
+                                                            id="international-normal-shipping-method-radio"
+                                                            className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                            name="radioGroup2"
+                                                            onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}
+                                                        />
+                                                        <label htmlFor="normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}>{t("Normal")}</label>
+                                                    </div>
+                                                    <div className="col-md-6 text-md-end">
+                                                        <span className="p-3 border border-3">( 10 - 15 ) {t("Work Days")}</span>
+                                                    </div>
                                                 </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <span className="p-3 border border-3">( {(3 * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)} )</span>
+                                                <div className={`row align-items-center pt-4 mb-5`}>
+                                                    <div className="col-md-6">
+                                                        <input
+                                                            type="radio"
+                                                            checked={shippingMethod.forInternationalProducts === "fast"}
+                                                            id="international-fast-shipping-method-radio"
+                                                            className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                            name="radioGroup2"
+                                                            onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}
+                                                        />
+                                                        <label htmlFor="international-fast-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}>{t("Fast")}</label>
+                                                    </div>
+                                                    <div className="col-md-6 text-md-end">
+                                                        <span className="p-3 border border-3">( 6 - 9 ) {t("Work Days")}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h6 className="text-center mb-4 border-top pt-4">{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</h6>
-                                            <h6 className="text-center mb-3 fw-bold">{t("Product Names")} :</h6>
-                                            <ul className={`mb-5 border border-2 p-3`}>
-                                                {localAndInternationlProducts.international.map((product, productIndex) => <li key={productIndex} className={`${productIndex !== localAndInternationlProducts.international.length - 1 ? "mb-3" : ""}`}>{product} .</li>)}
-                                            </ul>
-                                            <div className={`row align-items-center pt-4 mb-5`}>
-                                                <div className="col-md-6">
-                                                    <input
-                                                        type="radio"
-                                                        checked={shippingMethod.forInternationalProducts === "normal"}
-                                                        id="international-normal-shipping-method-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup2"
-                                                        onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}
-                                                    />
-                                                    <label htmlFor="normal-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "normal" })}>{t("Normal")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <span className="p-3 border border-3">( 10 - 15 ) {t("Work Days")}</span>
-                                                </div>
-                                            </div>
-                                            <div className={`row align-items-center pt-4 mb-5`}>
-                                                <div className="col-md-6">
-                                                    <input
-                                                        type="radio"
-                                                        checked={shippingMethod.forInternationalProducts === "fast"}
-                                                        id="international-fast-shipping-method-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup2"
-                                                        onChange={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}
-                                                    />
-                                                    <label htmlFor="international-fast-shipping-method-radio" onClick={() => setShippingMethod({ ...shippingMethod, forInternationalProducts: "fast" })}>{t("Fast")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <span className="p-3 border border-3">( 6 - 9 ) {t("Work Days")}</span>
-                                                </div>
-                                            </div>
+                                            </>}
                                         </section>
                                         {/* End Shipping Methods Section */}
                                         {/* Start Payement Methods Section */}
