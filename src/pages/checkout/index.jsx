@@ -218,7 +218,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         let tempShippingCost = { forLocalProducts: 0, forInternationalProducts: 0 };
         if (localProductsLength !== 0) {
             if (shippingMethod.forLocalProducts === "ubuyblues") {
-                tempShippingCost.forLocalProducts = 1;
+                tempShippingCost.forLocalProducts = 3;
             }
         }
         if (internationalProductsLength !== 0) {
@@ -1041,7 +1041,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t(localAndInternationlProducts.international.length > 0 ? "Shipping Cost For Local Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(shippingCost.forLocalProducts).toFixed(2)} {t("KWD")}
+                                                {(shippingCost.forLocalProducts  * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
                                             </div>
                                         </div>}
                                         {localAndInternationlProducts.international.length > 0 && <div className="row shipping-cost-for-international-products total pb-3 mb-4">
@@ -1050,6 +1050,14 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(shippingCost.forInternationalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                            </div>
+                                        </div>}
+                                        {localAndInternationlProducts.local.length > 0 && localAndInternationlProducts.international.length > 0 && <div className="row shipping-cost-for-products total pb-3 mb-4">
+                                            <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                {t("Shipping Cost")}
+                                            </div>
+                                            <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                {((shippingCost.forLocalProducts + shippingCost.forInternationalProducts) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </div>}
                                         {/* Start Shipping Methods Section */}
