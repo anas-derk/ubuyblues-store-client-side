@@ -595,7 +595,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 if (paymentName === "tap") {
                     await router.push(result.data.transaction.url);
                 } else if (paymentMethod === "tabby") {
-                    console.log(result)
                     await router.push(result.data.checkoutURL);
                 }
             } else {
