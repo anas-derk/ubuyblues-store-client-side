@@ -555,6 +555,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 productId: product._id,
                 quantity: getProductQuantity(product._id),
             })),
+            shippingMethod,
             requestNotes
         }
     }
@@ -593,8 +594,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
             if (!result.error) {
                 if (paymentName === "tap") {
                     await router.push(result.data.transaction.url);
-                } else if (paymentMethod === "pilisio") {
-                    await router.push(result.data.data.invoice_url);
+                } else if (paymentMethod === "tabby") {
+                    console.log(result)
+                    await router.push(result.data.checkoutURL);
                 }
             } else {
                 setIsWaitCreateNewOrder(false);
@@ -1195,17 +1197,17 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <FaTape className="icon tap-icon" />
                                                 </div>
                                             </div>
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "pilisio" ? "mb-3" : ""}`}>
+                                            <div className={`row align-items-center pt-3 ${paymentMethod === "tabby" ? "mb-3" : ""}`}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
-                                                        checked={paymentMethod === "pilisio"}
+                                                        checked={paymentMethod === "tabby"}
                                                         id="tap-radio"
                                                         className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                         name="radioGroup"
-                                                        onChange={() => setPaymentMethod("pilisio")}
+                                                        onChange={() => setPaymentMethod("tabby")}
                                                     />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("pilisio")}>{t("Pilisio")}</label>
+                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tabby")}>{t("Tabby")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
                                                     <FaTape className="icon tap-icon" />
@@ -1220,6 +1222,12 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             {paymentMethod === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={() => createPaymentOrder("tap")}
+                                            >
+                                                {t("Confirm Request")}
+                                            </button>}
+                                            {paymentMethod === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                                onClick={() => createPaymentOrder("tabby")}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}
