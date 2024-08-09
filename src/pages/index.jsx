@@ -184,6 +184,7 @@ export default function Home({ countryAsProperty, storeId }) {
         // ==========================================================================================
         getStoreDetails(storeId)
             .then(async (storeDetailsResult) => {
+                console.log(storeDetailsResult)
                 setIsGetStoreDetails(false);
                 if (!storeDetailsResult.error && storeDetailsResult.data?.status === "approving") {
                     setStoreDetails(storeDetailsResult.data);
