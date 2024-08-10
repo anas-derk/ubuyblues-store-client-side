@@ -64,7 +64,7 @@ export default function AccountVerification({ email }) {
         else {
             if (isEmail(email)) {
                 setIsWaitSendTheCode(true);
-                sendTheCodeToUserEmail(email)
+                sendTheCodeToUserEmail(email, "to activate account")
                     .then((result) => {
                         setIsWaitSendTheCode(false);
                         if (!result.error) {
@@ -109,7 +109,7 @@ export default function AccountVerification({ email }) {
     const resendTheCodeToEmail = async () => {
         try {
             setIsWaitSendTheCode(true);
-            const result = await sendTheCodeToUserEmail(email);
+            const result = await sendTheCodeToUserEmail(email, "to activate account");
             setIsWaitSendTheCode(false);
             if (!result.error) {
                 setSuccessMsg(result.msg);

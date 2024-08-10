@@ -223,9 +223,9 @@ async function getUserInfo() {
     }
 }
 
-const sendTheCodeToUserEmail = async (email) => {
+const sendTheCodeToUserEmail = async (email, typeOfUse) => {
     try {
-        return (await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}`)).data;
+        return (await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}&typeOfUse=${typeOfUse}`)).data;
     }
     catch (err) {
         throw err;
