@@ -8,11 +8,14 @@ import LoaderPage from "@/components/LoaderPage";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { isEmail } from "../../../public/global_functions/validations";
-import { getUserInfo } from "../../../public/global_functions/popular";
+import { getUserInfo, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
+import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function AccountVerification({ email }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
+
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
 
     const [minutes, setMinutes] = useState(1);
 
@@ -106,7 +109,7 @@ export default function AccountVerification({ email }) {
     const resendTheCodeToEmail = async () => {
         try {
             setIsWaitSendTheCode(true);
-            const result = await sendTheCodeToUserEmail();
+            const result = await sendTheCodeToUserEmail(email);
             setIsWaitSendTheCode(false);
             if (!result.error) {
                 setSuccessMsg(result.msg);
@@ -133,22 +136,11 @@ export default function AccountVerification({ email }) {
         }
     }
 
-    const sendTheCodeToUserEmail = async () => {
-        try {
-            const res = await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}`);
-            return res.data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
     const checkAccountVerificationCode = async (e) => {
         try {
             e.preventDefault();
             setIsWaitCheckingStatus(true);
-            const res = await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}&code=${accountVerificationCodeCharactersList.join("")}`);
-            const result = res.data;
+            const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}&code=${accountVerificationCodeCharactersList.join("")}`)).data;
             if (!result.error) {
                 localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
                 await router.replace("/");
@@ -218,7 +210,7 @@ export default function AccountVerification({ email }) {
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Account Verification")}</title>
             </Head>
-            {!isLoadingPage ? <>
+            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid pb-5">
@@ -274,7 +266,7 @@ export default function AccountVerification({ email }) {
                                     {!isWaitSendTheCode && !errorMsg && <button
                                         className="btn btn-danger me-2"
                                         onClick={resendTheCodeToEmail}
-                                        disabled={seconds == 0 && minutes == 0 ? false : true}
+                                        disabled={seconds === 0 && minutes === 0 ? false : true}
                                     >
                                         {t("Resend The Code")}
                                     </button>}
@@ -294,7 +286,9 @@ export default function AccountVerification({ email }) {
                         </section>}
                     </div>
                 </div>
-            </> : <LoaderPage />}
+            </>}
+            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
+            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
         </div>
     );
 }

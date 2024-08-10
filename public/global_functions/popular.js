@@ -223,6 +223,15 @@ async function getUserInfo() {
     }
 }
 
+const sendTheCodeToUserEmail = async (email) => {
+    try {
+        return (await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}`)).data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -244,5 +253,6 @@ export {
     getFavoriteProductsByProductsIdsAndUserId,
     isFavoriteProductForUser,
     calcTotalOrderPriceAfterDiscount,
-    getUserInfo
+    getUserInfo,
+    sendTheCodeToUserEmail
 }
