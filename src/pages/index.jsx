@@ -281,10 +281,10 @@ export default function Home({ countryAsProperty, storeId }) {
         totalPagesCount.forCategories = 0;
         setCurrentPage({ ...currentPage, forCategories: 1 });
         const result = await getCategoriesCount(filtersAsString);
-        console.log(await getCategoriesCount(filtersAsString))
         if (result.data > 0) {
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
             totalPagesCount.forCategories = Math.ceil(result.data / pageSizes.forCategories);
+            console.log(totalPagesCount.forCategories)
         }
     }
 
