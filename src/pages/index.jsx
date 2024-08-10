@@ -283,8 +283,10 @@ export default function Home({ countryAsProperty, storeId }) {
         const result = await getCategoriesCount(filtersAsString);
         if (result.data > 0) {
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
-            totalPagesCount.forCategories = Math.ceil(result.data / pageSizes.forCategories);
-            console.log(totalPagesCount.forCategories)
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forCategories: Math.ceil(result.data / pageSizes.forCategories)
+            });
         }
     }
 
@@ -297,7 +299,10 @@ export default function Home({ countryAsProperty, storeId }) {
             const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
             setAllFlashProductsInsideThePage(result1.products);
             setCurrentDate(result1.currentDate);
-            totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSizes.forFlashProducts);
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forFlashProducts: Math.ceil(result.data / pageSizes.forFlashProducts)
+            });
             return result1.products;
         }
         return [];
@@ -311,7 +316,10 @@ export default function Home({ countryAsProperty, storeId }) {
         if (result.data > 0) {
             const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
             setAllProductsInsideThePage(result1.products);
-            totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forProducts: Math.ceil(result.data / pageSizes.forProducts)
+            });
             return result1.products;
         }
         return [];
