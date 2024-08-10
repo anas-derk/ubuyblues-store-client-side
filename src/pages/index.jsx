@@ -278,18 +278,12 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetAndSetCategories = async (filtersAsString) => {
         setAllCategoriesInsideThePage([]);
-        setTotalPagesCount({
-            ...totalPagesCount,
-            forCategories: 0
-        });
+        totalPagesCount.forCategories = 0;
         setCurrentPage({ ...currentPage, forCategories: 1 });
         const result = await getCategoriesCount(filtersAsString);
         if (result.data > 0) {
             setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forCategories: Math.ceil(result.data / pageSizes.forCategories)
-            });
+            totalPagesCount.forCategories = Math.ceil(result.data / pageSizes.forCategories);
         }
     }
 
@@ -302,10 +296,7 @@ export default function Home({ countryAsProperty, storeId }) {
             const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
             setAllFlashProductsInsideThePage(result1.products);
             setCurrentDate(result1.currentDate);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forFlashProducts: Math.ceil(result.data / pageSizes.forFlashProducts)
-            });
+            totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSizes.forFlashProducts);
             return result1.products;
         }
         return [];
@@ -319,10 +310,7 @@ export default function Home({ countryAsProperty, storeId }) {
         if (result.data > 0) {
             const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
             setAllProductsInsideThePage(result1.products);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forProducts: Math.ceil(result.data / pageSizes.forProducts)
-            });
+            totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
             return result1.products;
         }
         return [];
