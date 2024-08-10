@@ -64,7 +64,7 @@ export default function AccountVerification({ email }) {
         else {
             if (isEmail(email)) {
                 setIsWaitSendTheCode(true);
-                sendTheCodeToUserEmail()
+                sendTheCodeToUserEmail(email)
                     .then((result) => {
                         setIsWaitSendTheCode(false);
                         if (!result.error) {
