@@ -278,7 +278,10 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetAndSetCategories = async (filtersAsString) => {
         setAllCategoriesInsideThePage([]);
-        totalPagesCount.forCategories = 0;
+        setTotalPagesCount({
+            ...totalPagesCount,
+            forCategories: 0
+        });
         setCurrentPage({ ...currentPage, forCategories: 1 });
         const result = await getCategoriesCount(filtersAsString);
         if (result.data > 0) {
