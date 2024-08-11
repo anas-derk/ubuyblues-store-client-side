@@ -110,7 +110,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     const resendTheCodeToEmail = async () => {
         try {
             setIsWaitSendTheCode(true);
-            const result = await sendTheCodeToUserEmail(email, "to reset password");
+            const result = await sendTheCodeToUserEmail(email, "to reset password", userType);
             setIsWaitSendTheCode(false);
             if (!result.error) {
                 setSuccessMsg(result.msg);
