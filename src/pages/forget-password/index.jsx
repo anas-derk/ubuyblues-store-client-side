@@ -29,7 +29,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
 
     const [seconds, setSeconds] = useState(59);
 
-    const [userType, setUserType] = useState("");
+    const [userType, setUserType] = useState();
 
     const [email, setEmail] = useState("");
 
@@ -255,7 +255,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                 if (!result.error) {
                     setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
                     let successTimeout = setTimeout(async () => {
-                        await router.push(userType === "user" ? "/auth" : "https://dashboard.ubuyblues.com/login");
+                        await router.push(userTypeAsProperty === "user" ? "/auth" : "https://dashboard.ubuyblues.com/login");
                         clearTimeout(successTimeout);
                     }, 6000);
                 } else {
