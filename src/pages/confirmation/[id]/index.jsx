@@ -146,7 +146,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content page">
+                <div className="page-content page pt-5">
                     <div className="container-fluid align-items-center pb-4 text-white">
                         <h1 className="welcome-msg text-center mb-5">{t("Welcome To You In Payment Confirmation Page")}</h1>
                         {Object.keys(orderDetails).length > 0 ? <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">

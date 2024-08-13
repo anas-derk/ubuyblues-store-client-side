@@ -235,7 +235,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     sharingURL={sharingURL}
                 />}
                 {/* End Share Options Box */}
-                <div className="page-content">
+                <div className="page-content pt-5">
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">

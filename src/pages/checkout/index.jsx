@@ -637,7 +637,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     <p>{t("Please Wait")} ...</p>
                 </div>}
                 <Header />
-                <div className="page-content">
+                <div className="page-content pt-5">
                     <div className="container-fluid text-white p-4">
                         <h1 className="h3 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
                         {Object.keys(storeDetails).length > 0 ?

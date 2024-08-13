@@ -258,7 +258,7 @@ export default function UserAuth() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content pt-5">
                     <div className="container-fluid p-4 text-white text-center">
                         <section className="auth-part-display-control mb-5">
                             <h4

@@ -109,7 +109,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <section className="page-content page d-flex justify-content-center align-items-center flex-column pt-4 pb-4">
+                <section className="page-content page d-flex justify-content-center align-items-center flex-column pt-5 pb-4">
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-xl-3">

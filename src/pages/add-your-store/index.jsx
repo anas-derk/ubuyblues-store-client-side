@@ -251,7 +251,7 @@ export default function AddYourStore() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content pt-5">
                     <div className="container-fluid">
                         {isServiceAvailable ? <section className="add-your-store pb-5">
                             <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>

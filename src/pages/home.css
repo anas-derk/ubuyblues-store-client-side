@@ -1,3 +1,17 @@
+.home .carousel {
+  position: static;
+}
+
+.home .carousel .carousel-caption {
+  position: static;
+  padding: 0;
+}
+
+.home .carousel .carousel-caption .ads-content {
+  margin: 0;
+  font-size: 20px;
+}
+
 .home .store-details, .home .categories, .home .last-added-flash-products {
   border-bottom: 2px solid var(--main-color-two);
 }

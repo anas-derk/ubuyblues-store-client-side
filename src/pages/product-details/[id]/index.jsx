@@ -602,7 +602,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     return (
-        <div className="product-details page d-flex flex-column justify-content-center">
+        <div className="product-details page pt-5 d-flex flex-column justify-content-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Product Details")}</title>
             </Head>

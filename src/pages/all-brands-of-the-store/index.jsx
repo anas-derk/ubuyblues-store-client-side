@@ -133,7 +133,7 @@ export default function AllBrands({ storeId }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content pb-5">
+                <div className="page-content pb-5 pt-5">
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeDetails.name}</h1>

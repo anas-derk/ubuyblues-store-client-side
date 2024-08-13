@@ -284,7 +284,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content text-white ps-4 pe-4 text-center">
+                <div className="page-content pt-5 text-white ps-4 pe-4 text-center">
                     <div className="container-fluid">
                         <h1 className="h3 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
                         {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>

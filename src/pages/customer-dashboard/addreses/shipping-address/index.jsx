@@ -224,7 +224,7 @@ export default function CustomerBillingAddress() {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content page d-flex align-items-center">
+                <div className="page-content page pt-5 d-flex align-items-center">
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-xl-3">

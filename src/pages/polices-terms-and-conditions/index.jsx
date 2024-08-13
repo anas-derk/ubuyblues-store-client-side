@@ -46,7 +46,7 @@ export default function PolicesTermsAndConditions() {
     }
 
     return (
-        <div className="privacy-policy-and-conditions caption-page page d-flex flex-column justify-content-center align-items-center">
+        <div className="privacy-policy-and-conditions caption-page page pt-5 d-flex flex-column justify-content-center align-items-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Polices Terms And Conditions")}</title>
             </Head>

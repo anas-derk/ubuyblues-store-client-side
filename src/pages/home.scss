@@ -1,4 +1,15 @@
 .home{
+    .carousel{
+        position: static;
+        .carousel-caption{
+            position: static;
+            padding: 0;
+            .ads-content{
+                margin: 0;
+                font-size: 20px;
+            }
+        }
+    }
     .store-details, .categories, .last-added-flash-products{
         border-bottom: 2px solid var(--main-color-two);
     }

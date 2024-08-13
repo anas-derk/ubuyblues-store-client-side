@@ -195,6 +195,15 @@ export default function Home({ countryAsProperty, storeId }) {
                     const tempFilters = { ...filters, storeId: storeDetailsResult.data._id };
                     setFilters(tempFilters);
                     const filtersAsString = getFiltersAsQuery(tempFilters);
+                    if (storeDetailsResult.data.isMainStore) {
+                        let allTextAdsTemp = [], allImageAdsTemp = [];
+                        (await getAllAds()).data.forEach((ad) => {
+                            if (ad.type === "text") allTextAdsTemp.push(ad);
+                            else allImageAdsTemp.push(ad);
+                        });
+                        setAllTextAds(allTextAdsTemp);
+                        setAllImageAds(allImageAdsTemp);
+                    }
                     // =============================================================================
                     let totalPagesCountTemp = {
                         forCategories: 0,
@@ -302,6 +311,10 @@ export default function Home({ countryAsProperty, storeId }) {
         setIsGetFlashProducts(true);
         setIsGetBrands(true);
         setIsGetStores(true);
+    }
+
+    const getAllAds = async () => {
+        return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads`)).data;
     }
 
     const handleGetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
@@ -584,12 +597,12 @@ export default function Home({ countryAsProperty, storeId }) {
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
                 <div className="page-content">
-                    {allTextAds.length > 0 && <section className="text-ads text-center p-3">
+                    {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-dark mb-5">
                         <Carousel indicators={false} controls={false}>
                             {allTextAds.map((ad, index) => (
                                 <Carousel.Item key={index}>
                                     <Carousel.Caption>
-                                        <p className="ad-content">{ad.content}</p>
+                                        <p className="ad-content text-white m-0">{ad.content}</p>
                                     </Carousel.Caption>
                                 </Carousel.Item>
                             ))}

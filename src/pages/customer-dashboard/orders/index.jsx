@@ -201,7 +201,7 @@ export default function CustomerOrders({ countryAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content page">
+                <div className="page-content page pt-5">
                     <div className="container-fluid pb-4">
                         <div className="row align-items-center">
                             <div className="col-xl-3">

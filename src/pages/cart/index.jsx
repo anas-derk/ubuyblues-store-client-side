@@ -220,7 +220,7 @@ export default function Cart({ countryAsProperty }) {
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content">
+                <div className="page-content pt-5">
                     <div className="container-fluid text-white text-center mb-4">
                         {allProductsData.length > 0 ? <section className="products-by-store">
                             {allProductsData.map((store, storeIndex) => (
