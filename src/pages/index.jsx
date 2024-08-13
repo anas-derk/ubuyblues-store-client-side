@@ -37,6 +37,7 @@ import SectionLoader from "@/components/SectionLoader";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import BrandCard from "@/components/BrandCard";
 import ErrorPopup from "@/components/ErrorPopup";
+import { Carousel } from "react-bootstrap";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -68,9 +69,13 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isGetStores, setIsGetStores] = useState(true);
 
-    const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
+    const [allTextAds, setAllTextAds] = useState([]);
+
+    const [allImageAds, setAllImageAds] = useState([]);
 
     const [allCategoriesInsideThePage, setAllCategoriesInsideThePage] = useState([]);
+
+    const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
 
     const [allFlashProductsInsideThePage, setAllFlashProductsInsideThePage] = useState([]);
 
@@ -191,16 +196,31 @@ export default function Home({ countryAsProperty, storeId }) {
                     setFilters(tempFilters);
                     const filtersAsString = getFiltersAsQuery(tempFilters);
                     // =============================================================================
-                    await handleGetAndSetCategories(filtersAsString);
+                    let totalPagesCountTemp = {
+                        forCategories: 0,
+                        forFlashProducts: 0,
+                        forProducts: 0,
+                        forStores: 0,
+                    }
+                    const result = await getCategoriesCount(filtersAsString);
+                    if (result.data > 0) {
+                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
+                        totalPagesCountTemp.forCategories = Math.ceil(result.data / pageSizes.forCategories);
+                    }
                     setIsGetCategories(false);
                     // =============================================================================
-                    const flashProductsData = await handleGetAndSetFlashProducts(filtersAsString);
+                    const { flashProductsCount, flashProductsData, currentDateTemp } = await handleGetFlashProducts(filtersAsString);
+                    setCurrentDate(currentDateTemp);
+                    setAllFlashProductsInsideThePage(flashProductsData);
+                    totalPagesCountTemp.forFlashProducts = Math.ceil(flashProductsCount / pageSizes.forFlashProducts);
                     if (flashProductsData.length > 0) {
                         setIsExistFlashProductsInDBInGeneral(true);
                     }
                     setIsGetFlashProducts(false);
                     // =============================================================================
-                    const productsData = await handleGetAndSetProducts(filtersAsString);
+                    const { productsCount, productsData } = await handleGetProducts(filtersAsString);
+                    setAllProductsInsideThePage(productsData);
+                    totalPagesCountTemp.forProducts = Math.ceil(productsCount / pageSizes.forProducts);
                     if (productsData.length > 0) {
                         setIsExistProductsInDBInGeneral(true);
                     }
@@ -223,14 +243,17 @@ export default function Home({ countryAsProperty, storeId }) {
                                 setIsGetBrands(false);
                             }
                             if (appearedSectionsResult.data[i].sectionName === "stores" && appearedSectionsResult.data[i].isAppeared) {
-                                await handleGetAndSetStores(filtersAsString);
+                                const { storesCount, storesData } = await handleGetStores(filtersAsString);
+                                totalPagesCountTemp.forStores = Math.ceil(storesCount / pageSizes.forStores);
+                                setAllStoresInsideThePage(storesData);
                                 setIsGetStores(false);
                             }
                         }
                     }
+                    setTotalPagesCount(totalPagesCountTemp);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
@@ -249,6 +272,8 @@ export default function Home({ countryAsProperty, storeId }) {
     }, []);
 
     const handleResetAllHomeData = () => {
+        setAllTextAds([]);
+        setAllImageAds([]);
         setAllCategoriesInsideThePage([]);
         setAllFlashProductsInsideThePage([]);
         setAllProductsInsideThePage([]);
@@ -276,44 +301,35 @@ export default function Home({ countryAsProperty, storeId }) {
         setIsGetStores(true);
     }
 
-    const handleGetAndSetCategories = async (filtersAsString) => {
-        setAllCategoriesInsideThePage([]);
-        totalPagesCount.forCategories = 0;
-        setCurrentPage({ ...currentPage, forCategories: 1 });
-        const result = await getCategoriesCount(filtersAsString);
-        if (result.data > 0) {
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
-            totalPagesCount.forCategories = Math.ceil(result.data / pageSizes.forCategories);
-        }
-    }
-
-    const handleGetAndSetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
-        setAllFlashProductsInsideThePage([]);
-        totalPagesCount.forFlashProducts = 0;
-        setCurrentPage({ ...currentPage, forFlashProducts: 1 });
+    const handleGetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
         const result = await getFlashProductsCount(filtersAsString);
         if (result.data > 0) {
             const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
-            setAllFlashProductsInsideThePage(result1.products);
-            setCurrentDate(result1.currentDate);
-            totalPagesCount.forFlashProducts = Math.ceil(result.data / pageSizes.forFlashProducts);
-            return result1.products;
+            return {
+                flashProductsCount: result.data,
+                flashProductsData: result1.products,
+                currentDateTemp: result1.currentDate
+            }
         }
-        return [];
+        return {
+            flashProductsCount: 0,
+            flashProductsData: [],
+            currentDate: Date.now()
+        }
     }
 
-    const handleGetAndSetProducts = async (filtersAsString, sortDetailsAsString) => {
-        setAllProductsInsideThePage([]);
-        totalPagesCount.forProducts = 0;
-        setCurrentPage({ ...currentPage, forProducts: 1 });
+    const handleGetProducts = async (filtersAsString, sortDetailsAsString) => {
         const result = await getProductsCount(filtersAsString);
         if (result.data > 0) {
-            const result1 = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
-            setAllProductsInsideThePage(result1.products);
-            totalPagesCount.forProducts = Math.ceil(result.data / pageSizes.forProducts);
-            return result1.products;
+            return {
+                productsCount: result.data,
+                productsData: (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data.products
+            }
         }
-        return [];
+        return {
+            productsCount: 0,
+            productsData: [],
+        }
     }
 
     const handleCreateProductsIdsToGetFavoriteProductsForUser = (flashProductsIds, productsIds) => {
@@ -327,20 +343,17 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const handleGetAndSetStores = async (filtersAsString) => {
-        setAllStoresInsideThePage([]);
-        setTotalPagesCount({
-            ...totalPagesCount,
-            forStores: 0
-        });
-        setCurrentPage({ ...currentPage, forStores: 1 });
-        const storesCount = await getStoresCount(filtersAsString);
-        if (storesCount.data > 0) {
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data);
-            setTotalPagesCount({
-                ...totalPagesCount,
-                forStores: Math.ceil(storesCount.data / pageSizes.forStores)
-            });
+    const handleGetStores = async (filtersAsString) => {
+        const result = await getStoresCount(filtersAsString);
+        if (result.data > 0) {
+            return {
+                storesCount: result.data,
+                storesData: (await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data,
+            }
+        }
+        return {
+            storesCount: 0,
+            storesData: [],
         }
     }
 
@@ -505,7 +518,13 @@ export default function Home({ countryAsProperty, storeId }) {
             e.preventDefault();
             if (productType === "normal") {
                 setIsGetProducts(true);
-                const productsData = await handleGetAndSetProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                setCurrentPage({ ...currentPage, forProducts: 1 });
+                const { productsCount, productsData } = await handleGetProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                setTotalPagesCount({
+                    ...totalPagesCount,
+                    forProducts: productsCount
+                });
+                setAllProductsInsideThePage(productsData);
                 await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
                     handleCreateProductsIdsToGetFavoriteProductsForUser(
                         allFlashProductsInsideThePage.map((flashProduct) => flashProduct._id),
@@ -515,7 +534,13 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsGetProducts(false);
             } else {
                 setIsGetFlashProducts(true);
-                const flashProductsData = await handleGetAndSetFlashProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                const { flashProductsCount, flashProductsData, currentDateTemp } = await handleGetFlashProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
+                setCurrentDate(currentDateTemp);
+                setTotalPagesCount({
+                    ...totalPagesCount,
+                    forFlashProducts: flashProductsCount
+                });
+                setAllFlashProductsInsideThePage(flashProductsData);
                 await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
                     handleCreateProductsIdsToGetFavoriteProductsForUser(
                         flashProductsData.map((flashProduct) => flashProduct._id),
@@ -556,6 +581,17 @@ export default function Home({ countryAsProperty, storeId }) {
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
                 <div className="page-content">
+                    {allTextAds.length > 0 && <section className="text-ads text-center p-3">
+                        <Carousel indicators={false} controls={false}>
+                            {allTextAds.map((ad, index) => (
+                                <Carousel.Item key={index}>
+                                    <Carousel.Caption>
+                                        <p className="ad-content">{ad.content}</p>
+                                    </Carousel.Caption>
+                                </Carousel.Item>
+                            ))}
+                        </Carousel>
+                    </section>}
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             {/* Start Store Details Section */}

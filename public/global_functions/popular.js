@@ -22,8 +22,7 @@ const getProductsCount = async (filters) => {
 
 const getAllFlashProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/products/all-flash-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/products/all-flash-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
