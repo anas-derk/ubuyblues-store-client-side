@@ -253,19 +253,11 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                 const result = (await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}`)).data;
                 setIsResetingPasswordStatus(false);
                 if (!result.error) {
-                    if (userTypeAsProperty === "user") {
-                        setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
-                        let successTimeout = setTimeout(async () => {
-                            await router.push("/auth");
-                            clearTimeout(successTimeout);
-                        }, 6000);
-                    } else {
-                        setSuccessMsg(result.msg);
-                        let successTimeout = setTimeout(async () => {
-                            setSuccessMsg("");
-                            clearTimeout(successTimeout);
-                        }, 6000);
-                    }
+                    setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
+                    let successTimeout = setTimeout(async () => {
+                        await router.push(userType === "user" ? "/auth" : "https://dashboard.ubuyblues.com/login");
+                        clearTimeout(successTimeout);
+                    }, 6000);
                 } else {
                     setErrorMsg(result.msg);
                     let errorTimeout = setTimeout(() => {
