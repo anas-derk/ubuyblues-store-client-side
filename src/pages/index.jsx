@@ -206,6 +206,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     if (result.data > 0) {
                         setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
                         totalPagesCountTemp.forCategories = Math.ceil(result.data / pageSizes.forCategories);
+                        setTotalPagesCount(totalPagesCountTemp);
                     }
                     setIsGetCategories(false);
                     // =============================================================================
@@ -213,6 +214,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     setCurrentDate(currentDateTemp);
                     setAllFlashProductsInsideThePage(flashProductsData);
                     totalPagesCountTemp.forFlashProducts = Math.ceil(flashProductsCount / pageSizes.forFlashProducts);
+                    setTotalPagesCount(totalPagesCountTemp);
                     if (flashProductsData.length > 0) {
                         setIsExistFlashProductsInDBInGeneral(true);
                     }
@@ -221,6 +223,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     const { productsCount, productsData } = await handleGetProducts(filtersAsString);
                     setAllProductsInsideThePage(productsData);
                     totalPagesCountTemp.forProducts = Math.ceil(productsCount / pageSizes.forProducts);
+                    setTotalPagesCount(totalPagesCountTemp);
                     if (productsData.length > 0) {
                         setIsExistProductsInDBInGeneral(true);
                     }
@@ -253,7 +256,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     setTotalPagesCount(totalPagesCountTemp);
                 }
             })
-            .catch((err) => {
+            .catch(() => {
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
