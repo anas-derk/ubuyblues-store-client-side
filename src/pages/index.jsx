@@ -38,6 +38,7 @@ import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import BrandCard from "@/components/BrandCard";
 import ErrorPopup from "@/components/ErrorPopup";
 import { Carousel } from "react-bootstrap";
+import Slider from "react-slick";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -55,6 +56,8 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
+    const [storeDetails, setStoreDetails] = useState({});
+
     const [isGetStoreDetails, setIsGetStoreDetails] = useState(true);
 
     const [isGetCategories, setIsGetCategories] = useState(true);
@@ -63,7 +66,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isGetFlashProducts, setIsGetFlashProducts] = useState(true);
 
-    const [storeDetails, setStoreDetails] = useState({});
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [isGetBrands, setIsGetBrands] = useState(true);
 
@@ -281,6 +284,10 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         const userLanguage = localStorage.getItem("asfour-store-language");
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", function () {
+            setWindowInnerWidth(this.innerWidth);
+        });
     }, []);
 
     const handleResetAllHomeData = () => {
@@ -315,6 +322,13 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const getAllAds = async () => {
         return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads`)).data;
+    }
+
+    const getAppearedSlidesCount = (windowInnerWidth, count) => {
+        if (windowInnerWidth < 767) return 1;
+        if (windowInnerWidth >= 767 && windowInnerWidth < 1199 && count >= 2) return 2;
+        if (windowInnerWidth >= 1199 && count >= 3) return 3;
+        return count;
     }
 
     const handleGetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
@@ -597,6 +611,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
                 <div className={`page-content ${allTextAds.length === 0 && "pt-5"}`}>
+                    {/* Start Text Ads Section */}
                     {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-dark mb-5">
                         <Carousel indicators={false} controls={false}>
                             {allTextAds.map((ad, index) => (
@@ -608,6 +623,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             ))}
                         </Carousel>
                     </section>}
+                    {/* End Text Ads Section */}
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             {/* Start Store Details Section */}
@@ -623,6 +639,32 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="products-description mb-4">{storeDetails.productsDescription}</h2>
                             </section>
                             {/* End Store Details Section */}
+                            {/* Start Image Ads Section */}
+                            {allImageAds.length > 0 && <section className="image-ads mb-5">
+                                <h2 className="section-name text-center mb-5 text-white">{t("Image Ads")}</h2>
+                                <div className="container-fluid">
+                                    <Slider
+                                        dots={true}
+                                        arrows={false}
+                                        infinite={false}
+                                        speed={500}
+                                        slidesToShow={getAppearedSlidesCount(windowInnerWidth, allImageAds.length)}
+                                        slidesToScroll={getAppearedSlidesCount(windowInnerWidth, allImageAds.length)}
+                                    >
+                                        {allImageAds.map((ad) => (
+                                            <div className="ad-box mb-4" key={ad._id}>
+                                                <div className="ad-image-box mb-4">
+                                                    <img
+                                                        src={`${process.env.BASE_API_URL}/${ad.imagePath}`}
+                                                        alt="Ad Image"
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                </div>
+                            </section>}
+                            {/* End Image Ads Section */}
                             {/* Start Categories Section */}
                             <section className="categories mb-5 pb-5" id="categories">
                                 <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
