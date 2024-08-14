@@ -657,6 +657,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     <img
                                                         src={`${process.env.BASE_API_URL}/${ad.imagePath}`}
                                                         alt="Ad Image"
+                                                        onDragStart={(e) => e.preventDefault()}
                                                     />
                                                 </div>
                                             </div>
