@@ -627,7 +627,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
                             {/* Start Store Details Section */}
-                            <section className="store-details text-white text-center mb-5">
+                            {!storeDetails.isMainStore && <section className="store-details text-white text-center mb-5">
                                 <img
                                     src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
                                     alt={`${storeDetails.name} Store Image`}
@@ -637,7 +637,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 />
                                 <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto">{t("Welcome To You In Store")} {storeDetails.name}</h1>
                                 <h2 className="products-description mb-4">{storeDetails.productsDescription}</h2>
-                            </section>
+                            </section>}
                             {/* End Store Details Section */}
                             {/* Start Image Ads Section */}
                             {allImageAds.length > 0 && <section className="image-ads mb-5">
