@@ -51,8 +51,6 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [sharingURL, setSharingURL] = useState("");
 
-    const [appearedNavigateIcon, setAppearedNavigateIcon] = useState("down");
-
     const [filters, setFilters] = useState({
         categoryId: "",
     });
@@ -66,7 +64,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const { t, i18n } = useTranslation();
 
-    const pageSize = 3;
+    const pageSize = 9;
 
     useEffect(() => {
         setIsLoadingPage(true);
