@@ -641,7 +641,6 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* End Store Details Section */}
                             {/* Start Image Ads Section */}
                             {allImageAds.length > 0 && <section className="image-ads mb-5">
-                                <h2 className="section-name text-center mb-5 text-white">{t("Image Ads")}</h2>
                                 <div className="container-fluid">
                                     <Slider
                                         dots={true}
