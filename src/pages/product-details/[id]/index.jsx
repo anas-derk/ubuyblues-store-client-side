@@ -78,7 +78,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
-    const [errorInAddProductToFavoriteUserProductsList, setErrorAddProductToFavoriteUserProductsList] = useState("");
+    const [errorInAddProductToFavoriteUserProductsList, setErrorInAddProductToFavoriteUserProductsList] = useState("");
 
     const [isSelectProductRating, setIsSelectProductRating] = useState(false);
 
@@ -122,7 +122,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const pageSize = 3;
 
     const { i18n, t } = useTranslation();
-    
+
     const sliderRef = useRef();
 
     useEffect(() => {
@@ -164,28 +164,38 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
                         setTotalPagesCount(Math.ceil(result.data / pageSize));
                     }
-                    const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
-                    if (referalWriterInfo) {
-                        setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
-                        setIsSaveReferalWriterInfo(true);
-                    } else {
-                        setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
-                    }
                     setIsGetProductReferals(false);
                     result = await getSampleFromRelatedProductsInProduct(productIdAsProperty);
                     const relatedProducts = result.data;
                     setSampleFromRelatedProductsInProduct(relatedProducts);
                     setIsGetSampleFromRelatedProductsInProduct(false);
+                    const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
                     const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                     if (userToken) {
                         result = await getUserInfo();
                         if (!result.error) {
-                            setUserInfo(result.data);
+                            const tempUserInfo = result.data;
+                            setUserInfo(tempUserInfo);
                             result = await getProductRatingByUserId(productIdAsProperty);
                             if (!result.error && result?.data > 0) {
                                 setStartNumber(result.data);
                             }
                             setFavoriteProductsListForUser((await getFavoriteProductsByProductsIdsAndUserId([productIdAsProperty, ...relatedProducts.map((product) => product._id)])).data);
+                            setReferalDetails({ ...referalDetails, name: tempUserInfo.firstName, email: tempUserInfo.email, productId: productIdAsProperty });
+                        } else {
+                            if (referalWriterInfo) {
+                                setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
+                                setIsSaveReferalWriterInfo(true);
+                            } else {
+                                setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
+                            }
+                        }
+                    } else {
+                        if (referalWriterInfo) {
+                            setReferalDetails({ ...referalDetails, name: referalWriterInfo.name, email: referalWriterInfo.email, productId: productIdAsProperty });
+                            setIsSaveReferalWriterInfo(true);
+                        } else {
+                            setReferalDetails({ ...referalDetails, productId: productIdAsProperty });
                         }
                     }
                     setIsGetUserInfo(false);
@@ -678,7 +688,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             }
                                             {
                                                 productInfo.quantity > 0 ? <h5 className="product-quantity">{productInfo.quantity} {t("Product Available In Store")}</h5> :
-                                                <h5 className="product-not-available-error text-danger fw-bold">{t("Sorry, This Product Not Available Now !!")}</h5>
+                                                    <h5 className="product-not-available-error text-danger fw-bold">{t("Sorry, This Product Not Available Now !!")}</h5>
                                             }
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
@@ -855,7 +865,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </p>}
                                                     </div>
                                                 </div>
-                                                <div className="save-your-details-box mb-3 row">
+                                                {Object.keys(userInfo).length === 0 && <div className="save-your-details-box mb-3 row">
                                                     <div className="col-md-1">
                                                         <div className="form-check mb-3">
                                                             <input
@@ -870,7 +880,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     <div className="col-md-11">
                                                         <label htmlFor="save-your-details-checkbox">{t("Save my name, email, and referal in this browser for the next time I comment")} .</label>
                                                     </div>
-                                                </div>
+                                                </div>}
                                                 {!waitAddNewReferalMsg && !successAddNewReferalMsg && !errorAddNewReferalMsg && <button
                                                     className="private-btn p-2 d-block w-100 fw-bold"
                                                     type="submit"
