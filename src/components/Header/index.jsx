@@ -18,6 +18,8 @@ export default function Header() {
     const [lightMode, setLightMode] = useState("sunny");
 
     const [token, setToken] = useState("");
+    
+    const [productsCountInCart, setProductsCountInCart] = useState(0);
 
     const router = useRouter();
 
