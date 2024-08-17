@@ -48,7 +48,11 @@ export default function Header() {
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
             .then((result) => {
-                setProductsCountInCart(result.data.productByIds.length);
+                let tempProductsCountInCart = 0;
+                result.data.productByIds.forEach((storeProducts) => {
+                    tempProductsCountInCart += storeProducts.products.length;
+                });
+                setProductsCountInCart(tempProductsCountInCart);
             })
             .catch(() => {
                 setIsLoadingPage(false);
