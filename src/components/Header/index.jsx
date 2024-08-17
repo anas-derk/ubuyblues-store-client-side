@@ -46,7 +46,14 @@ export default function Header() {
     useEffect(() => {
         let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
-            setProductsCountInCart(tempAllProductsDataInsideTheCart.length);
+            getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
+            .then((result) => {
+                setProductsCountInCart(result.data.productByIds.length);
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
         }
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
@@ -62,14 +69,6 @@ export default function Header() {
                 setIsErrorMsgOnLoadingThePage(true);
             });
         }
-        getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
-            .then((result) => {
-                setProductsCountInCart(result.data.productByIds.length);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
     }, []);
 
     const handleChangeMode = () => {
