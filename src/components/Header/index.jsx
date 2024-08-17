@@ -18,8 +18,10 @@ export default function Header() {
     const [lightMode, setLightMode] = useState("sunny");
 
     const [token, setToken] = useState("");
-    
+
     const [productsCountInCart, setProductsCountInCart] = useState(0);
+
+    const [productsCountInFavorite, setProductsCountInFavorite] = useState(0);
 
     const router = useRouter();
 
@@ -142,13 +144,35 @@ export default function Header() {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={() => handleSelectCountry("turkey")}>{t("TR")}</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/cart" as={Link}>
-                                <FaShoppingCart className={`cart-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                {t("Cart")}
+                            <Nav.Link href="/cart" as={Link} className="ps-3 pe-3">
+                                <div className="d-inline icon-box">
+                                    <FaShoppingCart className={`cart-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                    <span
+                                        className="products-count-in-cart-box products-count-box"
+                                        style={i18n.language !== "ar" ? {
+                                            right: "-20px",
+                                            top: "-10px"
+                                        } : {
+                                            left: "-20px",
+                                            top: "-10px"
+                                        }}
+                                    >{productsCountInCart}</span>
+                                </div>
                             </Nav.Link>
-                            <Nav.Link href="/customer-dashboard/favorite-products" as={Link}>
-                                <BsFillSuitHeartFill className={`favorite-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                {t("Favorite Products")}
+                            <Nav.Link href="/customer-dashboard/favorite-products" as={Link} className="ps-3 pe-3">
+                                <div className="d-inline icon-box">
+                                    <BsFillSuitHeartFill className={`favorite-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
+                                    <span
+                                        className="products-count-in-favorite-box products-count-box"
+                                        style={i18n.language !== "ar" ? {
+                                            right: "-20px",
+                                            top: "-10px"
+                                        } : {
+                                            left: "-20px",
+                                            top: "-10px"
+                                        }}
+                                    >{productsCountInFavorite}</span>
+                                </div>
                             </Nav.Link>
                             {lightMode == "sunny" ?
                                 <MdOutlineDarkMode
