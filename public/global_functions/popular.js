@@ -244,6 +244,17 @@ const getFavoriteProductsCount = async (filters) => {
     }
 }
 
+const getProductsByIds = async (productsIds) => {
+    try {
+        return (await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids`, {
+            productsIds,
+        })).data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -267,5 +278,6 @@ export {
     calcTotalOrderPriceAfterDiscount,
     getUserInfo,
     sendTheCodeToUserEmail,
-    getFavoriteProductsCount
+    getFavoriteProductsCount,
+    getProductsByIds
 }

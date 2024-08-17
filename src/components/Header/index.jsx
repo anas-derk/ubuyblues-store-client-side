@@ -12,7 +12,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
-import { getFavoriteProductsCount } from "../../../public/global_functions/popular";
+import { getFavoriteProductsCount, getProductsByIds } from "../../../public/global_functions/popular";
 
 export default function Header() {
 
@@ -35,6 +35,15 @@ export default function Header() {
         window.addEventListener("resize", () => {
             setWindowInnerWidth(window.innerWidth);
         });
+        const tempLightMode = localStorage.getItem("asfour-store-light-mode");
+        if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
+            setLightMode(tempLightMode);
+            let rootElement = document.documentElement;
+            rootElement.style.setProperty("--main-color-one", tempLightMode === "sunny" ? "#6A017A" : "#000");
+        }
+    }, []);
+
+    useEffect(() => {
         let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             setProductsCountInCart(tempAllProductsDataInsideTheCart.length);
@@ -42,18 +51,25 @@ export default function Header() {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             setToken(userToken);
-            getFavoriteProductsCount().then((result) => {
+            getFavoriteProductsCount()
+            .then((result) => {
                 if (!result.error) {
                     setProductsCountInFavorite(result.data);
                 }
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
             });
         }
-        const tempLightMode = localStorage.getItem("asfour-store-light-mode");
-        if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
-            setLightMode(tempLightMode);
-            let rootElement = document.documentElement;
-            rootElement.style.setProperty("--main-color-one", tempLightMode === "sunny" ? "#6A017A" : "#000");
-        }
+        getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
+            .then((result) => {
+                setProductsCountInCart(result.data.productByIds.length);
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
     }, []);
 
     const handleChangeMode = () => {

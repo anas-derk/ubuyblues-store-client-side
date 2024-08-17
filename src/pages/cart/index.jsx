@@ -9,8 +9,7 @@ import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import axios from "axios";
-import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo } from "../../../public/global_functions/popular";
+import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 
 export default function Cart({ countryAsProperty }) {
@@ -132,18 +131,6 @@ export default function Cart({ countryAsProperty }) {
             setIsLoadingPage(false);
         }
     }, [isGetGroupedProductsByStoreId, isGetUserInfo]);
-
-    const getProductsByIds = async (productsIds) => {
-        try {
-            const res = await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids`, {
-                productsIds,
-            });
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
 
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
