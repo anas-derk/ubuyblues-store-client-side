@@ -12,12 +12,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
+import { getFavoriteProductsCount } from "../../../public/global_functions/popular";
 
 export default function Header() {
 
     const [lightMode, setLightMode] = useState("sunny");
 
     const [token, setToken] = useState("");
+
+    const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [productsCountInCart, setProductsCountInCart] = useState(0);
 
@@ -28,9 +31,22 @@ export default function Header() {
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", () => {
+            setWindowInnerWidth(window.innerWidth);
+        });
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+        if (Array.isArray(tempAllProductsDataInsideTheCart)) {
+            setProductsCountInCart(tempAllProductsDataInsideTheCart.length);
+        }
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             setToken(userToken);
+            getFavoriteProductsCount().then((result) => {
+                if (!result.error) {
+                    setProductsCountInFavorite(result.data);
+                }
+            });
         }
         const tempLightMode = localStorage.getItem("asfour-store-light-mode");
         if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
@@ -144,7 +160,7 @@ export default function Header() {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={() => handleSelectCountry("turkey")}>{t("TR")}</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/cart" as={Link} className="ps-3 pe-3">
+                            <Nav.Link href="/cart" as={Link} className={windowInnerWidth > 991 && "ps-4 pe-4"}>
                                 <div className="d-inline icon-box">
                                     <FaShoppingCart className={`cart-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                     <span
@@ -159,10 +175,10 @@ export default function Header() {
                                     >{productsCountInCart}</span>
                                 </div>
                             </Nav.Link>
-                            <Nav.Link href="/customer-dashboard/favorite-products" as={Link} className="ps-3 pe-3">
+                            <Nav.Link href="/customer-dashboard/favorite-products" as={Link} className={token && windowInnerWidth > 991 && "ps-4 pe-4"}>
                                 <div className="d-inline icon-box">
                                     <BsFillSuitHeartFill className={`favorite-icon link-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                    <span
+                                    {token && <span
                                         className="products-count-in-favorite-box products-count-box"
                                         style={i18n.language !== "ar" ? {
                                             right: "-20px",
@@ -171,7 +187,7 @@ export default function Header() {
                                             left: "-20px",
                                             top: "-10px"
                                         }}
-                                    >{productsCountInFavorite}</span>
+                                    >{productsCountInFavorite}</span>}
                                 </div>
                             </Nav.Link>
                             {lightMode == "sunny" ?

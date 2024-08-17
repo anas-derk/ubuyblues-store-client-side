@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo } from "../../../../public/global_functions/popular";
+import { getUserInfo, getFavoriteProductsCount } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 
@@ -116,20 +116,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
-    }
-
-    const getFavoriteProductsCount = async (filters) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?${filters ? filters : ""}`, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
-                }
-            });
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
     }
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {

@@ -231,6 +231,19 @@ const sendTheCodeToUserEmail = async (email, typeOfUse, userType) => {
     }
 }
 
+const getFavoriteProductsCount = async (filters) => {
+    try {
+        return (await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?${filters ? filters : ""}`, {
+            headers: {
+                Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+            }
+        })).data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -253,5 +266,6 @@ export {
     isFavoriteProductForUser,
     calcTotalOrderPriceAfterDiscount,
     getUserInfo,
-    sendTheCodeToUserEmail
+    sendTheCodeToUserEmail,
+    getFavoriteProductsCount
 }
