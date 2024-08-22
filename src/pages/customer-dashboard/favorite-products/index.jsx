@@ -181,7 +181,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
-                setIsSuccessDeletingFavoriteProduct(false);
                 setSelectedFavoriteProduct(-1);
                 dispatch({
                     type: "(Add / Delete) (To / From ) Favorite",
@@ -195,6 +194,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                     setAllFavoriteProductsInsideThePage([]);
                     setTotalPagesCount(0);
                 }
+                setIsSuccessDeletingFavoriteProduct(false);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
