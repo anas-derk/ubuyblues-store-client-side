@@ -69,10 +69,14 @@ export default function Header() {
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
             .then((result) => {
-                let tempProductsCountInCart = 0;
+                let tempProductsCountInCart = 0, tempProductsIds = [];
                 result.data.productByIds.forEach((storeProducts) => {
                     tempProductsCountInCart += storeProducts.products.length;
+                    storeProducts.products.forEach((product) => {
+                        tempProductsIds.push(product._id);
+                    });
                 });
+                localStorage.setItem("asfour-store-customer-cart", JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
                     productsCountInCart: tempProductsCountInCart
