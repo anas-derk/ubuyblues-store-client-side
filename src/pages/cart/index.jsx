@@ -192,7 +192,7 @@ export default function Cart({ countryAsProperty }) {
             setAllProductsData(result.data.productByIds);
             dispatch({
                 type: "(Add / Delete) (To / From ) Cart",
-                newProductsCountInCart: tempProductsCountInCart
+                productsCountInCart: tempProductsCountInCart
             });
         } else {
             setPricesDetailsSummary([{
@@ -203,7 +203,7 @@ export default function Cart({ countryAsProperty }) {
             setAllProductsData([]);
             dispatch({
                 type: "(Add / Delete) (To / From ) Cart",
-                newProductsCountInCart: 0
+                productsCountInCart: 0
             });
         }
     }
