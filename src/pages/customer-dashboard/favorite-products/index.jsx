@@ -34,6 +34,8 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [isWaitGetFavoriteProductsStatus, setIsWaitGetFavoriteProductsStatus] = useState(true);
 
+    const [selectedFavoriteProduct, setSelectedFavoriteProduct] = useState(-1);
+
     const [isDeletingFavoriteProduct, setIsDeletingFavoriteProduct] = useState(false);
 
     const [isSuccessDeletingFavoriteProduct, setIsSuccessDeletingFavoriteProduct] = useState(false);
@@ -170,6 +172,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const deleteProductFromFavoriteUserProducts = async (favoriteProductIndex) => {
         try {
             setIsDeletingFavoriteProduct(true);
+            setSelectedFavoriteProduct(favoriteProductIndex);
             await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
@@ -179,6 +182,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                 setIsSuccessDeletingFavoriteProduct(false);
+                setSelectedFavoriteProduct(-1);
                 dispatch({
                     type: "(Add / Delete) (To / From ) Favorite",
                     productsCountInFavorite: productsCountInFavorite - 1
@@ -203,6 +207,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setErrorMsgOnDeletingFavoriteProduct("Sorry, Someting Went Wrong, Please Repeate The Proccess !!");
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
                 setErrorMsgOnDeletingFavoriteProduct("");
+                setSelectedFavoriteProduct(-1);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
@@ -289,9 +294,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                         <tr>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
-                                                                {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                                {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {selectedFavoriteProduct !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
+                                                                {isDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {isSuccessDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                                 <Link
                                                                     href={`/product-details/${favoriteProduct._id}`}
                                                                     className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
