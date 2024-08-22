@@ -20,11 +20,15 @@ import "slick-carousel/slick/slick-theme.css";
 import "../components/SectionLoader/section_loader.css";
 import "../../config/i18n";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import store from "@/store";
+import { Provider } from "react-redux";
 
 export default function App({ Component, pageProps }) {
   return (
-    <GoogleOAuthProvider clientId={"665697657851-ajm9qfeko4lcero0hj8jh7eqvds9eg18.apps.googleusercontent.com"}>
-      <Component {...pageProps} />
-    </GoogleOAuthProvider>
+    <Provider store={store}>
+      <GoogleOAuthProvider clientId={"665697657851-ajm9qfeko4lcero0hj8jh7eqvds9eg18.apps.googleusercontent.com"}>
+        <Component {...pageProps} />
+      </GoogleOAuthProvider>
+    </Provider>
   );
 }

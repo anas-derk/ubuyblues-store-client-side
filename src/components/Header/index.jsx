@@ -6,13 +6,14 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { MdOutlineDarkMode, MdOutlineWbSunny } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 import { getFavoriteProductsCount, getProductsByIds } from "../../../public/global_functions/popular";
+import { useSelector } from "react-redux";
 
 export default function Header() {
 
@@ -30,6 +31,8 @@ export default function Header() {
 
     const { i18n, t } = useTranslation();
 
+    const newProductsCountInCart = useSelector(state => state.newProductsCountInCart);
+
     useEffect(() => {
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", () => {
@@ -44,6 +47,23 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        if (userToken) {
+            setToken(userToken);
+            getFavoriteProductsCount()
+            .then((result) => {
+                if (!result.error) {
+                    setProductsCountInFavorite(result.data);
+                }
+            })
+            .catch(() => {
+                setIsLoadingPage(false);
+                setIsErrorMsgOnLoadingThePage(true);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
         let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
@@ -53,20 +73,6 @@ export default function Header() {
                     tempProductsCountInCart += storeProducts.products.length;
                 });
                 setProductsCountInCart(tempProductsCountInCart);
-            })
-            .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
-            });
-        }
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-        if (userToken) {
-            setToken(userToken);
-            getFavoriteProductsCount()
-            .then((result) => {
-                if (!result.error) {
-                    setProductsCountInFavorite(result.data);
-                }
             })
             .catch(() => {
                 setIsLoadingPage(false);
@@ -191,7 +197,7 @@ export default function Header() {
                                             left: "-20px",
                                             top: "-10px"
                                         }}
-                                    >{productsCountInCart}</span>
+                                    >{newProductsCountInCart ? newProductsCountInCart : productsCountInCart}</span>
                                 </div>
                             </Nav.Link>
                             <Nav.Link href="/customer-dashboard/favorite-products" as={Link} className={token && windowInnerWidth > 991 && "ps-4 pe-4"}>

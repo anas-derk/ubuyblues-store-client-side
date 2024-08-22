@@ -9,6 +9,7 @@ import Link from "next/link";
 import axios from "axios";
 import { getRemainingTime } from "../../../public/global_functions/popular";
 import { IoIosFlash } from "react-icons/io";
+import { useDispatch } from "react-redux";
 
 export default function ProductCard({
     productDetails,
@@ -63,7 +64,7 @@ export default function ProductCard({
 
     const { t, i18n } = useTranslation();
 
-    const router = useRouter();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isFlashProduct) {
@@ -89,12 +90,11 @@ export default function ProductCard({
             const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
             if (userToken) {
                 setIsWaitAddProductToFavoriteUserProductsList(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                const res = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
-                });
-                const result = res.data;
+                })).data;
                 setIsWaitAddProductToFavoriteUserProductsList(false);
                 if (!result.error) {
                     setIsSuccessAddProductToFavoriteUserProductsList(true);
@@ -158,6 +158,10 @@ export default function ProductCard({
                         localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
+                        dispatch({
+                            type: "(Add / Delete) (To / From ) Cart",
+                            newProductsCountInCart: userCart.length
+                        });
                         let successAddToCartTimeout = setTimeout(() => {
                             setIsSuccessAddToCart(false);
                             setIsExistProductInsideTheCart(true);
@@ -181,6 +185,10 @@ export default function ProductCard({
                     localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Cart",
+                        newProductsCountInCart: allProductsData.length
+                    });
                     let successAddToCartTimeout = setTimeout(() => {
                         setIsSuccessAddToCart(false);
                         setIsExistProductInsideTheCart(true);
@@ -196,6 +204,10 @@ export default function ProductCard({
                 localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Cart",
+                    newProductsCountInCart: allProductsData.length
+                });
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddToCart(false);
                     setIsExistProductInsideTheCart(true);
@@ -223,6 +235,10 @@ export default function ProductCard({
                     localStorage.setItem("asfour-store-customer-cart", JSON.stringify(newUserCart));
                     setIsWaitDeleteFromCart(false);
                     setIsSuccessDeleteFromCart(true);
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Cart",
+                        newProductsCountInCart: newUserCart.length
+                    });
                     let successDeleteFromCartTimeout = setTimeout(() => {
                         setIsSuccessDeleteFromCart(false);
                         setIsExistProductInsideTheCart(false);
@@ -240,6 +256,10 @@ export default function ProductCard({
                 setIsWaitDeleteFromCart(false);
                 setErrorInDeleteFromCart("Sorry, This Product Is Not Exist In Your Cart !!");
                 localStorage.setItem("asfour-store-customer-cart", JSON.stringify([]));
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Cart",
+                    newProductsCountInCart: 0
+                });
                 let errorInDeleteFromCartTimeout = setTimeout(() => {
                     setErrorInDeleteFromCart("");
                     clearTimeout(errorInDeleteFromCartTimeout);
