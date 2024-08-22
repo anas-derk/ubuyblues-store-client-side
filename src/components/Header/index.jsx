@@ -13,7 +13,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 import { getFavoriteProductsCount, getProductsByIds } from "../../../public/global_functions/popular";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
 
@@ -23,13 +23,13 @@ export default function Header() {
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
-    const [productsCountInCart, setProductsCountInCart] = useState(0);
-
     const [productsCountInFavorite, setProductsCountInFavorite] = useState(0);
 
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
+
+    const dispatch = useDispatch();
 
     const newProductsCountInCart = useSelector(state => state.newProductsCountInCart);
 
@@ -72,7 +72,10 @@ export default function Header() {
                 result.data.productByIds.forEach((storeProducts) => {
                     tempProductsCountInCart += storeProducts.products.length;
                 });
-                setProductsCountInCart(tempProductsCountInCart);
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Cart",
+                    newProductsCountInCart: tempProductsCountInCart
+                });
             })
             .catch(() => {
                 setIsLoadingPage(false);
@@ -197,7 +200,7 @@ export default function Header() {
                                             left: "-20px",
                                             top: "-10px"
                                         }}
-                                    >{newProductsCountInCart ? newProductsCountInCart : productsCountInCart}</span>
+                                    >{newProductsCountInCart}</span>
                                 </div>
                             </Nav.Link>
                             <Nav.Link href="/customer-dashboard/favorite-products" as={Link} className={token && windowInnerWidth > 991 && "ps-4 pe-4"}>
