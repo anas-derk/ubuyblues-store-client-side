@@ -23,6 +23,7 @@ import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProducts
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import ErrorPopup from "@/components/ErrorPopup";
 import SectionLoader from "@/components/SectionLoader";
+import { useDispatch } from "react-redux";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -124,6 +125,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const { i18n, t } = useTranslation();
 
     const sliderRef = useRef();
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -342,6 +345,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
+                        dispatch({
+                            type: "(Add / Delete) (To / From ) Cart",
+                            newProductsCountInCart: userCart.length
+                        });
                         let successAddToCartTimeout = setTimeout(() => {
                             setIsSuccessAddToCart(false);
                             clearTimeout(successAddToCartTimeout);
@@ -364,6 +371,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Cart",
+                        newProductsCountInCart: allProductsData.length
+                    });
                     let successAddToCartTimeout = setTimeout(() => {
                         setIsSuccessAddToCart(false);
                         clearTimeout(successAddToCartTimeout);
@@ -378,6 +389,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Cart",
+                    newProductsCountInCart: allProductsData.length
+                });
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddToCart(false);
                     clearTimeout(successAddToCartTimeout);
