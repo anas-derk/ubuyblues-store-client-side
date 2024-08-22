@@ -253,9 +253,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                     <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingFavoriteProduct && !isSuccessDeletingFavoriteProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
-                                                        {isDeletingFavoriteProduct && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                        {isSuccessDeletingFavoriteProduct && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {selectedFavoriteProduct !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
+                                                        {isDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {isSuccessDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                         <Link
                                                             href={`/product-details/${favoriteProduct.productId}`}
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
