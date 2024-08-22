@@ -9,7 +9,7 @@ import Link from "next/link";
 import axios from "axios";
 import { getRemainingTime } from "../../../public/global_functions/popular";
 import { IoIosFlash } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductCard({
     productDetails,
@@ -66,6 +66,8 @@ export default function ProductCard({
 
     const dispatch = useDispatch();
 
+    const state = useSelector(state => state);
+
     useEffect(() => {
         if (isFlashProduct) {
             const endDate = new Date(productDetails.endDiscountPeriod);
@@ -90,7 +92,7 @@ export default function ProductCard({
             const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
             if (userToken) {
                 setIsWaitAddProductToFavoriteUserProductsList(true);
-                const res = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
@@ -100,6 +102,10 @@ export default function ProductCard({
                     setIsSuccessAddProductToFavoriteUserProductsList(true);
                     let successAddToCartTimeout = setTimeout(() => {
                         setIsSuccessAddProductToFavoriteUserProductsList(false);
+                        dispatch({
+                            type: "(Add / Delete) (To / From ) Favorite",
+                            productsCountInFavorite: state.productsCountInFavorite + 1
+                        });
                         setIsFavoriteProductForUser(true);
                         clearTimeout(successAddToCartTimeout);
                     }, 3000);
@@ -133,6 +139,10 @@ export default function ProductCard({
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
                 let successDeleteToCartTimeout = setTimeout(() => {
                     setIsSuccessDeleteProductToFavoriteUserProductsList(false);
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Favorite",
+                        productsCountInFavorite: state.productsCountInFavorite - 1
+                    });
                     setIsFavoriteProductForUser(false);
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
@@ -160,7 +170,7 @@ export default function ProductCard({
                         setIsSuccessAddToCart(true);
                         dispatch({
                             type: "(Add / Delete) (To / From ) Cart",
-                            newProductsCountInCart: userCart.length
+                            productsCountInCart: userCart.length
                         });
                         let successAddToCartTimeout = setTimeout(() => {
                             setIsSuccessAddToCart(false);
@@ -187,7 +197,7 @@ export default function ProductCard({
                     setIsSuccessAddToCart(true);
                     dispatch({
                         type: "(Add / Delete) (To / From ) Cart",
-                        newProductsCountInCart: allProductsData.length
+                        productsCountInCart: allProductsData.length
                     });
                     let successAddToCartTimeout = setTimeout(() => {
                         setIsSuccessAddToCart(false);
@@ -206,7 +216,7 @@ export default function ProductCard({
                 setIsSuccessAddToCart(true);
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
-                    newProductsCountInCart: allProductsData.length
+                    productsCountInCart: allProductsData.length
                 });
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddToCart(false);
@@ -237,7 +247,7 @@ export default function ProductCard({
                     setIsSuccessDeleteFromCart(true);
                     dispatch({
                         type: "(Add / Delete) (To / From ) Cart",
-                        newProductsCountInCart: newUserCart.length
+                        productsCountInCart: newUserCart.length
                     });
                     let successDeleteFromCartTimeout = setTimeout(() => {
                         setIsSuccessDeleteFromCart(false);
@@ -258,7 +268,7 @@ export default function ProductCard({
                 localStorage.setItem("asfour-store-customer-cart", JSON.stringify([]));
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
-                    newProductsCountInCart: 0
+                    productsCountInCart: 0
                 });
                 let errorInDeleteFromCartTimeout = setTimeout(() => {
                     setErrorInDeleteFromCart("");

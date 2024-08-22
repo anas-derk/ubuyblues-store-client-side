@@ -16,6 +16,7 @@ import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../.
 import { getUserInfo, getFavoriteProductsCount } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
@@ -52,6 +53,10 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const router = useRouter();
 
     const { t, i18n } = useTranslation();
+
+    const productsCountInFavorite = useSelector(state => state.productsCountInFavorite);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -169,11 +174,15 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
-            })
+            });
             setIsDeletingFavoriteProduct(false);
             setIsSuccessDeletingFavoriteProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                 setIsSuccessDeletingFavoriteProduct(false);
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Favorite",
+                    productsCountInFavorite: productsCountInFavorite - 1
+                });
                 const result = await getFavoriteProductsCount();
                 if (result.data > 0) {
                     setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(1, pageSize)).data);

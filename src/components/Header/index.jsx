@@ -23,15 +23,13 @@ export default function Header() {
 
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
-    const [productsCountInFavorite, setProductsCountInFavorite] = useState(0);
-
     const router = useRouter();
 
     const { i18n, t } = useTranslation();
 
     const dispatch = useDispatch();
 
-    const newProductsCountInCart = useSelector(state => state.newProductsCountInCart);
+    const state = useSelector(state => state);
 
     useEffect(() => {
         setWindowInnerWidth(window.innerWidth);
@@ -53,7 +51,10 @@ export default function Header() {
             getFavoriteProductsCount()
             .then((result) => {
                 if (!result.error) {
-                    setProductsCountInFavorite(result.data);
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Favorite",
+                        productsCountInFavorite: result.data
+                    });
                 }
             })
             .catch(() => {
@@ -74,7 +75,7 @@ export default function Header() {
                 });
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
-                    newProductsCountInCart: tempProductsCountInCart
+                    productsCountInCart: tempProductsCountInCart
                 });
             })
             .catch(() => {
@@ -200,7 +201,7 @@ export default function Header() {
                                             left: "-20px",
                                             top: "-10px"
                                         }}
-                                    >{newProductsCountInCart}</span>
+                                    >{state.productsCountInCart}</span>
                                 </div>
                             </Nav.Link>
                             <Nav.Link href="/customer-dashboard/favorite-products" as={Link} className={token && windowInnerWidth > 991 && "ps-4 pe-4"}>
@@ -215,7 +216,7 @@ export default function Header() {
                                             left: "-20px",
                                             top: "-10px"
                                         }}
-                                    >{productsCountInFavorite}</span>}
+                                    >{state.productsCountInFavorite}</span>}
                                 </div>
                             </Nav.Link>
                             {lightMode == "sunny" ?

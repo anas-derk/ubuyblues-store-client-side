@@ -1,7 +1,8 @@
 import { createStore } from "redux";
 
 const initialState = {
-    newProductsCountInCart: 0
+    productsCountInCart: 0,
+    productsCountInFavorite: 0,
 }
 
 const cartReducer = (state = initialState, action) => {
@@ -9,7 +10,13 @@ const cartReducer = (state = initialState, action) => {
         case "(Add / Delete) (To / From ) Cart": {
             return {
                 ...state,
-                newProductsCountInCart: action.newProductsCountInCart,
+                productsCountInCart: action.productsCountInCart,
+            }
+        }
+        case "(Add / Delete) (To / From ) Favorite": {
+            return {
+                ...state,
+                productsCountInFavorite: action.productsCountInFavorite,
             }
         }
         default: return state;
