@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
+import { useDispatch } from "react-redux";
 
 export default function Cart({ countryAsProperty }) {
 
@@ -39,6 +40,8 @@ export default function Cart({ countryAsProperty }) {
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const { t, i18n } = useTranslation();
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -180,12 +183,17 @@ export default function Cart({ countryAsProperty }) {
         updateCartInLocalStorage(newProductsData);
         if (newProductsData.length > 0) {
             const result = await getProductsByIds(newProductsData.map((product) => product._id));
-            let tempPricesDetailsSummary = [];
+            let tempPricesDetailsSummary = [], tempProductsCountInCart = 0;
             result.data.productByIds.forEach((data) => {
                 tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
+                tempProductsCountInCart += data.products.length;
             });
             setPricesDetailsSummary(tempPricesDetailsSummary);
             setAllProductsData(result.data.productByIds);
+            dispatch({
+                type: "(Add / Delete) (To / From ) Cart",
+                newProductsCountInCart: tempProductsCountInCart
+            });
         } else {
             setPricesDetailsSummary([{
                 totalPriceBeforeDiscount: 0,
@@ -193,6 +201,10 @@ export default function Cart({ countryAsProperty }) {
                 totalPriceAfterDiscount: 0,
             }]);
             setAllProductsData([]);
+            dispatch({
+                type: "(Add / Delete) (To / From ) Cart",
+                newProductsCountInCart: 0
+            });
         }
     }
 
