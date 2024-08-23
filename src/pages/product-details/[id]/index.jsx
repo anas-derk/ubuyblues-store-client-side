@@ -23,7 +23,7 @@ import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProducts
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import ErrorPopup from "@/components/ErrorPopup";
 import SectionLoader from "@/components/SectionLoader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -125,6 +125,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const { i18n, t } = useTranslation();
 
     const sliderRef = useRef();
+
+    const productsCountInFavorite = useSelector(state => state.productsCountInFavorite);
 
     const dispatch = useDispatch();
 
@@ -278,18 +280,21 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsDisplayErrorPopup(true);
             } else {
                 setIsWaitAddProductToFavoriteUserProductsList(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
-                });
-                const result = res.data;
+                })).data;
                 setIsWaitAddProductToFavoriteUserProductsList(false);
                 if (!result.error) {
                     setIsSuccessAddProductToFavoriteUserProductsList(true);
                     let successAddToCartTimeout = setTimeout(() => {
                         setFavoriteProductsListForUser([...favoriteProductsListForUser, result.data]);
                         setIsSuccessAddProductToFavoriteUserProductsList(false);
+                        dispatch({
+                            type: "(Add / Delete) (To / From ) Favorite",
+                            productsCountInFavorite: productsCountInFavorite + 1
+                        });
                         clearTimeout(successAddToCartTimeout);
                     }, 3000);
                 }
@@ -321,6 +326,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 let successDeleteToCartTimeout = setTimeout(() => {
                     setFavoriteProductsListForUser(favoriteProductsListForUser.filter((favoriteProduct) => favoriteProduct.productId !== productId));
                     setIsSuccessDeleteProductToFavoriteUserProductsList(false);
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Favorite",
+                        productsCountInFavorite: productsCountInFavorite - 1
+                    });
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
             }
@@ -345,9 +354,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
+                        
                         dispatch({
                             type: "(Add / Delete) (To / From ) Cart",
-                            newProductsCountInCart: userCart.length
+                            productsCountInCart: userCart.length
                         });
                         let successAddToCartTimeout = setTimeout(() => {
                             setIsSuccessAddToCart(false);
@@ -373,7 +383,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     setIsSuccessAddToCart(true);
                     dispatch({
                         type: "(Add / Delete) (To / From ) Cart",
-                        newProductsCountInCart: allProductsData.length
+                        productsCountInCart: allProductsData.length
                     });
                     let successAddToCartTimeout = setTimeout(() => {
                         setIsSuccessAddToCart(false);
@@ -391,7 +401,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsSuccessAddToCart(true);
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
-                    newProductsCountInCart: allProductsData.length
+                    productsCountInCart: allProductsData.length
                 });
                 let successAddToCartTimeout = setTimeout(() => {
                     setIsSuccessAddToCart(false);
