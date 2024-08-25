@@ -252,13 +252,13 @@ export default function UserAuth() {
     }
 
     return (
-        <div className="auth page d-flex flex-column justify-content-center align-items-center">
+        <div className="auth page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("User Auth")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
-                <div className="page-content pt-5">
+                <div className="page-content">
                     <div className="container-fluid p-4 text-white text-center">
                         <section className="auth-part-display-control mb-5">
                             <h4
@@ -278,13 +278,13 @@ export default function UserAuth() {
                             <div className="row">
                                 {appearedAuthPartName === "sign-up" && <div className="col-md-12">
                                     <div className="signup-section">
-                                        <h3 className="part-name mb-4">{t("Create New Account")}</h3>
+                                        <h5 className="part-name mb-4">{t("Create New Account")}</h5>
                                         <form className="user-signup-form mb-3" onSubmit={userSignup}>
                                             <div className="email-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter Your Email")}
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["emailForSignup"] ? "border-danger mb-3" : "mb-5"}`}
+                                                    className={`form-control ${formValidationErrors["emailForSignup"] ? "border-danger mb-3" : "mb-5"}`}
                                                     onChange={(e) => setEmailForSignup(e.target.value.trim())}
                                                 />
                                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -296,7 +296,7 @@ export default function UserAuth() {
                                                 <input
                                                     type={isVisiblePasswordForSignup ? "text" : "password"}
                                                     placeholder={t("Please Enter Your Password")}
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["passwordForSignup"] ? "border-danger mb-3" : "mb-5"}`}
+                                                    className={`form-control ${formValidationErrors["passwordForSignup"] ? "border-danger mb-3" : "mb-5"}`}
                                                     onChange={(e) => setPasswordForSignup(e.target.value.trim())}
                                                 />
                                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -305,15 +305,15 @@ export default function UserAuth() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForSignup"])}</p>}
-                                            {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                            {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 auth-btn">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("sign-up")}</span>
                                                 {i18n.language !== "ar" && <FiLogIn />}
                                             </button>}
-                                            {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
+                                            {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 auth-btn">
                                                 <span className="me-2">{t("Wait Signup")} ...</span>
                                             </button>}
-                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
+                                            {(errMsg || successMsg) && <p className={`result-auth-msg text-center text-white text-start mb-5 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign Up With")}</h6>
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item">
@@ -329,13 +329,13 @@ export default function UserAuth() {
                                 </div>}
                                 {appearedAuthPartName === "login" && <div className="col-md-12">
                                     <div className="login-section">
-                                        <h3 className="part-name mb-4">{t("login")}</h3>
+                                        <h5 className="part-name mb-4">{t("login")}</h5>
                                         <form className="user-login-form mb-3" onSubmit={userLogin}>
                                             <div className="email-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter Your Email")}
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["emailForLogin"] ? "border-danger mb-4" : "mb-5"}`}
+                                                    className={`form-control ${formValidationErrors["emailForLogin"] ? "border-danger mb-4" : "mb-5"}`}
                                                     onChange={(e) => setEmailForLogin(e.target.value.trim())}
                                                 />
                                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -347,7 +347,7 @@ export default function UserAuth() {
                                                 <input
                                                     type={isVisiblePasswordForLogin ? "text" : "password"}
                                                     placeholder={t("Please Enter Your Password")}
-                                                    className={`form-control p-3 border-2 ${formValidationErrors["passwordForLogin"] ? "border-danger mb-4" : "mb-5"}`}
+                                                    className={`form-control ${formValidationErrors["passwordForLogin"] ? "border-danger mb-4" : "mb-5"}`}
                                                     onChange={(e) => setPasswordForLogin(e.target.value.trim())}
                                                 />
                                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -356,15 +356,15 @@ export default function UserAuth() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForLogin"])}</p>}
-                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 auth-btn">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("login")}</span>
                                                 {i18n.language !== "ar" && <FiLogIn />}
                                             </button>}
-                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
+                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 auth-btn">
                                                 <span className="me-2">{t("Wait Logining")} ...</span>
                                             </button>}
-                                            {(errMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
+                                            {(errMsg || successMsg) && <p className={`result-auth-msg text-center text-white text-start mb-5 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item">
@@ -376,7 +376,7 @@ export default function UserAuth() {
                                                 </li>
                                             </ul>
                                         </form>
-                                        <Link href="/forget-password?userType=user" className="text-white border-bottom border-2 pb-2">{t("forget password").toUpperCase()}</Link>
+                                        <Link href="/forget-password?userType=user" className="text-white border-bottom border-2 pb-2 forget-password-link-btn">{t("forget password").toUpperCase()}</Link>
                                     </div>
                                 </div>}
                             </div>

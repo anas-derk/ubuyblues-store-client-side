@@ -1,7 +1,4 @@
 .auth{
-    .result-auth-msg{
-        font-size: 22px;
-    }
     .auth-part-display-control{
         display: grid;
         grid-template-columns: auto auto;
@@ -10,6 +7,7 @@
         border: 2px solid #CCC;
         cursor: pointer;
         .display-btn{
+            font-size: 16px !important;
             &:hover{
                 background-color: #b3aeae;
             }
@@ -24,9 +22,20 @@
             grid-template-columns: auto;
         }
     }
+    h6{
+        font-size: 13px;
+    }
     .authentication{
         .signup-section, .login-section{
             animation: displayAuthPartAnimation 2s ease-in-out 0s 1 forwards;
+        }
+        .auth-btn{
+            padding: 13px 0;
+            font-size: 13px;
+        }
+        .result-auth-msg{
+            padding: 13px 0;
+            font-size: 13px;
         }
         .external-auth-sites-list{
             width: fit-content;
@@ -36,7 +45,7 @@
             gap: 20px;
             li{
                 border: 1px solid #FFF;
-                padding: 10px 15px;
+                padding: 8px 10px;
                 cursor: pointer;
                 &:hover{
                     color: var(--main-color-two);
@@ -46,6 +55,9 @@
                 }
             }
         }
+    }
+    .forget-password-link-btn{
+        font-size: 14px;
     }
 }
 
