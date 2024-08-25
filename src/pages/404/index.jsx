@@ -47,7 +47,7 @@ export default function PageNotFound() {
     }
 
     return (
-        <div className="page-not-found pb-5 page d-flex align-items-center justify-content-center flex-column text-center">
+        <div className="page-not-found page d-flex align-items-center justify-content-center flex-column text-center">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Page Not Found")}</title>
             </Head>
@@ -55,11 +55,11 @@ export default function PageNotFound() {
                 <Header />
                 <div className="page-content pt-5 pb-5">
                     <BiError className="error-404-icon" />
-                    <h1 className="mb-3">{t("Sorry,")}</h1>
-                    <h2 className="mb-3">{t("this page could not be found.")}</h2>
-                    <h3 className="mb-4">{t("Something went wrong.")}</h3>
-                    <h3 className="mb-4">{t("The page you were looking for could not be found. Please check the URL")}</h3>
-                    <Link href="/" className="home-page-link">{t("Or Go To Home Page")}</Link>
+                    <h1 className="mb-3 h4">{t("Sorry,")}</h1>
+                    <h2 className="mb-3 h5">{t("this page could not be found.")}</h2>
+                    <h3 className="mb-4 h6">{t("Something went wrong.")}</h3>
+                    <h3 className="mb-4 h6">{t("The page you were looking for could not be found. Please check the URL")}</h3>
+                    <Link href="/" className="home-page-link-button">{t("Or Go To Home Page")}</Link>
                 </div>
             </>}
             {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}

@@ -32,8 +32,9 @@ input, textarea, select, .checkbox{
     border: 1px solid #FFF;
     border-radius: 3px;
     color: #FFF;
+    padding: 13px !important;
     width: 100%;
-    font-size: 13px !important;
+    font-size: 11px !important;
     &::placeholder{
         color: #FFF;
     }
@@ -209,10 +210,10 @@ textarea{
     right: 20px;
     bottom: 20px;
     z-index: 2;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 25px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
     background-color: var(--main-color-two);
     cursor: pointer;
     border-radius: 50%;
@@ -230,16 +231,16 @@ textarea{
     cursor: pointer;
     .contact-icons-list{
         .contact-icon-item{
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             text-align: center;
-            line-height: 60px;
+            line-height: 50px;
             border-radius: 50%;
             background-color: var(--main-color-two);
         }
     }
     .contact-icon, .close-icon, .whatsapp-icon, .mail-icon{
-        font-size: 35px;
+        font-size: 30px;
         color: #000;
     }
 }
@@ -295,7 +296,7 @@ textarea{
         font-size: 14px;
     }
     .pagination-icon{
-        font-size: 25px;
+        font-size: 22px;
         cursor: pointer;
         &:hover{
             background-color: #dc3545;
@@ -304,7 +305,7 @@ textarea{
         }
     }
     .pagination-button{
-        font-size: 14px;
+        font-size: 12px;
         border-radius: 50%;
         border: none;
         font-weight: bold;
@@ -315,7 +316,7 @@ textarea{
     }
     .navigate-to-specific-page-form{
         .page-number-input{
-            font-size: 14px;
+            font-size: 12px;
         }
     }
 }
@@ -431,6 +432,7 @@ textarea{
         .login-btn{
             width: 50%;
             margin: 0 auto;
+            font-size: 13px;
             @media (max-width: 767px) {
                 width: 100%;
             }
@@ -489,13 +491,14 @@ textarea{
         width: 360px;
     }
     @media (min-width: 1301px) {
-        width: 400px;
+        width: 330px;
     }
     .managment-box{
         position: relative;
         cursor: pointer;
         border-top-right-radius: 8px;
         border-top-left-radius: 8px;
+        font-size: 12px;
         @media (min-width: 320px) and (max-width: 400px) {
             width: 280px;
             height: 280px;
@@ -529,8 +532,8 @@ textarea{
             height: 360px;
         }
         @media (min-width: 1301px) {
-            width: 400px;
-            height: 400px;
+            width: 330px;
+            height: 330px;
         }
         img{
             width: 100%;
@@ -545,7 +548,6 @@ textarea{
             background-color: rgba($color: #000000, $alpha: 0.6);
             opacity: 0;
             transition: .3s;
-            
         }
         .managment-buttons{
             position: absolute;
@@ -555,7 +557,7 @@ textarea{
             border-radius: 10px;
             opacity: 0;
             .managment-icon{
-                font-size: 20px;
+                font-size: 14px;
             }
         }
         &:hover{
@@ -570,6 +572,10 @@ textarea{
         border-bottom-right-radius: 8px;
         border-bottom-left-radius: 8px;
         min-height: 142px;
+        font-size: 13px;
+        h6{
+            font-size: 13px;
+        }
         &.brand-details{
             min-height: 70px;
         }
@@ -597,6 +603,8 @@ textarea{
     border-radius: 10px;
     color: #000;
     font-weight: bold;
+    font-size: 13px;
+    padding: 13px 0;
     @media (max-width: 767px) {
         width: 100%;
     }

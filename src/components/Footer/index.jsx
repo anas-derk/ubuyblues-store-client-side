@@ -68,11 +68,11 @@ export default function Footer() {
 
     return (
         <footer className="pt-4 pb-4">
-            <div className="container-fluid">
+            <div className="container">
+                {/* <div className="logo-box">
+                    <img src={ubuybluesLogo.src} alt="ubuyblues logo for footer" className="ubuyblues-logo-for-footer" />
+                </div> */}
                 <div className="row align-items-center mb-4">
-                    <div className="col-xl-2 text-center">
-                        <img src={ubuybluesLogo.src} alt="ubuyblues logo for footer" className="ubuyblues-logo-for-footer" />
-                    </div>
                     <div className="col-xl-3">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Our links").toUpperCase()}</h5>
                         <ul className="links-list">
@@ -93,11 +93,11 @@ export default function Footer() {
                                 <Link href="/polices-terms-and-conditions" className="text-dark link-btn">{t("Polices-Terms & Conditions").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
-                            {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
+                                {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/return-and-refund-policy" className="text-dark link-btn">{t("Return & Refund Policy").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold">
-                            {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
+                                {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/return-and-delivery-sheet" className="text-dark link-btn">{t("Return And Delivery Sheet").toUpperCase()}</Link>
                             </li>
                         </ul>
@@ -127,7 +127,7 @@ export default function Footer() {
                             </li>
                         </ul>
                     </div>
-                    <div className="col-xl-4">
+                    <div className="col-xl-3">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Payment Methods").toUpperCase()}</h5>
                         <ul className="payment-methods-list mb-5">
                             <li className="payment-method-item fw-bold mb-3">
@@ -147,13 +147,15 @@ export default function Footer() {
                                 <span>{t("Knet")}</span>
                             </li>
                         </ul>
+                    </div>
+                    <div className="col-xl-3">
                         <h5 className="fw-bold mb-3 border-bottom border-dark border-2 pb-2 title">{t("Subscription").toUpperCase()}</h5>
-                        <h6 className="mb-3">{t("Enter your email address")}</h6>
-                        <h6 className="mb-3">{"(" + t("I want to receive all the latest updates via email") + " )"}</h6>
-                        <form className="subscription" onSubmit={(e) => handleSubscription(e, email)}>
+                        <p className="mb-3">{t("Enter your email address")}</p>
+                        <p className="mb-3">{"(" + t("I want to receive all the latest updates via email") + " )"}</p>
+                        <form className="subscription-form" onSubmit={(e) => handleSubscription(e, email)}>
                             <input
                                 type="email"
-                                className="form-control  p-2 d-block w-75 mb-3"
+                                className="form-control p-2 d-block w-75 mb-3"
                                 placeholder={t("Please Enter Email Here")}
                                 onChange={(e) => setEmail(e.target.value.trim())}
                                 required

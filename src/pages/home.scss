@@ -1,5 +1,4 @@
 .home{
-    overflow: auto;
     .carousel{
         position: static;
         .carousel-caption{
@@ -19,6 +18,9 @@
     }
     .welcome-msg{
         width: fit-content;
+    }
+    .text-ads{
+        font-size: 14px;
     }
     .image-ads{
         .slick-slider{

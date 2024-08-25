@@ -1,13 +1,16 @@
 .product-card{
     .flash-discount-description{
         .flash-icon{
-            font-size: 50px;
+            font-size: 35px;
         }
-        h4, .remaining-time, button{
+        h6, .remaining-time, button{
             border: 4px solid var(--main-color-two);
         }
         .flash-icon, button{
             background-color: var(--main-color-two);
+        }
+        .remaining-time, button{
+            font-size: 12px;
         }
     }
     .product-managment-box{
@@ -38,13 +41,13 @@
     }
     .product-details{
         .product-name{
-            font-size: 19px;
+            font-size: 16px;
         }
         .product-category{
-            font-size: 18px;
+            font-size: 15px;
         }
         .product-price, .product-price-after-discount{
-            font-size: 17px;
+            font-size: 13px;
         }
         .discount-timer-box{
             position: absolute;

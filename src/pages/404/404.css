@@ -4,14 +4,14 @@
 }
 
 .page-not-found .page-content .error-404-icon {
-  font-size: 175px;
+  font-size: 150px;
 }
 
-.page-not-found .page-content .home-page-link {
+.page-not-found .page-content .home-page-link-button {
   color: #000;
-  font-size: 20px;
+  font-size: 15px;
 }
 
-.page-not-found .page-content .home-page-link:hover {
+.page-not-found .page-content .home-page-link-button:hover {
   text-decoration: underline;
 }

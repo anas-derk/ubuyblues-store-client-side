@@ -322,38 +322,38 @@ export default function ProductCard({
         <div className="product-card card-box">
             {!isDisplayProduct && <div className="flash-discount-description bg-white text-dark p-4 text-center">
                 <IoIosFlash className="flash-icon mb-3" />
-                <h4 className="fw-bold mb-4 p-2">
+                <h6 className="fw-bold mb-4 p-2">
                     {
                         remainingTimeForDiscountOffer.days > 0 ||
                             remainingTimeForDiscountOffer.hours > 0 ||
                             remainingTimeForDiscountOffer.minutes > 0 ||
                             remainingTimeForDiscountOffer.seconds > 0 ? t("Time Is Running Out !!") : t("Expired !!")
                     }
-                </h4>
-                <h4 className="fw-bold mb-4 p-2">{productDetails.offerDescription}</h4>
+                </h6>
+                <h6 className="fw-bold mb-4 p-2">{productDetails.offerDescription}</h6>
                 <div className="row mb-4">
                     <div className="col-3">
                         <div className="remaining-time w-100 text-dark fw-bold d-flex flex-column justify-content-center align-items-center pt-2 pb-2">
                             <span>{remainingTimeForDiscountOffer.days}</span>
-                            <h6 className="mb-0 fw-bold">{t("Day")}</h6>
+                            <p className="mb-0 fw-bold">{t("Day")}</p>
                         </div>
                     </div>
                     <div className="col-3">
                         <div className="remaining-time w-100 text-dark fw-bold d-flex flex-column justify-content-center align-items-center pt-2 pb-2">
                             <span>{remainingTimeForDiscountOffer.hours}</span>
-                            <h6 className="mb-0 fw-bold">{t("Hour")}</h6>
+                            <p className="mb-0 fw-bold">{t("Hour")}</p>
                         </div>
                     </div>
                     <div className="col-3">
                         <div className="remaining-time w-100 text-dark fw-bold d-flex flex-column justify-content-center align-items-center pt-2 pb-2">
                             <span>{remainingTimeForDiscountOffer.minutes}</span>
-                            <h6 className="mb-0 fw-bold">{t("Min")}</h6>
+                            <p className="mb-0 fw-bold">{t("Min")}</p>
                         </div>
                     </div>
                     <div className="col-3">
                         <div className="remaining-time w-100 text-dark fw-bold d-flex flex-column justify-content-center align-items-center pt-2 pb-2">
                             <span>{remainingTimeForDiscountOffer.seconds}</span>
-                            <h6 className="mb-0 fw-bold">{t("Sec")}</h6>
+                            <p className="mb-0 fw-bold">{t("Sec")}</p>
                         </div>
                     </div>
                 </div>

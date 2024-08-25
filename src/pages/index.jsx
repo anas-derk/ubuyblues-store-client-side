@@ -610,7 +610,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 />}
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
-                <div className={`page-content ${allTextAds.length === 0 && "pt-5"}`}>
+                <div className={`page-content w-100 ${allTextAds.length === 0 && "pt-5"}`}>
                     {/* Start Text Ads Section */}
                     {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-dark mb-5">
                         <Carousel indicators={false} controls={false}>
@@ -635,12 +635,12 @@ export default function Home({ countryAsProperty, storeId }) {
                                     height="200"
                                     className="d-block mx-auto mb-5 store-image"
                                 />
-                                <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto">{t("Welcome To You In Store")} {storeDetails.name}</h1>
-                                <h2 className="products-description mb-4">{storeDetails.productsDescription}</h2>
+                                <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto h3">{t("Welcome To You In Store")} {storeDetails.name}</h1>
+                                <h2 className="products-description mb-4 h4">{storeDetails.productsDescription}</h2>
                             </section>}
                             {/* End Store Details Section */}
                             {/* Start Image Ads Section */}
-                            {allImageAds.length > 0 && <section className="image-ads mb-5">
+                            {/* {allImageAds.length > 0 && <section className="image-ads mb-5">
                                 <div className="container-fluid">
                                     <Slider
                                         dots={true}
@@ -663,18 +663,18 @@ export default function Home({ countryAsProperty, storeId }) {
                                         ))}
                                     </Slider>
                                 </div>
-                            </section>}
+                            </section>} */}
                             {/* End Image Ads Section */}
                             {/* Start Categories Section */}
                             <section className="categories mb-5 pb-5" id="categories">
-                                <h2 className="section-name text-center mb-4 text-white">{t("Categories")}</h2>
+                                <h2 className="section-name text-center mb-4 text-white h4">{t("Categories")}</h2>
                                 {isGetCategories && <SectionLoader />}
                                 {!isGetCategories && allCategoriesInsideThePage.length > 0 && <div className="row mb-5">
                                     {allCategoriesInsideThePage.map((category) => (
                                         <div className="col-md-3" key={category._id}>
                                             <div className="category-details p-3">
                                                 <Link href={`/products-by-category?categoryId=${category._id}`} className="product-by-category-link text-dark">
-                                                    <h5 className="cateogory-name mb-3">{category.name}</h5>
+                                                    <h6 className="cateogory-name mb-3">{category.name}</h6>
                                                     <MdKeyboardArrowRight className="forward-arrow-icon" />
                                                 </Link>
                                             </div>
@@ -702,7 +702,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* End Categories Section */}
                             {/* Start Last Added Flash Products */}
                             <section className="last-added-flash-products mb-5 pb-3" id="latest-added-products">
-                                <h2 className="section-name text-center mb-4 text-white">{t("Flash Products")}</h2>
+                                <h2 className="section-name text-center mb-4 text-white h4">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
                                         <form className="search-form">
@@ -710,7 +710,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                    className={`form-control p-3 border-2`}
+                                                    className="form-control border-2"
                                                     onChange={(e) => handleChangeFilters(e, "flash-products")}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -723,7 +723,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)}>
                                             <div className="select-sort-type-box">
                                                 <select
-                                                    className="select-sort-type form-select p-3"
+                                                    className="select-sort-type form-select"
                                                     onChange={(e) => handleChangeSorts(e, "flash-products")}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
@@ -757,7 +757,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                             />
                                         </div>
                                     ))}
-                                    {!isGetFlashProducts && allFlashProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
+                                    {!isGetFlashProducts && allFlashProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistFlashProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                     {totalPagesCount.forFlashProducts > 1 &&
                                         <PaginationBar
                                             totalPagesCount={totalPagesCount.forFlashProducts}
@@ -776,7 +776,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* End Last Added Flash Products */}
                             {/* Start Last Added Products */}
                             <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                                <h2 className="section-name text-center mb-4 text-white">{t("Last Added Products")}</h2>
+                                <h2 className="section-name text-center mb-4 text-white h4">{t("Last Added Products")}</h2>
                                 {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
                                         <form className="search-form">
@@ -784,7 +784,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                    className={`form-control p-3 border-2`}
+                                                    className="form-control"
                                                     onChange={(e) => handleChangeFilters(e, "products")}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -797,7 +797,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         <form className="sort-form">
                                             <div className="select-sort-type-box">
                                                 <select
-                                                    className="select-sort-type form-select p-3"
+                                                    className="select-sort-type form-select"
                                                     onChange={(e) => handleChangeSorts(e, "products")}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
@@ -811,7 +811,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     </div>
                                 </div>}
                                 {isGetProducts && <SectionLoader />}
-                                {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Products Related In This Name !!")} />}
+                                {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
                                     {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
                                         <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
@@ -849,7 +849,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* End Last Added Products */}
                             {/* Start Brands Section */}
                             {appearedSections.includes("brands") && lastSevenBrands.length > 0 && <section className="brands mb-5">
-                                <h2 className="section-name text-center mb-5 text-white">{t("Brands")}</h2>
+                                <h2 className="section-name text-center mb-5 text-white h4">{t("Brands")}</h2>
                                 <div className="row brands-box section-data-box pt-4 pb-4">
                                     {isGetBrands && <SectionLoader />}
                                     {!isGetBrands && lastSevenBrands.length > 0 && lastSevenBrands.map((brand) => (
@@ -861,12 +861,12 @@ export default function Home({ countryAsProperty, storeId }) {
                                     ))}
                                     {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                                 </div>
-                                {!isGetBrands && lastSevenBrands.length !== 0 && <Link href={`/all-brands-of-the-store?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-btn p-3">{t("Show All Brands")}</Link>}
+                                {!isGetBrands && lastSevenBrands.length !== 0 && <Link href={`/all-brands-of-the-store?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-btn">{t("Show All Brands")}</Link>}
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}
-                            {appearedSections.includes("stores") && <section className="stores mb-5 pt-5">
-                                <h2 className="section-name text-center mb-4 text-white">{t("Stores")}</h2>
+                            {appearedSections.includes("stores") && <section className="stores mb-5 pt-5 h4">
+                                <h2 className="section-name text-center mb-4 text-white h4">{t("Stores")}</h2>
                                 <div className="row stores-box section-data-box pt-4 pb-4">
                                     {isGetStores && <SectionLoader />}
                                     {!isGetStores && allStoresInsideThePage.length > 0 && allStoresInsideThePage.map((store) => (

@@ -2,18 +2,13 @@ footer {
   background-color: #FFF;
 }
 
-footer .ubuyblues-logo-for-footer {
-  width: 50%;
-  max-width: 100%;
-  max-height: 100%;
-}
-
 footer .link-btn {
-  font-size: 13px;
+  font-size: 11px;
 }
 
 footer .title {
   width: fit-content;
+  font-size: 14px;
 }
 
 @media (max-width: 1199px) {
@@ -22,14 +17,18 @@ footer .title {
   }
 }
 
-footer .payment-methods-list .payment-method-item span {
-  font-size: 16px;
-}
-
-footer .payment-methods-list .payment-method-item .icon {
-  font-size: 20px;
+footer .payment-methods-list .payment-method-item {
+  font-size: 14px;
 }
 
 footer .payment-methods-list .payment-method-item .knet-icon {
-  width: 20px;
+  width: 14px;
+}
+
+footer .subscription-form button, footer .subscription-form input {
+  font-size: 12px !important;
+}
+
+footer p {
+  font-size: 14px;
 }

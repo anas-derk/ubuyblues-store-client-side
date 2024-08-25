@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
 
+    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+
     const [lightMode, setLightMode] = useState("sunny");
 
     const [token, setToken] = useState("");
@@ -83,7 +85,6 @@ export default function Header() {
                 });
             })
             .catch(() => {
-                setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
         }
@@ -157,10 +158,10 @@ export default function Header() {
 
     return (
         <header className="global-header">
-            <Navbar expand="lg" className="bg-body-tertiary bg-white" fixed="top">
+            <Navbar expand="lg" className="bg-body-tertiary bg-white pt-1 pb-1" fixed="top">
                 <Container fluid>
                     <Navbar.Brand href="/" as={Link}>
-                        <img src={ubuybluesLogo.src} alt="asfour logo for footer" className="ubuyblues-logo" width="75" height="75" />
+                        <img src={ubuybluesLogo.src} alt="ubuyblues logo for header" className="ubuyblues-logo" width="70" height="70" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
