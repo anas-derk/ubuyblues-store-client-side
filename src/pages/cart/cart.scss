@@ -11,6 +11,7 @@
             }
             th, td{
                 padding: 20px;
+                font-size: 13px;
             }
             tbody{
                 tr{
@@ -37,7 +38,7 @@
         .delete-product-cell{
             .trash-icon{
                 cursor: pointer;
-                font-size: 22px;
+                font-size: 20px;
             }
         }
         .cart-total-btn-box{
@@ -58,5 +59,9 @@
                 color: #FFF;
             }
         }
+    }
+    .order-total{
+        font-size: 12px;
+        padding: 35px;
     }
 }

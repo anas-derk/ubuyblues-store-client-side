@@ -1,1 +1,1 @@
-.error-msg-on-loading-the-page .error-icon{font-size:100px}.error-msg-on-loading-the-page .error-msg-on-loading-box{font-size:25px}
+.error-msg-on-loading-the-page{height:calc(100vh - 90px)}.error-msg-on-loading-the-page .error-icon{font-size:100px}.error-msg-on-loading-the-page .error-msg-on-loading-box{font-size:25px}

@@ -46,7 +46,7 @@ export default function ReturnAndDeliverySheet() {
     }
 
     return (
-        <div className="return-and-delivery-sheet caption-page page d-flex flex-column justify-content-center align-items-center">
+        <div className="return-and-delivery-sheet caption-page page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Return And Delivery Sheet")}</title>
             </Head>

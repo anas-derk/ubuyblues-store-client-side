@@ -245,7 +245,7 @@ export default function AddYourStore() {
     }
 
     return (
-        <div className="add-your-store page d-flex flex-column justify-content-center align-items-center">
+        <div className="add-your-store page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Add Your Store")}</title>
             </Head>
@@ -254,12 +254,12 @@ export default function AddYourStore() {
                 <div className="page-content pt-5">
                     <div className="container-fluid">
                         {isServiceAvailable ? <section className="add-your-store pb-5">
-                            <h2 className="section-name text-center mb-4 text-white">{t("Add Your Store")}</h2>
+                            <h1 className="section-name text-center mb-4 text-white h4">{t("Add Your Store")}</h1>
                             <form className="add-your-store-form mx-auto public-form" onSubmit={createNewStore}>
                                 <section className="name mb-4">
                                     <input
                                         type="text"
-                                        className={`form-control p-3 border-2 store-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control store-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Store Name")}
                                         onChange={(e) => setStoreData({ ...storeData, name: e.target.value })}
                                         value={storeData.name}
@@ -272,7 +272,7 @@ export default function AddYourStore() {
                                 <section className="owner-first-name mb-4">
                                     <input
                                         type="text"
-                                        className={`form-control p-3 border-2 store-owner-first-name-field ${formValidationErrors["ownerFirstName"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control store-owner-first-name-field ${formValidationErrors["ownerFirstName"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your First Name")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerFirstName: e.target.value })}
                                         value={storeData.ownerFirstName}
@@ -285,7 +285,7 @@ export default function AddYourStore() {
                                 <section className="owner-last-name mb-4">
                                     <input
                                         type="text"
-                                        className={`form-control p-3 border-2 store-owner-last-name-field ${formValidationErrors["ownerLastName"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control store-owner-last-name-field ${formValidationErrors["ownerLastName"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Last Name")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerLastName: e.target.value })}
                                         value={storeData.ownerLastName}
@@ -298,7 +298,7 @@ export default function AddYourStore() {
                                 <section className="owner-email mb-4">
                                     <input
                                         type="text"
-                                        className={`form-control p-3 border-2 store-owner-email-field ${formValidationErrors["ownerEmail"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control store-owner-email-field ${formValidationErrors["ownerEmail"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Email")}
                                         onChange={(e) => setStoreData({ ...storeData, ownerEmail: e.target.value })}
                                         value={storeData.ownerEmail}
@@ -311,7 +311,7 @@ export default function AddYourStore() {
                                 <section className="store-products-type mb-4">
                                     <input
                                         type="text"
-                                        className={`form-control p-3 border-2 store-products-type-field ${formValidationErrors["productsType"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control store-products-type-field ${formValidationErrors["productsType"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Products Type")}
                                         onChange={(e) => setStoreData({ ...storeData, productsType: e.target.value })}
                                         value={storeData.productsType}
@@ -324,7 +324,7 @@ export default function AddYourStore() {
                                 <section className="store-products-description mb-4">
                                     <input
                                         type="text"
-                                        className={`form-control p-3 border-2 store-products-description-field ${formValidationErrors["productsDescription"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control store-products-description-field ${formValidationErrors["productsDescription"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder={t("Please Enter Your Products Description")}
                                         onChange={(e) => setStoreData({ ...storeData, productsDescription: e.target.value })}
                                         value={storeData.productsDescription}
@@ -337,7 +337,7 @@ export default function AddYourStore() {
                                 <section className="image mb-4">
                                     <input
                                         type="file"
-                                        className={`form-control p-3 border-2 product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
+                                        className={`form-control product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}
                                         placeholder="Please Enter Product Image"
                                         onChange={(e) => setStoreData({ ...storeData, image: e.target.files[0] })}
                                         ref={storeImageFileElementRef}
@@ -350,20 +350,20 @@ export default function AddYourStore() {
                                 </section>
                                 {!isWaitStatus && !successMsg && !errorMsg && <button
                                     type="submit"
-                                    className="btn btn-success w-50 d-block mx-auto p-3 global-button"
+                                    className="btn btn-success w-50 d-block mx-auto global-button"
                                 >
                                     {t("Add Now")}
                                 </button>}
                                 {isWaitStatus && <button
                                     type="button"
-                                    className="btn btn-danger w-50 d-block mx-auto p-3 global-button"
+                                    className="btn btn-danger w-50 d-block mx-auto global-button"
                                     disabled
                                 >
                                     {t("Please Waiting")} ...
                                 </button>}
                                 {errorMsg && <button
                                     type="button"
-                                    className="btn btn-danger w-50 d-block mx-auto p-3 global-button"
+                                    className="btn btn-danger w-50 d-block mx-auto global-button"
                                     disabled
                                 >
                                     {t(errorMsg)}

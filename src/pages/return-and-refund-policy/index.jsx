@@ -46,7 +46,7 @@ export default function PolicesTermsAndConditions() {
     }
 
     return (
-        <div className="return-and-refund-policy caption-page page d-flex flex-column justify-content-center align-items-center">
+        <div className="return-and-refund-policy caption-page page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Return And Refund Policy")}</title>
             </Head>

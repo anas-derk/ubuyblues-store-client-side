@@ -1,13 +1,12 @@
 .checkout{
     .page-content{
         .container-fluid{
+            h6{
+                font-size: 14px;
+            }
             > .row{
                 @media (max-width: 991px) {
                     gap: 30px;
-                }
-                > div:last-of-type{
-                    position: sticky;
-                    top: 20px;
                 }
                 .first-and-last-name{
                     .row{
@@ -29,12 +28,18 @@
                     }
                 }
             }
+            .order-total{
+                font-size: 13px;
+            }
+        }
+        label{
+            font-size: 14px;
         }
         .radio-input{
             width: fit-content;
         }
-        .icon{
-            font-size: 50px;
+        .payment-icon{
+            font-size: 40px;
         }
     }
 }

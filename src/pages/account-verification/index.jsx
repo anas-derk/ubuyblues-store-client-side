@@ -206,7 +206,7 @@ export default function AccountVerification({ email }) {
     }
 
     return (
-        <div className="account-verification page d-flex flex-column justify-content-center align-items-center">
+        <div className="account-verification page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Account Verification")}</title>
             </Head>

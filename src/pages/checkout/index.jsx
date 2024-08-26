@@ -627,7 +627,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     return (
-        <div className="checkout page d-flex flex-column justify-content-center align-items-center">
+        <div className="checkout page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Checkout")}</title>
             </Head>
@@ -639,7 +639,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 <Header />
                 <div className="page-content pt-5">
                     <div className="container-fluid text-white p-4">
-                        <h1 className="h3 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
+                        <h1 className="h4 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
                         {Object.keys(storeDetails).length > 0 ?
                             allProductsData.length > 0 ? <div className="row align-items-center">
                                 <div className="col-xl-6">
@@ -1063,7 +1063,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         </div>}
                                         {/* Start Shipping Methods Section */}
                                         <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
-                                            <h5 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h5>
+                                            <h6 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h6>
                                             {localAndInternationlProducts.local.length > 0 && <>
                                                 {localAndInternationlProducts.international.length > 0 && <>
                                                     <h6 className="text-center mb-4">{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} )</h6>
@@ -1150,7 +1150,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         {/* End Shipping Methods Section */}
                                         {/* Start Payement Methods Section */}
                                         <section className="payment-methods mb-4 border border-2 p-3 mb-4">
-                                            <h5 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Payment Methods")}</h5>
+                                            <h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Payment Methods")}</h6>
                                             <div className={`row align-items-center pt-3 ${paymentMethod === "paypal" ? "mb-3" : ""}`}>
                                                 <div className="col-md-6 text-start">
                                                     <input
@@ -1164,7 +1164,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>{t("PayPal")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
-                                                    <FaCcPaypal className="icon paypal-icon" />
+                                                    <FaCcPaypal className="payment-icon paypal-icon" />
                                                 </div>
                                             </div>
                                             {paymentMethod === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
@@ -1193,7 +1193,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tap")}>{t("Tap")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
-                                                    <FaTape className="icon tap-icon" />
+                                                    <FaTape className="payment-icon tap-icon" />
                                                 </div>
                                             </div>
                                             <div className={`row align-items-center pt-3 ${paymentMethod === "tabby" ? "mb-3" : ""}`}>
@@ -1209,7 +1209,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tabby")}>{t("Tabby")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
-                                                    <FaTape className="icon tap-icon" />
+                                                    <FaTape className="payment-icon tap-icon" />
                                                 </div>
                                             </div>
                                             {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button

@@ -127,7 +127,7 @@ export default function AllBrands({ storeId }) {
     }
 
     return (
-        <div className="all-brands page d-flex flex-column justify-content-center align-items-center">
+        <div className="all-brands page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("All The Brands Of The Store")}</title>
             </Head>

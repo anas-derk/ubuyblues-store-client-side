@@ -8,6 +8,7 @@
 
 .cart .products .user-products-table th, .cart .products .user-products-table td {
   padding: 20px;
+  font-size: 13px;
 }
 
 .cart .products .user-products-table tbody tr {
@@ -33,7 +34,7 @@
 
 .cart .products .delete-product-cell .trash-icon {
   cursor: pointer;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .cart .products .cart-total-btn-box {
@@ -54,4 +55,9 @@
 .cart .products .cart-total-btn-box:hover {
   background-color: #000;
   color: #FFF;
+}
+
+.cart .order-total {
+  font-size: 12px;
+  padding: 35px;
 }

@@ -1,12 +1,11 @@
+.checkout .page-content .container-fluid h6 {
+  font-size: 14px;
+}
+
 @media (max-width: 991px) {
   .checkout .page-content .container-fluid > .row {
     gap: 30px;
   }
-}
-
-.checkout .page-content .container-fluid > .row > div:last-of-type {
-  position: sticky;
-  top: 20px;
 }
 
 @media (max-width: 767px) {
@@ -24,10 +23,18 @@
   }
 }
 
+.checkout .page-content .container-fluid .order-total {
+  font-size: 13px;
+}
+
+.checkout .page-content label {
+  font-size: 14px;
+}
+
 .checkout .page-content .radio-input {
   width: fit-content;
 }
 
-.checkout .page-content .icon {
-  font-size: 50px;
+.checkout .page-content .payment-icon {
+  font-size: 40px;
 }

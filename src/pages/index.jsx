@@ -592,7 +592,7 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     return (
-        <div className="home page d-flex flex-column justify-content-center align-items-center">
+        <div className="home page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Home")}</title>
             </Head>
@@ -610,7 +610,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 />}
                 <NavigateToUpOrDown />
                 {/* End Share Options Box */}
-                <div className={`page-content w-100 ${allTextAds.length === 0 && "pt-5"}`}>
+                <div className={`page-content ${allTextAds.length === 0 && "pt-5"}`}>
                     {/* Start Text Ads Section */}
                     {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-dark mb-5">
                         <Carousel indicators={false} controls={false}>

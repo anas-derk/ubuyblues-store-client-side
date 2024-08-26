@@ -27,7 +27,7 @@ a{
     text-decoration: none;
 }
 
-input, textarea, select, .checkbox{
+input, textarea, select{
     background: transparent;
     border: 1px solid #FFF;
     border-radius: 3px;
@@ -63,6 +63,7 @@ textarea{
 
 .global-button{
     font-size: 13px;
+    padding: 13px;
 }
 
 .private-btn {
@@ -280,7 +281,7 @@ textarea{
         color: #000;
         border: 5px solid #FFF;
         border-top-left-radius: 20px;
-        
+        font-size: 12px !important;
         &:hover{
             background-color: var(--main-color-one);
             color: #FFF;

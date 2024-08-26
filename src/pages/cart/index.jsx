@@ -213,7 +213,7 @@ export default function Cart({ countryAsProperty }) {
     }
 
     return (
-        <div className="cart page d-flex flex-column justify-content-center align-items-center">
+        <div className="cart page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Cart")}</title>
             </Head>
@@ -224,7 +224,7 @@ export default function Cart({ countryAsProperty }) {
                         {allProductsData.length > 0 ? <section className="products-by-store">
                             {allProductsData.map((store, storeIndex) => (
                                 <div className="store mb-5 pb-5" key={store.storeId}>
-                                    <h2 className="mb-5">{t("Store-Associated Products")} : {store.storeId}</h2>
+                                    <h4 className="mb-5">{t("Store-Associated Products")} : {store.storeId}</h4>
                                     <div className="row align-items-center">
                                         <div className="col-xl-8">
                                             {windowInnerWidth > 991 && <section className="products w-100">
@@ -246,7 +246,7 @@ export default function Cart({ countryAsProperty }) {
                                                                             <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" />
                                                                         </div>
                                                                         <div className="col-lg-8">
-                                                                            <h5 className="product-name mb-3">{product.name}</h5>
+                                                                            <h6 className="product-name mb-3">{product.name}</h6>
                                                                             <h6 className={`product-price ${product.discount !== 0 || product.discountInOfferPeriod !== 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                             {
                                                                                 product.discount > 0 &&
@@ -289,14 +289,14 @@ export default function Cart({ countryAsProperty }) {
                                                 </a>
                                                 {store.products.map((product, index) => (
                                                     <div className="product mb-4" key={product._id}>
-                                                        <h4 className="mb-3">{t("Product")} # {index + 1}</h4>
+                                                        <h5 className="mb-3">{t("Product")} # {index + 1}</h5>
                                                         <table className="user-products-table-for-mobiles-and-tablets table-for-mobiles-and-tablets w-100">
                                                             <tbody>
                                                                 <tr>
                                                                     <th>{t("Product")}</th>
                                                                     <td className="product-cell">
                                                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
-                                                                        <h5 className="product-name mb-3">{product.name}</h5>
+                                                                        <h6 className="product-name mb-3">{product.name}</h6>
                                                                         <h6 className={`product-price ${(product.discount !== 0 || product.discountInOfferPeriod) ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                         {
                                                                             product.discount > 0 &&
@@ -343,8 +343,8 @@ export default function Cart({ countryAsProperty }) {
                                             </section>}
                                         </div>
                                         <div className="col-xl-4">
-                                            <section className="order-total border border-3 p-4 ps-5 pe-5 text-start" id="order-total">
-                                                <h5 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h5>
+                                            <section className="order-total border border-3 text-start" id="order-total">
+                                                <h6 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h6>
                                                 <div className="row total-price-before-discount total pb-3 mb-5">
                                                     <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                         {t("Total Price Before Discount")}

@@ -60,7 +60,6 @@ export default function Header() {
                 }
             })
             .catch(() => {
-                setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
         }
