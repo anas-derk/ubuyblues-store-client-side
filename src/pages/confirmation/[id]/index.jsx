@@ -148,7 +148,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 <Header />
                 <div className="page-content page pt-5">
                     <div className="container-fluid align-items-center pb-4 text-white">
-                        <h1 className="welcome-msg text-center mb-5">{t("Welcome To You In Payment Confirmation Page")}</h1>
+                        <h1 className="welcome-msg text-center mb-5 h4">{t("Welcome To You In Payment Confirmation Page")}</h1>
                         {Object.keys(orderDetails).length > 0 ? <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-center" id="order-total">
                             <h5 className="fw-bold mb-4 text-center">{t("Your Request")}</h5>
                             <div className="order-id-and-number border border-white border-2 p-4 mb-5">
@@ -225,9 +225,8 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                             </h4>
                             <img
                                 src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
-                                alt="Ubuyblues Logo"
-                                width="150"
-                                height="150"
+                                alt={`${storeDetails.name} Logo`}
+                                className="store-image"
                             />
                         </section>: <NotFoundError errorMsg={t("Sorry, This Order Is Not Found !!")} />}
                     </div>

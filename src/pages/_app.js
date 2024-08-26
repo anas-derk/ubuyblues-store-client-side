@@ -8,6 +8,8 @@ import "../components/CustomerDashboardSideBar/customer_dashboard_side_bar.css";
 import "../pages/customer-dashboard/customer_dashboard.css";
 import "../pages/customer-dashboard/addreses/addreses.css";
 import "../pages/customer-dashboard/orders/index.css";
+import "../pages/confirmation/[id]/confirmation.css";
+import "../pages/customer-dashboard/orders/[orderId]/order_details.css";
 import "../pages/customer-dashboard/account-details/customer_account_details.css";
 import "../pages/404/404.css";
 import "../pages/account-verification/account_verification.css";

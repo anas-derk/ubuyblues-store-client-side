@@ -117,7 +117,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {orderDetails?.checkoutStatus === "Checkout Successfull" ? <div className="order-details-box p-3 data-box">
+                                {orderDetails?.checkoutStatus !== "Checkout Successfull" ? <div className="order-details-box p-3 data-box">
                                     {windowInnerWidth > 991 ? <table className="order-data-table customer-table mb-5 w-100">
                                         <thead>
                                             <tr>
