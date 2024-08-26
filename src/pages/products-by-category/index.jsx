@@ -237,7 +237,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h2 className="section-name text-center mt-4 mb-5 text-white">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h2>
+                            <h1 className="section-name text-center mt-4 mb-5 text-white h3">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h1>
                             {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                 <div className="col-xs-12 col-md-6">
                                     <form className="search-form">
@@ -245,7 +245,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                             <input
                                                 type="text"
                                                 placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                className={`form-control p-3 border-2`}
+                                                className="form-control"
                                                 onChange={(e) => {
                                                     const tempFilters = { ...filters, name: e.target.value.trim() };
                                                     setFilters(tempFilters);
@@ -262,7 +262,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                     <form className="sort-form">
                                         <div className="select-sort-type-box">
                                             <select
-                                                className="select-sort-type form-select p-3"
+                                                className="select-sort-type form-select"
                                                 onChange={(e) => {
                                                     const sortDetailsArray = e.target.value.split(",");
                                                     const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };

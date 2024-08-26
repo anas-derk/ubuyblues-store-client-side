@@ -659,7 +659,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     <div className="container-fluid">
                         {Object.keys(productInfo).length > 0 ?
                             <section className={`product-details-box ${windowInnerWidth < 991 ? "p-3" : ""}`}>
-                                <h1 className="section-name text-center mb-4 text-white pb-3">{t("Product Details")}</h1>
+                                <h1 className="section-name text-center mb-4 text-white pb-3 h3">{t("Product Details")}</h1>
                                 <div className="row mb-3 justify-content-center align-items-center">
                                     <div className="col-lg-6">
                                         <div className="product-images-box mb-4">
@@ -695,25 +695,25 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                            <h2 className="product-name fw-bold mb-4">{productInfo.name}</h2>
+                                            <h5 className="product-name fw-bold mb-4">{productInfo.name}</h5>
                                             <h5 className="product-category-name mb-4">
                                                 <span className="fw-bold">{t("Category")}: </span>
                                                 <span>{productInfo.category}</span>
                                             </h5>
-                                            <h5 className={`product-price ${productInfo.discount != 0 ? "text-decoration-line-through" : "mb-4"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                                            <h5 className={`product-price mb-4 ${productInfo.discount !== 0 && "text-decoration-line-through"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                                             {
                                                 productInfo.discount > 0 &&
                                                 !isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
-                                                <h4 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                                                <h6 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                             }
                                             {
                                                 productInfo.discountInOfferPeriod > 0 &&
                                                 isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
-                                                <h4 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                                                <h6 className="product-price-after-discount mb-4">{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                             }
                                             {
                                                 productInfo.quantity > 0 ? <h5 className="product-quantity">{productInfo.quantity} {t("Product Available In Store")}</h5> :
-                                                    <h5 className="product-not-available-error text-danger fw-bold">{t("Sorry, This Product Not Available Now !!")}</h5>
+                                                    <h6 className="product-not-available-error text-danger fw-bold">{t("Sorry, This Product Not Available Now !!")}</h6>
                                             }
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
@@ -742,12 +742,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             </div>
                                             <div className={`add-to-cart row align-items-center mb-4 ${i18n.language !== "ar" && windowInnerWidth > 767 && "me-2"} ${i18n.language === "ar" && windowInnerWidth > 767 && "ms-2"}`}>
                                                 <div className="add-to-cart-managment-btns-box col-md-8">
-                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100" onClick={() => addToCart(productInfo._id)}>{t("Add To Cart")}</button>}
-                                                    {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100" disabled>{t("Waiting In Add To Cart ...")}</button>}
-                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100 bg-danger text-white" disabled>{t(errorInAddToCart)}</button>}
+                                                    {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100 private-btn" onClick={() => addToCart(productInfo._id)}>{t("Add To Cart")}</button>}
+                                                    {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100 private-btn" disabled>{t("Waiting In Add To Cart ...")}</button>}
+                                                    {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100 bg-danger text-white private-btn" disabled>{t(errorInAddToCart)}</button>}
                                                     {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>{t("Display Your Cart")}</Link>}
                                                 </div>
-                                                <div className="select-product-quantity-box p-3 col-md-4">
+                                                <div className="select-product-quantity-box p-2 col-md-4">
                                                     <HiMinus className="select-product-quantity-icon"
                                                         onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
                                                     />
@@ -935,7 +935,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     </div>
                                 </div>}
                                 <section className="related-products-box">
-                                    <h2 className="text-center mb-4">{t("Related Products")}</h2>
+                                    <h3 className="text-center mb-4">{t("Related Products")}</h3>
                                     {sampleFromRelatedProductsInProduct.length > 0 ? <div className="row products-box section-data-box pt-4 pb-4">
                                         {sampleFromRelatedProductsInProduct.map((product) => (
                                             product._id !== productIdAsProperty && <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
