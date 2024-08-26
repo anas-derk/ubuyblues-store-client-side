@@ -136,7 +136,7 @@ export default function AllBrands({ storeId }) {
                 <div className="page-content pb-5 pt-5">
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
-                            <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white">{t("All The Brands Of The Store")}: {storeDetails.name}</h1>
+                            <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white h3">{t("All The Brands Of The Store")}: {storeDetails.name}</h1>
                             <div className="row brands-box section-data-box mb-5">
                                 {allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
                                     <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
