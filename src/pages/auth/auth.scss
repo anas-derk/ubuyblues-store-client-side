@@ -22,20 +22,9 @@
             grid-template-columns: auto;
         }
     }
-    h6{
-        font-size: 13px;
-    }
     .authentication{
         .signup-section, .login-section{
             animation: displayAuthPartAnimation 2s ease-in-out 0s 1 forwards;
-        }
-        .auth-btn{
-            padding: 13px 0;
-            font-size: 13px;
-        }
-        .result-auth-msg{
-            padding: 13px 0;
-            font-size: 13px;
         }
         .external-auth-sites-list{
             width: fit-content;

@@ -278,7 +278,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     }
 
     return (
-        <div className="forget-password page d-flex flex-column justify-content-center align-items-center">
+        <div className="forget-password page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Forget Password")}</title>
             </Head>
@@ -286,11 +286,11 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                 <Header />
                 <div className="page-content pt-5 text-white ps-4 pe-4 text-center">
                     <div className="container-fluid">
-                        <h1 className="h3 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
+                        <h1 className="h4 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
                         {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>
                             <div className="select-user-type-field-box">
                                 <select
-                                    className={`select-user-type form-select p-3 border-2 ${i18n.language === "ar" ? "ar" : ""} ${formValidationErrors["userType"] ? "border-danger mb-3" : "mb-5"}`}
+                                    className={`select-user-type form-select ${i18n.language === "ar" ? "ar" : ""} ${formValidationErrors["userType"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => handleSelectUserType(e.target.value)}
                                 >
                                     <option value="" hidden>{t("Pleae Select User Type")}</option>
@@ -303,7 +303,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 <input
                                     type="text"
                                     placeholder={t("Please Enter Your Email")}
-                                    className={`form-control p-3 border-2 ${formValidationErrors["email"] ? "border-danger mb-3" : "mb-5"}`}
+                                    className={`form-control ${formValidationErrors["email"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setEmail(e.target.value.trim())}
                                 />
                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -311,22 +311,22 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 </div>
                             </div>
                             {formValidationErrors["email"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["email"])}</p>}
-                            {!isCheckingStatus && !errorMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 p-3">
+                            {!isCheckingStatus && !errorMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 global-button">
                                 {i18n.language === "ar" && <RiLockPasswordLine />}
                                 <span className="me-2">{t("Forget Password")}</span>
                                 {i18n.language !== "ar" && <RiLockPasswordLine />}
                             </button>}
-                            {isCheckingStatus && <button disabled className="btn btn-primary w-100 mb-4 p-3">
+                            {isCheckingStatus && <button disabled className="btn btn-primary w-100 mb-4 global-button">
                                 <span className="me-2">{t("Wait Checking")} ...</span>
                             </button>}
-                            {(errorMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errorMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errorMsg || successMsg)}</p>}
+                            {(errorMsg || successMsg) && <p className={`global-button text-center text-white text-start mb-5 alert ${errorMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errorMsg || successMsg)}</p>}
                         </form>}
                         {isDisplayResetPasswordForm && <form className="user-reset-form mb-3" onSubmit={resetPassword}>
                             <div className="code-field-box">
                                 <input
                                     type="text"
                                     placeholder={t("Please Enter The Code Here")}
-                                    className={`form-control p-3 border-2 ${formValidationErrors["typedUserCode"] ? "border-danger mb-3" : "mb-5"}`}
+                                    className={`form-control ${formValidationErrors["typedUserCode"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setTypedUser(e.target.value.trim())}
                                 />
                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -338,7 +338,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 <input
                                     type={isVisibleNewPassword ? "text" : "password"}
                                     placeholder={t("Please Enter New Password Here")}
-                                    className={`form-control p-3 border-2 ${formValidationErrors["newPassword"] ? "border-danger mb-3" : "mb-5"}`}
+                                    className={`form-control ${formValidationErrors["newPassword"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setNewPassword(e.target.value.trim())}
                                 />
                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -351,7 +351,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 <input
                                     type={isVisibleConfirmNewPassword ? "text" : "password"}
                                     placeholder={t("Please Enter Confirm New Password Here")}
-                                    className={`form-control p-3 border-2 ${formValidationErrors["confirmNewPassword"] ? "border-danger mb-3" : "mb-5"}`}
+                                    className={`form-control ${formValidationErrors["confirmNewPassword"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => setConfirmNewPassword(e.target.value.trim())}
                                 />
                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
@@ -360,29 +360,35 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 </div>
                             </div>
                             {formValidationErrors["confirmNewPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["confirmNewPassword"])}</p>}
-                            {!isResetingPasswordStatus && !errorMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-5 p-3">
+                            {!isResetingPasswordStatus && !errorMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-5 global-button">
                                 {i18n.language === "ar" && <RiLockPasswordLine />}
                                 <span className="me-2">{t("Reset Password")}</span>
                                 {i18n.language !== "ar" && <RiLockPasswordLine />}
                             </button>}
-                            {isResetingPasswordStatus && <button disabled className="btn btn-primary w-100 mb-5 p-3">
+                            {isResetingPasswordStatus && <button disabled className="btn btn-primary w-100 mb-5 global-button">
                                 <span className="me-2">{t("Wait Reseting")} ...</span>
                             </button>}
-                            {(errorMsg || successMsg) && <p className={`text-center text-white text-start mb-5 p-3 alert ${errorMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errorMsg || successMsg)}</p>}
+                            {(errorMsg || successMsg) && <p className={`global-button text-center text-white text-start mb-5 alert ${errorMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errorMsg || successMsg)}</p>}
                             <div className="email-sent-manager-box pb-3">
-                                <span className="fw-bold">{t("Didn't get your email?")} </span>
+                                <h6 className="fw-bold d-inline-block">{t("Didn't get your email?")} </h6>
                                 {!isWaitSendTheCode && !errorMsg && <button
-                                    className="btn btn-danger me-2"
+                                    className="btn btn-danger me-2 global-button"
                                     onClick={resendTheCodeToEmail}
                                     disabled={seconds === 0 && minutes === 0 ? false : true}
                                 >
                                     {t("Resend The Code")}
                                 </button>}
                                 {isWaitSendTheCode && <button
-                                    className="btn btn-danger me-2"
+                                    className="btn btn-danger me-2 global-button"
                                     disabled
                                 >
                                     {t("Resending The Code")} ...
+                                </button>}
+                                {errorMsg && <button
+                                    className="btn btn-danger me-2 global-button"
+                                    disabled
+                                >
+                                    {t(errorMsg)}
                                 </button>}
                             </div>
                             <h6 className="mb-3 fw-bold">

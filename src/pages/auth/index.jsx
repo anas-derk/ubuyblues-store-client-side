@@ -305,15 +305,15 @@ export default function UserAuth() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForSignup"])}</p>}
-                                            {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 auth-btn">
+                                            {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 global-button">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("sign-up")}</span>
                                                 {i18n.language !== "ar" && <FiLogIn />}
                                             </button>}
-                                            {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 auth-btn">
+                                            {isSignupStatus && <button disabled className="btn btn-primary w-100 mb-4 global-button">
                                                 <span className="me-2">{t("Wait Signup")} ...</span>
                                             </button>}
-                                            {(errMsg || successMsg) && <p className={`result-auth-msg text-center text-white text-start mb-5 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
+                                            {(errMsg || successMsg) && <p className={`global-button text-center text-white text-start mb-5 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign Up With")}</h6>
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item">
@@ -356,15 +356,15 @@ export default function UserAuth() {
                                                 </div>
                                             </div>
                                             {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForLogin"])}</p>}
-                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 auth-btn">
+                                            {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 global-button">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("login")}</span>
                                                 {i18n.language !== "ar" && <FiLogIn />}
                                             </button>}
-                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 auth-btn">
+                                            {isLoginingStatus && <button disabled className="btn btn-primary w-100 mb-4 global-button">
                                                 <span className="me-2">{t("Wait Logining")} ...</span>
                                             </button>}
-                                            {(errMsg || successMsg) && <p className={`result-auth-msg text-center text-white text-start mb-5 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
+                                            {(errMsg || successMsg) && <p className={`global-button text-center text-white text-start mb-5 alert ${errMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errMsg || successMsg)}</p>}
                                             <h6 className="fw-bold mb-4">{t("Or Sign In With")}</h6>
                                             <ul className="external-auth-sites-list">
                                                 <li className="external-auth-site-item">

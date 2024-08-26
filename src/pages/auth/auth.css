@@ -30,22 +30,8 @@
   }
 }
 
-.auth h6 {
-  font-size: 13px;
-}
-
 .auth .authentication .signup-section, .auth .authentication .login-section {
   animation: displayAuthPartAnimation 2s ease-in-out 0s 1 forwards;
-}
-
-.auth .authentication .auth-btn {
-  padding: 13px 0;
-  font-size: 13px;
-}
-
-.auth .authentication .result-auth-msg {
-  padding: 13px 0;
-  font-size: 13px;
 }
 
 .auth .authentication .external-auth-sites-list {

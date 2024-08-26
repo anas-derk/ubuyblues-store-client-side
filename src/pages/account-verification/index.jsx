@@ -271,7 +271,7 @@ export default function AccountVerification({ email }) {
                                         {t("Resend The Code")}
                                     </button>}
                                     {isWaitSendTheCode && <button
-                                        className="btn btn-danger me-2"
+                                        className="btn btn-danger me-2 global-button"
                                         disabled
                                     >
                                         {t("Resending The Code")} ...
