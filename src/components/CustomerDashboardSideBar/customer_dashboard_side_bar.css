@@ -1,6 +1,5 @@
 .customer-dashboard-side-bar {
   border-radius: 5px;
-  font-size: 13px;
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item:hover, .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .active {
@@ -9,13 +8,13 @@
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .managment-customer-account-link {
-  padding: 20px;
+  padding: 14px;
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .managment-customer-account-link .customer-account-managment-link-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .customer-dashboard-side-bar .managment-customer-account-link-list .managment-customer-account-link-item .managment-customer-account-link .customer-dashboard-link-name {
-  font-size: 13px;
+  font-size: 10px;
 }

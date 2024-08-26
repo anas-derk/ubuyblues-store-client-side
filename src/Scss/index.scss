@@ -378,9 +378,15 @@ textarea{
 .customer-favorite-products-list, .customer-wallet-products-list{
     .favorite-products-list-for-user, .wallet-products-list-for-user{
         .favorite-products-table-for-user, .wallet-products-table-for-user{
+            th, td{
+                font-size: 12px;
+            }
             .managment-favorite-products-icon, .managment-wallet-products-icon{
-                font-size: 20px;
+                font-size: 17px;
                 cursor: pointer;
+            }
+            a{
+                padding: 8px;
             }
         }
     }
@@ -395,9 +401,8 @@ textarea{
 .customer-billing-address, .customer-shipping-address{
     .edit-customer-billing-address-form, .edit-customer-shipping-address-form{
         color: #FFF;
-        font-size: 13px;
         h6{
-            font-size: 14px;
+            font-size: 12px;
         }
         .address-name-and-editing-link{
             border: 2px dotted #FFF;

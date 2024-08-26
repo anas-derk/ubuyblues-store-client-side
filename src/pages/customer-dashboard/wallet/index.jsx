@@ -214,7 +214,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     }
 
     return (
-        <div className="customer-wallet-products-list customer-dashboard">
+        <div className="customer-wallet-products-list customer-dashboard customer-products-list">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Customer Wallet Products")}</title>
             </Head>
@@ -299,7 +299,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                                 {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 <Link
                                                                     href={`/product-details/${walletProduct.productId}`}
-                                                                    className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
+                                                                    className="btn btn-success d-block mx-auto mb-4 mt-4 w-75"
                                                                 >{t("Show Details")}</Link>
                                                             </td>
                                                         </tr>

@@ -3,7 +3,7 @@
 }
 
 .customer-dashboard .customer-info-and-managment-account-links-for-customer .welcome-msg {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .customer-dashboard .customer-info-and-managment-account-links-for-customer .managment-link {
@@ -16,4 +16,5 @@
 .customer-dashboard .customer-info-and-managment-account-links-for-customer .managment-links {
   line-height: 2.2;
   word-spacing: 5px;
+  font-size: 14px;
 }

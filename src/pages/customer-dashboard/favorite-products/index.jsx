@@ -214,7 +214,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }
 
     return (
-        <div className="customer-favorite-products-list customer-dashboard">
+        <div className="customer-favorite-products-list customer-dashboard customer-products-list">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Customer Favorite Products")}</title>
             </Head>
@@ -299,7 +299,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                                 {isSuccessDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                                 <Link
                                                                     href={`/product-details/${favoriteProduct._id}`}
-                                                                    className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
+                                                                    className="btn btn-success d-block mx-auto mb-4 mt-4 w-75"
                                                                 >{t("Show Details")}</Link>
                                                             </td>
                                                         </tr>

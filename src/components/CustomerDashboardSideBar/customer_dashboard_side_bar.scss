@@ -1,6 +1,5 @@
 .customer-dashboard-side-bar{
     border-radius: 5px;
-    font-size: 13px;
     .managment-customer-account-link-list{
         .managment-customer-account-link-item{
             &:hover, .active{
@@ -8,12 +7,12 @@
                 border-radius: 5px;
             }
             .managment-customer-account-link{
-                padding: 20px;
+                padding: 14px;
                 .customer-account-managment-link-icon{
-                    font-size: 20px;
+                    font-size: 18px;
                 }
                 .customer-dashboard-link-name{
-                    font-size: 13px;
+                    font-size: 10px;
                 }
             }
         }

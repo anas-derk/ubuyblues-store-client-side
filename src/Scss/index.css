@@ -438,9 +438,17 @@ textarea {
   line-height: 2;
 }
 
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user td, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user th, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user td, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user th, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user td, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user th, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user td, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user td, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user th, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user td, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user th, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user td, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user th, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user td {
+  font-size: 12px;
+}
+
 .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon {
-  font-size: 20px;
+  font-size: 17px;
   cursor: pointer;
+}
+
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user a, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user a, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user a, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user a, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user a, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user a, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user a, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user a {
+  padding: 8px;
 }
 
 .customer-favorite-products-list .not-found-any-favorite-products-for-user, .customer-favorite-products-list .not-found-any-wallet-products-for-user, .customer-wallet-products-list .not-found-any-favorite-products-for-user, .customer-wallet-products-list .not-found-any-wallet-products-for-user {
@@ -453,11 +461,10 @@ textarea {
 
 .customer-billing-address .edit-customer-billing-address-form, .customer-billing-address .edit-customer-shipping-address-form, .customer-shipping-address .edit-customer-billing-address-form, .customer-shipping-address .edit-customer-shipping-address-form {
   color: #FFF;
-  font-size: 13px;
 }
 
 .customer-billing-address .edit-customer-billing-address-form h6, .customer-billing-address .edit-customer-shipping-address-form h6, .customer-shipping-address .edit-customer-billing-address-form h6, .customer-shipping-address .edit-customer-shipping-address-form h6 {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link, .customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link, .customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link, .customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link {
