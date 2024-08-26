@@ -43,7 +43,6 @@ export default function CustomerOrders({ countryAsProperty }) {
         orderNumber: -1,
         customerId: "",
         status: "",
-        checkoutStatus: "Checkout Successfull"
     });
 
     const router = useRouter();
@@ -81,10 +80,9 @@ export default function CustomerOrders({ countryAsProperty }) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
-                        setFilters({ ...filters, customerId: result.data._id });
-                        const result2 = await getOrdersCount();
+                        const result2 = await getOrdersCount("destination=user");
                         if (result2.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
+                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, "destination=user")).data);
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                             setIsExistOrdersForThisUserInDBInGeneral(true);
                         }
@@ -170,7 +168,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     }
 
     const getFilteringString = (filters) => {
-        let filteringString = "";
+        let filteringString = "destination=user&";
         if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
         if (filters.status) filteringString += `status=${filters.status}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
