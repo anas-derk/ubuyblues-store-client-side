@@ -701,7 +701,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>
                             {/* End Categories Section */}
                             {/* Start Last Added Flash Products */}
-                            <section className="last-added-flash-products mb-5 pb-3" id="latest-added-products">
+                            <section className="last-added-flash-products mb-5 pb-3" id="latest-added-flash-products">
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
@@ -710,7 +710,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                    className="form-control border-2"
+                                                    className="form-control"
                                                     onChange={(e) => handleChangeFilters(e, "flash-products")}
                                                 />
                                                 <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
