@@ -210,12 +210,11 @@ const isFavoriteProductForUser = (favorite_products_list, productId) => {
 
 async function getUserInfo() {
     try{
-        const res = await axios.get(`${process.env.BASE_API_URL}/users/user-info`, {
+        return (await axios.get(`${process.env.BASE_API_URL}/users/user-info`, {
             headers: {
                 Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
             },
-        });
-        return res.data;
+        })).data;
     }
     catch(err) {
         throw err;

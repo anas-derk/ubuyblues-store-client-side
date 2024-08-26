@@ -28,7 +28,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     const [windowInnerWidth, setWindowInnerWidth] = useState(0);
 
     const [allOrdersInsideThePage, setAllOrdersInsideThePage] = useState([]);
-    
+
     const [isExistOrdersForThisUserInDBInGeneral, setIsExistOrdersForThisUserInDBInGeneral] = useState(false);
 
     const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(true);
@@ -43,6 +43,7 @@ export default function CustomerOrders({ countryAsProperty }) {
         orderNumber: -1,
         customerId: "",
         status: "",
+        checkoutStatus: "Checkout Successfull"
     });
 
     const router = useRouter();
@@ -50,6 +51,13 @@ export default function CustomerOrders({ countryAsProperty }) {
     const { t, i18n } = useTranslation();
 
     const pageSize = 3;
+
+    useEffect(() => {
+        setWindowInnerWidth(window.innerWidth);
+        window.addEventListener("resize", () => {
+            setWindowInnerWidth(window.innerWidth);
+        });
+    }, []);
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -74,17 +82,13 @@ export default function CustomerOrders({ countryAsProperty }) {
                 .then(async (result) => {
                     if (!result.error) {
                         setFilters({ ...filters, customerId: result.data._id });
-                        const result2 = await getOrdersCount(`customerId=${result.data._id}`);
+                        const result2 = await getOrdersCount();
                         if (result2.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
+                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize)).data);
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                             setIsExistOrdersForThisUserInDBInGeneral(true);
                         }
                         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-                        setWindowInnerWidth(window.innerWidth);
-                        window.addEventListener("resize", () => {
-                            setWindowInnerWidth(window.innerWidth);
-                        });
                         setIsFilteringOrdersStatus(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -96,7 +100,6 @@ export default function CustomerOrders({ countryAsProperty }) {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     } else {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -119,8 +122,11 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getOrdersCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`);
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                }
+            })).data;
         }
         catch (err) {
             throw Error(err);
@@ -129,8 +135,11 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                }
+            })).data;
         }
         catch (err) {
             throw Error(err);
@@ -162,7 +171,6 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getFilteringString = (filters) => {
         let filteringString = "";
-        if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
         if (filters.orderNumber !== -1 && filters.orderNumber) filteringString += `orderNumber=${filters.orderNumber}&`;
         if (filters.status) filteringString += `status=${filters.status}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);

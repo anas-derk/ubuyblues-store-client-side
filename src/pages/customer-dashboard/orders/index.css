@@ -7,3 +7,15 @@
     margin-bottom: 15px;
   }
 }
+
+.customer-orders-managment .customer-orders .filters button {
+  font-size: 12px;
+}
+
+.customer-orders-managment .customer-orders table th, .customer-orders-managment .customer-orders table td, .customer-orders-managment .customer-orders table a {
+  font-size: 12px;
+}
+
+.customer-orders-managment .customer-orders table a {
+  padding: 8px;
+}

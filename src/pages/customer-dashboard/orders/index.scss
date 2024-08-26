@@ -9,5 +9,18 @@
                 }
             }
         }
+        .filters{
+            button{
+                font-size: 12px;
+            }
+        }
+        table{
+            th, td, a{
+                font-size: 12px;
+            }
+            a{
+                padding: 8px;
+            }
+        }
     }
 }

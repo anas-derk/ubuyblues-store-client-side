@@ -9,6 +9,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import { getUserInfo } from "../../../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../../public/global_functions/prices";
+import NotFoundError from "@/components/NotFoundError";
 
 export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
 
@@ -229,7 +230,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                                             </div>
                                         </div>
                                     </section>
-                                </div> : <p className="alert alert-danger order-not-found-error">{t("Sorry, This Order Is Not Found !!")}</p>}
+                                </div> : <NotFoundError errorMsg={t("Sorry, This Order Is Not Found !!")} />}
                             </div>
                         </div>
                     </div>
