@@ -43,6 +43,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [userInfo, setUserInfo] = useState({});
 
+    const [userToken, setUserToken] = useState();
+
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
     const [requestNotes, setRequestNotes] = useState("");
@@ -188,6 +190,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 const result = await getUserInfo();
                 if (!result.error) {
                     setUserInfo(result.data);
+                    setUserToken(userToken);
                     return result.data;
                 } else {
                     localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -292,7 +295,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const createNewOrder = async (orderDetails) => {
         try {
-            return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}`, orderDetails)).data;
+            return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}`, orderDetails, userToken > 0 ? {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                }
+            }: {})).data;
         }
         catch (err) {
             throw Error(err);
@@ -526,7 +533,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const getOrderDetailsForCreating = () => {
         return {
-            customerId: userInfo ? userInfo._id : "",
             billingAddress: {
                 firstName: userInfo.billingAddress.firstName,
                 lastName: userInfo.billingAddress.lastName,
@@ -590,7 +596,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const createPaymentOrder = async (paymentName) => {
         try {
             setIsWaitCreateNewOrder(true);
-            const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}`, getOrderDetailsForCreating())).data;
+            const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}`, getOrderDetailsForCreating(), userToken ? {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                }
+            }: {})).data;
             if (!result.error) {
                 if (paymentName === "tap") {
                     await router.push(result.data.transaction.url);
