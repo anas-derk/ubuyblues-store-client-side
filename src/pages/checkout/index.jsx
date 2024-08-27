@@ -53,7 +53,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
-    const [paymentMethod, setPaymentMethod] = useState("tap");
+    const [paymentGate, setPaymentGate] = useState("tap");
 
     const [shippingMethod, setShippingMethod] = useState({ forLocalProducts: "ubuyblues", forInternationalProducts: "normal" });
 
@@ -533,6 +533,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const getOrderDetailsForCreating = () => {
         return {
+            creator: userToken ? "user" : "guest",
+            paymentGate,
             billingAddress: {
                 firstName: userInfo.billingAddress.firstName,
                 lastName: userInfo.billingAddress.lastName,
@@ -593,18 +595,18 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }
 
-    const createPaymentOrder = async (paymentName) => {
+    const createPaymentOrder = async (paymentGate) => {
         try {
             setIsWaitCreateNewOrder(true);
-            const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order-by-${paymentName}?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}`, getOrderDetailsForCreating(), userToken ? {
+            const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order?country=${countryAsProperty}`, getOrderDetailsForCreating(), userToken ? {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
             }: {})).data;
             if (!result.error) {
-                if (paymentName === "tap") {
+                if (paymentGate === "tap") {
                     await router.push(result.data.transaction.url);
-                } else if (paymentMethod === "tabby") {
+                } else if (paymentGate === "tabby") {
                     await router.push(result.data.checkoutURL);
                 }
             } else {
@@ -1161,23 +1163,23 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         {/* Start Payement Methods Section */}
                                         <section className="payment-methods mb-4 border border-2 p-3 mb-4">
                                             <h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Payment Methods")}</h6>
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "paypal" ? "mb-3" : ""}`}>
+                                            <div className={`row align-items-center pt-3 ${paymentGate === "paypal" ? "mb-3" : ""}`}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
-                                                        checked={paymentMethod === "paypal"}
+                                                        checked={paymentGate === "paypal"}
                                                         id="paypal-radio"
                                                         className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                         name="radioGroup"
-                                                        onChange={() => setPaymentMethod("paypal")}
+                                                        onChange={() => setPaymentGate("paypal")}
                                                     />
-                                                    <label htmlFor="paypal-radio" onClick={() => setPaymentMethod("paypal")}>{t("PayPal")}</label>
+                                                    <label htmlFor="paypal-radio" onClick={() => setPaymentGate("paypal")}>{t("PayPal")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
                                                     <FaCcPaypal className="payment-icon paypal-icon" />
                                                 </div>
                                             </div>
-                                            {paymentMethod === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
+                                            {paymentGate === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
                                                 options={{
                                                     clientId: "test",
                                                     currency: "USD",
@@ -1190,51 +1192,51 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     onApprove={approveOnPayPalOrder}
                                                 />
                                             </PayPalScriptProvider>}
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "tap" ? "mb-3" : ""}`}>
+                                            <div className={`row align-items-center pt-3 ${paymentGate === "tap" ? "mb-3" : ""}`}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
-                                                        checked={paymentMethod === "tap"}
+                                                        checked={paymentGate === "tap"}
                                                         id="tap-radio"
                                                         className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                         name="radioGroup"
-                                                        onChange={() => setPaymentMethod("tap")}
+                                                        onChange={() => setPaymentGate("tap")}
                                                     />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tap")}>{t("Tap")}</label>
+                                                    <label htmlFor="tap-radio" onClick={() => setPaymentGate("tap")}>{t("Tap")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
                                                     <FaTape className="payment-icon tap-icon" />
                                                 </div>
                                             </div>
-                                            <div className={`row align-items-center pt-3 ${paymentMethod === "tabby" ? "mb-3" : ""}`}>
+                                            <div className={`row align-items-center pt-3 ${paymentGate === "tabby" ? "mb-3" : ""}`}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
-                                                        checked={paymentMethod === "tabby"}
+                                                        checked={paymentGate === "tabby"}
                                                         id="tap-radio"
                                                         className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                         name="radioGroup"
-                                                        onChange={() => setPaymentMethod("tabby")}
+                                                        onChange={() => setPaymentGate("tabby")}
                                                     />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentMethod("tabby")}>{t("Tabby")}</label>
+                                                    <label htmlFor="tap-radio" onClick={() => setPaymentGate("tabby")}>{t("Tabby")}</label>
                                                 </div>
                                                 <div className="col-md-6 text-md-end">
                                                     <FaTape className="payment-icon tap-icon" />
                                                 </div>
                                             </div>
-                                            {paymentMethod === "paypal" && !isDisplayPaypalPaymentButtons && <button
+                                            {paymentGate === "paypal" && !isDisplayPaypalPaymentButtons && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={handleSelectPaypalPayment}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}
-                                            {paymentMethod === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
+                                            {paymentGate === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={() => createPaymentOrder("tap")}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}
-                                            {paymentMethod === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
+                                            {paymentGate === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={() => createPaymentOrder("tabby")}
                                             >
