@@ -269,7 +269,6 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             })
             .catch((err) => {
-                console.log(err)
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
