@@ -826,7 +826,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             id="flexCheckDefault"
                                             onChange={(e) => setIsSavePaymentInfo(e.target.checked)}
                                         />
-                                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                                        <label className="form-check-label" htmlFor="flexCheckDefault" onClick={(e) => setIsSavePaymentInfo(e.target.checked)}>
                                             {t("Do You Want To Save Payment Information ?")}
                                         </label>
                                     </div>}
@@ -837,7 +837,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             id="flexCheckDefault"
                                             onChange={(e) => handleIsShippingToOtherAddress(e.target.checked)}
                                         />
-                                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                                        <label className="form-check-label" htmlFor="flexCheckDefault" onClick={(e) => handleIsShippingToOtherAddress(e.target.checked)}>
                                             {t("Do You Want To Ship To A Different Address ?")}
                                         </label>
                                     </div>
