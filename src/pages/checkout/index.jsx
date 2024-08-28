@@ -564,7 +564,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 quantity: getProductQuantity(product._id),
             })),
             shippingMethod,
-            requestNotes
+            requestNotes,
+            language: i18n.language
         }
     }
 
