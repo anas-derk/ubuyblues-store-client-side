@@ -268,7 +268,8 @@ export default function Home({ countryAsProperty, storeId }) {
                     setTotalPagesCount(totalPagesCountTemp);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err)
                 setIsLoadingPage(false);
                 setIsErrorMsgOnLoadingThePage(true);
             });
