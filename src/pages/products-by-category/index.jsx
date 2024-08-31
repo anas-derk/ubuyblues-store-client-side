@@ -219,7 +219,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }
 
     return (
-        <div className="home page d-flex flex-column justify-content-center align-items-center">
+        <div className="home page">
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Products By Category")}</title>
             </Head>
