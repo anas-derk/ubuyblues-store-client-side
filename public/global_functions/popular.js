@@ -2,8 +2,7 @@ import axios from "axios";
 
 const getFlashProductsCount = async (filters) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/products/flash-products-count?${filters ? filters : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/products/flash-products-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -12,8 +11,7 @@ const getFlashProductsCount = async (filters) => {
 
 const getProductsCount = async (filters) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -31,8 +29,7 @@ const getAllFlashProductsInsideThePage = async (pageNumber, pageSize, filters, s
 
 const getAllProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -73,8 +70,7 @@ const getStoreDetails = async (storeId) => {
 
 const getCategoriesCount = async (filters) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/categories/categories-count?${filters ? filters : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/categories/categories-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -83,8 +79,7 @@ const getCategoriesCount = async (filters) => {
 
 const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-        return res.data;
+        return res = (await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -93,8 +88,7 @@ const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
 
 const getStoresCount = async (filters) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?${filters ? filters : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -103,8 +97,7 @@ const getStoresCount = async (filters) => {
 
 const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
     try {
-        const res = await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-        return res.data;
+        return (await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
         throw Error(err);
@@ -190,14 +183,13 @@ const isExistOfferOnProduct = (currentDateAsString, startDateAsString, endDateAs
 
 const getFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
     try{
-        const res = await axios.post(`${process.env.BASE_API_URL}/favorite-products/favorite-products-by-products-ids-and-user-id`, {
+        return (await axios.post(`${process.env.BASE_API_URL}/favorite-products/favorite-products-by-products-ids-and-user-id`, {
             productsIds
         }, {
             headers: {
                 Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
             }
-        });
-        return res.data;
+        })).data;
     }
     catch(err) {
         throw Error(err);
