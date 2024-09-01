@@ -552,7 +552,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 const { productsCount, productsData } = await handleGetProducts(getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails));
                 setTotalPagesCount({
                     ...totalPagesCount,
-                    forProducts: productsCount
+                    forProducts: Math.ceil(productsCount / pageSizes.forProducts)
                 });
                 setAllProductsInsideThePage(productsData);
                 await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
@@ -568,7 +568,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 setCurrentDate(currentDateTemp);
                 setTotalPagesCount({
                     ...totalPagesCount,
-                    forFlashProducts: flashProductsCount
+                    forFlashProducts: Math.ceil(flashProductsCount / pageSizes.forProducts)
                 });
                 setAllFlashProductsInsideThePage(flashProductsData);
                 await handleGetAndSetFavoriteProductsByProductsIdsAndUserId(
