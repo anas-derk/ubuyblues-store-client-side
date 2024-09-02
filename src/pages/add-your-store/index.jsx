@@ -9,7 +9,7 @@ import axios from "axios";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo } from "../../../public/global_functions/popular";
+import { getUserInfo, getAppearedSections } from "../../../public/global_functions/popular";
 
 export default function AddYourStore() {
 
@@ -101,16 +101,6 @@ export default function AddYourStore() {
     const handleSelectUserLanguage = (userLanguage) => {
         i18n.changeLanguage(userLanguage);
         document.body.lang = userLanguage;
-    }
-
-    const getAppearedSections = async () => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
     }
 
     const createNewStore = async (e) => {
@@ -206,8 +196,7 @@ export default function AddYourStore() {
                 formData.append("storeImg", storeData.image);
                 formData.append("language", i18n.language);
                 setIsWaitStatus(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData);
-                const result = res.data;
+                const result = (await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData)).data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
@@ -247,7 +236,7 @@ export default function AddYourStore() {
     return (
         <div className="add-your-store page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Add Your Store")}</title>
+                <title>{t(process.env.storeName)} - {t("Add Your Store")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

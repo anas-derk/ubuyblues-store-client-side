@@ -178,14 +178,13 @@ export default function CustomerBillingAddress() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
                     shippingAddress: userInfo.shippingAddress,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
-                });
-                const result = res.data;
+                })).data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);

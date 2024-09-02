@@ -48,7 +48,7 @@ export default function PolicesTermsAndConditions() {
     return (
         <div className="privacy-policy-and-conditions caption-page page pt-5">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Polices Terms And Conditions")}</title>
+                <title>{t(process.env.storeName)} - {t("Polices Terms And Conditions")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

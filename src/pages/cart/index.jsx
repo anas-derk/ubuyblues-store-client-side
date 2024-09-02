@@ -215,7 +215,7 @@ export default function Cart({ countryAsProperty }) {
     return (
         <div className="cart page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Cart")}</title>
+                <title>{t(process.env.storeName)} - {t("Cart")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

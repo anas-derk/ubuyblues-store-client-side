@@ -246,6 +246,24 @@ const getProductsByIds = async (productsIds) => {
     }
 }
 
+const getAppearedSections = async () => {
+    try {
+        return (await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`)).data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
+const getOrderDetails = async (orderId) => {
+    try {
+        return (await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`)).data;
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -270,5 +288,7 @@ export {
     getUserInfo,
     sendTheCodeToUserEmail,
     getFavoriteProductsCount,
-    getProductsByIds
+    getProductsByIds,
+    getAppearedSections,
+    getOrderDetails
 }

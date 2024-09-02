@@ -3,12 +3,15 @@ const nextConfig = {
     reactStrictMode: false,
     swcMinify: true,
     compiler: {
-        // removeConsole: process.env.NODE_ENV === "production",
+        removeConsole: process.env.NODE_ENV === "production",
     },
     env: {
         BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
         WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
-        userTokenNameInLocalStorage: "as-s-u-t",
+        userTokenNameInLocalStorage: "ub-s-u-t",
+        storeName: "Ubuyblues Store",
+        contactNumber: "4917682295720",
+        contactEmail: "info@asfourintlco.com"
     },
     async headers() {
         return [

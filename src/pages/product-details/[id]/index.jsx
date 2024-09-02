@@ -241,8 +241,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductInfo = async (productId) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}`);
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -251,12 +250,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductRatingByUserId = async (productId) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
-            });
-            return res.data;
+            })).data;
         }
         catch (err) {
             throw Error(err);
@@ -265,8 +263,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getSampleFromRelatedProductsInProduct = async (productId) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/products/sample-from-related-products-in-the-product/${productId}`)
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/products/sample-from-related-products-in-the-product/${productId}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -314,12 +311,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
-            });
-            const result = res.data;
+            })).data;
             setIsWaitDeleteProductToFavoriteUserProductsList(false);
             if (!result.error) {
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
@@ -426,14 +422,14 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsDisplayErrorPopup(true);
             } else {
                 setIsSelectProductRating(true);
-                const res = await axios.post(`${process.env.BASE_API_URL}/ratings/select-product-rating`, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/ratings/select-product-rating`, {
                     productId: productInfo._id,
                     rating: starNumber
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                     }
-                });
+                })).data;
                 setIsSelectProductRating(false);
                 setStartNumber(starNumber);
             }
@@ -552,8 +548,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     localStorage.removeItem("asfour-store-referal-writer-info");
                 }
                 setWaitAddNewReferalMsg("Please Wait ...");
-                const res = await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal`, referalDetails);
-                const result = res.data;
+                const result = (await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal`, referalDetails)).data;
                 setWaitAddNewReferalMsg("");
                 if (!result.error) {
                     setSuccessAddNewReferalMsg(result.msg);
@@ -582,8 +577,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductReferalsCount = async (productId, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/referals/product-referals-count/${productId}?${filters ? filters : ""}`);
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/referals/product-referals-count/${productId}?${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -592,8 +586,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getAllProductReferalsInsideThePage = async (productId, pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/referals/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`);
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/referals/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -676,7 +669,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     <div>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
-                                                            alt="product image !!"
+                                                            alt={`${productInfo.name} image !!`}
                                                             className="w-100 h-100 product-image"
                                                         />
                                                     </div>
@@ -684,8 +677,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         <div key={pathIndex}>
                                                             <img
                                                                 src={`${process.env.BASE_API_URL}/${path}`}
-                                                                alt="product image !!"
-                                                                className="w-100 h-100 product-image"
+                                                                alt={`${productInfo.name} Gallery image !!`}
+                                                                className="w-100 h-100 product--gallery-image"
                                                             />
                                                         </div>
                                                     ))}

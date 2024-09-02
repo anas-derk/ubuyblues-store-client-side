@@ -216,7 +216,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     return (
         <div className="customer-wallet-products-list customer-dashboard customer-products-list">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Customer Wallet Products")}</title>
+                <title>{t(process.env.storeName)} - {t("Customer Wallet Products")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

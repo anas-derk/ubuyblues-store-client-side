@@ -236,7 +236,7 @@ export default function CustomerAccountDetails() {
     return (
         <div className="customer-account-details customer-dashboard">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Customer Account Info")}</title>
+                <title>{t(process.env.storeName)} - {t("Customer Account Info")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

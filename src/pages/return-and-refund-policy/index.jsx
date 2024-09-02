@@ -48,7 +48,7 @@ export default function PolicesTermsAndConditions() {
     return (
         <div className="return-and-refund-policy caption-page page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Return And Refund Policy")}</title>
+                <title>{t(process.env.storeName)} - {t("Return And Refund Policy")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

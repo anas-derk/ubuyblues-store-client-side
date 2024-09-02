@@ -28,7 +28,8 @@ import {
     isExistOfferOnProduct,
     getFavoriteProductsByProductsIdsAndUserId,
     isFavoriteProductForUser,
-    getUserInfo
+    getUserInfo,
+    getAppearedSections
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -384,16 +385,6 @@ export default function Home({ countryAsProperty, storeId }) {
         return {
             storesCount: 0,
             storesData: [],
-        }
-    }
-
-    const getAppearedSections = async () => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
         }
     }
 

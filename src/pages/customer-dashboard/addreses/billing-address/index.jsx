@@ -179,14 +179,13 @@ export default function CustomerBillingAddress() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
                     billingAddress: userInfo.billingAddress,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
-                });
-                const result = res.data;
+                })).data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
@@ -221,7 +220,7 @@ export default function CustomerBillingAddress() {
     return (
         <div className="customer-billing-address customer-dashboard">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Customer Billing Address")}</title>
+                <title>{t(process.env.storeName)} - {t("Customer Billing Address")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

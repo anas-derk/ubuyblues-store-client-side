@@ -280,7 +280,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     return (
         <div className="forget-password page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Forget Password")}</title>
+                <title>{t(process.env.storeName)} - {t("Forget Password")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

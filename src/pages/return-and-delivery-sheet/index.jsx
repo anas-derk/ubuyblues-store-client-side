@@ -48,7 +48,7 @@ export default function ReturnAndDeliverySheet() {
     return (
         <div className="return-and-delivery-sheet caption-page page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Return And Delivery Sheet")}</title>
+                <title>{t(process.env.storeName)} - {t("Return And Delivery Sheet")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

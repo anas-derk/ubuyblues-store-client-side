@@ -49,7 +49,7 @@ export default function PageNotFound() {
     return (
         <div className="page-not-found page d-flex align-items-center justify-content-center flex-column text-center">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Page Not Found")}</title>
+                <title>{t(process.env.storeName)} - {t("Page Not Found")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

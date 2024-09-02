@@ -57,7 +57,7 @@ export default function CustomerAddreses() {
     return (
         <div className="customer-addreses customer-dashboard">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Customer Addreses")}</title>
+                <title>{t(process.env.storeName)} - {t("Customer Addreses")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

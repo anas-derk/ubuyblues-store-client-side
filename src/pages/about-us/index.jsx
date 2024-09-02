@@ -49,7 +49,7 @@ export default function AboutUs() {
     return (
         <div className="about-us caption-page page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("About Us")}</title>
+                <title>{t(process.env.storeName)} - {t("About Us")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

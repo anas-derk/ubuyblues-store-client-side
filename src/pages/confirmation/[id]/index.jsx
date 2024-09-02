@@ -7,7 +7,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getStoreDetails, getUserInfo } from "../../../../public/global_functions/popular";
+import { getStoreDetails, getUserInfo, getOrderDetails } from "../../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import NotFoundError from "@/components/NotFoundError";
 
@@ -113,16 +113,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
         document.body.lang = userLanguage;
     }
 
-    const getOrderDetails = async (orderId) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
     const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
         let tempTotalPriceBeforeDiscount = 0;
         allProductsData.forEach((product) => {
@@ -142,7 +132,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     return (
         <div className="confirmation">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Payment Confirmation")}</title>
+                <title>{t(process.env.storeName)} - {t("Payment Confirmation")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

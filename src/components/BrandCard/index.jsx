@@ -7,7 +7,7 @@ export default function BrandCard({
             <div
                 className="brand-managment-box managment-box"
             >
-                <img src={`${process.env.BASE_API_URL}/${brandDetails.imagePath}`} alt={`${brandDetails.name} Brand Image`} />
+                <img src={`${process.env.BASE_API_URL}/${brandDetails.imagePath}`} alt={`${brandDetails.title} Brand Image`} />
                 <div className="brand-overlay card-overlay"></div>
             </div>
             <div className="brand-details details-box p-3 text-center d-flex justify-content-center align-items-center">

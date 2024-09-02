@@ -208,7 +208,7 @@ export default function AccountVerification({ email }) {
     return (
         <div className="account-verification page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Account Verification")}</title>
+                <title>{t(process.env.storeName)} - {t("Account Verification")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

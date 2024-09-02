@@ -2,12 +2,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
-import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
-import { getUserInfo } from "../../../../../public/global_functions/popular";
+import { getUserInfo, getOrderDetails } from "../../../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../../public/global_functions/prices";
 import NotFoundError from "@/components/NotFoundError";
 
@@ -93,20 +92,10 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
         document.body.lang = userLanguage;
     }
 
-    const getOrderDetails = async (orderId) => {
-        try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`);
-            return res.data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
     return (
         <div className="order-details customer-dashboard">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Order Details")}</title>
+                <title>{t(process.env.storeName)} - {t("Order Details")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />

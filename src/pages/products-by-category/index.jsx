@@ -221,7 +221,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     return (
         <div className="home page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Products By Category")}</title>
+                <title>{t(process.env.storeName)} - {t("Products By Category")}</title>
             </Head>
             {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
                 <Header />
