@@ -10,6 +10,7 @@ const nextConfig = {
         WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
         userTokenNameInLocalStorage: "ub-s-u-t",
         storeName: "Ubuyblues Store",
+        userCartNameInLocalStorage: "ubuyblues-store-customer-cart",
         contactNumber: "4917682295720",
         contactEmail: "info@asfourintlco.com"
     },

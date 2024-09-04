@@ -100,7 +100,7 @@ export default function Cart({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             if (tempAllProductsDataInsideTheCart.length > 0) {
                 getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
@@ -143,7 +143,7 @@ export default function Cart({ countryAsProperty }) {
     const updateProductQuantity = async (productId, operation) => {
         switch (operation) {
             case "increase-product-quantity": {
-                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
                 tempAllProductsDataInsideTheCart.forEach((product) => {
                     if (product._id === productId && product.quantity < 50) product.quantity++;
                 });
@@ -158,7 +158,7 @@ export default function Cart({ countryAsProperty }) {
                 break;
             }
             case "decrease-product-quantity": {
-                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
                 tempAllProductsDataInsideTheCart.forEach((product) => {
                     if (product._id === productId && product.quantity > 1) product.quantity--;
                 });
@@ -179,7 +179,7 @@ export default function Cart({ countryAsProperty }) {
     }
 
     const deleteProduct = async (productId) => {
-        const newProductsData = JSON.parse(localStorage.getItem("asfour-store-customer-cart")).filter((product) => product._id !== productId);
+        const newProductsData = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage)).filter((product) => product._id !== productId);
         updateCartInLocalStorage(newProductsData);
         if (newProductsData.length > 0) {
             const result = await getProductsByIds(newProductsData.map((product) => product._id));
@@ -209,7 +209,7 @@ export default function Cart({ countryAsProperty }) {
     }
 
     const updateCartInLocalStorage = (newProductsData) => {
-        localStorage.setItem("asfour-store-customer-cart", JSON.stringify(newProductsData));
+        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(newProductsData));
     }
 
     return (

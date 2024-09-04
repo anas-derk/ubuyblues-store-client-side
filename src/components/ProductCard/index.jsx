@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
 import { BsClock, BsFillSuitHeartFill, BsSuitHeart } from "react-icons/bs";
 import { PiShareFatLight } from "react-icons/pi";
 import { FaCheck, FaCartPlus, FaStar, FaRegStar } from "react-icons/fa";
@@ -128,12 +127,11 @@ export default function ProductCard({
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const res = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
-            });
-            const result = res.data;
+            })).data;
             if (!result.error) {
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
                 setIsSuccessDeleteProductToFavoriteUserProductsList(true);
@@ -156,7 +154,7 @@ export default function ProductCard({
     const addToCart = (productId) => {
         try {
             setIsWaitAddToCart(true);
-            const userCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+            const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
             if (Array.isArray(userCart)) {
                 if (userCart.length > 0) {
                     const productIndex = userCart.findIndex((product) => product._id === productId);
@@ -165,7 +163,7 @@ export default function ProductCard({
                             _id: productId,
                             quantity: 1,
                         });
-                        localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
+                        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
                         dispatch({
@@ -192,7 +190,7 @@ export default function ProductCard({
                         _id: productId,
                         quantity: 1,
                     });
-                    localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
+                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
                     dispatch({
@@ -211,7 +209,7 @@ export default function ProductCard({
                     _id: productId,
                     quantity: 1,
                 });
-                localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
+                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
                 dispatch({
@@ -237,12 +235,12 @@ export default function ProductCard({
 
     const deleteFromCart = (productId) => {
         setIsWaitDeleteFromCart(true);
-        const userCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+        const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
         if (Array.isArray(userCart)) {
             if (userCart.length > 0) {
                 const newUserCart = userCart.filter((product) => product._id !== productId);
                 if (newUserCart.length < userCart.length) {
-                    localStorage.setItem("asfour-store-customer-cart", JSON.stringify(newUserCart));
+                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(newUserCart));
                     setIsWaitDeleteFromCart(false);
                     setIsSuccessDeleteFromCart(true);
                     dispatch({
@@ -265,7 +263,7 @@ export default function ProductCard({
             } else {
                 setIsWaitDeleteFromCart(false);
                 setErrorInDeleteFromCart("Sorry, This Product Is Not Exist In Your Cart !!");
-                localStorage.setItem("asfour-store-customer-cart", JSON.stringify([]));
+                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify([]));
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
                     productsCountInCart: 0

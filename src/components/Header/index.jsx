@@ -66,7 +66,7 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
-        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
             .then((result) => {
@@ -77,7 +77,7 @@ export default function Header() {
                         tempProductsIds.push(product._id);
                     });
                 });
-                localStorage.setItem("asfour-store-customer-cart", JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
+                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
                     productsCountInCart: tempProductsCountInCart

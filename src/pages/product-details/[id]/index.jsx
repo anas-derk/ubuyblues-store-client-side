@@ -338,7 +338,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const addToCart = (productId) => {
         try {
             setIsWaitAddToCart(true);
-            const userCart = JSON.parse(localStorage.getItem("asfour-store-customer-cart"));
+            const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
             if (Array.isArray(userCart)) {
                 if (userCart.length > 0) {
                     const productIndex = userCart.findIndex((product) => product._id === productId);
@@ -347,7 +347,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             _id: productId,
                             quantity: 1,
                         });
-                        localStorage.setItem("asfour-store-customer-cart", JSON.stringify(userCart));
+                        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
                         
@@ -374,7 +374,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         _id: productId,
                         quantity: 1,
                     });
-                    localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
+                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
                     dispatch({
@@ -392,7 +392,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     _id: productId,
                     quantity: 1,
                 });
-                localStorage.setItem("asfour-store-customer-cart", JSON.stringify(allProductsData));
+                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
                 dispatch({
