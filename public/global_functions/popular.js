@@ -105,7 +105,7 @@ const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
 }
 
 const getProductQuantity = (productId) => {
-    return JSON.parse(localStorage.getItem("asfour-store-customer-cart")).find((product) => product._id === productId).quantity;
+    return JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage)).find((product) => product._id === productId).quantity;
 }
 
 const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
@@ -135,7 +135,7 @@ const calcTotalPrices = (currentDate, allProductsData) => {
         totalPriceBeforeDiscount,
         totalDiscount,
         totalPriceAfterDiscount: calcTotalOrderPriceAfterDiscount(totalPriceBeforeDiscount, totalDiscount)
-    };
+    }
 }
 
 const getTimeAndDateByLocalTime = (dateAndTimeAsString) => {

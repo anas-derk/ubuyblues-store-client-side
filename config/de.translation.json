@@ -496,5 +496,10 @@
     "Product Names": "Produktnamen",
     "Shipping Cost For Local Products": "Versandkosten für lokale Produkte",
     "Shipping Cost For International Products": "Versandkosten für internationale Produkte",
-    "Shipping Cost": "Versandkosten"
+    "Shipping Cost": "Versandkosten",
+    "Have a Coupon Code ?": "Haben Sie einen Gutscheincode?",
+    "Apply": "Anwenden",
+    "Total Amount": "Gesamtbetrag",
+    "Apply Coupon Code Process Has Been Successfully !!": "Der Gutscheincode wurde erfolgreich angewendet!",
+    "Sorry This Code Is Not Exist !!": "Entschuldigung, dieser Code existiert nicht!"
 }

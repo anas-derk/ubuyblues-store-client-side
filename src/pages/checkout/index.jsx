@@ -39,6 +39,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         totalPriceBeforeDiscount: 0,
         totalDiscount: 0,
         totalPriceAfterDiscount: 0,
+        orderAmount: 0
     });
 
     const [userInfo, setUserInfo] = useState({});
@@ -53,6 +54,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
+    const [couponCode, setCouponCode] = useState("");
+
     const [paymentGateway, setPaymentGateway] = useState("tap");
 
     const [shippingMethod, setShippingMethod] = useState({ forLocalProducts: "ubuyblues", forInternationalProducts: "normal" });
@@ -61,13 +64,19 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [shippingCost, setShippingCost] = useState({ forLocalProducts: 0, forInternationalProducts: 0 });
 
+    const [totalAmount, setTotalAmount] = useState(0);
+
     const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
+
+    const [isWaitApplyCoupon, setIsWaitApplyCoupon] = useState(false);
 
     const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
 
     const [isWaitCreateNewOrder, setIsWaitCreateNewOrder] = useState(false);
 
     const [errorMsg, setErrorMsg] = useState("");
+
+    const [successMsg, setSuccessMsg] = useState("");
 
     const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
 
@@ -108,7 +117,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
                         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
                             if (tempAllProductsDataInsideTheCart.length > 0) {
-                                result = await getProductsByIdsAnsStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
+                                result = await getProductsByIdsAndStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
                                 if (result.data.products.length > 0) {
                                     setCurrentDate(result.data.currentDate);
                                     const totalPrices = calcTotalPrices(result.data.currentDate, result.data.products);
@@ -118,7 +127,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                     setUserInfo(userData);
                                     const localAndInternationlProductsTemp = getLocalAndInternationalProducts(result.data.products, isShippingToOtherAddress ? userData.shippingAddress.country : userData.billingAddress.country);
                                     setLocalAndInternationlProducts(localAndInternationlProductsTemp);
-                                    setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod , totalPrices.totalPriceAfterDiscount));
+                                    const tempShippingCost = getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod, totalPrices.totalPriceAfterDiscount);
+                                    setShippingCost(tempShippingCost);
+                                    setTotalAmount(totalPrices.totalPriceAfterDiscount + tempShippingCost.forLocalProducts + tempShippingCost.forInternationalProducts + 0);
                                     setIsGetUserInfo(false);
                                 }
                             }
@@ -145,7 +156,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }, [isGetUserInfo, isGetStoreDetails]);
 
     const getAndSetUserInfoAsGuest = () => {
-        const userAddresses = JSON.parse(localStorage.getItem("asfour-store-user-addresses"));
+        const userAddresses = JSON.parse(localStorage.getItem("ubuyblues-store-user-addresses"));
         if (userAddresses) {
             const userInfo = { billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress };
             setUserInfo(userInfo);
@@ -240,7 +251,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         document.body.lang = userLanguage;
     }
 
-    const getProductsByIdsAnsStoreId = async (storeId, productsIds) => {
+    const getProductsByIdsAndStoreId = async (storeId, productsIds) => {
         try {
             return (await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids-and-store-id?storeId=${storeId}`, {
                 productsIds,
@@ -293,13 +304,58 @@ export default function Checkout({ countryAsProperty, storeId }) {
         setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod, pricesDetailsSummary.totalPriceAfterDiscount));
     }
 
+    const applyCoupon = async () => {
+        try {
+            const errorsObject = inputValuesValidation([
+                {
+                    name: "couponCode",
+                    value: couponCode,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitApplyCoupon(true);
+                const result = (await axios.get(`${process.env.BASE_API_URL}/coupons/coupon-details?code=${couponCode}`)).data;
+                setIsWaitApplyCoupon(false);
+                if (!result.error) {
+                    const totalAmountBeforeApplyCoupon = pricesDetailsSummary.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts;
+                    setTotalAmount(totalAmountBeforeApplyCoupon - (totalAmountBeforeApplyCoupon * result.data.discountPercentage) / 100);
+                    setSuccessMsg("Apply Coupon Code Process Has Been Successfully !!");
+                    let successTimeout = setTimeout(() => {
+                        setSuccessMsg("");
+                        clearTimeout(successTimeout);
+                    }, 3000);
+                } else {
+                    setErrorMsg("Sorry This Code Is Not Exist !!");
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 2000);
+                }
+            }
+        }
+        catch (err) {
+            setIsWaitApplyCoupon(false);
+            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 2000);
+        }
+    }
+
     const createNewOrder = async (orderDetails) => {
         try {
             return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}`, orderDetails, userToken > 0 ? {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
-            }: {})).data;
+            } : {})).data;
         }
         catch (err) {
             throw Error(err);
@@ -472,7 +528,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitCreateNewOrder(true);
                 if (isSavePaymentInfo) {
-                    localStorage.setItem("asfour-store-user-addresses", JSON.stringify({
+                    localStorage.setItem("ubuyblues-store-user-addresses", JSON.stringify({
                         billingAddress: {
                             firstName: userInfo ? userInfo.billingAddress.firstName : "",
                             lastName: userInfo ? userInfo.billingAddress.lastName : "",
@@ -499,7 +555,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         },
                     }));
                 } else {
-                    localStorage.removeItem("asfour-store-user-addresses");
+                    localStorage.removeItem("ubuyblues-store-user-addresses");
                 }
                 const result = await createNewOrder(getOrderDetailsForCreating());
                 setIsWaitCreateNewOrder(false);
@@ -603,25 +659,188 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const createPaymentOrder = async (paymentGateway) => {
         try {
-            setIsWaitCreateNewOrder(true);
-            const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order?country=${countryAsProperty}`, getOrderDetailsForCreating(), userToken ? {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+            const errorsObject = inputValuesValidation([
+                {
+                    name: "first_name_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.firstName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, First Name Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "last_name_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.lastName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "country_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.country : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "street_address_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.streetAddress : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "city_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.city : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "postal_code_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.postalCode : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "phone_number_for_billing_address",
+                    value: userInfo.billingAddress.phoneNumber,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                        isValidMobilePhone: {
+                            msg: "Sorry, Invalid Mobile Phone !!",
+                            countryCode: getCountryCode(userInfo.billingAddress.country),
+                        },
+                    },
+                },
+                {
+                    name: "email_for_billing_address",
+                    value: userInfo ? userInfo.billingAddress.email : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Email Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                },
+                isShippingToOtherAddress ? {
+                    name: "firstName_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.firstName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, First Name Field Can't Be Empty !!",
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "lastName_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.lastName : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "country_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.country : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "streetAddress_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.streetAddress : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "city_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.city : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "postalCode_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.postalCode : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "phoneNumber_for_shipping_address",
+                    value: userInfo.shippingAddress.phoneNumber,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Last Name Field Can't Be Empty !!",
+                        },
+                        isValidMobilePhone: {
+                            msg: "Sorry, Invalid Mobile Phone !!",
+                            countryCode: getCountryCode(userInfo.shippingAddress.country),
+                        },
+                    },
+                } : null,
+                isShippingToOtherAddress ? {
+                    name: "email_for_shipping_address",
+                    value: userInfo ? userInfo.shippingAddress.email : "",
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, Email Field Can't Be Empty !!",
+                        },
+                        isEmail: {
+                            msg: "Sorry, Invalid Email !!",
+                        },
+                    },
+                } : null,
+            ]);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setIsWaitCreateNewOrder(true);
+                const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order?country=${countryAsProperty}`, getOrderDetailsForCreating(), userToken ? {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                    }
+                } : {})).data;
+                if (!result.error) {
+                    if (paymentGateway === "tap") {
+                        await router.push(result.data.transaction.url);
+                    } else if (paymentGateway === "tabby") {
+                        await router.push(result.data.checkoutURL);
+                    }
+                } else {
+                    setIsWaitCreateNewOrder(false);
+                    setErrorMsg(result.msg);
+                    let errorTimeout = setTimeout(() => {
+                        setErrorMsg("");
+                        clearTimeout(errorTimeout);
+                    }, 2000);
                 }
-            }: {})).data;
-            if (!result.error) {
-                if (paymentGateway === "tap") {
-                    await router.push(result.data.transaction.url);
-                } else if (paymentGateway === "tabby") {
-                    await router.push(result.data.checkoutURL);
-                }
-            } else {
-                setIsWaitCreateNewOrder(false);
-                setErrorMsg(result.msg);
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorTimeout);
-                }, 2000);
             }
         }
         catch (err) {
@@ -659,7 +878,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     <div className="container-fluid text-white p-4">
                         <h1 className="h4 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
                         {Object.keys(storeDetails).length > 0 ?
-                            allProductsData.length > 0 ? <div className="row align-items-center">
+                            allProductsData.length > 0 ? <div className="row">
                                 <div className="col-xl-6">
                                     <h6 className="mb-4 fw-bold">{t("Billing Details")}</h6>
                                     <form className="edit-customer-billing-address-form" onSubmit={(e) => e.preventDefault()}>
@@ -1060,7 +1279,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t(localAndInternationlProducts.international.length > 0 ? "Shipping Cost For Local Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(shippingCost.forLocalProducts  * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
+                                                {(shippingCost.forLocalProducts * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
                                             </div>
                                         </div>}
                                         {localAndInternationlProducts.international.length > 0 && <div className="row shipping-cost-for-international-products total pb-3 mb-4">
@@ -1079,6 +1298,48 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {((shippingCost.forLocalProducts + shippingCost.forInternationalProducts) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </div>}
+                                        <div className="row total-price total pb-3 mb-4">
+                                            <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                {t("Total Amount")}
+                                            </div>
+                                            <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                                {(totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                            </div>
+                                        </div>
+                                        {/* Start Coupon Section */}
+                                        <section className="coupon mb-4 border border-2 p-3 mb-4">
+                                            <h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Coupon")}</h6>
+                                            <h6 className={`fw-bold mb-3 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>{t("Have a Coupon Code ?")}</h6>
+                                            <input
+                                                type="text"
+                                                className={`p-2 mb-2 ${formValidationErrors.couponCode ? "border-3 border-danger" : ""}`}
+                                                placeholder={t("Please Enter Coupon Code Here")}
+                                                onChange={(e) => setCouponCode(e.target.value)}
+                                            />
+                                            {formValidationErrors.couponCode && <p className={`bg-danger p-2 form-field-error-box m-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                                <span className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`}><HiOutlineBellAlert className="alert-icon" /></span>
+                                                <span>{t(formValidationErrors.couponCode)}</span>
+                                            </p>}
+                                            {!isWaitApplyCoupon && !errorMsg && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                                onClick={applyCoupon}
+                                            >
+                                                {t("Apply")}
+                                            </button>}
+                                            {isWaitApplyCoupon && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                                disabled
+                                            >
+                                                {t("Please Waiting")}
+                                            </button>}
+                                            {errorMsg && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
+                                                disabled
+                                            >
+                                                {t(errorMsg)}
+                                            </button>}
+                                        </section>
+                                        {/* End Coupon Section */}
                                         {/* Start Shipping Methods Section */}
                                         <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
                                             <h6 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h6>

@@ -505,5 +505,12 @@
     "Product Names": "أسماء المنتجات",
     "Shipping Cost For Local Products": "تكلفة الشحن للمنتجات المحلية",
     "Shipping Cost For International Products": "تكلفة الشحن للمنتجات الدولية",
-    "Shipping Cost": "تكلفة الشحن"
+    "Shipping Cost": "تكلفة الشحن",
+    "Coupon": "القسيمة",
+    "Please Enter Coupon Code Here": "الرجاء إدخال رمز القسيمة هنا",
+    "Have a Coupon Code ?": "لديك رمز قسيمة ؟",
+    "Apply": "تطبيق",
+    "Total Amount": "المبلغ الإجمالي",
+    "Apply Coupon Code Process Has Been Successfully !!": "عملية تطبيق رمز القسيمة تمت بنجاح !!",
+    "Sorry This Code Is Not Exist !!": "عذراً ، هذا الرمز غير موجود !!"
 }
