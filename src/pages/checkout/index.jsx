@@ -590,6 +590,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const getOrderDetailsForCreating = () => {
         return {
             creator: userToken ? "user" : "guest",
+            couponCode,
             paymentGateway,
             billingAddress: {
                 firstName: userInfo.billingAddress.firstName,
