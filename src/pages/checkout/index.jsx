@@ -16,6 +16,7 @@ import NotFoundError from "@/components/NotFoundError";
 import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
+import { SiBinance } from "react-icons/si";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -1492,6 +1493,22 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <FaTape className="payment-icon tap-icon" />
                                                 </div>
                                             </div>
+                                            <div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`}>
+                                                <div className="col-md-6 text-start">
+                                                    <input
+                                                        type="radio"
+                                                        checked={paymentGateway === "binance"}
+                                                        id="binance-radio"
+                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                        name="radioGroup"
+                                                        onChange={() => setPaymentGateway("binance")}
+                                                    />
+                                                    <label htmlFor="binance-radio" onClick={() => setPaymentGateway("binance")}>{t("Binance")}</label>
+                                                </div>
+                                                <div className="col-md-6 text-md-end">
+                                                    <SiBinance className="payment-icon binance-icon" />
+                                                </div>
+                                            </div>
                                             {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={handleSelectPaypalPayment}
@@ -1507,6 +1524,12 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             {paymentGateway === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={() => createPaymentOrder("tabby")}
+                                            >
+                                                {t("Confirm Request")}
+                                            </button>}
+                                            {paymentGateway === "binance" && !isWaitCreateNewOrder && !errorMsg && <button
+                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                                onClick={() => createPaymentOrder("binance")}
                                             >
                                                 {t("Confirm Request")}
                                             </button>}
