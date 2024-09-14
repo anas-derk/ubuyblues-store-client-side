@@ -832,7 +832,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 if (!result.error) {
                     if (paymentGateway === "tap") {
                         await router.push(result.data.transaction.url);
-                    } else if (paymentGateway === "tabby") {
+                    } else  {
                         await router.push(result.data.checkoutURL);
                     }
                 } else {
