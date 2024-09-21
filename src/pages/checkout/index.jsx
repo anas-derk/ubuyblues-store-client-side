@@ -280,13 +280,13 @@ export default function Checkout({ countryAsProperty, storeId }) {
             ...(section === "billing" ? {
                 billingAddress: {
                     ...userInfo.billingAddress,
-                    country,
+                    country: countryCode,
                     phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, countryCode),
                 }
             } : {
                 shippingAddress: {
                     ...userInfo.shippingAddress,
-                    country,
+                    country: countryCode,
                     phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, countryCode),
                 }
             }),
@@ -935,7 +935,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     backgroundColor: "var(--main-color-one)",
                                                 }}
                                             >
-                                                <option value={countries[userInfo.billingAddress.country].name} hidden>{userInfo.billingAddress.country}</option>
+                                                <option value={userInfo.billingAddress.country} hidden>{countries[userInfo.billingAddress.country].name}</option>
                                                 {countryList.map((country) => (
                                                     <option key={country.name} value={country.name}>
                                                         {country.name}
@@ -1115,7 +1115,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     backgroundColor: "var(--main-color-one)",
                                                 }}
                                             >
-                                                <option value={countries[getCountryCode(userInfo.shippingAddress.country)].name} hidden>{userInfo.shippingAddress.country}</option>
+                                                <option value={userInfo.shippingAddress.country} hidden>{countries[userInfo.shippingAddress.country].name}</option>
                                                 {countryList.map((country) => (
                                                     <option key={country.name} value={country.name}>
                                                         {country.name}
@@ -1187,7 +1187,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className="p-2 text-center"
                                                         disabled
-                                                        value={"00" + countries[getCountryCode(userInfo.shippingAddress.country)].phone}
+                                                        value={"00" + countries[userInfo.shippingAddress.country].phone}
                                                     />
                                                 </div>
                                                 <div className="col-md-10">
@@ -1195,7 +1195,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Phone Number Here")}
-                                                        defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, getCountryCode(userInfo.shippingAddress.country)) : ""}
+                                                        defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, userInfo.shippingAddress.country) : ""}
                                                         onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, phoneNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                     />
                                                 </div>
