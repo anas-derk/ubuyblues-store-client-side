@@ -159,7 +159,7 @@ export default function CustomerBillingAddress() {
                         },
                         isValidMobilePhone: {
                             msg: "Sorry, Invalid Mobile Phone !!",
-                            countryCode: getCountryCode(userInfo.billingAddress.country),
+                            countryCode: userInfo.billingAddress.country,
                         }
                     },
                 },
@@ -283,7 +283,7 @@ export default function CustomerBillingAddress() {
                                                 setUserInfo({ ...userInfo,
                                                     billingAddress: {
                                                         ...userInfo.billingAddress,
-                                                        country: e.target.value,
+                                                        country: countryCode,
                                                         phoneNumber: "00" + countries[countryCode].phone + getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, countryCode),
                                                     },
                                                 })
@@ -292,7 +292,7 @@ export default function CustomerBillingAddress() {
                                                 backgroundColor: "var(--main-color-one)",
                                             }}
                                         >
-                                            <option value={countries[getCountryCode(userInfo.billingAddress.country)].name} hidden>{userInfo.billingAddress.country}</option>
+                                            <option value={userInfo.billingAddress.country} hidden>{countries[userInfo.billingAddress.country].name}</option>
                                             {countryList.map((country) => (
                                                 <option key={country.name} value={country.name}>
                                                     {country.name}
