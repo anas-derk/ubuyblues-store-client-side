@@ -169,7 +169,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     firstName: "",
                     lastName: "",
                     companyName: "",
-                    country: "Kuwait",
+                    country: "KW",
                     streetAddress: "",
                     apartmentNumber: 1,
                     city: "",
@@ -181,7 +181,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     firstName: "",
                     lastName: "",
                     companyName: "",
-                    country: "Kuwait",
+                    country: "KW",
                     streetAddress: "",
                     apartmentNumber: 1,
                     city: "",
@@ -220,7 +220,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const getLocalAndInternationalProducts = (products, shippingCountry) => {
         let local = [], international = [];
         products.forEach((product) => {
-            if (countries[product.country].name === shippingCountry) {
+            if (product.countries.includes(shippingCountry)) {
                 local.push(product.name);
             } else {
                 international.push(product.name);
@@ -429,7 +429,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         },
                         isValidMobilePhone: {
                             msg: "Sorry, Invalid Mobile Phone !!",
-                            countryCode: getCountryCode(userInfo.billingAddress.country),
+                            countryCode: userInfo.billingAddress.country,
                         },
                     },
                 },
@@ -725,7 +725,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         },
                         isValidMobilePhone: {
                             msg: "Sorry, Invalid Mobile Phone !!",
-                            countryCode: getCountryCode(userInfo.billingAddress.country),
+                            countryCode: userInfo.billingAddress.country,
                         },
                     },
                 },
@@ -935,7 +935,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     backgroundColor: "var(--main-color-one)",
                                                 }}
                                             >
-                                                <option value={countries[getCountryCode(userInfo.billingAddress.country)].name} hidden>{userInfo.billingAddress.country}</option>
+                                                <option value={countries[userInfo.billingAddress.country].name} hidden>{userInfo.billingAddress.country}</option>
                                                 {countryList.map((country) => (
                                                     <option key={country.name} value={country.name}>
                                                         {country.name}
@@ -1007,7 +1007,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className="p-2 text-center"
                                                         disabled
-                                                        value={"00" + countries[getCountryCode(userInfo.billingAddress.country)].phone}
+                                                        value={"00" + countries[userInfo.billingAddress.country].phone}
                                                     />
                                                 </div>
                                                 <div className="col-md-10">
@@ -1015,7 +1015,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         type="text"
                                                         className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Phone Number")}
-                                                        defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, getCountryCode(userInfo.billingAddress.country)) : ""}
+                                                        defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, userInfo.billingAddress.country) : ""}
                                                         onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, phoneNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                     />
                                                 </div>
