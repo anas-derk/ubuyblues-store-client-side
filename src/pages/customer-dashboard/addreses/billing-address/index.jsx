@@ -364,7 +364,7 @@ export default function CustomerBillingAddress() {
                                                     type="text"
                                                     className="p-2 text-center"
                                                     disabled
-                                                    value={"00" + countries[getCountryCode(userInfo.billingAddress.country)].phone}
+                                                    value={"00" + countries[userInfo.billingAddress.country].phone}
                                                 />
                                             </div>
                                             <div className="col-md-10">
