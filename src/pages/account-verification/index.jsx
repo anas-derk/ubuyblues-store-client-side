@@ -8,7 +8,7 @@ import LoaderPage from "@/components/LoaderPage";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { isEmail } from "../../../public/global_functions/validations";
-import { getUserInfo, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function AccountVerification({ email }) {
@@ -38,8 +38,11 @@ export default function AccountVerification({ email }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -100,11 +103,6 @@ export default function AccountVerification({ email }) {
             }
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const resendTheCodeToEmail = async () => {
         try {

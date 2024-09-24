@@ -8,7 +8,7 @@ import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getUserInfo } from "../../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 
 export default function CustomerAddreses() {
 
@@ -21,13 +21,16 @@ export default function CustomerAddreses() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -39,7 +42,6 @@ export default function CustomerAddreses() {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     } else {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -48,11 +50,6 @@ export default function CustomerAddreses() {
             router.replace("/auth");
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     return (
         <div className="customer-addreses customer-dashboard">

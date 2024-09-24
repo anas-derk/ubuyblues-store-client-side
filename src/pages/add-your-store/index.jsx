@@ -9,7 +9,7 @@ import axios from "axios";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo, getAppearedSections } from "../../../public/global_functions/popular";
+import { getUserInfo, getAppearedSections, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 
 export default function AddYourStore() {
 
@@ -46,8 +46,11 @@ export default function AddYourStore() {
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -72,8 +75,6 @@ export default function AddYourStore() {
     }, []);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         getAppearedSections()
             .then(async (result) => {
                 const appearedSectionsLength = result.data.length;
@@ -97,11 +98,6 @@ export default function AddYourStore() {
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetAppearedSections]);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const createNewStore = async (e) => {
         try {

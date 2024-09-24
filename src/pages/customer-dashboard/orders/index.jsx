@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getDateFormated, getUserInfo } from "../../../../public/global_functions/popular";
+import { getDateFormated, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 
@@ -52,6 +52,11 @@ export default function CustomerOrders({ countryAsProperty }) {
     const pageSize = 3;
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", () => {
             setWindowInnerWidth(window.innerWidth);
@@ -74,7 +79,6 @@ export default function CustomerOrders({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -86,7 +90,6 @@ export default function CustomerOrders({ countryAsProperty }) {
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                             setIsExistOrdersForThisUserInDBInGeneral(true);
                         }
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsFilteringOrdersStatus(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -112,11 +115,6 @@ export default function CustomerOrders({ countryAsProperty }) {
             setIsLoadingPage(false);
         }
     }, [isFilteringOrdersStatus]);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const getOrdersCount = async (filters) => {
         try {

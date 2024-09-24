@@ -29,7 +29,8 @@ import {
     getFavoriteProductsByProductsIdsAndUserId,
     isFavoriteProductForUser,
     getUserInfo,
-    getAppearedSections
+    getAppearedSections,
+    handleSelectUserLanguage
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -150,6 +151,11 @@ export default function Home({ countryAsProperty, storeId }) {
         forProducts: 9,
         forStores: 9,
     };
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -283,8 +289,6 @@ export default function Home({ countryAsProperty, storeId }) {
     }, [isGetStoreDetails]);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", function () {
             setWindowInnerWidth(this.innerWidth);
@@ -322,7 +326,12 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const getAllAds = async () => {
-        return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads`)).data;
+        try {
+            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads`)).data;
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getAppearedSlidesCount = (windowInnerWidth, count) => {
@@ -333,33 +342,43 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
-        const result = await getFlashProductsCount(filtersAsString);
-        if (result.data > 0) {
-            const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
+        try {
+            const result = await getFlashProductsCount(filtersAsString);
+            if (result.data > 0) {
+                const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
+                return {
+                    flashProductsCount: result.data,
+                    flashProductsData: result1.products,
+                    currentDateTemp: result1.currentDate
+                }
+            }
             return {
-                flashProductsCount: result.data,
-                flashProductsData: result1.products,
-                currentDateTemp: result1.currentDate
+                flashProductsCount: 0,
+                flashProductsData: [],
+                currentDate: Date.now()
             }
         }
-        return {
-            flashProductsCount: 0,
-            flashProductsData: [],
-            currentDate: Date.now()
+        catch (err) {
+            throw err;
         }
     }
 
     const handleGetProducts = async (filtersAsString, sortDetailsAsString) => {
-        const result = await getProductsCount(filtersAsString);
-        if (result.data > 0) {
+        try {
+            const result = await getProductsCount(filtersAsString);
+            if (result.data > 0) {
+                return {
+                    productsCount: result.data,
+                    productsData: (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data.products
+                }
+            }
             return {
-                productsCount: result.data,
-                productsData: (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data.products
+                productsCount: 0,
+                productsData: [],
             }
         }
-        return {
-            productsCount: 0,
-            productsData: [],
+        catch (err) {
+            throw err;
         }
     }
 
@@ -368,23 +387,33 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const handleGetAndSetFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-        if (userToken) {
-            setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)).data);
+        try {
+            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+            if (userToken) {
+                setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)).data);
+            }
+        }
+        catch (err) {
+            throw err;
         }
     }
 
     const handleGetStores = async (filtersAsString) => {
-        const result = await getStoresCount(filtersAsString);
-        if (result.data > 0) {
+        try {
+            const result = await getStoresCount(filtersAsString);
+            if (result.data > 0) {
+                return {
+                    storesCount: result.data,
+                    storesData: (await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data,
+                }
+            }
             return {
-                storesCount: result.data,
-                storesData: (await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data,
+                storesCount: 0,
+                storesData: [],
             }
         }
-        return {
-            storesCount: 0,
-            storesData: [],
+        catch (err) {
+            throw err;
         }
     }
 
@@ -396,11 +425,6 @@ export default function Home({ countryAsProperty, storeId }) {
         catch (err) {
             throw Error(err);
         }
-    }
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
     }
 
     const getFiltersAsQuery = (filters) => {

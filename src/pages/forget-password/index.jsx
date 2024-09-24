@@ -10,7 +10,7 @@ import { FaCode } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 
 export default function ForgetPassword({ userTypeAsProperty }) {
@@ -56,8 +56,12 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     const router = useRouter();
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-        const userLanguage = localStorage.getItem("asfour-store-language");
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
@@ -66,29 +70,16 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                         await router.replace("/");
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
                 }).catch(() => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     setIsLoadingPage(false);
                     setIsErrorMsgOnLoadingThePage(true);
                 });
         } else {
-            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             setIsLoadingPage(false);
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
-
-    const handleSelectUserType = (userType) => {
-        setUserType(userType);
-        router.replace(`/forget-password?userType=${userType}`);
-    }
 
     const handleTimeCounter = () => {
         let secondsTemp = 59, minutesTemp = 1;

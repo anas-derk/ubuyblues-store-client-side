@@ -264,6 +264,11 @@ const getOrderDetails = async (orderId) => {
     }
 }
 
+const handleSelectUserLanguage = (userLanguage, changeLanguageFunc) => {
+    changeLanguageFunc(userLanguage);
+    document.body.lang = userLanguage;
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -290,5 +295,6 @@ export {
     getFavoriteProductsCount,
     getProductsByIds,
     getAppearedSections,
-    getOrderDetails
+    getOrderDetails,
+    handleSelectUserLanguage
 }

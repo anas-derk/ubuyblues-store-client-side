@@ -11,7 +11,7 @@ import { countries, getCountryCode } from "countries-list";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import { inputValuesValidation } from "../../../../../public/global_functions/validations";
-import { getUserInfo } from "../../../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../../../public/global_functions/popular";
 
 export default function CustomerBillingAddress() {
 
@@ -36,14 +36,17 @@ export default function CustomerBillingAddress() {
     const countryList = Object.values(countries);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -55,7 +58,6 @@ export default function CustomerBillingAddress() {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     } else {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -64,11 +66,6 @@ export default function CustomerBillingAddress() {
             router.replace("/auth");
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const getPhoneNumberFromString = (text, country) => {
         try {

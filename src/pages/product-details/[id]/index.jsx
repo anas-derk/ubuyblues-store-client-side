@@ -19,7 +19,7 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser } from "../../../../public/global_functions/popular";
+import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import ErrorPopup from "@/components/ErrorPopup";
 import SectionLoader from "@/components/SectionLoader";
@@ -129,6 +129,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const productsCountInFavorite = useSelector(state => state.productsCountInFavorite);
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
 
     useEffect(() => {
         setIsLoadingPage(true);

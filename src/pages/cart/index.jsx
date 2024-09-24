@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds } from "../../../public/global_functions/popular";
+import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { useDispatch } from "react-redux";
 
@@ -42,6 +42,11 @@ export default function Cart({ countryAsProperty }) {
     const { t, i18n } = useTranslation();
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
 
     useEffect(() => {
         setIsLoadingPage(true);
@@ -83,8 +88,6 @@ export default function Cart({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", () => {
             setWindowInnerWidth(window.innerWidth);
@@ -135,11 +138,6 @@ export default function Cart({ countryAsProperty }) {
             setIsLoadingPage(false);
         }
     }, [isGetGroupedProductsByStoreId, isGetUserInfo]);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const updateProductQuantity = async (productId, operation) => {
         switch (operation) {

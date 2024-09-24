@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo, getFavoriteProductsCount } from "../../../../public/global_functions/popular";
+import { getUserInfo, getFavoriteProductsCount, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,6 +61,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
@@ -76,7 +81,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -88,7 +92,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                             setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                         }
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
@@ -104,7 +107,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     } else {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -119,11 +121,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setIsLoadingPage(false);
         }
     }, [isWaitGetFavoriteProductsStatus]);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {

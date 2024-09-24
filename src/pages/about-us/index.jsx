@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
-import { getUserInfo } from "../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import Footer from "@/components/Footer";
 
@@ -16,8 +16,11 @@ export default function AboutUs() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -40,11 +43,6 @@ export default function AboutUs() {
             setIsLoadingPage(false);
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     return (
         <div className="about-us caption-page page">

@@ -11,7 +11,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { getUserInfo } from "../../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 
 export default function CustomerAccountDetails() {
 
@@ -52,14 +52,17 @@ export default function CustomerAccountDetails() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
                         setUserInfo(result.data);
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -71,7 +74,6 @@ export default function CustomerAccountDetails() {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     } else {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -80,11 +82,6 @@ export default function CustomerAccountDetails() {
             router.replace("/auth");
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const updateUserInfo = async (e) => {
         try {

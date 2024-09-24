@@ -1045,10 +1045,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             className="form-check-input"
                                             type="checkbox"
                                             defaultChecked={isSavePaymentInfo}
-                                            id="flexCheckDefault"
+                                            id="save-payment-information"
                                             onChange={(e) => setIsSavePaymentInfo(e.target.checked)}
                                         />
-                                        <label className="form-check-label" htmlFor="flexCheckDefault" onClick={(e) => setIsSavePaymentInfo(e.target.checked)}>
+                                        <label className="form-check-label" htmlFor="save-payment-information" onClick={(e) => setIsSavePaymentInfo(e.target.checked)}>
                                             {t("Do You Want To Save Payment Information ?")}
                                         </label>
                                     </div>}
@@ -1056,10 +1056,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         <input
                                             className="form-check-input"
                                             type="checkbox"
-                                            id="flexCheckDefault"
+                                            id="shipping-to-different-address"
                                             onChange={(e) => handleIsShippingToOtherAddress(e.target.checked)}
                                         />
-                                        <label className="form-check-label" htmlFor="flexCheckDefault" onClick={(e) => handleIsShippingToOtherAddress(e.target.checked)}>
+                                        <label className="form-check-label" htmlFor="shipping-to-different-address" onClick={(e) => handleIsShippingToOtherAddress(e.target.checked)}>
                                             {t("Do You Want To Ship To A Different Address ?")}
                                         </label>
                                     </div>

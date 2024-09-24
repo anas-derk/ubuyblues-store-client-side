@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo } from "../../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 
@@ -54,6 +54,11 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
@@ -69,7 +74,6 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -81,7 +85,6 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                             setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                         }
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
@@ -97,7 +100,6 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     } else {
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                         setIsErrorMsgOnLoadingThePage(true);
                     }
@@ -169,11 +171,6 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         if (filters.customerId) filteringString += `customerId=${filters.customerId}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
-    }
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
     }
 
     const deleteProductFromUserProductsWallet = async (walletProductIndex) => {

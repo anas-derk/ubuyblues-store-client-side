@@ -14,7 +14,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { decode } from "jsonwebtoken";
 import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo } from "../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 
 export default function UserAuth() {
 
@@ -51,8 +51,11 @@ export default function UserAuth() {
     const router = useRouter();
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
-        const userLanguage = localStorage.getItem("asfour-store-language");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
@@ -61,11 +64,9 @@ export default function UserAuth() {
                         await router.replace("/");
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                         setIsLoadingPage(false);
                     }
                 }).catch((err) => {
-                    handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
                     if (err?.response?.data?.msg === "Unauthorized Error") {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         setIsLoadingPage(false);
@@ -75,15 +76,9 @@ export default function UserAuth() {
                     }
                 });
         } else {
-            handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
             setIsLoadingPage(false);
         }
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const userLogin = async (e) => {
         try {

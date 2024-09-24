@@ -6,7 +6,7 @@ import NotFoundError from "@/components/NotFoundError";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getStoreDetails, getUserInfo } from "../../../public/global_functions/popular";
+import { getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import axios from "axios";
 import SectionLoader from "@/components/SectionLoader";
 import BrandCard from "@/components/BrandCard";
@@ -37,6 +37,11 @@ export default function AllBrands({ storeId }) {
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
@@ -58,11 +63,6 @@ export default function AllBrands({ storeId }) {
         } else {
             setIsGetUserInfo(false);
         }
-    }, []);
-
-    useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
     }, []);
 
     useEffect(() => {
@@ -92,11 +92,6 @@ export default function AllBrands({ storeId }) {
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetBrands]);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const getBrandsCount = async (filters) => {
         try {

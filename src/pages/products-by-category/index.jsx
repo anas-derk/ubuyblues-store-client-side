@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useState, useEffect } from "react";
-import { getUserInfo } from "../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
@@ -67,6 +67,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     const pageSize = 9;
 
     useEffect(() => {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
+    }, []);
+
+    useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
@@ -104,12 +109,6 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }, []);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
-    }, []);
-
-    useEffect(() => {
-        // =============================================================================
         getCategoryInfo(categoryIdAsProperty)
             .then(async (result) => {
                 if (Object.keys(result.data).length > 0) {
@@ -147,11 +146,6 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const getCategoryInfo = async (categoryId) => {
         return (await axios.get(`${process.env.BASE_API_URL}/categories/category-info/${categoryId}`)).data;
-    }
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
     }
 
     const getFiltersAsQuery = (filters) => {
