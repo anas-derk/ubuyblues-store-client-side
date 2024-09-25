@@ -32,10 +32,9 @@ export default function Footer() {
         try {
             e.preventDefault();
             setWaitMsg("Please Wait ...");
-            const res = await axios.post(`${process.env.BASE_API_URL}/subscriptions/add-new-subscription`, {
+            const result = (await axios.post(`${process.env.BASE_API_URL}/subscriptions/add-new-subscription`, {
                 email,
-            });
-            const result = res.data;
+            })).data;
             setWaitMsg("");
             if (!result.error) {
                 setSuccessMsg("Success Subscription !!");
@@ -53,7 +52,7 @@ export default function Footer() {
         }
         catch (err) {
             setWaitMsg(false);
-            setErrorMsg("Sorry, Someting Went Wrong !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);

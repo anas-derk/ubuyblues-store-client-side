@@ -2,20 +2,16 @@ import { GrFormClose } from "react-icons/gr";
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, FacebookMessengerShareButton, FacebookMessengerIcon, TelegramShareButton, TelegramIcon } from "react-share";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { handleSelectUserLanguage } from "../../../public/global_functions/popular";
 
 export default function ShareOptionsBox({ setIsDisplayShareOptionsBox, sharingName, sharingURL }) {
 
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     return (
         <div className="share-options-box popup-box">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
+import { handleSelectUserLanguage } from "../../../public/global_functions/popular";
 
 export default function PaginationBar({
     totalPagesCount,
@@ -22,14 +23,9 @@ export default function PaginationBar({
     const { i18n, t } = useTranslation();
     
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const getSuitableArrow = (arrowDirection) => {
         if (arrowDirection === "to-previous") {

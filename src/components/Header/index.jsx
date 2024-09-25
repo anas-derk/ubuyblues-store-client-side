@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [lightMode, setLightMode] = useState("sunny");
 
@@ -51,17 +51,22 @@ export default function Header() {
         if (userToken) {
             setToken(userToken);
             getFavoriteProductsCount()
-            .then((result) => {
-                if (!result.error) {
-                    dispatch({
-                        type: "(Add / Delete) (To / From ) Favorite",
-                        productsCountInFavorite: result.data
-                    });
-                }
-            })
-            .catch((err) => {
-                setIsErrorMsgOnLoadingThePage(true);
-            });
+                .then((result) => {
+                    if (!result.error) {
+                        dispatch({
+                            type: "(Add / Delete) (To / From ) Favorite",
+                            productsCountInFavorite: result.data
+                        });
+                    }
+                })
+                .catch((err) => {
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    }
+                    else {
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
+                    }
+                });
         }
     }, []);
 
@@ -69,23 +74,23 @@ export default function Header() {
         let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
-            .then((result) => {
-                let tempProductsCountInCart = 0, tempProductsIds = [];
-                result.data.productByIds.forEach((storeProducts) => {
-                    tempProductsCountInCart += storeProducts.products.length;
-                    storeProducts.products.forEach((product) => {
-                        tempProductsIds.push(product._id);
+                .then((result) => {
+                    let tempProductsCountInCart = 0, tempProductsIds = [];
+                    result.data.productByIds.forEach((storeProducts) => {
+                        tempProductsCountInCart += storeProducts.products.length;
+                        storeProducts.products.forEach((product) => {
+                            tempProductsIds.push(product._id);
+                        });
                     });
+                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Cart",
+                        productsCountInCart: tempProductsCountInCart
+                    });
+                })
+                .catch((err) => {
+                    setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                 });
-                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
-                dispatch({
-                    type: "(Add / Delete) (To / From ) Cart",
-                    productsCountInCart: tempProductsCountInCart
-                });
-            })
-            .catch(() => {
-                setIsErrorMsgOnLoadingThePage(true);
-            });
         }
     }, []);
 
@@ -164,7 +169,7 @@ export default function Header() {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-                        <Nav>
+                        {!errorMsgOnLoadingThePage ? <Nav>
                             <Nav.Link href="/" as={Link}>
                                 <AiOutlineHome className={`home-icon global-header-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 {t("Home")}
@@ -242,7 +247,7 @@ export default function Header() {
                                     <span>{t("Logout")}</span>
                                 </button>
                             </>}
-                        </Nav>
+                        </Nav> : <p className="alert alert-danger m-0 w-100 text-center fw-bold">{errorMsgOnLoadingThePage}</p>}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
