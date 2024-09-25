@@ -59,7 +59,7 @@ export default function Header() {
                     });
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsErrorMsgOnLoadingThePage(true);
             });
         }

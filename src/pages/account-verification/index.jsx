@@ -15,7 +15,7 @@ export default function AccountVerification({ email }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [minutes, setMinutes] = useState(1);
 
@@ -55,12 +55,13 @@ export default function AccountVerification({ email }) {
                         await router.push("/auth");
                     }
                 }).catch(async (err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                        await router.push("/auth");
-                    } else {
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                        await router.replace("/auth");
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setErrorMsgOnLoading("Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         }
@@ -208,7 +209,7 @@ export default function AccountVerification({ email }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Account Verification")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid pb-5">
@@ -285,8 +286,8 @@ export default function AccountVerification({ email }) {
                     </div>
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoading} />}
         </div>
     );
 }

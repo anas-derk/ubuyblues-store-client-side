@@ -15,7 +15,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -51,9 +51,9 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -68,12 +68,13 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                     setIsGetUserInfo(false);
                 })
                 .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsGetUserInfo(false);
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -99,9 +100,9 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                     setIsGetOrderDetails(false);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [orderIdAsProperty]);
 
@@ -132,7 +133,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Payment Confirmation")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content page pt-5">
                     <div className="container-fluid align-items-center pb-4 text-white">
@@ -221,8 +222,8 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

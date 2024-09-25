@@ -46,7 +46,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -166,9 +166,9 @@ export default function Home({ countryAsProperty, storeId }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -182,11 +182,12 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                 })
                 .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                    } else {
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         }
@@ -276,8 +277,14 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             })
             .catch((err) => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                if (err?.response?.status === 401) {
+                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    setIsLoadingPage(false);
+                }
+                else {
+                    setIsLoadingPage(false);
+                    setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
+                }
             });
         // =============================================================================
     }, [storeId]);
@@ -419,8 +426,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const getLastSevenBrandsByStoreId = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/brands/last-seven-brands-by-store-id?${filters ? filters : ""}`);
-            return res.data;
+            return (await axios.get(`${process.env.BASE_API_URL}/brands/last-seven-brands-by-store-id?${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -598,7 +604,7 @@ export default function Home({ countryAsProperty, storeId }) {
         catch (err) {
             setIsGetFlashProducts(false);
             setIsGetProducts(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -611,7 +617,7 @@ export default function Home({ countryAsProperty, storeId }) {
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Home")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox
@@ -929,8 +935,8 @@ export default function Home({ countryAsProperty, storeId }) {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div >
     );
 }

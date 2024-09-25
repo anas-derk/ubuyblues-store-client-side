@@ -21,7 +21,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -80,9 +80,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -97,12 +97,13 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     setIsGetUserInfo(false);
                 })
                 .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsGetUserInfo(false);
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else setIsGetUserInfo(false);
@@ -131,10 +132,15 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 setIsGetProducts(false);
             })
             .catch(() => {
-                setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                if (err?.response?.status === 401) {
+                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    setIsGetProducts(false);
+                }
+                else {
+                    setIsGetProducts(false);
+                    setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
+                }
             });
-        // =============================================================================
     }, []);
 
     useEffect(() => {
@@ -145,7 +151,12 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }, [isGetUserInfo, isGetProducts]);
 
     const getCategoryInfo = async (categoryId) => {
-        return (await axios.get(`${process.env.BASE_API_URL}/categories/category-info/${categoryId}`)).data;
+        try{
+            return (await axios.get(`${process.env.BASE_API_URL}/categories/category-info/${categoryId}`)).data;
+        }
+        catch(err){
+            throw err;
+        }
     }
 
     const getFiltersAsQuery = (filters) => {
@@ -204,7 +215,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         }
         catch (err) {
             setIsGetProducts(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -213,11 +224,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }
 
     return (
-        <div className="home page">
+        <div className="products-by-category page">
             <Head>
                 <title>{t(process.env.storeName)} - {t("Products By Category")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <NavigateToUpOrDown />
                 {/* Start Share Options Box */}
@@ -313,8 +324,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div >
     )
 }

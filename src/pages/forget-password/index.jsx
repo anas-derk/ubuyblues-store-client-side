@@ -17,7 +17,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
@@ -72,9 +72,15 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         setIsLoadingPage(false);
                     }
-                }).catch(() => {
-                    setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                }).catch((err) => {
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                        setIsLoadingPage(false);
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
+                    }
                 });
         } else {
             setIsLoadingPage(false);
@@ -119,13 +125,12 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             }
         }
         catch (err) {
-            console.log(err)
             setIsWaitSendTheCode(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeat The Process !!");
-            let errorMsgTimeout = setTimeout(() => {
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
-                clearTimeout(errorMsgTimeout);
-            }, 2000);
+                clearTimeout(errorTimeout);
+            }, 5000);
         }
     }
 
@@ -260,7 +265,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
         }
         catch (err) {
             setIsResetingPasswordStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -273,7 +278,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Forget Password")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content pt-5 text-white ps-4 pe-4 text-center">
                     <div className="container-fluid">
@@ -390,8 +395,8 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                     </div>
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

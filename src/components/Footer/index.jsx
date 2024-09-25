@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.jpg";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { FaLongArrowAltRight, FaLongArrowAltLeft, FaCcPaypal, FaInstagram, FaTiktok } from "react-icons/fa";
@@ -10,6 +9,7 @@ import KnetLogo from "../../../public/images/knet-logo.png";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import axios from "axios";
+import { handleSelectUserLanguage } from "../../../public/global_functions/popular";
 
 export default function Footer() {
 
@@ -24,14 +24,9 @@ export default function Footer() {
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
-    }
 
     const handleSubscription = async (e, email) => {
         try {
@@ -69,9 +64,6 @@ export default function Footer() {
     return (
         <footer className="pt-4 pb-4">
             <div className="container">
-                {/* <div className="logo-box">
-                    <img src={ubuybluesLogo.src} alt="ubuyblues logo for footer" className="ubuyblues-logo-for-footer" />
-                </div> */}
                 <div className="row align-items-center mb-4">
                     <div className="col-xl-3">
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Our links").toUpperCase()}</h5>

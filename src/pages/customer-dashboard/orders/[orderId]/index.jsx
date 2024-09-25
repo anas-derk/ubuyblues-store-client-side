@@ -14,7 +14,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -44,9 +44,9 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -72,13 +72,13 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                     }
                 })
                 .catch(async (err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.replace("/auth");
                     }
                     else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else router.replace("/auth");
@@ -95,7 +95,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Order Details")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <section className="page-content page d-flex justify-content-center align-items-center flex-column pt-5 pb-4">
                     <div className="container-fluid">
@@ -224,8 +224,8 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                 </section>
                 {/* End Content Section */}
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

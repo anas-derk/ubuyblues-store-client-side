@@ -15,7 +15,7 @@ export default function AllBrands({ storeId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
@@ -52,12 +52,13 @@ export default function AllBrands({ storeId }) {
                     setIsGetUserInfo(false);
                 })
                 .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsGetUserInfo(false);
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -83,7 +84,7 @@ export default function AllBrands({ storeId }) {
             })
             .catch(() => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, []);
 
@@ -124,7 +125,7 @@ export default function AllBrands({ storeId }) {
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("All The Brands Of The Store")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content pb-5 pt-5">
                     <div className="container-fluid">
@@ -147,8 +148,8 @@ export default function AllBrands({ storeId }) {
                 </div>
                 <Footer />
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage  errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

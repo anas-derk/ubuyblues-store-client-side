@@ -17,7 +17,7 @@ export default function Cart({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -57,9 +57,9 @@ export default function Cart({ countryAsProperty }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -74,12 +74,13 @@ export default function Cart({ countryAsProperty }) {
                     setIsGetUserInfo(false);
                 })
                 .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsGetUserInfo(false);
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -120,9 +121,8 @@ export default function Cart({ countryAsProperty }) {
                         setIsGetGroupedProductsByStoreId(false);
                     })
                     .catch((err) => {
-                        console.log(err);
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     });
             } else {
                 setIsGetGroupedProductsByStoreId(false);
@@ -140,70 +140,80 @@ export default function Cart({ countryAsProperty }) {
     }, [isGetGroupedProductsByStoreId, isGetUserInfo]);
 
     const updateProductQuantity = async (productId, operation) => {
-        switch (operation) {
-            case "increase-product-quantity": {
-                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
-                tempAllProductsDataInsideTheCart.forEach((product) => {
-                    if (product._id === productId && product.quantity < 50) product.quantity++;
-                });
-                updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
-                const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
-                let tempPricesDetailsSummary = [];
-                result.data.productByIds.forEach((data) => {
-                    tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
-                });
-                setPricesDetailsSummary(tempPricesDetailsSummary);
-                setAllProductsData(result.data.productByIds);
-                break;
+        try {
+            switch (operation) {
+                case "increase-product-quantity": {
+                    const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+                    tempAllProductsDataInsideTheCart.forEach((product) => {
+                        if (product._id === productId && product.quantity < 50) product.quantity++;
+                    });
+                    updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
+                    const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
+                    let tempPricesDetailsSummary = [];
+                    result.data.productByIds.forEach((data) => {
+                        tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
+                    });
+                    setPricesDetailsSummary(tempPricesDetailsSummary);
+                    setAllProductsData(result.data.productByIds);
+                    break;
+                }
+                case "decrease-product-quantity": {
+                    const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+                    tempAllProductsDataInsideTheCart.forEach((product) => {
+                        if (product._id === productId && product.quantity > 1) product.quantity--;
+                    });
+                    updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
+                    const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
+                    let tempPricesDetailsSummary = [];
+                    result.data.productByIds.forEach((data) => {
+                        tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
+                    });
+                    setPricesDetailsSummary(tempPricesDetailsSummary);
+                    setAllProductsData(result.data.productByIds);
+                    break;
+                }
+                default: {
+                    console.log("Error, Wrong Operation !!");
+                }
             }
-            case "decrease-product-quantity": {
-                const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
-                tempAllProductsDataInsideTheCart.forEach((product) => {
-                    if (product._id === productId && product.quantity > 1) product.quantity--;
-                });
-                updateCartInLocalStorage(tempAllProductsDataInsideTheCart);
-                const result = await getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id));
-                let tempPricesDetailsSummary = [];
-                result.data.productByIds.forEach((data) => {
-                    tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
-                });
-                setPricesDetailsSummary(tempPricesDetailsSummary);
-                setAllProductsData(result.data.productByIds);
-                break;
-            }
-            default: {
-                console.log("Error, Wrong Operation !!");
-            }
+        }
+        catch (err) {
+            console.log(err);
         }
     }
 
     const deleteProduct = async (productId) => {
-        const newProductsData = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage)).filter((product) => product._id !== productId);
-        updateCartInLocalStorage(newProductsData);
-        if (newProductsData.length > 0) {
-            const result = await getProductsByIds(newProductsData.map((product) => product._id));
-            let tempPricesDetailsSummary = [], tempProductsCountInCart = 0;
-            result.data.productByIds.forEach((data) => {
-                tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
-                tempProductsCountInCart += data.products.length;
-            });
-            setPricesDetailsSummary(tempPricesDetailsSummary);
-            setAllProductsData(result.data.productByIds);
-            dispatch({
-                type: "(Add / Delete) (To / From ) Cart",
-                productsCountInCart: tempProductsCountInCart
-            });
-        } else {
-            setPricesDetailsSummary([{
-                totalPriceBeforeDiscount: 0,
-                totalDiscount: 0,
-                totalPriceAfterDiscount: 0,
-            }]);
-            setAllProductsData([]);
-            dispatch({
-                type: "(Add / Delete) (To / From ) Cart",
-                productsCountInCart: 0
-            });
+        try {
+            const newProductsData = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage)).filter((product) => product._id !== productId);
+            updateCartInLocalStorage(newProductsData);
+            if (newProductsData.length > 0) {
+                const result = await getProductsByIds(newProductsData.map((product) => product._id));
+                let tempPricesDetailsSummary = [], tempProductsCountInCart = 0;
+                result.data.productByIds.forEach((data) => {
+                    tempPricesDetailsSummary.push(calcTotalPrices(currentDate, data.products));
+                    tempProductsCountInCart += data.products.length;
+                });
+                setPricesDetailsSummary(tempPricesDetailsSummary);
+                setAllProductsData(result.data.productByIds);
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Cart",
+                    productsCountInCart: tempProductsCountInCart
+                });
+            } else {
+                setPricesDetailsSummary([{
+                    totalPriceBeforeDiscount: 0,
+                    totalDiscount: 0,
+                    totalPriceAfterDiscount: 0,
+                }]);
+                setAllProductsData([]);
+                dispatch({
+                    type: "(Add / Delete) (To / From ) Cart",
+                    productsCountInCart: 0
+                });
+            }
+        }
+        catch (err) {
+            console.log(err);
         }
     }
 
@@ -216,7 +226,7 @@ export default function Cart({ countryAsProperty }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Cart")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content pt-5">
                     <div className="container-fluid text-white text-center mb-4">
@@ -379,8 +389,8 @@ export default function Cart({ countryAsProperty }) {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

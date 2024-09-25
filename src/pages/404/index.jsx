@@ -12,7 +12,7 @@ export default function PageNotFound() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const { t, i18n } = useTranslation();
 
@@ -32,11 +32,13 @@ export default function PageNotFound() {
                     setIsLoadingPage(false);
                 })
                 .catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                    } else {
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                    }
+                    else {
+                        setIsLoadingPage(false);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -49,7 +51,7 @@ export default function PageNotFound() {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Page Not Found")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content pt-5 pb-5">
                     <BiError className="error-404-icon" />
@@ -60,8 +62,8 @@ export default function PageNotFound() {
                     <Link href="/" className="home-page-link-button">{t("Or Go To Home Page")}</Link>
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

@@ -29,7 +29,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -80,6 +80,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isSuccessDeleteProductToFavoriteUserProductsList, setIsSuccessDeleteProductToFavoriteUserProductsList] = useState(false);
 
     const [errorInAddProductToFavoriteUserProductsList, setErrorInAddProductToFavoriteUserProductsList] = useState("");
+
+    const [errorInDeleteProductFromFavoriteUserProductsList, setErrorInDeleteProductFromFavoriteUserProductsList] = useState("");
 
     const [isSelectProductRating, setIsSelectProductRating] = useState(false);
 
@@ -144,9 +146,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -215,12 +217,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 }
             })
             .catch((err) => {
-                if (err?.response?.data?.msg === "Unauthorized Error") {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                if (err?.response?.status === 401) {
+                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                     setIsGetUserInfo(false);
-                } else {
+                }
+                else {
                     setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                    setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                 }
             });
     }, [productIdAsProperty]);
@@ -303,13 +306,19 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
-                return;
             }
-            setIsWaitAddProductToFavoriteUserProductsList(false);
+            else {
+                setIsWaitAddProductToFavoriteUserProductsList(false);
+                setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorInAddProductToFavoriteUserProductsList("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -336,7 +345,19 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
         }
         catch (err) {
-            setIsWaitDeleteProductToFavoriteUserProductsList(false);
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
+                setIsDisplayErrorPopup(true);
+            }
+            else {
+                setIsWaitDeleteProductToFavoriteUserProductsList(false);
+                setErrorInDeleteProductFromFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorInDeleteProductFromFavoriteUserProductsList("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -412,7 +433,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             setIsWaitAddToCart(false);
-            setErrorInAddToCart("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            setErrorInAddToCart(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorInAddToCartTimeout = setTimeout(() => {
                 setErrorInAddToCart(false);
                 clearTimeout(errorInAddToCartTimeout);
@@ -440,13 +461,19 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                setErrorType("user-not-logged-in-for-rating");
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
-                return;
             }
-            setIsSelectProductRating(false);
+            else {
+                setIsSelectProductRating(false);
+                setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorInAddProductToFavoriteUserProductsList("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -571,12 +598,18 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
         }
         catch (err) {
-            setWaitAddNewReferalMsg("");
-            setErrorAddNewReferalMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorAddNewReferalMsg("");
-                clearTimeout(errorTimeout);
-            }, 2000);
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                await router.replace("/auth");
+            }
+            else {
+                setWaitAddNewReferalMsg(false);
+                setErrorAddNewReferalMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorAddNewReferalMsg("");
+                    clearTimeout(errorTimeout);
+                }, 2000);
+            }
         }
     }
 
@@ -639,7 +672,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             <Head>
                 <title>{t("Ubuyblues Store")} - {t("Product Details")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <NavigateToUpOrDown />
                 {/* Start Share Options Box */}
@@ -960,8 +993,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div >
     );
 }

@@ -21,7 +21,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -33,11 +33,13 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const [isWaitGetWalletProductsStatus, setIsWaitGetWalletProductsStatus] = useState(true);
 
+    const [selectedWalletProduct, setSelectedWalletProduct] = useState(-1);
+
     const [isDeletingWalletProduct, setIsDeletingWalletProduct] = useState(false);
 
     const [isSuccessDeletingWalletProductProduct, setIsSuccessDeletingWalletProduct] = useState(false);
 
-    const [errorMsgOnDeletingFavoriteProduct, setErrorMsgOnDeletingFavoriteProduct] = useState(false);
+    const [errorMsgOnDeletingWalletProduct, setErrorMsgOnDeletingWalletProduct] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -67,9 +69,9 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -96,12 +98,13 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                     }
                 })
                 .catch(async (err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.replace("/auth");
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -117,12 +120,11 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const getWalletProductsCount = async (filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/wallet/wallet-products-count?${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/wallet/wallet-products-count?${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
-            });
-            return res.data;
+            })).data;
         }
         catch (err) {
             throw Error(err);
@@ -131,12 +133,11 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const getAllWalletProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            const res = await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
-            });
-            return res.data;
+            })).data;
         }
         catch (err) {
             throw Error(err);
@@ -197,16 +198,19 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             }, 1500);
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.replace("/auth");
-                return;
             }
-            setIsDeletingWalletProduct(false);
-            setErrorMsgOnDeletingFavoriteProduct("Sorry, Someting Went Wrong, Please Repeate The Proccess !!");
-            let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                setErrorMsgOnDeletingFavoriteProduct("");
-                clearTimeout(successDeletingFavoriteProductMsgTimeOut);
-            }, 1500);
+            else {
+                setIsDeletingWalletProduct(false);
+                setErrorMsgOnDeletingWalletProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
+                    setErrorMsgOnDeletingWalletProduct("");
+                    setSelectedWalletProduct(-1);
+                    clearTimeout(successDeletingFavoriteProductMsgTimeOut);
+                }, 1500);
+            }
         }
     }
 
@@ -215,7 +219,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Customer Wallet Products")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content page pt-5">
                     <div className="container-fluid  align-items-center pb-4">
@@ -250,7 +254,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                     <td>{(walletProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
+                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingWalletProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                         {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         <Link
@@ -291,7 +295,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                         <tr>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingFavoriteProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
+                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingWalletProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
                                                                 {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 <Link
@@ -329,8 +333,8 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

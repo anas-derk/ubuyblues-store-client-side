@@ -20,7 +20,7 @@ export default function UserAuth() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [appearedAuthPartName, setAppearedAuthPartName] = useState("login");
 
@@ -67,12 +67,13 @@ export default function UserAuth() {
                         setIsLoadingPage(false);
                     }
                 }).catch((err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         setIsLoadingPage(false);
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -133,7 +134,7 @@ export default function UserAuth() {
         }
         catch (err) {
             setIsLoginingStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -176,7 +177,7 @@ export default function UserAuth() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsSignupStatus(true);
-                const result =( await axios.post(`${process.env.BASE_API_URL}/users/create-new-user`, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/users/create-new-user`, {
                     email: emailForSignup,
                     password: passwordForSignup,
                     language : i18n.language
@@ -199,11 +200,11 @@ export default function UserAuth() {
         }
         catch (err) {
             setIsSignupStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Try Again The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
-            }, 2000);
+            }, 5000);
         }
     }
 
@@ -248,7 +249,7 @@ export default function UserAuth() {
             <Head>
                 <title>{t(process.env.storeName)} - {t("User Auth")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid p-4 text-white text-center">
@@ -377,8 +378,8 @@ export default function UserAuth() {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

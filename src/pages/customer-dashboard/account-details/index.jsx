@@ -17,7 +17,7 @@ export default function CustomerAccountDetails() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [userInfo, setUserInfo] = useState({
         email: "",
@@ -70,12 +70,13 @@ export default function CustomerAccountDetails() {
                     }
                 })
                 .catch(async (err) => {
-                    if (err?.response?.data?.msg === "Unauthorized Error") {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                         await router.replace("/auth");
-                    } else {
+                    }
+                    else {
                         setIsLoadingPage(false);
-                        setIsErrorMsgOnLoadingThePage(true);
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     }
                 });
         } else {
@@ -193,12 +194,11 @@ export default function CustomerAccountDetails() {
                     newUserInfo = { ...newUserInfo, password: currentPassword, newPassword: newPassword };
                 }
                 setIsWaitStatus(true);
-                const res = await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, newUserInfo, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, newUserInfo, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
-                });
-                const result = res.data;
+                })).data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);
@@ -216,17 +216,18 @@ export default function CustomerAccountDetails() {
             }
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.replace("/auth");
-                return;
             }
-            setIsWaitStatus(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(errorTimeout);
-            }, 2000);
+            else {
+                setIsWaitStatus(false);
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -235,7 +236,7 @@ export default function CustomerAccountDetails() {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Customer Account Info")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content page pt-5">
                     <div className="container-fluid align-items-center pb-4">
@@ -395,8 +396,8 @@ export default function CustomerAccountDetails() {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

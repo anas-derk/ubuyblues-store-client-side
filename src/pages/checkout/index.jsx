@@ -13,7 +13,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo } from "../../../public/global_functions/popular";
+import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { SiBinance } from "react-icons/si";
@@ -22,7 +22,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
-    const [isErrorMsgOnLoadingThePage, setIsErrorMsgOnLoadingThePage] = useState(false);
+    const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
 
@@ -90,8 +90,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem("asfour-store-language");
-        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en");
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
     useEffect(() => {
@@ -105,7 +105,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         })
             .catch(() => {
                 setIsLoadingPage(false);
-                setIsErrorMsgOnLoadingThePage(true);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
     }, [countryAsProperty]);
 
@@ -140,12 +140,13 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 setIsGetStoreDetails(false);
             })
             .catch((err) => {
-                if (err?.response?.data?.msg === "Unauthorized Error") {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                if (err?.response?.status === 401) {
+                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                     setIsGetUserInfo(false);
-                } else {
+                }
+                else {
                     setIsLoadingPage(false);
-                    setIsErrorMsgOnLoadingThePage(true);
+                    setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                 }
             });
     }, [storeId]);
@@ -157,7 +158,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }, [isGetUserInfo, isGetStoreDetails]);
 
     const getAndSetUserInfoAsGuest = () => {
-        const userAddresses = JSON.parse(localStorage.getItem("ubuyblues-store-user-addresses"));
+        const userAddresses = JSON.parse(localStorage.getItem(process.env.userAddressesFieldNameInLocalStorage));
         if (userAddresses) {
             const userInfo = { billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress };
             setUserInfo(userInfo);
@@ -245,11 +246,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
         }
         return tempShippingCost;
-    }
-
-    const handleSelectUserLanguage = (userLanguage) => {
-        i18n.changeLanguage(userLanguage);
-        document.body.lang = userLanguage;
     }
 
     const getProductsByIdsAndStoreId = async (storeId, productsIds) => {
@@ -342,7 +338,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             setIsWaitApplyCoupon(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -529,7 +525,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitCreateNewOrder(true);
                 if (isSavePaymentInfo) {
-                    localStorage.setItem("ubuyblues-store-user-addresses", JSON.stringify({
+                    localStorage.setItem(process.env.userAddressesFieldNameInLocalStorage, JSON.stringify({
                         billingAddress: {
                             firstName: userInfo ? userInfo.billingAddress.firstName : "",
                             lastName: userInfo ? userInfo.billingAddress.lastName : "",
@@ -556,7 +552,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         },
                     }));
                 } else {
-                    localStorage.removeItem("ubuyblues-store-user-addresses");
+                    localStorage.removeItem(process.env.userAddressesFieldNameInLocalStorage);
                 }
                 const result = await createNewOrder(getOrderDetailsForCreating());
                 setIsWaitCreateNewOrder(false);
@@ -574,17 +570,18 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                 await router.replace("/auth");
-                return;
             }
-            setIsWaitCreateNewOrder(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(errorTimeout);
-            }, 2000);
+            else {
+                setIsWaitCreateNewOrder(false);
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -628,16 +625,21 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     const createPayPalOrder = async (data, actions) => {
-        return actions.order.create({
-            purchase_units: [
-                {
-                    amount: {
-                        currency_code: "USD",
-                        value: pricesDetailsSummary.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts,
+        try{
+            return actions.order.create({
+                purchase_units: [
+                    {
+                        amount: {
+                            currency_code: "USD",
+                            value: pricesDetailsSummary.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts,
+                        }
                     }
-                }
-            ]
-        });
+                ]
+            });
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
 
     const approveOnPayPalOrder = async () => {
@@ -650,12 +652,18 @@ export default function Checkout({ countryAsProperty, storeId }) {
             await router.push(`/confirmation/${result.data.orderId}?country=${countryAsProperty}`);
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                await router.push("/auth");
-                return;
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                await router.replace("/auth");
             }
-            setIsWaitApproveOnPayPalOrder(false);
+            else {
+                setIsWaitApproveOnPayPalOrder(false);
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -832,7 +840,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 if (!result.error) {
                     if (paymentGateway === "tap") {
                         await router.push(result.data.transaction.url);
-                    } else  {
+                    } else {
                         await router.push(result.data.checkoutURL);
                     }
                 } else {
@@ -846,17 +854,18 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
         }
         catch (err) {
-            if (err?.response?.data?.msg === "Unauthorized Error") {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
-                await router.push("/auth");
-                return;
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                await router.replace("/auth");
             }
-            setIsWaitCreateNewOrder(false);
-            setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-            let errorTimeout = setTimeout(() => {
-                setErrorMsg("");
-                clearTimeout(errorTimeout);
-            }, 2000);
+            else {
+                setIsWaitCreateNewOrder(false);
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
         }
     }
 
@@ -870,7 +879,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             <Head>
                 <title>{t(process.env.storeName)} - {t("Checkout")}</title>
             </Head>
-            {!isLoadingPage && !isErrorMsgOnLoadingThePage && <>
+            {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">
                     <span class="loader mb-4"></span>
                     <p>{t("Please Wait")} ...</p>
@@ -1556,8 +1565,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     <Footer />
                 </div>
             </>}
-            {isLoadingPage && !isErrorMsgOnLoadingThePage && <LoaderPage />}
-            {isErrorMsgOnLoadingThePage && <ErrorOnLoadingThePage />}
+            {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }
