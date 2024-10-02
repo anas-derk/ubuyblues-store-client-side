@@ -56,6 +56,7 @@ export default function UserAuth() {
     }, []);
 
     useEffect(() => {
+        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {

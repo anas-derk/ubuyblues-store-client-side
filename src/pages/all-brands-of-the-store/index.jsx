@@ -82,7 +82,7 @@ export default function AllBrands({ storeId }) {
                 }
                 setIsGetBrands(false);
             })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
@@ -99,7 +99,7 @@ export default function AllBrands({ storeId }) {
             return (await axios.get(`${process.env.BASE_API_URL}/brands/brands-count?${filters ? filters : ""}`)).data;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     }
 
@@ -108,16 +108,21 @@ export default function AllBrands({ storeId }) {
             return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     }
 
     const getNextPage = async () => {
-        setIsGetBrands(true);
-        const newCurrentPage = currentPage + 1;
-        setAllBrandsInsideThePage([...allBrandsInsideThePage, ...(await getAllBrandsInsideThePage(newCurrentPage, pageSize, `storeId=${storeDetails._id}`)).data]);
-        setCurrentPage(newCurrentPage);
-        setIsGetBrands(false);
+        try {
+            setIsGetBrands(true);
+            const newCurrentPage = currentPage + 1;
+            setAllBrandsInsideThePage([...allBrandsInsideThePage, ...(await getAllBrandsInsideThePage(newCurrentPage, pageSize, `storeId=${storeDetails._id}`)).data]);
+            setCurrentPage(newCurrentPage);
+            setIsGetBrands(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     return (
@@ -149,7 +154,7 @@ export default function AllBrands({ storeId }) {
                 <Footer />
             </>}
             {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
-            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage  errorMsg={errorMsgOnLoadingThePage} />}
+            {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div>
     );
 }

@@ -5,7 +5,7 @@ const getFlashProductsCount = async (filters) => {
         return (await axios.get(`${process.env.BASE_API_URL}/products/flash-products-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -14,7 +14,7 @@ const getProductsCount = async (filters) => {
         return (await axios.get(`${process.env.BASE_API_URL}/products/products-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -23,7 +23,7 @@ const getAllFlashProductsInsideThePage = async (pageNumber, pageSize, filters, s
         return (await axios.get(`${process.env.BASE_API_URL}/products/all-flash-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -32,7 +32,7 @@ const getAllProductsInsideThePage = async (pageNumber, pageSize, filters, sortDe
         return (await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -64,7 +64,7 @@ const getStoreDetails = async (storeId) => {
         return res.data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -73,7 +73,7 @@ const getCategoriesCount = async (filters) => {
         return (await axios.get(`${process.env.BASE_API_URL}/categories/categories-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -82,7 +82,7 @@ const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
         return (await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -91,7 +91,7 @@ const getStoresCount = async (filters) => {
         return (await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?${filters ? filters : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -100,7 +100,7 @@ const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
         return (await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -192,7 +192,7 @@ const getFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
         })).data;
     }
     catch(err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -231,7 +231,7 @@ const getFavoriteProductsCount = async (filters) => {
         })).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -242,7 +242,7 @@ const getProductsByIds = async (productsIds) => {
         })).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -251,7 +251,7 @@ const getAppearedSections = async () => {
         return (await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
@@ -260,7 +260,7 @@ const getOrderDetails = async (orderId) => {
         return (await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}`)).data;
     }
     catch (err) {
-        throw Error(err);
+        throw err;
     }
 }
 
