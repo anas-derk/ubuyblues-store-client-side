@@ -117,7 +117,7 @@ export default function Header() {
         try {
             switch (country) {
                 case "kuwait": {
-                    localStorage.setItem("asfour-store-country", country);
+                    localStorage.setItem(process.env.selectedCountryByUser, country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -128,7 +128,7 @@ export default function Header() {
                     return;
                 }
                 case "germany": {
-                    localStorage.setItem("asfour-store-country", country);
+                    localStorage.setItem(process.env.selectedCountryByUser, country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -139,7 +139,7 @@ export default function Header() {
                     return;
                 }
                 case "turkey": {
-                    localStorage.setItem("asfour-store-country", country);
+                    localStorage.setItem(process.env.selectedCountryByUser, country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
