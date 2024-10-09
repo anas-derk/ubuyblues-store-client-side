@@ -208,7 +208,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     const filtersAsString = getFiltersAsQuery(tempFilters);
                     if (storeDetailsResult.data.isMainStore) {
                         let allTextAdsTemp = [], allImageAdsTemp = [];
-                        (await getAllAds()).data.forEach((ad) => {
+                        (await getAllAds(filtersAsString)).data.forEach((ad) => {
                             if (ad.type === "text") allTextAdsTemp.push(ad);
                             else allImageAdsTemp.push(ad);
                         });
@@ -334,7 +334,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const getAllAds = async () => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads?language=${i18n.language}`)).data;
         }
         catch (err) {
             throw err;
@@ -426,7 +426,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const getLastSevenBrandsByStoreId = async (filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/brands/last-seven-brands-by-store-id?${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/brands/last-seven-brands-by-store-id?language=${i18n.language}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -450,71 +450,86 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const getPreviousPage = async (section) => {
-        if (section === "categories") {
-            setIsGetCategories(true);
-            const newCurrentPage = currentPage.forCategories - 1;
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
-            setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
-            setIsGetCategories(false);
+        try {
+            if (section === "categories") {
+                setIsGetCategories(true);
+                const newCurrentPage = currentPage.forCategories - 1;
+                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
+                setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
+                setIsGetCategories(false);
+            }
+            else if (section === "products") {
+                setIsGetProducts(true);
+                const newCurrentPage = currentPage.forProducts - 1;
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+                setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+                setIsGetProducts(false);
+            }
+            else {
+                setIsGetStores(true);
+                const newCurrentPage = currentPage.forStores - 1;
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
+                setCurrentPage({ ...currentPage, forStores: newCurrentPage });
+                setIsGetStores(false);
+            }
         }
-        else if (section === "products") {
-            setIsGetProducts(true);
-            const newCurrentPage = currentPage.forProducts - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
-            setIsGetProducts(false);
-        }
-        else {
-            setIsGetStores(true);
-            const newCurrentPage = currentPage.forStores - 1;
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
-            setCurrentPage({ ...currentPage, forStores: newCurrentPage });
-            setIsGetStores(false);
+        catch (err) {
+            throw err;
         }
     }
 
     const getNextPage = async (section) => {
-        if (section === "categories") {
-            setIsGetCategories(true);
-            const newCurrentPage = currentPage.forCategories + 1;
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
-            setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
-            setIsGetCategories(false);
+        try {
+            if (section === "categories") {
+                setIsGetCategories(true);
+                const newCurrentPage = currentPage.forCategories + 1;
+                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
+                setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
+                setIsGetCategories(false);
+            }
+            else if (section === "products") {
+                setIsGetProducts(true);
+                const newCurrentPage = currentPage.forProducts + 1;
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+                setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+                setIsGetProducts(false);
+            }
+            else {
+                setIsGetStores(true);
+                const newCurrentPage = currentPage.forStores + 1;
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
+                setCurrentPage({ ...currentPage, forStores: newCurrentPage });
+                setIsGetStores(false);
+            }
         }
-        else if (section === "products") {
-            setIsGetProducts(true);
-            const newCurrentPage = currentPage.forProducts + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
-            setIsGetProducts(false);
-        }
-        else {
-            setIsGetStores(true);
-            const newCurrentPage = currentPage.forStores + 1;
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
-            setCurrentPage({ ...currentPage, forStores: newCurrentPage });
-            setIsGetStores(false);
+        catch (err) {
+            throw err;
         }
     }
 
     const getSpecificPage = async (pageNumber, section) => {
-        if (section === "categories") {
-            setIsGetCategories(true);
-            setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data);
-            setCurrentPage({ ...currentPage, forCategories: pageNumber });
-            setIsGetCategories(false);
+        try {
+            if (section === "categories") {
+                setIsGetCategories(true);
+                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data);
+                setCurrentPage({ ...currentPage, forCategories: pageNumber });
+                setIsGetCategories(false);
+            }
+            else if (section === "products") {
+                setIsGetProducts(true);
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+                setCurrentPage({ ...currentPage, forProducts: pageNumber });
+                setIsGetProducts(false);
+            }
+            else {
+                setIsGetStores(true);
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSizes.forStores, getFiltersAsQuery(filters))).data);
+                setCurrentPage({ ...currentPage, forStores: pageNumber });
+                setIsGetStores(false);
+            }
         }
-        else if (section === "products") {
-            setIsGetProducts(true);
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPage({ ...currentPage, forProducts: pageNumber });
-            setIsGetProducts(false);
-        }
-        else {
-            setIsGetStores(true);
-            setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSizes.forStores, getFiltersAsQuery(filters))).data);
-            setCurrentPage({ ...currentPage, forStores: pageNumber });
-            setIsGetStores(false);
+        catch (err) {
+            throw err;
         }
     }
 

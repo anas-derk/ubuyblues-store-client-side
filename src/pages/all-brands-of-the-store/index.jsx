@@ -96,7 +96,7 @@ export default function AllBrands({ storeId }) {
 
     const getBrandsCount = async (filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/brands/brands-count?${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/brands/brands-count?language=${i18n.language}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw err;
@@ -105,7 +105,7 @@ export default function AllBrands({ storeId }) {
 
     const getAllBrandsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw err;

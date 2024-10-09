@@ -131,7 +131,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 }
                 setIsGetProducts(false);
             })
-            .catch(() => {
+            .catch((err) => {
                 if (err?.response?.status === 401) {
                     localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                     setIsGetProducts(false);
@@ -151,10 +151,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }, [isGetUserInfo, isGetProducts]);
 
     const getCategoryInfo = async (categoryId) => {
-        try{
-            return (await axios.get(`${process.env.BASE_API_URL}/categories/category-info/${categoryId}`)).data;
+        try {
+            return (await axios.get(`${process.env.BASE_API_URL}/categories/category-info/${categoryId}?language=${i18n.language}`)).data;
         }
-        catch(err){
+        catch (err) {
             throw err;
         }
     }
@@ -174,26 +174,41 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }
 
     const getPreviousPage = async () => {
-        setIsGetProducts(true);
-        const newCurrentPage = currentPage - 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-        setCurrentPage(newCurrentPage);
-        setIsGetProducts(false);
+        try {
+            setIsGetProducts(true);
+            const newCurrentPage = currentPage - 1;
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+            setCurrentPage(newCurrentPage);
+            setIsGetProducts(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getNextPage = async () => {
-        setIsGetProducts(true);
-        const newCurrentPage = currentPage + 1;
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-        setCurrentPage(newCurrentPage);
-        setIsGetProducts(false);
+        try {
+            setIsGetProducts(true);
+            const newCurrentPage = currentPage + 1;
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+            setCurrentPage(newCurrentPage);
+            setIsGetProducts(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsGetProducts(true);
-        setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-        setCurrentPage(pageNumber);
-        setIsGetProducts(false);
+        try {
+            setIsGetProducts(true);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+            setCurrentPage(pageNumber);
+            setIsGetProducts(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const searchOnProduct = async (e, filters, sortDetails) => {

@@ -194,7 +194,7 @@ export default function CustomerAccountDetails() {
                     newUserInfo = { ...newUserInfo, password: currentPassword, newPassword: newPassword };
                 }
                 setIsWaitStatus(true);
-                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, newUserInfo, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info?language=${i18n.language}`, newUserInfo, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }

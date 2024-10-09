@@ -32,7 +32,7 @@ export default function Footer() {
         try {
             e.preventDefault();
             setWaitMsg("Please Wait ...");
-            const result = (await axios.post(`${process.env.BASE_API_URL}/subscriptions/add-new-subscription`, {
+            const result = (await axios.post(`${process.env.BASE_API_URL}/subscriptions/add-new-subscription?language=${i18n.language}`, {
                 email,
             })).data;
             setWaitMsg("");

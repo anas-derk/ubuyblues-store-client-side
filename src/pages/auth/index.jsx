@@ -117,7 +117,7 @@ export default function UserAuth() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsLoginingStatus(true);
-                const result = (await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}`)).data;
+                const result = (await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}&language=${i18n.language}`)).data;
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
@@ -178,7 +178,7 @@ export default function UserAuth() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsSignupStatus(true);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/users/create-new-user`, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/users/create-new-user?language=${i18n.language}`, {
                     email: emailForSignup,
                     password: passwordForSignup,
                     language : i18n.language
@@ -214,7 +214,7 @@ export default function UserAuth() {
             if (authType === "sign-up") setIsSignupStatus(true);
             else setIsLoginingStatus(true);
             let result = decode(credentialResponse.credential);
-            result = (await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&firstName=${result.given_name}&lastName=${result.family_name}&previewName=${result.name}`)).data;
+            result = (await axios.get(`${process.env.BASE_API_URL}/users/login-with-google?email=${result.email}&firstName=${result.given_name}&lastName=${result.family_name}&previewName=${result.name}&language=${i18n.language}`)).data;
             if (result.error) {
                 if (authType === "sign-up") setIsSignupStatus(true);
                 else setIsLoginingStatus(true);

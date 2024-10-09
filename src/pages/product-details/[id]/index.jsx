@@ -249,7 +249,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductInfo = async (productId) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/products/product-info/${productId}?language=${i18n.language}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -258,7 +258,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductRatingByUserId = async (productId) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
@@ -271,7 +271,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getSampleFromRelatedProductsInProduct = async (productId) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/products/sample-from-related-products-in-the-product/${productId}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/products/sample-from-related-products-in-the-product/${productId}?language=${i18n.language}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -285,7 +285,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsDisplayErrorPopup(true);
             } else {
                 setIsWaitAddProductToFavoriteUserProductsList(true);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}?language=${i18n.language}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
@@ -325,7 +325,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
@@ -376,7 +376,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
-                        
+
                         dispatch({
                             type: "(Add / Delete) (To / From ) Cart",
                             productsCountInCart: userCart.length
@@ -580,7 +580,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     localStorage.removeItem("asfour-store-referal-writer-info");
                 }
                 setWaitAddNewReferalMsg("Please Wait ...");
-                const result = (await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal`, referalDetails)).data;
+                const result = (await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal?language=${i18n.language}`, referalDetails)).data;
                 setWaitAddNewReferalMsg("");
                 if (!result.error) {
                     setSuccessAddNewReferalMsg(result.msg);
@@ -615,7 +615,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getProductReferalsCount = async (productId, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/referals/product-referals-count/${productId}?${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/referals/product-referals-count/${productId}?language=${i18n.language}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -624,7 +624,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const getAllProductReferalsInsideThePage = async (productId, pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/referals/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/referals/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw Error(err);
@@ -632,26 +632,41 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     }
 
     const getPreviousPage = async () => {
-        setIsGetProductReferals(true);
-        const newCurrentPage = currentPage - 1;
-        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsGetProductReferals(false);
+        try {
+            setIsGetProductReferals(true);
+            const newCurrentPage = currentPage - 1;
+            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsGetProductReferals(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getNextPage = async () => {
-        setIsGetProductReferals(true);
-        const newCurrentPage = currentPage + 1;
-        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsGetProductReferals(false);
+        try {
+            setIsGetProductReferals(true);
+            const newCurrentPage = currentPage + 1;
+            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsGetProductReferals(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsGetProductReferals(true);
-        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, pageNumber, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(pageNumber);
-        setIsGetProductReferals(false);
+        try {
+            setIsGetProductReferals(true);
+            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, pageNumber, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(pageNumber);
+            setIsGetProductReferals(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getFilteringString = (filters) => {

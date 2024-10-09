@@ -177,7 +177,7 @@ export default function CustomerBillingAddress() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitStatus(true);
-                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info`, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-user-info?language=${i18n.language}`, {
                     billingAddress: userInfo.billingAddress,
                 }, {
                     headers: {

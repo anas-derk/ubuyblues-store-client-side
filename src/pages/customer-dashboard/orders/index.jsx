@@ -119,51 +119,66 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getOrdersCount = async (filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
             })).data;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     }
 
     const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
             })).data;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     }
 
     const getPreviousPage = async () => {
-        setIsFilteringOrdersStatus(true);
-        const newCurrentPage = currentPage - 1;
-        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsFilteringOrdersStatus(false);
+        try {
+            setIsFilteringOrdersStatus(true);
+            const newCurrentPage = currentPage - 1;
+            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsFilteringOrdersStatus(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getNextPage = async () => {
-        setIsFilteringOrdersStatus(true);
-        const newCurrentPage = currentPage + 1;
-        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsFilteringOrdersStatus(false);
+        try {
+            setIsFilteringOrdersStatus(true);
+            const newCurrentPage = currentPage + 1;
+            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsFilteringOrdersStatus(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsFilteringOrdersStatus(true);
-        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(pageNumber);
-        setIsFilteringOrdersStatus(false);
+        try {
+            setIsFilteringOrdersStatus(true);
+            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(pageNumber);
+            setIsFilteringOrdersStatus(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getFilteringString = (filters) => {

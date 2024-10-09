@@ -193,7 +193,7 @@ export default function AddYourStore() {
                 formData.append("storeImg", storeData.image);
                 formData.append("language", i18n.language);
                 setIsWaitStatus(true);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store`, formData)).data;
+                const result = (await axios.post(`${process.env.BASE_API_URL}/stores/create-new-store?language=${i18n.language}`, formData)).data;
                 setIsWaitStatus(false);
                 if (!result.error) {
                     setSuccessMsg(result.msg);

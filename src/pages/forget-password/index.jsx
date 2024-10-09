@@ -166,7 +166,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsCheckingStatus(true);
-                const result = (await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userType}`)).data;
+                const result = (await axios.get(`${process.env.BASE_API_URL}/users/forget-password?email=${email}&userType=${userType}&language=${i18n.language}`)).data;
                 if (result.error) {
                     setIsCheckingStatus(false);
                     setErrorMsg(result.msg);
@@ -246,7 +246,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
-                const result = (await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}`)).data;
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}&language=${i18n.language}`)).data;
                 setIsResetingPasswordStatus(false);
                 if (!result.error) {
                     setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);

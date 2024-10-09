@@ -91,7 +91,7 @@ export default function ProductCard({
             const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
             if (userToken) {
                 setIsWaitAddProductToFavoriteUserProductsList(true);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}`, undefined, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}?language=${i18n.language}`, undefined, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                     }
@@ -127,7 +127,7 @@ export default function ProductCard({
     const deleteProductFromFavoriteUserProducts = async (productId) => {
         try {
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
-            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }

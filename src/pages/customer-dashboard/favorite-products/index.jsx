@@ -125,7 +125,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
@@ -137,26 +137,41 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }
 
     const getPreviousPage = async () => {
-        setIsWaitGetFavoriteProductsStatus(true);
-        const newCurrentPage = currentPage - 1;
-        setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsWaitGetFavoriteProductsStatus(false);
+        try {
+            setIsWaitGetFavoriteProductsStatus(true);
+            const newCurrentPage = currentPage - 1;
+            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsWaitGetFavoriteProductsStatus(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getNextPage = async () => {
-        setIsWaitGetFavoriteProductsStatus(true);
-        const newCurrentPage = currentPage + 1;
-        setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsWaitGetFavoriteProductsStatus(false);
+        try {
+            setIsWaitGetFavoriteProductsStatus(true);
+            const newCurrentPage = currentPage + 1;
+            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsWaitGetFavoriteProductsStatus(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsWaitGetFavoriteProductsStatus(true);
-        setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(pageNumber);
-        setIsWaitGetFavoriteProductsStatus(false);
+        try {
+            setIsWaitGetFavoriteProductsStatus(true);
+            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(pageNumber);
+            setIsWaitGetFavoriteProductsStatus(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getFilteringString = (filters) => {
@@ -170,7 +185,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         try {
             setIsDeletingFavoriteProduct(true);
             setSelectedFavoriteProduct(favoriteProductIndex);
-            await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}`, {
+            await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }

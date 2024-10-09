@@ -250,7 +250,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const getProductsByIdsAndStoreId = async (storeId, productsIds) => {
         try {
-            return (await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids-and-store-id?storeId=${storeId}`, {
+            return (await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids-and-store-id?storeId=${storeId}&language=${i18n.language}`, {
                 productsIds,
             })).data;
         }
@@ -317,7 +317,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitApplyCoupon(true);
-                const result = (await axios.get(`${process.env.BASE_API_URL}/coupons/coupon-details?code=${couponCode}`)).data;
+                const result = (await axios.get(`${process.env.BASE_API_URL}/coupons/coupon-details?code=${couponCode}&language=${i18n.language}`)).data;
                 setIsWaitApplyCoupon(false);
                 if (!result.error) {
                     const totalAmountBeforeApplyCoupon = pricesDetailsSummary.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts;
@@ -348,7 +348,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const createNewOrder = async (orderDetails) => {
         try {
-            return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}`, orderDetails, userToken > 0 ? {
+            return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}&language=${i18n.language}`, orderDetails, userToken > 0 ? {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
@@ -645,7 +645,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const approveOnPayPalOrder = async () => {
         try {
             setIsWaitApproveOnPayPalOrder(true);
-            const result = (await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}`)).data;
+            const result = (await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}?language=${i18n.language}`)).data;
             const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
             const orderProductsIds = allProductsData.map((product) => product._id);
             localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
@@ -832,7 +832,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitCreateNewOrder(true);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order?country=${countryAsProperty}`, getOrderDetailsForCreating(), userToken ? {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order?country=${countryAsProperty}&language=${i18n.language}`, getOrderDetailsForCreating(), userToken ? {
                     headers: {
                         Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                     }

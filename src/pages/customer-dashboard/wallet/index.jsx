@@ -31,7 +31,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const [allWalletProductsInsideThePage, setAllWalletProductsInsideThePage] = useState([]);
 
-    const [isWaitGetWalletProductsStatus, setIsWaitGetWalletProductsStatus] = useState(true);
+    const [isGetWalletProducts, setIsGetWalletProducts] = useState(true);
 
     const [selectedWalletProduct, setSelectedWalletProduct] = useState(-1);
 
@@ -65,7 +65,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isWaitGetWalletProductsStatus) {
+            if (!isGetWalletProducts) {
                 setIsLoadingPage(false);
             }
         })
@@ -91,7 +91,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
                         });
-                        setIsWaitGetWalletProductsStatus(false);
+                        setIsGetWalletProducts(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
@@ -113,10 +113,10 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        if (!isWaitGetWalletProductsStatus) {
+        if (!isGetWalletProducts) {
             setIsLoadingPage(false);
         }
-    }, [isWaitGetWalletProductsStatus]);
+    }, [isGetWalletProducts]);
 
     const getWalletProductsCount = async (filters) => {
         try {
@@ -127,44 +127,59 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             })).data;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     }
 
     const getAllWalletProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             })).data;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     }
 
     const getPreviousPage = async () => {
-        setIsWaitGetWalletProductsStatus(true);
-        const newCurrentPage = currentPage - 1;
-        setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsWaitGetWalletProductsStatus(false);
+        try {
+            setIsGetWalletProducts(true);
+            const newCurrentPage = currentPage - 1;
+            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsGetWalletProducts(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getNextPage = async () => {
-        setIsWaitGetWalletProductsStatus(true);
-        const newCurrentPage = currentPage + 1;
-        setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(newCurrentPage);
-        setIsWaitGetWalletProductsStatus(false);
+        try {
+            setIsGetWalletProducts(true);
+            const newCurrentPage = currentPage + 1;
+            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(newCurrentPage);
+            setIsGetWalletProducts(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getSpecificPage = async (pageNumber) => {
-        setIsWaitGetWalletProductsStatus(true);
-        setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
-        setCurrentPage(pageNumber);
-        setIsWaitGetWalletProductsStatus(false);
+        try {
+            setIsGetWalletProducts(true);
+            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setCurrentPage(pageNumber);
+            setIsGetWalletProducts(false);
+        }
+        catch (err) {
+            throw err;
+        }
     }
 
     const getFilteringString = (filters) => {
@@ -177,7 +192,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const deleteProductFromUserProductsWallet = async (walletProductIndex) => {
         try {
             setIsDeletingWalletProduct(true);
-            await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}`, {
+            await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
@@ -228,7 +243,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {allWalletProductsInsideThePage.length > 0 && !isWaitGetWalletProductsStatus && <section className="wallet-products-list-for-user data-box text-center">
+                                {allWalletProductsInsideThePage.length > 0 && !isGetWalletProducts && <section className="wallet-products-list-for-user data-box text-center">
                                     {windowInnerWidth > 991 ? <table className="wallet-products-table-for-user data-table mb-4 w-100">
                                         <thead>
                                             <tr>
@@ -310,8 +325,8 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                         ))}
                                     </div>}
                                 </section>}
-                                {allWalletProductsInsideThePage.length === 0 && !isWaitGetWalletProductsStatus && <NotFoundError errorMsg={t("Sorry, Can't Find Any Previous Products In Your History Wallet !!")} />}
-                                {isWaitGetWalletProductsStatus && <SectionLoader />}
+                                {allWalletProductsInsideThePage.length === 0 && !isGetWalletProducts && <NotFoundError errorMsg={t("Sorry, Can't Find Any Previous Products In Your History Wallet !!")} />}
+                                {isGetWalletProducts && <SectionLoader />}
                                 {totalPagesCount > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
