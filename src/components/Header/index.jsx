@@ -110,7 +110,7 @@ export default function Header() {
     const handleChangeLanguage = (language) => {
         i18n.changeLanguage(language);
         document.body.lang = language;
-        localStorage.setItem("asfour-store-language", language);
+        localStorage.setItem(process.env.userlanguageFieldNameInLocalStorage, language);
     }
 
     const handleSelectCountry = async (country) => {
