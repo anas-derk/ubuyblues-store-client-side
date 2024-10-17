@@ -215,8 +215,127 @@ export default function PolicesTermsAndConditions() {
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Changes to the Privacy Notice")}</h2>
                             <p className="mb-4">{t("We may update this privacy notice from time to time in response to legal, technical, contractual, regulatory, or business developments. When we update our privacy notice, we will take appropriate steps to notify you, in accordance with the significance of the changes we make. Your continued use of this website constitutes acceptance of these changes. We will obtain your consent to any material changes to the privacy notice where and to the extent required by applicable laws")} .</p>
                             <p className="mb-4">{t("You can find out the last update date of the corresponding privacy notice by checking the 'Last Modified' date displayed at the end of the corresponding privacy notice")} .</p>
-                            <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Complaint Escalation Process")}</h2>
-                            
+                            <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Payment")}</h2>
+                            <p className="mb-4">{t("We accept Visa, MasterCard, and KNET cards, as well as any other payment methods that may be clearly announced on the website from time to time. Payments will be deducted from your account and released before your order is sent. You confirm that you are the owner of the credit or debit card used, or that the owner of the credit or debit card has specifically authorized you to use it. All credit and debit cardholders are subject to data validation and authentication processes by the card issuer")} .</p>
+                            <p className="mb-4">{t("We take reasonable care to maintain the security of the website, and all financial transactions on credit or debit cards on this site are processed through secure electronic payment gateways where card data is encrypted in a secure host environment. We securely store your credit or debit card information on our systems, and this data is fully encrypted and used solely to process transactions for the cards you have created")} .</p>
+                            <p className="mb-4">{t("We also give a reasonable amount of care and as much as possible to maintain the security of data related to purchase orders and payments. Accordingly, in the absence of negligence on our part, we cannot be held responsible for any loss you may incur if another party obtains any data, you provide when accessing the website or making a purchase through it without permission")} .</p>
+                            <h3 className="mb-4">{t("TABBY")}</h3>
+                            <h4 className="mb-4">{t("What is Tabby service ?")}</h4>
+                            <p className="mb-4">{t("It is a service provided by UbuyBlues in collaboration with Tabby, which allows the customer to purchase products through the UbuyBlues website or app and pay for them in monthly installments")} .</p>
+                            <h5 className="mb-4">{t("Advantages")}</h5>
+                            <ul>
+                                <li className="mb-2">{t("4 monthly installments")} .</li>
+                                <li className="mb-4">{t("Immediate approval")} .</li>
+                            </ul>
+                            <h5 className="mb-4">{t("Terms and conditions")}</h5>
+                            <ul>
+                                <li className="mb-2">{t("The Tabby payment service is available on the UbuyBlues website")} .</li>
+                                <li className="mb-2">{t("Payment through Tabby service is available on all products")} .</li>
+                                <li className="mb-2">{t("Products purchased through the Tabby service cannot be returned")} .</li>
+                                <li className="mb-2">{t("UbuyBlues' policy applies to exchanges and returns")} .</li>
+                                <li className="mb-2">{t("Service fees will apply when paying with Tabby")} .</li>
+                                <li className="mb-2">{t("UbuyBlues is not responsible for any issues related to the customer's account or payment in the Tabby app. For technical issues with the Tabby app or website, please contact Tabby customer service at +96522270163 or email: help@tabby.ai")} .</li>
+                                <li className="mb-4">{t("A good payment history with Tabby can improve your chances of getting approved for more purchases, in addition to the duration you have been using Tabby for shopping")} .</li>
+                            </ul>
+                            <h5 className="mb-4">{t("The transaction may be rejected for one of the following reasons")}</h5>
+                            <ul>
+                                <li className="mb-2">{t("Not paying the payments on time. Pay it off and try again")} .</li>
+                                <li className="mb-2">{t("You have a negative balance")} .</li>
+                                <li className="mb-2">{t("The total amount in the cart may have exceeded the limit, please removed some items and try again")} .</li>
+                                <li className="mb-2">{t("Uploading an incorrect or unclear ID card")} .</li>
+                                <li className="mb-2">{t("Service fees will apply when paying with Tabby")} .</li>
+                                <li className="mb-4">{t("In case of non-payment on time, a fee of 1.25 Kuwaiti Dinars will be charged after the due date. If you do not make the payment within 14 days, an additional fee of 2.5 Kuwaiti Dinars will be applied. In case of a delay of 28 days, an additional fee of 2.5 Kuwaiti Dinars will be added")} .</li>
+                            </ul>
+                            <h5 className="mb-4">{t("Frequently Asked Questions")}</h5>
+                            <h5 className="mb-4">{t("What are the requirements for using Tabby ?")}</h5>
+                            <p className="mb-4">{t("Tabby is available to all citizens and residents. We only need your mobile phone number and a valid payment method")} .</p>
+                            <h5 className="mb-4">{t("What is the minimum and maximum purchase amount using the Tabby service ?")}</h5>
+                            <p className="mb-4">{t("The minimum purchase is 20 Kuwaiti Dinars, and the maximum is 500 Kuwaiti Dinars")} .</p>
+                            <p className="mb-4">{t("In case the invoice amount is more than 500 Kuwaiti Dinars, the customer can pay the remaining amount as follows")} .</p>
+                            <p className="mb-4">{t("The remaining amount will be added to the first installment payment. For example")} :</p>
+                            <p className="mb-4">{t("If the invoice amount is 700 Kuwaiti Dinars and the customer's approval from Tabby is 500 Kuwaiti Dinars. The client will pay the remaining amount of 200 Kuwaiti Dinars with the first installment of 125 Kuwaiti Dinars, thus the total of the first payment will be 325 Kuwaiti Dinars, the second payment will be 125 Kuwaiti Dinars, the third payment will be 125 Kuwaiti Dinars, and the fourth payment will be 125 Kuwaiti Dinars")} .</p>
+                            <h5 className="mb-4">{t("Is there a limit to how much I can spend on a single purchase with Tabby ?")}</h5>
+                            <p className="mb-4">{t("The maximum for a single purchase is 700 Kuwaiti Dinars. The decision on the limit also depends on")} .</p>
+                            <p className="mb-4">{t("Your previous commitment to pay Tabi installments")} .</p>
+                            <p className="mb-4">{t("Your remaining balance and unpaid payments")} .</p>
+                            <p className="mb-4">{t("The size of the shopping cart")} .</p>
+                            <p className="mb-4">{t("Other factors for approving consent cannot be disclosed for security reasons")} .</p>
+                            <h5 className="mb-4">{t("How do I pay ?")}</h5>
+                            <p className="mb-4">{t("The easiest and fastest way to make and review payments is through the Tabby app. When using any card while shopping with Tabby, payments will not be automatically processed, and you will need to log into your Tabby account to make the payment. You will receive emails and text messages to remind you of the due dates for upcoming payments. In case you wish to make an early payment, log in online, or download the app, select the payment you want to make, and choose 'Payment Options'. There are no fees when you make early payments")} .</p>
+                            <p className="mb-4">{t("Follow the steps below to complete the payment process")} :</p>
+                            <ol>
+                                <li className="mb-4">{t("Log in to the Tabby app or Tabby online")} .</li>
+                                <li className="mb-4">{t("Click on the 'My Payments' option from the menu")} .</li>
+                                <li className="mb-4">{t("Choose the order you want to pay for or pay all remaining installments")} .</li>
+                                <li className="mb-4">{t("Follow the displayed steps to complete the payment and ensure that the correct payment details are used when making the payment to avoid any mistakes")} .</li>
+                            </ol>
+                            <h5 className="mb-4">{t("What are the payment methods on the Tabby website or app ?")}</h5>
+                            <p className="mb-4">{t("Tabby accepts Apple Pay and all bank and credit cards, such as MasterCard and Visa")} .</p>
+                            <h5 className="mb-4">{t("Are you having trouble paying for your order with Tabby ?")}</h5>
+                            <p className="mb-4">{t("Tabby does not approve all purchase requests; Tabby is committed to promoting responsible spending habits. We understand that receiving a purchase request rejection is frustrating, especially since previous transactions from you have been accepted. But Tabby relies on several factors to determine whether the request is accepted or rejected, while the purchase limit is determined by the store you are shopping from. We would like to point out that our customer service team cannot change these automated results")} .</p>
+                            <h5 className="mb-4">{t("How do you increase the chances of getting the request approved ?")}</h5>
+                            <ul>
+                                <li className="mb-2">{t("Commitment to making payments on time, in addition to your usage period with Tabby")} .</li>
+                                <li className="mb-2">{t("If you have a negative balance or unpaid payments, settle them")} .</li>
+                                <li className="mb-2">{t("The basket amount might be large, try to reduce the amount")} .</li>
+                                <li className="mb-2">{t("Make sure you have only one Tabby account")} .</li>
+                                <li className="mb-4">{t("With every purchase using Tabby, we make new and different decisions. If the purchase was previously rejected, it does not mean that all future purchase requests will be rejected. You can always try to pay with Tabby again")} .</li>
+                            </ul>
+                            <h5 className="mb-4">{t("How does Tabby work ?")}</h5>
+                            <p className="mb-4">{t("Tabby allows you to split your purchases into 4 monthly installments without interest or fees. You can make a purchase by following these steps")} .</p>
+                            <ul>
+                                <li className="mb-2">{t("Step one: Choose Tabby as your payment method")} .</li>
+                                <li className="mb-2">{t("Step two: Link any bank card")} .</li>
+                                <li className="mb-4">{t("Step three: Complete only the first payment, and Tabby will remind you before the due dates of the other payments")} .</li>
+                            </ul>
+                            <h5 className="mb-4">{t("Can I pay before the due date ?")}</h5>
+                            <p className="mb-4">{t("Yes! If you wish to pay the outstanding balance for your purchase in installments early, simply log in to Tabby, go to the order page, and select early payment")} .</p>
+                            <h5 className="mb-4">{t("Can I change the card used for payment ?")}</h5>
+                            <p className="mb-4">{t("You can view all amounts, make payments, and manage your personal account by logging in online or using the Tabby app")} .</p>
+                            <p className="mb-4">{t("Follow the steps below to change the card")} :</p>
+                            <ol>
+                                <li className="mb-4">{t("Log in to the Tabby app")} .</li>
+                                <li className="mb-4">{t("Click on the 'Installment Request' option")} .</li>
+                                <li className="mb-4">{t("Choose to change the card")} .</li>
+                                <li className="mb-4">{t("Enter the details of your new card")} .</li>
+                            </ol>
+                            <h5 className="mb-4">{t("How do I know when I need to pay ?")}</h5>
+                            <p className="mb-4">{t("You will receive regular reminders before any due payments to avoid missing them")} .</p>
+                            <p className="mb-4">{t("The payment is due, but I haven't received my products!")} .</p>
+                            <p className="mb-4">{t("Please inform Tabi that you have not received the order. Once reported, Tabi will adjust your account to ensure that you do not need to make any payment until the issue is resolved. If you have not received the products, please do the following, and then we will adjust your account to ensure that you do not need to make any payment until the issue is resolved")} .</p>
+                            <p className="mb-4">{t("Contact UbuyBlues if you don't find any information about the shipment or if there is a delay in the delivery date")} .</p>
+                            <h5 className="mb-4">{t("Let us know!")}</h5>
+                            <ol>
+                                <li className="mb-4">{t("Log in to the Tabby app")} .</li>
+                                <li className="mb-4">{t("Click on 'My Payments'")} .</li>
+                                <li className="mb-4">{t("Choose the request that has the issue")} .</li>
+                                <li className="mb-4">{t("Click on 'Need Help'")} .</li>
+                                <li className="mb-4">{t("Choose 'I have a payment due, and I haven't received my order yet!' And then contact us")} .</li>
+                            </ol>
+                            <h5 className="mb-4">{t("What happens if I don't pay on time ?")}</h5>
+                            <p className="mb-4">{t("Delay in payment. In case of late payment, you are obliged to pay an additional fee from the date of default")} .</p>
+                            <h5 className="mb-4">{t("How can I get a refund ?")}</h5>
+                            <p className="mb-4">{t("Refunds are processed according to UbuyBlues' return and cancellation policy. The amounts are processed once UbuyBlues registers the return or cancellation request, and Tabby begins the process of refunding you. Here’s what you can expect from the recovery process with Tabby")} :</p>
+                            <ul>
+                                <li className="mb-2">{t("In the case where the refunded amount is less than the remaining amounts, the remaining amounts will be adjusted accordingly")} .</li>
+                                <li className="mb-2">{t("In the case where the refunded amount is greater than the remaining amounts, the remaining payments will be canceled, and the remaining amount will be refunded accordingly")} .</li>
+                            </ul>
+                            <h5 className="mb-4">{t("How long does it take to process a refund ?")}</h5>
+                            <p className="mb-4">{t("The amount will be refunded to the card used for the payment, and it will take 2-5 business days. But the process may take longer depending on your bank")} :</p>
+                            <h4 className="mb-4">{t("BINANCE")}</h4>
+                            <h5 className="mb-4">{t("Using Binance on UbuyBlues")}</h5>
+                            <p className="mb-4">{t("checking out with Binance on UbuyBlues is easy and secure. Refunds for purchases made via Binance can be processed directly to Binance")} .</p>
+                            <p className="mb-4">{t("The pay with Binance option is only available on desktop currently")} .</p>
+                            <ol>
+                                <li className="mb-4">{t("During the Payment section of checkout select, the Binance option then proceed to pay with Binance")} .</li>
+                                <li className="mb-4">{t("Begin payment and select your wallet Binance")} .</li>
+                                <li className="mb-4">{t("Select your USDT currency")} .</li>
+                                <li className="mb-4">{t("Once you’re ready to pay either")} .</li>
+                                <li className="mb-4">{t("scan the QR code within your mobile Binance app or Select Pay in Wallet")} .</li>
+                            </ol>
+                            <h5 className="mb-4">{t("All returns follow our return policy")}</h5>
+                            <h5 className="mb-4">{t("Note")} :</h5>
+                            <p className="mb-4">{t("When using Binance as your payment method, once you have clicked the “Pay with Binance” button, you will have only 15 minutes to complete your payment. If you are unable to complete your payment, you will have two options: You can try again later to place a new order or you can change your payment method later from Order History in My Account")} .</p>
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Contact us")}</h2>
                             <p className="mb-4">{t("If you have any comments or inquiries regarding our terms or privacy policy, you can contact us by sending an email or calling customer service at the following address")} .</p>
                             <a href="mailto:info@ubuyblues.com" className="text-white border-bottom pb-2">info@ubuyblues.com</a>
