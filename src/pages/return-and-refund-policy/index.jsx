@@ -63,6 +63,27 @@ export default function PolicesTermsAndConditions() {
                                 <li className="mb-3">{t("Returned products must be unused, and the original packaging must be retained, We do not accept returns of used or damaged items")} .</li>
                                 <li className="mb-3">{t("Products with non-returnable tags and free gifts are not eligible for return or exchange")} .</li>
                             </ol>
+                            <p className="mb-3">{t("You have only one day from the delivery date to request a return and refund with the invoice for the following products and valuable goods")} :</p>
+                            <ol>
+                                <li className="mb-3">{t("Jewelry and / pierced earrings")} .</li>
+                                <li className="mb-3">{t("Watches")} .</li>
+                                <li className="mb-3">{t("Evening wear, wedding attire, socks, and swimwear")} .</li>
+                                <li className="mb-3">{t("Glasses")} .</li>
+                                <li className="mb-3">{t("Leather")} .</li>
+                                <li className="mb-3">{t("Perfumes (including home fragrances), skincare products, hair care products, aerosol sprays, and cosmetics")} .</li>
+                                <li className="mb-3">{t("In some cases, we cannot accept returns")} .</li>
+                            </ol>
+                            <p className="mb-3">{t("The following categories are non-refundable and non-exchangeable")} :</p>
+                            <ol>
+                                <li className="mb-3">{t("Underwear and lingerie")} .</li>
+                                <li className="mb-3">{t("The perfumes that have been opened, tested, and used")} .</li>
+                                <li className="mb-3">{t("Any product that has been exchanged or modified")} .</li>
+                                <li className="mb-3">{t("Any product that was used")} .</li>
+                                <li className="mb-3">{t("Any product that was not received in its original packaging")} .</li>
+                                <li className="mb-3">{t("Any product without the original tags or labels of the product")} .</li>
+                                <li className="mb-3">{t("Any products that have been resized, altered, or damaged after delivery")} .</li>
+                            </ol>
+                            <p className="mb-3">{t("In exceptional circumstances - such as the COVID-19 pandemic - special market regulations may be implemented by local authorities, which could affect our return and refund policy")} .</p>
                             <h6 className="fw-bold border-bottom border-2 pb-2 w-fit">{t("Note")} :</h6>
                             <ol>
                                 <li className="mb-3">{t("We do not accept products that have been returned without a prior return request")} .</li>
