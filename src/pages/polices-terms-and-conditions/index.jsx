@@ -215,6 +215,8 @@ export default function PolicesTermsAndConditions() {
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Changes to the Privacy Notice")}</h2>
                             <p className="mb-4">{t("We may update this privacy notice from time to time in response to legal, technical, contractual, regulatory, or business developments. When we update our privacy notice, we will take appropriate steps to notify you, in accordance with the significance of the changes we make. Your continued use of this website constitutes acceptance of these changes. We will obtain your consent to any material changes to the privacy notice where and to the extent required by applicable laws")} .</p>
                             <p className="mb-4">{t("You can find out the last update date of the corresponding privacy notice by checking the 'Last Modified' date displayed at the end of the corresponding privacy notice")} .</p>
+                            <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Complaint Escalation Process")}</h2>
+                            
                             <h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2">{t("Contact us")}</h2>
                             <p className="mb-4">{t("If you have any comments or inquiries regarding our terms or privacy policy, you can contact us by sending an email or calling customer service at the following address")} .</p>
                             <a href="mailto:info@ubuyblues.com" className="text-white border-bottom pb-2">info@ubuyblues.com</a>
