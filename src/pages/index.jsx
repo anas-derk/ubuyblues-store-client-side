@@ -117,7 +117,8 @@ export default function Home({ countryAsProperty, storeId }) {
             name: "",
         },
         storeId: "",
-        status: "approving"
+        status: "approving",
+        parent: null,
     });
 
     const [sortDetails, setSortDetails] = useState({
@@ -434,7 +435,7 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const getFiltersAsQuery = (filters) => {
-        let filtersAsQuery = "";
+        let filtersAsQuery = `parent=${filters.parent}&`;
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
         if (filters.offerDescription) filtersAsQuery += `offerDescription=${filters.offerDescription}&`;
         if (filters.storeId) filtersAsQuery += `storeId=${filters.storeId}&`;
