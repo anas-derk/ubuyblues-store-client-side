@@ -142,9 +142,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         }
                     }
                     setIsGetProducts(false);
-                    result = await getCategoriesCount(filtersAsString);
+                    result = await getCategoriesCount(`parent=${categoryIdAsProperty}`);
                     if (result.data > 0) {
-                        setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, 1000, filtersAsString)).data);
+                        setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, 1000, `parent=${categoryIdAsProperty}`)).data);
                         setTotalPagesCountForSubCategories(Math.ceil(result.data / 1000));
                     }
                     setIsGetSubCategories(false);
