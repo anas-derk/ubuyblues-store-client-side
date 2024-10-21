@@ -310,7 +310,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                     {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                     <div className="row products-box pt-4 pb-4">
                                         {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
-                                            <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
+                                            <div className="col-xs-12 col-lg-6 col-xl-6 mb-5" key={product._id}>
                                                 <ProductCard
                                                     productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
