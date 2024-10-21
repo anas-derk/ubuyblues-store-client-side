@@ -16,6 +16,7 @@ import NotFoundError from "@/components/NotFoundError";
 import axios from "axios";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import SectionLoader from "@/components/SectionLoader";
+import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
 
 export default function ProductByCategory({ countryAsProperty, categoryIdAsProperty }) {
 
@@ -258,80 +259,87 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h1 className="section-name text-center mt-4 mb-5 text-white h3">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h1>
-                            {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
-                                <div className="col-xs-12 col-md-6">
-                                    <form className="search-form">
-                                        <div className="product-name-field-box">
-                                            <input
-                                                type="text"
-                                                placeholder={t("Please Enter The name Of The Product You Want To Search For")}
-                                                className="form-control"
-                                                onChange={(e) => {
-                                                    const tempFilters = { ...filters, name: e.target.value.trim() };
-                                                    setFilters(tempFilters);
-                                                    searchOnProduct(e, tempFilters, sortDetails);
-                                                }}
-                                            />
-                                            <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                            <div className="row">
+                                <div className="col-xl-3">
+                                    <CustomerDashboardSideBar />
+                                </div>
+                                <div className="col-xl-9">
+                                    {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
+                                        <div className="col-xs-12 col-md-6">
+                                            <form className="search-form">
+                                                <div className="product-name-field-box">
+                                                    <input
+                                                        type="text"
+                                                        placeholder={t("Please Enter The name Of The Product You Want To Search For")}
+                                                        className="form-control"
+                                                        onChange={(e) => {
+                                                            const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                            setFilters(tempFilters);
+                                                            searchOnProduct(e, tempFilters, sortDetails);
+                                                        }}
+                                                    />
+                                                    <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                        <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div className="col-xs-12 col-md-6">
+                                            <form className="sort-form">
+                                                <div className="select-sort-type-box">
+                                                    <select
+                                                        className="select-sort-type form-select"
+                                                        onChange={(e) => {
+                                                            const sortDetailsArray = e.target.value.split(",");
+                                                            const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
+                                                            setSortDetails(tempSortDetails);
+                                                            searchOnProduct(e, filters, tempSortDetails);
+                                                        }}
+                                                    >
+                                                        <option value="" hidden>{t("Sort By")}</option>
+                                                        <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
+                                                        <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                        <option value="price,-1">{t("From Highest Price To Lowest")}</option>
+                                                        <option value="price,1">{t("From Lowest Price To Highest")}</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>}
+                                    {isGetProducts && <SectionLoader />}
+                                    {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
+                                    <div className="row products-box pt-4 pb-4">
+                                        {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
+                                            <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
+                                                <ProductCard
+                                                    productDetails={product}
+                                                    setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
+                                                    usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                    currencyNameByCountry={currencyNameByCountry}
+                                                    isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
+                                                    isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
+                                                    setSharingName={setSharingName}
+                                                    setSharingURL={setSharingURL}
+                                                    currentDateAsString={currentDate}
+                                                    isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
+                                                />
                                             </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div className="col-xs-12 col-md-6">
-                                    <form className="sort-form">
-                                        <div className="select-sort-type-box">
-                                            <select
-                                                className="select-sort-type form-select"
-                                                onChange={(e) => {
-                                                    const sortDetailsArray = e.target.value.split(",");
-                                                    const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
-                                                    setSortDetails(tempSortDetails);
-                                                    searchOnProduct(e, filters, tempSortDetails);
-                                                }}
-                                            >
-                                                <option value="" hidden>{t("Sort By")}</option>
-                                                <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
-                                                <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
-                                                <option value="price,-1">{t("From Highest Price To Lowest")}</option>
-                                                <option value="price,1">{t("From Lowest Price To Highest")}</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>}
-                            {isGetProducts && <SectionLoader />}
-                            {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
-                            <div className="row products-box pt-4 pb-4">
-                                {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
-                                    <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
-                                        <ProductCard
-                                            productDetails={product}
-                                            setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
-                                            usdPriceAgainstCurrency={usdPriceAgainstCurrency}
-                                            currencyNameByCountry={currencyNameByCountry}
-                                            isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
-                                            isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
-                                            setSharingName={setSharingName}
-                                            setSharingURL={setSharingURL}
-                                            currentDateAsString={currentDate}
-                                            isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
-                                        />
+                                        ))}
+                                        {totalPagesCount > 1 &&
+                                            <PaginationBar
+                                                totalPagesCount={totalPagesCount}
+                                                currentPage={currentPage}
+                                                getPreviousPage={getPreviousPage}
+                                                getNextPage={getNextPage}
+                                                getSpecificPage={getSpecificPage}
+                                                paginationButtonTextColor={"#FFF"}
+                                                paginationButtonBackgroundColor={"transparent"}
+                                                activePaginationButtonColor={"#000"}
+                                                activePaginationButtonBackgroundColor={"#FFF"}
+                                                section="products"
+                                            />}
                                     </div>
-                                ))}
-                                {totalPagesCount > 1 &&
-                                    <PaginationBar
-                                        totalPagesCount={totalPagesCount}
-                                        currentPage={currentPage}
-                                        getPreviousPage={getPreviousPage}
-                                        getNextPage={getNextPage}
-                                        getSpecificPage={getSpecificPage}
-                                        paginationButtonTextColor={"#FFF"}
-                                        paginationButtonBackgroundColor={"transparent"}
-                                        activePaginationButtonColor={"#000"}
-                                        activePaginationButtonBackgroundColor={"#FFF"}
-                                        section="products"
-                                    />}
+                                </div>
                             </div>
                         </section> : <NotFoundError errorMsg={t("Sorry, This Category Is Not Exist !!")} />}
                         {/* End Last Added Products By Category Id */}
