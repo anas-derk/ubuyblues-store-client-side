@@ -438,6 +438,27 @@ textarea {
   line-height: 2;
 }
 
+.managment-links-side-bar {
+  border-radius: 5px;
+}
+
+.managment-links-side-bar .managment-link-list .managment-link-item:hover, .managment-links-side-bar .managment-link-list .managment-link-item .active {
+  background-color: var(--main-color-two);
+  border-radius: 5px;
+}
+
+.managment-links-side-bar .managment-link-list .managment-link-item .managment-link {
+  padding: 14px;
+}
+
+.managment-links-side-bar .managment-link-list .managment-link-item .managment-link .managment-link-icon {
+  font-size: 18px;
+}
+
+.managment-links-side-bar .managment-link-list .managment-link-item .managment-link .managment-link-name {
+  font-size: 10px;
+}
+
 .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user td, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user th, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user td, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user th, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user td, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user th, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user td, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user td, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user th, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user td, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user th, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user td, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user th, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user td {
   font-size: 12px;
 }

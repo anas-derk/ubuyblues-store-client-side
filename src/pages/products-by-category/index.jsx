@@ -16,7 +16,7 @@ import NotFoundError from "@/components/NotFoundError";
 import axios from "axios";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import SectionLoader from "@/components/SectionLoader";
-import CustomerDashboardSideBar from "@/components/CustomerDashboardSideBar";
+import SubCategoriesForParentSidBar from "@/components/SubCategoriesForParentSidBar";
 
 export default function ProductByCategory({ countryAsProperty, categoryIdAsProperty }) {
 
@@ -281,7 +281,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                             <div className="row">
                                 <div className="col-xl-3">
                                     {isGetSubCategories && <SectionLoader />}
-                                    {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <CustomerDashboardSideBar />}
+                                    {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <SubCategoriesForParentSidBar subCategories={allSubCategoriesInsideThePage} />}
                                     {!isGetSubCategories && allSubCategoriesInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Can't Find Any Sub Categories For This Category !!")} />}
                                 </div>
                                 <div className="col-xl-9">

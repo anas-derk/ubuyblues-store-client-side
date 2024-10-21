@@ -20,81 +20,81 @@ export default function CustomerDashboardSideBar() {
     }
 
     return (
-        <aside className="customer-dashboard-side-bar bg-white">
-            <ul className="managment-customer-account-link-list">
+        <aside className="customer-dashboard-side-bar managment-links-side-bar bg-white">
+            <ul className="managment-customer-account-link-list managment-link-list">
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                 >
                     <Link
                         href="/customer-dashboard"
-                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard" && "active"}`}
+                        className={`text-dark w-100 d-block managment-customer-account-link managment-link fw-bold ${router.pathname === "/customer-dashboard" && "active"}`}
                     >
-                        <RxDashboard className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Dashboard")}</span>
+                        <RxDashboard className={`customer-account-managment-link-icon managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Dashboard")}</span>
                     </Link>
                 </li>
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                 >
                     <Link
                         href="/customer-dashboard/orders"
-                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/orders" && "active"}`}
+                        className={`text-dark w-100 d-block managment-customer-account-link managment-link fw-bold ${router.pathname === "/customer-dashboard/orders" && "active"}`}
                     >
-                        <LuShoppingBag className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Orders")}</span>
+                        <LuShoppingBag className={`customer-account-managment-link-icon managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Orders")}</span>
                     </Link>
                 </li>
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                 >
                     <Link
                         href="/customer-dashboard/addreses"
-                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${(router.pathname === "/customer-dashboard/addreses" || router.pathname === "/customer-dashboard/addreses/billing-address" || router.pathname === "/customer-dashboard/addreses/shipping-address") && "active"}`}
+                        className={`text-dark w-100 d-block managment-customer-account-link managment-link fw-bold ${(router.pathname === "/customer-dashboard/addreses" || router.pathname === "/customer-dashboard/addreses/billing-address" || router.pathname === "/customer-dashboard/addreses/shipping-address") && "active"}`}
                     >
-                        <HiOutlineHome className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Addresses")}</span>
+                        <HiOutlineHome className={`customer-account-managment-link-icon managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Addresses")}</span>
                     </Link>
                 </li>
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                 >
                     <Link
                         href="/customer-dashboard/account-details"
-                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/account-details" && "active"}`}
+                        className={`text-dark w-100 d-block managment-customer-account-link managment-link fw-bold ${router.pathname === "/customer-dashboard/account-details" && "active"}`}
                     >
                         <BsPerson className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Account Details")}</span>
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Account Details")}</span>
                     </Link>
                 </li>
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                 >
                     <Link
                         href="/customer-dashboard/favorite-products"
-                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/favorite-products" && "active"}`}
+                        className={`text-dark w-100 d-block managment-customer-account-link managment-link fw-bold ${router.pathname === "/customer-dashboard/favorite-products" && "active"}`}
                     >
                         <MdOutlineFavoriteBorder className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Favorite Products")}</span>
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Favorite Products")}</span>
                     </Link>
                 </li>
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                 >
                     <Link
                         href="/customer-dashboard/wallet"
-                        className={`text-dark w-100 d-block managment-customer-account-link fw-bold ${router.pathname === "/customer-dashboard/wallet" && "active"}`}
+                        className={`text-dark w-100 d-block managment-customer-account-link managment-link fw-bold ${router.pathname === "/customer-dashboard/wallet" && "active"}`}
                     >
                         <IoWalletOutline className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Wallet")}</span>
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Wallet")}</span>
                     </Link>
                 </li>
                 <li
-                    className="managment-customer-account-link-item"
+                    className="managment-customer-account-link-item managment-link-item"
                     onClick={userLogout}
                 >
-                    <Link href="#" className="text-dark w-100 d-block managment-customer-account-link fw-bold">
+                    <Link href="#" className="text-dark w-100 d-block managment-customer-account-link managment-link fw-bold">
                         <MdOutlineLogout className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
-                        <span className="customer-dashboard-link-name">{t("Logout")}</span>
+                        <span className="customer-dashboard-link-name managment-link-name">{t("Logout")}</span>
                     </Link>
                 </li>
             </ul>
