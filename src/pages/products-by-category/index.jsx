@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useState, useEffect } from "react";
-import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAllCategoriesInsideThePage, getCategoriesCount, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
@@ -32,19 +32,29 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [isGetProducts, setIsGetProducts] = useState(true);
 
+    const [isGetCategoryInfo, setIsGetCategoryInfo] = useState(true);
+
+    const [isGetSubCategories, setIsGetSubCategories] = useState(true);
+
     const [categoryInfo, setCategoryInfo] = useState({});
 
     const [favoriteProductsListForUserByProductsIdsAndUserId, setFavoriteProductsListForUserByProductsIdsAndUserId] = useState([]);
 
     const [allProductsInsideThePage, setAllProductsInsideThePage] = useState([]);
 
+    const [allSubCategoriesInsideThePage, setAllSubCategoriesInsideThePage] = useState([]);
+
     const [isExistProductsInDBInGeneral, setIsExistProductsInDBInGeneral] = useState(false);
 
     const [currentDate, setCurrentDate] = useState("");
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPageForProducts, setCurrentPageForProducts] = useState(1);
 
-    const [totalPagesCount, setTotalPagesCount] = useState(0);
+    const [currentPageForSubCategories, setCurrentPageForSubCategories] = useState(1);
+
+    const [totalPagesCountForProducts, setTotalPagesCountForProducts] = useState(0);
+
+    const [totalPagesCountForSubCategories, setTotalPagesCountForSubCategories] = useState(0);
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
@@ -113,11 +123,13 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     useEffect(() => {
         getCategoryInfo(categoryIdAsProperty)
             .then(async (result) => {
+                setIsGetCategoryInfo(false);
                 if (Object.keys(result.data).length > 0) {
                     setCategoryInfo(result.data);
-                    result = await getProductsCount(getFiltersAsQuery({ categoryId: categoryIdAsProperty }));
+                    const filtersAsString = getFiltersAsQuery({ categoryId: categoryIdAsProperty });
+                    result = await getProductsCount(filtersAsString);
                     if (result.data > 0) {
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
+                        setTotalPagesCountForProducts(Math.ceil(result.data / pageSize));
                         result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
                         setAllProductsInsideThePage(result.products);
                         setCurrentDate(result.currentDate);
@@ -129,10 +141,17 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                             setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(result.products.map((product) => product._id))).data);
                         }
                     }
+                    setIsGetProducts(false);
+                    result = await getCategoriesCount(filtersAsString);
+                    if (result.data > 0) {
+                        setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, 1000, filtersAsString)).data);
+                        setTotalPagesCountForSubCategories(Math.ceil(result.data / 1000));
+                    }
+                    setIsGetSubCategories(false);
                 }
-                setIsGetProducts(false);
             })
             .catch((err) => {
+                console.log(err);
                 if (err?.response?.status === 401) {
                     localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                     setIsGetProducts(false);
@@ -145,11 +164,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     }, []);
 
     useEffect(() => {
-        if (!isGetUserInfo && !isGetProducts) {
+        if (!isGetUserInfo && !isGetCategoryInfo) {
             setFilters({ ...filters, categoryId: categoryIdAsProperty });
             setIsLoadingPage(false);
         }
-    }, [isGetUserInfo, isGetProducts]);
+    }, [isGetUserInfo, isGetCategoryInfo]);
 
     const getCategoryInfo = async (categoryId) => {
         try {
@@ -179,7 +198,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             setIsGetProducts(true);
             const newCurrentPage = currentPage - 1;
             setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPage(newCurrentPage);
+            setCurrentPageForProducts(newCurrentPage);
             setIsGetProducts(false);
         }
         catch (err) {
@@ -192,7 +211,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             setIsGetProducts(true);
             const newCurrentPage = currentPage + 1;
             setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPage(newCurrentPage);
+            setCurrentPageForProducts(newCurrentPage);
             setIsGetProducts(false);
         }
         catch (err) {
@@ -204,7 +223,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         try {
             setIsGetProducts(true);
             setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPage(pageNumber);
+            setCurrentPageForProducts(pageNumber);
             setIsGetProducts(false);
         }
         catch (err) {
@@ -216,16 +235,16 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         try {
             e.preventDefault();
             setIsGetProducts(true);
-            setCurrentPage(1);
+            setCurrentPageForProducts(1);
             let filtersAsQuery = getFiltersAsQuery(filters);
             const result = await getProductsCount(filtersAsQuery);
             if (result.data > 0) {
                 setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
-                setTotalPagesCount(Math.ceil(result.data / pageSize));
+                setTotalPagesCountForProducts(Math.ceil(result.data / pageSize));
                 setIsGetProducts(false);
             } else {
                 setAllProductsInsideThePage([]);
-                setTotalPagesCount(0);
+                setTotalPagesCountForProducts(0);
                 setIsGetProducts(false);
             }
         }
@@ -261,7 +280,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                             <h1 className="section-name text-center mt-4 mb-5 text-white h3">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h1>
                             <div className="row">
                                 <div className="col-xl-3">
-                                    <CustomerDashboardSideBar />
+                                    {isGetSubCategories && <SectionLoader />}
+                                    {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <CustomerDashboardSideBar />}
+                                    {!isGetSubCategories && allSubCategoriesInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Can't Find Any Sub Categories For This Category !!")} />}
                                 </div>
                                 <div className="col-xl-9">
                                     {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
@@ -325,10 +346,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                 />
                                             </div>
                                         ))}
-                                        {totalPagesCount > 1 &&
+                                        {totalPagesCountForProducts > 1 &&
                                             <PaginationBar
-                                                totalPagesCount={totalPagesCount}
-                                                currentPage={currentPage}
+                                                totalPagesCount={totalPagesCountForProducts}
+                                                currentPage={currentPageForProducts}
                                                 getPreviousPage={getPreviousPage}
                                                 getNextPage={getNextPage}
                                                 getSpecificPage={getSpecificPage}
