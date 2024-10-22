@@ -120,7 +120,26 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         } else setIsGetUserInfo(false);
     }, []);
 
+    const handleResetAllCategoryData = () => {
+        setCategoryInfo({});
+        setCurrentPageForProducts(1);
+        setCurrentPageForSubCategories(1);
+        setAllProductsInsideThePage([]);
+        setIsExistProductsInDBInGeneral(false);
+        setAllSubCategoriesInsideThePage([]);
+        setFavoriteProductsListForUserByProductsIdsAndUserId([]);
+    }
+
+    const handleIsGetAllCategoryData = () => {
+        setIsGetCategoryInfo(true);
+        setIsGetProducts(true);
+        setIsGetSubCategories(true);
+    }
+
     useEffect(() => {
+        setIsLoadingPage(true);
+        handleResetAllCategoryData();
+        handleIsGetAllCategoryData();
         getCategoryInfo(categoryIdAsProperty)
             .then(async (result) => {
                 setIsGetCategoryInfo(false);
@@ -151,7 +170,6 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 }
             })
             .catch((err) => {
-                console.log(err);
                 if (err?.response?.status === 401) {
                     localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
                     setIsGetProducts(false);
@@ -161,7 +179,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                 }
             });
-    }, []);
+    }, [categoryIdAsProperty]);
 
     useEffect(() => {
         if (!isGetUserInfo && !isGetCategoryInfo) {
