@@ -224,10 +224,8 @@ export default function UserAuth() {
                     clearTimeout(errorTimeout);
                 }, 5000);
             } else {
-                if (result.data.isVerified) {
-                    localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
-                    await router.replace("/");
-                } else await router.replace(`/account-verification?email=${emailForLogin}`);
+                localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
+                await router.replace("/");
             }
         }
         catch (err) {
