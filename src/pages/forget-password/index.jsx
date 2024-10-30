@@ -126,7 +126,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
         }
         catch (err) {
             setIsWaitSendTheCode(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -265,7 +265,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
         }
         catch (err) {
             setIsResetingPasswordStatus(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);

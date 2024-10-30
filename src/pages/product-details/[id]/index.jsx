@@ -313,7 +313,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
             else {
                 setIsWaitAddProductToFavoriteUserProductsList(false);
-                setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorInAddProductToFavoriteUserProductsList("");
                     clearTimeout(errorTimeout);
@@ -352,7 +352,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
             else {
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
-                setErrorInDeleteProductFromFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorInDeleteProductFromFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorInDeleteProductFromFavoriteUserProductsList("");
                     clearTimeout(errorTimeout);
@@ -433,7 +433,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             setIsWaitAddToCart(false);
-            setErrorInAddToCart(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorInAddToCart(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorInAddToCartTimeout = setTimeout(() => {
                 setErrorInAddToCart(false);
                 clearTimeout(errorInAddToCartTimeout);
@@ -468,7 +468,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
             else {
                 setIsSelectProductRating(false);
-                setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorInAddProductToFavoriteUserProductsList("");
                     clearTimeout(errorTimeout);
@@ -604,7 +604,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
             else {
                 setWaitAddNewReferalMsg(false);
-                setErrorAddNewReferalMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorAddNewReferalMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorAddNewReferalMsg("");
                     clearTimeout(errorTimeout);

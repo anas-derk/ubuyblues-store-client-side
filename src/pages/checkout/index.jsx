@@ -352,7 +352,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             setIsWaitApplyCoupon(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -603,7 +603,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
             else {
                 setIsWaitCreateNewOrder(false);
-                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
                     clearTimeout(errorTimeout);
@@ -685,7 +685,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
             else {
                 setIsWaitApproveOnPayPalOrder(false);
-                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
                     clearTimeout(errorTimeout);
@@ -728,7 +728,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             }
             else {
                 setIsWaitCreateNewOrder(false);
-                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorMsg("");
                     clearTimeout(errorTimeout);

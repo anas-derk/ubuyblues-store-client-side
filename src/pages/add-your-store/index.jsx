@@ -222,7 +222,7 @@ export default function AddYourStore() {
         }
         catch (err) {
             setIsWaitStatus(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);

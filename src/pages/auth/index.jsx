@@ -135,7 +135,7 @@ export default function UserAuth() {
         }
         catch (err) {
             setIsLoginingStatus(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);
@@ -201,7 +201,7 @@ export default function UserAuth() {
         }
         catch (err) {
             setIsSignupStatus(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorTimeout);

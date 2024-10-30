@@ -127,7 +127,7 @@ export default function AccountVerification({ email }) {
         }
         catch (err) {
             setIsWaitSendTheCode(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorMsgTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorMsgTimeout);
@@ -157,7 +157,7 @@ export default function AccountVerification({ email }) {
         }
         catch (err) {
             setIsWaitCheckingStatus(false);
-            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
             let errorMsgTimeout = setTimeout(() => {
                 setErrorMsg("");
                 clearTimeout(errorMsgTimeout);

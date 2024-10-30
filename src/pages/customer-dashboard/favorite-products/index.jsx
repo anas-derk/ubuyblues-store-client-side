@@ -217,7 +217,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             }
             else {
                 setIsDeletingFavoriteProduct(false);
-                setErrorMsgOnDeletingFavoriteProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorMsgOnDeletingFavoriteProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
                     setErrorMsgOnDeletingFavoriteProduct("");
                     setSelectedFavoriteProduct(-1);

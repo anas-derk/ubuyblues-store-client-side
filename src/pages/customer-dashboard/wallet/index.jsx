@@ -219,7 +219,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             }
             else {
                 setIsDeletingWalletProduct(false);
-                setErrorMsgOnDeletingWalletProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                setErrorMsgOnDeletingWalletProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
                 let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
                     setErrorMsgOnDeletingWalletProduct("");
                     setSelectedWalletProduct(-1);
