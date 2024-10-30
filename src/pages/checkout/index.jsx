@@ -17,6 +17,7 @@ import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnPro
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { SiBinance } from "react-icons/si";
+import Link from "next/link";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -82,6 +83,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
+
+    const [isAgreeOnTermsAndConditions, setIsAgreeOnTermsAndConditions] = useState(false);
 
     const [orderResult, setOrderResult] = useState({});
 
@@ -431,7 +434,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 value: userInfo ? userInfo.billingAddress.email : "",
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Email Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                     isEmail: {
                         msg: "Sorry, Invalid Email !!",
@@ -443,7 +446,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 value: userInfo ? userInfo.shippingAddress.firstName : "",
                 rules: {
                     isRequired: {
-                        msg: "Sorry, First Name Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                 },
             } : null,
@@ -510,13 +513,22 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 value: userInfo ? userInfo.shippingAddress.email : "",
                 rules: {
                     isRequired: {
-                        msg: "Sorry, Email Field Can't Be Empty !!",
+                        msg: "Sorry, This Field Can't Be Empty !!",
                     },
                     isEmail: {
                         msg: "Sorry, Invalid Email !!",
                     },
                 },
             } : null,
+            {
+                name: "is_agree_on_terms_and_conditions",
+                value: isAgreeOnTermsAndConditions,
+                rules: {
+                    isRequired: {
+                        msg: "Sorry, This Field Can't Be Empty !!",
+                    },
+                },
+            }
         ];
     }
 
@@ -1374,44 +1386,59 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <SiBinance className="payment-icon binance-icon" />
                                                 </div>
                                             </div>}
-                                            {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={handleSelectPaypalPayment}
-                                            >
-                                                {t("Confirm Request")}
-                                            </button>}
-                                            {paymentGateway === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={() => createPaymentOrder("tap")}
-                                            >
-                                                {t("Confirm Request")}
-                                            </button>}
-                                            {paymentGateway === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={() => createPaymentOrder("tabby")}
-                                            >
-                                                {t("Confirm Request")}
-                                            </button>}
-                                            {paymentGateway === "binance" && !isWaitCreateNewOrder && !errorMsg && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                                onClick={() => createPaymentOrder("binance")}
-                                            >
-                                                {t("Confirm Request")}
-                                            </button>}
-                                            {isWaitCreateNewOrder && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                                disabled
-                                            >
-                                                {t("Please Waiting")}
-                                            </button>}
-                                            {errorMsg && <button
-                                                className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
-                                                disabled
-                                            >
-                                                {t(errorMsg)}
-                                            </button>}
                                         </section>
                                         {/* End Payement Methods Section */}
+                                        <div className={`form-check mb-4 border p-4 ${i18n.language !== "ar" ? "text-end" : "text-end"}`}>
+                                            <input
+                                                className="form-check-input mt-0"
+                                                type="checkbox"
+                                                id="approve-on-terms-and-conditions"
+                                                onChange={(e) => setIsAgreeOnTermsAndConditions(e.target.checked)}
+                                            />
+                                            <label className="form-check-label p-0" htmlFor="approve-on-terms-and-conditions" onClick={(e) => setIsAgreeOnTermsAndConditions(e.target.checked)}>
+                                                {t("Agree To")} <Link href="/polices-terms-and-conditions">{t("Terms And Conditions")}</Link>
+                                            </label>
+                                        </div>
+                                        {formValidationErrors.is_agree_on_terms_and_conditions && <p className="bg-danger p-2 form-field-error-box m-0">
+                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                            <span>{t(formValidationErrors.is_agree_on_terms_and_conditions)}</span>
+                                        </p>}
+                                        {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <button
+                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                            onClick={handleSelectPaypalPayment}
+                                        >
+                                            {t("Confirm Request")}
+                                        </button>}
+                                        {paymentGateway === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
+                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                            onClick={() => createPaymentOrder("tap")}
+                                        >
+                                            {t("Confirm Request")}
+                                        </button>}
+                                        {paymentGateway === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
+                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                            onClick={() => createPaymentOrder("tabby")}
+                                        >
+                                            {t("Confirm Request")}
+                                        </button>}
+                                        {paymentGateway === "binance" && !isWaitCreateNewOrder && !errorMsg && <button
+                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                            onClick={() => createPaymentOrder("binance")}
+                                        >
+                                            {t("Confirm Request")}
+                                        </button>}
+                                        {isWaitCreateNewOrder && <button
+                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
+                                            disabled
+                                        >
+                                            {t("Please Waiting")}
+                                        </button>}
+                                        {errorMsg && <button
+                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
+                                            disabled
+                                        >
+                                            {t(errorMsg)}
+                                        </button>}
                                     </section>
                                 </div>
                             </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For This Store Your Cart !!")} />
