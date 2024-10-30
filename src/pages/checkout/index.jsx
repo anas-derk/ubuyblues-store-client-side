@@ -13,7 +13,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, handleSelectUserLanguage, getAppearedSections } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { SiBinance } from "react-icons/si";
@@ -46,6 +46,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const [userInfo, setUserInfo] = useState({});
 
     const [userToken, setUserToken] = useState();
+
+    const [isAppearedBinancePaymentMethod, setIsAppearedBinancePaymentMethod] = useState(false);
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
@@ -131,6 +133,15 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                     const tempShippingCost = getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod, totalPrices.totalPriceAfterDiscount);
                                     setShippingCost(tempShippingCost);
                                     setTotalAmount(totalPrices.totalPriceAfterDiscount + tempShippingCost.forLocalProducts + tempShippingCost.forInternationalProducts + 0);
+                                    const appearedSectionsResult = await getAppearedSections();
+                                    const appearedSectionsLength = appearedSectionsResult.data.length;
+                                    if (appearedSectionsLength > 0) {
+                                        for (let i = 0; i < appearedSectionsLength; i++) {
+                                            if (appearedSectionsResult.data[i].sectionName === "binance payment method" && appearedSectionsResult.data[i].isAppeared) {
+                                                setIsAppearedBinancePaymentMethod(true);
+                                            }
+                                        }
+                                    }
                                     setIsGetUserInfo(false);
                                 }
                             }
@@ -625,7 +636,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     const createPayPalOrder = async (data, actions) => {
-        try{
+        try {
             return actions.order.create({
                 purchase_units: [
                     {
@@ -637,7 +648,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 ]
             });
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
         }
     }
@@ -1502,7 +1513,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <FaTape className="payment-icon tap-icon" />
                                                 </div>
                                             </div>
-                                            <div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`}>
+                                            {isAppearedBinancePaymentMethod && <div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
@@ -1517,7 +1528,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <div className="col-md-6 text-md-end">
                                                     <SiBinance className="payment-icon binance-icon" />
                                                 </div>
-                                            </div>
+                                            </div>}
                                             {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={handleSelectPaypalPayment}
