@@ -184,7 +184,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 })
                 .catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     }
                     else {
                         setIsLoadingPage(false);
@@ -279,7 +279,7 @@ export default function Home({ countryAsProperty, storeId }) {
             })
             .catch((err) => {
                 if (err?.response?.status === 401) {
-                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     setIsLoadingPage(false);
                 }
                 else {

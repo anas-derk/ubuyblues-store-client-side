@@ -11,7 +11,7 @@ i18next.use(initReactI18next).init({
         de: { translation: deTranslation },
     },
     lng: "en",
-    fallbackLng: 'en',
+    fallbackLng: "en",
 });
 
 export default i18next;

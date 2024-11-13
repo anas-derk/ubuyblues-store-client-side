@@ -56,7 +56,7 @@ export default function CustomerBillingAddress() {
                 })
                 .catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
                     }
                     else {
@@ -202,7 +202,7 @@ export default function CustomerBillingAddress() {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 await router.replace("/auth");
             }
             else {

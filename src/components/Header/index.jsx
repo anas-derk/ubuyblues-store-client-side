@@ -61,7 +61,7 @@ export default function Header() {
                 })
                 .catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     }
                     else {
                         setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");

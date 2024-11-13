@@ -218,7 +218,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             })
             .catch((err) => {
                 if (err?.response?.status === 401) {
-                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     setIsGetUserInfo(false);
                 }
                 else {
@@ -307,7 +307,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
             }
@@ -346,7 +346,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
             }
@@ -462,7 +462,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
             }
@@ -599,7 +599,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 await router.replace("/auth");
             }
             else {

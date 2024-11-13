@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { RxDashboard } from "react-icons/rx";
-import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
 export default function SubCategoriesForParentSidBar({ subCategories }) {

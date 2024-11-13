@@ -155,7 +155,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             })
             .catch((err) => {
                 if (err?.response?.status === 401) {
-                    localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     setIsGetUserInfo(false);
                 }
                 else {
@@ -598,7 +598,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 await router.replace("/auth");
             }
             else {
@@ -680,7 +680,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 await router.replace("/auth");
             }
             else {
@@ -723,7 +723,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                 await router.replace("/auth");
             }
             else {
