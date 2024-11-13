@@ -649,12 +649,12 @@ export default function Home({ countryAsProperty, storeId }) {
                 {/* End Share Options Box */}
                 <div className={`page-content ${allTextAds.length === 0 && "pt-5"}`}>
                     {/* Start Text Ads Section */}
-                    {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-dark mb-5">
+                    {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-white fw-bold mb-5">
                         <Carousel indicators={false} controls={false}>
                             {allTextAds.map((ad, index) => (
                                 <Carousel.Item key={index}>
                                     <Carousel.Caption>
-                                        <p className="ad-content text-white m-0">{ad.content}</p>
+                                        <p className="ad-content text-dark m-0">{ad.content}</p>
                                     </Carousel.Caption>
                                 </Carousel.Item>
                             ))}
