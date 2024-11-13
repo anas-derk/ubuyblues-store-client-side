@@ -6,7 +6,6 @@ import { FaXTwitter } from "react-icons/fa6";
 import { LiaCcVisa } from "react-icons/lia";
 import { FaCcMastercard } from "react-icons/fa";
 import KnetLogo from "../../../public/images/knet-logo.png";
-import TapLogo from "../../../public/images/tap-logo.png";
 import TabbyLogo from "../../../public/images/tabby-logo.png";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
@@ -138,10 +137,6 @@ export default function Footer() {
                             <li className="payment-method-item fw-bold mb-3">
                                 <img src={KnetLogo.src} alt="Knet Logo" className={`icon-as-image knet-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 <span>{t("Knet")}</span>
-                            </li>
-                            <li className="payment-method-item fw-bold mb-3">
-                                <img src={TapLogo.src} alt="Tap Logo" className={`icon-as-image tap-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <span>{t("Tap")}</span>
                             </li>
                             <li className="payment-method-item fw-bold mb-3">
                                 <img src={TabbyLogo.src} alt="Tabby Logo" className={`icon-as-image tabby-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
