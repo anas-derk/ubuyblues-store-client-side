@@ -297,12 +297,13 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
                             <h1 className="section-name text-center mt-4 mb-5 text-white h3">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h1>
                             <div className="row">
-                                <div className="col-xl-3">
+                                {isGetSubCategories && <div className="col-xl-3">
                                     {isGetSubCategories && <SectionLoader />}
-                                    {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <SubCategoriesForParentSidBar subCategories={allSubCategoriesInsideThePage} />}
-                                    {!isGetSubCategories && allSubCategoriesInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Can't Find Any Sub Categories For This Category !!")} />}
-                                </div>
-                                <div className="col-xl-9">
+                                </div>}
+                                {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <div className="col-xl-3">
+                                    <SubCategoriesForParentSidBar subCategories={allSubCategoriesInsideThePage} />
+                                </div>}
+                                <div className={`${!isGetSubCategories && allSubCategoriesInsideThePage.length === 0 ? "col-xl-12" : "col-xl-9"}`}>
                                     {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                         <div className="col-xs-12 col-md-6">
                                             <form className="search-form">
@@ -349,7 +350,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                     {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                     <div className="row products-box pt-4 pb-4">
                                         {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
-                                            <div className="col-xs-12 col-lg-6 col-xl-6 mb-5" key={product._id}>
+                                            <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
                                                 <ProductCard
                                                     productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
