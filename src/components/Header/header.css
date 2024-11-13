@@ -2,6 +2,10 @@
   min-height: 90px;
 }
 
+.global-header .navbar {
+  background-color: var(--main-color-two);
+}
+
 .global-header .navbar .navbar-nav {
   align-items: center;
 }

@@ -1,6 +1,7 @@
 .global-header{
     min-height: 90px;
     .navbar{
+        background-color: var(--main-color-two);
         .navbar-nav{
             align-items: center;
             .nav-link{
