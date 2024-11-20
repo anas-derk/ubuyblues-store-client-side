@@ -321,6 +321,7 @@ export default function AddYourStore() {
                                     </p>}
                                 </section>
                                 <section className="image mb-4">
+                                    <h6 className="fw-bold text-white mb-3">{t("Please Select Your Store Image")}</h6>
                                     <input
                                         type="file"
                                         className={`form-control product-image-field ${formValidationErrors["image"] ? "border-danger mb-3" : "mb-4"}`}

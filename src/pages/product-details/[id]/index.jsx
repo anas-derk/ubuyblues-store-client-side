@@ -166,6 +166,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         getProductInfo(productIdAsProperty)
             .then(async (res) => {
                 let result = res.data;
+                console.log(result.productDetails)
                 setIsGetProductInfo(false);
                 if (Object.keys(result).length > 0) {
                     setProductInfo(result.productDetails);
@@ -742,10 +743,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     <div className="col-lg-6">
                                         <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
                                             <h5 className="product-name fw-bold mb-4">{productInfo.name}</h5>
-                                            <h5 className="product-category-name mb-4">
-                                                <span className="fw-bold">{t("Category")}: </span>
-                                                <span>{productInfo.category}</span>
-                                            </h5>
+                                            <h5 className="product-category-name mb-4">{t("Categories")}:</h5>
+                                            <ul>
+                                                {productInfo.categories.length > 0 && productInfo.categories.map((category, categoryIndex) => (
+                                                    <li className="mb-3 d-inline-block" key={category._id}>{category.name + (categoryIndex !== productInfo.categories.length - 1 ? "  - " : "")}</li>
+                                                ))}
+                                            </ul>
                                             <h5 className={`product-price mb-4 ${productInfo.discount !== 0 && "text-decoration-line-through"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
                                             {
                                                 productInfo.discount > 0 &&

@@ -475,7 +475,7 @@ export default function Home({ countryAsProperty, storeId }) {
             }
         }
         catch (err) {
-            throw err;
+            setErrorMsg(err?.message === "Network Error" ? "Network Error When Get Data" : "Sorry, Someting Went Wrong When Get Data, Please Repeate The Process !!");
         }
     }
 
@@ -504,7 +504,7 @@ export default function Home({ countryAsProperty, storeId }) {
             }
         }
         catch (err) {
-            throw err;
+            setErrorMsg(err?.message === "Network Error" ? "Network Error When Get Data" : "Sorry, Someting Went Wrong When Get Data, Please Repeate The Process !!");
         }
     }
 
@@ -530,7 +530,7 @@ export default function Home({ countryAsProperty, storeId }) {
             }
         }
         catch (err) {
-            throw err;
+            setErrorMsg(err?.message === "Network Error" ? "Network Error When Get Data" : "Sorry, Someting Went Wrong When Get Data, Please Repeate The Process !!");
         }
     }
 

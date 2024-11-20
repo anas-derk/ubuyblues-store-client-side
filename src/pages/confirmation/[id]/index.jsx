@@ -198,12 +198,44 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                     {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
+                            <div className="row shipping-cost-for-local-products total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Shipping Cost For Local Products")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {(orderDetails.shippingCost.forLocalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
+                            </div>
+                            <div className="row shipping-cost-for-international-products total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Shipping Cost For International Products")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {(orderDetails.shippingCost.forInternationalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
+                            </div>
+                            <div className="row total-shipping-cost total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Total Shipping Cost")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {((orderDetails.shippingCost.forLocalProducts + orderDetails.shippingCost.forInternationalProducts) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
+                            </div>
                             <div className="row total-price-after-discount total pb-3 mb-5">
                                 <div className="col-md-3 fw-bold p-0">
                                     {t("Total Price After Discount")}
                                 </div>
                                 <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                     {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                </div>
+                            </div>
+                            <div className="row total-amount total pb-3 mb-5">
+                                <div className="col-md-3 fw-bold p-0">
+                                    {t("Total Amount")}
+                                </div>
+                                <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
+                                    {(orderDetails.orderAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
                             <div className="thanks-icon-box mb-4">
@@ -217,7 +249,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 alt={`${storeDetails.name} Logo`}
                                 className="store-image"
                             />
-                        </section>: <NotFoundError errorMsg={t("Sorry, This Order Is Not Found !!")} />}
+                        </section> : <NotFoundError errorMsg={t("Sorry, This Order Is Not Found !!")} />}
                     </div>
                     <Footer />
                 </div>

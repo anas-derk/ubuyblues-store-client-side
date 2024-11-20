@@ -65,8 +65,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
-                    const result = res.data;
-                    if (!result.error) {
+                    if (!res.data.error) {
                         await router.replace("/");
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);

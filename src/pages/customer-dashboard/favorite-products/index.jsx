@@ -32,7 +32,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
 
-    const [isWaitGetFavoriteProductsStatus, setIsWaitGetFavoriteProductsStatus] = useState(true);
+    const [IsGetFavoriteProducts, setIsGetFavoriteProducts] = useState(true);
 
     const [selectedFavoriteProduct, setSelectedFavoriteProduct] = useState(-1);
 
@@ -70,7 +70,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isWaitGetFavoriteProductsStatus) {
+            if (!IsGetFavoriteProducts) {
                 setIsLoadingPage(false);
             }
         })
@@ -96,7 +96,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
                         });
-                        setIsWaitGetFavoriteProductsStatus(false);
+                        setIsGetFavoriteProducts(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
@@ -118,10 +118,10 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        if (!isWaitGetFavoriteProductsStatus) {
+        if (!IsGetFavoriteProducts) {
             setIsLoadingPage(false);
         }
-    }, [isWaitGetFavoriteProductsStatus]);
+    }, [IsGetFavoriteProducts]);
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
@@ -138,11 +138,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const getPreviousPage = async () => {
         try {
-            setIsWaitGetFavoriteProductsStatus(true);
+            setIsGetFavoriteProducts(true);
             const newCurrentPage = currentPage - 1;
             setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
             setCurrentPage(newCurrentPage);
-            setIsWaitGetFavoriteProductsStatus(false);
+            setIsGetFavoriteProducts(false);
         }
         catch (err) {
             throw err;
@@ -151,11 +151,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const getNextPage = async () => {
         try {
-            setIsWaitGetFavoriteProductsStatus(true);
+            setIsGetFavoriteProducts(true);
             const newCurrentPage = currentPage + 1;
             setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
             setCurrentPage(newCurrentPage);
-            setIsWaitGetFavoriteProductsStatus(false);
+            setIsGetFavoriteProducts(false);
         }
         catch (err) {
             throw err;
@@ -164,10 +164,10 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const getSpecificPage = async (pageNumber) => {
         try {
-            setIsWaitGetFavoriteProductsStatus(true);
+            setIsGetFavoriteProducts(true);
             setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
             setCurrentPage(pageNumber);
-            setIsWaitGetFavoriteProductsStatus(false);
+            setIsGetFavoriteProducts(false);
         }
         catch (err) {
             throw err;
@@ -241,7 +241,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {allFavoriteProductsInsideThePage.length > 0 && !isWaitGetFavoriteProductsStatus && <section className="favorite-products-list-for-user data-box text-center">
+                                {allFavoriteProductsInsideThePage.length > 0 && !IsGetFavoriteProducts && <section className="favorite-products-list-for-user data-box text-center">
                                     {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table mb-4 w-100">
                                         <thead>
                                             <tr>
@@ -323,8 +323,8 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                         ))}
                                     </div>}
                                 </section>}
-                                {allFavoriteProductsInsideThePage.length === 0 && !isWaitGetFavoriteProductsStatus && <NotFoundError errorMsg={t("Sorry, Can't Find Any Favorite Products For You !!")} />}
-                                {isWaitGetFavoriteProductsStatus && <SectionLoader />}
+                                {allFavoriteProductsInsideThePage.length === 0 && !IsGetFavoriteProducts && <NotFoundError errorMsg={t("Sorry, Can't Find Any Favorite Products For You !!")} />}
+                                {IsGetFavoriteProducts && <SectionLoader />}
                                 {totalPagesCount > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}

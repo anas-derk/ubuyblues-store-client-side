@@ -16,6 +16,8 @@ export default function AllBrands({ storeId }) {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
+    
+    const [errorMsg, setErrorMsg] = useState("");
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
 
@@ -121,7 +123,7 @@ export default function AllBrands({ storeId }) {
             setIsGetBrands(false);
         }
         catch (err) {
-            throw err;
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
         }
     }
 
@@ -148,6 +150,7 @@ export default function AllBrands({ storeId }) {
                                 {isGetBrands && <SectionLoader />}
                             </div>
                             {!isGetBrands && currentPage < totalPagesCount && <button className="mb-4 d-block mx-auto text-center show-btn p-3" onClick={getNextPage}>Show More</button>}
+                            {errorMsg && <NotFoundError errorMsg={errorMsg} />}
                         </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
                     </div>
                 </div>

@@ -84,13 +84,9 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                         setFilters({ ...filters, customerId: result.data._id });
                         const result2 = await getWalletProductsCount(`customerId=${result.data._id}`);
                         if (result2.data > 0) {
-                            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
+                            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize)).data);
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                         }
-                        setWindowInnerWidth(window.innerWidth);
-                        window.addEventListener("resize", () => {
-                            setWindowInnerWidth(window.innerWidth);
-                        });
                         setIsGetWalletProducts(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -196,7 +192,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
-            })
+            });
             setIsDeletingWalletProduct(false);
             setIsSuccessDeletingWalletProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
@@ -269,9 +265,9 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                     <td>{(walletProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingWalletProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
-                                                        {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
-                                                        {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                        {!isDeletingWalletProduct && selectedWalletProduct !== walletProductIndex && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
+                                                        {isDeletingWalletProduct && selectedWalletProduct === walletProductIndex && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                        {isSuccessDeletingWalletProductProduct && selectedWalletProduct === walletProductIndex && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         <Link
                                                             href={`/product-details/${walletProduct.productId}`}
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"

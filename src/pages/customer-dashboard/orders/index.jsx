@@ -31,7 +31,7 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const [isExistOrdersForThisUserInDBInGeneral, setIsExistOrdersForThisUserInDBInGeneral] = useState(false);
 
-    const [isFilteringOrdersStatus, setIsFilteringOrdersStatus] = useState(true);
+    const [isGetOrders, setIsGetOrders] = useState(true);
 
     const [errMsg, setErrorMsg] = useState("");
 
@@ -68,7 +68,7 @@ export default function CustomerOrders({ countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!isFilteringOrdersStatus) {
+            if (!isGetOrders) {
                 setIsLoadingPage(false);
             }
         })
@@ -90,7 +90,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                             setTotalPagesCount(Math.ceil(result2.data / pageSize));
                             setIsExistOrdersForThisUserInDBInGeneral(true);
                         }
-                        setIsFilteringOrdersStatus(false);
+                        setIsGetOrders(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                         await router.replace("/auth");
@@ -112,10 +112,10 @@ export default function CustomerOrders({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        if (!isFilteringOrdersStatus) {
+        if (!isGetOrders) {
             setIsLoadingPage(false);
         }
-    }, [isFilteringOrdersStatus]);
+    }, [isGetOrders]);
 
     const getOrdersCount = async (filters) => {
         try {
@@ -145,11 +145,11 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getPreviousPage = async () => {
         try {
-            setIsFilteringOrdersStatus(true);
+            setIsGetOrders(true);
             const newCurrentPage = currentPage - 1;
             setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
             setCurrentPage(newCurrentPage);
-            setIsFilteringOrdersStatus(false);
+            setIsGetOrders(false);
         }
         catch (err) {
             throw err;
@@ -158,11 +158,11 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getNextPage = async () => {
         try {
-            setIsFilteringOrdersStatus(true);
+            setIsGetOrders(true);
             const newCurrentPage = currentPage + 1;
             setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
             setCurrentPage(newCurrentPage);
-            setIsFilteringOrdersStatus(false);
+            setIsGetOrders(false);
         }
         catch (err) {
             throw err;
@@ -171,10 +171,10 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const getSpecificPage = async (pageNumber) => {
         try {
-            setIsFilteringOrdersStatus(true);
+            setIsGetOrders(true);
             setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
             setCurrentPage(pageNumber);
-            setIsFilteringOrdersStatus(false);
+            setIsGetOrders(false);
         }
         catch (err) {
             throw err;
@@ -191,13 +191,13 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const filterOrders = async () => {
         try {
-            setIsFilteringOrdersStatus(true);
+            setIsGetOrders(true);
             const filteringString = getFilteringString(filters);
             const result = await getOrdersCount(filteringString);
             if (result.data > 0) {
                 setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
                 setTotalPagesCount(Math.ceil(result.data / pageSize));
-                setIsFilteringOrdersStatus(false);
+                setIsGetOrders(false);
             } else {
                 setAllOrdersInsideThePage([]);
                 setTotalPagesCount(0);
@@ -262,20 +262,20 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                 </select>
                                             </div>
                                         </div>
-                                        {!isFilteringOrdersStatus && <button
+                                        {!isGetOrders && <button
                                             className="btn btn-success d-block w-25 mx-auto mt-2"
                                             onClick={() => filterOrders()}
                                         >
                                             {t("Filter")}
                                         </button>}
-                                        {isFilteringOrdersStatus && <button
+                                        {isGetOrders && <button
                                             className="btn btn-success d-block w-25 mx-auto mt-2"
                                             disabled
                                         >
                                             {t("Filtering")} ...
                                         </button>}
                                     </section>}
-                                    {allOrdersInsideThePage.length > 0 && !isFilteringOrdersStatus && !errMsg && <section className="orders-data-box p-3 data-box">
+                                    {allOrdersInsideThePage.length > 0 && !isGetOrders && !errMsg && <section className="orders-data-box p-3 data-box">
                                         {windowInnerWidth > 991 ? <table className="orders-data-table customer-table data-table mb-4 w-100">
                                             <thead>
                                                 <tr>
@@ -367,11 +367,11 @@ export default function CustomerOrders({ countryAsProperty }) {
                                             ))}
                                         </div>}
                                     </section>}
-                                    {allOrdersInsideThePage.length === 0 && !isFilteringOrdersStatus && !errMsg && <NotFoundError errorMsg={t("Sorry, Can't Find Any Orders")} />}
+                                    {allOrdersInsideThePage.length === 0 && !isGetOrders && !errMsg && <NotFoundError errorMsg={t("Sorry, Can't Find Any Orders")} />}
                                     {errMsg && <p className="alert alert-danger">{t(errMsg)}</p>}
-                                    {isFilteringOrdersStatus && <SectionLoader />}
+                                    {isGetOrders && <SectionLoader />}
                                 </div>
-                                {totalPagesCount > 1 && !isFilteringOrdersStatus &&
+                                {totalPagesCount > 1 && !isGetOrders &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}
                                         currentPage={currentPage}
