@@ -18,6 +18,7 @@
     "i18next": "^23.7.16",
     "jsonwebtoken": "^9.0.2",
     "libphonenumber-js": "^1.10.53",
+    "motion": "^11.11.17",
     "next": "^13.5.6",
     "react": "18.2.0",
     "react-bootstrap": "^2.10.0",

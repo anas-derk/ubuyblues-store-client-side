@@ -41,6 +41,7 @@ import BrandCard from "@/components/BrandCard";
 import ErrorPopup from "@/components/ErrorPopup";
 import { Carousel } from "react-bootstrap";
 import Slider from "react-slick";
+import { motion } from "motion/react";
 
 export default function Home({ countryAsProperty, storeId }) {
 
@@ -703,7 +704,18 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>} */}
                             {/* End Image Ads Section */}
                             {/* Start Categories Section */}
-                            <section className="categories mb-5 pb-5" id="categories">
+                            <motion.section
+                                className="categories mb-5 pb-5" id="categories"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        duration: 2
+                                    }
+                                }}
+                            >
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Categories")}</h2>
                                 {isGetCategories && <SectionLoader />}
                                 {!isGetCategories && allCategoriesInsideThePage.length > 0 && <div className="row mb-5">
@@ -735,7 +747,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         section="categories"
                                     />
                                 }
-                            </section>
+                            </motion.section>
                             {/* End Categories Section */}
                             {/* Start Last Added Flash Products */}
                             <section className="last-added-flash-products mb-5 pb-3" id="latest-added-flash-products">
