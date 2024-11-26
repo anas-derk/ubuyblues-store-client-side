@@ -772,7 +772,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div
-                                        className="col-xs-12 col-md-6"
+                                        className="col-xs-12 col-md-6 position-relative"
                                     >
                                         <motion.form
                                             className="search-form"
@@ -831,7 +831,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 {isGetFlashProducts && <SectionLoader />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
                                     {!isGetFlashProducts && allFlashProductsInsideThePage.length > 0 && allFlashProductsInsideThePage.map((product) => (
-                                        <div
+                                        <motion.div
                                             className="col-xs-12 col-lg-6 col-xl-4"
                                             key={product._id}
                                             initial={{
@@ -862,7 +862,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setIsDisplayErrorPopup={setIsDisplayErrorPopup}
                                                 setErrorType={setErrorType}
                                             />
-                                        </div>
+                                        </motion.div>
                                     ))}
                                     {!isGetFlashProducts && allFlashProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistFlashProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                     {totalPagesCount.forFlashProducts > 1 &&
