@@ -772,10 +772,10 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div
-                                        className="col-xs-12 col-md-6 position-relative"
+                                        className="col-xs-12 col-md-6"
                                     >
                                         <motion.form
-                                            className="search-form"
+                                            className="search-form position-relative"
                                             initial={{
                                                 right: "-100%",
                                             }}
