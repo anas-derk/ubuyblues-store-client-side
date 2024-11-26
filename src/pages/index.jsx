@@ -650,7 +650,18 @@ export default function Home({ countryAsProperty, storeId }) {
                 {/* End Share Options Box */}
                 <div className={`page-content ${allTextAds.length === 0 && "pt-5"}`}>
                     {/* Start Text Ads Section */}
-                    {allTextAds.length > 0 && <section className="text-ads text-center p-3 bg-white fw-bold mb-5">
+                    {allTextAds.length > 0 && <motion.section
+                        className="text-ads text-center p-3 bg-white fw-bold mb-5"
+                        initial={{
+                            width: 0,
+                        }}
+                        animate={{
+                            width: "100%",
+                            transition: {
+                                duration: 0.3,
+                            }
+                        }}
+                    >
                         <Carousel indicators={false} controls={false}>
                             {allTextAds.map((ad, index) => (
                                 <Carousel.Item key={index}>
@@ -660,7 +671,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 </Carousel.Item>
                             ))}
                         </Carousel>
-                    </section>}
+                    </motion.section>}
                     {/* End Text Ads Section */}
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
@@ -704,30 +715,37 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>} */}
                             {/* End Image Ads Section */}
                             {/* Start Categories Section */}
-                            <motion.section
+                            <section
                                 className="categories mb-5 pb-5" id="categories"
-                                initial={{
-                                    opacity: 0
-                                }}
-                                animate={{
-                                    opacity: 1,
-                                    transition: {
-                                        duration: 2
-                                    }
-                                }}
                             >
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Categories")}</h2>
                                 {isGetCategories && <SectionLoader />}
                                 {!isGetCategories && allCategoriesInsideThePage.length > 0 && <div className="row mb-5">
                                     {allCategoriesInsideThePage.map((category) => (
-                                        <div className="col-md-3" key={category._id}>
+                                        <motion.div
+                                            className="col-md-3"
+                                            key={category._id}
+                                            initial={{
+                                                right: "-100%",
+                                                position: "relative"
+                                            }}
+                                            animate={{
+                                                right: 0,
+                                                transition: {
+                                                    duration: 0.3,
+                                                }
+                                            }}
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                        >
                                             <div className="category-details p-3">
                                                 <Link href={`/products-by-category?categoryId=${category._id}`} className="product-by-category-link text-dark">
                                                     <h6 className="cateogory-name mb-3">{category.name}</h6>
                                                     <MdKeyboardArrowRight className="forward-arrow-icon" />
                                                 </Link>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     ))}
                                 </div>}
                                 {!isGetCategories && allCategoriesInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Can't Find Any Categories For This Store !!")} />}
@@ -747,14 +765,27 @@ export default function Home({ countryAsProperty, storeId }) {
                                         section="categories"
                                     />
                                 }
-                            </motion.section>
+                            </section>
                             {/* End Categories Section */}
                             {/* Start Last Added Flash Products */}
                             <section className="last-added-flash-products mb-5 pb-3" id="latest-added-flash-products">
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Flash Products")}</h2>
                                 {isExistFlashProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
-                                    <div className="col-xs-12 col-md-6">
-                                        <form className="search-form">
+                                    <div
+                                        className="col-xs-12 col-md-6"
+                                    >
+                                        <motion.form
+                                            className="search-form"
+                                            initial={{
+                                                right: "-100%",
+                                            }}
+                                            whileInView={{
+                                                right: "0",
+                                                transition: {
+                                                    duration: 0.3,
+                                                }
+                                            }}
+                                        >
                                             <div className="product-name-field-box">
                                                 <input
                                                     type="text"
@@ -766,10 +797,22 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     <FaSearch className="icon" onClick={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)} />
                                                 </div>
                                             </div>
-                                        </form>
+                                        </motion.form>
                                     </div>
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form" onSubmit={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)}>
+                                        <motion.form
+                                            className="sort-form"
+                                            onSubmit={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)}
+                                            initial={{
+                                                scale: 0.5,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.3,
+                                                }
+                                            }}
+                                        >
                                             <div className="select-sort-type-box">
                                                 <select
                                                     className="select-sort-type form-select"
@@ -782,13 +825,28 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     <option value="price,1">{t("From Lowest Price To Highest")}</option>
                                                 </select>
                                             </div>
-                                        </form>
+                                        </motion.form>
                                     </div>
                                 </div>}
                                 {isGetFlashProducts && <SectionLoader />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
                                     {!isGetFlashProducts && allFlashProductsInsideThePage.length > 0 && allFlashProductsInsideThePage.map((product) => (
-                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                        <div
+                                            className="col-xs-12 col-lg-6 col-xl-4"
+                                            key={product._id}
+                                            initial={{
+                                                scale: 0.7,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.5,
+                                                }
+                                            }}
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                        >
                                             <ProductCard
                                                 productDetails={product}
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -828,7 +886,18 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Last Added Products")}</h2>
                                 {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="search-form">
+                                        <motion.form
+                                            className="search-form position-relative"
+                                            initial={{
+                                                right: "-100%",
+                                            }}
+                                            whileInView={{
+                                                right: "0",
+                                                transition: {
+                                                    duration: 0.3,
+                                                }
+                                            }}
+                                        >
                                             <div className="product-name-field-box">
                                                 <input
                                                     type="text"
@@ -840,10 +909,21 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     <FaSearch className='icon' onClick={(e) => searchOnProduct(e, "normal", filters.forProducts, sortDetails.forProducts)} />
                                                 </div>
                                             </div>
-                                        </form>
+                                        </motion.form>
                                     </div>
                                     <div className="col-xs-12 col-md-6">
-                                        <form className="sort-form">
+                                        <motion.form
+                                            className="sort-form position-relative"
+                                            initial={{
+                                                scale: 0.5,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.3,
+                                                }
+                                            }}
+                                        >
                                             <div className="select-sort-type-box">
                                                 <select
                                                     className="select-sort-type form-select"
@@ -856,14 +936,29 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     <option value="price,1">{t("From Lowest Price To Highest")}</option>
                                                 </select>
                                             </div>
-                                        </form>
+                                        </motion.form>
                                     </div>
                                 </div>}
                                 {isGetProducts && <SectionLoader />}
                                 {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                 <div className="row products-box section-data-box pt-4 pb-4">
                                     {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
-                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={product._id}>
+                                        <motion.div
+                                            className="col-xs-12 col-lg-6 col-xl-4 position-relative"
+                                            key={product._id}
+                                            initial={{
+                                                scale: 0.7,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.5,
+                                                }
+                                            }}
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                        >
                                             <ProductCard
                                                 productDetails={product}
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -878,7 +973,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                 setIsDisplayErrorPopup={setIsDisplayErrorPopup}
                                                 setErrorType={setErrorType}
                                             />
-                                        </div>
+                                        </motion.div>
                                     ))}
                                     {totalPagesCount.forProducts > 1 &&
                                         <PaginationBar
@@ -902,11 +997,26 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <div className="row brands-box section-data-box pt-4 pb-4">
                                     {isGetBrands && <SectionLoader />}
                                     {!isGetBrands && lastSevenBrands.length > 0 && lastSevenBrands.map((brand) => (
-                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
+                                        <motion.div
+                                            className="col-xs-12 col-lg-6 col-xl-4 position-relative"
+                                            key={brand._id}
+                                            initial={{
+                                                scale: 0.7,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.5,
+                                                }
+                                            }}
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                        >
                                             <BrandCard
                                                 brandDetails={brand}
                                             />
-                                        </div>
+                                        </motion.div>
                                     ))}
                                     {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                                 </div>
@@ -919,14 +1029,29 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <div className="row stores-box section-data-box pt-4 pb-4">
                                     {isGetStores && <SectionLoader />}
                                     {!isGetStores && allStoresInsideThePage.length > 0 && allStoresInsideThePage.map((store) => (
-                                        <div className="col-xs-12 col-lg-6 col-xl-4" key={store._id}>
+                                        <motion.div
+                                            className="col-xs-12 col-lg-6 col-xl-4 position-relative"
+                                            key={store._id}
+                                            initial={{
+                                                scale: 0.7,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.5,
+                                                }
+                                            }}
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                        >
                                             <StoreCard
                                                 storeDetails={store}
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
                                                 setSharingName={setSharingName}
                                                 setSharingURL={setSharingURL}
                                             />
-                                        </div>
+                                        </motion.div>
                                     ))}
                                     {!isGetStores && allStoresInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, There Is Not Found Stores Now !!")} />}
                                 </div>

@@ -11,6 +11,7 @@ import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import axios from "axios";
 import { handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function Footer() {
 
@@ -65,9 +66,22 @@ export default function Footer() {
         <footer className="pt-4 pb-4">
             <div className="container">
                 <div className="row align-items-center mb-4">
-                    <div className="col-xl-3">
+                    <motion.div
+                        className="col-xl-3"
+                        initial={{
+                            scale: 0.7,
+                        }}
+                        whileInView={{
+                            scale: 1,
+                            transition: {
+                                duration: 0.4,
+                            }
+                        }}
+                    >
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Our links").toUpperCase()}</h5>
-                        <ul className="links-list">
+                        <ul
+                            className="links-list"
+                        >
                             <li className="link-item fw-bold mb-3">
                                 {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
                                 <Link href="/" className="text-dark link-btn">{t("Main").toUpperCase()}</Link>
@@ -93,10 +107,23 @@ export default function Footer() {
                                 <Link href="/return-and-delivery-sheet" className="text-dark link-btn">{t("Return And Delivery Sheet").toUpperCase()}</Link>
                             </li>
                         </ul>
-                    </div>
-                    <div className="col-xl-3">
+                    </motion.div>
+                    <motion.div
+                        className="col-xl-3"
+                        initial={{
+                            scale: 0.7,
+                        }}
+                        whileInView={{
+                            scale: 1,
+                            transition: {
+                                duration: 0.4,
+                            }
+                        }}
+                    >
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Contact Us").toUpperCase()}</h5>
-                        <ul className="links-list">
+                        <ul
+                            className="links-list"
+                        >
                             <li className="link-item fw-bold mb-3">
                                 <IoLogoFacebook className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 <Link href="https://www.facebook.com/AsfourInternational?mibextid=ZbWKwL" target="_blank" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
@@ -118,10 +145,23 @@ export default function Footer() {
                                 <Link href="mailto:info@ubuyblues.com" className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
                             </li>
                         </ul>
-                    </div>
-                    <div className="col-xl-3">
+                    </motion.div>
+                    <motion.div
+                        className="col-xl-3"
+                        initial={{
+                            scale: 0.7,
+                        }}
+                        whileInView={{
+                            scale: 1,
+                            transition: {
+                                duration: 0.4,
+                            }
+                        }}
+                    >
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Payment Methods").toUpperCase()}</h5>
-                        <ul className="payment-methods-list mb-5">
+                        <ul
+                            className="payment-methods-list mb-5"
+                        >
                             <li className="payment-method-item fw-bold mb-3">
                                 <FaCcPaypal className={`icon paypal-icon ${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
                                 <span>{t("PayPal")}</span>
@@ -143,8 +183,19 @@ export default function Footer() {
                                 <span>{t("Tabby")}</span>
                             </li>
                         </ul>
-                    </div>
-                    <div className="col-xl-3">
+                    </motion.div>
+                    <motion.div
+                        className="col-xl-3"
+                        initial={{
+                            scale: 0.7,
+                        }}
+                        whileInView={{
+                            scale: 1,
+                            transition: {
+                                duration: 0.4,
+                            }
+                        }}
+                    >
                         <h5 className="fw-bold mb-3 border-bottom border-dark border-2 pb-2 title">{t("Subscription").toUpperCase()}</h5>
                         <p className="mb-3">{t("Enter your email address")}</p>
                         <p className="mb-3">{"(" + t("I want to receive all the latest updates via email") + " )"}</p>
@@ -161,7 +212,7 @@ export default function Footer() {
                             {successMsg && <button type="button" disabled className="btn btn-success">{successMsg}</button>}
                             {errMsg && <button type="button" disabled className="btn btn-danger">{errMsg}</button>}
                         </form>
-                    </div>
+                    </motion.div>
                 </div>
                 <p className="mb-0 text-center fw-bold">
                     {t("All Rights Reserved For")} <Link href="/" className="text-danger">Ubuyblues</Link>
