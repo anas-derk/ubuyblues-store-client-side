@@ -6,6 +6,7 @@ import LoaderPage from "@/components/LoaderPage";
 import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import Footer from "@/components/Footer";
+import { motion } from "motion/react";
 
 export default function AboutUs() {
 
@@ -45,6 +46,20 @@ export default function AboutUs() {
         }
     }, []);
 
+    const initialStateForElement = {
+        opacity: 0,
+    };
+
+    const getAnimationSettings = (index) => {
+        return {
+            opacity: 1,
+            transition: {
+                delay: 0.3 * index,
+                duration: 0.3
+            }
+        }
+    }
+
     return (
         <div className="about-us caption-page page">
             <Head>
@@ -54,13 +69,43 @@ export default function AboutUs() {
                 <Header />
                 <div className="page-content text-white ps-4 pe-4 pb-5 pt-5">
                     <div className="container-fluid">
-                        <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto">{t("About Us")}</h1>
+                        <motion.h1
+                            className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto"
+                            initial={initialStateForElement}
+                            animate={getAnimationSettings(0)}
+                            whileInView={getAnimationSettings(0)}
+                        >{t("About Us")}</motion.h1>
                         <div className="content">
-                            <p className="mb-4">{t("We offer high-quality products to our customers. We are committed to meeting your needs and providing the best solutions to ensure your satisfaction .")} .</p>
-                            <p className="mb-4">{t("We feature a wide range of diverse products available at competitive prices. We strive to provide a variety of products to suit your different needs and budgets. We offer high-quality products in various fields such as handicrafts, home and office supplies, household products, and more .")} .</p>
-                            <p className="mb-4">{t("We consider our customers as partners in our success, and we strive to provide high-quality customer service. We pay attention to the smallest details and aim to provide a satisfying shopping experience for our customers .")} .</p>
-                            <p className="mb-4">{t("We are committed to dedicating ourselves to achieving the highest levels of quality and satisfaction for our customers. We strive for innovation and continuous development to meet the changing market demands and continually improve our operations .")} .</p>
-                            <p className="mb-0">{t("We are committed to meeting your needs and achieving your satisfaction, and we are dedicated to achieving sustainable success in our field of work .")} .</p>
+                            <motion.p
+                                className="mb-4"
+                                initial={initialStateForElement}
+                                animate={getAnimationSettings(1)}
+                                whileInView={getAnimationSettings(1)}
+                            >{t("We offer high-quality products to our customers. We are committed to meeting your needs and providing the best solutions to ensure your satisfaction .")} .</motion.p>
+                            <motion.p
+                                className="mb-4"
+                                initial={initialStateForElement}
+                                animate={getAnimationSettings(2)}
+                                whileInView={getAnimationSettings(2)}
+                            >{t("We feature a wide range of diverse products available at competitive prices. We strive to provide a variety of products to suit your different needs and budgets. We offer high-quality products in various fields such as handicrafts, home and office supplies, household products, and more .")} .</motion.p>
+                            <motion.p
+                                className="mb-4"
+                                initial={initialStateForElement}
+                                animate={getAnimationSettings(3)}
+                                whileInView={getAnimationSettings(3)}
+                            >{t("We consider our customers as partners in our success, and we strive to provide high-quality customer service. We pay attention to the smallest details and aim to provide a satisfying shopping experience for our customers .")} .</motion.p>
+                            <motion.p
+                                className="mb-4"
+                                initial={initialStateForElement}
+                                animate={getAnimationSettings(4)}
+                                whileInView={getAnimationSettings(4)}
+                            >{t("We are committed to dedicating ourselves to achieving the highest levels of quality and satisfaction for our customers. We strive for innovation and continuous development to meet the changing market demands and continually improve our operations .")} .</motion.p>
+                            <motion.p
+                                className="mb-0"
+                                initial={initialStateForElement}
+                                animate={getAnimationSettings(5)}
+                                whileInView={getAnimationSettings(5)}
+                            >{t("We are committed to meeting your needs and achieving your satisfaction, and we are dedicated to achieving sustainable success in our field of work .")} .</motion.p>
                         </div>
                     </div>
                 </div>
