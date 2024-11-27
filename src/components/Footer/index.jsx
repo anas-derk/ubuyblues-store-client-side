@@ -10,7 +10,7 @@ import TabbyLogo from "../../../public/images/tabby-logo.png";
 import { IoLogoFacebook } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import axios from "axios";
-import { handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { motion } from "motion/react";
 
 export default function Footer() {
@@ -110,15 +110,8 @@ export default function Footer() {
                     </motion.div>
                     <motion.div
                         className="col-xl-3"
-                        initial={{
-                            scale: 0.7,
-                        }}
-                        whileInView={{
-                            scale: 1,
-                            transition: {
-                                duration: 0.4,
-                            }
-                        }}
+                        initial={getInitialStateForElementBeforeAnimation()}
+                        whileInView={getAnimationSettings}
                     >
                         <h5 className="fw-bold mb-4 border-bottom border-dark border-2 pb-2 title">{t("Contact Us").toUpperCase()}</h5>
                         <ul

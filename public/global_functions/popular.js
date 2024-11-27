@@ -285,6 +285,21 @@ const handleSelectUserLanguage = (userLanguage, changeLanguageFunc) => {
     document.body.lang = userLanguage;
 }
 
+const getInitialStateForElementBeforeAnimation = () => {
+    return {
+        scale: 0.7
+    }
+}
+
+const getAnimationSettings = () => {
+    return {
+        scale: 1,
+        transition: {
+            duration: 0.4
+        }
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -312,5 +327,7 @@ export {
     getProductsByIds,
     getAppearedSections,
     getOrderDetails,
-    handleSelectUserLanguage
+    handleSelectUserLanguage,
+    getInitialStateForElementBeforeAnimation,
+    getAnimationSettings
 }
