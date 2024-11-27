@@ -6,17 +6,18 @@ import NotFoundError from "@/components/NotFoundError";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import axios from "axios";
 import SectionLoader from "@/components/SectionLoader";
 import BrandCard from "@/components/BrandCard";
+import { motion } from "motion/react";
 
 export default function AllBrands({ storeId }) {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
-    
+
     const [errorMsg, setErrorMsg] = useState("");
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
@@ -137,14 +138,27 @@ export default function AllBrands({ storeId }) {
                 <div className="page-content pb-5 pt-5">
                     <div className="container-fluid">
                         {Object.keys(storeDetails).length > 0 ? <>
-                            <h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white h3">{t("All The Brands Of The Store")}: {storeDetails.name}</h1>
+                            <motion.h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white h3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("All The Brands Of The Store")}: {storeDetails.name}</motion.h1>
                             <div className="row brands-box section-data-box mb-5">
                                 {allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
-                                    <div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}>
+                                    <motion.div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}
+                                        initial={{
+                                            scale: 0.7,
+                                        }}
+                                        whileInView={{
+                                            scale: 1,
+                                            transition: {
+                                                duration: 0.5,
+                                            }
+                                        }}
+                                        whileHover={{
+                                            scale: 1.1
+                                        }}
+                                    >
                                         <BrandCard
                                             brandDetails={brand}
                                         />
-                                    </div>
+                                    </motion.div>
                                 ))}
                                 {allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                                 {isGetBrands && <SectionLoader />}

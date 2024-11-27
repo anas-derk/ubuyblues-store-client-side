@@ -14,7 +14,8 @@ import { GoogleLogin } from '@react-oauth/google';
 import { decode } from "jsonwebtoken";
 import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function UserAuth() {
 
@@ -252,7 +253,7 @@ export default function UserAuth() {
                 <Header />
                 <div className="page-content">
                     <div className="container-fluid p-4 text-white text-center">
-                        <section className="auth-part-display-control mb-5">
+                        <motion.section className="auth-part-display-control mb-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                             <h4
                                 className="m-0 display-login-btn display-btn p-3"
                                 onClick={() => setAppearedAuthPartName("login")}
@@ -265,13 +266,13 @@ export default function UserAuth() {
                             >
                                 {t("sign-up")}
                             </h4>
-                        </section>
+                        </motion.section>
                         <section className="authentication">
                             <div className="row">
                                 {appearedAuthPartName === "sign-up" && <div className="col-md-12">
                                     <div className="signup-section">
                                         <h5 className="part-name mb-4">{t("Create New Account")}</h5>
-                                        <form className="user-signup-form mb-3" onSubmit={userSignup}>
+                                        <motion.form className="user-signup-form mb-3" onSubmit={userSignup} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className="email-field-box">
                                                 <input
                                                     type="text"
@@ -316,13 +317,13 @@ export default function UserAuth() {
                                                     />
                                                 </li>
                                             </ul>
-                                        </form>
+                                        </motion.form>
                                     </div>
                                 </div>}
                                 {appearedAuthPartName === "login" && <div className="col-md-12">
                                     <div className="login-section">
                                         <h5 className="part-name mb-4">{t("login")}</h5>
-                                        <form className="user-login-form mb-3" onSubmit={userLogin}>
+                                        <motion.form className="user-login-form mb-3" onSubmit={userLogin} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className="email-field-box">
                                                 <input
                                                     type="text"
@@ -367,7 +368,7 @@ export default function UserAuth() {
                                                     />
                                                 </li>
                                             </ul>
-                                        </form>
+                                        </motion.form>
                                         <Link href="/forget-password?userType=user" className="text-white border-bottom border-2 pb-2 forget-password-link-btn">{t("forget password").toUpperCase()}</Link>
                                     </div>
                                 </div>}

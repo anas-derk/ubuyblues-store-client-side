@@ -10,8 +10,9 @@ import { FaCode } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { motion } from "motion/react";
 
 export default function ForgetPassword({ userTypeAsProperty }) {
 
@@ -281,9 +282,21 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                 <Header />
                 <div className="page-content pt-5 text-white ps-4 pe-4 text-center">
                     <div className="container-fluid">
-                        <h1 className="h4 mb-5 fw-bold text-center">{t("Welcome To You In Forget Password Page")}</h1>
+                        <motion.h1 className="h4 mb-5 fw-bold text-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Welcome To You In Forget Password Page")}</motion.h1>
                         {!isDisplayResetPasswordForm && <form className="user-forget-form mb-3" onSubmit={forgetPassword}>
-                            <div className="select-user-type-field-box">
+                            <motion.div
+                                className="select-user-type-field-box"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 0.3,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 <select
                                     className={`select-user-type form-select ${i18n.language === "ar" ? "ar" : ""} ${formValidationErrors["userType"] ? "border-danger mb-3" : "mb-5"}`}
                                     onChange={(e) => handleSelectUserType(e.target.value)}
@@ -292,9 +305,21 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     <option value="user">{t("Normal User")}</option>
                                     <option value="admin">{t("Admin")}</option>
                                 </select>
-                            </div>
+                            </motion.div>
                             {formValidationErrors["userType"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["userType"])}</p>}
-                            <div className="email-field-box">
+                            <motion.div
+                                className="email-field-box"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 0.5,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 <input
                                     type="text"
                                     placeholder={t("Please Enter Your Email")}
@@ -304,20 +329,43 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
                                     <BiSolidUser className="icon" />
                                 </div>
-                            </div>
+                            </motion.div>
                             {formValidationErrors["email"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["email"])}</p>}
-                            {!isCheckingStatus && !errorMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 global-button">
+                            {!isCheckingStatus && !errorMsg && !successMsg && <motion.button type="submit" className="btn btn-success w-100 mb-4 global-button"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 0.8,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 {i18n.language === "ar" && <RiLockPasswordLine />}
                                 <span className="me-2">{t("Forget Password")}</span>
                                 {i18n.language !== "ar" && <RiLockPasswordLine />}
-                            </button>}
+                            </motion.button>}
                             {isCheckingStatus && <button disabled className="btn btn-primary w-100 mb-4 global-button">
                                 <span className="me-2">{t("Wait Checking")} ...</span>
                             </button>}
                             {(errorMsg || successMsg) && <p className={`global-button text-center text-white text-start mb-5 alert ${errorMsg ? "alert-danger bg-danger" : ""} ${successMsg ? "alert-success bg-success" : ""}`}>{t(errorMsg || successMsg)}</p>}
                         </form>}
                         {isDisplayResetPasswordForm && <form className="user-reset-form mb-3" onSubmit={resetPassword}>
-                            <div className="code-field-box">
+                            <motion.div
+                                className="code-field-box"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 0.3,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 <input
                                     type="text"
                                     placeholder={t("Please Enter The Code Here")}
@@ -327,9 +375,21 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                 <div className={`icon-box text-dark ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
                                     <FaCode className="icon" />
                                 </div>
-                            </div>
+                            </motion.div>
                             {formValidationErrors["typedUserCode"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["typedUserCode"])}</p>}
-                            <div className="new-password-field-box">
+                            <motion.div
+                                className="new-password-field-box"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 0.5,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 <input
                                     type={isVisibleNewPassword ? "text" : "password"}
                                     placeholder={t("Please Enter New Password Here")}
@@ -340,9 +400,21 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     {!isVisibleNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
                                     {isVisibleNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
                                 </div>
-                            </div>
+                            </motion.div>
                             {formValidationErrors["newPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["newPassword"])}</p>}
-                            <div className="confirm-new-password-field-box">
+                            <motion.div
+                                className="confirm-new-password-field-box"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 0.8,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 <input
                                     type={isVisibleConfirmNewPassword ? "text" : "password"}
                                     placeholder={t("Please Enter Confirm New Password Here")}
@@ -353,13 +425,24 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     {!isVisibleConfirmNewPassword && <AiOutlineEye className='eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
                                     {isVisibleConfirmNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
                                 </div>
-                            </div>
+                            </motion.div>
                             {formValidationErrors["confirmNewPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["confirmNewPassword"])}</p>}
-                            {!isResetingPasswordStatus && !errorMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-5 global-button">
+                            {!isResetingPasswordStatus && !errorMsg && !successMsg && <motion.button type="submit" className="btn btn-success w-100 mb-5 global-button"
+                                initial={{
+                                    opacity: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    transition: {
+                                        delay: 1.1,
+                                        duration: 0.3
+                                    }
+                                }}
+                            >
                                 {i18n.language === "ar" && <RiLockPasswordLine />}
                                 <span className="me-2">{t("Reset Password")}</span>
                                 {i18n.language !== "ar" && <RiLockPasswordLine />}
-                            </button>}
+                            </motion.button>}
                             {isResetingPasswordStatus && <button disabled className="btn btn-primary w-100 mb-5 global-button">
                                 <span className="me-2">{t("Wait Reseting")} ...</span>
                             </button>}

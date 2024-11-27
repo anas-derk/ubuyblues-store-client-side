@@ -9,7 +9,8 @@ import axios from "axios";
 import NotFoundError from "@/components/NotFoundError";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
-import { getUserInfo, getAppearedSections, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getUserInfo, getAppearedSections, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function AddYourStore() {
 
@@ -240,9 +241,9 @@ export default function AddYourStore() {
                 <div className="page-content pt-5">
                     <div className="container-fluid">
                         {isServiceAvailable ? <section className="add-your-store pb-5">
-                            <h1 className="section-name text-center mb-4 text-white h4">{t("Add Your Store")}</h1>
+                            <motion.h1 className="section-name text-center mb-4 text-white h4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Add Your Store")}</motion.h1>
                             <form className="add-your-store-form mx-auto public-form" onSubmit={createNewStore}>
-                                <section className="name mb-4">
+                                <motion.section className="name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
                                         type="text"
                                         className={`form-control store-name-field ${formValidationErrors["name"] ? "border-danger mb-3" : "mb-4"}`}
@@ -254,8 +255,8 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["name"])}</span>
                                     </p>}
-                                </section>
-                                <section className="owner-first-name mb-4">
+                                </motion.section>
+                                <motion.section className="owner-first-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
                                         type="text"
                                         className={`form-control store-owner-first-name-field ${formValidationErrors["ownerFirstName"] ? "border-danger mb-3" : "mb-4"}`}
@@ -267,8 +268,8 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["ownerFirstName"])}</span>
                                     </p>}
-                                </section>
-                                <section className="owner-last-name mb-4">
+                                </motion.section>
+                                <motion.section className="owner-last-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
                                         type="text"
                                         className={`form-control store-owner-last-name-field ${formValidationErrors["ownerLastName"] ? "border-danger mb-3" : "mb-4"}`}
@@ -280,8 +281,8 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["ownerLastName"])}</span>
                                     </p>}
-                                </section>
-                                <section className="owner-email mb-4">
+                                </motion.section>
+                                <motion.section className="owner-email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
                                         type="text"
                                         className={`form-control store-owner-email-field ${formValidationErrors["ownerEmail"] ? "border-danger mb-3" : "mb-4"}`}
@@ -293,8 +294,8 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["ownerEmail"])}</span>
                                     </p>}
-                                </section>
-                                <section className="store-products-type mb-4">
+                                </motion.section>
+                                <motion.section className="store-products-type mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
                                         type="text"
                                         className={`form-control store-products-type-field ${formValidationErrors["productsType"] ? "border-danger mb-3" : "mb-4"}`}
@@ -306,8 +307,8 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["productsType"])}</span>
                                     </p>}
-                                </section>
-                                <section className="store-products-description mb-4">
+                                </motion.section>
+                                <motion.section className="store-products-description mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
                                         type="text"
                                         className={`form-control store-products-description-field ${formValidationErrors["productsDescription"] ? "border-danger mb-3" : "mb-4"}`}
@@ -319,8 +320,8 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["productsDescription"])}</span>
                                     </p>}
-                                </section>
-                                <section className="image mb-4">
+                                </motion.section>
+                                <motion.section className="image mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <h6 className="fw-bold text-white mb-3">{t("Please Select Your Store Image")}</h6>
                                     <input
                                         type="file"
@@ -334,13 +335,14 @@ export default function AddYourStore() {
                                         <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                         <span>{t(formValidationErrors["image"])}</span>
                                     </p>}
-                                </section>
-                                {!isWaitStatus && !successMsg && !errorMsg && <button
+                                </motion.section>
+                                {!isWaitStatus && !successMsg && !errorMsg && <motion.button
                                     type="submit"
                                     className="btn btn-success w-50 d-block mx-auto global-button"
+                                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                 >
                                     {t("Add Now")}
-                                </button>}
+                                </motion.button>}
                                 {isWaitStatus && <button
                                     type="button"
                                     className="btn btn-danger w-50 d-block mx-auto global-button"
