@@ -30,7 +30,9 @@ import {
     isFavoriteProductForUser,
     getUserInfo,
     getAppearedSections,
-    handleSelectUserLanguage
+    handleSelectUserLanguage,
+    getInitialStateForElementBeforeAnimation,
+    getAnimationSettings
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -725,16 +727,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                         <motion.div
                                             className="col-md-3"
                                             key={category._id}
-                                            initial={{
-                                                right: "-100%",
-                                                position: "relative"
-                                            }}
-                                            animate={{
-                                                right: 0,
-                                                transition: {
-                                                    duration: 0.3,
-                                                }
-                                            }}
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
                                             whileHover={{
                                                 scale: 1.1
                                             }}
@@ -775,16 +769,9 @@ export default function Home({ countryAsProperty, storeId }) {
                                         className="col-xs-12 col-md-6"
                                     >
                                         <motion.form
-                                            className="search-form position-relative"
-                                            initial={{
-                                                right: "-100%",
-                                            }}
-                                            whileInView={{
-                                                right: "0",
-                                                transition: {
-                                                    duration: 0.3,
-                                                }
-                                            }}
+                                            className="search-form"
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
                                         >
                                             <div className="product-name-field-box">
                                                 <input
@@ -803,15 +790,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                         <motion.form
                                             className="sort-form"
                                             onSubmit={(e) => searchOnProduct(e, "flash", filters.forFlashProducts, sortDetails.forFlashProducts)}
-                                            initial={{
-                                                scale: 0.5,
-                                            }}
-                                            whileInView={{
-                                                scale: 1,
-                                                transition: {
-                                                    duration: 0.3,
-                                                }
-                                            }}
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
                                         >
                                             <div className="select-sort-type-box">
                                                 <select
@@ -834,15 +814,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                         <motion.div
                                             className="col-xs-12 col-lg-6 col-xl-4"
                                             key={product._id}
-                                            initial={{
-                                                scale: 0.7,
-                                            }}
-                                            whileInView={{
-                                                scale: 1,
-                                                transition: {
-                                                    duration: 0.5,
-                                                }
-                                            }}
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
                                             whileHover={{
                                                 scale: 1.1
                                             }}
@@ -887,16 +860,9 @@ export default function Home({ countryAsProperty, storeId }) {
                                 {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                     <div className="col-xs-12 col-md-6">
                                         <motion.form
-                                            className="search-form position-relative"
-                                            initial={{
-                                                right: "-100%",
-                                            }}
-                                            whileInView={{
-                                                right: "0",
-                                                transition: {
-                                                    duration: 0.3,
-                                                }
-                                            }}
+                                            className="search-form"
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
                                         >
                                             <div className="product-name-field-box">
                                                 <input
@@ -913,16 +879,9 @@ export default function Home({ countryAsProperty, storeId }) {
                                     </div>
                                     <div className="col-xs-12 col-md-6">
                                         <motion.form
-                                            className="sort-form position-relative"
-                                            initial={{
-                                                scale: 0.5,
-                                            }}
-                                            whileInView={{
-                                                scale: 1,
-                                                transition: {
-                                                    duration: 0.3,
-                                                }
-                                            }}
+                                            className="sort-form"
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
                                         >
                                             <div className="select-sort-type-box">
                                                 <select
@@ -944,7 +903,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                 <div className="row products-box section-data-box pt-4 pb-4">
                                     {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
                                         <motion.div
-                                            className="col-xs-12 col-lg-6 col-xl-4 position-relative"
+                                            className="col-xs-12 col-lg-6 col-xl-4"
                                             key={product._id}
                                             initial={{
                                                 scale: 0.7,
@@ -998,7 +957,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     {isGetBrands && <SectionLoader />}
                                     {!isGetBrands && lastSevenBrands.length > 0 && lastSevenBrands.map((brand) => (
                                         <motion.div
-                                            className="col-xs-12 col-lg-6 col-xl-4 position-relative"
+                                            className="col-xs-12 col-lg-6 col-xl-4"
                                             key={brand._id}
                                             initial={{
                                                 scale: 0.7,
@@ -1030,7 +989,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                     {isGetStores && <SectionLoader />}
                                     {!isGetStores && allStoresInsideThePage.length > 0 && allStoresInsideThePage.map((store) => (
                                         <motion.div
-                                            className="col-xs-12 col-lg-6 col-xl-4 position-relative"
+                                            className="col-xs-12 col-lg-6 col-xl-4"
                                             key={store._id}
                                             initial={{
                                                 scale: 0.7,
