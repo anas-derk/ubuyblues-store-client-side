@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { motion } from "motion/react";
 
 export default function PageNotFound() {
 
@@ -54,12 +55,87 @@ export default function PageNotFound() {
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content pt-5 pb-5">
-                    <BiError className="error-404-icon" />
-                    <h1 className="mb-3 h4">{t("Sorry,")}</h1>
-                    <h2 className="mb-3 h5">{t("this page could not be found.")}</h2>
-                    <h3 className="mb-4 h6">{t("Something went wrong.")}</h3>
-                    <h3 className="mb-4 h6">{t("The page you were looking for could not be found. Please check the URL")}</h3>
-                    <Link href="/" className="home-page-link-button">{t("Or Go To Home Page")}</Link>
+                    <motion.div
+                        className="position-relative"
+                        initial={{
+                            scale: 0.5,
+                        }}
+                        animate={{
+                            scale: 1,
+                            color: "#F00",
+                            transition: {
+                                duration: 0.5,
+                            }
+                        }}
+                    >
+                        <BiError className="error-404-icon" />
+                    </motion.div>
+                    <motion.h1
+                        className="mb-3 h4"
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1,
+                            transition: {
+                                delay: 0.5,
+                                duration: 0.3
+                            }
+                        }}
+                    >{t("Sorry,")}</motion.h1>
+                    <motion.h2
+                        className="mb-3 h5"
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1,
+                            transition: {
+                                delay: 1,
+                                duration: 0.3
+                            }
+                        }}
+                    >{t("this page could not be found.")}</motion.h2>
+                    <motion.h3
+                        className="mb-4 h6"
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1,
+                            transition: {
+                                delay: 1.5,
+                                duration: 0.3
+                            }
+                        }}
+                    >{t("Something went wrong.")}</motion.h3>
+                    <motion.h3
+                        className="mb-4 h6"
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1,
+                            transition: {
+                                delay: 2,
+                                duration: 0.3
+                            }
+                        }}
+                    >{t("The page you were looking for could not be found. Please check the URL")}</motion.h3>
+                    <motion.div
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1,
+                            transition: {
+                                delay: 2.5,
+                                duration: 0.3
+                            }
+                        }}
+                    >
+                        <Link href="/" className="home-page-link-button">{t("Or Go To Home Page")}</Link>
+                    </motion.div>
                 </div>
             </>}
             {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
