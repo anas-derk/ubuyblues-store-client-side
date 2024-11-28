@@ -9,9 +9,10 @@ import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds, handleSelectUserLanguage, getAnimationSettings, getInitialStateForElementBeforeAnimation } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { useDispatch } from "react-redux";
+import { motion } from "motion/react";
 
 export default function Cart({ countryAsProperty }) {
 
@@ -238,17 +239,17 @@ export default function Cart({ countryAsProperty }) {
                                         <div className="col-xl-8">
                                             {windowInnerWidth > 991 && <section className="products w-100">
                                                 <table className="user-products-table mb-4 w-100">
-                                                    <thead>
+                                                    <motion.thead initial={getInitialStateForElementBeforeAnimation()} whileInView={() => getAnimationSettings(0.3)}>
                                                         <tr>
                                                             <th>{t("Product")}</th>
                                                             <th>{t("Quantity")}</th>
                                                             <th>{t("Subtotal")}</th>
                                                             <th>{t("Action")}</th>
                                                         </tr>
-                                                    </thead>
+                                                    </motion.thead>
                                                     <tbody>
-                                                        {store.products.map((product) => (
-                                                            <tr key={product._id}>
+                                                        {store.products.map((product, productIndex) => (
+                                                            <motion.tr key={product._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={() => getAnimationSettings(0.3 * productIndex)}>
                                                                 <td className="product-cell">
                                                                     <div className="row">
                                                                         <div className="col-lg-4">
@@ -287,7 +288,7 @@ export default function Cart({ countryAsProperty }) {
                                                                 <td className="delete-product-cell">
                                                                     <BsTrash className="trash-icon" onClick={() => deleteProduct(product._id)} />
                                                                 </td>
-                                                            </tr>
+                                                            </motion.tr>
                                                         ))}
                                                     </tbody>
                                                 </table>
@@ -301,7 +302,7 @@ export default function Cart({ countryAsProperty }) {
                                                         <h5 className="mb-3">{t("Product")} # {index + 1}</h5>
                                                         <table className="user-products-table-for-mobiles-and-tablets table-for-mobiles-and-tablets w-100">
                                                             <tbody>
-                                                                <tr>
+                                                                <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                     <th>{t("Product")}</th>
                                                                     <td className="product-cell">
                                                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
@@ -318,8 +319,8 @@ export default function Cart({ countryAsProperty }) {
                                                                             <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                         }
                                                                     </td>
-                                                                </tr>
-                                                                <tr>
+                                                                </motion.tr>
+                                                                <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                     <th>{t("Quantity")}</th>
                                                                     <td className="update-product-quantity-cell">
                                                                         <div className="update-product-quantity p-3 w-100">
@@ -332,26 +333,26 @@ export default function Cart({ countryAsProperty }) {
                                                                             />
                                                                         </div>
                                                                     </td>
-                                                                </tr>
-                                                                <tr>
+                                                                </motion.tr>
+                                                                <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                     <th>{t("Subtotal")}</th>
                                                                     <td className="subtotal-cell">
                                                                         {(product.price * usdPriceAgainstCurrency * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
                                                                     </td>
-                                                                </tr>
-                                                                <tr>
+                                                                </motion.tr>
+                                                                <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                     <th>{t("Action")}</th>
                                                                     <td className="delete-product-cell">
                                                                         <BsTrash className="trash-icon" onClick={() => deleteProduct(product._id)} />
                                                                     </td>
-                                                                </tr>
+                                                                </motion.tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 ))}
                                             </section>}
                                         </div>
-                                        <div className="col-xl-4">
+                                        <motion.div className="col-xl-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={() => getAnimationSettings(0.3 * storeIndex)}>
                                             <section className="order-total border border-3 text-start" id="order-total">
                                                 <h6 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h6>
                                                 <div className="row total-price-before-discount total pb-3 mb-5">
@@ -380,7 +381,7 @@ export default function Cart({ countryAsProperty }) {
                                                 </div>
                                                 <Link href={`/checkout?storeId=${store.storeId}`} className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
                                             </section>
-                                        </div>
+                                        </motion.div>
                                     </div>
                                 </div>
                             ))}

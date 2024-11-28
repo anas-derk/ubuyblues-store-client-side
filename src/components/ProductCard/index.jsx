@@ -400,16 +400,16 @@ export default function ProductCard({
                         {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id, productDetails.name, productDetails.price, productDetails.description, productDetails.category, productDetails.discount, productDetails.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
                         {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2">{t("Waiting In Add To Cart")} ...</button>}
                         {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
-                        {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn p-2 btn btn-success text-white">
+                        {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn btn btn-success text-white">
                             <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
                             <span style={{ fontSize: "13px" }}>{t("Click To Go To Cart Page")}</span>
                         </Link>}
                         {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(productDetails._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
-                        {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn p-2 bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}
-                        {errorInDeleteFromCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white" disabled>{errorInDeleteFromCart}</button>}
-                        {isSuccessDeleteFromCart && <Link href="/cart" className="success-in-delete-from-cart-btn cart-btn p-2 btn btn-success text-white">
+                        {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}
+                        {errorInDeleteFromCart && <button className="error-to-cart-btn cart-btn bg-danger text-white" disabled>{errorInDeleteFromCart}</button>}
+                        {isSuccessDeleteFromCart && <Link href="/cart" className="success-in-delete-from-cart-btn cart-btn btn btn-success text-white">
                             <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
-                            <span>{t("Click To Go To Cart Page")}</span>
+                            <span style={{ fontSize: "13px" }}>{t("Click To Go To Cart Page")}</span>
                         </Link>}
                     </div>
                 </div>
