@@ -1033,7 +1033,7 @@ export default function Home({ countryAsProperty, storeId }) {
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
                                 {isDisplayContactIcons && <li className="contact-icon-item mb-3">
-                                    <a href="mailto:info@asfourintlco.com" target="_blank"><MdOutlineMail className="mail-icon" /></a>
+                                    <a href="mailto:info@ubuyblues.com" target="_blank"><MdOutlineMail className="mail-icon" /></a>
                                 </li>}
                                 {isDisplayContactIcons && appearedSections.includes("whatsapp button") && <li className="contact-icon-item mb-3">
                                     <a href="https://wa.me/96560048235?text=welcome" target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
