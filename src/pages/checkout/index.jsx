@@ -13,11 +13,12 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, handleSelectUserLanguage, getAppearedSections } from "../../../public/global_functions/popular";
+import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, handleSelectUserLanguage, getAppearedSections, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { SiBinance } from "react-icons/si";
 import Link from "next/link";
+import { motion } from "motion/react";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -755,13 +756,13 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 <Header />
                 <div className="page-content pt-5">
                     <div className="container-fluid text-white p-4">
-                        <h1 className="h4 mb-4 fw-bold text-center">{t("Welcome To You In Checkout Page")}</h1>
+                        <motion.h1 className="h4 mb-4 fw-bold text-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Welcome To You In Checkout Page")}</motion.h1>
                         {Object.keys(storeDetails).length > 0 ?
                             allProductsData.length > 0 ? <div className="row">
                                 <div className="col-xl-6">
-                                    <h6 className="mb-4 fw-bold">{t("Billing Details")}</h6>
+                                    <motion.h6 className="mb-4 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Billing Details")}</motion.h6>
                                     <form className="edit-customer-billing-address-form" onSubmit={(e) => e.preventDefault()}>
-                                        <section className="first-and-last-name mb-4">
+                                        <motion.section className="first-and-last-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <h6>{t("First Name")} <span className="text-danger">*</span></h6>
@@ -792,8 +793,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     </p>}
                                                 </div>
                                             </div>
-                                        </section>
-                                        <section className="company-name mb-4">
+                                        </motion.section>
+                                        <motion.section className="company-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Company Name")} ({t("Optional")})</h6>
                                             <input
                                                 type="text"
@@ -802,8 +803,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.billingAddress.companyName : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, companyName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                        </section>
-                                        <section className="country mb-4">
+                                        </motion.section>
+                                        <motion.section className="country mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                             <select
                                                 className={`p-2 ${formValidationErrors.country_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
@@ -823,8 +824,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.country_for_billing_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="street-address mb-4">
+                                        </motion.section>
+                                        <motion.section className="street-address mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -837,8 +838,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.street_address_for_billing_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="apartment-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="apartment-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
                                             <input
                                                 type="number"
@@ -847,8 +848,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.billingAddress.apartmentNumber : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartmentNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                        </section>
-                                        <section className="city-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="city-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("City")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -861,8 +862,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.city_for_billing_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="postal-code-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="postal-code-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -875,8 +876,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.postal_code_for_billing_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="phone-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="phone-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
                                             <div className="row">
                                                 <div className="col-md-2">
@@ -901,8 +902,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.phone_number_for_billing_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="email mb-4">
+                                        </motion.section>
+                                        <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -915,9 +916,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.email_for_billing_address)}</span>
                                             </p>}
-                                        </section>
+                                        </motion.section>
                                     </form>
-                                    {!userInfo._id && <div className="form-check mb-3">
+                                    {!userInfo._id && <motion.div className="form-check mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <input
                                             className="form-check-input"
                                             type="checkbox"
@@ -928,8 +929,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         <label className="form-check-label" htmlFor="save-payment-information" onClick={(e) => setIsSavePaymentInfo(e.target.checked)}>
                                             {t("Do You Want To Save Payment Information ?")}
                                         </label>
-                                    </div>}
-                                    <div className="form-check mb-3">
+                                    </motion.div>}
+                                    <motion.div className="form-check mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <input
                                             className="form-check-input"
                                             type="checkbox"
@@ -939,9 +940,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         <label className="form-check-label" htmlFor="shipping-to-different-address" onClick={(e) => handleIsShippingToOtherAddress(e.target.checked)}>
                                             {t("Do You Want To Ship To A Different Address ?")}
                                         </label>
-                                    </div>
+                                    </motion.div>
                                     {isShippingToOtherAddress && <form className="edit-customer-shipping-address-form" onSubmit={(e) => e.preventDefault()}>
-                                        <section className="first-and-last-name mb-4">
+                                        <motion.section className="first-and-last-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <h6>{t("First Name")} <span className="text-danger">*</span></h6>
@@ -972,8 +973,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     </p>}
                                                 </div>
                                             </div>
-                                        </section>
-                                        <section className="company-name mb-4">
+                                        </motion.section>
+                                        <motion.section className="company-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Company Name")} ({t("Optional")})</h6>
                                             <input
                                                 type="text"
@@ -982,8 +983,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.shippingAddress.companyName : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, companyName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                        </section>
-                                        <section className="country mb-4">
+                                        </motion.section>
+                                        <motion.section className="country mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                             <select
                                                 className={`p-2 ${formValidationErrors.country_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
@@ -1003,8 +1004,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{formValidationErrors.country_for_shipping_address}</span>
                                             </p>}
-                                        </section>
-                                        <section className="street-address mb-4">
+                                        </motion.section>
+                                        <motion.section className="street-address mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -1017,8 +1018,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.street_address_for_shipping_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="apartment-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="apartment-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
                                             <input
                                                 type="number"
@@ -1027,8 +1028,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.shippingAddress.apartmentNumber.toString() : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                        </section>
-                                        <section className="city-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="city-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("City")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -1041,8 +1042,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.city_for_shipping_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="postal-code-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="postal-code-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -1055,8 +1056,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.postal_code_for_shipping_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="phone-number mb-4">
+                                        </motion.section>
+                                        <motion.section className="phone-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
                                             <div className="row">
                                                 <div className="col-md-2">
@@ -1081,8 +1082,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.phone_number_for_shipping_address)}</span>
                                             </p>}
-                                        </section>
-                                        <section className="email mb-4">
+                                        </motion.section>
+                                        <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                             <input
                                                 type="text"
@@ -1095,28 +1096,29 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.email_for_shipping_address)}</span>
                                             </p>}
-                                        </section>
+                                        </motion.section>
                                     </form>}
-                                    <h6 className="mb-3">{t("Request Notes")} ( {t("Optional")} )</h6>
-                                    <textarea
+                                    <motion.h6 className="mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Request Notes")} ( {t("Optional")} )</motion.h6>
+                                    <motion.textarea
                                         className="p-2"
                                         placeholder={t("Notes About Request, Example: Note About Request Delivery")}
                                         onChange={(e) => setRequestNotes(e.target.value.trim())}
-                                    ></textarea>
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
+                                    ></motion.textarea>
                                 </div>
                                 <div className="col-xl-6">
                                     <section className="order-total border border-3 p-4 ps-md-5 pe-md-5 text-start" id="order-total">
-                                        <h5 className="fw-bold mb-5 text-center">{t("Your Request")}</h5>
-                                        <div className="row total pb-3 mb-5">
+                                        <motion.h5 className="fw-bold mb-5 text-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Your Request")}</motion.h5>
+                                        <motion.div className="row total pb-3 mb-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t("Product")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {t("Sum")}
                                             </div>
-                                        </div>
+                                        </motion.div>
                                         {allProductsData.map((product, productIndex) => (
-                                            <div className="row total pb-3 mb-5" key={productIndex}>
+                                            <motion.div className="row total pb-3 mb-5" key={productIndex} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                     {i18n.language !== "ar" ? <span>
                                                         ( {product.name} ) x {getProductQuantity(product._id)}
@@ -1127,110 +1129,114 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                     {(product.price * getProductQuantity(product._id) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                                 </div>
-                                            </div>
+                                            </motion.div>
                                         ))}
-                                        <div className="row total-price-before-discount total pb-3 mb-5">
+                                        <motion.div className="row total-price-before-discount total pb-3 mb-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t("Total Price Before Discount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>
-                                        <div className="row total-price-discount total pb-3 mb-5">
+                                        </motion.div>
+                                        <motion.div className="row total-price-discount total pb-3 mb-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t("Total Discount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>
-                                        <div className="row total-price-after-discount total pb-3 mb-4">
+                                        </motion.div>
+                                        <motion.div className="row total-price-after-discount total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t("Total Price After Discount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>
-                                        {localAndInternationlProducts.local.length > 0 && <div className="row shipping-cost-for-local-products total pb-3 mb-4">
+                                        </motion.div>
+                                        {localAndInternationlProducts.local.length > 0 && <motion.div className="row shipping-cost-for-local-products total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t(localAndInternationlProducts.international.length > 0 ? "Shipping Cost For Local Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(shippingCost.forLocalProducts * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
                                             </div>
-                                        </div>}
-                                        {localAndInternationlProducts.international.length > 0 && <div className="row shipping-cost-for-international-products total pb-3 mb-4">
+                                        </motion.div>}
+                                        {localAndInternationlProducts.international.length > 0 && <motion.div className="row shipping-cost-for-international-products total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t(localAndInternationlProducts.local.length > 0 ? "Shipping Cost For International Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(shippingCost.forInternationalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>}
-                                        {localAndInternationlProducts.local.length > 0 && localAndInternationlProducts.international.length > 0 && <div className="row shipping-cost-for-products total pb-3 mb-4">
+                                        </motion.div>}
+                                        {localAndInternationlProducts.local.length > 0 && localAndInternationlProducts.international.length > 0 && <motion.div className="row shipping-cost-for-products total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t("Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {((shippingCost.forLocalProducts + shippingCost.forInternationalProducts) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>}
-                                        <div className="row total-price total pb-3 mb-4">
+                                        </motion.div>}
+                                        <motion.div className="row total-price total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                 {t("Total Amount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
                                                 {(totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
-                                        </div>
+                                        </motion.div>
                                         {/* Start Coupon Section */}
                                         <section className="coupon mb-4 border border-2 p-3 mb-4">
-                                            <h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Coupon")}</h6>
-                                            <h6 className={`fw-bold mb-3 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>{t("Have a Coupon Code ?")}</h6>
-                                            <input
+                                            <motion.h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Coupon")}</motion.h6>
+                                            <motion.h6 className={`fw-bold mb-3 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Have a Coupon Code ?")}</motion.h6>
+                                            <motion.input
                                                 type="text"
                                                 className={`p-2 mb-2 ${formValidationErrors.couponCode ? "border-3 border-danger" : ""}`}
                                                 placeholder={t("Please Enter Coupon Code Here")}
                                                 onChange={(e) => setCouponCode(e.target.value)}
+                                                initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             />
-                                            {formValidationErrors.couponCode && <p className={`bg-danger p-2 form-field-error-box m-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
+                                            {formValidationErrors.couponCode && <motion.p className={`bg-danger p-2 form-field-error-box m-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <span className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`}><HiOutlineBellAlert className="alert-icon" /></span>
                                                 <span>{t(formValidationErrors.couponCode)}</span>
-                                            </p>}
-                                            {!isWaitApplyCoupon && !errorMsg && <button
+                                            </motion.p>}
+                                            {!isWaitApplyCoupon && !errorMsg && <motion.button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={applyCoupon}
+                                                initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             >
                                                 {t("Apply")}
-                                            </button>}
-                                            {isWaitApplyCoupon && <button
+                                            </motion.button>}
+                                            {isWaitApplyCoupon && <motion.button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 disabled
+                                                initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             >
                                                 {t("Please Waiting")}
-                                            </button>}
-                                            {errorMsg && <button
+                                            </motion.button>}
+                                            {errorMsg && <motion.button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
                                                 disabled
+                                                initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             >
                                                 {t(errorMsg)}
-                                            </button>}
+                                            </motion.button>}
                                         </section>
                                         {/* End Coupon Section */}
                                         {/* Start Shipping Methods Section */}
                                         <section className="shipping-methods mb-4 border border-2 p-3 mb-4">
-                                            <h6 className={`fw-bold mb-5 text-center bg-white text-dark p-3`}>{t("Shipping Methods")}</h6>
+                                            <motion.h6 className={`fw-bold mb-5 text-center bg-white text-dark p-3`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Shipping Methods")}</motion.h6>
                                             {localAndInternationlProducts.local.length > 0 && <>
                                                 {localAndInternationlProducts.international.length > 0 && <>
-                                                    <h6 className="text-center mb-4">{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} )</h6>
-                                                    <h6 className="text-center mb-3 fw-bold">{t("Product Names")} :</h6>
+                                                    <motion.h6 className="text-center mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} )</motion.h6>
+                                                    <motion.h6 className="text-center mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Product Names")} :</motion.h6>
                                                     <ul className={`mb-5 border border-2 p-3`}>
-                                                        {localAndInternationlProducts.local.map((product, productIndex) => <li key={productIndex}>{product} .</li>)}
+                                                        {localAndInternationlProducts.local.map((product, productIndex) => <motion.li key={productIndex} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{product} .</motion.li>)}
                                                     </ul>
                                                 </>}
-                                                <div className={`row align-items-center mb-5`}>
+                                                <motion.div className={`row align-items-center mb-5`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <div className="col-md-6">
                                                         <input
                                                             type="radio"
@@ -1245,8 +1251,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( 2 - 5 ) {t("Work Days")}</span>
                                                     </div>
-                                                </div>
-                                                <div className={`row align-items-center pt-4 mb-5`}>
+                                                </motion.div>
+                                                <motion.div className={`row align-items-center pt-4 mb-5`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <div className="col-md-6">
                                                         <input
                                                             type="radio"
@@ -1261,17 +1267,17 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( {(3 * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)} )</span>
                                                     </div>
-                                                </div>
+                                                </motion.div>
                                             </>}
                                             {localAndInternationlProducts.international.length > 0 && <>
                                                 {localAndInternationlProducts.local.length > 0 && <>
-                                                    <h6 className="text-center mb-4 border-top pt-4">{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</h6>
-                                                    <h6 className="text-center mb-3 fw-bold">{t("Product Names")} :</h6>
+                                                    <motion.h6 className="text-center mb-4 border-top pt-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</motion.h6>
+                                                    <motion.h6 className="text-center mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Product Names")} :</motion.h6>
                                                     <ul className={`mb-5 border border-2 p-3`}>
-                                                        {localAndInternationlProducts.international.map((product, productIndex) => <li key={productIndex} className={`${productIndex !== localAndInternationlProducts.international.length - 1 ? "mb-3" : ""}`}>{product} .</li>)}
+                                                        {localAndInternationlProducts.international.map((product, productIndex) => <motion.li key={productIndex} className={`${productIndex !== localAndInternationlProducts.international.length - 1 ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{product} .</motion.li>)}
                                                     </ul>
                                                 </>}
-                                                <div className={`row align-items-center pt-4 mb-5`}>
+                                                <motion.div className={`row align-items-center pt-4 mb-5`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <div className="col-md-6">
                                                         <input
                                                             type="radio"
@@ -1286,8 +1292,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( 10 - 15 ) {t("Work Days")}</span>
                                                     </div>
-                                                </div>
-                                                <div className={`row align-items-center pt-4 mb-5`}>
+                                                </motion.div>
+                                                <motion.div className={`row align-items-center pt-4 mb-5`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <div className="col-md-6">
                                                         <input
                                                             type="radio"
@@ -1302,14 +1308,14 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <div className="col-md-6 text-md-end">
                                                         <span className="p-3 border border-3">( 6 - 9 ) {t("Work Days")}</span>
                                                     </div>
-                                                </div>
+                                                </motion.div>
                                             </>}
                                         </section>
                                         {/* End Shipping Methods Section */}
                                         {/* Start Payement Methods Section */}
                                         <section className="payment-methods mb-4 border border-2 p-3 mb-4">
-                                            <h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`}>{t("Payment Methods")}</h6>
-                                            <div className={`row align-items-center pt-3 ${paymentGateway === "paypal" ? "mb-3" : ""}`}>
+                                            <motion.h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Payment Methods")}</motion.h6>
+                                            <motion.div className={`row align-items-center pt-3 ${paymentGateway === "paypal" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
@@ -1324,7 +1330,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <div className="col-md-6 text-md-end">
                                                     <FaCcPaypal className="payment-icon paypal-icon" />
                                                 </div>
-                                            </div>
+                                            </motion.div>
                                             {paymentGateway === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
                                                 options={{
                                                     clientId: "test",
@@ -1338,7 +1344,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     onApprove={approveOnPayPalOrder}
                                                 />
                                             </PayPalScriptProvider>}
-                                            <div className={`row align-items-center pt-3 ${paymentGateway === "tap" ? "mb-3" : ""}`}>
+                                            <motion.div className={`row align-items-center pt-3 ${paymentGateway === "tap" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
@@ -1353,8 +1359,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <div className="col-md-6 text-md-end">
                                                     <FaTape className="payment-icon tap-icon" />
                                                 </div>
-                                            </div>
-                                            <div className={`row align-items-center pt-3 ${paymentGateway === "tabby" ? "mb-3" : ""}`}>
+                                            </motion.div>
+                                            <motion.div className={`row align-items-center pt-3 ${paymentGateway === "tabby" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
@@ -1369,8 +1375,8 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <div className="col-md-6 text-md-end">
                                                     <FaTape className="payment-icon tap-icon" />
                                                 </div>
-                                            </div>
-                                            {isAppearedBinancePaymentMethod && <div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`}>
+                                            </motion.div>
+                                            {isAppearedBinancePaymentMethod && <motion.div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className="col-md-6 text-start">
                                                     <input
                                                         type="radio"
@@ -1385,10 +1391,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 <div className="col-md-6 text-md-end">
                                                     <SiBinance className="payment-icon binance-icon" />
                                                 </div>
-                                            </div>}
+                                            </motion.div>}
                                         </section>
                                         {/* End Payement Methods Section */}
-                                        <div className={`form-check mb-4 border p-4 ${i18n.language !== "ar" ? "text-end" : "text-end"}`}>
+                                        <motion.div className={`form-check mb-4 border p-4 ${i18n.language !== "ar" ? "text-end" : "text-end"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <input
                                                 className="form-check-input mt-0"
                                                 type="checkbox"
@@ -1398,47 +1404,53 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             <label className="form-check-label p-0" htmlFor="approve-on-terms-and-conditions" onClick={(e) => setIsAgreeOnTermsAndConditions(e.target.checked)}>
                                                 {t("Agree To")} <Link href="/polices-terms-and-conditions">{t("Terms And Conditions")}</Link>
                                             </label>
-                                        </div>
+                                        </motion.div>
                                         {formValidationErrors.is_agree_on_terms_and_conditions && <p className="bg-danger p-2 form-field-error-box m-0">
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.is_agree_on_terms_and_conditions)}</span>
                                         </p>}
-                                        {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <button
+                                        {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                             onClick={handleSelectPaypalPayment}
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t("Confirm Request")}
-                                        </button>}
-                                        {paymentGateway === "tap" && !isWaitCreateNewOrder && !errorMsg && <button
+                                        </motion.button>}
+                                        {paymentGateway === "tap" && !isWaitCreateNewOrder && !errorMsg && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                             onClick={() => createPaymentOrder("tap")}
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t("Confirm Request")}
-                                        </button>}
-                                        {paymentGateway === "tabby" && !isWaitCreateNewOrder && !errorMsg && <button
+                                        </motion.button>}
+                                        {paymentGateway === "tabby" && !isWaitCreateNewOrder && !errorMsg && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                             onClick={() => createPaymentOrder("tabby")}
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t("Confirm Request")}
-                                        </button>}
-                                        {paymentGateway === "binance" && !isWaitCreateNewOrder && !errorMsg && <button
+                                        </motion.button>}
+                                        {paymentGateway === "binance" && !isWaitCreateNewOrder && !errorMsg && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                             onClick={() => createPaymentOrder("binance")}
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t("Confirm Request")}
-                                        </button>}
-                                        {isWaitCreateNewOrder && <button
+                                        </motion.button>}
+                                        {isWaitCreateNewOrder && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                             disabled
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t("Please Waiting")}
-                                        </button>}
-                                        {errorMsg && <button
+                                        </motion.button>}
+                                        {errorMsg && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3 bg-danger text-white"
                                             disabled
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t(errorMsg)}
-                                        </button>}
+                                        </motion.button>}
                                     </section>
                                 </div>
                             </div> : <NotFoundError errorMsg={t("Sorry, Can't Find Any Products For This Store Your Cart !!")} />

@@ -8,8 +8,10 @@ import LoaderPage from "@/components/LoaderPage";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { isEmail } from "../../../public/global_functions/validations";
-import { getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { motion } from "motion/react";
+let accountVerificationCodeCharactersList = ["", "", "", ""];
 
 export default function AccountVerification({ email }) {
 
@@ -30,8 +32,6 @@ export default function AccountVerification({ email }) {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [errorMsgOnLoading, setErrorMsgOnLoading] = useState("");
-
-    const [accountVerificationCodeCharactersList, setAccountVerificationCodeCharactersList] = useState([]);
 
     const router = useRouter();
 
@@ -165,19 +165,18 @@ export default function AccountVerification({ email }) {
         }
     }
 
-    const handleWritePartOfVerificationCode = (character, inputIndex) => {
-        accountVerificationCodeCharactersList[inputIndex] = character;
-        if (inputIndex < 3) {
+    const handleWritePartOfVerificationCode = (e, inputIndex) => {
+        accountVerificationCodeCharactersList[inputIndex] = e.target.value;
+        if (inputIndex < 3 && accountVerificationCodeCharactersList[inputIndex]) {
             const nextCodeCharacterInputField = document.getElementById(`field${inputIndex + 2}`);
-            if (nextCodeCharacterInputField.value.length === 0) {
-                nextCodeCharacterInputField.focus();
-            }
-        } else if (inputIndex === 3 || !accountVerificationCodeCharactersList.includes("")) {
-            checkAccountVerificationCode(event);
+            nextCodeCharacterInputField.focus();
+        } else if (!accountVerificationCodeCharactersList.includes("")) {
+            checkAccountVerificationCode(e);
         }
     }
 
-    const handlePasteVerificationCode = (word) => {
+    const handlePasteVerificationCode = (e) => {
+        const word = e.clipboardData.getData("text");
         if (word.length > 0) {
             for (let i = 0; i < 4; i++) {
                 const currentCharacterInputField = document.getElementById(`field${i + 1}`);
@@ -205,7 +204,7 @@ export default function AccountVerification({ email }) {
     }
 
     return (
-        <div className="account-verification page">
+        <div className="account-verification page d-flex flex-column justify-content-center">
             <Head>
                 <title>{t(process.env.storeName)} - {t("Account Verification")}</title>
             </Head>
@@ -214,34 +213,34 @@ export default function AccountVerification({ email }) {
                 <div className="page-content">
                     <div className="container-fluid pb-5">
                         {!errorMsgOnLoading ? <>
-                            <h1 className="welcome-msg border-bottom pb-3 mb-5 text-center text-white">{t("Welcome To You In Account Verification Page")}</h1>
+                            <motion.h1 className="welcome-msg border-bottom pb-3 mb-5 text-center text-white" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Welcome To You In Account Verification Page")}</motion.h1>
                             <section className="verification p-4">
-                                {errorMsg && <p className="alert alert-danger">{t(errorMsg)}</p>}
-                                {successMsg && <p className="alert alert-success">{t(successMsg)}</p>}
+                                {errorMsg && <motion.p className="alert alert-danger" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t(errorMsg)}</motion.p>}
+                                {successMsg && <motion.p className="alert alert-success" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t(successMsg)}</motion.p>}
                                 {isWaitCheckingStatus && <div className="overlay d-flex align-items-center justify-content-center flex-column text-white">
                                     <span className="check-loader mb-4"></span>
                                     <h6>{t("Checking")} ....</h6>
                                 </div>}
                                 <div className="row">
-                                    <div className="col-md-5">
+                                    <motion.div className="col-md-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6 className="mb-3 fw-bold">{t("You're almost done!")}</h6>
-                                    </div>
-                                    <div className="col-md-7 text-xl-end">
+                                    </motion.div>
+                                    <motion.div className="col-md-7 text-xl-end" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6 className="mb-3 fw-bold">
                                             {t("You can redial the message after")}
                                         </h6>
                                         <h6 className="mb-3 fw-bold">{minutes} : {seconds}</h6>
-                                    </div>
+                                    </motion.div>
                                 </div>
-                                <h6 className="mb-3 fw-bold">
+                                <motion.h6 className="mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <span className="me-2">{t("We sent a launch code to")}</span>
                                     <span className="text-danger email-box">{email}</span>
-                                </h6>
-                                <h6 className="mb-3 fw-bold">
+                                </motion.h6>
+                                <motion.h6 className="mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <FaLongArrowAltRight className="me-2" />
                                     <span className="text-danger fw-bold">{t("Enter code Here")} *</span>
-                                </h6>
-                                <form className="code-write-form d-flex mb-4" onSubmit={checkAccountVerificationCode}>
+                                </motion.h6>
+                                <motion.form className="code-write-form d-flex mb-4" dir="ltr" onSubmit={checkAccountVerificationCode} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     {
                                         ["field1", "field2", "field3", "field4"]
                                             .map((el, index) => (
@@ -253,34 +252,38 @@ export default function AccountVerification({ email }) {
                                                     min="0"
                                                     maxLength="1"
                                                     id={el}
-                                                    onChange={(e) => handleWritePartOfVerificationCode(e.target.value, index)}
-                                                    onPaste={(e) => handlePasteVerificationCode(e.clipboardData.getData("text"))}
+                                                    onChange={(e) => handleWritePartOfVerificationCode(e, index)}
+                                                    onPaste={handlePasteVerificationCode}
                                                 />
                                             ))
                                     }
                                     <input type="submit" hidden />
-                                </form>
+                                </motion.form>
                                 <div className="email-sent-manager-box pb-3">
-                                    <span className="fw-bold">{t("Didn't get your email?")} </span>
-                                    {!isWaitSendTheCode && !errorMsg && <button
+                                    <motion.span className="fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Didn't get your email?")} </motion.span>
+                                    {!isWaitSendTheCode && !errorMsg && <motion.button
                                         className="btn btn-danger me-2"
                                         onClick={resendTheCodeToEmail}
                                         disabled={seconds === 0 && minutes === 0 ? false : true}
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t("Resend The Code")}
-                                    </button>}
-                                    {isWaitSendTheCode && <button
+                                    </motion.button>}
+                                    {isWaitSendTheCode && <motion.button
                                         className="btn btn-danger me-2 global-button"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t("Resending The Code")} ...
-                                    </button>}
+                                    </motion.button>}
                                 </div>
                             </section>
                         </> : <section className="error-msg-on-loading d-flex justify-content-center align-items-center flex-column">
                             <main className="error-box p-4 text-center">
-                                <MdOutlineErrorOutline className="error-icon mb-4" />
-                                <p className="error-msg">{t(errorMsgOnLoading)}</p>
+                                <motion.div initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
+                                    <MdOutlineErrorOutline className="error-icon mb-4" />
+                                </motion.div>
+                                <motion.p className="error-msg" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t(errorMsgOnLoading)}</motion.p>
                             </main>
                         </section>}
                     </div>
