@@ -402,7 +402,7 @@ export default function ProductCard({
                         {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
                         {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn p-2 btn btn-success text-white">
                             <FaCheck className={`${i18n.language !== "ar" ? "me-2" : "ms-3"}`} />
-                            <span>{t("Click To Go To Cart Page")}</span>
+                            <span style={{ fontSize: "13px" }}>{t("Click To Go To Cart Page")}</span>
                         </Link>}
                         {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="delete-from-cart-btn cart-btn p-2 bg-danger text-white" onClick={() => deleteFromCart(productDetails._id)}>{t("Delete From Cart")} <MdDeleteForever /></button>}
                         {isWaitDeleteFromCart && <button className="wait-to-cart-btn cart-btn p-2 bg-danger text-white">{t("Waiting To Delete From Cart")} ...</button>}

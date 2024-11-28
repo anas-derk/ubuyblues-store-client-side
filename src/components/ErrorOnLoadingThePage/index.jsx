@@ -12,13 +12,38 @@ export default function ErrorOnLoadingThePage({ errorMsg }) {
         const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
-    
+
     return (
         <div className="error-on-loading-component">
             <Header />
             <div className="error-msg-on-loading-the-page text-center text-white d-flex flex-column justify-content-center align-items-center">
-                <PiSmileySad className="error-icon mb-5" />
-                <p className="error-msg-on-loading-box">{t(errorMsg)}</p>
+                <motion.div
+                    initial={{
+                        opacity: 0
+                    }}
+                    animate={{
+                        opacity: 1,
+                        transition: {
+                            delay: 0.5,
+                            duration: 0.3
+                        }
+                    }}
+                >
+                    <PiSmileySad className="sorry-icon mb-5" />
+                </motion.div>
+                <motion.p
+                    className="error-msg-on-loading-box"
+                    initial={{
+                        opacity: 0
+                    }}
+                    animate={{
+                        opacity: 1,
+                        transition: {
+                            delay: 0.8,
+                            duration: 0.3
+                        }
+                    }}
+                >{t(errorMsg)}</motion.p>
             </div>
         </div>
     );

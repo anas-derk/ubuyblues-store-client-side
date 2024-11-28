@@ -291,10 +291,11 @@ const getInitialStateForElementBeforeAnimation = () => {
     }
 }
 
-const getAnimationSettings = () => {
+const getAnimationSettings = (delay = 0) => {
     return {
         scale: 1,
         transition: {
+            delay,
             duration: 0.4
         }
     }
