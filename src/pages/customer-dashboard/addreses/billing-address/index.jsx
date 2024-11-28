@@ -372,8 +372,8 @@ export default function CustomerBillingAddress() {
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phoneNumber ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New Phone Number Here")}
-                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, getCountryCode(userInfo.billingAddress.country)) : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, phoneNumber: "00" + countries[getCountryCode(userInfo.billingAddress.country)].phone + e.target.value } })}
+                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, userInfo.billingAddress.country) : ""}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, phoneNumber: "00" + countries[userInfo.billingAddress.country].phone + e.target.value } })}
                                                 />
                                             </div>
                                         </div>

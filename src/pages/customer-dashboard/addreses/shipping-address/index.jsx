@@ -14,7 +14,7 @@ import { inputValuesValidation } from "../../../../../public/global_functions/va
 import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../../public/global_functions/popular";
 import { motion } from "motion/react";
 
-export default function CustomerBillingAddress() {
+export default function CustomerShippingAddress() {
 
     const [isLoadingPage, setIsLoadingPage] = useState(true);
 
@@ -372,8 +372,8 @@ export default function CustomerBillingAddress() {
                                                     type="text"
                                                     className={`p-2 ${formValidationErrors.phoneNumber ? "border-3 border-danger mb-3" : ""}`}
                                                     placeholder={t("Please Enter New Phone Number Here")}
-                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, getCountryCode(userInfo.shippingAddress.country)) : ""}
-                                                    onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, phoneNumber: "00" + countries[getCountryCode(userInfo.shippingAddress.country)].phone + e.target.value } })}
+                                                    defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, userInfo.shippingAddress.country) : ""}
+                                                    onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, phoneNumber: "00" + countries[userInfo.shippingAddress.country].phone + e.target.value } })}
                                                 />
                                             </div>
                                         </div>
