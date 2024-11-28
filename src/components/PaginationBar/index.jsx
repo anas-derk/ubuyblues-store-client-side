@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
-import { handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function PaginationBar({
     totalPagesCount,
@@ -113,8 +114,8 @@ export default function PaginationBar({
     }
 
     return (
-        <section className="pagination-bar d-flex justify-content-center align-items-center w-100 mb-3">
+        <motion.section className="pagination-bar d-flex justify-content-center align-items-center w-100 mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
             {getPaginationButtons()}
-        </section>
+        </motion.section>
     );
 }

@@ -12,7 +12,8 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../../../public/global_functions/validations";
-import { getUserInfo, handleSelectUserLanguage } from "../../../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function CustomerBillingAddress() {
 
@@ -233,7 +234,7 @@ export default function CustomerBillingAddress() {
                                 <form className="edit-customer-billing-address-form p-4" onSubmit={updateBillingAddressInfoForUser}>
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
-                                            <div className="col-md-6">
+                                            <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
@@ -246,8 +247,8 @@ export default function CustomerBillingAddress() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.firstName)}</span>
                                                 </p>}
-                                            </div>
-                                            <div className="col-md-6">
+                                            </motion.div>
+                                            <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
@@ -260,10 +261,10 @@ export default function CustomerBillingAddress() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.lastName)}</span>
                                                 </p>}
-                                            </div>
+                                            </motion.div>
                                         </div>
                                     </section>
-                                    <section className="company-name mb-4">
+                                    <motion.section className="company-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Company Name")} ({t("Optional")})</h6>
                                         <input
                                             type="text"
@@ -272,8 +273,8 @@ export default function CustomerBillingAddress() {
                                             defaultValue={userInfo.billingAddress.companyName}
                                             onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, companyName: e.target.value.trim() } })}
                                         />
-                                    </section>
-                                    <section className="country mb-4">
+                                    </motion.section>
+                                    <motion.section className="country mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Country / Area")} <span className="text-danger">*</span></h6>
                                         <select
                                             className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
@@ -302,8 +303,8 @@ export default function CustomerBillingAddress() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.country)}</span>
                                         </p>}
-                                    </section>
-                                    <section className="street-address mb-4">
+                                    </motion.section>
+                                    <motion.section className="street-address mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
@@ -316,8 +317,8 @@ export default function CustomerBillingAddress() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.streetAddress)}</span>
                                         </p>}
-                                    </section>
-                                    <section className="apartment-number mb-4">
+                                    </motion.section>
+                                    <motion.section className="apartment-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
                                         <input
                                             type="number"
@@ -326,8 +327,8 @@ export default function CustomerBillingAddress() {
                                             defaultValue={userInfo.billingAddress.apartmentNumber.toString()}
                                             onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartmentNumber: e.target.value } })}
                                         />
-                                    </section>
-                                    <section className="city-number mb-4">
+                                    </motion.section>
+                                    <motion.section className="city-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("City")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
@@ -340,8 +341,8 @@ export default function CustomerBillingAddress() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.city)}</span>
                                         </p>}
-                                    </section>
-                                    <section className="postal-code-number mb-4">
+                                    </motion.section>
+                                    <motion.section className="postal-code-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
@@ -354,8 +355,8 @@ export default function CustomerBillingAddress() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.postalCode)}</span>
                                         </p>}
-                                    </section>
-                                    <section className="phone-number mb-4">
+                                    </motion.section>
+                                    <motion.section className="phone-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
                                         <div className="row">
                                             <div className="col-md-2">
@@ -380,8 +381,8 @@ export default function CustomerBillingAddress() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.phoneNumber)}</span>
                                         </p>}
-                                    </section>
-                                    <section className="email mb-4">
+                                    </motion.section>
+                                    <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
@@ -394,31 +395,35 @@ export default function CustomerBillingAddress() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.email)}</span>
                                         </p>}
-                                    </section>
-                                    {!isWaitStatus && !successMsg && !errorMsg && <button
+                                    </motion.section>
+                                    {!isWaitStatus && !successMsg && !errorMsg && <motion.button
                                         type="submit"
                                         className="btn btn-success d-block mx-auto"
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t("Save Changes")}
-                                    </button>}
-                                    {isWaitStatus && <button
+                                    </motion.button>}
+                                    {isWaitStatus && <motion.button
                                         className="btn btn-success d-block mx-auto"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t("Saving")} ...
-                                    </button>}
-                                    {errorMsg && <button
+                                    </motion.button>}
+                                    {errorMsg && <motion.button
                                         className="btn btn-danger d-block mx-auto"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t(errorMsg)}
-                                    </button>}
-                                    {successMsg && <button
+                                    </motion.button>}
+                                    {successMsg && <motion.button
                                         className="btn btn-success d-block mx-auto"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t(successMsg)}
-                                    </button>}
+                                    </motion.button>}
                                 </form>
                             </div>
                         </div>

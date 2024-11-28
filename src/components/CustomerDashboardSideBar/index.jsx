@@ -7,6 +7,8 @@ import { MdOutlineFavoriteBorder, MdOutlineLogout } from "react-icons/md";
 import { useRouter } from "next/router";
 import { IoWalletOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import { motion } from "motion/react";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation } from "../../../public/global_functions/popular";
 
 export default function CustomerDashboardSideBar() {
 
@@ -22,8 +24,9 @@ export default function CustomerDashboardSideBar() {
     return (
         <aside className="customer-dashboard-side-bar managment-links-side-bar bg-white">
             <ul className="managment-customer-account-link-list managment-link-list">
-                <li
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                 >
                     <Link
                         href="/customer-dashboard"
@@ -32,9 +35,10 @@ export default function CustomerDashboardSideBar() {
                         <RxDashboard className={`customer-account-managment-link-icon managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Dashboard")}</span>
                     </Link>
-                </li>
-                <li
+                </motion.li>
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                 >
                     <Link
                         href="/customer-dashboard/orders"
@@ -43,9 +47,10 @@ export default function CustomerDashboardSideBar() {
                         <LuShoppingBag className={`customer-account-managment-link-icon managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Orders")}</span>
                     </Link>
-                </li>
-                <li
+                </motion.li>
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                 >
                     <Link
                         href="/customer-dashboard/addreses"
@@ -54,9 +59,10 @@ export default function CustomerDashboardSideBar() {
                         <HiOutlineHome className={`customer-account-managment-link-icon managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Addresses")}</span>
                     </Link>
-                </li>
-                <li
+                </motion.li>
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                 >
                     <Link
                         href="/customer-dashboard/account-details"
@@ -65,9 +71,10 @@ export default function CustomerDashboardSideBar() {
                         <BsPerson className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Account Details")}</span>
                     </Link>
-                </li>
-                <li
+                </motion.li>
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                 >
                     <Link
                         href="/customer-dashboard/favorite-products"
@@ -76,9 +83,10 @@ export default function CustomerDashboardSideBar() {
                         <MdOutlineFavoriteBorder className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Favorite Products")}</span>
                     </Link>
-                </li>
-                <li
+                </motion.li>
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                 >
                     <Link
                         href="/customer-dashboard/wallet"
@@ -87,16 +95,17 @@ export default function CustomerDashboardSideBar() {
                         <IoWalletOutline className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Wallet")}</span>
                     </Link>
-                </li>
-                <li
+                </motion.li>
+                <motion.li
                     className="managment-customer-account-link-item managment-link-item"
+                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                     onClick={userLogout}
                 >
                     <Link href="#" className="text-dark w-100 d-block managment-customer-account-link managment-link fw-bold">
                         <MdOutlineLogout className={`customer-account-managment-link-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`} />
                         <span className="customer-dashboard-link-name managment-link-name">{t("Logout")}</span>
                     </Link>
-                </li>
+                </motion.li>
             </ul>
         </aside>
     );

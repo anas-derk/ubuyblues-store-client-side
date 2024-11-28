@@ -11,9 +11,10 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getDateFormated, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { getAnimationSettings, getDateFormated, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
+import { motion } from "motion/react";
 
 export default function CustomerOrders({ countryAsProperty }) {
 
@@ -236,10 +237,10 @@ export default function CustomerOrders({ countryAsProperty }) {
                             <div className="col-xl-9">
                                 <div className="customer-orders">
                                     {isExistOrdersForThisUserInDBInGeneral && <section className="filters mb-3 border-3 border-white p-3 text-start text-white">
-                                        <h5 className="section-name fw-bold text-center">{t("Filters")} : </h5>
+                                        <motion.h5 className="section-name fw-bold text-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Filters")} : </motion.h5>
                                         <hr />
                                         <div className="row mb-4">
-                                            <div className="col-xl-6 d-flex align-items-center">
+                                            <motion.div className="col-xl-6 d-flex align-items-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <input
                                                     type="number"
                                                     className="p-2"
@@ -248,8 +249,8 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                     max={allOrdersInsideThePage.length}
                                                     onChange={(e) => setFilters({ ...filters, orderNumber: e.target.valueAsNumber ? e.target.valueAsNumber : -1 })}
                                                 />
-                                            </div>
-                                            <div className="col-xl-6 d-flex align-items-center">
+                                            </motion.div>
+                                            <motion.div className="col-xl-6 d-flex align-items-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <select
                                                     className="select-order-status p-2"
                                                     onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -260,24 +261,26 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                     <option value="shipping">{t("Shipping")}</option>
                                                     <option value="completed">{t("Completed")}</option>
                                                 </select>
-                                            </div>
+                                            </motion.div>
                                         </div>
-                                        {!isGetOrders && <button
+                                        {!isGetOrders && <motion.button
                                             className="btn btn-success d-block w-25 mx-auto mt-2"
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             onClick={() => filterOrders()}
                                         >
                                             {t("Filter")}
-                                        </button>}
-                                        {isGetOrders && <button
+                                        </motion.button>}
+                                        {isGetOrders && <motion.button
                                             className="btn btn-success d-block w-25 mx-auto mt-2"
+                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             disabled
                                         >
                                             {t("Filtering")} ...
-                                        </button>}
+                                        </motion.button>}
                                     </section>}
                                     {allOrdersInsideThePage.length > 0 && !isGetOrders && !errMsg && <section className="orders-data-box p-3 data-box">
                                         {windowInnerWidth > 991 ? <table className="orders-data-table customer-table data-table mb-4 w-100">
-                                            <thead>
+                                            <motion.thead initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <tr>
                                                     <th>{t("Order Number")}</th>
                                                     <th>{t("Checkout Status")}</th>
@@ -286,10 +289,10 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                     <th>{t("Added Date")}</th>
                                                     <th>{t("Action")}</th>
                                                 </tr>
-                                            </thead>
+                                            </motion.thead>
                                             <tbody>
                                                 {allOrdersInsideThePage.map((order) => (
-                                                    <tr key={order._id}>
+                                                    <motion.tr key={order._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <td>{order.orderNumber}</td>
                                                         <td>{t(order.checkoutStatus)}</td>
                                                         <td className="fw-bold">
@@ -309,46 +312,46 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                                 className="btn btn-success d-block mx-auto global-button"
                                                             >{t("Show Billing")}</Link>
                                                         </td>
-                                                    </tr>
+                                                    </motion.tr>
                                                 ))}
                                             </tbody>
                                         </table> : <div className="orders-for-user text-center">
                                             {allOrdersInsideThePage.map((order, orderIndex) => (
                                                 <div className="order-data data-box mb-5" key={order._id}>
-                                                    <h4 className="mb-3 text-white">{t("Order Details")} # {orderIndex + 1}</h4>
+                                                    <motion.h4 className="mb-3 text-white" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Order Details")} # {orderIndex + 1}</motion.h4>
                                                     <table className="order-data-table-for-user data-table w-100">
                                                         <tbody>
-                                                            <tr>
+                                                            <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                 <th>{t("Order Number")}</th>
                                                                 <td>
                                                                     {order.orderNumber}
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
+                                                            </motion.tr>
+                                                            <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                 <th>{t("Checkout Status")}</th>
                                                                 <td>
                                                                     {t(order.checkoutStatus)}
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
+                                                            </motion.tr>
+                                                            <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                 <th>{t("Status")}</th>
                                                                 <td>
                                                                     {t(order.status)}
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
+                                                            </motion.tr>
+                                                            <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                 <th>{t("Order Total Amount")}</th>
                                                                 <td>
                                                                     {order.orderAmount}
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
+                                                            </motion.tr>
+                                                            <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                 <th>{t("Added Date")}</th>
                                                                 <td>
                                                                     {getDateFormated(order.addedDate)}
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
+                                                            </motion.tr>
+                                                            <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                 <th>{t("Action")}</th>
                                                                 <td>
                                                                     <Link
@@ -360,7 +363,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                                         className="btn btn-success d-block mx-auto global-button"
                                                                     >{t("Show Billing")}</Link>
                                                                 </td>
-                                                            </tr>
+                                                            </motion.tr>
                                                         </tbody>
                                                     </table>
                                                 </div>

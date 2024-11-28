@@ -8,7 +8,8 @@ import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function CustomerAddreses() {
 
@@ -67,18 +68,18 @@ export default function CustomerAddreses() {
                             </div>
                             <div className="col-xl-9">
                                 <div className="row">
-                                    <div className="col-md-6">
+                                    <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <div className="address-editing-link-box d-flex justify-content-between p-3">
                                             <span className="text-white">{t("Billing Address")}</span>
                                             <Link href="/customer-dashboard/addreses/billing-address" className="editing-link">{t("Edit")}</Link>
                                         </div>
-                                    </div>
-                                    <div className="col-md-6">
+                                    </motion.div>
+                                    <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <div className="address-editing-link-box d-flex justify-content-between p-3">
                                             <span className="text-white">{t("Shipping Address")}</span>
                                             <Link href="/customer-dashboard/addreses/shipping-address" className="editing-link">{t("Edit")}</Link>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 </div>
                             </div>
                         </div>

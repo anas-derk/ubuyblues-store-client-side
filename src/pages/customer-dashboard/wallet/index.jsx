@@ -13,9 +13,10 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
+import { motion } from "motion/react";
 
 export default function CustomerWalletProductsList({ countryAsProperty }) {
 
@@ -241,17 +242,17 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                             <div className="col-xl-9">
                                 {allWalletProductsInsideThePage.length > 0 && !isGetWalletProducts && <section className="wallet-products-list-for-user data-box text-center">
                                     {windowInnerWidth > 991 ? <table className="wallet-products-table-for-user data-table mb-4 w-100">
-                                        <thead>
+                                        <motion.thead initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <tr>
                                                 <th>{t("Product")}</th>
                                                 <th>{t("Unit Price")}</th>
                                                 <th>{t("Stock Status")}</th>
                                                 <th>{t("Action")}</th>
                                             </tr>
-                                        </thead>
+                                        </motion.thead>
                                         <tbody>
                                             {allWalletProductsInsideThePage.map((walletProduct, walletProductIndex) => (
-                                                <tr key={walletProduct.productId}>
+                                                <motion.tr key={walletProduct.productId} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <td>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${walletProduct.imagePath}`}
@@ -273,16 +274,16 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
                                                         >{t("Show Product Details")}</Link>
                                                     </td>
-                                                </tr>
+                                                </motion.tr>
                                             ))}
                                         </tbody>
                                     </table> : <div className="wallet-products-for-user">
                                         {allWalletProductsInsideThePage.map((walletProduct, walletProductIndex) => (
                                             <div className="wallet-product data-box mb-5" key={walletProduct.productId}>
-                                                <h4 className="mb-3 text-white">{t("Product")} # {walletProductIndex + 1}</h4>
+                                                <motion.h4 className="mb-3 text-white" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Product")} # {walletProductIndex + 1}</motion.h4>
                                                 <table className="wallet-products-table-for-user data-table w-100">
                                                     <tbody>
-                                                        <tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Product")}</th>
                                                             <td>
                                                                 <img
@@ -294,16 +295,16 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                                 />
                                                                 <h6>{walletProduct.name}</h6>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
+                                                        </motion.tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Unit Price")}</th>
                                                             <td>{(walletProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
-                                                        </tr>
-                                                        <tr>
+                                                        </motion.tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Stock Status")}</th>
                                                             <td>{t("Stock Status")}</td>
-                                                        </tr>
-                                                        <tr>
+                                                        </motion.tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Action")}</th>
                                                             <td>
                                                                 {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingWalletProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
@@ -314,7 +315,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                                     className="btn btn-success d-block mx-auto mb-4 mt-4 w-75"
                                                                 >{t("Show Details")}</Link>
                                                             </td>
-                                                        </tr>
+                                                        </motion.tr>
                                                     </tbody>
                                                 </table>
                                             </div>

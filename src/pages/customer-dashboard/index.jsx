@@ -8,7 +8,8 @@ import Link from "next/link";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function CustomerDashboard() {
 
@@ -73,7 +74,7 @@ export default function CustomerDashboard() {
                             <div className="col-xl-3">
                                 <CustomerDashboardSideBar />
                             </div>
-                            <div className="col-xl-9">
+                            <motion.div className="col-xl-9" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                 <div className="customer-info-and-managment-account-links-for-customer">
                                     <h1 className="welcome-msg fw-bold mb-4">
                                         <span className="me-2">{t("Hello")} {userInfo.email}</span>
@@ -88,7 +89,7 @@ export default function CustomerDashboard() {
                                         <Link href="/customer-dashboard/account-details" className="managment-link me-2">{t("edit your password and account details")}</Link>
                                     </h2>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
                     <Footer />

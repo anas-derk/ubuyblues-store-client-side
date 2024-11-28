@@ -13,10 +13,11 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo, getFavoriteProductsCount, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { getUserInfo, getFavoriteProductsCount, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { motion } from "motion/react";
 
 export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
@@ -243,17 +244,17 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                             <div className="col-xl-9">
                                 {allFavoriteProductsInsideThePage.length > 0 && !IsGetFavoriteProducts && <section className="favorite-products-list-for-user data-box text-center">
                                     {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table mb-4 w-100">
-                                        <thead>
+                                        <motion.thead initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <tr>
                                                 <th>{t("Product")}</th>
                                                 <th>{t("Unit Price")}</th>
                                                 <th>{t("Stock Status")}</th>
                                                 <th>{t("Action")}</th>
                                             </tr>
-                                        </thead>
+                                        </motion.thead>
                                         <tbody>
                                             {allFavoriteProductsInsideThePage.map((favoriteProduct, favoriteProductIndex) => (
-                                                <tr key={favoriteProduct._id}>
+                                                <motion.tr key={favoriteProduct._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <td>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${favoriteProduct.imagePath}`}
@@ -275,16 +276,16 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
                                                         >{t("Show Product Details")}</Link>
                                                     </td>
-                                                </tr>
+                                                </motion.tr>
                                             ))}
                                         </tbody>
                                     </table> : <div className="favorite-products-for-user">
                                         {allFavoriteProductsInsideThePage.map((favoriteProduct, favoriteProductIndex) => (
                                             <div className="favorite-product data-box mb-5" key={favoriteProduct._id}>
-                                                <h4 className="mb-3 text-white">{t("Product")} # {favoriteProductIndex + 1}</h4>
+                                                <motion.h4 className="mb-3 text-white" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Product")} # {favoriteProductIndex + 1}</motion.h4>
                                                 <table className="favorite-products-table-for-user data-table w-100">
                                                     <tbody>
-                                                        <tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Product")}</th>
                                                             <td>
                                                                 <img
@@ -296,16 +297,16 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                                 />
                                                                 <h6>{favoriteProduct.name}</h6>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
+                                                        </motion.tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Unit Price")}</th>
                                                             <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
-                                                        </tr>
-                                                        <tr>
+                                                        </motion.tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Stock Status")}</th>
                                                             <td>{t("Stock Status")}</td>
-                                                        </tr>
-                                                        <tr>
+                                                        </motion.tr>
+                                                        <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Action")}</th>
                                                             <td>
                                                                 {selectedFavoriteProduct !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
@@ -316,7 +317,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                                     className="btn btn-success d-block mx-auto mb-4 mt-4 w-75"
                                                                 >{t("Show Details")}</Link>
                                                             </td>
-                                                        </tr>
+                                                        </motion.tr>
                                                     </tbody>
                                                 </table>
                                             </div>

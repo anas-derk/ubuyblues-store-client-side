@@ -11,7 +11,8 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { motion } from "motion/react";
 
 export default function CustomerAccountDetails() {
 
@@ -248,7 +249,7 @@ export default function CustomerAccountDetails() {
                                 <form className="edit-customer-account-details-form p-4" onSubmit={updateUserInfo}>
                                     <section className="first-and-last-name mb-4">
                                         <div className="row">
-                                            <div className="col-md-6">
+                                            <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("First Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
@@ -261,8 +262,8 @@ export default function CustomerAccountDetails() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.firstName)}</span>
                                                 </p>}
-                                            </div>
-                                            <div className="col-md-6">
+                                            </motion.div>
+                                            <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
                                                 <input
                                                     type="text"
@@ -275,10 +276,10 @@ export default function CustomerAccountDetails() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.lastName)}</span>
                                                 </p>}
-                                            </div>
+                                            </motion.div>
                                         </div>
                                     </section>
-                                    <section className="preview-name mb-4">
+                                    <motion.section className="preview-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Preview Name")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
@@ -292,8 +293,8 @@ export default function CustomerAccountDetails() {
                                             <span>{t(formValidationErrors.previewName)}</span>
                                         </p>}
                                         <h6 className="note mt-2">{t("This way your name will be displayed in the accounts section and in reviews")}</h6>
-                                    </section>
-                                    <section className="email mb-4">
+                                    </motion.section>
+                                    <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Email")} <span className="text-danger">*</span></h6>
                                         <input
                                             type="text"
@@ -306,10 +307,10 @@ export default function CustomerAccountDetails() {
                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                             <span>{t(formValidationErrors.email)}</span>
                                         </p>}
-                                    </section>
+                                    </motion.section>
                                     <section className="change-password mb-4">
                                         <fieldset>
-                                            <section className="current-password mb-3">
+                                            <motion.section className="current-password mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Current password")} ({t("leave the field blank if you do not want to change it")})</h6>
                                                 <div className={`current-password-field-box ${formValidationErrors.currentPassword ? "error-in-field" : ""}`}>
                                                     <input
@@ -326,8 +327,8 @@ export default function CustomerAccountDetails() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.currentPassword)}</span>
                                                 </p>}
-                                            </section>
-                                            <section className="new-password mb-3">
+                                            </motion.section>
+                                            <motion.section className="new-password mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("New password")} ({t("leave the field blank if you do not want to change it")})</h6>
                                                 <div className={`new-password-field-box ${formValidationErrors.newPassword ? "error-in-field" : ""}`}>
                                                     <input
@@ -344,8 +345,8 @@ export default function CustomerAccountDetails() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.newPassword)}</span>
                                                 </p>}
-                                            </section>
-                                            <section className="confirm-new-password mb-3">
+                                            </motion.section>
+                                            <motion.section className="confirm-new-password mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Confirm New password")} ({t("leave the field blank if you do not want to change it")})</h6>
                                                 <div className={`confirm-new-password-field-box ${formValidationErrors.confirmNewPassword ? "error-in-field" : ""}`}>
                                                     <input
@@ -362,33 +363,37 @@ export default function CustomerAccountDetails() {
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.confirmNewPassword)}</span>
                                                 </p>}
-                                            </section>
+                                            </motion.section>
                                         </fieldset>
                                     </section>
-                                    {!isWaitStatus && !successMsg && !errorMsg && <button
+                                    {!isWaitStatus && !successMsg && !errorMsg && <motion.button
                                         type="submit"
                                         className="btn btn-success d-block mx-auto"
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t("Save Changes")}
-                                    </button>}
-                                    {isWaitStatus && <button
+                                    </motion.button>}
+                                    {isWaitStatus && <motion.button
                                         className="btn btn-success d-block mx-auto"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
                                         {t("Saving")} ...
-                                    </button>}
-                                    {errorMsg && <button
+                                    </motion.button>}
+                                    {errorMsg && <motion.button
                                         className="btn btn-danger d-block mx-auto"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
-                                        { t(errorMsg) }
-                                    </button>}
-                                    {successMsg && <button
+                                        {t(errorMsg)}
+                                    </motion.button>}
+                                    {successMsg && <motion.button
                                         className="btn btn-success d-block mx-auto"
                                         disabled
+                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                     >
-                                        { t(successMsg) }
-                                    </button>}
+                                        {t(successMsg)}
+                                    </motion.button>}
                                 </form>
                             </div>
                         </div>
