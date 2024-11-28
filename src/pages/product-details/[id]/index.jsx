@@ -19,11 +19,12 @@ import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
+import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../../public/global_functions/popular";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import ErrorPopup from "@/components/ErrorPopup";
 import SectionLoader from "@/components/SectionLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { motion } from "motion/react";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -516,10 +517,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             }
         }
         return (
-            <div className="rating-box mb-4">
+            <motion.div className="rating-box mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                 <span className="me-3">{t("Your Rating")} *</span>
                 {ratingStarIcons}
-            </div>
+            </motion.div>
         );
     }
 
@@ -720,13 +721,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     ref={sliderRef}
                                                     afterChange={(slideIndex) => setProductGalleryImageIndex(slideIndex - 1)}
                                                 >
-                                                    <div>
+                                                    <motion.div initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <img
                                                             src={`${process.env.BASE_API_URL}/${productInfo.imagePath}`}
                                                             alt={`${productInfo.name} image !!`}
                                                             className="w-100 h-100 product-image"
                                                         />
-                                                    </div>
+                                                    </motion.div>
                                                     {productInfo.galleryImagesPaths.map((path, pathIndex) => (
                                                         <div key={pathIndex}>
                                                             <img
@@ -742,27 +743,27 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                            <h5 className="product-name fw-bold mb-4">{productInfo.name}</h5>
-                                            <h5 className="mb-4">{t("Categories")}:</h5>
+                                            <motion.h5 className="product-name fw-bold mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.name}</motion.h5>
+                                            <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Categories")}:</motion.h5>
                                             <ul className="product-categories-list">
                                                 {productInfo.categories.length > 0 ? productInfo.categories.map((category, categoryIndex) => (
-                                                    <li className="mb-3 d-inline-block fw-bold" key={category._id}>{category.name + (categoryIndex !== productInfo.categories.length - 1 ? "  - " : "")}</li>
-                                                )) : <li className="mb-3 d-inline-block fw-bold bg-danger p-2 text-white border-2">{t("Ucategorized")}</li>}
+                                                    <motion.li className="mb-3 d-inline-block fw-bold" key={category._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{category.name + (categoryIndex !== productInfo.categories.length - 1 ? "  - " : "")}</motion.li>
+                                                )) : <motion.li className="mb-3 d-inline-block fw-bold bg-danger p-2 text-white border-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Ucategorized")}</motion.li>}
                                             </ul>
-                                            <h5 className={`product-price mb-4 ${productInfo.discount !== 0 && "text-decoration-line-through"}`}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                                            <motion.h5 className={`product-price mb-4 ${productInfo.discount !== 0 && "text-decoration-line-through"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</motion.h5>
                                             {
                                                 productInfo.discount > 0 &&
                                                 !isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
-                                                <h6 className="product-price-after-discount mb-3">{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                <motion.h6 className="product-price-after-discount mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</motion.h6>
                                             }
                                             {
                                                 productInfo.discountInOfferPeriod > 0 &&
                                                 isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
-                                                <h6 className="product-price-after-discount mb-4">{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                <motion.h6 className="product-price-after-discount mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</motion.h6>
                                             }
                                             {
-                                                productInfo.quantity > 0 ? <h5 className="product-quantity">{productInfo.quantity} {t("Product Available In Store")}</h5> :
-                                                    <h6 className="product-not-available-error text-danger fw-bold">{t("Sorry, This Product Not Available Now !!")}</h6>
+                                                productInfo.quantity > 0 ? <motion.h5 className="product-quantity" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.quantity} {t("Product Available In Store")}</motion.h5> :
+                                                    <motion.h6 className="product-not-available-error text-danger fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Sorry, This Product Not Available Now !!")}</motion.h6>
                                             }
                                         </div>
                                         <div className="add-to-wish-list-or-cart text-center me-3 border-bottom border-2 mb-3">
@@ -790,13 +791,13 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon" />}
                                             </div>
                                             <div className={`add-to-cart row align-items-center mb-4 ${i18n.language !== "ar" && windowInnerWidth > 767 && "me-2"} ${i18n.language === "ar" && windowInnerWidth > 767 && "ms-2"}`}>
-                                                <div className="add-to-cart-managment-btns-box col-md-8">
+                                                <motion.div className="add-to-cart-managment-btns-box col-md-8" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     {!isWaitAddToCart && !errorInAddToCart && !isSuccessAddToCart && <button className="add-to-cart-btn p-2 d-block w-100 private-btn" onClick={() => addToCart(productInfo._id)}>{t("Add To Cart")}</button>}
                                                     {isWaitAddToCart && <button className="wait-to-cart-btn p-2 d-block w-100 private-btn" disabled>{t("Waiting In Add To Cart ...")}</button>}
                                                     {errorInAddToCart && <button className="error-to-cart-btn p-2 d-block w-100 bg-danger text-white private-btn" disabled>{t(errorInAddToCart)}</button>}
                                                     {isSuccessAddToCart && <Link href="/cart" className="success-to-cart-btn p-2 btn btn-success d-block w-100" disabled>{t("Display Your Cart")}</Link>}
-                                                </div>
-                                                <div className="select-product-quantity-box p-2 col-md-4">
+                                                </motion.div>
+                                                <motion.div className="select-product-quantity-box p-2 col-md-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <HiMinus className="select-product-quantity-icon"
                                                         onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity - 1)}
                                                     />
@@ -804,7 +805,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     <HiPlus className="select-product-quantity-icon"
                                                         onClick={() => setProductQuantity((previousProductQuantity) => previousProductQuantity + 1)}
                                                     />
-                                                </div>
+                                                </motion.div>
                                             </div>
                                         </div>
                                     </div>
@@ -827,9 +828,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     />
                                                 </div>
                                                 {productInfo.galleryImagesPaths.map((path, pathIndex) => (
-                                                    <div
+                                                    <motion.div
                                                         key={pathIndex}
                                                         onClick={() => { setProductGalleryImageIndex(pathIndex); goToSlide(pathIndex + 1); }}
+                                                        initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                                     >
                                                         <div className="gallery-image-box" onClick={() => setProductGalleryImageIndex(pathIndex)}>
                                                             <img
@@ -838,7 +840,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                                 className={`${productGalleryImageIndex === pathIndex ? "selection" : ""}`}
                                                             />
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                 ))}
                                             </Slider>
                                         </div>
@@ -847,34 +849,31 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 </div>
                                 <div className={`product-description-and-referrals border-top border-2 mb-4 ${windowInnerWidth > 767 ? "" : "pb-3"}`}>
                                     <div className="row justify-content-center">
-                                        <div className="col-lg-6 text-center">
+                                        <motion.div className="col-lg-6 text-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6 className={`p-2 ${appearedProductDetailsBoxName === "description" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("description")}>{t("Description")}</h6>
-                                        </div>
-                                        <div className="col-lg-6 text-center">
+                                        </motion.div>
+                                        <motion.div className="col-lg-6 text-center" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6 className={`p-2 ${appearedProductDetailsBoxName === "referrals" ? "selected" : ""}`} onClick={() => setAppearedProductDetailsBoxName("referrals")}>{t("Referrals")} ({allProductReferalsCount})</h6>
-                                        </div>
+                                        </motion.div>
                                     </div>
                                 </div>
                                 {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2">
-                                    <h6 className="mb-3 fw-bold">{t("Description")}</h6>
-                                    <p className="description-content">{productInfo.description}</p>
+                                    <motion.h6 className="mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Description")}</motion.h6>
+                                    <motion.p className="description-content" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.description}</motion.p>
                                 </div>}
                                 {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2">
                                     <div className="row">
                                         <div className="col-lg-6">
                                             <h6 className="mb-2 fw-bold">{t("Referrals")}</h6>
-                                            {allProductReferalsInsideThePage.length === 0 && !isGetProductReferals && <h6 className="mb-4">{t("There are no reviews yet")} !!</h6>}
-                                            {isGetProductReferals && <div className="loader-table-box d-flex flex-column align-items-center justify-content-center">
-                                                <span className="loader-table-data"></span>
-                                            </div>}
+                                            {allProductReferalsInsideThePage.length === 0 && !isGetProductReferals && <motion.h6 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("There are no reviews yet")} !!</motion.h6>}
+                                            {isGetProductReferals && <SectionLoader />}
                                             {allProductReferalsInsideThePage.length > 0 && <div className="referals">
                                                 {allProductReferalsInsideThePage.map((referal, referalIndex) => (
                                                     <div className="referal-box" key={referal._id}>
                                                         <div className="referal-details pt-3 pb-3">
-                                                            <h6 className="referal-number">{t("Referral")} #{referalIndex + 1}</h6>
-                                                            <h6 className="referal-writer-name">{t("Name")}: {referal.name}</h6>
-                                                            <h6 className="referal-writer-email mb-0">{t("Email")}: {referal.email}</h6>
-                                                            <p className="referal-content mb-0">{referal.content}</p>
+                                                            <motion.h6 className="referal-number" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Referral")} #{referalIndex + 1}</motion.h6>
+                                                            <motion.h6 className="referal-writer-name" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Name")}: {referal.name}</motion.h6>
+                                                            <motion.p className="referal-content mb-0" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{referal.content}</motion.p>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -896,23 +895,24 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             }
                                         </div>
                                         <div className="col-lg-6">
-                                            <h6 className="mb-4">{t("Be the first to review")} .</h6>
-                                            <h6 className="mb-4 note">{t("your e-mail address will not be published. Required fields are marked")} *</h6>
+                                            <motion.h6 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Be the first to review")} .</motion.h6>
+                                            <motion.h6 className="mb-4 note" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("your e-mail address will not be published. Required fields are marked")} *</motion.h6>
                                             {!isSelectProductRating && getRatingStars()}
                                             {isSelectProductRating && <SectionLoader />}
                                             <form className="referral-form mb-4" onSubmit={addNewReferal}>
-                                                <textarea
+                                                <motion.textarea
                                                     className={`p-2 mb-3 ${formValidationErrors.name ? "border-3 border-danger" : ""}`}
                                                     placeholder={t("Your Referal") + " *"}
                                                     defaultValue={referalDetails.content}
                                                     onChange={(e) => setReferalDetails({ ...referalDetails, content: e.target.value.trim() })}
-                                                ></textarea>
-                                                {formValidationErrors.content && <p className="bg-danger p-2 form-field-error-box mb-4">
+                                                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
+                                                />
+                                                {formValidationErrors.content && <motion.p className="bg-danger p-2 form-field-error-box mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{t(formValidationErrors.content)}</span>
-                                                </p>}
+                                                </motion.p>}
                                                 <div className="row mb-4 name-and-email-box">
-                                                    <div className="col-md-6">
+                                                    <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <input
                                                             type="text"
                                                             className={`p-2 ${formValidationErrors.name ? "border-3 border-danger mb-3" : ""}`}
@@ -924,8 +924,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                             <span>{t(formValidationErrors.name)}</span>
                                                         </p>}
-                                                    </div>
-                                                    <div className="col-md-6">
+                                                    </motion.div>
+                                                    <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <input
                                                             type="text"
                                                             className={`p-2 ${formValidationErrors.email ? "border-3 border-danger mb-3" : ""}`}
@@ -937,9 +937,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                             <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                             <span>{t(formValidationErrors.email)}</span>
                                                         </p>}
-                                                    </div>
+                                                    </motion.div>
                                                 </div>
-                                                {Object.keys(userInfo).length === 0 && <div className="save-your-details-box mb-3 row">
+                                                {Object.keys(userInfo).length === 0 && <motion.div className="save-your-details-box mb-3 row" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                     <div className="col-md-1">
                                                         <div className="form-check mb-3">
                                                             <input
@@ -954,40 +954,44 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     <div className="col-md-11">
                                                         <label htmlFor="save-your-details-checkbox">{t("Save my name, email, and referal in this browser for the next time I comment")} .</label>
                                                     </div>
-                                                </div>}
-                                                {!waitAddNewReferalMsg && !successAddNewReferalMsg && !errorAddNewReferalMsg && <button
+                                                </motion.div>}
+                                                {!waitAddNewReferalMsg && !successAddNewReferalMsg && !errorAddNewReferalMsg && <motion.button
                                                     className="private-btn p-2 d-block w-100 fw-bold"
                                                     type="submit"
+                                                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                                 >
                                                     {t("Send")}
-                                                </button>}
-                                                {waitAddNewReferalMsg && <button
+                                                </motion.button>}
+                                                {waitAddNewReferalMsg && <motion.button
                                                     className="private-btn private-wait-btn p-2 d-block w-100 fw-bold"
+                                                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                                     disabled
                                                 >
                                                     {waitAddNewReferalMsg}
-                                                </button>}
-                                                {successAddNewReferalMsg && <button
+                                                </motion.button>}
+                                                {successAddNewReferalMsg && <motion.button
                                                     className="private-btn private-success-btn p-2 d-block w-100 fw-bold"
+                                                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                                     disabled
                                                 >
                                                     {successAddNewReferalMsg}
-                                                </button>}
-                                                {errorAddNewReferalMsg && <button
+                                                </motion.button>}
+                                                {errorAddNewReferalMsg && <motion.button
                                                     className="private-btn private-error-btn p-2 d-block w-100 fw-bold"
+                                                    initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                                     disabled
                                                 >
                                                     {errorAddNewReferalMsg}
-                                                </button>}
+                                                </motion.button>}
                                             </form>
                                         </div>
                                     </div>
                                 </div>}
                                 <section className="related-products-box">
-                                    <h3 className="text-center mb-4">{t("Related Products")}</h3>
+                                    <motion.h3 className="text-center mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Related Products")}</motion.h3>
                                     {sampleFromRelatedProductsInProduct.length > 0 ? <div className="row products-box section-data-box pt-4 pb-4">
                                         {sampleFromRelatedProductsInProduct.map((product) => (
-                                            product._id !== productIdAsProperty && <div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id}>
+                                            product._id !== productIdAsProperty && <motion.div className="col-xs-12 col-lg-6 col-xl-4 text-dark" key={product._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <ProductCard
                                                     productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -1002,7 +1006,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     setIsDisplayErrorPopup={setIsDisplayErrorPopup}
                                                     setErrorType={errorType}
                                                 />
-                                            </div>
+                                            </motion.div>
                                         ))}
                                     </div> : <NotFoundError errorMsg={t("Sorry, There Is No Related Products In This Product !!")} />}
                                 </section>

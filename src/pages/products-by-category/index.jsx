@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useState, useEffect } from "react";
-import { getAllCategoriesInsideThePage, getCategoriesCount, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAllCategoriesInsideThePage, getAnimationSettings, getCategoriesCount, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
@@ -17,6 +17,7 @@ import axios from "axios";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
 import SectionLoader from "@/components/SectionLoader";
 import SubCategoriesForParentSidBar from "@/components/SubCategoriesForParentSidBar";
+import { motion } from "motion/react";
 
 export default function ProductByCategory({ countryAsProperty, categoryIdAsProperty }) {
 
@@ -295,7 +296,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <h1 className="section-name text-center mt-4 mb-5 text-white h3">{t("Last Added Products By Category Name")} : ( {categoryInfo.name} )</h1>
+                            <motion.h1 className="section-name text-center mt-4 mb-5 text-white h3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Last Added Products")} : ( {categoryInfo.name} )</motion.h1>
                             <div className="row">
                                 {isGetSubCategories && <div className="col-xl-3">
                                     {isGetSubCategories && <SectionLoader />}
@@ -350,7 +351,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                     {!isGetProducts && allProductsInsideThePage.length === 0 && <NotFoundError errorMsg={t(!isExistProductsInDBInGeneral ? "Sorry, Not Found Any Products Now !!" : "Sorry, Not Found Any Products Related In This Name !!")} />}
                                     <div className="row products-box pt-4 pb-4">
                                         {!isGetProducts && allProductsInsideThePage.length > 0 && allProductsInsideThePage.map((product) => (
-                                            <div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id}>
+                                            <motion.div className="col-xs-12 col-lg-6 col-xl-4 mb-5" key={product._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <ProductCard
                                                     productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
@@ -363,7 +364,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                     currentDateAsString={currentDate}
                                                     isFlashProductAsProperty={isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod)}
                                                 />
-                                            </div>
+                                            </motion.div>
                                         ))}
                                         {totalPagesCountForProducts > 1 &&
                                             <PaginationBar
@@ -390,7 +391,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             {isLoadingPage && !errorMsgOnLoadingThePage && <LoaderPage />}
             {errorMsgOnLoadingThePage && <ErrorOnLoadingThePage errorMsg={errorMsgOnLoadingThePage} />}
         </div >
-    )
+    );
 }
 
 export async function getServerSideProps({ query }) {
