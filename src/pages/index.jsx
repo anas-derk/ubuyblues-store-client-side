@@ -634,7 +634,7 @@ export default function Home({ countryAsProperty, storeId }) {
     return (
         <div className="home page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Home")}</title>
+                <title>{t(process.env.storeName)} - {t("Home")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

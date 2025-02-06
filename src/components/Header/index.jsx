@@ -73,24 +73,26 @@ export default function Header() {
     useEffect(() => {
         let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
-            getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
-                .then((result) => {
-                    let tempProductsCountInCart = 0, tempProductsIds = [];
-                    result.data.productByIds.forEach((storeProducts) => {
-                        tempProductsCountInCart += storeProducts.products.length;
-                        storeProducts.products.forEach((product) => {
-                            tempProductsIds.push(product._id);
+            if (tempAllProductsDataInsideTheCart.length > 0) {
+                getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
+                    .then((result) => {
+                        let tempProductsCountInCart = 0, tempProductsIds = [];
+                        result.data.productByIds.forEach((storeProducts) => {
+                            tempProductsCountInCart += storeProducts.products.length;
+                            storeProducts.products.forEach((product) => {
+                                tempProductsIds.push(product._id);
+                            });
                         });
+                        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
+                        dispatch({
+                            type: "(Add / Delete) (To / From ) Cart",
+                            productsCountInCart: tempProductsCountInCart
+                        });
+                    })
+                    .catch((err) => {
+                        setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
                     });
-                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
-                    dispatch({
-                        type: "(Add / Delete) (To / From ) Cart",
-                        productsCountInCart: tempProductsCountInCart
-                    });
-                })
-                .catch((err) => {
-                    setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
-                });
+            }
         }
     }, []);
 
