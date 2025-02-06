@@ -296,7 +296,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                     <div className="container-fluid">
                         {/* Start Last Added Products By Category Id */}
                         {Object.keys(categoryInfo).length > 0 ? <section className="last-added-products mb-5 pb-3" id="latest-added-products">
-                            <motion.h1 className="section-name text-center mt-4 mb-5 text-white h3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Last Added Products")} : ( {categoryInfo.name} )</motion.h1>
+                            <motion.h1 className="section-name text-center mt-4 mb-5 text-white h3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Last Added Products")} : {categoryInfo.name}</motion.h1>
                             <div className="row">
                                 {isGetSubCategories && <div className="col-xl-3">
                                     {isGetSubCategories && <SectionLoader />}
