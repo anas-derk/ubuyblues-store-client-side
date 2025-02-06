@@ -38,7 +38,7 @@ export default function Header() {
         window.addEventListener("resize", () => {
             setWindowInnerWidth(window.innerWidth);
         });
-        const tempLightMode = localStorage.getItem("asfour-store-light-mode");
+        const tempLightMode = localStorage.getItem(process.env.userThemeModeFieldNameInLocalStorage);
         if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
             setLightMode(tempLightMode);
             let rootElement = document.documentElement;
@@ -99,7 +99,7 @@ export default function Header() {
         setLightMode(newLightMode);
         let rootElement = document.documentElement;
         rootElement.style.setProperty("--main-color-one", newLightMode === "sunny" ? "#6A017A" : "#000");
-        localStorage.setItem("asfour-store-light-mode", newLightMode);
+        localStorage.setItem(process.env.userThemeModeFieldNameInLocalStorage, newLightMode);
     }
 
     const userLogout = async () => {

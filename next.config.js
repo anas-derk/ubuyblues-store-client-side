@@ -13,9 +13,10 @@ const nextConfig = {
         userlanguageFieldNameInLocalStorage: "ubuyblues-store-language",
         userAddressesFieldNameInLocalStorage: "ubuyblues-customer-addresses",
         userCartNameInLocalStorage: "ubuyblues-store-customer-cart",
+        userThemeModeFieldNameInLocalStorage: "ubuyblues-store-light-mode",
         selectedCountryByUser: "ubuyblues-store-country",
-        contactNumber: "4917682295720",
-        contactEmail: "info@asfourintlco.com"
+        contactNumber: "96560048235",
+        contactEmail: "info@ubuyblues.com"
     },
     async headers() {
         return [
