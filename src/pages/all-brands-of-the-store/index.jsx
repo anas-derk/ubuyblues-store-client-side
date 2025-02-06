@@ -131,7 +131,7 @@ export default function AllBrands({ storeId }) {
     return (
         <div className="all-brands page">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("All The Brands Of The Store")}</title>
+                <title>{t(process.env.storeName)} - {t("All The Brands Of The Store")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

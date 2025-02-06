@@ -687,7 +687,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     return (
         <div className="product-details page pt-5 d-flex flex-column justify-content-center">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Product Details")}</title>
+                <title>{t(process.env.storeName)} - {t("Product Details")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

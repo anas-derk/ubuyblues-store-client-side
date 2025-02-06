@@ -29,9 +29,9 @@ export default function CustomerShippingAddress() {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
-    
+
     const router = useRouter();
-    
+
     const { t, i18n } = useTranslation();
 
     const countryList = Object.values(countries);
@@ -219,7 +219,7 @@ export default function CustomerShippingAddress() {
     return (
         <div className="customer-shipping-address customer-dashboard">
             <Head>
-                <title>{t("Ubuyblues Store")} - {t("Customer Shipping Address")}</title>
+                <title>{t(process.env.storeName)} - {t("Customer Shipping Address")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
