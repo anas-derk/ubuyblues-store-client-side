@@ -27,7 +27,7 @@ import { Provider } from "react-redux";
 export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <GoogleOAuthProvider clientId={"665697657851-ajm9qfeko4lcero0hj8jh7eqvds9eg18.apps.googleusercontent.com"}>
+      <GoogleOAuthProvider clientId={"474293828709-lose15l4kuf529gb9hu85or53b33vv8s.apps.googleusercontent.com"}>
         <Component {...pageProps} />
       </GoogleOAuthProvider>
     </Provider>
