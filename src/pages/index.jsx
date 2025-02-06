@@ -691,7 +691,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>}
                             {/* End Store Details Section */}
                             {/* Start Image Ads Section */}
-                            {allImageAds.length > 0 && <section className="image-ads mb-5">
+                            {allImageAds.length > 0 && <section className="image-ads mb-5 pb-3">
                                 <div className="container-fluid">
                                     <Slider
                                         dots={true}
