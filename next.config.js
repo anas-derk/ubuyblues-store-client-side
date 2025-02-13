@@ -14,6 +14,7 @@ const nextConfig = {
         userAddressesFieldNameInLocalStorage: "ubuyblues-customer-addresses",
         userCartNameInLocalStorage: "ubuyblues-store-customer-cart",
         userThemeModeFieldNameInLocalStorage: "ubuyblues-store-light-mode",
+        referalWriterFieldNameInLocalStorage: "ubuyblue-store-referal-writer-info",
         selectedCountryByUser: "ubuyblues-store-country",
         contactNumber: "96560048235",
         contactEmail: "info@ubuyblues.com"

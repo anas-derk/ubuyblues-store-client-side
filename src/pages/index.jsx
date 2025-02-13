@@ -226,12 +226,10 @@ export default function Home({ countryAsProperty, storeId }) {
                         forProducts: 0,
                         forStores: 0,
                     }
-                    const result = await getCategoriesCount(filtersAsString);
-                    if (result.data > 0) {
-                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data);
-                        totalPagesCountTemp.forCategories = Math.ceil(result.data / pageSizes.forCategories);
-                        setTotalPagesCount(totalPagesCountTemp);
-                    }
+                    const result = (await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data;
+                    setAllCategoriesInsideThePage(result.categories);
+                    totalPagesCountTemp.forCategories = Math.ceil(result.categoriesCount / pageSizes.forCategories);
+                    setTotalPagesCount(totalPagesCountTemp);
                     setIsGetCategories(false);
                     // =============================================================================
                     const { flashProductsCount, flashProductsData, currentDateTemp } = await handleGetFlashProducts(filtersAsString);
@@ -354,19 +352,11 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
         try {
-            const result = await getFlashProductsCount(filtersAsString);
-            if (result.data > 0) {
-                const result1 = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
-                return {
-                    flashProductsCount: result.data,
-                    flashProductsData: result1.products,
-                    currentDateTemp: result1.currentDate
-                }
-            }
+            const result = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
             return {
-                flashProductsCount: 0,
-                flashProductsData: [],
-                currentDate: Date.now()
+                flashProductsData: result.products,
+                flashProductsCount: result.productsCount,
+                currentDateTemp: result.currentDate
             }
         }
         catch (err) {
@@ -376,16 +366,10 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetProducts = async (filtersAsString, sortDetailsAsString) => {
         try {
-            const result = await getProductsCount(filtersAsString);
-            if (result.data > 0) {
-                return {
-                    productsCount: result.data,
-                    productsData: (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data.products
-                }
-            }
+            const result = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsString, sortDetailsAsString)).data;
             return {
-                productsCount: 0,
-                productsData: [],
+                productsData: result.products,
+                productsCount: result.productsCount,
             }
         }
         catch (err) {
@@ -411,16 +395,10 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetStores = async (filtersAsString) => {
         try {
-            const result = await getStoresCount(filtersAsString);
-            if (result.data > 0) {
-                return {
-                    storesCount: result.data,
-                    storesData: (await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data,
-                }
-            }
+            const result = (await getAllStoresInsideThePage(1, pageSizes.forStores, filtersAsString)).data;
             return {
-                storesCount: 0,
-                storesData: [],
+                storesData: result.stores,
+                storesCount: result.storesCount,
             }
         }
         catch (err) {
@@ -458,7 +436,7 @@ export default function Home({ countryAsProperty, storeId }) {
             if (section === "categories") {
                 setIsGetCategories(true);
                 const newCurrentPage = currentPage.forCategories - 1;
-                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
+                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data.categories);
                 setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
                 setIsGetCategories(false);
             }
@@ -472,7 +450,7 @@ export default function Home({ countryAsProperty, storeId }) {
             else {
                 setIsGetStores(true);
                 const newCurrentPage = currentPage.forStores - 1;
-                setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data.stores);
                 setCurrentPage({ ...currentPage, forStores: newCurrentPage });
                 setIsGetStores(false);
             }
@@ -487,7 +465,7 @@ export default function Home({ countryAsProperty, storeId }) {
             if (section === "categories") {
                 setIsGetCategories(true);
                 const newCurrentPage = currentPage.forCategories + 1;
-                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data);
+                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data.categories);
                 setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
                 setIsGetCategories(false);
             }
@@ -501,7 +479,7 @@ export default function Home({ countryAsProperty, storeId }) {
             else {
                 setIsGetStores(true);
                 const newCurrentPage = currentPage.forStores + 1;
-                setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data);
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(newCurrentPage, pageSizes.forStores, getFiltersAsQuery(filters))).data.stores);
                 setCurrentPage({ ...currentPage, forStores: newCurrentPage });
                 setIsGetStores(false);
             }
@@ -515,7 +493,7 @@ export default function Home({ countryAsProperty, storeId }) {
         try {
             if (section === "categories") {
                 setIsGetCategories(true);
-                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data);
+                setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data.categories);
                 setCurrentPage({ ...currentPage, forCategories: pageNumber });
                 setIsGetCategories(false);
             }
@@ -527,7 +505,7 @@ export default function Home({ countryAsProperty, storeId }) {
             }
             else {
                 setIsGetStores(true);
-                setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSizes.forStores, getFiltersAsQuery(filters))).data);
+                setAllStoresInsideThePage((await getAllStoresInsideThePage(pageNumber, pageSizes.forStores, getFiltersAsQuery(filters))).data.stores);
                 setCurrentPage({ ...currentPage, forStores: pageNumber });
                 setIsGetStores(false);
             }

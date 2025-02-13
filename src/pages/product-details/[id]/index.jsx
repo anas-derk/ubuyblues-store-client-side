@@ -172,18 +172,16 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 if (Object.keys(result).length > 0) {
                     setProductInfo(result.productDetails);
                     setCurrentDate(result.currentDate);
-                    result = await getProductReferalsCount(productIdAsProperty);
-                    setAllProductReferalsCount(result.data);
-                    if (result.data > 0) {
-                        setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    }
+                    result = (await getAllProductReferalsInsideThePage(productIdAsProperty, 1, pageSize)).data;
+                    setAllProductReferalsCount(result.referalsCount);
+                    setAllProductReferalsInsideThePage(result.referals);
+                    setTotalPagesCount(Math.ceil(result.referalsCount / pageSize));
                     setIsGetProductReferals(false);
                     result = await getSampleFromRelatedProductsInProduct(productIdAsProperty);
                     const relatedProducts = result.data;
                     setSampleFromRelatedProductsInProduct(relatedProducts);
                     setIsGetSampleFromRelatedProductsInProduct(false);
-                    const referalWriterInfo = JSON.parse(localStorage.getItem("asfour-store-referal-writer-info"));
+                    const referalWriterInfo = JSON.parse(localStorage.getItem(process.env.referalWriterFieldNameInLocalStorage));
                     const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
                     if (userToken) {
                         result = await getUserInfo();
@@ -615,15 +613,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
     }
 
-    const getProductReferalsCount = async (productId, filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/referals/product-referals-count/${productId}?language=${i18n.language}&${filters ? filters : ""}`)).data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
     const getAllProductReferalsInsideThePage = async (productId, pageNumber, pageSize, filters) => {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/referals/all-product-referals-inside-the-page/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`)).data;
@@ -637,7 +626,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         try {
             setIsGetProductReferals(true);
             const newCurrentPage = currentPage - 1;
-            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).referals);
             setCurrentPage(newCurrentPage);
             setIsGetProductReferals(false);
         }
@@ -650,7 +639,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         try {
             setIsGetProductReferals(true);
             const newCurrentPage = currentPage + 1;
-            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, newCurrentPage, pageSize, getFilteringString(filters))).data.referals);
             setCurrentPage(newCurrentPage);
             setIsGetProductReferals(false);
         }
@@ -662,7 +651,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const getSpecificPage = async (pageNumber) => {
         try {
             setIsGetProductReferals(true);
-            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, pageNumber, pageSize, getFilteringString(filters))).data);
+            setAllProductReferalsInsideThePage((await getAllProductReferalsInsideThePage(productIdAsProperty, pageNumber, pageSize, getFilteringString(filters))).data.referals);
             setCurrentPage(pageNumber);
             setIsGetProductReferals(false);
         }

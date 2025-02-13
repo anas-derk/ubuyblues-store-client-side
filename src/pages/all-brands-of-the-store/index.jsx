@@ -77,11 +77,9 @@ export default function AllBrands({ storeId }) {
                         _id: storeDetailsResult.data._id,
                         name: storeDetailsResult.data.name
                     });
-                    const result = await getBrandsCount(`storeId=${storeDetailsResult.data._id}`);
-                    if (result.data > 0) {
-                        setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, pageSize, `storeId=${storeDetailsResult.data._id}`)).data);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    }
+                    const result = (await getAllBrandsInsideThePage(1, pageSize, `storeId=${storeDetailsResult.data._id}`)).data;
+                    setAllBrandsInsideThePage(result.brands);
+                    setTotalPagesCount(Math.ceil(result.brandsCount / pageSize));
                 }
                 setIsGetBrands(false);
             })
@@ -97,15 +95,6 @@ export default function AllBrands({ storeId }) {
         }
     }, [isGetUserInfo, isGetBrands]);
 
-    const getBrandsCount = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/brands/brands-count?language=${i18n.language}&${filters ? filters : ""}`)).data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
     const getAllBrandsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`)).data;
@@ -119,7 +108,7 @@ export default function AllBrands({ storeId }) {
         try {
             setIsGetBrands(true);
             const newCurrentPage = currentPage + 1;
-            setAllBrandsInsideThePage([...allBrandsInsideThePage, ...(await getAllBrandsInsideThePage(newCurrentPage, pageSize, `storeId=${storeDetails._id}`)).data]);
+            setAllBrandsInsideThePage([...allBrandsInsideThePage, ...(await getAllBrandsInsideThePage(newCurrentPage, pageSize, `storeId=${storeDetails._id}`)).data.brands]);
             setCurrentPage(newCurrentPage);
             setIsGetBrands(false);
         }

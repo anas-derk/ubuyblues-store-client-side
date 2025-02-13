@@ -146,11 +146,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 setIsGetCategoryInfo(false);
                 if (Object.keys(result.data).length > 0) {
                     setCategoryInfo(result.data);
-                    const filtersAsString = getFiltersAsQuery({ categoryId: categoryIdAsProperty });
-                    result = await getProductsCount(filtersAsString);
-                    if (result.data > 0) {
-                        setTotalPagesCountForProducts(Math.ceil(result.data / pageSize));
-                        result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
+                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
+                    if (result.productsCount > 0) {
+                        setTotalPagesCountForProducts(Math.ceil(result.productsCount / pageSize));
                         setAllProductsInsideThePage(result.products);
                         setCurrentDate(result.currentDate);
                         if (result.products.length > 0) {
@@ -162,11 +160,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         }
                     }
                     setIsGetProducts(false);
-                    result = await getCategoriesCount(`parent=${categoryIdAsProperty}`);
-                    if (result.data > 0) {
-                        setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(1, 1000, `parent=${categoryIdAsProperty}`)).data);
-                        setTotalPagesCountForSubCategories(Math.ceil(result.data / 1000));
-                    }
+                    result = (await getAllCategoriesInsideThePage(1, 1000, `parent=${categoryIdAsProperty}`)).data;
+                    setAllSubCategoriesInsideThePage(result.categories);
+                    setTotalPagesCountForSubCategories(Math.ceil(result.categoriesCount / 1000));
                     setIsGetSubCategories(false);
                 }
             })
@@ -256,16 +252,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             setIsGetProducts(true);
             setCurrentPageForProducts(1);
             let filtersAsQuery = getFiltersAsQuery(filters);
-            const result = await getProductsCount(filtersAsQuery);
-            if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data.products);
-                setTotalPagesCountForProducts(Math.ceil(result.data / pageSize));
-                setIsGetProducts(false);
-            } else {
-                setAllProductsInsideThePage([]);
-                setTotalPagesCountForProducts(0);
-                setIsGetProducts(false);
-            }
+            const result = (await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data;
+            setAllProductsInsideThePage(result.products);
+            setTotalPagesCountForProducts(Math.ceil(result.productsCount / pageSize));
+            setIsGetProducts(false);
         }
         catch (err) {
             setIsGetProducts(false);

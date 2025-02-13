@@ -88,11 +88,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                 .then(async (result) => {
                     if (!result.error) {
                         setFilters({ ...filters, customerId: result.data._id });
-                        const result2 = await getFavoriteProductsCount(`customerId=${result.data._id}`);
-                        if (result2.data > 0) {
-                            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data);
-                            setTotalPagesCount(Math.ceil(result2.data / pageSize));
-                        }
+                        const result2 = (await getAllFavoriteProductsInsideThePage(1, pageSize, `customerId=${result.data._id}`)).data;
+                        setAllFavoriteProductsInsideThePage(result2.favoriteProducts);
+                        setTotalPagesCount(Math.ceil(result2.favoriteProductsCount / pageSize));
                         setWindowInnerWidth(window.innerWidth);
                         window.addEventListener("resize", () => {
                             setWindowInnerWidth(window.innerWidth);
@@ -141,7 +139,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         try {
             setIsGetFavoriteProducts(true);
             const newCurrentPage = currentPage - 1;
-            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.favoriteProducts);
             setCurrentPage(newCurrentPage);
             setIsGetFavoriteProducts(false);
         }
@@ -154,7 +152,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         try {
             setIsGetFavoriteProducts(true);
             const newCurrentPage = currentPage + 1;
-            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.favoriteProducts);
             setCurrentPage(newCurrentPage);
             setIsGetFavoriteProducts(false);
         }
@@ -166,7 +164,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const getSpecificPage = async (pageNumber) => {
         try {
             setIsGetFavoriteProducts(true);
-            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.favoriteProducts);
             setCurrentPage(pageNumber);
             setIsGetFavoriteProducts(false);
         }
@@ -198,16 +196,9 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                     type: "(Add / Delete) (To / From ) Favorite",
                     productsCountInFavorite: productsCountInFavorite - 1
                 });
-                const result = await getFavoriteProductsCount();
-                if (result.data > 0) {
-                    setAllFavoriteProductsInsideThePage((await getAllFavoriteProductsInsideThePage(1, pageSize)).data);
-                    setTotalPagesCount(Math.ceil(result.data / pageSize));
-                } else {
-                    setAllFavoriteProductsInsideThePage([]);
-                    setTotalPagesCount(0);
-                }
-                setSelectedFavoriteProduct(-1);
                 setIsSuccessDeletingFavoriteProduct(false);
+                setAllFavoriteProductsInsideThePage(allFavoriteProductsInsideThePage.filter((favoriteProduct, index) => index !== favoriteProductIndex));
+                setSelectedFavoriteProduct(-1);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }

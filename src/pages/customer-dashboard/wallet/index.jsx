@@ -83,11 +83,9 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                 .then(async (result) => {
                     if (!result.error) {
                         setFilters({ ...filters, customerId: result.data._id });
-                        const result2 = await getWalletProductsCount(`customerId=${result.data._id}`);
-                        if (result2.data > 0) {
-                            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize)).data);
-                            setTotalPagesCount(Math.ceil(result2.data / pageSize));
-                        }
+                        const result2 = (await getAllWalletProductsInsideThePage(1, pageSize)).data;
+                        setAllWalletProductsInsideThePage(result2.walletProducts);
+                        setTotalPagesCount(Math.ceil(result2.walletProductsCount / pageSize));
                         setIsGetWalletProducts(false);
                     } else {
                         localStorage.removeItem(process.env.userTokenNameInLocalStorage);
@@ -115,19 +113,6 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         }
     }, [isGetWalletProducts]);
 
-    const getWalletProductsCount = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/wallet/wallet-products-count?${filters ? filters : ""}`, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
-                }
-            })).data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
     const getAllWalletProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
@@ -145,7 +130,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         try {
             setIsGetWalletProducts(true);
             const newCurrentPage = currentPage - 1;
-            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.walletProducts);
             setCurrentPage(newCurrentPage);
             setIsGetWalletProducts(false);
         }
@@ -158,7 +143,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         try {
             setIsGetWalletProducts(true);
             const newCurrentPage = currentPage + 1;
-            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.walletProducts);
             setCurrentPage(newCurrentPage);
             setIsGetWalletProducts(false);
         }
@@ -170,7 +155,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const getSpecificPage = async (pageNumber) => {
         try {
             setIsGetWalletProducts(true);
-            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.walletProducts);
             setCurrentPage(pageNumber);
             setIsGetWalletProducts(false);
         }
@@ -189,6 +174,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const deleteProductFromUserProductsWallet = async (walletProductIndex) => {
         try {
             setIsDeletingWalletProduct(true);
+            setSelectedWalletProduct(walletProductIndex);
             await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
@@ -198,14 +184,8 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             setIsSuccessDeletingWalletProduct(true);
             let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                 setIsSuccessDeletingWalletProduct(false);
-                const result = await getWalletProductsCount();
-                if (result.data > 0) {
-                    setAllWalletProductsInsideThePage((await getAllWalletProductsInsideThePage(1, pageSize)).data);
-                    setTotalPagesCount(Math.ceil(result.data / pageSize));
-                } else {
-                    setAllWalletProductsInsideThePage([]);
-                    setTotalPagesCount(0);
-                }
+                setAllWalletProductsInsideThePage(allWalletProductsInsideThePage.filter((walletProduct, index) => index !== walletProductIndex));
+                setSelectedWalletProduct(-1);
                 clearTimeout(successDeletingFavoriteProductMsgTimeOut);
             }, 1500);
         }
