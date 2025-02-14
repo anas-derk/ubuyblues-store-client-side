@@ -119,6 +119,12 @@ export default function Home({ countryAsProperty, storeId }) {
         forProducts: {
             name: "",
         },
+        forCategories: {
+            name: "",
+        },
+        forStores: {
+            name: "",
+        },
         storeId: "",
         status: "approving",
         parent: null,
@@ -350,6 +356,19 @@ export default function Home({ countryAsProperty, storeId }) {
         return count;
     }
 
+    const handleGetCategories = async (filtersAsString) => {
+        try {
+            const result = (await getAllCategoriesInsideThePage(1, pageSizes.forCategories, filtersAsString)).data;
+            return {
+                categoriesData: result.categories,
+                categoriesCount: result.categoriesCount,
+            }
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
     const handleGetFlashProducts = async (filtersAsString, sortDetailsAsString) => {
         try {
             const result = (await getAllFlashProductsInsideThePage(1, pageSizes.forFlashProducts, filtersAsString, sortDetailsAsString)).data;
@@ -515,9 +534,19 @@ export default function Home({ countryAsProperty, storeId }) {
         }
     }
 
-    const handleChangeFilters = (e, section) => {
+    const handleChangeFilters = async (e, section) => {
         e.preventDefault();
-        if (section === "flash-products") {
+        if (section === "categories") {
+            const tempFilters = {
+                ...filters,
+                forCategories: {
+                    ...filters.forCategories,
+                    name: e.target.value.trim(),
+                },
+            };
+            setFilters(tempFilters);
+            await searchOnCategory(e, { ...tempFilters.forCategories, storeId: filters.storeId, parent: "null" });
+        } else if (section === "flash-products") {
             const tempFilters = {
                 ...filters,
                 forFlashProducts: {
@@ -526,8 +555,8 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             };
             setFilters(tempFilters);
-            searchOnProduct(e, "flash", tempFilters.forFlashProducts, sortDetails.forFlashProducts);
-        } else {
+            await searchOnProduct(e, "flash", tempFilters.forFlashProducts, sortDetails.forFlashProducts);
+        } else if (section === "products") {
             const tempFilters = {
                 ...filters,
                 forProducts: {
@@ -536,7 +565,17 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             };
             setFilters(tempFilters);
-            searchOnProduct(e, "normal", tempFilters.forProducts, sortDetails.forProducts);
+            await searchOnProduct(e, "normal", tempFilters.forProducts, sortDetails.forProducts);
+        } else {
+            const tempFilters = {
+                ...filters,
+                forStores: {
+                    ...filters.forStores,
+                    name: e.target.value.trim(),
+                }
+            };
+            setFilters(tempFilters);
+            await searchOnStore(e, { ...tempFilters.forStores, status: "approving" });
         }
     }
 
@@ -601,6 +640,52 @@ export default function Home({ countryAsProperty, storeId }) {
         catch (err) {
             setIsGetFlashProducts(false);
             setIsGetProducts(false);
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
+    const searchOnCategory = async (e, filters) => {
+        try {
+            e.preventDefault();
+            setIsGetCategories(true);
+            setCurrentPage({ ...currentPage, forCategories: 1 });
+            const { categoriesCount, categoriesData } = await handleGetCategories(getFiltersAsQuery(filters));
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forCategories: Math.ceil(categoriesCount / pageSizes.forCategories)
+            });
+            setAllCategoriesInsideThePage(categoriesData);
+            setIsGetCategories(false);
+        }
+        catch (err) {
+            setIsGetCategories(false);
+            setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+            let errorTimeout = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(errorTimeout);
+            }, 1500);
+        }
+    }
+
+    const searchOnStore = async (e, filters) => {
+        try {
+            e.preventDefault();
+            setIsGetStores(true);
+            setCurrentPage({ ...currentPage, forStores: 1 });
+            const { storesCount, storesData } = await handleGetStores(getFiltersAsQuery(filters));
+            setTotalPagesCount({
+                ...totalPagesCount,
+                forStores: Math.ceil(storesCount / pageSizes.forStores)
+            });
+            setAllStoresInsideThePage(storesData);
+            setIsGetStores(false);
+        }
+        catch (err) {
+            setIsGetStores(false);
             setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
             let errorTimeout = setTimeout(() => {
                 setErrorMsg("");
@@ -709,6 +794,27 @@ export default function Home({ countryAsProperty, storeId }) {
                                 className="categories mb-5 pb-5" id="categories"
                             >
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Categories")}</h2>
+                                <div className="row filters-box mb-4">
+                                    <div className="col-12">
+                                        <motion.form
+                                            className="search-form"
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
+                                        >
+                                            <div className="category-name-field-box searched-field-box">
+                                                <input
+                                                    type="text"
+                                                    placeholder={t("Please Enter The Name Of The Category You Want To Search For")}
+                                                    className="form-control"
+                                                    onChange={(e) => handleChangeFilters(e, "categories")}
+                                                />
+                                                <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                    <FaSearch className='icon' onClick={(e) => searchOnCategory(e, filters.forCategories)} />
+                                                </div>
+                                            </div>
+                                        </motion.form>
+                                    </div>
+                                </div>
                                 {isGetCategories && <SectionLoader />}
                                 {!isGetCategories && allCategoriesInsideThePage.length > 0 && <div className="row mb-5">
                                     {allCategoriesInsideThePage.map((category) => (
@@ -761,7 +867,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                             initial={getInitialStateForElementBeforeAnimation()}
                                             whileInView={getAnimationSettings}
                                         >
-                                            <div className="product-name-field-box">
+                                            <div className="product-name-field-box searched-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
@@ -852,7 +958,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                             initial={getInitialStateForElementBeforeAnimation()}
                                             whileInView={getAnimationSettings}
                                         >
-                                            <div className="product-name-field-box">
+                                            <div className="product-name-field-box searched-field-box">
                                                 <input
                                                     type="text"
                                                     placeholder={t("Please Enter The name Of The Product You Want To Search For")}
@@ -973,6 +1079,27 @@ export default function Home({ countryAsProperty, storeId }) {
                             {/* Start Stores Section */}
                             {appearedSections.includes("stores") && <section className="stores mb-5 pt-5 h4">
                                 <h2 className="section-name text-center mb-4 text-white h4">{t("Stores")}</h2>
+                                <div className="row filters-box mb-4">
+                                    <div className="col-12">
+                                        <motion.form
+                                            className="search-form"
+                                            initial={getInitialStateForElementBeforeAnimation()}
+                                            whileInView={getAnimationSettings}
+                                        >
+                                            <div className="store-name-field-box searched-field-box">
+                                                <input
+                                                    type="text"
+                                                    placeholder={t("Please Enter The Name Of The Store You Want To Search For")}
+                                                    className="form-control"
+                                                    onChange={(e) => handleChangeFilters(e, "stores")}
+                                                />
+                                                <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
+                                                    <FaSearch className="icon" onClick={(e) => searchOnStore(e, filters.forStores)} />
+                                                </div>
+                                            </div>
+                                        </motion.form>
+                                    </div>
+                                </div>
                                 <div className="row stores-box section-data-box pt-4 pb-4">
                                     {isGetStores && <SectionLoader />}
                                     {!isGetStores && allStoresInsideThePage.length > 0 && allStoresInsideThePage.map((store) => (

@@ -130,7 +130,7 @@ textarea {
 .confirm-new-password-field-box,
 .code-field-box,
 .new-password-field-box,
-.product-name-field-box,
+.searched-field-box,
 .select-sort-type-box,
 .website-owner-password-field-box {
   position: relative;
@@ -144,7 +144,7 @@ textarea {
 .confirm-new-password-field-box .icon-box,
 .code-field-box .icon-box,
 .new-password-field-box .icon-box,
-.product-name-field-box .icon-box,
+.searched-field-box .icon-box,
 .select-sort-type-box .icon-box,
 .website-owner-password-field-box .icon-box {
   position: absolute;
@@ -160,7 +160,7 @@ textarea {
 .confirm-new-password-field-box .icon-box.ar-language-mode,
 .code-field-box .icon-box.ar-language-mode,
 .new-password-field-box .icon-box.ar-language-mode,
-.product-name-field-box .icon-box.ar-language-mode,
+.searched-field-box .icon-box.ar-language-mode,
 .select-sort-type-box .icon-box.ar-language-mode,
 .website-owner-password-field-box .icon-box.ar-language-mode {
   left: 15px;
@@ -174,7 +174,7 @@ textarea {
 .confirm-new-password-field-box .icon-box.other-languages-mode,
 .code-field-box .icon-box.other-languages-mode,
 .new-password-field-box .icon-box.other-languages-mode,
-.product-name-field-box .icon-box.other-languages-mode,
+.searched-field-box .icon-box.other-languages-mode,
 .select-sort-type-box .icon-box.other-languages-mode,
 .website-owner-password-field-box .icon-box.other-languages-mode {
   right: 15px;
@@ -188,7 +188,7 @@ textarea {
 .confirm-new-password-field-box .icon-box .icon,
 .code-field-box .icon-box .icon,
 .new-password-field-box .icon-box .icon,
-.product-name-field-box .icon-box .icon,
+.searched-field-box .icon-box .icon,
 .select-sort-type-box .icon-box .icon,
 .website-owner-password-field-box .icon-box .icon {
   font-size: 22px;
@@ -203,7 +203,7 @@ textarea {
 .confirm-new-password-field-box.error-in-field .icon-box,
 .code-field-box.error-in-field .icon-box,
 .new-password-field-box.error-in-field .icon-box,
-.product-name-field-box.error-in-field .icon-box,
+.searched-field-box.error-in-field .icon-box,
 .select-sort-type-box.error-in-field .icon-box,
 .website-owner-password-field-box.error-in-field .icon-box {
   transform: translateY(-80%);
