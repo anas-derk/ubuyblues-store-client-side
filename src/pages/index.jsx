@@ -682,11 +682,13 @@ export default function Home({ countryAsProperty, storeId }) {
                                         {allImageAds.map((ad) => (
                                             <div className="ad-box mb-4" key={ad._id}>
                                                 <div className="ad-image-box mb-4">
-                                                    <img
-                                                        src={`${process.env.BASE_API_URL}/${ad.imagePath}`}
-                                                        alt="Ad Image"
-                                                        onDragStart={(e) => e.preventDefault()}
-                                                    />
+                                                    <Link href={`/product-details/${ad.product}`}>
+                                                        <img
+                                                            src={`${process.env.BASE_API_URL}/${ad.imagePath}`}
+                                                            alt="Ad Image"
+                                                            onDragStart={(e) => e.preventDefault()}
+                                                        />
+                                                    </Link>
                                                 </div>
                                             </div>
                                         ))}
