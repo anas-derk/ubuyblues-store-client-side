@@ -680,7 +680,15 @@ export default function Home({ countryAsProperty, storeId }) {
                                         slidesToScroll={getAppearedSlidesCount(windowInnerWidth, allImageAds.length)}
                                     >
                                         {allImageAds.map((ad) => (
-                                            <div className="ad-box mb-4" key={ad._id}>
+                                            <motion.div
+                                                className="ad-box mb-4"
+                                                key={ad._id}
+                                                initial={getInitialStateForElementBeforeAnimation()}
+                                                whileInView={getAnimationSettings}
+                                                whileHover={{
+                                                    scale: 1.1
+                                                }}
+                                            >
                                                 <div className="ad-image-box mb-4">
                                                     <Link href={`/product-details/${ad.product}`}>
                                                         <img
@@ -690,7 +698,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                                         />
                                                     </Link>
                                                 </div>
-                                            </div>
+                                            </motion.div>
                                         ))}
                                     </Slider>
                                 </div>
