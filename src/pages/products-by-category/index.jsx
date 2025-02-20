@@ -291,14 +291,14 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                 {isGetSubCategories && <div className="col-xl-3">
                                     {isGetSubCategories && <SectionLoader />}
                                 </div>}
-                                {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <div className="col-xl-3">
+                                {!isGetSubCategories && allSubCategoriesInsideThePage.length > 0 && <div className="col-xl-3 mb-5">
                                     <SubCategoriesForParentSidBar subCategories={allSubCategoriesInsideThePage} />
                                 </div>}
                                 <div className={`${!isGetSubCategories && allSubCategoriesInsideThePage.length === 0 ? "col-xl-12" : "col-xl-9"}`}>
                                     {isExistProductsInDBInGeneral && <div className="row filters-and-sorting-box mb-4">
                                         <div className="col-xs-12 col-md-6">
                                             <form className="search-form">
-                                                <div className="product-name-field-box">
+                                                <div className="product-name-field-box searched-field-box">
                                                     <input
                                                         type="text"
                                                         placeholder={t("Please Enter The name Of The Product You Want To Search For")}
