@@ -435,7 +435,8 @@ export default function Home({ countryAsProperty, storeId }) {
     }
 
     const getFiltersAsQuery = (filters) => {
-        let filtersAsQuery = `parent=${filters.parent}&`;
+        let filtersAsQuery = "";
+        if (filters.parent || filters.parent === null) filtersAsQuery = `parent=${filters.parent}&`;
         if (filters.name) filtersAsQuery += `name=${filters.name}&`;
         if (filters.offerDescription) filtersAsQuery += `offerDescription=${filters.offerDescription}&`;
         if (filters.storeId) filtersAsQuery += `storeId=${filters.storeId}&`;
@@ -545,7 +546,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 },
             };
             setFilters(tempFilters);
-            await searchOnCategory(e, { ...tempFilters.forCategories, storeId: filters.storeId, parent: "null" });
+            await searchOnCategory(e, { ...tempFilters.forCategories, storeId: filters.storeId });
         } else if (section === "flash-products") {
             const tempFilters = {
                 ...filters,
