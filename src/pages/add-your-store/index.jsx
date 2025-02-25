@@ -348,7 +348,7 @@ export default function AddYourStore() {
                                     className="btn btn-danger w-50 d-block mx-auto global-button"
                                     disabled
                                 >
-                                    {t("Please Waiting")} ...
+                                    {t("Please Waiting")}
                                 </button>}
                                 {errorMsg && <button
                                     type="button"
