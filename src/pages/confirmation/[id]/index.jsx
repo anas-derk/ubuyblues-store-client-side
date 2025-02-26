@@ -2,7 +2,6 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import LoaderPage from "@/components/LoaderPage";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegSmileWink } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -28,12 +27,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
     const [orderDetails, setOrderDetails] = useState({});
 
     const [storeDetails, setStoreDetails] = useState({});
-
-    const [pricesDetailsSummary, setPricesDetailsSummary] = useState({
-        totalPriceBeforeDiscount: 0,
-        totalDiscount: 0,
-        totalPriceAfterDiscount: 0
-    });
 
     const { t, i18n } = useTranslation();
 
@@ -88,13 +81,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                 let result = res.data;
                 if (!res.error) {
                     setOrderDetails(result);
-                    const tempTotalPriceBeforeDiscount = calcTotalOrderPriceBeforeDiscount(result.products);
-                    const tempTotalDiscount = calcTotalOrderDiscount(result.products);
-                    setPricesDetailsSummary({
-                        totalPriceBeforeDiscount: tempTotalPriceBeforeDiscount,
-                        totalDiscount: tempTotalDiscount,
-                        totalPriceAfterDiscount: tempTotalPriceBeforeDiscount - tempTotalDiscount
-                    });
                     result = await getStoreDetails(result.storeId);
                     setStoreDetails(result.data);
                     setIsGetOrderDetails(false);
@@ -111,22 +97,6 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
             setIsLoadingPage(false);
         }
     }, [isGetOrderDetails]);
-
-    const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
-        let tempTotalPriceBeforeDiscount = 0;
-        allProductsData.forEach((product) => {
-            tempTotalPriceBeforeDiscount += product.unitPrice * product.quantity;
-        });
-        return tempTotalPriceBeforeDiscount;
-    }
-
-    const calcTotalOrderDiscount = (allProductsData) => {
-        let tempTotalDiscount = 0;
-        allProductsData.forEach((product) => {
-            tempTotalDiscount += product.discount * product.quantity;
-        });
-        return tempTotalDiscount;
-    }
 
     return (
         <div className="confirmation">
@@ -175,10 +145,10 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                         {(product.unitPrice * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                     </div>
                                     <div className="col-md-3 fw-bold p-0">
-                                        {(product.discount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                        {(product.unitDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                     </div>
                                     <div className="col-md-3 fw-bold p-0">
-                                        {((product.unitPrice - product.discount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                        {((product.unitPrice - product.unitDiscount) * product.quantity * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                     </div>
                                 </div>
                             ))}
@@ -187,7 +157,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                     {t("Total Price Before Discount")}
                                 </div>
                                 <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                    {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {(orderDetails.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
                             <div className="row total-price-discount total pb-3 mb-5">
@@ -195,7 +165,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                     {t("Total Discount")}
                                 </div>
                                 <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                    {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {(orderDetails.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
                             <div className="row shipping-cost-for-local-products total pb-3 mb-5">
@@ -227,7 +197,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                     {t("Total Price After Discount")}
                                 </div>
                                 <div className={`col-md-9 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                    {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                    {(orderDetails.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                 </div>
                             </div>
                             <div className="row total-amount total pb-3 mb-5">
