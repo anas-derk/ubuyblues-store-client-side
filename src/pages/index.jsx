@@ -732,7 +732,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             {allTextAds.map((ad, index) => (
                                 <Carousel.Item key={index}>
                                     <Carousel.Caption>
-                                        <p className="ad-content text-dark m-0">{ad.content}</p>
+                                        <p className="ad-content text-dark m-0">{ad.content[i18n.language]}</p>
                                     </Carousel.Caption>
                                 </Carousel.Item>
                             ))}
