@@ -830,7 +830,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                         >
                                             <div className="category-details p-3">
                                                 <Link href={`/products-by-category?categoryId=${category._id}`} className="product-by-category-link text-dark">
-                                                    <h6 className="cateogory-name mb-3">{category.name}</h6>
+                                                    <h6 className="cateogory-name mb-3">{category.name[i18n.language]}</h6>
                                                     <MdKeyboardArrowRight className="forward-arrow-icon" />
                                                 </Link>
                                             </div>

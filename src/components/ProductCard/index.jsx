@@ -418,7 +418,7 @@ export default function ProductCard({
                     <h4 className="product-name mb-3 fw-bold">{productDetails.name}</h4>
                     <ul className="product-categories-list">
                         {productDetails.categories.length > 0 ? productDetails.categories.map((category, categoryIndex) => (
-                            <li className="mb-3 d-inline-block fw-bold" key={category._id}>{category.name + (categoryIndex !== productDetails.categories.length - 1 ? "  - " : "")}</li>
+                            <li className="mb-3 d-inline-block fw-bold" key={category._id}>{category.name[i18n.language] + (categoryIndex !== productDetails.categories.length - 1 ? " - " : "")}</li>
                         )) : <li className="mb-3 d-inline-block fw-bold bg-danger p-2 text-white border-2">{t("Ucategorized")}</li>}
                     </ul>
                     <h5 className={`product-price ${(productDetails.discount !== 0 || productDetails.discountInOfferPeriod !== 0) ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
