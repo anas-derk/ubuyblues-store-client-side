@@ -397,7 +397,7 @@ export default function ProductCard({
                         {(isSuccessAddProductToFavoriteUserProductsList || isSuccessDeleteProductToFavoriteUserProductsList) && <FaCheck className="product-managment-icon managment-icon" />}
                     </div>
                     <div className={`add-to-cart-button-box ${(isWaitAddToCart || isSuccessAddToCart) ? "displaying" : ""}`}>
-                        {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id, productDetails.name, productDetails.price, productDetails.description, productDetails.category, productDetails.discount, productDetails.imagePath)}>{t("Add To Cart")} <FaCartPlus /> </button>}
+                        {!isWaitAddToCart && !isWaitDeleteFromCart && !isSuccessAddToCart && !isSuccessDeleteFromCart && !isExistProductInsideTheCart && !errorInAddToCart && !errorInDeleteFromCart && <button className="add-to-cart-btn cart-btn p-2" onClick={() => addToCart(productDetails._id)}>{t("Add To Cart")} <FaCartPlus /> </button>}
                         {isWaitAddToCart && <button className="wait-to-cart-btn cart-btn p-2">{t("Waiting In Add To Cart")} ...</button>}
                         {errorInAddToCart && <button className="error-to-cart-btn cart-btn p-2 bg-danger text-white">{errorInAddToCart}</button>}
                         {isSuccessAddToCart && <Link href="/cart" className="success-in-add-to-cart-btn cart-btn btn btn-success text-white">
@@ -415,7 +415,7 @@ export default function ProductCard({
                 </div>
                 <div className="product-details details-box p-3 text-center">
                     {getRatingResult()}
-                    <h4 className="product-name mb-3 fw-bold">{productDetails.name}</h4>
+                    <h4 className="product-name mb-3 fw-bold">{productDetails.name[i18n.language]}</h4>
                     <ul className="product-categories-list">
                         {productDetails.categories.length > 0 ? productDetails.categories.map((category, categoryIndex) => (
                             <li className="mb-3 d-inline-block fw-bold" key={category._id}>{category.name[i18n.language] + (categoryIndex !== productDetails.categories.length - 1 ? " - " : "")}</li>

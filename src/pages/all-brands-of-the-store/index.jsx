@@ -113,6 +113,7 @@ export default function AllBrands({ storeId }) {
             setIsGetBrands(false);
         }
         catch (err) {
+            setIsGetBrands(false);
             setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
         }
     }

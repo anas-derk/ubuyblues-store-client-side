@@ -721,7 +721,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         <div key={pathIndex}>
                                                             <img
                                                                 src={`${process.env.BASE_API_URL}/${path}`}
-                                                                alt={`${productInfo.name} Gallery image !!`}
+                                                                alt={`${productInfo.name[i18n.language]} Gallery image !!`}
                                                                 className="w-100 h-100 product--gallery-image"
                                                             />
                                                         </div>
@@ -732,7 +732,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="product-price-and-quantity me-3 mb-4 border-bottom border-2">
-                                            <motion.h5 className="product-name fw-bold mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.name}</motion.h5>
+                                            <motion.h5 className="product-name fw-bold mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.name[i18n.language]}</motion.h5>
                                             <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Categories")}:</motion.h5>
                                             <ul className="product-categories-list">
                                                 {productInfo.categories.length > 0 ? productInfo.categories.map((category, categoryIndex) => (
@@ -848,7 +848,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                 </div>
                                 {appearedProductDetailsBoxName === "description" && <div className="product-description mb-4 border-bottom border-2">
                                     <motion.h6 className="mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Description")}</motion.h6>
-                                    <motion.p className="description-content" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.description}</motion.p>
+                                    <motion.p className="description-content" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.description[i18n.language]}</motion.p>
                                 </div>}
                                 {appearedProductDetailsBoxName === "referrals" && <div className="product-referrals mb-4 border-bottom border-2">
                                     <div className="row">
