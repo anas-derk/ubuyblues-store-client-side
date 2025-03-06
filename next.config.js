@@ -17,7 +17,13 @@ const nextConfig = {
         referalWriterFieldNameInLocalStorage: "ubuyblue-store-referal-writer-info",
         selectedCountryByUser: "ubuyblues-store-country",
         contactNumber: "96560048235",
-        contactEmail: "info@ubuyblues.com"
+        contactEmail: "info@ubuyblues.com",
+        SOCIAL_MEDIA_LINKS: {
+            FACEBOOK: "https://www.facebook.com/ubuyblues?mibextid=ZbWKwL",
+            INSTAGRAM: "https://www.instagram.com/ubuyblues",
+            X: "https://x.com/ubuyblues",
+            TIKTOK: "https://www.tiktok.com/@ubuyblues",
+        }
     },
     async headers() {
         return [
