@@ -628,5 +628,6 @@
     "Are You Sure From Delete All {{dataNames}} ?": "Tüm {{dataNames}} silmek istediğinizden emin misiniz ?",
     "Confirm Delete All": "Tümünü silmeyi onayla",
     "Delete All Favorite Products": "Tüm favori ürünleri sil",
-    "Delete All Wallet Products": "Tüm cüzdan ürünlerini sil"
+    "Delete All Wallet Products": "Tüm cüzdan ürünlerini sil",
+    "Wallet Products": "Cüzdan ürünleri"
 }

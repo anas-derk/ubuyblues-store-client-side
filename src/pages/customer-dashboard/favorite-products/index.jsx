@@ -35,7 +35,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [allFavoriteProductsInsideThePage, setAllFavoriteProductsInsideThePage] = useState([]);
 
-    const [IsGetFavoriteProducts, setIsGetFavoriteProducts] = useState(true);
+    const [isGetFavoriteProducts, setIsGetFavoriteProducts] = useState(true);
 
     const [selectedFavoriteProduct, setSelectedFavoriteProduct] = useState(-1);
 
@@ -77,7 +77,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
-            if (!IsGetFavoriteProducts) {
+            if (!isGetFavoriteProducts) {
                 setIsLoadingPage(false);
             }
         })
@@ -123,10 +123,10 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        if (!IsGetFavoriteProducts) {
+        if (!isGetFavoriteProducts) {
             setIsLoadingPage(false);
         }
-    }, [IsGetFavoriteProducts]);
+    }, [isGetFavoriteProducts]);
 
     const getAllFavoriteProductsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
@@ -203,7 +203,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                         type: "(Add / Delete) (To / From ) Favorite",
                         productsCountInFavorite: productsCountInFavorite - 1
                     });
-                    setSuccessMsg(false);
+                    setSuccessMsg("");
                     setAllFavoriteProductsInsideThePage(allFavoriteProductsInsideThePage.filter((favoriteProduct, index) => index !== favoriteProductIndex));
                     setSelectedFavoriteProduct(-1);
                     clearTimeout(successDeletingFavoriteProductMsgTimeOut);
@@ -239,11 +239,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setWaitMsg("");
             if (!result.error) {
                 setSuccessMsg(result.msg);
-                let successTimeout = setTimeout(async () => {
+                let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                     setSuccessMsg("");
                     setAllFavoriteProductsInsideThePage([]);
                     setIsDisplayConfirmDeleteAllBox(false);
-                    clearTimeout(successTimeout);
+                    clearTimeout(successDeletingFavoriteProductMsgTimeOut);
                 }, 3000);
             }
             else {
@@ -287,7 +287,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                 <CustomerDashboardSideBar />
                             </div>
                             <div className="col-xl-9">
-                                {allFavoriteProductsInsideThePage.length > 0 && !IsGetFavoriteProducts && <section className="favorite-products-list-for-user data-box text-center">
+                                {allFavoriteProductsInsideThePage.length > 0 && !isGetFavoriteProducts && <section className="favorite-products-list-for-user data-box text-center">
                                     {!isDisplayConfirmDeleteAllBox && <button className="btn btn-danger mb-4" onClick={() => setIsDisplayConfirmDeleteAllBox(true)}>{t("Delete All Favorite Products")}</button>}
                                     {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table mb-4 w-100">
                                         <motion.thead initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -370,8 +370,8 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                         ))}
                                     </div>}
                                 </section>}
-                                {allFavoriteProductsInsideThePage.length === 0 && !IsGetFavoriteProducts && <NotFoundError errorMsg={t("Sorry, Can't Find Any Favorite Products For You !!")} />}
-                                {IsGetFavoriteProducts && <SectionLoader />}
+                                {allFavoriteProductsInsideThePage.length === 0 && !isGetFavoriteProducts && <NotFoundError errorMsg={t("Sorry, Can't Find Any Favorite Products For You !!")} />}
+                                {isGetFavoriteProducts && <SectionLoader />}
                                 {totalPagesCount > 1 &&
                                     <PaginationBar
                                         totalPagesCount={totalPagesCount}

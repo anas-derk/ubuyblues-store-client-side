@@ -17,6 +17,8 @@ import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUser
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 import { motion } from "motion/react";
+import ConfirmDeleteAllBox from "@/components/ConfirmDeleteAllBox";
+import ErrorPopup from "@/components/ErrorPopup";
 
 export default function CustomerWalletProductsList({ countryAsProperty }) {
 
@@ -36,11 +38,15 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const [selectedWalletProduct, setSelectedWalletProduct] = useState(-1);
 
-    const [isDeletingWalletProduct, setIsDeletingWalletProduct] = useState(false);
+    const [waitMsg, setWaitMsg] = useState("");
 
-    const [isSuccessDeletingWalletProductProduct, setIsSuccessDeletingWalletProduct] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
 
-    const [errorMsgOnDeletingWalletProduct, setErrorMsgOnDeletingWalletProduct] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const [isDisplayErrorPopup, setIsDisplayErrorPopup] = useState(false);
+
+    const [isDisplayConfirmDeleteAllBox, setIsDisplayConfirmDeleteAllBox] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -173,21 +179,26 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
 
     const deleteProductFromUserProductsWallet = async (walletProductIndex) => {
         try {
-            setIsDeletingWalletProduct(true);
+            setWaitMsg("Please Wait");
             setSelectedWalletProduct(walletProductIndex);
-            await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}?language=${i18n.language}`, {
+            const result = await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
                 }
             });
-            setIsDeletingWalletProduct(false);
-            setIsSuccessDeletingWalletProduct(true);
-            let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
-                setIsSuccessDeletingWalletProduct(false);
-                setAllWalletProductsInsideThePage(allWalletProductsInsideThePage.filter((walletProduct, index) => index !== walletProductIndex));
-                setSelectedWalletProduct(-1);
-                clearTimeout(successDeletingFavoriteProductMsgTimeOut);
-            }, 1500);
+            setWaitMsg("");
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
+                    setSuccessMsg("");
+                    setAllWalletProductsInsideThePage(allWalletProductsInsideThePage.filter((walletProduct, index) => index !== walletProductIndex));
+                    setSelectedWalletProduct(-1);
+                    clearTimeout(successDeletingFavoriteProductMsgTimeOut);
+                }, 1500);
+            } else {
+                setErrorMsg(result.msg);
+                setIsDisplayErrorPopup(true);
+            }
         }
         catch (err) {
             if (err?.response?.status === 401) {
@@ -195,13 +206,47 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                 await router.replace("/auth");
             }
             else {
-                setIsDeletingWalletProduct(false);
-                setErrorMsgOnDeletingWalletProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                    setErrorMsgOnDeletingWalletProduct("");
-                    setSelectedWalletProduct(-1);
+                setWaitMsg("");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                setIsDisplayErrorPopup(true);
+            }
+        }
+    }
+
+    const deleteAllWalletProducts = async () => {
+        try {
+            setWaitMsg("Please Wait");
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/wallet/all-wallet-products?language=${i18n.language}`,
+                {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    }
+                }
+            )).data;
+            setWaitMsg("");
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
+                    setSuccessMsg("");
+                    setAllWalletProductsInsideThePage([]);
+                    setIsDisplayConfirmDeleteAllBox(false);
                     clearTimeout(successDeletingFavoriteProductMsgTimeOut);
-                }, 1500);
+                }, 3000);
+            }
+            else {
+                setErrorMsg(result.msg);
+                setIsDisplayErrorPopup(true);
+            }
+        }
+        catch (err) {
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                await router.replace("/login");
+            }
+            else {
+                setWaitMsg("");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                setIsDisplayErrorPopup(true);
             }
         }
     }
@@ -214,6 +259,15 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content page pt-5">
+                    {isDisplayConfirmDeleteAllBox && <ConfirmDeleteAllBox
+                        dataNames={t("Wallet Products")}
+                        setIsDisplayConfirmDeleteAllBox={setIsDisplayConfirmDeleteAllBox}
+                        deleteAll={deleteAllWalletProducts}
+                        waitMsg={waitMsg}
+                        successMsg={successMsg}
+                        errorMsg={errorMsg}
+                    />}
+                    {isDisplayErrorPopup && <ErrorPopup errorMsg={t(errorMsg)} setIsDisplayErrorPopup={setIsDisplayErrorPopup} />}
                     <div className="container-fluid  align-items-center pb-4">
                         <div className="row align-items-center">
                             <div className="col-xl-3">
@@ -246,9 +300,9 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                     <td>{(walletProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
-                                                        {!isDeletingWalletProduct && selectedWalletProduct !== walletProductIndex && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
-                                                        {isDeletingWalletProduct && selectedWalletProduct === walletProductIndex && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
-                                                        {isSuccessDeletingWalletProductProduct && selectedWalletProduct === walletProductIndex && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                        {!waitMsg && selectedWalletProduct !== walletProductIndex && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
+                                                        {waitMsg && selectedWalletProduct === walletProductIndex && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                        {successMsg && selectedWalletProduct === walletProductIndex && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                         <Link
                                                             href={`/product-details/${walletProduct.productId}`}
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
@@ -287,9 +341,9 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                         <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Action")}</th>
                                                             <td>
-                                                                {!isDeletingWalletProduct && !isSuccessDeletingWalletProductProduct && !errorMsgOnDeletingWalletProduct && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
-                                                                {isDeletingWalletProduct && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
-                                                                {isSuccessDeletingWalletProductProduct && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                                {!waitMsg && !successMsg && !errorMsg && <BsTrash className="delete-product-from-wallet-user-list-icon managment-wallet-products-icon" onClick={() => deleteProductFromUserProductsWallet(walletProductIndex)} />}
+                                                                {waitMsg && <BsClock className="wait-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
+                                                                {successMsg && <FaCheck className="success-delete-product-from-wallet-user-list-icon managment-wallet-products-icon" />}
                                                                 <Link
                                                                     href={`/product-details/${walletProduct.productId}`}
                                                                     className="btn btn-success d-block mx-auto mb-4 mt-4 w-75"

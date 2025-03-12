@@ -638,5 +638,6 @@
     "Are You Sure From Delete All {{dataNames}} ?": "هل أنت متأكد من حذف كل {{dataNames}} ؟",
     "Confirm Delete All": "تأكيد حذف الكل",
     "Delete All Favorite Products": "حذف كل المنتجات المفضلة",
-    "Delete All Wallet Products": "حذف كل منتجات المحفظة"
+    "Delete All Wallet Products": "حذف كل منتجات المحفظة",
+    "Wallet Products": "منتجات المحفظة"
 }
