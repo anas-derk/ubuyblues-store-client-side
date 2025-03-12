@@ -229,6 +229,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                 let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                     setSuccessMsg("");
                     setAllWalletProductsInsideThePage([]);
+                    setTotalPagesCount(0);
                     setIsDisplayConfirmDeleteAllBox(false);
                     clearTimeout(successDeletingFavoriteProductMsgTimeOut);
                 }, 3000);

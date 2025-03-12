@@ -242,6 +242,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                 let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
                     setSuccessMsg("");
                     setAllFavoriteProductsInsideThePage([]);
+                    setTotalPagesCount(0);
                     setIsDisplayConfirmDeleteAllBox(false);
                     clearTimeout(successDeletingFavoriteProductMsgTimeOut);
                 }, 3000);
