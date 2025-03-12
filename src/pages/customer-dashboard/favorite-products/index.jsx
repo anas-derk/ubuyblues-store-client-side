@@ -13,11 +13,13 @@ import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
 import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
-import { getUserInfo, getFavoriteProductsCount, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../../public/global_functions/popular";
+import { getUserInfo, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "motion/react";
+import ConfirmDeleteAllBox from "@/components/ConfirmDeleteAllBox";
+import ErrorPopup from "@/components/ErrorPopup";
 
 export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
@@ -37,11 +39,15 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [selectedFavoriteProduct, setSelectedFavoriteProduct] = useState(-1);
 
-    const [isDeletingFavoriteProduct, setIsDeletingFavoriteProduct] = useState(false);
+    const [waitMsg, setWaitMsg] = useState("");
 
-    const [isSuccessDeletingFavoriteProduct, setIsSuccessDeletingFavoriteProduct] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
 
-    const [errorMsgOnDeletingFavoriteProduct, setErrorMsgOnDeletingFavoriteProduct] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const [isDisplayErrorPopup, setIsDisplayErrorPopup] = useState(false);
+
+    const [isDisplayConfirmDeleteAllBox, setIsDisplayConfirmDeleteAllBox] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -182,25 +188,31 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const deleteProductFromFavoriteUserProducts = async (favoriteProductIndex) => {
         try {
-            setIsDeletingFavoriteProduct(true);
+            sss
+            setWaitMsg("Please Wait");
             setSelectedFavoriteProduct(favoriteProductIndex);
-            await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}?language=${i18n.language}`, {
+            const result = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
                 }
             });
-            setIsDeletingFavoriteProduct(false);
-            setIsSuccessDeletingFavoriteProduct(true);
-            let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
-                dispatch({
-                    type: "(Add / Delete) (To / From ) Favorite",
-                    productsCountInFavorite: productsCountInFavorite - 1
-                });
-                setIsSuccessDeletingFavoriteProduct(false);
-                setAllFavoriteProductsInsideThePage(allFavoriteProductsInsideThePage.filter((favoriteProduct, index) => index !== favoriteProductIndex));
-                setSelectedFavoriteProduct(-1);
-                clearTimeout(successDeletingFavoriteProductMsgTimeOut);
-            }, 1500);
+            setWaitMsg("");
+            if (!result.error) {
+                setSuccessMsg("Success Process");
+                let successDeletingFavoriteProductMsgTimeOut = setTimeout(async () => {
+                    dispatch({
+                        type: "(Add / Delete) (To / From ) Favorite",
+                        productsCountInFavorite: productsCountInFavorite - 1
+                    });
+                    setSuccessMsg(false);
+                    setAllFavoriteProductsInsideThePage(allFavoriteProductsInsideThePage.filter((favoriteProduct, index) => index !== favoriteProductIndex));
+                    setSelectedFavoriteProduct(-1);
+                    clearTimeout(successDeletingFavoriteProductMsgTimeOut);
+                }, 1500);
+            } else {
+                setErrorMsg(result.msg);
+                setIsDisplayErrorPopup(true);
+            }
         }
         catch (err) {
             if (err?.response?.status === 401) {
@@ -208,16 +220,45 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                 await router.replace("/login");
             }
             else {
-                setIsDeletingFavoriteProduct(false);
-                setErrorMsgOnDeletingFavoriteProduct(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let successDeletingFavoriteProductMsgTimeOut = setTimeout(() => {
-                    setErrorMsgOnDeletingFavoriteProduct("");
-                    setSelectedFavoriteProduct(-1);
-                    clearTimeout(successDeletingFavoriteProductMsgTimeOut);
-                }, 1500);
+                setWaitMsg("");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                setIsDisplayErrorPopup(true);
             }
         }
     }
+
+    // const deleteAllFavoriteProducts = async () => {
+    //     try {
+    //         setWaitMsg(true);
+    //         const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products?language=${process.env.defaultLanguage}`,
+    //             {
+    //                 headers: {
+    //                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+    //                 }
+    //             }
+    //         )).data;
+    //         setWaitMsg("");
+    //         if (!result.error) {
+    //             setSuccessMsg(result.msg);
+    //             let successTimeout = setTimeout(async () => {
+    //                 setSuccessMsg("");
+    //                 handleClosePopupBox();
+    //                 handleChangeStoreStatus("approving");
+    //                 clearTimeout(successTimeout);
+    //             }, 3000);
+    //         }
+    //         else {
+    //             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+    //             let errorTimeout = setTimeout(() => {
+    //                 setErrorMsg("");
+    //                 clearTimeout(errorTimeout);
+    //             }, 1500);
+    //         }
+    //     }
+    //     catch (err) {
+
+    //     }
+    // }
 
     return (
         <div className="customer-favorite-products-list customer-dashboard customer-products-list">
@@ -227,6 +268,11 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <div className="page-content page pt-5">
+                    {isDisplayConfirmDeleteAllBox && <ConfirmDeleteAllBox
+                        dataNames={t("Favorite Products")}
+                        setIsDisplayConfirmDeleteAllBox={setIsDisplayConfirmDeleteAllBox}
+                    />}
+                    {isDisplayErrorPopup && <ErrorPopup errorMsg={t(errorMsg)} setIsDisplayErrorPopup={setIsDisplayErrorPopup} />}
                     <div className="container-fluid align-items-center pb-4">
                         <div className="row align-items-center">
                             <div className="col-xl-3">
@@ -234,6 +280,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                             </div>
                             <div className="col-xl-9">
                                 {allFavoriteProductsInsideThePage.length > 0 && !IsGetFavoriteProducts && <section className="favorite-products-list-for-user data-box text-center">
+                                    {!isDisplayConfirmDeleteAllBox && <button className="btn btn-danger mb-4" onClick={() => setIsDisplayConfirmDeleteAllBox(true)}>{t("Delete All Favorite Products")}</button>}
                                     {windowInnerWidth > 991 ? <table className="favorite-products-table-for-user data-table mb-4 w-100">
                                         <motion.thead initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <tr>
@@ -260,8 +307,8 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {selectedFavoriteProduct !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
-                                                        {isDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                        {isSuccessDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {waitMsg && selectedFavoriteProduct === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                        {successMsg && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                         <Link
                                                             href={`/product-details/${favoriteProduct.productId}`}
                                                             className="btn btn-success d-block mx-auto mb-4 global-button mt-4 w-75"
@@ -301,8 +348,8 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                             <th>{t("Action")}</th>
                                                             <td>
                                                                 {selectedFavoriteProduct !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
-                                                                {isDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
-                                                                {isSuccessDeletingFavoriteProduct && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {waitMsg && selectedFavoriteProduct === favoriteProductIndex && <BsClock className="wait-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
+                                                                {successMsg && selectedFavoriteProduct === favoriteProductIndex && <FaCheck className="success-delete-product-from-favorite-user-list-icon managment-favorite-products-icon" />}
                                                                 <Link
                                                                     href={`/product-details/${favoriteProduct._id}`}
                                                                     className="btn btn-success d-block mx-auto mb-4 mt-4 w-75"
