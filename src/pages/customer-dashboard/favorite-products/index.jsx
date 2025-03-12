@@ -188,7 +188,6 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const deleteProductFromFavoriteUserProducts = async (favoriteProductIndex) => {
         try {
-            sss
             setWaitMsg("Please Wait");
             setSelectedFavoriteProduct(favoriteProductIndex);
             const result = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}?language=${i18n.language}`, {
@@ -227,38 +226,43 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         }
     }
 
-    // const deleteAllFavoriteProducts = async () => {
-    //     try {
-    //         setWaitMsg(true);
-    //         const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products?language=${process.env.defaultLanguage}`,
-    //             {
-    //                 headers: {
-    //                     Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
-    //                 }
-    //             }
-    //         )).data;
-    //         setWaitMsg("");
-    //         if (!result.error) {
-    //             setSuccessMsg(result.msg);
-    //             let successTimeout = setTimeout(async () => {
-    //                 setSuccessMsg("");
-    //                 handleClosePopupBox();
-    //                 handleChangeStoreStatus("approving");
-    //                 clearTimeout(successTimeout);
-    //             }, 3000);
-    //         }
-    //         else {
-    //             setErrorMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
-    //             let errorTimeout = setTimeout(() => {
-    //                 setErrorMsg("");
-    //                 clearTimeout(errorTimeout);
-    //             }, 1500);
-    //         }
-    //     }
-    //     catch (err) {
-
-    //     }
-    // }
+    const deleteAllFavoriteProducts = async () => {
+        try {
+            setWaitMsg("Please Wait");
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products?language=${i18n.language}`,
+                {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    }
+                }
+            )).data;
+            setWaitMsg("");
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(async () => {
+                    setSuccessMsg("");
+                    setAllFavoriteProductsInsideThePage([]);
+                    setIsDisplayConfirmDeleteAllBox(false);
+                    clearTimeout(successTimeout);
+                }, 3000);
+            }
+            else {
+                setErrorMsg(result.msg);
+                setIsDisplayErrorPopup(true);
+            }
+        }
+        catch (err) {
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                await router.replace("/login");
+            }
+            else {
+                setWaitMsg("");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
+                setIsDisplayErrorPopup(true);
+            }
+        }
+    }
 
     return (
         <div className="customer-favorite-products-list customer-dashboard customer-products-list">
@@ -271,6 +275,10 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                     {isDisplayConfirmDeleteAllBox && <ConfirmDeleteAllBox
                         dataNames={t("Favorite Products")}
                         setIsDisplayConfirmDeleteAllBox={setIsDisplayConfirmDeleteAllBox}
+                        deleteAll={deleteAllFavoriteProducts}
+                        waitMsg={waitMsg}
+                        successMsg={successMsg}
+                        errorMsg={errorMsg}
                     />}
                     {isDisplayErrorPopup && <ErrorPopup errorMsg={t(errorMsg)} setIsDisplayErrorPopup={setIsDisplayErrorPopup} />}
                     <div className="container-fluid align-items-center pb-4">
