@@ -295,7 +295,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                                                             width="100"
                                                             height="100"
                                                         />
-                                                        <h6>{walletProduct.name}</h6>
+                                                        <h6>{walletProduct.name[i18n.language]}</h6>
                                                     </td>
                                                     <td>{(walletProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>

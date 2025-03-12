@@ -309,7 +309,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                             width="100"
                                                             height="100"
                                                         />
-                                                        <h6>{favoriteProduct.name}</h6>
+                                                        <h6>{favoriteProduct.name[i18n.language]}</h6>
                                                     </td>
                                                     <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
