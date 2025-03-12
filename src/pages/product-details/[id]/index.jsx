@@ -302,6 +302,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         });
                         clearTimeout(successAddToCartTimeout);
                     }, 3000);
+                } else {
+                    setErrorInAddProductToFavoriteUserProductsList(result.msg);
+                    setIsDisplayErrorPopup(true);
                 }
             }
         }
@@ -314,10 +317,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             else {
                 setIsWaitAddProductToFavoriteUserProductsList(false);
                 setErrorInAddProductToFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let errorTimeout = setTimeout(() => {
-                    setErrorInAddProductToFavoriteUserProductsList("");
-                    clearTimeout(errorTimeout);
-                }, 1500);
+                setIsDisplayErrorPopup(true);
             }
         }
     }
@@ -342,6 +342,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     });
                     clearTimeout(successDeleteToCartTimeout);
                 }, 3000);
+            } else {
+                setIsDisplayErrorPopup(true);
             }
         }
         catch (err) {
@@ -353,10 +355,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             else {
                 setIsWaitDeleteProductToFavoriteUserProductsList(false);
                 setErrorInDeleteProductFromFavoriteUserProductsList(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let errorTimeout = setTimeout(() => {
-                    setErrorInDeleteProductFromFavoriteUserProductsList("");
-                    clearTimeout(errorTimeout);
-                }, 1500);
+                setIsDisplayErrorPopup(true);
             }
         }
     }
@@ -681,6 +680,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
                 <NavigateToUpOrDown />
+                {isDisplayErrorPopup && <ErrorPopup
+                    setIsDisplayErrorPopup={setIsDisplayErrorPopup}
+                    errorMsg={errorInAddProductToFavoriteUserProductsList ? errorInAddProductToFavoriteUserProductsList : errorInDeleteProductFromFavoriteUserProductsList}
+                />}
                 {/* Start Share Options Box */}
                 {isDisplayShareOptionsBox && <ShareOptionsBox
                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
