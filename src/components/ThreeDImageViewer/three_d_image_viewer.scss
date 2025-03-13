@@ -1,0 +1,14 @@
+.tree-d-image-viewer-popup{
+    .content-box{
+        position: static;
+        .close-popup-box-icon{
+            right: 20px;
+            top: 20px;
+        }
+        .image-box{
+            img{
+                max-width: 100%;
+            }
+        }
+    }
+}

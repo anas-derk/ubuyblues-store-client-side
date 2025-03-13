@@ -65,6 +65,11 @@
   border: 3px solid #000;
 }
 
+.product-details .product-details-box .all-product-images .display-3d-image-btn .three-degree-icon {
+  font-size: 92px;
+  cursor: pointer;
+}
+
 @media (max-width: 991px) {
   .product-details .product-details-box .product-price-and-quantity {
     text-align: center;

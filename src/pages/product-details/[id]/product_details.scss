@@ -65,6 +65,12 @@ $height: 400px;
                     }
                 }
             }
+            .display-3d-image-btn{
+                .three-degree-icon{
+                    font-size: 92px;
+                    cursor: pointer;
+                }
+            }
         }
         .product-price-and-quantity {
             @media (max-width: 991px) {

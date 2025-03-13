@@ -23,6 +23,7 @@ import "../../config/i18n";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import store from "@/store";
 import { Provider } from "react-redux";
+import "../components/ThreeDImageViewer/three_d_image_viewer.css";
 
 export default function App({ Component, pageProps }) {
   return (

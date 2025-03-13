@@ -25,6 +25,8 @@ import ErrorPopup from "@/components/ErrorPopup";
 import SectionLoader from "@/components/SectionLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "motion/react";
+import { TbView360Number } from "react-icons/tb";
+import ThreeDImageViewer from "@/components/ThreeDImageViewer";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -61,6 +63,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
     const [isDisplayErrorPopup, setIsDisplayErrorPopup] = useState(false);
+
+    const [isDisplayThreeDImageViewerPopup, setIsDisplayThreeDImageViewerPopup] = useState(false);
 
     const [errorType, setErrorType] = useState("");
 
@@ -167,7 +171,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         getProductInfo(productIdAsProperty)
             .then(async (res) => {
                 let result = res.data;
-                console.log(result.productDetails)
                 setIsGetProductInfo(false);
                 if (Object.keys(result).length > 0) {
                     setProductInfo(result.productDetails);
@@ -694,6 +697,11 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     setIsDisplayErrorPopup={setIsDisplayErrorPopup}
                     errorType={errorType}
                 />}
+                {isDisplayThreeDImageViewerPopup && <ThreeDImageViewer
+                    imagePath={productInfo.imagePath}
+                    name={productInfo.name[i18n.language]}
+                    setIsDisplayThreeDImageViewerPopup={setIsDisplayThreeDImageViewerPopup}
+                />}
                 {/* End Share Options Box */}
                 <div className="page-content">
                     <div className="container-fluid">
@@ -834,6 +842,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </div>
                                                     </motion.div>
                                                 ))}
+                                                {!productInfo.threeDImagePath && <div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
+                                                    <TbView360Number className="three-degree-icon" />
+                                                </div>}
                                             </Slider>
                                         </div>
                                     </div>
