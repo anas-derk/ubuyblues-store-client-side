@@ -681,7 +681,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 <title>{t(process.env.storeName)} - {t("Product Details")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
-                <Header />
+                {!isDisplayThreeDImageViewerPopup && <Header />}
                 <NavigateToUpOrDown />
                 {isDisplayErrorPopup && <ErrorPopup
                     setIsDisplayErrorPopup={setIsDisplayErrorPopup}
@@ -698,7 +698,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     errorType={errorType}
                 />}
                 {isDisplayThreeDImageViewerPopup && <ThreeDImageViewer
-                    imagePath={productInfo.imagePath}
+                    imagePath={productInfo.threeDImagePath}
                     name={productInfo.name[i18n.language]}
                     setIsDisplayThreeDImageViewerPopup={setIsDisplayThreeDImageViewerPopup}
                 />}
@@ -770,7 +770,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                             <div className="product-managment-buttons mb-3">
                                                 <PiShareFatLight
                                                     className={`product-managment-icon ${i18n.language !== "ar" ? "me-3" : "ms-3"}`}
-                                                    onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/product-details/${productInfo._id}`)}
+                                                    onClick={() => handleDisplayShareOptionsBox(`${process.env.WEBSITE_URL}/product-details/${productInfo._id}`)}
                                                 />
                                                 {
                                                     !isWaitAddProductToFavoriteUserProductsList &&
@@ -842,7 +842,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </div>
                                                     </motion.div>
                                                 ))}
-                                                {!productInfo.threeDImagePath && <div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
+                                                {productInfo.threeDImagePath && <div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
                                                     <TbView360Number className="three-degree-icon" />
                                                 </div>}
                                             </Slider>

@@ -1,13 +1,16 @@
 .tree-d-image-viewer-popup{
     .content-box{
         position: static;
+        transform: none;
+        width: 100%;
+        height: 100%;
         .close-popup-box-icon{
             right: 20px;
             top: 20px;
         }
         .image-box{
-            img{
-                max-width: 100%;
+            .pnlm-container{
+                max-width: inherit;
             }
         }
     }
