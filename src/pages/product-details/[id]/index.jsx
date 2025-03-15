@@ -842,7 +842,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </div>
                                                     </motion.div>
                                                 ))}
-                                                {productInfo.threeDImagePath && <div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
+                                                {<div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
                                                     <TbView360Number className="three-degree-icon" />
                                                 </div>}
                                             </Slider>
