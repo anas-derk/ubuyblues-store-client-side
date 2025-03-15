@@ -827,6 +827,9 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         className={`product-gallery-image ${productGalleryImageIndex === -1 ? "selection" : ""}`}
                                                     />
                                                 </div>
+                                                {productInfo.threeDImagePath && <div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
+                                                    <TbView360Number className="three-degree-icon" />
+                                                </div>}
                                                 {productInfo.galleryImagesPaths.map((path, pathIndex) => (
                                                     <motion.div
                                                         key={pathIndex}
@@ -842,9 +845,6 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                         </div>
                                                     </motion.div>
                                                 ))}
-                                                {productInfo.threeDImagePath && <div className="display-3d-image-btn" onClick={() => setIsDisplayThreeDImageViewerPopup(true)}>
-                                                    <TbView360Number className="three-degree-icon" />
-                                                </div>}
                                             </Slider>
                                         </div>
                                     </div>
