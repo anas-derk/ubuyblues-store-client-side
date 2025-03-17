@@ -170,6 +170,7 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
+            console.log(price)
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetStoreDetails) {
