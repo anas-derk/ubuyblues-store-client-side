@@ -1121,9 +1121,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             <motion.div className="row total pb-3 mb-5" key={productIndex} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
                                                     {i18n.language !== "ar" ? <span>
-                                                        ( {product.name} ) x {getProductQuantity(product._id)}
+                                                        ( {product.name[i18n.language]} ) x {getProductQuantity(product._id)}
                                                     </span> : <span>
-                                                        ( {product.name} ) {getProductQuantity(product._id)} x
+                                                        ( {product.name[i18n.language]} ) {getProductQuantity(product._id)} x
                                                     </span>}
                                                 </div>
                                                 <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
