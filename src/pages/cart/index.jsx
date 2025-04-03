@@ -256,7 +256,7 @@ export default function Cart({ countryAsProperty }) {
                                                                             <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" />
                                                                         </div>
                                                                         <div className="col-lg-8">
-                                                                            <h6 className="product-name mb-3">{product.name}</h6>
+                                                                            <h6 className="product-name mb-3">{product.name[i18n.language]}</h6>
                                                                             <h6 className={`product-price ${product.discount !== 0 || product.discountInOfferPeriod !== 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                             {
                                                                                 product.discount > 0 &&
