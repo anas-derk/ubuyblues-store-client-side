@@ -26,7 +26,7 @@ export default function Footer() {
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
