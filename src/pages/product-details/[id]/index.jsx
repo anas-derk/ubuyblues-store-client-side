@@ -12,7 +12,6 @@ import LoaderPage from "@/components/LoaderPage";
 import Slider from "react-slick";
 import { useTranslation } from "react-i18next";
 import NotFoundError from "@/components/NotFoundError";
-import { HiOutlineBellAlert } from "react-icons/hi2";
 import PaginationBar from "@/components/PaginationBar";
 import { PiShareFatLight } from "react-icons/pi";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
@@ -27,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion } from "motion/react";
 import { TbView360Number } from "react-icons/tb";
 import ThreeDImageViewer from "@/components/ThreeDImageViewer";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function ProductDetails({ countryAsProperty, productIdAsProperty }) {
 
@@ -910,10 +910,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     onChange={(e) => setReferalDetails({ ...referalDetails, content: e.target.value.trim() })}
                                                     initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                                 />
-                                                {formValidationErrors.content && <motion.p className="bg-danger p-2 form-field-error-box mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.content)}</span>
-                                                </motion.p>}
+                                                {formValidationErrors.content && <FormFieldErrorBox errorMsg={t(formValidationErrors.content)} />}
                                                 <div className="row mb-4 name-and-email-box">
                                                     <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <input
@@ -923,10 +920,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                             defaultValue={referalDetails.name}
                                                             onChange={(e) => setReferalDetails({ ...referalDetails, name: e.target.value.trim() })}
                                                         />
-                                                        {formValidationErrors.name && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                            <span>{t(formValidationErrors.name)}</span>
-                                                        </p>}
+                                                        {formValidationErrors.name && <FormFieldErrorBox errorMsg={t(formValidationErrors.name)} />}
                                                     </motion.div>
                                                     <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <input
@@ -936,10 +930,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                             defaultValue={referalDetails.email}
                                                             onChange={(e) => setReferalDetails({ ...referalDetails, email: e.target.value.trim() })}
                                                         />
-                                                        {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                            <span>{t(formValidationErrors.email)}</span>
-                                                        </p>}
+                                                        {formValidationErrors.email && <FormFieldErrorBox errorMsg={t(formValidationErrors.email)} />}
                                                     </motion.div>
                                                 </div>
                                                 {Object.keys(userInfo).length === 0 && <motion.div className="save-your-details-box mb-3 row" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>

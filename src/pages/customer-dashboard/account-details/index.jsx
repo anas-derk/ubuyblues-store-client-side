@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { HiOutlineBellAlert } from "react-icons/hi2";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
 import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import { motion } from "motion/react";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function CustomerAccountDetails() {
 
@@ -258,10 +258,7 @@ export default function CustomerAccountDetails() {
                                                     defaultValue={userInfo.firstName}
                                                     onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value.trim() })}
                                                 />
-                                                {formValidationErrors.firstName && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.firstName)}</span>
-                                                </p>}
+                                                {formValidationErrors.firstName && <FormFieldErrorBox errorMsg={t(formValidationErrors.firstName)} />}
                                             </motion.div>
                                             <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
@@ -272,10 +269,7 @@ export default function CustomerAccountDetails() {
                                                     defaultValue={userInfo.lastName}
                                                     onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value.trim() })}
                                                 />
-                                                {formValidationErrors.lastName && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.lastName)}</span>
-                                                </p>}
+                                                {formValidationErrors.lastName && <FormFieldErrorBox errorMsg={t(formValidationErrors.lastName)} />}
                                             </motion.div>
                                         </div>
                                     </section>
@@ -288,10 +282,7 @@ export default function CustomerAccountDetails() {
                                             defaultValue={userInfo.previewName}
                                             onChange={(e) => setUserInfo({ ...userInfo, previewName: e.target.value.trim() })}
                                         />
-                                        {formValidationErrors.previewName && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.previewName)}</span>
-                                        </p>}
+                                        {formValidationErrors.previewName && <FormFieldErrorBox errorMsg={t(formValidationErrors.previewName)} />}
                                         <h6 className="note mt-2">{t("This way your name will be displayed in the accounts section and in reviews")}</h6>
                                     </motion.section>
                                     <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -303,10 +294,7 @@ export default function CustomerAccountDetails() {
                                             defaultValue={userInfo.email}
                                             onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value.trim() })}
                                         />
-                                        {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.email)}</span>
-                                        </p>}
+                                        {formValidationErrors.email && <FormFieldErrorBox errorMsg={t(formValidationErrors.email)} />}
                                     </motion.section>
                                     <section className="change-password mb-4">
                                         <fieldset>
@@ -323,10 +311,7 @@ export default function CustomerAccountDetails() {
                                                         {isVisibleCurrentPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleCurrentPassword(value => value = !value)} />}
                                                     </div>
                                                 </div>
-                                                {formValidationErrors.currentPassword && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.currentPassword)}</span>
-                                                </p>}
+                                                {formValidationErrors.currentPassword && <FormFieldErrorBox errorMsg={t(formValidationErrors.currentPassword)} />}
                                             </motion.section>
                                             <motion.section className="new-password mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("New password")} ({t("leave the field blank if you do not want to change it")})</h6>
@@ -341,10 +326,7 @@ export default function CustomerAccountDetails() {
                                                         {isVisibleNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
                                                     </div>
                                                 </div>
-                                                {formValidationErrors.newPassword && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.newPassword)}</span>
-                                                </p>}
+                                                {formValidationErrors.newPassword && <FormFieldErrorBox errorMsg={t(formValidationErrors.newPassword)} />}
                                             </motion.section>
                                             <motion.section className="confirm-new-password mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Confirm New password")} ({t("leave the field blank if you do not want to change it")})</h6>
@@ -359,10 +341,7 @@ export default function CustomerAccountDetails() {
                                                         {isVisibleConfirmNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
                                                     </div>
                                                 </div>
-                                                {formValidationErrors.confirmNewPassword && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.confirmNewPassword)}</span>
-                                                </p>}
+                                                {formValidationErrors.confirmNewPassword && <FormFieldErrorBox errorMsg={t(formValidationErrors.confirmNewPassword)} />}
                                             </motion.section>
                                         </fieldset>
                                     </section>

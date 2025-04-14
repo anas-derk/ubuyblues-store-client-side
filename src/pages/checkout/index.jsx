@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
-import { HiOutlineBellAlert } from "react-icons/hi2";
 import { useRouter } from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
@@ -1151,10 +1150,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 onChange={(e) => setCouponCode(e.target.value)}
                                                 initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                             />
-                                            {formValidationErrors.couponCode && <motion.p className={`bg-danger p-2 form-field-error-box m-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                                <span className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`}><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.couponCode)}</span>
-                                            </motion.p>}
+                                            {formValidationErrors.couponCode && <FormFieldErrorBox errorMsg={t(formValidationErrors.couponCode)} />}
                                             {!isWaitApplyCoupon && !errorMsg && <motion.button
                                                 className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                                 onClick={applyCoupon}
@@ -1358,10 +1354,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t("Agree To")} <Link href="/polices-terms-and-conditions">{t("Terms And Conditions")}</Link>
                                             </label>
                                         </motion.div>
-                                        {formValidationErrors.is_agree_on_terms_and_conditions && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.is_agree_on_terms_and_conditions)}</span>
-                                        </p>}
+                                        {formValidationErrors.is_agree_on_terms_and_conditions && <FormFieldErrorBox errorMsg={t(formValidationErrors.is_agree_on_terms_and_conditions)} />}
                                         {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
                                             onClick={handleSelectPaypalPayment}

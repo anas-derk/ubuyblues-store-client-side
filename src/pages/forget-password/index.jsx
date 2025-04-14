@@ -13,6 +13,7 @@ import { inputValuesValidation } from "../../../public/global_functions/validati
 import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage, sendTheCodeToUserEmail } from "../../../public/global_functions/popular";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { motion } from "motion/react";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function ForgetPassword({ userTypeAsProperty }) {
 
@@ -62,6 +63,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     }, []);
 
     useEffect(() => {
+        setUserType(userTypeAsProperty);
         const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
@@ -85,7 +87,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
         } else {
             setIsLoadingPage(false);
         }
-    }, []);
+    }, [userTypeAsProperty]);
 
     const handleTimeCounter = () => {
         let secondsTemp = 59, minutesTemp = 1;
@@ -306,7 +308,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     <option value="admin">{t("Admin")}</option>
                                 </select>
                             </motion.div>
-                            {formValidationErrors["userType"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["userType"])}</p>}
+                            {formValidationErrors["userType"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["userType"])} />}
                             <motion.div
                                 className="email-field-box"
                                 initial={{
@@ -330,7 +332,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     <BiSolidUser className="icon" />
                                 </div>
                             </motion.div>
-                            {formValidationErrors["email"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["email"])}</p>}
+                            {formValidationErrors["email"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["email"])} />}
                             {!isCheckingStatus && !errorMsg && !successMsg && <motion.button type="submit" className="btn btn-success w-100 mb-4 global-button"
                                 initial={{
                                     opacity: 0
@@ -376,7 +378,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     <FaCode className="icon" />
                                 </div>
                             </motion.div>
-                            {formValidationErrors["typedUserCode"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["typedUserCode"])}</p>}
+                            {formValidationErrors["typedUserCode"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["typedUserCode"])} />}
                             <motion.div
                                 className="new-password-field-box"
                                 initial={{
@@ -401,7 +403,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     {isVisibleNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleNewPassword(value => value = !value)} />}
                                 </div>
                             </motion.div>
-                            {formValidationErrors["newPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["newPassword"])}</p>}
+                            {formValidationErrors["newPassword"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["newPassword"])} />}
                             <motion.div
                                 className="confirm-new-password-field-box"
                                 initial={{
@@ -426,7 +428,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
                                     {isVisibleConfirmNewPassword && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisibleConfirmNewPassword(value => value = !value)} />}
                                 </div>
                             </motion.div>
-                            {formValidationErrors["confirmNewPassword"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["confirmNewPassword"])}</p>}
+                            {formValidationErrors["confirmNewPassword"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["confirmNewPassword"])} />}
                             {!isResetingPasswordStatus && !errorMsg && !successMsg && <motion.button type="submit" className="btn btn-success w-100 mb-5 global-button"
                                 initial={{
                                     opacity: 0

@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import LoaderPage from "@/components/LoaderPage";
-import { HiOutlineBellAlert } from "react-icons/hi2";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from "countries-list";
 import { parsePhoneNumber } from "libphonenumber-js";
@@ -14,6 +13,7 @@ import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../../../public/global_functions/validations";
 import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../../public/global_functions/popular";
 import { motion } from "motion/react";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function CustomerBillingAddress() {
 
@@ -243,10 +243,7 @@ export default function CustomerBillingAddress() {
                                                     defaultValue={userInfo.billingAddress.firstName}
                                                     onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, firstName: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.firstName && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.firstName)}</span>
-                                                </p>}
+                                                {formValidationErrors.firstName && <FormFieldErrorBox errorMsg={t(formValidationErrors.firstName)} />}
                                             </motion.div>
                                             <motion.div className="col-md-6" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
@@ -257,10 +254,7 @@ export default function CustomerBillingAddress() {
                                                     defaultValue={userInfo.billingAddress.lastName}
                                                     onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, lastName: e.target.value.trim() } })}
                                                 />
-                                                {formValidationErrors.lastName && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{t(formValidationErrors.lastName)}</span>
-                                                </p>}
+                                                {formValidationErrors.lastName && <FormFieldErrorBox errorMsg={t(formValidationErrors.lastName)} />}
                                             </motion.div>
                                         </div>
                                     </section>
@@ -300,10 +294,7 @@ export default function CustomerBillingAddress() {
                                                 </option>
                                             ))}
                                         </select>
-                                        {formValidationErrors.country && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.country)}</span>
-                                        </p>}
+                                        {formValidationErrors.country && <FormFieldErrorBox errorMsg={t(formValidationErrors.country)} />}
                                     </motion.section>
                                     <motion.section className="street-address mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
@@ -314,10 +305,7 @@ export default function CustomerBillingAddress() {
                                             defaultValue={userInfo.billingAddress.streetAddress}
                                             onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, streetAddress: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.streetAddress && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.streetAddress)}</span>
-                                        </p>}
+                                        {formValidationErrors.streetAddress && <FormFieldErrorBox errorMsg={t(formValidationErrors.streetAddress)} />}
                                     </motion.section>
                                     <motion.section className="apartment-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
@@ -338,10 +326,7 @@ export default function CustomerBillingAddress() {
                                             defaultValue={userInfo.billingAddress.city}
                                             onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, city: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.city && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.city)}</span>
-                                        </p>}
+                                        {formValidationErrors.city && <FormFieldErrorBox errorMsg={t(formValidationErrors.city)} />}
                                     </motion.section>
                                     <motion.section className="postal-code-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
@@ -352,10 +337,7 @@ export default function CustomerBillingAddress() {
                                             defaultValue={userInfo.billingAddress.postalCode.toString()}
                                             onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, postalCode: e.target.value } })}
                                         />
-                                        {formValidationErrors.postalCode && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.postalCode)}</span>
-                                        </p>}
+                                        {formValidationErrors.postalCode && <FormFieldErrorBox errorMsg={t(formValidationErrors.postalCode)} />}
                                     </motion.section>
                                     <motion.section className="phone-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
@@ -378,10 +360,7 @@ export default function CustomerBillingAddress() {
                                                 />
                                             </div>
                                         </div>
-                                        {formValidationErrors.phoneNumber && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.phoneNumber)}</span>
-                                        </p>}
+                                        {formValidationErrors.phoneNumber && <FormFieldErrorBox errorMsg={t(formValidationErrors.phoneNumber)} />}
                                     </motion.section>
                                     <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6>{t("Email")} <span className="text-danger">*</span></h6>
@@ -392,10 +371,7 @@ export default function CustomerBillingAddress() {
                                             defaultValue={userInfo.billingAddress.email}
                                             onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, email: e.target.value.trim() } })}
                                         />
-                                        {formValidationErrors.email && <p className="bg-danger p-2 form-field-error-box m-0">
-                                            <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                            <span>{t(formValidationErrors.email)}</span>
-                                        </p>}
+                                        {formValidationErrors.email && <FormFieldErrorBox errorMsg={t(formValidationErrors.email)} />}
                                     </motion.section>
                                     {!isWaitStatus && !successMsg && !errorMsg && <motion.button
                                         type="submit"
