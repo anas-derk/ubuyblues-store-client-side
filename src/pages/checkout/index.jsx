@@ -19,6 +19,7 @@ import { inputValuesValidation } from "../../../public/global_functions/validati
 import { SiBinance } from "react-icons/si";
 import Link from "next/link";
 import { motion } from "motion/react";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function Checkout({ countryAsProperty, storeId }) {
 
@@ -773,10 +774,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         defaultValue={userInfo ? userInfo.billingAddress.firstName : ""}
                                                         onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, firstName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                     />
-                                                    {formValidationErrors.firstName_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{t(formValidationErrors.firstName_for_billing_address)}</span>
-                                                    </p>}
+                                                    {formValidationErrors.firstName_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.firstName_for_billing_address)} />}
                                                 </div>
                                                 <div className="col-md-6">
                                                     <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
@@ -787,10 +785,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         defaultValue={userInfo ? userInfo.billingAddress.lastName : ""}
                                                         onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, lastName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
                                                     />
-                                                    {formValidationErrors.last_name_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{t(formValidationErrors.last_name_for_billing_address)}</span>
-                                                    </p>}
+                                                    {formValidationErrors.last_name_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.last_name_for_billing_address)} />}
                                                 </div>
                                             </div>
                                         </motion.section>
@@ -820,10 +815,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     </option>
                                                 ))}
                                             </select>
-                                            {formValidationErrors.country_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.country_for_billing_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.country_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.country_for_billing_address)} />}
                                         </motion.section>
                                         <motion.section className="street-address mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
@@ -834,10 +826,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.billingAddress.streetAddress : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, streetAddress: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.street_address_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.street_address_for_billing_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.street_address_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.street_address_for_billing_address)} />}
                                         </motion.section>
                                         <motion.section className="apartment-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
@@ -858,10 +847,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.billingAddress.city : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.city_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.city_for_billing_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.city_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.city_for_billing_address)} />}
                                         </motion.section>
                                         <motion.section className="postal-code-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
@@ -872,10 +858,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.billingAddress.postalCode : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, postalCode: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.postal_code_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.postal_code_for_billing_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.postal_code_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.postal_code_for_billing_address)} />}
                                         </motion.section>
                                         <motion.section className="phone-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
@@ -898,10 +881,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     />
                                                 </div>
                                             </div>
-                                            {formValidationErrors.phone_number_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.phone_number_for_billing_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.phone_number_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.phone_number_for_billing_address)} />}
                                         </motion.section>
                                         <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Email")} <span className="text-danger">*</span></h6>
@@ -912,10 +892,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.billingAddress.email : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.email_for_billing_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.email_for_billing_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.email_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.email_for_billing_address)} />}
                                         </motion.section>
                                     </form>
                                     {!userInfo._id && <motion.div className="form-check mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -953,10 +930,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         defaultValue={userInfo ? userInfo.shippingAddress.firstName : ""}
                                                         onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, firstName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                     />
-                                                    {formValidationErrors.first_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{t(formValidationErrors.first_name_for_shipping_address)}</span>
-                                                    </p>}
+                                                    {formValidationErrors.first_name_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.first_name_for_shipping_address)} />}
                                                 </div>
                                                 <div className="col-md-6">
                                                     <h6>{t("Last Name")} <span className="text-danger">*</span></h6>
@@ -967,10 +941,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         defaultValue={userInfo ? userInfo.shippingAddress.lastName : ""}
                                                         onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, lastName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                                     />
-                                                    {formValidationErrors.last_name_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                        <span>{t(formValidationErrors.last_name_for_shipping_address)}</span>
-                                                    </p>}
+                                                    {formValidationErrors.last_name_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.last_name_for_shipping_address)} />}
                                                 </div>
                                             </div>
                                         </motion.section>
@@ -1000,10 +971,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     </option>
                                                 ))}
                                             </select>
-                                            {formValidationErrors.country_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{formValidationErrors.country_for_shipping_address}</span>
-                                            </p>}
+                                            {formValidationErrors.country_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.country_for_shipping_address)} />}
                                         </motion.section>
                                         <motion.section className="street-address mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Street Address / Neighborhood")} <span className="text-danger">*</span></h6>
@@ -1014,10 +982,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.shippingAddress.streetAddress : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, streetAddress: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.street_address_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.street_address_for_shipping_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.street_address_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.street_address_for_shipping_address)} />}
                                         </motion.section>
                                         <motion.section className="apartment-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Apartment Number, Ward, Unit, Etc")} . ( {t("Optional")} )</h6>
@@ -1038,10 +1003,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.shippingAddress.city : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.city_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.city_for_shipping_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.city_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.city_for_shipping_address)} />}
                                         </motion.section>
                                         <motion.section className="postal-code-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Postal Code / Zip")} <span className="text-danger">*</span></h6>
@@ -1052,10 +1014,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.shippingAddress.postalCode.toString() : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, postalCode: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.postal_code_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.postal_code_for_shipping_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.postal_code_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.postal_code_for_shipping_address)} />}
                                         </motion.section>
                                         <motion.section className="phone-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Phone Number")} <span className="text-danger">*</span></h6>
@@ -1078,10 +1037,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     />
                                                 </div>
                                             </div>
-                                            {formValidationErrors.phone_number_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.phone_number_for_shipping_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.phone_number_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.phone_number_for_shipping_address)} />}
                                         </motion.section>
                                         <motion.section className="email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                             <h6>{t("Email")} <span className="text-danger">*</span></h6>
@@ -1092,10 +1048,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 defaultValue={userInfo ? userInfo.shippingAddress.email : ""}
                                                 onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
                                             />
-                                            {formValidationErrors.email_for_shipping_address && <p className="bg-danger p-2 form-field-error-box m-0">
-                                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                <span>{t(formValidationErrors.email_for_shipping_address)}</span>
-                                            </p>}
+                                            {formValidationErrors.email_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.email_for_shipping_address)} />}
                                         </motion.section>
                                     </form>}
                                     <motion.h6 className="mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Request Notes")} ( {t("Optional")} )</motion.h6>

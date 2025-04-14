@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import { motion } from "motion/react";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function UserAuth() {
 
@@ -284,7 +285,7 @@ export default function UserAuth() {
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
-                                            {formValidationErrors["emailForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["emailForSignup"])}</p>}
+                                            {formValidationErrors["emailForSignup"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["emailForSignup"])} />}
                                             <div className="password-field-box">
                                                 <input
                                                     type={isVisiblePasswordForSignup ? "text" : "password"}
@@ -297,7 +298,7 @@ export default function UserAuth() {
                                                     {isVisiblePasswordForSignup && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForSignup(value => value = !value)} />}
                                                 </div>
                                             </div>
-                                            {formValidationErrors["passwordForSignup"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForSignup"])}</p>}
+                                            {formValidationErrors["passwordForSignup"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["passwordForSignup"])} />}
                                             {!isSignupStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 global-button">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("sign-up")}</span>
@@ -335,7 +336,7 @@ export default function UserAuth() {
                                                     <BiSolidUser className="icon" />
                                                 </div>
                                             </div>
-                                            {formValidationErrors["emailForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["emailForLogin"])}</p>}
+                                            {formValidationErrors["emailForLogin"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["emailForLogin"])} />}
                                             <div className="password-field-box">
                                                 <input
                                                     type={isVisiblePasswordForLogin ? "text" : "password"}
@@ -348,7 +349,7 @@ export default function UserAuth() {
                                                     {isVisiblePasswordForLogin && <AiOutlineEyeInvisible className='invisible-eye-icon icon' onClick={() => setIsVisiblePasswordForLogin(value => value = !value)} />}
                                                 </div>
                                             </div>
-                                            {formValidationErrors["passwordForLogin"] && <p className='error-msg text-white bg-danger p-2 mb-4'>{t(formValidationErrors["passwordForLogin"])}</p>}
+                                            {formValidationErrors["passwordForLogin"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["passwordForLogin"])} />}
                                             {!isLoginingStatus && !errMsg && !successMsg && <button type="submit" className="btn btn-success w-100 mb-4 global-button">
                                                 {i18n.language === "ar" && <FiLogIn />}
                                                 <span className="me-2">{t("login")}</span>

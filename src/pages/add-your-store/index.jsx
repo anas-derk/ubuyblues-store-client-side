@@ -11,6 +11,7 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { getUserInfo, getAppearedSections, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../public/global_functions/popular";
 import { motion } from "motion/react";
+import FormFieldErrorBox from "@/components/FormFieldErrorBox";
 
 export default function AddYourStore() {
 
@@ -251,10 +252,7 @@ export default function AddYourStore() {
                                         onChange={(e) => setStoreData({ ...storeData, name: e.target.value })}
                                         value={storeData.name}
                                     />
-                                    {formValidationErrors["name"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["name"])}</span>
-                                    </p>}
+                                    {formValidationErrors["name"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["name"])} />}
                                 </motion.section>
                                 <motion.section className="owner-first-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
@@ -264,10 +262,7 @@ export default function AddYourStore() {
                                         onChange={(e) => setStoreData({ ...storeData, ownerFirstName: e.target.value })}
                                         value={storeData.ownerFirstName}
                                     />
-                                    {formValidationErrors["ownerFirstName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["ownerFirstName"])}</span>
-                                    </p>}
+                                    {formValidationErrors["ownerFirstName"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["ownerFirstName"])} />}
                                 </motion.section>
                                 <motion.section className="owner-last-name mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
@@ -277,10 +272,7 @@ export default function AddYourStore() {
                                         onChange={(e) => setStoreData({ ...storeData, ownerLastName: e.target.value })}
                                         value={storeData.ownerLastName}
                                     />
-                                    {formValidationErrors["ownerLastName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["ownerLastName"])}</span>
-                                    </p>}
+                                    {formValidationErrors["ownerLastName"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["ownerLastName"])} />}
                                 </motion.section>
                                 <motion.section className="owner-email mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
@@ -290,10 +282,7 @@ export default function AddYourStore() {
                                         onChange={(e) => setStoreData({ ...storeData, ownerEmail: e.target.value })}
                                         value={storeData.ownerEmail}
                                     />
-                                    {formValidationErrors["ownerEmail"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["ownerEmail"])}</span>
-                                    </p>}
+                                    {formValidationErrors["ownerEmail"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["ownerEmail"])} />}
                                 </motion.section>
                                 <motion.section className="store-products-type mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
@@ -303,10 +292,7 @@ export default function AddYourStore() {
                                         onChange={(e) => setStoreData({ ...storeData, productsType: e.target.value })}
                                         value={storeData.productsType}
                                     />
-                                    {formValidationErrors["productsType"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["productsType"])}</span>
-                                    </p>}
+                                    {formValidationErrors["productsType"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["productsType"])} />}
                                 </motion.section>
                                 <motion.section className="store-products-description mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <input
@@ -316,10 +302,7 @@ export default function AddYourStore() {
                                         onChange={(e) => setStoreData({ ...storeData, productsDescription: e.target.value })}
                                         value={storeData.productsDescription}
                                     />
-                                    {formValidationErrors["productsDescription"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["productsDescription"])}</span>
-                                    </p>}
+                                    {formValidationErrors["productsDescription"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["productsDescription"])} />}
                                 </motion.section>
                                 <motion.section className="image mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     <h6 className="fw-bold text-white mb-3">{t("Please Select Your Store Image")}</h6>
@@ -331,10 +314,7 @@ export default function AddYourStore() {
                                         ref={storeImageFileElementRef}
                                         value={storeImageFileElementRef.current?.value}
                                     />
-                                    {formValidationErrors["image"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                        <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                        <span>{t(formValidationErrors["image"])}</span>
-                                    </p>}
+                                    {formValidationErrors["image"] && <FormFieldErrorBox errorMsg={t(formValidationErrors["image"])} />}
                                 </motion.section>
                                 {!isWaitStatus && !successMsg && !errorMsg && <motion.button
                                     type="submit"
