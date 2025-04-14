@@ -32,7 +32,8 @@ import {
     getAppearedSections,
     handleSelectUserLanguage,
     getInitialStateForElementBeforeAnimation,
-    getAnimationSettings
+    getAnimationSettings,
+    getAllBrandsInsideThePage
 } from "../../public/global_functions/popular";
 import { FaSearch } from "react-icons/fa";
 import NotFoundError from "@/components/NotFoundError";
@@ -149,7 +150,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [appearedSections, setAppearedSections] = useState([]);
 
-    const [lastSevenBrands, setLastSevenBrands] = useState([]);
+    const [allBrandsInsideThePage, setAllBrandsInsideThePage] = useState([]);
 
     const [isDisplayContactIcons, setIsDisplayContactIcons] = useState(false);
 
@@ -170,7 +171,6 @@ export default function Home({ countryAsProperty, storeId }) {
     useEffect(() => {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            console.log(price)
             setUsdPriceAgainstCurrency(price);
             setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
             if (!isGetStoreDetails) {
@@ -271,7 +271,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     if (appearedSectionsLength > 0) {
                         for (let i = 0; i < appearedSectionsLength; i++) {
                             if (appearedSectionsResult.data[i].sectionName === "brands" && appearedSectionsResult.data[i].isAppeared) {
-                                setLastSevenBrands((await getLastSevenBrandsByStoreId(filtersAsString)).data);
+                                setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, 9, filtersAsString)).data);
                                 setIsGetBrands(false);
                             }
                             if (appearedSectionsResult.data[i].sectionName === "stores" && appearedSectionsResult.data[i].isAppeared) {
@@ -286,6 +286,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             })
             .catch((err) => {
+                console.log(err);
                 if (err?.response?.status === 401) {
                     localStorage.removeItem(process.env.userTokenNameInLocalStorage);
                     setIsLoadingPage(false);
@@ -317,7 +318,7 @@ export default function Home({ countryAsProperty, storeId }) {
         setAllCategoriesInsideThePage([]);
         setAllFlashProductsInsideThePage([]);
         setAllProductsInsideThePage([]);
-        setLastSevenBrands([]);
+        setAllBrandsInsideThePage([]);
         setAllStoresInsideThePage([]);
         setTotalPagesCount({
             forCategories: 0,
@@ -1047,11 +1048,11 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>
                             {/* End Last Added Products */}
                             {/* Start Brands Section */}
-                            {appearedSections.includes("brands") && lastSevenBrands.length > 0 && <section className="brands mb-5">
+                            {appearedSections.includes("brands") && allBrandsInsideThePage.length > 0 && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white h4">{t("Brands")}</h2>
                                 <div className="row brands-box section-data-box pt-4 pb-4">
                                     {isGetBrands && <SectionLoader />}
-                                    {!isGetBrands && lastSevenBrands.length > 0 && lastSevenBrands.map((brand) => (
+                                    {!isGetBrands && allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
                                         <motion.div
                                             className="col-xs-12 col-lg-6 col-xl-4"
                                             key={brand._id}
@@ -1073,9 +1074,9 @@ export default function Home({ countryAsProperty, storeId }) {
                                             />
                                         </motion.div>
                                     ))}
-                                    {!isGetBrands && lastSevenBrands.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                    {!isGetBrands && allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
                                 </div>
-                                {!isGetBrands && lastSevenBrands.length !== 0 && <Link href={`/all-brands-of-the-store?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-btn">{t("Show All Brands")}</Link>}
+                                {!isGetBrands && allBrandsInsideThePage.length !== 0 && <Link href={`/all-brands-of-the-store?storeId=${storeDetails._id}`} className="mb-4 d-block mx-auto text-center show-btn">{t("Show All Brands")}</Link>}
                             </section>}
                             {/* End Brands Section */}
                             {/* Start Stores Section */}

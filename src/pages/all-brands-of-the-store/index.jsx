@@ -6,8 +6,7 @@ import NotFoundError from "@/components/NotFoundError";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getAnimationSettings, getInitialStateForElementBeforeAnimation, getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
-import axios from "axios";
+import { getAllBrandsInsideThePage, getAnimationSettings, getInitialStateForElementBeforeAnimation, getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import SectionLoader from "@/components/SectionLoader";
 import BrandCard from "@/components/BrandCard";
 import { motion } from "motion/react";
@@ -94,15 +93,6 @@ export default function AllBrands({ storeId }) {
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetBrands]);
-
-    const getAllBrandsInsideThePage = async (pageNumber, pageSize, filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`)).data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
 
     const getNextPage = async () => {
         try {

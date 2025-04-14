@@ -191,7 +191,7 @@ const isExistOfferOnProduct = (currentDateAsString, startDateAsString, endDateAs
 }
 
 const getFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
-    try{
+    try {
         const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
         return (await axios.post(`${process.env.BASE_API_URL}/favorite-products/favorite-products-by-products-ids-and-user-id?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`, {
             productsIds
@@ -201,7 +201,7 @@ const getFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
             }
         })).data;
     }
-    catch(err) {
+    catch (err) {
         throw err;
     }
 }
@@ -211,7 +211,7 @@ const isFavoriteProductForUser = (favorite_products_list, productId) => {
 }
 
 async function getUserInfo() {
-    try{
+    try {
         const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
         return (await axios.get(`${process.env.BASE_API_URL}/users/user-info?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`, {
             headers: {
@@ -219,7 +219,7 @@ async function getUserInfo() {
             },
         })).data;
     }
-    catch(err) {
+    catch (err) {
         throw err;
     }
 }
@@ -301,6 +301,16 @@ const getAnimationSettings = (delay = 0) => {
     }
 }
 
+const getAllBrandsInsideThePage = async (pageNumber, pageSize, filters) => {
+    try {
+        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
 export {
     getFlashProductsCount,
     getProductsCount,
@@ -330,5 +340,6 @@ export {
     getOrderDetails,
     handleSelectUserLanguage,
     getInitialStateForElementBeforeAnimation,
-    getAnimationSettings
+    getAnimationSettings,
+    getAllBrandsInsideThePage
 }
