@@ -30,7 +30,7 @@ export default function ErrorOnLoadingThePage({ errorMsg }) {
                         }
                     }}
                 >
-                    <PiSmileySad className="sorry-icon mb-5" />
+                    <PiSmileySad className="error-icon mb-5" />
                 </motion.div>
                 <motion.p
                     className="error-msg-on-loading-box"
