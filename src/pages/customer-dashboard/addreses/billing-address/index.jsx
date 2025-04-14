@@ -38,12 +38,12 @@ export default function CustomerBillingAddress() {
     const countryList = Object.values(countries);
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -51,13 +51,13 @@ export default function CustomerBillingAddress() {
                         setUserInfo(result.data);
                         setIsLoadingPage(false);
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                     else {
@@ -71,10 +71,10 @@ export default function CustomerBillingAddress() {
     }, []);
 
     const getPhoneNumberFromString = (text, country) => {
-        try{
+        try {
             return parsePhoneNumber(text, country).nationalNumber;
         }
-        catch(err) {
+        catch (err) {
             return "";
         }
     }
@@ -182,7 +182,7 @@ export default function CustomerBillingAddress() {
                     billingAddress: userInfo.billingAddress,
                 }, {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                     }
                 })).data;
                 setIsWaitStatus(false);
@@ -203,7 +203,7 @@ export default function CustomerBillingAddress() {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -220,7 +220,7 @@ export default function CustomerBillingAddress() {
     return (
         <div className="customer-billing-address customer-dashboard">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Customer Billing Address")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Customer Billing Address")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
@@ -280,7 +280,8 @@ export default function CustomerBillingAddress() {
                                             className={`p-2 ${formValidationErrors.country ? "border-3 border-danger mb-3" : ""}`}
                                             onChange={(e) => {
                                                 const countryCode = getCountryCode(e.target.value);
-                                                setUserInfo({ ...userInfo,
+                                                setUserInfo({
+                                                    ...userInfo,
                                                     billingAddress: {
                                                         ...userInfo.billingAddress,
                                                         country: countryCode,

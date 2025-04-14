@@ -17,7 +17,7 @@ export default function CustomerDashboardSideBar() {
     const { i18n, t } = useTranslation();
 
     const userLogout = () => {
-        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         router.push("/auth");
     }
 

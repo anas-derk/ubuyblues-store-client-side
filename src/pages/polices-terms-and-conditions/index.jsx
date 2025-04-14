@@ -17,23 +17,23 @@ export default function PolicesTermsAndConditions() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then((result) => {
                     if (result.error) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     }
                     setIsLoadingPage(false);
                 })
                 .catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         setIsLoadingPage(false);
                     }
                     else {
@@ -49,7 +49,7 @@ export default function PolicesTermsAndConditions() {
     return (
         <div className="privacy-policy-and-conditions caption-page page pt-5">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Polices Terms And Conditions")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Polices Terms And Conditions")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
@@ -80,7 +80,7 @@ export default function PolicesTermsAndConditions() {
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("The term 'subsidiary company' refers to any individual or entity, another individual or entity that, directly or indirectly, through one or more intermediaries, controls or is controlled by or is under common control with this individual or entity")}</motion.li>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'Products and Services' refers to the products and services offered by Ubuyblues online on any website and/or services and call centers, including but not limited to Ubuyblues services")} .</motion.li>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'Ubuyblues Group' refers to a group of companies consisting of Ubuyblues and all its subsidiaries and affiliates")} .</motion.li>
-                                <motion.li  className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'The applicable laws' refer to any privacy law, personal data protection law, regulation, treaty, rule, ordinance, license, restriction, judicial or administrative order, law or public law, or any other declaration having legal effect in the State of Kuwait")}</motion.li>
+                                <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'The applicable laws' refer to any privacy law, personal data protection law, regulation, treaty, rule, ordinance, license, restriction, judicial or administrative order, law or public law, or any other declaration having legal effect in the State of Kuwait")}</motion.li>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'Data Subject' or 'You' means an identified or identifiable natural person whose personal data is processed through this website or Ubuyblues services")} .</motion.li>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'Personal data' refers to any information related to the data subject who can be identified, directly or indirectly, particularly by reference to an identifier such as a name, identification number, location data, online identifier, or one or more factors specific to the physical, physiological, genetic, mental, economic, cultural, or social identity of the data subject")}</motion.li>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("'Privacy notice' means this set of terms and conditions that govern the processing of personal data")}</motion.li>

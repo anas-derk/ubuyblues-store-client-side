@@ -96,7 +96,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -156,7 +156,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             })
             .catch((err) => {
                 if (err?.response?.status === 401) {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     setIsGetUserInfo(false);
                 }
                 else {
@@ -173,7 +173,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }, [isGetUserInfo, isGetStoreDetails]);
 
     const getAndSetUserInfoAsGuest = () => {
-        const userAddresses = JSON.parse(localStorage.getItem(process.env.userAddressesFieldNameInLocalStorage));
+        const userAddresses = JSON.parse(localStorage.getItem(process.env.USER_ADDRESSES_FIELD_NAME_IN_LOCAL_STORAGE));
         if (userAddresses) {
             const userInfo = { billingAddress: userAddresses.billingAddress, shippingAddress: userAddresses.shippingAddress };
             setUserInfo(userInfo);
@@ -213,7 +213,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     async function getAndSetUserInfoData() {
         try {
-            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+            const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
             if (userToken) {
                 const result = await getUserInfo();
                 if (!result.error) {
@@ -221,7 +221,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     setUserToken(userToken);
                     return result.data;
                 } else {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     return getAndSetUserInfoAsGuest();
                 }
             } else {
@@ -537,7 +537,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         try {
             return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}&language=${i18n.language}`, orderDetails, userToken > 0 ? {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
                 }
             } : {})).data;
         }
@@ -553,7 +553,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
             if (Object.keys(errorsObject).length == 0) {
                 setIsWaitCreateNewOrder(true);
                 if (isSavePaymentInfo) {
-                    localStorage.setItem(process.env.userAddressesFieldNameInLocalStorage, JSON.stringify({
+                    localStorage.setItem(process.env.USER_ADDRESSES_FIELD_NAME_IN_LOCAL_STORAGE, JSON.stringify({
                         billingAddress: {
                             firstName: userInfo ? userInfo.billingAddress.firstName : "",
                             lastName: userInfo ? userInfo.billingAddress.lastName : "",
@@ -580,7 +580,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         },
                     }));
                 } else {
-                    localStorage.removeItem(process.env.userAddressesFieldNameInLocalStorage);
+                    localStorage.removeItem(process.env.USER_ADDRESSES_FIELD_NAME_IN_LOCAL_STORAGE);
                 }
                 const result = await createNewOrder(getOrderDetailsForCreating());
                 setIsWaitCreateNewOrder(false);
@@ -599,7 +599,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -681,7 +681,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -703,7 +703,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 setIsWaitCreateNewOrder(true);
                 const result = (await axios.post(`${process.env.BASE_API_URL}/orders/create-payment-order?country=${countryAsProperty}&language=${i18n.language}`, getOrderDetailsForCreating(), userToken ? {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
                     }
                 } : {})).data;
                 if (!result.error) {
@@ -724,7 +724,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -746,7 +746,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     return (
         <div className="checkout page">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Checkout")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Checkout")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">

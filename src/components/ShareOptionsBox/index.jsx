@@ -10,7 +10,7 @@ export default function ShareOptionsBox({ setIsDisplayShareOptionsBox, sharingNa
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -25,22 +25,22 @@ export default function ShareOptionsBox({ setIsDisplayShareOptionsBox, sharingNa
                 >{t(`Share Your Favorite ${sharingName} With Your Friends`)}</motion.h5>
                 <motion.div className="row" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                     <div className="col-md-3">
-                        <WhatsappShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
+                        <WhatsappShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On ${process.env.WEBSITE_NAME}`)}>
                             <WhatsappIcon size={35} round />
                         </WhatsappShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
+                        <FacebookShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On ${process.env.WEBSITE_NAME}`)}>
                             <FacebookIcon size={35} round />
                         </FacebookShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookMessengerShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
+                        <FacebookMessengerShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On ${process.env.WEBSITE_NAME}`)}>
                             <FacebookMessengerIcon size={35} round />
                         </FacebookMessengerShareButton>
                     </div>
                     <div className="col-md-3">
-                        <TelegramShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On Ubuyblues`)}>
+                        <TelegramShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On ${process.env.WEBSITE_NAME}`)}>
                             <TelegramIcon size={35} round />
                         </TelegramShareButton>
                     </div>

@@ -119,23 +119,23 @@ export default function Footer() {
                         >
                             <li className="link-item fw-bold mb-3">
                                 <IoLogoFacebook className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href={process.env.SOCIAL_MEDIA_LINKS.FACEBOOK} target="_blank" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
+                                <Link href={process.env.FACEBOOK_LINK} target="_blank" className="text-dark link-btn">{t("Facebook").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <FaInstagram className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href={process.env.SOCIAL_MEDIA_LINKS.INSTAGRAM} target="_blank" className="text-dark link-btn">{t("Instagram").toUpperCase()}</Link>
+                                <Link href={process.env.INSTAGRAM_LINK} target="_blank" className="text-dark link-btn">{t("Instagram").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <FaXTwitter className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href={process.env.SOCIAL_MEDIA_LINKS.X} target="_blank" className="text-dark link-btn">{t("x").toUpperCase()}</Link>
+                                <Link href={process.env.X_LINK} target="_blank" className="text-dark link-btn">{t("x").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <FaTiktok className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href={process.env.SOCIAL_MEDIA_LINKS.TIKTOK} target="_blank" className="text-dark link-btn">{t("Tiktok").toUpperCase()}</Link>
+                                <Link href={process.env.TIKTOK_LINK} target="_blank" className="text-dark link-btn">{t("Tiktok").toUpperCase()}</Link>
                             </li>
                             <li className="link-item fw-bold mb-3">
                                 <MdEmail className={`${i18n.language !== "ar" ? "me-2" : "ms-2"}`} />
-                                <Link href={`mailto:${process.env.contactEmail}`} className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
+                                <Link href={`mailto:${process.env.CONTACT_EMAIL}`} className="text-dark link-btn">{t("Email").toUpperCase()}</Link>
                             </li>
                         </ul>
                     </motion.div>
@@ -208,7 +208,7 @@ export default function Footer() {
                     </motion.div>
                 </div>
                 <p className="mb-0 text-center fw-bold">
-                    {t("All Rights Reserved For")} <Link href="/" className="text-danger">Ubuyblues</Link>
+                    {t("All Rights Reserved For")} <Link href="/" className="text-danger">{process.env.WEBSITE_NAME}</Link>
                 </p>
             </div>
         </footer>

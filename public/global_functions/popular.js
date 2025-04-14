@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getFlashProductsCount = async (filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/products/flash-products-count?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
@@ -12,7 +12,7 @@ const getFlashProductsCount = async (filters) => {
 
 const getProductsCount = async (filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/products/products-count?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
@@ -22,7 +22,7 @@ const getProductsCount = async (filters) => {
 
 const getAllFlashProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/products/all-flash-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
@@ -32,7 +32,7 @@ const getAllFlashProductsInsideThePage = async (pageNumber, pageSize, filters, s
 
 const getAllProductsInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/products/all-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
@@ -59,7 +59,7 @@ const getDateFormated = (date) => {
 
 const getStoreDetails = async (storeId) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         let res;
         if (!storeId) {
             res = await axios.get(`${process.env.BASE_API_URL}/stores/main-store-details?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`);
@@ -75,7 +75,7 @@ const getStoreDetails = async (storeId) => {
 
 const getCategoriesCount = async (filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/categories/categories-count?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
@@ -85,7 +85,7 @@ const getCategoriesCount = async (filters) => {
 
 const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
@@ -95,7 +95,7 @@ const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
 
 const getStoresCount = async (filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/stores/stores-count?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
@@ -105,7 +105,7 @@ const getStoresCount = async (filters) => {
 
 const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/stores/all-stores-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {
@@ -192,12 +192,12 @@ const isExistOfferOnProduct = (currentDateAsString, startDateAsString, endDateAs
 
 const getFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.post(`${process.env.BASE_API_URL}/favorite-products/favorite-products-by-products-ids-and-user-id?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`, {
             productsIds
         }, {
             headers: {
-                Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
             }
         })).data;
     }
@@ -212,10 +212,10 @@ const isFavoriteProductForUser = (favorite_products_list, productId) => {
 
 async function getUserInfo() {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/users/user-info?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`, {
             headers: {
-                Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
             },
         })).data;
     }
@@ -226,7 +226,7 @@ async function getUserInfo() {
 
 const sendTheCodeToUserEmail = async (email, typeOfUse, userType) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.post(`${process.env.BASE_API_URL}/users/send-account-verification-code?email=${email}&typeOfUse=${typeOfUse}&userType=${userType}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`)).data;
     }
     catch (err) {
@@ -236,10 +236,10 @@ const sendTheCodeToUserEmail = async (email, typeOfUse, userType) => {
 
 const getFavoriteProductsCount = async (filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/favorite-products/favorite-products-count?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`, {
             headers: {
-                Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
             }
         })).data;
     }
@@ -250,7 +250,7 @@ const getFavoriteProductsCount = async (filters) => {
 
 const getProductsByIds = async (productsIds,) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.post(`${process.env.BASE_API_URL}/products/products-by-ids?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`, {
             productsIds,
         })).data;
@@ -262,7 +262,7 @@ const getProductsByIds = async (productsIds,) => {
 
 const getAppearedSections = async () => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/appeared-sections/all-sections?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`)).data;
     }
     catch (err) {
@@ -272,7 +272,7 @@ const getAppearedSections = async () => {
 
 const getOrderDetails = async (orderId) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderId}?language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}`)).data;
     }
     catch (err) {
@@ -303,7 +303,7 @@ const getAnimationSettings = (delay = 0) => {
 
 const getAllBrandsInsideThePage = async (pageNumber, pageSize, filters) => {
     try {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         return (await axios.get(`${process.env.BASE_API_URL}/brands/all-brands-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
     }
     catch (err) {

@@ -138,7 +138,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -184,8 +184,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     const relatedProducts = result.data;
                     setSampleFromRelatedProductsInProduct(relatedProducts);
                     setIsGetSampleFromRelatedProductsInProduct(false);
-                    const referalWriterInfo = JSON.parse(localStorage.getItem(process.env.referalWriterFieldNameInLocalStorage));
-                    const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+                    const referalWriterInfo = JSON.parse(localStorage.getItem(process.env.REFERAL_WRITER_FIELD_NAME_IN_LOCAL_STORAGE));
+                    const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     if (userToken) {
                         result = await getUserInfo();
                         if (!result.error) {
@@ -221,7 +221,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             })
             .catch((err) => {
                 if (err?.response?.status === 401) {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     setIsGetUserInfo(false);
                 }
                 else {
@@ -263,7 +263,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/ratings/product-rating-by-user-id/${productId}?language=${i18n.language}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
                 }
             })).data;
         }
@@ -290,7 +290,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                 setIsWaitAddProductToFavoriteUserProductsList(true);
                 const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}?language=${i18n.language}`, undefined, {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                     }
                 })).data;
                 setIsWaitAddProductToFavoriteUserProductsList(false);
@@ -313,7 +313,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
             }
@@ -330,7 +330,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
             const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}?language=${i18n.language}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                 }
             })).data;
             setIsWaitDeleteProductToFavoriteUserProductsList(false);
@@ -351,7 +351,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
             }
@@ -366,7 +366,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     const addToCart = (productId) => {
         try {
             setIsWaitAddToCart(true);
-            const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+            const userCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
             if (Array.isArray(userCart)) {
                 if (userCart.length > 0) {
                     const productIndex = userCart.findIndex((product) => product._id === productId);
@@ -375,7 +375,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                             _id: productId,
                             quantity: 1,
                         });
-                        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(userCart));
+                        localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
 
@@ -402,7 +402,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                         _id: productId,
                         quantity: 1,
                     });
-                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
+                    localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
                     dispatch({
@@ -420,7 +420,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     _id: productId,
                     quantity: 1,
                 });
-                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
+                localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
                 dispatch({
@@ -455,7 +455,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                     rating: starNumber
                 }, {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
                     }
                 })).data;
                 setIsSelectProductRating(false);
@@ -464,7 +464,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 setErrorType("user-not-logged-in-for-add-product-to-favourite-products-list");
                 setIsDisplayErrorPopup(true);
             }
@@ -574,12 +574,12 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 if (isSaveReferalWriterInfo) {
-                    localStorage.setItem("asfour-store-referal-writer-info", JSON.stringify({
+                    localStorage.setItem(process.env.REFERAL_WRITER_FIELD_NAME_IN_LOCAL_STORAGE, JSON.stringify({
                         name: referalDetails.name,
                         email: referalDetails.email,
                     }));
                 } else {
-                    localStorage.removeItem("asfour-store-referal-writer-info");
+                    localStorage.removeItem(process.env.REFERAL_WRITER_FIELD_NAME_IN_LOCAL_STORAGE);
                 }
                 setWaitAddNewReferalMsg("Please Wait ...");
                 const result = (await axios.post(`${process.env.BASE_API_URL}/referals/add-new-referal?language=${i18n.language}`, referalDetails)).data;
@@ -601,7 +601,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -678,7 +678,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
     return (
         <div className="product-details page pt-5 d-flex flex-column justify-content-center">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Product Details")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Product Details")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 {!isDisplayThreeDImageViewerPopup && <Header />}

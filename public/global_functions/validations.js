@@ -1,5 +1,4 @@
-import { isValidPhoneNumber }  from 'libphonenumber-js';
-import axios from "axios";
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 // تعريف دالة للتحقق من الإيميل هل صالح أم لا
 function isEmail(email) {

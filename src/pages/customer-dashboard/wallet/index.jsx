@@ -63,7 +63,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -83,7 +83,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -94,13 +94,13 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
                         setTotalPagesCount(Math.ceil(result2.walletProductsCount / pageSize));
                         setIsGetWalletProducts(false);
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                     else {
@@ -123,7 +123,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/wallet/all-wallet-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                 }
             })).data;
         }
@@ -183,7 +183,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             setSelectedWalletProduct(walletProductIndex);
             const result = await axios.delete(`${process.env.BASE_API_URL}/wallet/${allWalletProductsInsideThePage[walletProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                 }
             });
             setWaitMsg("");
@@ -202,7 +202,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -219,7 +219,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
             const result = (await axios.delete(`${process.env.BASE_API_URL}/wallet/all-wallet-products?language=${i18n.language}`,
                 {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                     }
                 }
             )).data;
@@ -241,7 +241,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/login");
             }
             else {
@@ -255,7 +255,7 @@ export default function CustomerWalletProductsList({ countryAsProperty }) {
     return (
         <div className="customer-wallet-products-list customer-dashboard customer-products-list">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Customer Wallet Products")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Customer Wallet Products")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

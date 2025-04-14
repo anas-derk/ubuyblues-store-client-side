@@ -31,7 +31,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -51,13 +51,13 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
                     let result = res.data;
                     if (result.error) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     } else {
                         result = await getOrderDetails(orderIdAsProperty);
@@ -73,7 +73,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                 })
                 .catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                     else {
@@ -93,7 +93,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
     return (
         <div className="order-details customer-dashboard">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Order Details")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Order Details")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

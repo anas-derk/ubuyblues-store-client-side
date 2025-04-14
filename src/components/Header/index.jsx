@@ -38,7 +38,7 @@ export default function Header() {
         window.addEventListener("resize", () => {
             setWindowInnerWidth(window.innerWidth);
         });
-        const tempLightMode = localStorage.getItem(process.env.userThemeModeFieldNameInLocalStorage);
+        const tempLightMode = localStorage.getItem(process.env.USER_THEME_MODE_FIELD_NAME_IN_LOCAL_STORAGE);
         if (tempLightMode && (tempLightMode === "dark" || tempLightMode === "sunny")) {
             setLightMode(tempLightMode);
             let rootElement = document.documentElement;
@@ -47,7 +47,7 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             setToken(userToken);
             getFavoriteProductsCount()
@@ -61,7 +61,7 @@ export default function Header() {
                 })
                 .catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     }
                     else {
                         setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
@@ -71,7 +71,7 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
-        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             if (tempAllProductsDataInsideTheCart.length > 0) {
                 getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
@@ -83,7 +83,7 @@ export default function Header() {
                                 tempProductsIds.push(product._id);
                             });
                         });
-                        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
+                        localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => tempProductsIds.includes(product._id))));
                         dispatch({
                             type: "(Add / Delete) (To / From ) Cart",
                             productsCountInCart: tempProductsCountInCart
@@ -101,25 +101,25 @@ export default function Header() {
         setLightMode(newLightMode);
         let rootElement = document.documentElement;
         rootElement.style.setProperty("--main-color-one", newLightMode === "sunny" ? "#6A017A" : "#000");
-        localStorage.setItem(process.env.userThemeModeFieldNameInLocalStorage, newLightMode);
+        localStorage.setItem(process.env.USER_THEME_MODE_FIELD_NAME_IN_LOCAL_STORAGE, newLightMode);
     }
 
     const userLogout = async () => {
-        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         await router.push("/auth");
     }
 
     const handleChangeLanguage = (language) => {
         i18n.changeLanguage(language);
         document.body.lang = language;
-        localStorage.setItem(process.env.userlanguageFieldNameInLocalStorage, language);
+        localStorage.setItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE, language);
     }
 
     const handleSelectCountry = async (country) => {
         try {
             switch (country) {
                 case "kuwait": {
-                    localStorage.setItem(process.env.selectedCountryByUser, country);
+                    localStorage.setItem(process.env.SELECTED_COUNTRY_BY_USER, country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -130,7 +130,7 @@ export default function Header() {
                     return;
                 }
                 case "germany": {
-                    localStorage.setItem(process.env.selectedCountryByUser, country);
+                    localStorage.setItem(process.env.SELECTED_COUNTRY_BY_USER, country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {
@@ -141,7 +141,7 @@ export default function Header() {
                     return;
                 }
                 case "turkey": {
-                    localStorage.setItem(process.env.selectedCountryByUser, country);
+                    localStorage.setItem(process.env.SELECTED_COUNTRY_BY_USER, country);
                     await router.replace({
                         pathname: router.pathname,
                         query: {

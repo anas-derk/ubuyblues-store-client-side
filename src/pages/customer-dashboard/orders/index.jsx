@@ -53,7 +53,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     const pageSize = 3;
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -80,26 +80,24 @@ export default function CustomerOrders({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
                     if (!result.error) {
-                        const result2 = await getOrdersCount("destination=user");
-                        if (result2.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, "destination=user")).data);
-                            setTotalPagesCount(Math.ceil(result2.data / pageSize));
-                            setIsExistOrdersForThisUserInDBInGeneral(true);
-                        }
+                        const result2 = (await getAllOrdersInsideThePage(1, pageSize, "destination=user")).data;
+                        setTotalPagesCount(Math.ceil(result2.ordersCount / pageSize));
+                        setAllOrdersInsideThePage(result2.orders);
+                        setIsExistOrdersForThisUserInDBInGeneral(true);
                         setIsGetOrders(false);
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                     else {
@@ -118,24 +116,11 @@ export default function CustomerOrders({ countryAsProperty }) {
         }
     }, [isGetOrders]);
 
-    const getOrdersCount = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?language=${i18n.language}&${filters ? filters : ""}`, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
-                }
-            })).data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
     const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
                 }
             })).data;
         }
@@ -194,20 +179,14 @@ export default function CustomerOrders({ countryAsProperty }) {
         try {
             setIsGetOrders(true);
             const filteringString = getFilteringString(filters);
-            const result = await getOrdersCount(filteringString);
-            if (result.data > 0) {
-                setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
-                setTotalPagesCount(Math.ceil(result.data / pageSize));
-                setIsGetOrders(false);
-            } else {
-                setAllOrdersInsideThePage([]);
-                setTotalPagesCount(0);
-                setIsFilteringOrdersStatus(false);
-            }
+            const result = (await getAllOrdersInsideThePage(1, pageSize, filteringString)).data;
+            setAllOrdersInsideThePage(result.orders);
+            setTotalPagesCount(Math.ceil(result.ordersCount / pageSize));
+            setIsGetOrders(false);
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/auth");
             }
             else {
@@ -224,7 +203,7 @@ export default function CustomerOrders({ countryAsProperty }) {
     return (
         <div className="customer-orders-managment customer-dashboard">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Customer Orders")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Customer Orders")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

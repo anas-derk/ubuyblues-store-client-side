@@ -164,7 +164,7 @@ export default function Home({ countryAsProperty, storeId }) {
     };
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -184,17 +184,17 @@ export default function Home({ countryAsProperty, storeId }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then((result) => {
                     if (result.error) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     }
                 })
                 .catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     }
                     else {
                         setIsLoadingPage(false);
@@ -286,9 +286,8 @@ export default function Home({ countryAsProperty, storeId }) {
                 }
             })
             .catch((err) => {
-                console.log(err);
                 if (err?.response?.status === 401) {
-                    localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                    localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     setIsLoadingPage(false);
                 }
                 else {
@@ -404,7 +403,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const handleGetAndSetFavoriteProductsByProductsIdsAndUserId = async (productsIds) => {
         try {
-            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+            const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
             if (userToken) {
                 setFavoriteProductsListForUserByProductsIdsAndUserId((await getFavoriteProductsByProductsIdsAndUserId(productsIds)).data);
             }
@@ -424,15 +423,6 @@ export default function Home({ countryAsProperty, storeId }) {
         }
         catch (err) {
             throw err;
-        }
-    }
-
-    const getLastSevenBrandsByStoreId = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/brands/last-seven-brands-by-store-id?language=${i18n.language}&${filters ? filters : ""}`)).data;
-        }
-        catch (err) {
-            throw Error(err);
         }
     }
 
@@ -700,7 +690,7 @@ export default function Home({ countryAsProperty, storeId }) {
     return (
         <div className="home page">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Home")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Home")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
@@ -1151,10 +1141,10 @@ export default function Home({ countryAsProperty, storeId }) {
                         <div className="contact-icons-box" onClick={() => setIsDisplayContactIcons(value => !value)}>
                             <ul className="contact-icons-list">
                                 {isDisplayContactIcons && <li className="contact-icon-item mb-3">
-                                    <a href={`mailto:${process.env.contactEmail}`} target="_blank"><MdOutlineMail className="mail-icon" /></a>
+                                    <a href={`mailto:${process.env.CONTACT_EMAIL}`} target="_blank"><MdOutlineMail className="mail-icon" /></a>
                                 </li>}
                                 {isDisplayContactIcons && appearedSections.includes("whatsapp button") && <li className="contact-icon-item mb-3">
-                                    <a href={`https://wa.me/${process.env.contactNumber}?text=welcome`} target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
+                                    <a href={`https://wa.me/${process.env.CONTACT_NUMBER}?text=welcome`} target="_blank"><FaWhatsapp className="whatsapp-icon" /></a>
                                 </li>}
                                 {!isDisplayContactIcons && <li className="contact-icon-item"><MdOutlineContactPhone className="contact-icon" /></li>}
                                 {isDisplayContactIcons && <li className="contact-icon-item"><FaTimes className="close-icon" /></li>}

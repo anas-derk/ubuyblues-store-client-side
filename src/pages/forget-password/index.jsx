@@ -57,24 +57,24 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     const router = useRouter();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
                     if (!res.data.error) {
                         await router.replace("/");
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         setIsLoadingPage(false);
                     }
                 }).catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         setIsLoadingPage(false);
                     }
                     else {
@@ -246,12 +246,12 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsResetingPasswordStatus(true);
-                const result = (await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${newPassword}&userType=${userType}&language=${i18n.language}`)).data;
+                const result = (await axios.put(`${process.env.BASE_API_URL}/users/reset-password?email=${email}&code=${typedUserCode}&newPassword=${encodeURIComponent(newPassword)}&userType=${userType}&language=${i18n.language}`)).data;
                 setIsResetingPasswordStatus(false);
                 if (!result.error) {
                     setSuccessMsg(`${result.msg}, Please Wait To Navigate To Login Page !!`);
                     let successTimeout = setTimeout(async () => {
-                        await router.push(userTypeAsProperty === "user" ? "/auth" : "https://dashboard.ubuyblues.com/login");
+                        await router.push(userTypeAsProperty === "user" ? "/auth" : `${process.env.WEBSITE_DASHBOARD_URL}/login`);
                         clearTimeout(successTimeout);
                     }, 6000);
                 } else {
@@ -276,7 +276,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     return (
         <div className="forget-password page">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Forget Password")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Forget Password")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

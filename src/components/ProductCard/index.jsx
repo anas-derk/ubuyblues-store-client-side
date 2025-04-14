@@ -88,12 +88,12 @@ export default function ProductCard({
 
     const addProductToFavoriteUserProducts = async (productId) => {
         try {
-            const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+            const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
             if (userToken) {
                 setIsWaitAddProductToFavoriteUserProductsList(true);
                 const result = (await axios.post(`${process.env.BASE_API_URL}/favorite-products/add-new-favorite-product/${productId}?language=${i18n.language}`, undefined, {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                     }
                 })).data;
                 setIsWaitAddProductToFavoriteUserProductsList(false);
@@ -129,7 +129,7 @@ export default function ProductCard({
             setIsWaitDeleteProductToFavoriteUserProductsList(true);
             const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${productId}?language=${i18n.language}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                 }
             })).data;
             if (!result.error) {
@@ -154,7 +154,7 @@ export default function ProductCard({
     const addToCart = (productId) => {
         try {
             setIsWaitAddToCart(true);
-            const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+            const userCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
             if (Array.isArray(userCart)) {
                 if (userCart.length > 0) {
                     const productIndex = userCart.findIndex((product) => product._id === productId);
@@ -163,7 +163,7 @@ export default function ProductCard({
                             _id: productId,
                             quantity: 1,
                         });
-                        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(userCart));
+                        localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(userCart));
                         setIsWaitAddToCart(false);
                         setIsSuccessAddToCart(true);
                         dispatch({
@@ -190,7 +190,7 @@ export default function ProductCard({
                         _id: productId,
                         quantity: 1,
                     });
-                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
+                    localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(allProductsData));
                     setIsWaitAddToCart(false);
                     setIsSuccessAddToCart(true);
                     dispatch({
@@ -209,7 +209,7 @@ export default function ProductCard({
                     _id: productId,
                     quantity: 1,
                 });
-                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(allProductsData));
+                localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(allProductsData));
                 setIsWaitAddToCart(false);
                 setIsSuccessAddToCart(true);
                 dispatch({
@@ -235,12 +235,12 @@ export default function ProductCard({
 
     const deleteFromCart = (productId) => {
         setIsWaitDeleteFromCart(true);
-        const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+        const userCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
         if (Array.isArray(userCart)) {
             if (userCart.length > 0) {
                 const newUserCart = userCart.filter((product) => product._id !== productId);
                 if (newUserCart.length < userCart.length) {
-                    localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(newUserCart));
+                    localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(newUserCart));
                     setIsWaitDeleteFromCart(false);
                     setIsSuccessDeleteFromCart(true);
                     dispatch({
@@ -263,7 +263,7 @@ export default function ProductCard({
             } else {
                 setIsWaitDeleteFromCart(false);
                 setErrorInDeleteFromCart("Sorry, This Product Is Not Exist In Your Cart !!");
-                localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify([]));
+                localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify([]));
                 dispatch({
                     type: "(Add / Delete) (To / From ) Cart",
                     productsCountInCart: 0
@@ -376,7 +376,7 @@ export default function ProductCard({
                     <div className="product-managment-buttons managment-buttons p-2">
                         <PiShareFatLight
                             className="product-managment-icon d-block mb-2"
-                            onClick={() => handleDisplayShareOptionsBox(`https://ubuyblues.com/product-details/${productDetails._id}`)}
+                            onClick={() => handleDisplayShareOptionsBox(`${process.env.WEBSITE_URL}/product-details/${productDetails._id}`)}
                         />
                         {
                             !isWaitAddProductToFavoriteUserProductsList &&

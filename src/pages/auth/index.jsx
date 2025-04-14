@@ -52,12 +52,12 @@ export default function UserAuth() {
     const router = useRouter();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
@@ -65,12 +65,12 @@ export default function UserAuth() {
                     if (!result.error) {
                         await router.replace("/");
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         setIsLoadingPage(false);
                     }
                 }).catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         setIsLoadingPage(false);
                     }
                     else {
@@ -118,7 +118,7 @@ export default function UserAuth() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setIsLoginingStatus(true);
-                const result = (await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${passwordForLogin}&language=${i18n.language}`)).data;
+                const result = (await axios.get(`${process.env.BASE_API_URL}/users/login?email=${emailForLogin}&password=${encodeURIComponent(passwordForLogin)}&language=${i18n.language}`)).data;
                 if (result.error) {
                     setIsLoginingStatus(false);
                     setErrorMsg(result.msg);
@@ -128,7 +128,7 @@ export default function UserAuth() {
                     }, 5000);
                 } else {
                     if (result.data.isVerified) {
-                        localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
+                        localStorage.setItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE, result.data.token);
                         await router.replace("/");
                     } else await router.replace(`/account-verification?email=${emailForLogin}`);
                 }
@@ -181,8 +181,8 @@ export default function UserAuth() {
                 setIsSignupStatus(true);
                 const result = (await axios.post(`${process.env.BASE_API_URL}/users/create-new-user?language=${i18n.language}`, {
                     email: emailForSignup,
-                    password: passwordForSignup,
-                    language : i18n.language
+                    password: encodeURIComponent(passwordForSignup),
+                    language: i18n.language
                 })).data;
                 setIsSignupStatus(false);
                 if (result.error) {
@@ -225,7 +225,7 @@ export default function UserAuth() {
                     clearTimeout(errorTimeout);
                 }, 5000);
             } else {
-                localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
+                localStorage.setItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE, result.data.token);
                 await router.replace("/");
             }
         }
@@ -247,7 +247,7 @@ export default function UserAuth() {
     return (
         <div className="auth page">
             <Head>
-                <title>{t(process.env.storeName)} - {t("User Auth")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("User Auth")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

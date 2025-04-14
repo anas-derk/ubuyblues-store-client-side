@@ -38,12 +38,12 @@ export default function AccountVerification({ email }) {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (res) => {
@@ -51,12 +51,12 @@ export default function AccountVerification({ email }) {
                     if (!result.error) {
                         await router.push("/");
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.push("/auth");
                     }
                 }).catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                     else {
@@ -141,7 +141,7 @@ export default function AccountVerification({ email }) {
             setIsWaitCheckingStatus(true);
             const result = (await axios.put(`${process.env.BASE_API_URL}/users/update-verification-status?email=${email}&code=${accountVerificationCodeCharactersList.join("")}&language=${i18n.language}`)).data;
             if (!result.error) {
-                localStorage.setItem(process.env.userTokenNameInLocalStorage, result.data.token);
+                localStorage.setItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE, result.data.token);
                 await router.replace("/");
             } else {
                 let checkAccountVerificationCodeTimeout = setTimeout(() => {
@@ -206,7 +206,7 @@ export default function AccountVerification({ email }) {
     return (
         <div className="account-verification page d-flex flex-column justify-content-center">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Account Verification")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Account Verification")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

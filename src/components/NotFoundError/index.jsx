@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 
 export default function NotFoundError({ errorMsg }) {
     return (
-        <div className="not-found-product not-found-error text-center d-flex flex-column justify-content-center align-items-center">
+        <div className="not-found-error text-center d-flex flex-column justify-content-center align-items-center">
             <motion.div
                 initial={{
                     opacity: 0

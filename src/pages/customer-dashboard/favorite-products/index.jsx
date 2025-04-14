@@ -68,7 +68,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -88,7 +88,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then(async (result) => {
@@ -103,13 +103,13 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                         });
                         setIsGetFavoriteProducts(false);
                     } else {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                 })
                 .catch(async (err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         await router.replace("/auth");
                     }
                     else {
@@ -132,7 +132,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${i18n.language}&${filters ? filters : ""}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                 }
             })).data;
         }
@@ -192,7 +192,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             setSelectedFavoriteProduct(favoriteProductIndex);
             const result = await axios.delete(`${process.env.BASE_API_URL}/favorite-products/${allFavoriteProductsInsideThePage[favoriteProductIndex].productId}?language=${i18n.language}`, {
                 headers: {
-                    Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage)
+                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
                 }
             });
             setWaitMsg("");
@@ -215,7 +215,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/login");
             }
             else {
@@ -232,7 +232,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
             const result = (await axios.delete(`${process.env.BASE_API_URL}/favorite-products/all-favorite-products?language=${i18n.language}`,
                 {
                     headers: {
-                        Authorization: localStorage.getItem(process.env.userTokenNameInLocalStorage),
+                        Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE),
                     }
                 }
             )).data;
@@ -254,7 +254,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
         }
         catch (err) {
             if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                 await router.replace("/login");
             }
             else {
@@ -268,7 +268,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
     return (
         <div className="customer-favorite-products-list customer-dashboard customer-products-list">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Customer Favorite Products")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Customer Favorite Products")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />

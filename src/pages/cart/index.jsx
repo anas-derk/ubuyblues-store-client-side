@@ -45,7 +45,7 @@ export default function Cart({ countryAsProperty }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const userLanguage = localStorage.getItem(process.env.userlanguageFieldNameInLocalStorage);
+        const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
@@ -65,18 +65,18 @@ export default function Cart({ countryAsProperty }) {
     }, [countryAsProperty]);
 
     useEffect(() => {
-        const userToken = localStorage.getItem(process.env.userTokenNameInLocalStorage);
+        const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
             getUserInfo()
                 .then((result) => {
                     if (result.error) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                     }
                     setIsGetUserInfo(false);
                 })
                 .catch((err) => {
                     if (err?.response?.status === 401) {
-                        localStorage.removeItem(process.env.userTokenNameInLocalStorage);
+                        localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
                         setIsGetUserInfo(false);
                     }
                     else {
@@ -105,7 +105,7 @@ export default function Cart({ countryAsProperty }) {
     }, []);
 
     useEffect(() => {
-        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+        let tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
             if (tempAllProductsDataInsideTheCart.length > 0) {
                 getProductsByIds(tempAllProductsDataInsideTheCart.map((product) => product._id))
@@ -144,7 +144,7 @@ export default function Cart({ countryAsProperty }) {
         try {
             switch (operation) {
                 case "increase-product-quantity": {
-                    const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+                    const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
                     tempAllProductsDataInsideTheCart.forEach((product) => {
                         if (product._id === productId && product.quantity < 50) product.quantity++;
                     });
@@ -159,7 +159,7 @@ export default function Cart({ countryAsProperty }) {
                     break;
                 }
                 case "decrease-product-quantity": {
-                    const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+                    const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
                     tempAllProductsDataInsideTheCart.forEach((product) => {
                         if (product._id === productId && product.quantity > 1) product.quantity--;
                     });
@@ -185,7 +185,7 @@ export default function Cart({ countryAsProperty }) {
 
     const deleteProduct = async (productId) => {
         try {
-            const newProductsData = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage)).filter((product) => product._id !== productId);
+            const newProductsData = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE)).filter((product) => product._id !== productId);
             updateCartInLocalStorage(newProductsData);
             if (newProductsData.length > 0) {
                 const result = await getProductsByIds(newProductsData.map((product) => product._id));
@@ -219,13 +219,13 @@ export default function Cart({ countryAsProperty }) {
     }
 
     const updateCartInLocalStorage = (newProductsData) => {
-        localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(newProductsData));
+        localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(newProductsData));
     }
 
     return (
         <div className="cart page">
             <Head>
-                <title>{t(process.env.storeName)} - {t("Cart")}</title>
+                <title>{t(process.env.STORE_NAME)} - {t("Cart")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <Header />
