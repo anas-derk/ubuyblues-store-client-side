@@ -16,7 +16,7 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="/images/UbuyBlues_Logo_merged_Purple.webp" />
+        <link rel="icon" href="/images/Logo.webp" />
       </Head>
       <body lang="en" dir="ltr">
         <Main />
