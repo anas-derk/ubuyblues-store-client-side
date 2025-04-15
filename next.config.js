@@ -23,7 +23,8 @@ const nextConfig = {
         X_LINK: "https://x.com/ubuyblues",
         TIKTOK_LINK: "https://www.tiktok.com/@ubuyblues",
         WEBSITE_NAME: "Ubuyblues",
-        WEBSITE_DASHBOARD_URL: process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://dashboard.ubuyblues.com"
+        WEBSITE_DASHBOARD_URL: process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://dashboard.ubuyblues.com",
+        MAIN_COLOR_ONE: "#6A017A"
     },
     async headers() {
         return [
