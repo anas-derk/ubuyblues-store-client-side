@@ -10,7 +10,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import ubuybluesLogo from "../../../public/images/UbuyBlues_Logo_merged_Purple.webp";
+import ubuybluesLogo from "../../../public/images/Logo.webp";
 import { FaShoppingCart } from "react-icons/fa";
 import { getFavoriteProductsCount, getProductsByIds } from "../../../public/global_functions/popular";
 import { useDispatch, useSelector } from "react-redux";
