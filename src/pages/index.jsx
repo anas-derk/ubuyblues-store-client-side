@@ -271,7 +271,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     if (appearedSectionsLength > 0) {
                         for (let i = 0; i < appearedSectionsLength; i++) {
                             if (appearedSectionsResult.data[i].sectionName === "brands" && appearedSectionsResult.data[i].isAppeared) {
-                                setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, 9, filtersAsString)).data);
+                                setAllBrandsInsideThePage((await getAllBrandsInsideThePage(1, 9, filtersAsString)).data.brands);
                                 setIsGetBrands(false);
                             }
                             if (appearedSectionsResult.data[i].sectionName === "stores" && appearedSectionsResult.data[i].isAppeared) {
@@ -1038,7 +1038,7 @@ export default function Home({ countryAsProperty, storeId }) {
                             </section>
                             {/* End Last Added Products */}
                             {/* Start Brands Section */}
-                            {appearedSections.includes("brands") && allBrandsInsideThePage.length > 0 && <section className="brands mb-5">
+                            {appearedSections.includes("brands") && <section className="brands mb-5">
                                 <h2 className="section-name text-center mb-5 text-white h4">{t("Brands")}</h2>
                                 <div className="row brands-box section-data-box pt-4 pb-4">
                                     {isGetBrands && <SectionLoader />}
