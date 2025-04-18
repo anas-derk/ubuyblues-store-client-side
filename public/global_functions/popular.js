@@ -41,7 +41,7 @@ const getAllProductsInsideThePage = async (pageNumber, pageSize, filters, sortDe
 }
 
 const isExistProductInsideTheCart = (productId) => {
-    const userCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+    const userCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
     if (Array.isArray(userCart)) {
         return userCart.findIndex((product) => product._id === productId) > -1 ? true : false;
     }
@@ -114,7 +114,7 @@ const getAllStoresInsideThePage = async (pageNumber, pageSize, filters) => {
 }
 
 const getProductQuantity = (productId) => {
-    return JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage)).find((product) => product._id === productId).quantity;
+    return JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE)).find((product) => product._id === productId).quantity;
 }
 
 const calcTotalOrderPriceBeforeDiscount = (allProductsData) => {
