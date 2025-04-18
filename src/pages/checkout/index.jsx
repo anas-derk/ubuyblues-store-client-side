@@ -109,7 +109,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 setIsLoadingPage(false);
             }
         })
-            .catch(() => {
+            .catch((err) => {
                 setIsLoadingPage(false);
                 setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
             });
