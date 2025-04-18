@@ -121,7 +121,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 if (!result.error) {
                     if (result.data?.status === "approving") {
                         setStoreDetails(result.data);
-                        const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+                        const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
                         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
                             if (tempAllProductsDataInsideTheCart.length > 0) {
                                 result = await getProductsByIdsAndStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
@@ -146,12 +146,12 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             }
                                         }
                                     }
-                                    setIsGetUserInfo(false);
                                 }
                             }
                         }
                     }
                 }
+                setIsGetUserInfo(false);
                 setIsGetStoreDetails(false);
             })
             .catch((err) => {
@@ -674,9 +674,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
         try {
             setIsWaitApproveOnPayPalOrder(true);
             const result = (await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}?language=${i18n.language}`)).data;
-            const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.userCartNameInLocalStorage));
+            const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
             const orderProductsIds = allProductsData.map((product) => product._id);
-            localStorage.setItem(process.env.userCartNameInLocalStorage, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
+            localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
             await router.push(`/confirmation/${result.data.orderId}?country=${countryAsProperty}`);
         }
         catch (err) {
