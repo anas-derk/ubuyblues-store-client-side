@@ -114,7 +114,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 <h5 className="mb-4 text-center">{t("Order Id")} : {orderDetails._id}</h5>
                                 <h5 className="mb-4 text-center">{t("Order Number")} : {orderDetails.orderNumber}</h5>
                                 <h5 className="mb-4 text-center">{t("Store Id")} : {storeDetails._id}</h5>
-                                <h5 className="mb-4 text-center">{t("Store Name")} : {storeDetails.name}</h5>
+                                <h5 className="mb-4 text-center">{t("Store Name")} : {storeDetails.name[i18n.language]}</h5>
                                 <h5 className="mb-0 text-center">{t("Owner Full Name")} : {storeDetails.ownerFirstName} {storeDetails.ownerLastName}</h5>
                             </div>
                             <h5 className="mb-5 text-center border border-white border-2 p-4">{t("Order Details")}</h5>
@@ -136,9 +136,9 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 <div className="row total pb-3 mb-5" key={productIndex}>
                                     <div className="col-md-3 fw-bold p-0">
                                         {i18n.language !== "ar" ? <span>
-                                            ( {product.name} ) x {product.quantity}
+                                            ( {product.name[i18n.language]} ) x {product.quantity}
                                         </span> : <span>
-                                            ( {product.name} ) {product.quantity} x
+                                            ( {product.name[i18n.language]} ) {product.quantity} x
                                         </span>}
                                     </div>
                                     <div className="col-md-3 fw-bold p-0">
@@ -212,7 +212,7 @@ export default function Confirmation({ orderIdAsProperty, countryAsProperty }) {
                                 <FaRegSmileWink className="thanks-icon" style={{ fontSize: "70px" }} />
                             </div>
                             <h4 className="mb-4">
-                                {t("Thanks For Purchase From Store") + " : " + storeDetails.name}
+                                {t("Thanks For Purchase From Store") + " : " + storeDetails.name[i18n.language]}
                             </h4>
                             <img
                                 src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
