@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useEffect, useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
 import axios from "axios";
 import { useRouter } from "next/router";
 import LoaderPage from "@/components/LoaderPage";
@@ -224,12 +224,10 @@ export default function AccountVerification({ email }) {
                                 <div className="row">
                                     <motion.div className="col-md-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6 className="mb-3 fw-bold">{t("You're almost done!")}</h6>
-                                    </motion.div>
-                                    <motion.div className="col-md-7 text-xl-end" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                         <h6 className="mb-3 fw-bold">
                                             {t("You can redial the message after")}
                                         </h6>
-                                        <h6 className="mb-3 fw-bold">{minutes} : {seconds}</h6>
+                                        {i18n.language !== "ar" ? <h6 className="mb-3 fw-bold">{minutes} : {seconds}</h6> : <h6 className="mb-3 fw-bold">{seconds} : {minutes}</h6>}
                                     </motion.div>
                                 </div>
                                 <motion.h6 className="mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -237,8 +235,11 @@ export default function AccountVerification({ email }) {
                                     <span className="text-danger email-box">{email}</span>
                                 </motion.h6>
                                 <motion.h6 className="mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                    <FaLongArrowAltRight className="me-2" />
-                                    <span className="text-danger fw-bold">{t("Enter code Here")} *</span>
+                                        {i18n.language !== "ar" ? <FaLongArrowAltRight className="me-2" /> : <FaLongArrowAltLeft className="ms-2" />}
+                                        <span className="text-danger fw-bold">{t("Enter code Here")} *</span>
+                                    {i18n.language !== "ar" ? <>
+                                    </> : <>
+                                    </>}
                                 </motion.h6>
                                 <motion.form className="code-write-form d-flex mb-4" dir="ltr" onSubmit={checkAccountVerificationCode} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                     {

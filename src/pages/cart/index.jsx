@@ -53,7 +53,8 @@ export default function Cart({ countryAsProperty }) {
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
+            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty ) ));
             if (!isGetGroupedProductsByStoreId) {
                 setIsLoadingPage(false);
             }
@@ -93,14 +94,6 @@ export default function Cart({ countryAsProperty }) {
         setWindowInnerWidth(window.innerWidth);
         window.addEventListener("resize", () => {
             setWindowInnerWidth(window.innerWidth);
-        });
-        window.addEventListener("scroll", function () {
-            if (this.innerWidth < 991) {
-                let cartTotalBtnBox = document.querySelector(".products .cart-total-btn-box");
-                if (this.scrollY < 613) {
-                    cartTotalBtnBox.style.display = "block";
-                } else cartTotalBtnBox.style.display = "none";
-            }
         });
     }, []);
 
@@ -294,9 +287,6 @@ export default function Cart({ countryAsProperty }) {
                                                 </table>
                                             </section>}
                                             {windowInnerWidth <= 991 && <section className="products w-100">
-                                                <a href="#order-total" className="cart-total-btn-box">
-                                                    {t("Go To Cart Totals")}
-                                                </a>
                                                 {store.products.map((product, index) => (
                                                     <div className="product mb-4" key={product._id}>
                                                         <h5 className="mb-3">{t("Product")} # {index + 1}</h5>
@@ -306,7 +296,7 @@ export default function Cart({ countryAsProperty }) {
                                                                     <th>{t("Product")}</th>
                                                                     <td className="product-cell">
                                                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
-                                                                        <h6 className="product-name mb-3">{product.name}</h6>
+                                                                        <h6 className="product-name mb-3">{product.name[i18n.language]}</h6>
                                                                         <h6 className={`product-price ${(product.discount !== 0 || product.discountInOfferPeriod) ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                         {
                                                                             product.discount > 0 &&

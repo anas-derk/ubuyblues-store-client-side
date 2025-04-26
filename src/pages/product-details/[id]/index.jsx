@@ -146,7 +146,8 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         setIsLoadingPage(true);
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
+            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty ) ));
             if (!isGetUserInfo && !isGetProductInfo) {
                 setIsLoadingPage(false);
             }
