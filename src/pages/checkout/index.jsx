@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import LoaderPage from "@/components/LoaderPage";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { countries, getCountryCode } from 'countries-list';
 import { FaCcPaypal, FaTape } from "react-icons/fa";
@@ -71,11 +70,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [totalAmount, setTotalAmount] = useState(0);
 
-    const [isDisplayPaypalPaymentButtons, setIsDisplayPaypalPaymentButtons] = useState(false);
-
     const [isWaitApplyCoupon, setIsWaitApplyCoupon] = useState(false);
-
-    const [isWaitApproveOnPayPalOrder, setIsWaitApproveOnPayPalOrder] = useState(false);
 
     const [isWaitCreateNewOrder, setIsWaitCreateNewOrder] = useState(false);
 
@@ -86,8 +81,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
     const [isSavePaymentInfo, setIsSavePaymentInfo] = useState(false);
 
     const [isAgreeOnTermsAndConditions, setIsAgreeOnTermsAndConditions] = useState(false);
-
-    const [orderResult, setOrderResult] = useState({});
 
     const countryList = Object.values(countries);
 
@@ -105,7 +98,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty ) ));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
             if (!isGetUserInfo && !isGetStoreDetails) {
                 setIsLoadingPage(false);
             }
@@ -285,7 +278,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
     }
 
     const handleSelectCountry = (country, section) => {
-        setIsDisplayPaypalPaymentButtons(false);
         const countryCode = getCountryCode(country);
         const newUserInfo = {
             ...userInfo,
@@ -311,7 +303,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const handleIsShippingToOtherAddress = (isShippingToOtherAddress) => {
         setIsShippingToOtherAddress(isShippingToOtherAddress);
-        setIsDisplayPaypalPaymentButtons(false);
         const localAndInternationlProductsTemp = getLocalAndInternationalProducts(allProductsData, isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country);
         setLocalAndInternationlProducts(localAndInternationlProductsTemp);
         setShippingCost(getShippingCost(localAndInternationlProductsTemp.local.length, localAndInternationlProductsTemp.international.length, shippingMethod, pricesDetailsSummary.totalPriceAfterDiscount));
@@ -534,86 +525,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
         ];
     }
 
-    const createNewOrder = async (orderDetails) => {
-        try {
-            return (await axios.post(`${process.env.BASE_API_URL}/orders/create-new-order?country=${countryAsProperty}&creator=${userToken ? "user" : "guest"}&language=${i18n.language}`, orderDetails, userToken > 0 ? {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE)
-                }
-            } : {})).data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
-    }
-
-    const handleSelectPaypalPayment = async () => {
-        try {
-            const errorsObject = inputValuesValidation(getInputFieldForCheckBeforeCreateOrder());
-            setFormValidationErrors(errorsObject);
-            if (Object.keys(errorsObject).length == 0) {
-                setIsWaitCreateNewOrder(true);
-                if (isSavePaymentInfo) {
-                    localStorage.setItem(process.env.USER_ADDRESSES_FIELD_NAME_IN_LOCAL_STORAGE, JSON.stringify({
-                        billingAddress: {
-                            firstName: userInfo ? userInfo.billingAddress.firstName : "",
-                            lastName: userInfo ? userInfo.billingAddress.lastName : "",
-                            companyName: userInfo ? userInfo.billingAddress.companyName : "",
-                            country: userInfo.billingAddress.country,
-                            streetAddress: userInfo ? userInfo.billingAddress.streetAddress : "",
-                            apartmentNumber: userInfo.billingAddress.apartmentNumber,
-                            city: userInfo ? userInfo.billingAddress.city : "",
-                            postalCode: userInfo.billingAddress.postalCode,
-                            phoneNumber: userInfo.billingAddress.phoneNumber,
-                            email: userInfo ? userInfo.billingAddress.email : "",
-                        },
-                        shippingAddress: {
-                            firstName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.firstName : userInfo.billingAddress.firstName,
-                            lastName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.lastName : userInfo.billingAddress.lastName,
-                            companyName: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.companyName : userInfo.billingAddress.companyName,
-                            country: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.country : userInfo.billingAddress.country,
-                            streetAddress: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.streetAddress : userInfo.billingAddress.streetAddress,
-                            apartmentNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.apartmentNumber : userInfo.billingAddress.apartmentNumber,
-                            city: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.city : userInfo.billingAddress.city,
-                            postalCode: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.postalCode : userInfo.billingAddress.postalCode,
-                            phoneNumber: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.phoneNumber : userInfo.billingAddress.phoneNumber,
-                            email: userInfo && isShippingToOtherAddress ? userInfo.shippingAddress.email : userInfo.billingAddress.email,
-                        },
-                    }));
-                } else {
-                    localStorage.removeItem(process.env.USER_ADDRESSES_FIELD_NAME_IN_LOCAL_STORAGE);
-                }
-                const result = await createNewOrder(getOrderDetailsForCreating());
-                setIsWaitCreateNewOrder(false);
-                if (!result.error) {
-                    setOrderResult(result.data);
-                    setIsDisplayPaypalPaymentButtons(true);
-                }
-                else {
-                    setErrorMsg(result.msg);
-                    let errorTimeout = setTimeout(() => {
-                        setErrorMsg("");
-                        clearTimeout(errorTimeout);
-                    }, 2000);
-                }
-            }
-        }
-        catch (err) {
-            if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
-                await router.replace("/auth");
-            }
-            else {
-                setIsWaitCreateNewOrder(false);
-                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorTimeout);
-                }, 1500);
-            }
-        }
-    }
-
     const getOrderDetailsForCreating = () => {
         return {
             creator: userToken ? "user" : "guest",
@@ -653,50 +564,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
         }
     }
 
-    const createPayPalOrder = async (data, actions) => {
-        try {
-            return actions.order.create({
-                purchase_units: [
-                    {
-                        amount: {
-                            currency_code: "USD",
-                            value: pricesDetailsSummary.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts,
-                        }
-                    }
-                ]
-            });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-
-    const approveOnPayPalOrder = async () => {
-        try {
-            setIsWaitApproveOnPayPalOrder(true);
-            const result = (await axios.put(`${process.env.BASE_API_URL}/orders/handle-checkout-complete/${orderResult.orderId}?language=${i18n.language}`)).data;
-            const tempAllProductsDataInsideTheCart = JSON.parse(localStorage.getItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE));
-            const orderProductsIds = allProductsData.map((product) => product._id);
-            localStorage.setItem(process.env.USER_CART_NAME_IN_LOCAL_STORAGE, JSON.stringify(tempAllProductsDataInsideTheCart.filter((product) => !orderProductsIds.includes(product._id))));
-            await router.push(`/confirmation/${result.data.orderId}?country=${countryAsProperty}`);
-        }
-        catch (err) {
-            if (err?.response?.status === 401) {
-                localStorage.removeItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
-                await router.replace("/auth");
-            }
-            else {
-                setIsWaitApproveOnPayPalOrder(false);
-                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeat The Process !!");
-                let errorTimeout = setTimeout(() => {
-                    setErrorMsg("");
-                    clearTimeout(errorTimeout);
-                }, 1500);
-            }
-        }
-    }
-
-    const createPaymentOrder = async (paymentGateway) => {
+    const createPaymentOrder = async () => {
         try {
             const errorsObject = inputValuesValidation(getInputFieldForCheckBeforeCreateOrder());
             setFormValidationErrors(errorsObject);
@@ -708,11 +576,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                     }
                 } : {})).data;
                 if (!result.error) {
-                    if (paymentGateway === "tap") {
-                        await router.push(result.data.transaction.url);
-                    } else {
-                        await router.push(result.data.checkoutURL);
-                    }
+                    await router.push(result.data.paymentURL);
                 } else {
                     setIsWaitCreateNewOrder(false);
                     setErrorMsg(result.msg);
@@ -750,10 +614,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
                 <title>{t(process.env.STORE_NAME)} - {t("Checkout")}</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
-                {isWaitApproveOnPayPalOrder && <div className="overlay text-white d-flex flex-column align-items-center justify-content-center">
-                    <span class="loader mb-4"></span>
-                    <p>{t("Please Wait")} ...</p>
-                </div>}
                 <Header />
                 <div className="page-content pt-5">
                     <div className="container-fluid text-white p-4">
@@ -772,7 +632,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         className={`p-2 ${formValidationErrors.firstName_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter First Name Here")}
                                                         defaultValue={userInfo ? userInfo.billingAddress.firstName : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, firstName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
+                                                        onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, firstName: e.target.value.trim() } })}
                                                     />
                                                     {formValidationErrors.firstName_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.firstName_for_billing_address)} />}
                                                 </div>
@@ -783,7 +643,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         className={`p-2 ${formValidationErrors.last_name_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Last Name Here")}
                                                         defaultValue={userInfo ? userInfo.billingAddress.lastName : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, lastName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false) }}
+                                                        onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, lastName: e.target.value.trim() } })}
                                                     />
                                                     {formValidationErrors.last_name_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.last_name_for_billing_address)} />}
                                                 </div>
@@ -796,7 +656,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className="p-2"
                                                 placeholder={t("Please Enter Company Name Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.companyName : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, companyName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, companyName: e.target.value.trim() } })}
                                             />
                                         </motion.section>
                                         <motion.section className="country mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -824,7 +684,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.street_address_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Street Address / Neighborhood Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.streetAddress : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, streetAddress: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, streetAddress: e.target.value.trim() } })}
                                             />
                                             {formValidationErrors.street_address_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.street_address_for_billing_address)} />}
                                         </motion.section>
@@ -835,7 +695,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className="p-2"
                                                 placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.apartmentNumber : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartmentNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, apartmentNumber: e.target.value } })}
                                             />
                                         </motion.section>
                                         <motion.section className="city-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -845,7 +705,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.city_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter City Name Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.city : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, city: e.target.value.trim() } })}
                                             />
                                             {formValidationErrors.city_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.city_for_billing_address)} />}
                                         </motion.section>
@@ -856,7 +716,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.postal_code_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Postal Code / Zip Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.postalCode : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, postalCode: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, postalCode: e.target.value } })}
                                             />
                                             {formValidationErrors.postal_code_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.postal_code_for_billing_address)} />}
                                         </motion.section>
@@ -877,7 +737,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         className={`p-2 ${formValidationErrors.phone_number_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Phone Number")}
                                                         defaultValue={userInfo ? getPhoneNumberFromString(userInfo.billingAddress.phoneNumber, userInfo.billingAddress.country) : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, phoneNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                        onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, phoneNumber: e.target.value } })}
                                                     />
                                                 </div>
                                             </div>
@@ -890,7 +750,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.email_for_billing_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Email Here")}
                                                 defaultValue={userInfo ? userInfo.billingAddress.email : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, billingAddress: { ...userInfo.billingAddress, email: e.target.value.trim() } })}
                                             />
                                             {formValidationErrors.email_for_billing_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.email_for_billing_address)} />}
                                         </motion.section>
@@ -928,7 +788,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         className={`p-2 ${formValidationErrors.first_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter First Name Here")}
                                                         defaultValue={userInfo ? userInfo.shippingAddress.firstName : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, firstName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                        onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, firstName: e.target.value.trim() } })}
                                                     />
                                                     {formValidationErrors.first_name_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.first_name_for_shipping_address)} />}
                                                 </div>
@@ -939,7 +799,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         className={`p-2 ${formValidationErrors.last_name_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Last Name Here")}
                                                         defaultValue={userInfo ? userInfo.shippingAddress.lastName : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, lastName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                        onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, lastName: e.target.value.trim() } })}
                                                     />
                                                     {formValidationErrors.last_name_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.last_name_for_shipping_address)} />}
                                                 </div>
@@ -952,7 +812,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className="p-2"
                                                 placeholder={t("Please Enter Company Name Here")}
                                                 defaultValue={userInfo ? userInfo.shippingAddress.companyName : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, companyName: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, companyName: e.target.value.trim() } })}
                                             />
                                         </motion.section>
                                         <motion.section className="country mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -980,7 +840,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.street_address_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Street Address / Neighborhood Here")}
                                                 defaultValue={userInfo ? userInfo.shippingAddress.streetAddress : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, streetAddress: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, streetAddress: e.target.value.trim() } })}
                                             />
                                             {formValidationErrors.street_address_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.street_address_for_shipping_address)} />}
                                         </motion.section>
@@ -991,7 +851,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className="p-2"
                                                 placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
                                                 defaultValue={userInfo ? userInfo.shippingAddress.apartmentNumber.toString() : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } });; }}
                                             />
                                         </motion.section>
                                         <motion.section className="city-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1001,7 +861,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.city_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter City Name Here")}
                                                 defaultValue={userInfo ? userInfo.shippingAddress.city : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, city: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, city: e.target.value.trim() } })}
                                             />
                                             {formValidationErrors.city_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.city_for_shipping_address)} />}
                                         </motion.section>
@@ -1012,7 +872,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.postal_code_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder="Please Enter Postal Code / Zip Here"
                                                 defaultValue={userInfo ? userInfo.shippingAddress.postalCode.toString() : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, postalCode: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, postalCode: e.target.value } })}
                                             />
                                             {formValidationErrors.postal_code_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.postal_code_for_shipping_address)} />}
                                         </motion.section>
@@ -1033,7 +893,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         className={`p-2 ${formValidationErrors.phone_number_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                         placeholder={t("Please Enter Phone Number Here")}
                                                         defaultValue={userInfo ? getPhoneNumberFromString(userInfo.shippingAddress.phoneNumber, userInfo.shippingAddress.country) : ""}
-                                                        onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, phoneNumber: e.target.value } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                        onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, phoneNumber: e.target.value } })}
                                                     />
                                                 </div>
                                             </div>
@@ -1046,7 +906,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className={`p-2 ${formValidationErrors.email_for_shipping_address ? "border-3 border-danger mb-3" : ""}`}
                                                 placeholder={t("Please Enter Email Here")}
                                                 defaultValue={userInfo ? userInfo.shippingAddress.email : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, email: e.target.value.trim() } }); setIsDisplayPaypalPaymentButtons(false); }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, email: e.target.value.trim() } })}
                                             />
                                             {formValidationErrors.email_for_shipping_address && <FormFieldErrorBox errorMsg={t(formValidationErrors.email_for_shipping_address)} />}
                                         </motion.section>
@@ -1265,67 +1125,26 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         {/* Start Payement Methods Section */}
                                         <section className="payment-methods mb-4 border border-2 p-3 mb-4">
                                             <motion.h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Payment Methods")}</motion.h6>
-                                            <motion.div className={`row align-items-center pt-3 ${paymentGateway === "paypal" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                                <div className="col-md-6 text-start">
-                                                    <input
-                                                        type="radio"
-                                                        checked={paymentGateway === "paypal"}
-                                                        id="paypal-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup"
-                                                        onChange={() => setPaymentGateway("paypal")}
-                                                    />
-                                                    <label htmlFor="paypal-radio" onClick={() => setPaymentGateway("paypal")}>{t("PayPal")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <FaCcPaypal className="payment-icon paypal-icon" />
-                                                </div>
-                                            </motion.div>
-                                            {paymentGateway === "paypal" && isDisplayPaypalPaymentButtons && <PayPalScriptProvider
-                                                options={{
-                                                    clientId: "test",
-                                                    currency: "USD",
-                                                    intent: "capture",
-                                                }}
-                                            >
-                                                <PayPalButtons
-                                                    style={{ layout: "vertical" }}
-                                                    createOrder={createPayPalOrder}
-                                                    onApprove={approveOnPayPalOrder}
-                                                />
-                                            </PayPalScriptProvider>}
-                                            <motion.div className={`row align-items-center pt-3 ${paymentGateway === "tap" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                                <div className="col-md-6 text-start">
-                                                    <input
-                                                        type="radio"
-                                                        checked={paymentGateway === "tap"}
-                                                        id="tap-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup"
-                                                        onChange={() => setPaymentGateway("tap")}
-                                                    />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentGateway("tap")}>{t("Tap")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <FaTape className="payment-icon tap-icon" />
-                                                </div>
-                                            </motion.div>
-                                            <motion.div className={`row align-items-center pt-3 ${paymentGateway === "tabby" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                                <div className="col-md-6 text-start">
-                                                    <input
-                                                        type="radio"
-                                                        checked={paymentGateway === "tabby"}
-                                                        id="tap-radio"
-                                                        className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
-                                                        name="radioGroup"
-                                                        onChange={() => setPaymentGateway("tabby")}
-                                                    />
-                                                    <label htmlFor="tap-radio" onClick={() => setPaymentGateway("tabby")}>{t("Tabby")}</label>
-                                                </div>
-                                                <div className="col-md-6 text-md-end">
-                                                    <FaTape className="payment-icon tap-icon" />
-                                                </div>
-                                            </motion.div>
+                                            {["paypal", "tap", "tabby"].map((paymentMethod, paymentMethodIndex) => (
+                                                <motion.div key={paymentMethodIndex} className={`row align-items-center pt-3 ${paymentGateway === paymentMethod ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
+                                                    <div className="col-md-6 text-start">
+                                                        <input
+                                                            type="radio"
+                                                            checked={paymentGateway === paymentMethod}
+                                                            id={`${paymentMethod}-radio`}
+                                                            className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
+                                                            name="radioGroup"
+                                                            onChange={() => setPaymentGateway(paymentMethod)}
+                                                        />
+                                                        <label htmlFor={`${paymentMethod}-radio`} onClick={() => setPaymentGateway(paymentMethod)}>{t(paymentMethod)}</label>
+                                                    </div>
+                                                    <div className="col-md-6 text-md-end">
+                                                        {paymentMethod === "paypal" && <FaCcPaypal className={`payment-icon ${paymentMethod}-icon`} />}
+                                                        {paymentMethod === "tap" && <FaTape className={`payment-icon ${paymentMethod}-icon`} />}
+                                                        {paymentMethod === "tabby" && <FaTape className={`payment-icon ${paymentMethod}-icon`} />}
+                                                    </div>
+                                                </motion.div>
+                                            ))}
                                             {isAppearedBinancePaymentMethod && <motion.div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                 <div className="col-md-6 text-start">
                                                     <input
@@ -1356,30 +1175,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                             </label>
                                         </motion.div>
                                         {formValidationErrors.is_agree_on_terms_and_conditions && <FormFieldErrorBox errorMsg={t(formValidationErrors.is_agree_on_terms_and_conditions)} />}
-                                        {paymentGateway === "paypal" && !isDisplayPaypalPaymentButtons && <motion.button
+                                        {!isWaitCreateNewOrder && <motion.button
                                             className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                            onClick={handleSelectPaypalPayment}
-                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
-                                        >
-                                            {t("Confirm Request")}
-                                        </motion.button>}
-                                        {paymentGateway === "tap" && !isWaitCreateNewOrder && !errorMsg && <motion.button
-                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                            onClick={() => createPaymentOrder("tap")}
-                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
-                                        >
-                                            {t("Confirm Request")}
-                                        </motion.button>}
-                                        {paymentGateway === "tabby" && !isWaitCreateNewOrder && !errorMsg && <motion.button
-                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                            onClick={() => createPaymentOrder("tabby")}
-                                            initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
-                                        >
-                                            {t("Confirm Request")}
-                                        </motion.button>}
-                                        {paymentGateway === "binance" && !isWaitCreateNewOrder && !errorMsg && <motion.button
-                                            className="checkout-link p-2 w-100 mx-auto d-block text-center fw-bold mt-3"
-                                            onClick={() => createPaymentOrder("binance")}
+                                            onClick={createPaymentOrder}
                                             initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}
                                         >
                                             {t("Confirm Request")}
