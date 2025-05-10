@@ -312,7 +312,7 @@ export default function CustomerShippingAddress() {
                                             type="number"
                                             className="p-2"
                                             placeholder={t("Please Enter New Apartment Number, Ward, Unit, Etc Here")}
-                                            defaultValue={userInfo.shippingAddress.apartmentNumber.toString()}
+                                            defaultValue={userInfo.shippingAddress?.apartmentNumber?.toString()}
                                             onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } })}
                                         />
                                     </motion.section>
