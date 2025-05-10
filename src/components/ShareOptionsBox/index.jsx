@@ -35,11 +35,6 @@ export default function ShareOptionsBox({ setIsDisplayShareOptionsBox, sharingNa
                         </FacebookShareButton>
                     </div>
                     <div className="col-md-3">
-                        <FacebookMessengerShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On ${process.env.WEBSITE_NAME}`)}>
-                            <FacebookMessengerIcon size={35} round />
-                        </FacebookMessengerShareButton>
-                    </div>
-                    <div className="col-md-3">
                         <TelegramShareButton url={sharingURL} title={t(`Sharing Your Favorite ${sharingName} On ${process.env.WEBSITE_NAME}`)}>
                             <TelegramIcon size={35} round />
                         </TelegramShareButton>
