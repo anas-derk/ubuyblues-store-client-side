@@ -328,7 +328,7 @@ export default function ProductCard({
                             remainingTimeForDiscountOffer.seconds > 0 ? t("Time Is Running Out !!") : t("Expired !!")
                     }
                 </h6>
-                <h6 className="fw-bold mb-4 p-2">{productDetails.offerDescription}</h6>
+                <h6 className="fw-bold mb-4 p-2">{productDetails.offerDescription[i18n.language]}</h6>
                 <div className="row mb-4">
                     <div className="col-3">
                         <div className="remaining-time w-100 text-dark fw-bold d-flex flex-column justify-content-center align-items-center pt-2 pb-2">

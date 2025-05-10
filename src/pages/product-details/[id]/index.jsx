@@ -147,7 +147,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty ) ));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
             if (!isGetUserInfo && !isGetProductInfo) {
                 setIsLoadingPage(false);
             }
@@ -721,6 +721,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     slidesToScroll={1}
                                                     ref={sliderRef}
                                                     afterChange={(slideIndex) => setProductGalleryImageIndex(slideIndex - 1)}
+                                                    autoplay={true}
                                                 >
                                                     <motion.div initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                         <img

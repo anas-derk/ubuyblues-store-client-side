@@ -84,6 +84,64 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const countryList = Object.values(countries);
 
+    const paymentMethods = [
+        {
+            name: "paypal",
+            icon: <FaCcPaypal className={`payment-icon paypal-icon me-3`} />,
+            cards: [],
+        },
+        {
+            name: "tap",
+            cards: [
+                {
+                    name: "Visa Card",
+                    icon: <LiaCcVisa className={`payment-icon visa-card-icon me-3`} />
+                },
+                {
+                    name: "Master Card",
+                    icon: <FaCcMastercard className={`payment-icon master-card-icon me-3`} />
+                },
+                {
+                    name: "Google Pay Card",
+                    icon: <FaGooglePay className={`payment-icon google-pay-card-icon me-3`} />
+                },
+                {
+                    name: "Apple Pay Card",
+                    icon: <SiApplepay className={`payment-icon apple-pay-card-icon me-3`} />
+                },
+                {
+                    name: "American Express Card",
+                    icon: <SiAmericanexpress className={`payment-icon apple-pay-card-icon me-3`} />
+                },
+            ],
+        },
+        {
+            name: "tabby",
+            cards: [
+                {
+                    name: "Visa Card",
+                    icon: <LiaCcVisa className={`payment-icon visa-card-icon me-3`} />
+                },
+                {
+                    name: "Master Card",
+                    icon: <FaCcMastercard className={`payment-icon master-card-icon me-3`} />
+                },
+                {
+                    name: "Google Pay Card",
+                    icon: <FaGooglePay className={`payment-icon google-pay-card-icon me-3`} />
+                },
+                {
+                    name: "Apple Pay Card",
+                    icon: <SiApplepay className={`payment-icon apple-pay-card-icon me-3`} />
+                },
+                {
+                    name: "American Express Card",
+                    icon: <SiAmericanexpress className={`payment-icon apple-pay-card-icon me-3`} />
+                },
+            ],
+        }
+    ];
+
     const router = useRouter();
 
     const { t, i18n } = useTranslation();
@@ -851,7 +909,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 className="p-2"
                                                 placeholder={t("Please Enter Apartment Number, Ward, Unit, Etc Here")}
                                                 defaultValue={userInfo ? userInfo.shippingAddress.apartmentNumber.toString() : ""}
-                                                onChange={(e) => { setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } });; }}
+                                                onChange={(e) => setUserInfo({ ...userInfo, shippingAddress: { ...userInfo.shippingAddress, apartmentNumber: e.target.value } })}
                                             />
                                         </motion.section>
                                         <motion.section className="city-number mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1125,24 +1183,31 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                         {/* Start Payement Methods Section */}
                                         <section className="payment-methods mb-4 border border-2 p-3 mb-4">
                                             <motion.h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Payment Methods")}</motion.h6>
-                                            {["paypal", "tap", "tabby"].map((paymentMethod, paymentMethodIndex) => (
-                                                <motion.div key={paymentMethodIndex} className={`row align-items-center pt-3 ${paymentGateway === paymentMethod ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
-                                                    <div className="col-md-6 text-start">
+                                            {paymentMethods.map((paymentMethod, paymentMethodIndex) => (
+                                                <motion.div key={paymentMethodIndex} className={`row align-items-center  custom-frame pt-3 pb-3 m-2 ${paymentGateway === paymentMethod.name ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
+                                                    <div className={`col-md-6 ${i18n.language !== "ar" ? "text-start" : "text-end"}`}>
                                                         <input
                                                             type="radio"
-                                                            checked={paymentGateway === paymentMethod}
+                                                            checked={paymentGateway === paymentMethod.name}
                                                             id={`${paymentMethod}-radio`}
                                                             className={`radio-input ${i18n.language !== "ar" ? "me-2" : "ms-2"}`}
                                                             name="radioGroup"
-                                                            onChange={() => setPaymentGateway(paymentMethod)}
+                                                            onChange={() => setPaymentGateway(paymentMethod.name)}
                                                         />
-                                                        <label htmlFor={`${paymentMethod}-radio`} onClick={() => setPaymentGateway(paymentMethod)}>{t(paymentMethod)}</label>
+                                                        <label htmlFor={`${paymentMethod.name}-radio`} onClick={() => setPaymentGateway(paymentMethod.name)}>{t(paymentMethod.name)}</label>
                                                     </div>
-                                                    <div className="col-md-6 text-md-end">
-                                                        {paymentMethod === "paypal" && <FaCcPaypal className={`payment-icon ${paymentMethod}-icon`} />}
-                                                        {paymentMethod === "tap" && <FaTape className={`payment-icon ${paymentMethod}-icon`} />}
-                                                        {paymentMethod === "tabby" && <FaTape className={`payment-icon ${paymentMethod}-icon`} />}
+                                                    <div className={`col-md-6 ${i18n.language !== "ar" ? "text-end" : "text-start"}`}>
+                                                        {paymentMethod === "paypal" && <FaCcPaypal className={`payment-icon ${paymentMethod.name}-icon`} />}
+                                                        {paymentMethod === "tap" && <FaTape className={`payment-icon ${paymentMethod.name}-icon`} />}
+                                                        {paymentMethod === "tabby" && <FaTape className={`payment-icon ${paymentMethod.name}-icon`} />}
                                                     </div>
+                                                    {paymentMethod.cards.length > 0 && <>
+                                                        <hr className="mt-2 mb-2" />
+                                                        <div className="available-cards text-center">
+                                                            <motion.h6 className={`fw-bold mb-4 text-center bg-white text-dark p-3`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Available Cards")}</motion.h6>
+                                                            {paymentMethod.cards.map((card) => card.icon)}
+                                                        </div>
+                                                    </>}
                                                 </motion.div>
                                             ))}
                                             {isAppearedBinancePaymentMethod && <motion.div className={`row align-items-center pt-3 ${paymentGateway === "binance" ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
