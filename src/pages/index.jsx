@@ -710,7 +710,7 @@ export default function Home({ countryAsProperty, storeId }) {
                 <div className={`page-content ${allTextAds.length === 0 && "pt-5"}`}>
                     {/* Start Text Ads Section */}
                     {allTextAds.length > 0 && <motion.section
-                        className="text-ads text-center p-3 bg-white fw-bold mb-5"
+                        className="text-ads text-center p-3 bg-white fw-bold mb-5 custom-frame"
                         initial={{
                             width: 0,
                         }}

@@ -1,82 +1,103 @@
-.home{
-    .carousel{
+.home {
+    .carousel {
         position: static;
-        .carousel-caption{
+
+        .carousel-caption {
             position: static;
             padding: 0;
-            .ads-content{
+
+            .ads-content {
                 margin: 0;
                 font-size: 20px;
             }
         }
     }
-    .store-details,.image-ads, .categories, .last-added-flash-products{
+
+    .store-details,
+    .image-ads,
+    .categories,
+    .last-added-flash-products {
         border-bottom: 2px solid var(--main-color-two);
     }
-    .stores{
+
+    .stores {
         border-top: 2px solid var(--main-color-two);
     }
-    .welcome-msg{
+
+    .welcome-msg {
         width: fit-content;
     }
-    .text-ads{
+
+    .text-ads {
         font-size: 14px;
     }
-    .image-ads{
-        .slick-slider{
-            .slick-prev{
+
+    .image-ads {
+        .slick-slider {
+            .slick-prev {
                 left: 0;
             }
-            .slick-next{
+
+            .slick-next {
                 right: 0;
             }
-            .slick-dots{
+
+            .slick-dots {
                 bottom: 0;
-                li{
-                    button:before{
+
+                li {
+                    button:before {
                         font-size: 12px;
                     }
                 }
             }
         }
-        .ad-box{
-            .ad-image-box{
+
+        .ad-box {
+            .ad-image-box {
                 height: 350px;
-                img{
+
+                img {
                     width: 350px;
                     max-width: 100%;
                     height: 100%;
                     margin: 0 auto;
-                    border: 3px solid var(--main-color-two);
+                    border: 4px solid var(--main-color-five);
                 }
             }
         }
     }
-    .categories{
-        .row{
+
+    .categories {
+        .row {
             row-gap: 30px;
         }
-        .category-details{
+
+        .category-details {
             background-color: var(--main-color-two);
-            border-left: 10px solid #FFF;
+            border-left: 10px solid var(--main-color-five);
             border-radius: 15px;
-            &:hover{
+
+            &:hover {
                 border-left: none;
             }
-            .forward-arrow-icon{
-                background-color: #FFF;
+
+            .forward-arrow-icon {
+                background-color: var(--main-color-five);
                 border-radius: 50%;
                 width: 30px;
                 height: 30px;
                 font-size: 15px;
-                &:hover{
+                color: #FFF;
+
+                &:hover {
                     background-color: var(--main-color-one);
-                    color: #FFF;
                 }
             }
         }
     }
-    .last-added-products{
+
+    .last-added-products {
         border-bottom: 2px solid var(--main-color-two);
     }
 }
