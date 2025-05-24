@@ -1,111 +1,146 @@
-:root{
+:root {
     --main-color-one: #6A017A;
     --main-color-two: #00ffe1;
     --main-color-three: #dfb762;
+    --main-color-four: #e6d9db;
+    --main-color-five: #000;
 }
 
-body{
+body {
     background-color: var(--main-color-one);
-    &[lang="en"], &[lang="tr"], &[lang="de"] {
+
+    &[lang="en"],
+    &[lang="tr"],
+    &[lang="de"] {
         font-family: 'Montserrat', sans-serif;
         direction: ltr;
     }
+
     &[lang="ar"] {
         font-family: 'Cairo', sans-serif;
         direction: rtl;
     }
 }
 
-ul{
+ul {
     padding: 0;
     margin: 0;
     list-style: none;
 }
 
-a{
+a {
     color: #FFF;
     text-decoration: none;
 }
 
-input, textarea, select{
+.custom-frame {
+    border: 4px solid var(--main-color-five) !important;
+}
+
+input,
+textarea,
+select {
     background: transparent;
-    border: 1px solid #FFF;
     border-radius: 3px;
     color: #FFF;
     padding: 13px !important;
     width: 100%;
     font-size: 11px !important;
-    &::placeholder{
+    @extend .custom-frame;
+
+    &::placeholder {
         color: #FFF;
     }
-    &:focus{
+
+    &:focus {
         outline: none;
         border-color: #00F;
     }
 }
 
-h6{
+button {
+    @extend .custom-frame;
+}
+
+table {
+    @extend .custom-frame;
+
+    tr,
+    td {
+        @extend .custom-frame;
+    }
+}
+
+h6 {
     font-size: 13px;
 }
 
-select.ar{
+select.ar {
     text-indent: 20px;
 }
 
-textarea{
+textarea {
     height: 120px;
     resize: none;
 }
 
-.page{
+.page {
     min-height: 100vh;
 }
 
-.w-fit{
+.w-fit {
     width: fit-content;
 }
 
-.global-button{
+.global-button {
     font-size: 13px;
     padding: 13px;
 }
 
 .private-btn {
     border-top-right-radius: 20px;
-    border: 5px solid #FFF;
+    @extend .custom-frame;
     background-color: var(--main-color-two);
     font-size: 13px;
+
     &:hover {
         background-color: transparent;
         color: #FFF;
     }
-    &.private-wait-btn{
+
+    &.private-wait-btn {
         background-color: yellow;
         color: #000;
+
         &:hover {
             background-color: yellow;
         }
     }
-    &.private-success-btn{
+
+    &.private-success-btn {
         background-color: #0F0;
         color: #000;
+
         &:hover {
             background-color: #0F0;
         }
     }
-    &.private-error-btn{
+
+    &.private-error-btn {
         background-color: #F00;
         color: #FFF;
+
         &:hover {
             background-color: #F00;
         }
     }
 }
 
-.not-found-error{
+.not-found-error {
     color: #FFF;
     min-height: 300px;
-    .sorry-icon{
+
+    .sorry-icon {
         font-size: 70px;
     }
 }
@@ -120,45 +155,55 @@ textarea{
 .new-password-field-box,
 .searched-field-box,
 .select-sort-type-box,
-.website-owner-password-field-box{
+.website-owner-password-field-box {
     position: relative;
-    .icon-box{
+
+    .icon-box {
         position: absolute;
-        &.ar-language-mode{
+
+        &.ar-language-mode {
             left: 15px;
         }
-        &.other-languages-mode{
+
+        &.other-languages-mode {
             right: 15px;
         }
+
         top: 50%;
         transform: translateY(-50%);
-        .icon{
+
+        .icon {
             font-size: 22px;
             cursor: pointer;
         }
     }
-    &.error-in-field{
-        .icon-box{
+
+    &.error-in-field {
+        .icon-box {
             transform: translateY(-80%);
         }
     }
 }
 
-.select-sort-type{
+.select-sort-type {
     text-indent: 18px;
 }
 
-.filters-and-sorting-box{
+.filters-and-sorting-box {
     width: 100%;
     margin: 0 auto;
+
     @media (max-width: 767px) {
         width: 100%;
         gap: 30px;
     }
 }
 
-.managment-table, .customer-table{
-    td, th{
+.managment-table,
+.customer-table {
+
+    td,
+    th {
         border: 1px solid;
         padding: 15px;
         text-align: center;
@@ -166,41 +211,44 @@ textarea{
     }
 }
 
-.managment-table{
+.managment-table {
     background-color: #FFF;
-    textarea{
+
+    textarea {
         resize: none;
         height: 150px;
     }
-    h6{
+
+    h6 {
         font-size: 13px;
     }
 }
 
-.customer-table{
+.customer-table {
     color: #FFF;
 }
 
-.order-details{
-    .customer-info{
-        p{
+.order-details {
+    .customer-info {
+        p {
             font-size: 13px;
         }
     }
 }
 
-.filters{
-    h6{
+.filters {
+    h6 {
         font-size: 13px;
     }
 }
 
-.loading-box{
+.loading-box {
     height: 100vh;
     background-color: var(--main-color-one);
 }
 
-.loader, .loader-page {
+.loader,
+.loader-page {
     width: 48px;
     height: 48px;
     border: 5px solid #FFF;
@@ -218,52 +266,61 @@ textarea{
     z-index: 2;
     width: 40px;
     height: 40px;
-    line-height: 40px;
+    line-height: 34px;
     font-size: 20px;
-    background-color: var(--main-color-two);
+    background-color: var(--main-color-four);
+    border: 3px solid #000;
     cursor: pointer;
     border-radius: 50%;
     text-align: center;
-    &:hover{
+
+    &:hover {
         background-color: #000;
         color: #FFF;
     }
 }
 
-.contact-icons-box{
+.contact-icons-box {
     position: fixed;
     left: 30px;
     bottom: 30px;
     cursor: pointer;
-    .contact-icons-list{
-        .contact-icon-item{
+
+    .contact-icons-list {
+        .contact-icon-item {
             width: 50px;
             height: 50px;
             text-align: center;
-            line-height: 50px;
+            line-height: 46px;
             border-radius: 50%;
-            background-color: var(--main-color-two);
+            background-color: var(--main-color-four);
+            border: 3px solid #000;
         }
     }
-    .contact-icon, .close-icon, .whatsapp-icon, .mail-icon{
+
+    .contact-icon,
+    .close-icon,
+    .whatsapp-icon,
+    .mail-icon {
         font-size: 30px;
         color: #000;
     }
 }
 
-.form-field-error-box{
+.form-field-error-box {
     border-radius: 3px;
 }
 
-.customer-dashboard{
-    .page-content{
-        .container-fluid{
-            > .row{
+.customer-dashboard {
+    .page-content {
+        .container-fluid {
+            >.row {
                 @media (max-width: 1199px) {
                     row-gap: 40px;
                     padding-bottom: 40px;
                 }
-                .row{
+
+                .row {
                     @media (max-width: 1199px) {
                         row-gap: 40px;
                     }
@@ -273,61 +330,71 @@ textarea{
     }
 }
 
-.order-total{
+.order-total {
     font-size: 14px;
-    .total{
-        border-bottom: 2px dashed #FFF;
+
+    .total {
+        border-bottom: 3px dashed var(--main-color-five);
+
         @media (max-width: 767px) {
             gap: 15px;
         }
     }
-    .checkout-link{
+
+    .checkout-link {
         background-color: var(--main-color-two);
         color: #000;
         border: 5px solid #FFF;
         border-top-left-radius: 20px;
         font-size: 12px !important;
-        &:hover{
+
+        &:hover {
             background-color: var(--main-color-one);
             color: #FFF;
         }
     }
+
     @media (max-width: 767px) {
         text-align: center !important;
     }
 }
 
-.pagination-bar{
-    .current-page-number-and-count-of-pages{
+.pagination-bar {
+    .current-page-number-and-count-of-pages {
         font-size: 14px;
     }
-    .pagination-icon{
+
+    .pagination-icon {
         font-size: 22px;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
             background-color: #dc3545;
             color: #FFF;
             font-size: 25px;
         }
     }
-    .pagination-button{
+
+    .pagination-button {
         font-size: 12px;
         border-radius: 50%;
         border: none;
         font-weight: bold;
-        &.selection{
+
+        &.selection {
             background-color: var(--main-color-one);
             color: #FFF;
         }
     }
-    .navigate-to-specific-page-form{
-        .page-number-input{
+
+    .navigate-to-specific-page-form {
+        .page-number-input {
             font-size: 12px;
         }
     }
 }
 
-.overlay{
+.overlay {
     position: fixed;
     left: 0;
     top: 0;
@@ -337,9 +404,11 @@ textarea{
     z-index: 2;
 }
 
-.data-box{
-    .data-table{
-        th, td{
+.data-box {
+    .data-table {
+
+        th,
+        td {
             padding: 20px;
             border: 1px solid #FFF;
             color: #FFF;
@@ -349,46 +418,56 @@ textarea{
     }
 }
 
-.select-language-box{
+.select-language-box {
     position: relative;
-    .languages-list{
+
+    .languages-list {
         position: absolute;
         top: 120%;
         right: 0;
         z-index: 1;
         background-color: var(--main-color-two);
         width: 150px;
-        .language-item{
+
+        .language-item {
             cursor: pointer;
         }
     }
 }
 
-.caption-page{
-    .content{
-        ul{
+.caption-page {
+    .content {
+        ul {
             list-style: square inside;
         }
-        li, p{
+
+        li,
+        p {
             line-height: 2;
         }
     }
 }
 
-.managment-links-side-bar{
+.managment-links-side-bar {
     border-radius: 5px;
-    .managment-link-list{
-        .managment-link-item{
-            &:hover, .active{
-                background-color: var(--main-color-two);
-                border-radius: 5px;
-            }
-            .managment-link{
+    @extend .custom-frame;
+
+    .managment-link-list {
+        .managment-link-item {
+            .managment-link {
                 padding: 14px;
-                .managment-link-icon{
+
+                &:hover,
+                .active {
+                    background-color: var(--main-color-one);
+                    color: #FFF !important;
+                }
+
+                .managment-link-icon {
                     font-size: 18px;
                 }
-                .managment-link-name{
+
+                .managment-link-name {
                     font-size: 10px;
                 }
             }
@@ -396,38 +475,57 @@ textarea{
     }
 }
 
-.customer-favorite-products-list, .customer-wallet-products-list{
-    .favorite-products-list-for-user, .wallet-products-list-for-user{
-        .favorite-products-table-for-user, .wallet-products-table-for-user{
-            th, td{
+.customer-favorite-products-list,
+.customer-wallet-products-list {
+
+    .favorite-products-list-for-user,
+    .wallet-products-list-for-user {
+
+        .favorite-products-table-for-user,
+        .wallet-products-table-for-user {
+
+            th,
+            td {
                 font-size: 12px;
             }
-            .managment-favorite-products-icon, .managment-wallet-products-icon{
+
+            .managment-favorite-products-icon,
+            .managment-wallet-products-icon {
                 font-size: 17px;
                 cursor: pointer;
             }
-            a{
+
+            a {
                 padding: 8px;
             }
         }
     }
-    .not-found-any-favorite-products-for-user, .not-found-any-wallet-products-for-user{
+
+    .not-found-any-favorite-products-for-user,
+    .not-found-any-wallet-products-for-user {
         color: #FFF;
-        .sorry-icon{
+
+        .sorry-icon {
             font-size: 100px;
         }
     }
 }
 
-.customer-billing-address, .customer-shipping-address{
-    .edit-customer-billing-address-form, .edit-customer-shipping-address-form{
+.customer-billing-address,
+.customer-shipping-address {
+
+    .edit-customer-billing-address-form,
+    .edit-customer-shipping-address-form {
         color: #FFF;
-        h6{
+
+        h6 {
             font-size: 12px;
         }
-        .address-name-and-editing-link{
+
+        .address-name-and-editing-link {
             border: 2px dotted #FFF;
-            .editing-link{
+
+            .editing-link {
                 background: none;
                 border: none;
                 color: var(--main-color-two);
@@ -445,7 +543,8 @@ textarea{
     height: 100%;
     background-color: rgba($color: #000, $alpha: 0.5);
     z-index: 3;
-    .content-box{
+
+    .content-box {
         position: fixed;
         left: 50%;
         top: 50%;
@@ -454,23 +553,27 @@ textarea{
         box-shadow: 1px 1px 10px #000;
         width: 90%;
         height: 60%;
-        &.share-icons-box{
-            .row{
+
+        &.share-icons-box {
+            .row {
                 @media (max-width: 767px) {
                     gap: 20px;
                 }
             }
         }
-        .login-btn{
+
+        .login-btn {
             width: 50%;
             margin: 0 auto;
             font-size: 13px;
+
             @media (max-width: 767px) {
                 width: 100%;
             }
         }
     }
-    .close-popup-box-icon{
+
+    .close-popup-box-icon {
         position: absolute;
         right: -20px;
         top: -20px;
@@ -482,96 +585,122 @@ textarea{
     }
 }
 
-.table-for-mobiles-and-tablets{
-    th, td{
+.table-for-mobiles-and-tablets {
+
+    th,
+    td {
         border: 1px solid;
         padding: 15px;
     }
-    th{
+
+    th {
         width: 25%;
     }
-    td{
+
+    td {
         text-align: center;
     }
 }
 
-.card-box{
+.card-box {
     margin: auto;
     height: auto;
+    @extend .custom-frame;
+
     @media (min-width: 320px) and (max-width: 400px) {
-        width: 280px;
+        width: 287px;
     }
+
     @media (min-width: 401px) and (max-width: 500px) {
-        width: 360px;
+        width: 367px;
     }
+
     @media (min-width: 501px) and (max-width: 600px) {
-        width: 450px;
+        width: 457px;
     }
+
     @media (min-width: 601px) and (max-width: 700px) {
-        width: 500px;
+        width: 507px;
     }
+
     @media (min-width: 701px) and (max-width: 767px) {
-        width: 550px;
+        width: 557px;
     }
+
     @media (min-width: 768px) and (max-width: 991px) {
-        width: 500px;
+        width: 507px;
     }
+
     @media (min-width: 992px) and (max-width: 1199px) {
-        width: 450px;
+        width: 457px;
     }
+
     @media (min-width: 1200px) and (max-width: 1300px) {
-        width: 360px;
+        width: 367px;
     }
+
     @media (min-width: 1301px) {
-        width: 330px;
+        width: 337px;
     }
-    .managment-box{
+
+    .managment-box {
         position: relative;
         cursor: pointer;
         border-top-right-radius: 8px;
         border-top-left-radius: 8px;
         font-size: 12px;
+
         @media (min-width: 320px) and (max-width: 400px) {
             width: 280px;
             height: 280px;
         }
+
         @media (min-width: 401px) and (max-width: 500px) {
             width: 360px;
             height: 360px;
         }
+
         @media (min-width: 501px) and (max-width: 600px) {
             width: 450px;
             height: 450px;
         }
+
         @media (min-width: 601px) and (max-width: 700px) {
             width: 500px;
             height: 500px;
         }
+
         @media (min-width: 701px) and (max-width: 767px) {
             width: 550px;
             height: 550px;
         }
+
         @media (min-width: 768px) and (max-width: 991px) {
             width: 500px;
             height: 500px;
         }
+
         @media (min-width: 992px) and (max-width: 1199px) {
             width: 450px;
             height: 450px;
         }
+
         @media (min-width: 1200px) and (max-width: 1300px) {
             width: 360px;
             height: 360px;
         }
+
         @media (min-width: 1301px) {
             width: 330px;
             height: 330px;
         }
-        img{
+
+        img {
             width: 100%;
             height: 100%;
         }
-        .card-overlay{
+
+        .card-overlay {
             position: absolute;
             left: 0;
             top: 0;
@@ -581,55 +710,64 @@ textarea{
             opacity: 0;
             transition: .3s;
         }
-        .managment-buttons{
+
+        .managment-buttons {
             position: absolute;
             right: 8px;
             top: 8px;
             background-color: #FFF;
             border-radius: 10px;
             opacity: 0;
-            .managment-icon{
+
+            .managment-icon {
                 font-size: 14px;
             }
         }
-        &:hover{
-            .card-overlay, .managment-buttons, .add-to-cart-button-box{
+
+        &:hover {
+
+            .card-overlay,
+            .managment-buttons,
+            .add-to-cart-button-box {
                 opacity: 1;
             }
         }
     }
-    .details-box{
+
+    .details-box {
         position: relative;
         background-color: #FFF;
-        border-bottom-right-radius: 8px;
-        border-bottom-left-radius: 8px;
         min-height: 142px;
         font-size: 13px;
-        h6{
+
+        h6 {
             font-size: 13px;
         }
-        &.brand-details{
+
+        &.brand-details {
             min-height: 70px;
         }
     }
 }
 
-.section-data-box{
+.section-data-box {
     row-gap: 40px;
 }
 
-.public-form{
+.public-form {
     width: 50%;
+
     @media (max-width: 767px) {
         width: 100%;
         padding: 1rem !important;
     }
+
     @media (min-width: 768px) and (max-width: 1199px) {
         width: 75%;
     }
 }
 
-.show-btn{
+.show-btn {
     background-color: var(--main-color-two);
     width: 25%;
     border-radius: 10px;
@@ -637,6 +775,8 @@ textarea{
     font-weight: bold;
     font-size: 13px;
     padding: 13px 0;
+    @extend .custom-frame;
+
     @media (max-width: 767px) {
         width: 100%;
     }
@@ -646,28 +786,36 @@ textarea{
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
-} 
+}
 
 @keyframes bounce {
-    0% , 50% , 100%{
+
+    0%,
+    50%,
+    100% {
         transform: translate(-50%, 0px);
         height: 20px;
     }
+
     20% {
         transform: translate(-25%, 85px);
         height: 28px;
     }
+
     25% {
         transform: translate(-25%, 110px);
         height: 12px;
     }
+
     70% {
         transform: translate(-75%, 85px);
         height: 28px;
     }
+
     75% {
         transform: translate(-75%, 108px);
         height: 12px;
@@ -675,7 +823,18 @@ textarea{
 }
 
 @keyframes rotate {
-    0% , 50% , 100%{ transform: rotate(0deg)}
-    25% { transform: rotate(90deg)}
-    75%{ transform: rotate(-90deg)}
+
+    0%,
+    50%,
+    100% {
+        transform: rotate(0deg)
+    }
+
+    25% {
+        transform: rotate(90deg)
+    }
+
+    75% {
+        transform: rotate(-90deg)
+    }
 }

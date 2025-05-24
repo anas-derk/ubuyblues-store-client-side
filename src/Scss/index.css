@@ -2,13 +2,17 @@
   --main-color-one: #6A017A;
   --main-color-two: #00ffe1;
   --main-color-three: #dfb762;
+  --main-color-four: #e6d9db;
+  --main-color-five: #000;
 }
 
 body {
   background-color: var(--main-color-one);
 }
 
-body[lang="en"], body[lang="tr"], body[lang="de"] {
+body[lang="en"],
+body[lang="tr"],
+body[lang="de"] {
   font-family: 'Montserrat', sans-serif;
   direction: ltr;
 }
@@ -29,9 +33,25 @@ a {
   text-decoration: none;
 }
 
-input, textarea, select {
+.custom-frame,
+input,
+textarea,
+select,
+button,
+table,
+table tr,
+table td,
+.private-btn,
+.managment-links-side-bar,
+.card-box,
+.show-btn {
+  border: 4px solid var(--main-color-five) !important;
+}
+
+input,
+textarea,
+select {
   background: transparent;
-  border: 1px solid #FFF;
   border-radius: 3px;
   color: #FFF;
   padding: 13px !important;
@@ -39,11 +59,15 @@ input, textarea, select {
   font-size: 11px !important;
 }
 
-input::placeholder, textarea::placeholder, select::placeholder {
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
   color: #FFF;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   border-color: #00F;
 }
@@ -76,7 +100,6 @@ textarea {
 
 .private-btn {
   border-top-right-radius: 20px;
-  border: 5px solid #FFF;
   background-color: var(--main-color-two);
   font-size: 13px;
 }
@@ -225,7 +248,10 @@ textarea {
   }
 }
 
-.managment-table td, .managment-table th, .customer-table td, .customer-table th {
+.managment-table td,
+.managment-table th,
+.customer-table td,
+.customer-table th {
   border: 1px solid;
   padding: 15px;
   text-align: center;
@@ -262,7 +288,8 @@ textarea {
   background-color: var(--main-color-one);
 }
 
-.loader, .loader-page {
+.loader,
+.loader-page {
   width: 48px;
   height: 48px;
   border: 5px solid #FFF;
@@ -280,9 +307,10 @@ textarea {
   z-index: 2;
   width: 40px;
   height: 40px;
-  line-height: 40px;
+  line-height: 34px;
   font-size: 20px;
-  background-color: var(--main-color-two);
+  background-color: var(--main-color-four);
+  border: 3px solid #000;
   cursor: pointer;
   border-radius: 50%;
   text-align: center;
@@ -304,12 +332,16 @@ textarea {
   width: 50px;
   height: 50px;
   text-align: center;
-  line-height: 50px;
+  line-height: 46px;
   border-radius: 50%;
-  background-color: var(--main-color-two);
+  background-color: var(--main-color-four);
+  border: 3px solid #000;
 }
 
-.contact-icons-box .contact-icon, .contact-icons-box .close-icon, .contact-icons-box .whatsapp-icon, .contact-icons-box .mail-icon {
+.contact-icons-box .contact-icon,
+.contact-icons-box .close-icon,
+.contact-icons-box .whatsapp-icon,
+.contact-icons-box .mail-icon {
   font-size: 30px;
   color: #000;
 }
@@ -319,14 +351,14 @@ textarea {
 }
 
 @media (max-width: 1199px) {
-  .customer-dashboard .page-content .container-fluid > .row {
+  .customer-dashboard .page-content .container-fluid>.row {
     row-gap: 40px;
     padding-bottom: 40px;
   }
 }
 
 @media (max-width: 1199px) {
-  .customer-dashboard .page-content .container-fluid > .row .row {
+  .customer-dashboard .page-content .container-fluid>.row .row {
     row-gap: 40px;
   }
 }
@@ -336,7 +368,7 @@ textarea {
 }
 
 .order-total .total {
-  border-bottom: 2px dashed #FFF;
+  border-bottom: 3px dashed var(--main-color-five);
 }
 
 @media (max-width: 767px) {
@@ -405,7 +437,8 @@ textarea {
   z-index: 2;
 }
 
-.data-box .data-table th, .data-box .data-table td {
+.data-box .data-table th,
+.data-box .data-table td {
   padding: 20px;
   border: 1px solid #FFF;
   color: #FFF;
@@ -434,7 +467,8 @@ textarea {
   list-style: square inside;
 }
 
-.caption-page .content li, .caption-page .content p {
+.caption-page .content li,
+.caption-page .content p {
   line-height: 2;
 }
 
@@ -442,13 +476,14 @@ textarea {
   border-radius: 5px;
 }
 
-.managment-links-side-bar .managment-link-list .managment-link-item:hover, .managment-links-side-bar .managment-link-list .managment-link-item .active {
-  background-color: var(--main-color-two);
-  border-radius: 5px;
-}
-
 .managment-links-side-bar .managment-link-list .managment-link-item .managment-link {
   padding: 14px;
+}
+
+.managment-links-side-bar .managment-link-list .managment-link-item .managment-link:hover,
+.managment-links-side-bar .managment-link-list .managment-link-item .managment-link .active {
+  background-color: var(--main-color-one);
+  color: #FFF !important;
 }
 
 .managment-links-side-bar .managment-link-list .managment-link-item .managment-link .managment-link-icon {
@@ -459,40 +494,95 @@ textarea {
   font-size: 10px;
 }
 
-.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user td, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user th, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user td, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user th, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user td, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user th, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user td, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user th, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user td, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user th, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user td, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user th, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user td, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user th, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user td {
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user th,
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user td,
+.customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user th,
+.customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user td,
+.customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user th,
+.customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user td,
+.customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user th,
+.customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user td,
+.customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user th,
+.customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user td,
+.customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user th,
+.customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user td,
+.customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user th,
+.customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user td,
+.customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user th,
+.customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user td {
   font-size: 12px;
 }
 
-.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon {
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon,
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon,
+.customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon,
+.customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon,
+.customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon,
+.customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon,
+.customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon,
+.customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon,
+.customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon,
+.customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon,
+.customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon,
+.customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon,
+.customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-favorite-products-icon,
+.customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user .managment-wallet-products-icon,
+.customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-favorite-products-icon,
+.customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user .managment-wallet-products-icon {
   font-size: 17px;
   cursor: pointer;
 }
 
-.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user a, .customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user a, .customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user a, .customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user a, .customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user a, .customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user a, .customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user a, .customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user a {
+.customer-favorite-products-list .favorite-products-list-for-user .favorite-products-table-for-user a,
+.customer-favorite-products-list .favorite-products-list-for-user .wallet-products-table-for-user a,
+.customer-favorite-products-list .wallet-products-list-for-user .favorite-products-table-for-user a,
+.customer-favorite-products-list .wallet-products-list-for-user .wallet-products-table-for-user a,
+.customer-wallet-products-list .favorite-products-list-for-user .favorite-products-table-for-user a,
+.customer-wallet-products-list .favorite-products-list-for-user .wallet-products-table-for-user a,
+.customer-wallet-products-list .wallet-products-list-for-user .favorite-products-table-for-user a,
+.customer-wallet-products-list .wallet-products-list-for-user .wallet-products-table-for-user a {
   padding: 8px;
 }
 
-.customer-favorite-products-list .not-found-any-favorite-products-for-user, .customer-favorite-products-list .not-found-any-wallet-products-for-user, .customer-wallet-products-list .not-found-any-favorite-products-for-user, .customer-wallet-products-list .not-found-any-wallet-products-for-user {
+.customer-favorite-products-list .not-found-any-favorite-products-for-user,
+.customer-favorite-products-list .not-found-any-wallet-products-for-user,
+.customer-wallet-products-list .not-found-any-favorite-products-for-user,
+.customer-wallet-products-list .not-found-any-wallet-products-for-user {
   color: #FFF;
 }
 
-.customer-favorite-products-list .not-found-any-favorite-products-for-user .sorry-icon, .customer-favorite-products-list .not-found-any-wallet-products-for-user .sorry-icon, .customer-wallet-products-list .not-found-any-favorite-products-for-user .sorry-icon, .customer-wallet-products-list .not-found-any-wallet-products-for-user .sorry-icon {
+.customer-favorite-products-list .not-found-any-favorite-products-for-user .sorry-icon,
+.customer-favorite-products-list .not-found-any-wallet-products-for-user .sorry-icon,
+.customer-wallet-products-list .not-found-any-favorite-products-for-user .sorry-icon,
+.customer-wallet-products-list .not-found-any-wallet-products-for-user .sorry-icon {
   font-size: 100px;
 }
 
-.customer-billing-address .edit-customer-billing-address-form, .customer-billing-address .edit-customer-shipping-address-form, .customer-shipping-address .edit-customer-billing-address-form, .customer-shipping-address .edit-customer-shipping-address-form {
+.customer-billing-address .edit-customer-billing-address-form,
+.customer-billing-address .edit-customer-shipping-address-form,
+.customer-shipping-address .edit-customer-billing-address-form,
+.customer-shipping-address .edit-customer-shipping-address-form {
   color: #FFF;
 }
 
-.customer-billing-address .edit-customer-billing-address-form h6, .customer-billing-address .edit-customer-shipping-address-form h6, .customer-shipping-address .edit-customer-billing-address-form h6, .customer-shipping-address .edit-customer-shipping-address-form h6 {
+.customer-billing-address .edit-customer-billing-address-form h6,
+.customer-billing-address .edit-customer-shipping-address-form h6,
+.customer-shipping-address .edit-customer-billing-address-form h6,
+.customer-shipping-address .edit-customer-shipping-address-form h6 {
   font-size: 12px;
 }
 
-.customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link, .customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link, .customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link, .customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link {
+.customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link,
+.customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link,
+.customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link,
+.customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link {
   border: 2px dotted #FFF;
 }
 
-.customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link .editing-link, .customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link .editing-link, .customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link .editing-link, .customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link .editing-link {
+.customer-billing-address .edit-customer-billing-address-form .address-name-and-editing-link .editing-link,
+.customer-billing-address .edit-customer-shipping-address-form .address-name-and-editing-link .editing-link,
+.customer-shipping-address .edit-customer-billing-address-form .address-name-and-editing-link .editing-link,
+.customer-shipping-address .edit-customer-shipping-address-form .address-name-and-editing-link .editing-link {
   background: none;
   border: none;
   color: var(--main-color-two);
@@ -549,7 +639,8 @@ textarea {
   padding: 5px;
 }
 
-.table-for-mobiles-and-tablets th, .table-for-mobiles-and-tablets td {
+.table-for-mobiles-and-tablets th,
+.table-for-mobiles-and-tablets td {
   border: 1px solid;
   padding: 15px;
 }
@@ -569,55 +660,55 @@ textarea {
 
 @media (min-width: 320px) and (max-width: 400px) {
   .card-box {
-    width: 280px;
+    width: 287px;
   }
 }
 
 @media (min-width: 401px) and (max-width: 500px) {
   .card-box {
-    width: 360px;
+    width: 367px;
   }
 }
 
 @media (min-width: 501px) and (max-width: 600px) {
   .card-box {
-    width: 450px;
+    width: 457px;
   }
 }
 
 @media (min-width: 601px) and (max-width: 700px) {
   .card-box {
-    width: 500px;
+    width: 507px;
   }
 }
 
 @media (min-width: 701px) and (max-width: 767px) {
   .card-box {
-    width: 550px;
+    width: 557px;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .card-box {
-    width: 500px;
+    width: 507px;
   }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .card-box {
-    width: 450px;
+    width: 457px;
   }
 }
 
 @media (min-width: 1200px) and (max-width: 1300px) {
   .card-box {
-    width: 360px;
+    width: 367px;
   }
 }
 
 @media (min-width: 1301px) {
   .card-box {
-    width: 330px;
+    width: 337px;
   }
 }
 
@@ -721,15 +812,15 @@ textarea {
   font-size: 14px;
 }
 
-.card-box .managment-box:hover .card-overlay, .card-box .managment-box:hover .managment-buttons, .card-box .managment-box:hover .add-to-cart-button-box {
+.card-box .managment-box:hover .card-overlay,
+.card-box .managment-box:hover .managment-buttons,
+.card-box .managment-box:hover .add-to-cart-button-box {
   opacity: 1;
 }
 
 .card-box .details-box {
   position: relative;
   background-color: #FFF;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
   min-height: 142px;
   font-size: 13px;
 }
@@ -783,28 +874,36 @@ textarea {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
 
 @keyframes bounce {
-  0%, 50%, 100% {
+
+  0%,
+  50%,
+  100% {
     transform: translate(-50%, 0px);
     height: 20px;
   }
+
   20% {
     transform: translate(-25%, 85px);
     height: 28px;
   }
+
   25% {
     transform: translate(-25%, 110px);
     height: 12px;
   }
+
   70% {
     transform: translate(-75%, 85px);
     height: 28px;
   }
+
   75% {
     transform: translate(-75%, 108px);
     height: 12px;
@@ -812,12 +911,17 @@ textarea {
 }
 
 @keyframes rotate {
-  0%, 50%, 100% {
+
+  0%,
+  50%,
+  100% {
     transform: rotate(0deg);
   }
+
   25% {
     transform: rotate(90deg);
   }
+
   75% {
     transform: rotate(-90deg);
   }
