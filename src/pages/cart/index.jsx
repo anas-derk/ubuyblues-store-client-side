@@ -54,7 +54,7 @@ export default function Cart({ countryAsProperty }) {
         getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
             setUsdPriceAgainstCurrency(price);
             const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty ) ));
+            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
             if (!isGetGroupedProductsByStoreId) {
                 setIsLoadingPage(false);
             }
@@ -343,7 +343,7 @@ export default function Cart({ countryAsProperty }) {
                                             </section>}
                                         </div>
                                         <motion.div className="col-xl-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={() => getAnimationSettings(0.3 * storeIndex)}>
-                                            <section className="order-total border border-3 text-start" id="order-total">
+                                            <section className="order-total custom-frame text-start" id="order-total">
                                                 <h6 className="fw-bold mb-5 text-center">{t("Cart Totals")}</h6>
                                                 <div className="row total-price-before-discount total pb-3 mb-5">
                                                     <div className={`col-md-8 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-start" : "text-md-end"}`}>
@@ -369,7 +369,7 @@ export default function Cart({ countryAsProperty }) {
                                                         {(pricesDetailsSummary[storeIndex].totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
                                                     </div>
                                                 </div>
-                                                <Link href={`/checkout?storeId=${store.storeId}`} className="checkout-link p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
+                                                <Link href={`/checkout?storeId=${store.storeId}`} className="checkout-link private-btn p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
                                             </section>
                                         </motion.div>
                                     </div>
