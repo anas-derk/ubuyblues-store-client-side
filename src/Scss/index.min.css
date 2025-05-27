@@ -708,7 +708,7 @@ textarea {
 
 @media (min-width: 1301px) {
     .card-box {
-        width: 337px
+        width: 308px
     }
 }
 
@@ -778,8 +778,8 @@ textarea {
 
 @media (min-width: 1301px) {
     .card-box .managment-box {
-        width: 330px;
-        height: 330px
+        width: 300px;
+        height: 300px
     }
 }
 
