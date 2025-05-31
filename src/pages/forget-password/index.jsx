@@ -63,6 +63,7 @@ export default function ForgetPassword({ userTypeAsProperty }) {
     }, []);
 
     useEffect(() => {
+        setIsLoadingPage(true);
         setUserType(userTypeAsProperty);
         const userToken = localStorage.getItem(process.env.USER_TOKEN_NAME_IN_LOCAL_STORAGE);
         if (userToken) {
@@ -88,6 +89,10 @@ export default function ForgetPassword({ userTypeAsProperty }) {
             setIsLoadingPage(false);
         }
     }, [userTypeAsProperty]);
+
+    const handleSelectUserType = (newUserType) => {
+        router.replace(`/forget-password?userType=${newUserType}`);
+    }
 
     const handleTimeCounter = () => {
         let secondsTemp = 59, minutesTemp = 1;
