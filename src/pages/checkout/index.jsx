@@ -11,8 +11,8 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import NotFoundError from "@/components/NotFoundError";
-import { getStoreDetails, getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, handleSelectUserLanguage, getAppearedSections, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../public/global_functions/popular";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
+import { getStoreDetails, getProductQuantity, calcTotalPrices, getUserInfo, handleSelectUserLanguage, getAppearedSections, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../public/global_functions/popular";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../public/global_functions/validations";
 import { SiAmericanexpress, SiApplepay, SiBinance } from "react-icons/si";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -154,10 +154,10 @@ export default function Checkout({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetUserInfo && !isGetStoreDetails) {
                 setIsLoadingPage(false);
             }
@@ -999,7 +999,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     </span>}
                                                 </div>
                                                 <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                    {(product.price * getProductQuantity(product._id) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                    {(product.price * getProductQuantity(product._id) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                                 </div>
                                             </motion.div>
                                         ))}
@@ -1008,7 +1008,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t("Total Price Before Discount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(pricesDetailsSummary.totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                {(pricesDetailsSummary.totalPriceBeforeDiscount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </motion.div>
                                         <motion.div className="row total-price-discount total pb-3 mb-5" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1016,7 +1016,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t("Total Discount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(pricesDetailsSummary.totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                {(pricesDetailsSummary.totalDiscount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </motion.div>
                                         <motion.div className="row total-price-after-discount total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1024,7 +1024,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t("Total Price After Discount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(pricesDetailsSummary.totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                {(pricesDetailsSummary.totalPriceAfterDiscount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </motion.div>
                                         {localAndInternationlProducts.local.length > 0 && <motion.div className="row shipping-cost-for-local-products total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1032,7 +1032,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t(localAndInternationlProducts.international.length > 0 ? "Shipping Cost For Local Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(shippingCost.forLocalProducts * usdPriceAgainstCurrency).toFixed(2)} {t("KWD")}
+                                                {(shippingCost.forLocalProducts * convertedPrice).toFixed(2)} {t("KWD")}
                                             </div>
                                         </motion.div>}
                                         {localAndInternationlProducts.international.length > 0 && <motion.div className="row shipping-cost-for-international-products total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1040,7 +1040,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t(localAndInternationlProducts.local.length > 0 ? "Shipping Cost For International Products" : "Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(shippingCost.forInternationalProducts * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                {(shippingCost.forInternationalProducts * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </motion.div>}
                                         {localAndInternationlProducts.local.length > 0 && localAndInternationlProducts.international.length > 0 && <motion.div className="row shipping-cost-for-products total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1048,7 +1048,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t("Shipping Cost")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {((shippingCost.forLocalProducts + shippingCost.forInternationalProducts) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                {((shippingCost.forLocalProducts + shippingCost.forInternationalProducts) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </motion.div>}
                                         <motion.div className="row total-price total pb-3 mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1056,7 +1056,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                 {t("Total Amount")}
                                             </div>
                                             <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                {(totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                {(totalAmount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                             </div>
                                         </motion.div>
                                         {/* Start Coupon Section */}
@@ -1134,7 +1134,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                         <label htmlFor="ubuyblues-shipping-method-radio" onClick={() => handleSelectShippingMethod({ ...shippingMethod, forLocalProducts: "ubuyblues" })}>{t("Ubuyblues")}</label>
                                                     </div>
                                                     <div className="col-md-6 text-md-end">
-                                                        <span className="p-3 border border-3">( {(3 * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)} )</span>
+                                                        <span className="p-3 border border-3">( {(3 * convertedPrice).toFixed(2)} {t(currencyNameByCountry)} )</span>
                                                     </div>
                                                 </motion.div>
                                             </>}
@@ -1288,7 +1288,7 @@ export async function getServerSideProps({ query }) {
                         destination: `/checkout?storeId=${query.storeId}`,
                     },
                     props: {
-                        countryAsProperty: "kuwait",
+                        countryAsProperty: process.env.BASE_COUNTRY,
                         storeId: query.storeId,
                     },
                 }
@@ -1299,7 +1299,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/cart",
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                 },
             }
         }
@@ -1325,7 +1325,7 @@ export async function getServerSideProps({ query }) {
     if (query.storeId) {
         return {
             props: {
-                countryAsProperty: "kuwait",
+                countryAsProperty: process.env.BASE_COUNTRY,
                 storeId: query.storeId,
             },
         }
@@ -1336,7 +1336,7 @@ export async function getServerSideProps({ query }) {
             destination: "/cart",
         },
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
         },
     }
 }

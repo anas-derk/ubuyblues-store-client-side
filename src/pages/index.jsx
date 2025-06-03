@@ -11,7 +11,7 @@ import { FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineContactPhone } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../public/global_functions/prices";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import {
@@ -58,7 +58,7 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [errorType, setErrorType] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -170,10 +170,10 @@ export default function Home({ countryAsProperty, storeId }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetStoreDetails) {
                 setIsLoadingPage(false);
             }
@@ -912,7 +912,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                             <ProductCard
                                                 productDetails={product}
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
-                                                usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                convertedPrice={convertedPrice}
                                                 currencyNameByCountry={currencyNameByCountry}
                                                 isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
@@ -1010,7 +1010,7 @@ export default function Home({ countryAsProperty, storeId }) {
                                             <ProductCard
                                                 productDetails={product}
                                                 setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
-                                                usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                convertedPrice={convertedPrice}
                                                 currencyNameByCountry={currencyNameByCountry}
                                                 isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
                                                 isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
@@ -1174,7 +1174,7 @@ export async function getServerSideProps({ query }) {
                         destination: `/?storeId=${query.storeId}`,
                     },
                     props: {
-                        countryAsProperty: "kuwait",
+                        countryAsProperty: process.env.BASE_COUNTRY,
                         storeId: query.storeId,
                     },
                 }
@@ -1185,7 +1185,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/",
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                 },
             }
         }
@@ -1211,14 +1211,14 @@ export async function getServerSideProps({ query }) {
     if (query.storeId) {
         return {
             props: {
-                countryAsProperty: "kuwait",
+                countryAsProperty: process.env.BASE_COUNTRY,
                 storeId: query.storeId,
             },
         }
     }
     return {
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
         },
     }
 }

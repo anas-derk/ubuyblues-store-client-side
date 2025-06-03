@@ -15,7 +15,7 @@ export default function ProductCard({
     setIsDisplayShareOptionsBox,
     isFavoriteProductForUserAsProperty,
     isExistProductInsideTheCartAsProperty,
-    usdPriceAgainstCurrency,
+    convertedPrice,
     currencyNameByCountry,
     setSharingName,
     setSharingURL,
@@ -421,16 +421,16 @@ export default function ProductCard({
                             <li className="mb-3 d-inline-block fw-bold" key={category._id}>{category.name[i18n.language] + (categoryIndex !== productDetails.categories.length - 1 ? " - " : "")}</li>
                         )) : <li className="mb-3 d-inline-block fw-bold bg-danger p-2 text-white border-2">{t("Ucategorized")}</li>}
                     </ul>
-                    <h5 className={`product-price ${(productDetails.discount !== 0 || productDetails.discountInOfferPeriod !== 0) ? "text-decoration-line-through" : ""}`}>{(productDetails.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h5>
+                    <h5 className={`product-price ${(productDetails.discount !== 0 || productDetails.discountInOfferPeriod !== 0) ? "text-decoration-line-through" : ""}`}>{(productDetails.price * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h5>
                     {
                         productDetails.discount > 0 &&
                         !isFlashProduct &&
-                        <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                        <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discount) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h4>
                     }
                     {
                         productDetails.discountInOfferPeriod > 0 &&
                         isFlashProduct &&
-                        <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h4>
+                        <h4 className="product-price-after-discount m-0">{((productDetails.price - productDetails.discountInOfferPeriod) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h4>
                     }
                 </div>
             </>}

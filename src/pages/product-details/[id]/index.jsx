@@ -16,7 +16,7 @@ import PaginationBar from "@/components/PaginationBar";
 import { PiShareFatLight } from "react-icons/pi";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
 import { isExistOfferOnProduct, isExistProductInsideTheCart, getFavoriteProductsByProductsIdsAndUserId, getUserInfo, isFavoriteProductForUser, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../../public/global_functions/popular";
 import NavigateToUpOrDown from "@/components/NavigateToUpOrDown";
@@ -34,7 +34,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -144,10 +144,10 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetUserInfo && !isGetProductInfo) {
                 setIsLoadingPage(false);
             }
@@ -752,16 +752,16 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                     <motion.li className="mb-3 d-inline-block fw-bold" key={category._id} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{category.name[i18n.language] + (categoryIndex !== productInfo.categories.length - 1 ? "  - " : "")}</motion.li>
                                                 )) : <motion.li className="mb-3 d-inline-block fw-bold bg-danger p-2 text-white border-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Ucategorized")}</motion.li>}
                                             </ul>
-                                            <motion.h5 className={`product-price mb-4 ${productInfo.discount !== 0 && "text-decoration-line-through"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{(productInfo.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</motion.h5>
+                                            <motion.h5 className={`product-price mb-4 ${productInfo.discount !== 0 && "text-decoration-line-through"}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{(productInfo.price * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</motion.h5>
                                             {
                                                 productInfo.discount > 0 &&
                                                 !isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
-                                                <motion.h6 className="product-price-after-discount mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{((productInfo.price - productInfo.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</motion.h6>
+                                                <motion.h6 className="product-price-after-discount mb-3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{((productInfo.price - productInfo.discount) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</motion.h6>
                                             }
                                             {
                                                 productInfo.discountInOfferPeriod > 0 &&
                                                 isExistOfferOnProduct(currentDate, productInfo.startDiscountPeriod, productInfo.endDiscountPeriod) &&
-                                                <motion.h6 className="product-price-after-discount mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{((productInfo.price - productInfo.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</motion.h6>
+                                                <motion.h6 className="product-price-after-discount mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{((productInfo.price - productInfo.discountInOfferPeriod) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</motion.h6>
                                             }
                                             {
                                                 productInfo.quantity > 0 ? <motion.h5 className="product-quantity" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{productInfo.quantity} {t("Product Available In Store")}</motion.h5> :
@@ -991,7 +991,7 @@ export default function ProductDetails({ countryAsProperty, productIdAsProperty 
                                                 <ProductCard
                                                     productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
-                                                    usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                    convertedPrice={convertedPrice}
                                                     currencyNameByCountry={currencyNameByCountry}
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUser, product._id)}
                                                     isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}

@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import { getUserInfo, getOrderDetails, handleSelectUserLanguage } from "../../../../../public/global_functions/popular";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../../../public/global_functions/prices";
 import NotFoundError from "@/components/NotFoundError";
 
 export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
@@ -16,7 +16,7 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -37,9 +37,10 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetOrderDetails) {
                 setIsLoadingPage(false);
             }
@@ -124,13 +125,13 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                                                         {orderProduct.quantity}
                                                     </td>
                                                     <td>
-                                                        {orderProduct.name}
+                                                        {orderProduct.name[i18n.language]}
                                                     </td>
                                                     <td>
-                                                        {(orderProduct.unitPrice * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                        {(orderProduct.unitPrice * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                                     </td>
                                                     <td>
-                                                        {(orderProduct.totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                        {(orderProduct.totalAmount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                                     </td>
                                                     <td>
                                                         <img
@@ -159,15 +160,15 @@ export default function OrderDetails({ orderIdAsProperty, countryAsProperty }) {
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Name")}</th>
-                                                            <td>{orderProduct.name}</td>
+                                                            <td>{orderProduct.name[i18n.language]}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{(orderProduct.unitPrice * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                            <td>{(orderProduct.unitPrice * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Total")}</th>
-                                                            <td>{(orderProduct.totalAmount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                            <td>{(orderProduct.totalAmount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{t("Image")}</th>
@@ -238,7 +239,7 @@ export async function getServerSideProps({ query, params }) {
                 destination: "/customer-dashboard/orders",
             },
             props: {
-                countryAsProperty: "kuwait",
+                countryAsProperty: process.env.BASE_COUNTRY,
             },
         }
     }
@@ -251,7 +252,7 @@ export async function getServerSideProps({ query, params }) {
                     destination: `/customer-dashboard/orders/${params.orderId}`,
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                     orderIdAsProperty: params.orderId,
                 },
             }
@@ -277,7 +278,7 @@ export async function getServerSideProps({ query, params }) {
     }
     return {
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
             orderIdAsProperty: params.orderId,
         },
     }

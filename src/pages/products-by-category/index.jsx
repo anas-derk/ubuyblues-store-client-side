@@ -1,9 +1,9 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useState, useEffect } from "react";
-import { getAllCategoriesInsideThePage, getAnimationSettings, getCategoriesCount, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
-import { getProductsCount, getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
+import { getAllCategoriesInsideThePage, getAnimationSettings, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../public/global_functions/prices";
+import { getAllProductsInsideThePage, getFavoriteProductsByProductsIdsAndUserId, isExistProductInsideTheCart, isFavoriteProductForUser, isExistOfferOnProduct } from "../../../public/global_functions/popular";
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
@@ -25,7 +25,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -85,10 +85,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty ) ));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetUserInfo && !isGetProducts) {
                 setIsLoadingPage(false);
             }
@@ -346,7 +346,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                 <ProductCard
                                                     productDetails={product}
                                                     setIsDisplayShareOptionsBox={setIsDisplayShareOptionsBox}
-                                                    usdPriceAgainstCurrency={usdPriceAgainstCurrency}
+                                                    convertedPrice={convertedPrice}
                                                     currencyNameByCountry={currencyNameByCountry}
                                                     isFavoriteProductForUserAsProperty={isFavoriteProductForUser(favoriteProductsListForUserByProductsIdsAndUserId, product._id)}
                                                     isExistProductInsideTheCartAsProperty={isExistProductInsideTheCart(product._id)}
@@ -396,7 +396,7 @@ export async function getServerSideProps({ query }) {
                         destination: `/product-by-category?categoryId=${query.categoryId}`,
                     },
                     props: {
-                        countryAsProperty: "kuwait",
+                        countryAsProperty: process.env.BASE_COUNTRY,
                         categoryIdAsProperty: query.categoryId,
                     },
                 }
@@ -422,7 +422,7 @@ export async function getServerSideProps({ query }) {
         }
         return {
             props: {
-                countryAsProperty: "kuwait",
+                countryAsProperty: process.env.BASE_COUNTRY,
                 categoryIdAsProperty: query.categoryId,
             },
         }
@@ -433,7 +433,7 @@ export async function getServerSideProps({ query }) {
             destination: "/",
         },
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
         },
     }
 }

@@ -10,7 +10,7 @@ import NotFoundError from "@/components/NotFoundError";
 import Footer from "@/components/Footer";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { getProductQuantity, calcTotalPrices, isExistOfferOnProduct, getUserInfo, getProductsByIds, handleSelectUserLanguage, getAnimationSettings, getInitialStateForElementBeforeAnimation } from "../../../public/global_functions/popular";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../public/global_functions/prices";
 import { useDispatch } from "react-redux";
 import { motion } from "motion/react";
 
@@ -20,7 +20,7 @@ export default function Cart({ countryAsProperty }) {
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -51,10 +51,10 @@ export default function Cart({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty === selectedCountry ? countryAsProperty : (selectedCountry ?? countryAsProperty)));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetGroupedProductsByStoreId) {
                 setIsLoadingPage(false);
             }
@@ -250,22 +250,22 @@ export default function Cart({ countryAsProperty }) {
                                                                         </div>
                                                                         <div className="col-lg-8">
                                                                             <h6 className="product-name mb-3">{product.name[i18n.language]}</h6>
-                                                                            <h6 className={`product-price ${product.discount !== 0 || product.discountInOfferPeriod !== 0 ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            <h6 className={`product-price ${product.discount !== 0 || product.discountInOfferPeriod !== 0 ? "text-decoration-line-through" : ""}`}>{(product.price * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                             {
                                                                                 product.discount > 0 &&
                                                                                 !isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
-                                                                                <h6 className="product-price-before-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                                <h6 className="product-price-before-discount m-0">{((product.price - product.discount) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                             }
                                                                             {
                                                                                 product.discountInOfferPeriod > 0 &&
                                                                                 isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
-                                                                                <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                                <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                             }
                                                                         </div>
                                                                     </div>
                                                                 </td>
                                                                 <td className="update-product-quantity-cell">
-                                                                    <div className="update-product-quantity p-3">
+                                                                    <div className="update-product-quantity p-3 custom-frame">
                                                                         <HiMinus className="update-product-icon"
                                                                             onClick={() => updateProductQuantity(product._id, "decrease-product-quantity")}
                                                                         />
@@ -276,7 +276,7 @@ export default function Cart({ countryAsProperty }) {
                                                                     </div>
                                                                 </td>
                                                                 <td className="subtotal-cell">
-                                                                    {(product.price * usdPriceAgainstCurrency * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
+                                                                    {(product.price * convertedPrice * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
                                                                 </td>
                                                                 <td className="delete-product-cell">
                                                                     <BsTrash className="trash-icon" onClick={() => deleteProduct(product._id)} />
@@ -297,23 +297,23 @@ export default function Cart({ countryAsProperty }) {
                                                                     <td className="product-cell">
                                                                         <img src={`${process.env.BASE_API_URL}/${product.imagePath}`} width="100" height="100" className="mb-3" />
                                                                         <h6 className="product-name mb-3">{product.name[i18n.language]}</h6>
-                                                                        <h6 className={`product-price ${(product.discount !== 0 || product.discountInOfferPeriod) ? "text-decoration-line-through" : ""}`}>{(product.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                        <h6 className={`product-price ${(product.discount !== 0 || product.discountInOfferPeriod) ? "text-decoration-line-through" : ""}`}>{(product.price * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                         {
                                                                             product.discount > 0 &&
                                                                             !isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
-                                                                            <h6 className="product-price-after-discount m-0">{((product.price - product.discount) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            <h6 className="product-price-after-discount m-0">{((product.price - product.discount) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                         }
                                                                         {
                                                                             product.discountInOfferPeriod > 0 &&
                                                                             isExistOfferOnProduct(currentDate, product.startDiscountPeriod, product.endDiscountPeriod) &&
-                                                                            <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</h6>
+                                                                            <h6 className="product-price-after-discount m-0">{((product.price - product.discountInOfferPeriod) * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</h6>
                                                                         }
                                                                     </td>
                                                                 </motion.tr>
                                                                 <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                     <th>{t("Quantity")}</th>
                                                                     <td className="update-product-quantity-cell">
-                                                                        <div className="update-product-quantity p-3 w-100">
+                                                                        <div className="update-product-quantity p-3 w-100 custom-frame">
                                                                             <HiMinus className="update-product-icon"
                                                                                 onClick={() => updateProductQuantity(product._id, "decrease-product-quantity")}
                                                                             />
@@ -327,7 +327,7 @@ export default function Cart({ countryAsProperty }) {
                                                                 <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                                     <th>{t("Subtotal")}</th>
                                                                     <td className="subtotal-cell">
-                                                                        {(product.price * usdPriceAgainstCurrency * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
+                                                                        {(product.price * convertedPrice * getProductQuantity(product._id)).toFixed(2)} {t(currencyNameByCountry)}
                                                                     </td>
                                                                 </motion.tr>
                                                                 <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -350,7 +350,7 @@ export default function Cart({ countryAsProperty }) {
                                                         {t("Total Price Before Discount")}
                                                     </div>
                                                     <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                        {(pricesDetailsSummary[storeIndex].totalPriceBeforeDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                        {(pricesDetailsSummary[storeIndex].totalPriceBeforeDiscount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                                     </div>
                                                 </div>
                                                 <div className="row total-price-discount total pb-3 mb-5">
@@ -358,7 +358,7 @@ export default function Cart({ countryAsProperty }) {
                                                         {t("Total Discount")}
                                                     </div>
                                                     <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                        {(pricesDetailsSummary[storeIndex].totalDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                        {(pricesDetailsSummary[storeIndex].totalDiscount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                                     </div>
                                                 </div>
                                                 <div className="row total-price-after-discount total pb-3 mb-5">
@@ -366,7 +366,7 @@ export default function Cart({ countryAsProperty }) {
                                                         {t("Total Price After Discount")}
                                                     </div>
                                                     <div className={`col-md-4 fw-bold p-0 ${i18n.language !== "ar" ? "text-md-end" : "text-md-start"}`}>
-                                                        {(pricesDetailsSummary[storeIndex].totalPriceAfterDiscount * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}
+                                                        {(pricesDetailsSummary[storeIndex].totalPriceAfterDiscount * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}
                                                     </div>
                                                 </div>
                                                 <Link href={`/checkout?storeId=${store.storeId}`} className="checkout-link private-btn p-2 w-100 d-block text-center fw-bold">{t("Go To Checkout")}</Link>
@@ -396,7 +396,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/",
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                 },
             }
         }
@@ -419,7 +419,7 @@ export async function getServerSideProps({ query }) {
     }
     return {
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
         },
     }
 }

@@ -10,7 +10,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getAnimationSettings, getDateFormated, getInitialStateForElementBeforeAnimation, getUserInfo, handleSelectUserLanguage } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
@@ -22,7 +22,7 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -66,9 +66,10 @@ export default function CustomerOrders({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetOrders) {
                 setIsLoadingPage(false);
             }
@@ -278,7 +279,7 @@ export default function CustomerOrders({ countryAsProperty }) {
                                                             {t(order.status)}
                                                         </td>
                                                         <td>
-                                                            {order.orderAmount * usdPriceAgainstCurrency} {t(currencyNameByCountry)}
+                                                            {order.orderAmount * convertedPrice} {t(currencyNameByCountry)}
                                                         </td>
                                                         <td>{getDateFormated(order.addedDate)}</td>
                                                         <td>
@@ -390,7 +391,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/",
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                 },
             }
         }
@@ -413,7 +414,7 @@ export async function getServerSideProps({ query }) {
     }
     return {
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
         },
     }
 }

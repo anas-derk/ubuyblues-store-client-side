@@ -12,7 +12,7 @@ import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { useTranslation } from "react-i18next";
 import PaginationBar from "@/components/PaginationBar";
 import Footer from "@/components/Footer";
-import { getCurrencyNameByCountry, getUSDPriceAgainstCurrency } from "../../../../public/global_functions/prices";
+import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from "../../../../public/global_functions/prices";
 import { getUserInfo, handleSelectUserLanguage, getInitialStateForElementBeforeAnimation, getAnimationSettings } from "../../../../public/global_functions/popular";
 import NotFoundError from "@/components/NotFoundError";
 import SectionLoader from "@/components/SectionLoader";
@@ -27,7 +27,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
-    const [usdPriceAgainstCurrency, setUsdPriceAgainstCurrency] = useState(1);
+    const [convertedPrice, setConvertedPrice] = useState(1);
 
     const [currencyNameByCountry, setCurrencyNameByCountry] = useState("");
 
@@ -74,9 +74,10 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
 
     useEffect(() => {
         setIsLoadingPage(true);
-        getUSDPriceAgainstCurrency(countryAsProperty).then((price) => {
-            setUsdPriceAgainstCurrency(price);
-            setCurrencyNameByCountry(getCurrencyNameByCountry(countryAsProperty));
+        const selectedCountry = localStorage.getItem(process.env.SELECTED_COUNTRY_BY_USER) ?? countryAsProperty;
+        getBaseCurrencyPriceAgainstCurrency(selectedCountry).then((price) => {
+            setConvertedPrice(price);
+            setCurrencyNameByCountry(getCurrencyNameByCountry(selectedCountry));
             if (!isGetFavoriteProducts) {
                 setIsLoadingPage(false);
             }
@@ -312,7 +313,7 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                         />
                                                         <h6>{favoriteProduct.name[i18n.language]}</h6>
                                                     </td>
-                                                    <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                    <td>{(favoriteProduct.price * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                     <td>{t("Stock Status")}</td>
                                                     <td>
                                                         {selectedFavoriteProduct !== favoriteProductIndex && <BsTrash className="delete-product-from-favorite-user-list-icon managment-favorite-products-icon" onClick={() => deleteProductFromFavoriteUserProducts(favoriteProductIndex)} />}
@@ -342,12 +343,12 @@ export default function CustomerFavoriteProductsList({ countryAsProperty }) {
                                                                     width="100"
                                                                     height="100"
                                                                 />
-                                                                <h6>{favoriteProduct.name}</h6>
+                                                                <h6>{favoriteProduct.name[i18n.language]}</h6>
                                                             </td>
                                                         </motion.tr>
                                                         <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Unit Price")}</th>
-                                                            <td>{(favoriteProduct.price * usdPriceAgainstCurrency).toFixed(2)} {t(currencyNameByCountry)}</td>
+                                                            <td>{(favoriteProduct.price * convertedPrice).toFixed(2)} {t(currencyNameByCountry)}</td>
                                                         </motion.tr>
                                                         <motion.tr initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
                                                             <th>{t("Stock Status")}</th>
@@ -410,7 +411,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/",
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                 },
             }
         }
@@ -433,7 +434,7 @@ export async function getServerSideProps({ query }) {
     }
     return {
         props: {
-            countryAsProperty: "kuwait",
+            countryAsProperty: process.env.BASE_COUNTRY,
         },
     }
 }

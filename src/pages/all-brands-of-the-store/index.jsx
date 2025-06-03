@@ -167,7 +167,7 @@ export async function getServerSideProps({ query }) {
                         destination: `/all-brands?storeId=${query.storeId}`,
                     },
                     props: {
-                        countryAsProperty: "kuwait",
+                        countryAsProperty: process.env.BASE_COUNTRY,
                         storeId: query.storeId,
                     },
                 }
@@ -178,7 +178,7 @@ export async function getServerSideProps({ query }) {
                     destination: "/all-brands",
                 },
                 props: {
-                    countryAsProperty: "kuwait",
+                    countryAsProperty: process.env.BASE_COUNTRY,
                 },
             }
         }
