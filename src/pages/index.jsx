@@ -456,8 +456,9 @@ export default function Home({ countryAsProperty, storeId }) {
             else if (section === "products") {
                 setIsGetProducts(true);
                 const newCurrentPage = currentPage.forProducts - 1;
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-                setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+                const tempFilters = { ...filters.forProducts, storeId: filters.storeId, status: filters.status, parent: filters.parent };
+                const tempSortDetails = { ...sortDetails.forProducts };
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(tempFilters), getSortDetailsAsQuery(tempSortDetails))).data.products); setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
                 setIsGetProducts(false);
             }
             else {
@@ -485,7 +486,9 @@ export default function Home({ countryAsProperty, storeId }) {
             else if (section === "products") {
                 setIsGetProducts(true);
                 const newCurrentPage = currentPage.forProducts + 1;
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+                const tempFilters = { ...filters.forProducts, storeId: filters.storeId, status: filters.status, parent: filters.parent };
+                const tempSortDetails = { ...sortDetails.forProducts };
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(tempFilters), getSortDetailsAsQuery(tempSortDetails))).data.products);
                 setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
                 setIsGetProducts(false);
             }
