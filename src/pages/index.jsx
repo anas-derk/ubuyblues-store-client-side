@@ -133,12 +133,12 @@ export default function Home({ countryAsProperty, storeId }) {
 
     const [sortDetails, setSortDetails] = useState({
         forFlashProducts: {
-            by: "",
-            type: 1,
+            by: "postOfDate",
+            type: -1,
         },
         forProducts: {
-            by: "",
-            type: 1,
+            by: "postOfDate",
+            type: -1,
         },
     });
 
@@ -240,7 +240,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     setTotalPagesCount(totalPagesCountTemp);
                     setIsGetCategories(false);
                     // =============================================================================
-                    const { flashProductsCount, flashProductsData, currentDateTemp } = await handleGetFlashProducts(filtersAsString);
+                    const { flashProductsCount, flashProductsData, currentDateTemp } = await handleGetFlashProducts(filtersAsString, getSortDetailsAsQuery(sortDetails.forFlashProducts));
                     setCurrentDate(currentDateTemp);
                     setAllFlashProductsInsideThePage(flashProductsData);
                     totalPagesCountTemp.forFlashProducts = Math.ceil(flashProductsCount / pageSizes.forFlashProducts);
@@ -250,7 +250,7 @@ export default function Home({ countryAsProperty, storeId }) {
                     }
                     setIsGetFlashProducts(false);
                     // =============================================================================
-                    const { productsCount, productsData } = await handleGetProducts(filtersAsString);
+                    const { productsCount, productsData } = await handleGetProducts(filtersAsString, getSortDetailsAsQuery(sortDetails.forProducts));
                     setAllProductsInsideThePage(productsData);
                     totalPagesCountTemp.forProducts = Math.ceil(productsCount / pageSizes.forProducts);
                     setTotalPagesCount(totalPagesCountTemp);
