@@ -512,7 +512,9 @@ export default function Home({ countryAsProperty, storeId }) {
             }
             else if (section === "products") {
                 setIsGetProducts(true);
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
+                const tempFilters = { ...filters.forProducts, storeId: filters.storeId, status: filters.status, parent: filters.parent };
+                const tempSortDetails = { ...sortDetails.forProducts };
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSizes.forProducts, getFiltersAsQuery(tempFilters), getSortDetailsAsQuery(tempSortDetails))).data.products);
                 setCurrentPage({ ...currentPage, forProducts: pageNumber });
                 setIsGetProducts(false);
             }
