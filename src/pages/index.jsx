@@ -893,8 +893,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     onChange={(e) => handleChangeSorts(e, "flash-products")}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
-                                                    <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
-                                                    <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                    <option value="postOfDate,-1">{t("From Latest To Oldest")}</option>
+                                                    <option value="postOfDate,1">{t("From Oldest To Latest")}</option>
                                                     <option value="price,-1">{t("From Highest Price To Lowest")}</option>
                                                     <option value="price,1">{t("From Lowest Price To Highest")}</option>
                                                 </select>
@@ -983,8 +983,8 @@ export default function Home({ countryAsProperty, storeId }) {
                                                     onChange={(e) => handleChangeSorts(e, "products")}
                                                 >
                                                     <option value="" hidden>{t("Sort By")}</option>
-                                                    <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
-                                                    <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                    <option value="postOfDate,-1">{t("From Latest To Oldest")}</option>
+                                                    <option value="postOfDate,1">{t("From Oldest To Latest")}</option>
                                                     <option value="price,-1">{t("From Highest Price To Lowest")}</option>
                                                     <option value="price,1">{t("From Lowest Price To Highest")}</option>
                                                 </select>
