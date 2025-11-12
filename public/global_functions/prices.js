@@ -42,9 +42,6 @@ const getBaseCurrencyPriceAgainstCurrency = async (country) => {
             }
         }
         switch (country) {
-            case process.env.BASE_COUNTRY: {
-                return 1;
-            }
             case "kuwait": {
                 return (await axios.get(`${process.env.BASE_API_URL}/currency-exchange-rates/currency-rate-agaist-base-currency?currencySymbol=KWD&baseCurrencySymbol=${getCurrencyNameByCountry("United States Of America")}`)).data.data;
             }
