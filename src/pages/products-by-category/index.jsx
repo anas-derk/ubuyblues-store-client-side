@@ -124,9 +124,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const handleResetAllCategoryData = () => {
         setCategoryInfo({});
-        setCurrentPageForProducts(1);
         setCurrentPageForSubCategories(1);
         setAllProductsInsideThePage([]);
+        setTotalPagesCountForProducts(0);
+        setCurrentPageForProducts(1);
         setIsExistProductsInDBInGeneral(false);
         setAllSubCategoriesInsideThePage([]);
         setFavoriteProductsListForUserByProductsIdsAndUserId([]);
