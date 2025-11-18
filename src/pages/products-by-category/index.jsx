@@ -148,7 +148,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 setIsGetCategoryInfo(false);
                 if (Object.keys(result.data).length > 0) {
                     setCategoryInfo(result.data);
-                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }))).data;
+                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }), getSortDetailsAsQuery(sortDetails))).data;
                     if (result.productsCount > 0) {
                         setTotalPagesCountForProducts(Math.ceil(result.productsCount / pageSize));
                         setAllProductsInsideThePage(result.products);
