@@ -358,7 +358,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                 />
                                             </motion.div>
                                         ))}
-                                        {totalPagesCountForProducts > 1 &&
+                                        {!isGetProducts && totalPagesCountForProducts > 1 &&
                                             <PaginationBar
                                                 totalPagesCount={totalPagesCountForProducts}
                                                 currentPage={currentPageForProducts}
