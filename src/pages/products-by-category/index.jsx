@@ -376,7 +376,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                         className="form-control"
                                                         onChange={(e) => {
                                                             const tempFilters = {
-                                                                ...filters, forProducts: { name: e.target.value.trim() }
+                                                                ...filters,
+                                                                forProducts: {
+                                                                    ...filters.forProducts,
+                                                                    name: e.target.value.trim()
+                                                                }
                                                             }
                                                             setFilters(tempFilters);
                                                             searchOnProduct(e, tempFilters.forProducts, sortDetails.forProducts);
