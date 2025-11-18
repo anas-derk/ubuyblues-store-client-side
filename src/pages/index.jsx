@@ -15,15 +15,11 @@ import { getCurrencyNameByCountry, getBaseCurrencyPriceAgainstCurrency } from ".
 import ShareOptionsBox from "@/components/ShareOptionsBox";
 import ProductCard from "@/components/ProductCard";
 import {
-    getProductsCount,
     getAllProductsInsideThePage,
     isExistProductInsideTheCart,
     getStoreDetails,
-    getCategoriesCount,
     getAllCategoriesInsideThePage,
-    getStoresCount,
     getAllStoresInsideThePage,
-    getFlashProductsCount,
     getAllFlashProductsInsideThePage,
     isExistOfferOnProduct,
     getFavoriteProductsByProductsIdsAndUserId,

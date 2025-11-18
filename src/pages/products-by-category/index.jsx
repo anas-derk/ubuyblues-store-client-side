@@ -68,8 +68,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     });
 
     const [sortDetails, setSortDetails] = useState({
-        by: "",
-        type: 1,
+        by: "postOfDate",
+        type: -1,
     });
 
     const [errorMsg, setErrorMsg] = useState("");
@@ -330,8 +330,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                         }}
                                                     >
                                                         <option value="" hidden>{t("Sort By")}</option>
-                                                        <option value="postOfDate,1">{t("From Latest To Oldest")}</option>
-                                                        <option value="postOfDate,-1">{t("From Oldest To Latest")}</option>
+                                                        <option value="postOfDate,-1">{t("From Latest To Oldest")}</option>
+                                                        <option value="postOfDate,1">{t("From Oldest To Latest")}</option>
                                                         <option value="price,-1">{t("From Highest Price To Lowest")}</option>
                                                         <option value="price,1">{t("From Lowest Price To Highest")}</option>
                                                     </select>
