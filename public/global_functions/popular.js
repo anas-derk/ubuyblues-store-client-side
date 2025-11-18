@@ -83,10 +83,10 @@ const getCategoriesCount = async (filters) => {
     }
 }
 
-const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters) => {
+const getAllCategoriesInsideThePage = async (pageNumber, pageSize, filters, sortDetails) => {
     try {
         const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
-        return (await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}`)).data;
+        return (await axios.get(`${process.env.BASE_API_URL}/categories/all-categories-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en"}&${filters ? filters : ""}&${sortDetails ? sortDetails : ""}`)).data;
     }
     catch (err) {
         throw err;

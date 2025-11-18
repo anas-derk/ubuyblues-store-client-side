@@ -258,7 +258,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             if (section === "categories") {
                 setIsGetSubCategories(true);
                 const newCurrentPage = currentPage.forCategories + 1;
-                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data.categories);
+                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories, getFiltersAsQuery(filters.forCategories), getSortDetailsAsQuery(sortDetails.forCategories))).data.categories);
                 setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
                 setIsGetSubCategories(false);
             }
@@ -279,7 +279,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         try {
             if (section === "categories") {
                 setIsGetSubCategories(true);
-                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data.categories);
+                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories, getFiltersAsQuery(filters.forCategories), getSortDetailsAsQuery(sortDetails.forCategories))).data.categories);
                 setCurrentPage({ ...currentPage, forCategories: pageNumber });
                 setIsGetSubCategories(false);
             }
@@ -300,8 +300,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
             e.preventDefault();
             setIsGetProducts(true);
             setCurrentPage({ ...currentPage, forProducts: 1 });
-            let filtersAsQuery = getFiltersAsQuery(filters);
-            const result = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data;
+            const result = (await getAllProductsInsideThePage(1, pageSizes.forProducts, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data;
             setAllProductsInsideThePage(result.products);
             setTotalPagesCount({ forProducts: Math.ceil(result.productsCount / pageSizes.forProducts) });
             setIsGetProducts(false);
