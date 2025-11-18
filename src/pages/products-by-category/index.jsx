@@ -49,13 +49,15 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [currentDate, setCurrentDate] = useState("");
 
-    const [currentPageForProducts, setCurrentPageForProducts] = useState(1);
+    const [currentPage, setCurrentPage] = useState({
+        forCategories: 1,
+        forProducts: 1,
+    });
 
-    const [currentPageForSubCategories, setCurrentPageForSubCategories] = useState(1);
-
-    const [totalPagesCountForProducts, setTotalPagesCountForProducts] = useState(0);
-
-    const [totalPagesCountForSubCategories, setTotalPagesCountForSubCategories] = useState(0);
+    const [totalPagesCount, setTotalPagesCount] = useState({
+        forCategories: 0,
+        forProducts: 0,
+    });
 
     const [isDisplayShareOptionsBox, setIsDisplayShareOptionsBox] = useState(false);
 
@@ -64,19 +66,34 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
     const [sharingURL, setSharingURL] = useState("");
 
     const [filters, setFilters] = useState({
-        categoryId: "",
+        forCategories: {
+            categoryId: "",
+            name: "",
+        },
+        forProducts: {
+            name: "",
+        },
     });
 
     const [sortDetails, setSortDetails] = useState({
-        by: "postOfDate",
-        type: -1,
+        forCategories: {
+            by: "postOfDate",
+            type: -1,
+        },
+        forProducts: {
+            by: "postOfDate",
+            type: -1,
+        },
     });
 
     const [errorMsg, setErrorMsg] = useState("");
 
     const { t, i18n } = useTranslation();
 
-    const pageSize = 9;
+    const pageSizes = {
+        forCategories: 1000,
+        forProducts: 9,
+    };
 
     useEffect(() => {
         const userLanguage = localStorage.getItem(process.env.USER_LANGUAGE_FIELD_NAME_IN_LOCAL_STORAGE);
@@ -124,10 +141,9 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const handleResetAllCategoryData = () => {
         setCategoryInfo({});
-        setCurrentPageForSubCategories(1);
+        setCurrentPage({ forCategories: 1, forProducts: 1 });
         setAllProductsInsideThePage([]);
-        setTotalPagesCountForProducts(0);
-        setCurrentPageForProducts(1);
+        setTotalPagesCount({ forCategories: 1, forProducts: 1 });
         setIsExistProductsInDBInGeneral(false);
         setAllSubCategoriesInsideThePage([]);
         setFavoriteProductsListForUserByProductsIdsAndUserId([]);
@@ -148,9 +164,13 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 setIsGetCategoryInfo(false);
                 if (Object.keys(result.data).length > 0) {
                     setCategoryInfo(result.data);
-                    result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsQuery({ categoryId: categoryIdAsProperty }), getSortDetailsAsQuery(sortDetails))).data;
+                    let totalPagesCountTemp = {
+                        forCategories: 0,
+                        forProducts: 0,
+                    }
+                    result = (await getAllProductsInsideThePage(1, pageSizes.forProducts, getFiltersAsQuery({ categoryId: categoryIdAsProperty }), getSortDetailsAsQuery(sortDetails.forProducts))).data;
+                    totalPagesCountTemp.forProducts = Math.ceil(result.productsCount / pageSizes.forProducts);
                     if (result.productsCount > 0) {
-                        setTotalPagesCountForProducts(Math.ceil(result.productsCount / pageSize));
                         setAllProductsInsideThePage(result.products);
                         setCurrentDate(result.currentDate);
                         if (result.products.length > 0) {
@@ -162,9 +182,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                         }
                     }
                     setIsGetProducts(false);
-                    result = (await getAllCategoriesInsideThePage(1, 1000, `parent=${categoryIdAsProperty}`)).data;
+                    result = (await getAllCategoriesInsideThePage(1, pageSizes.forCategories, `parent=${categoryIdAsProperty}`, getSortDetailsAsQuery(sortDetails.forCategories))).data;
+                    totalPagesCountTemp.forCategories = Math.ceil(result.categoriesCount / pageSizes.forCategories);
                     setAllSubCategoriesInsideThePage(result.categories);
-                    setTotalPagesCountForSubCategories(Math.ceil(result.categoriesCount / 1000));
+                    setTotalPagesCount(totalPagesCountTemp);
                     setIsGetSubCategories(false);
                 }
             })
@@ -182,7 +203,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     useEffect(() => {
         if (!isGetUserInfo && !isGetCategoryInfo) {
-            setFilters({ ...filters, categoryId: categoryIdAsProperty });
+            setFilters({ ...filters, forCategories: { categoryId: categoryIdAsProperty } });
             setIsLoadingPage(false);
         }
     }, [isGetUserInfo, isGetCategoryInfo]);
@@ -210,38 +231,64 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         return sortDetailsAsQuery;
     }
 
-    const getPreviousPage = async () => {
+    const getPreviousPage = async (section) => {
         try {
-            setIsGetProducts(true);
-            const newCurrentPage = currentPage - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPageForProducts(newCurrentPage);
-            setIsGetProducts(false);
+            if (section === "categories") {
+                setIsGetSubCategories(true);
+                const newCurrentPage = currentPage.forCategories - 1;
+                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data.categories);
+                setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
+                setIsGetSubCategories(false);
+            }
+            else {
+                setIsGetProducts(true);
+                const newCurrentPage = currentPage.forProducts - 1;
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters.forProducts), getSortDetailsAsQuery(sortDetails.forProducts))).data.products);
+                setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+                setIsGetProducts(false);
+            }
         }
         catch (err) {
             throw err;
         }
     }
 
-    const getNextPage = async () => {
+    const getNextPage = async (section) => {
         try {
-            setIsGetProducts(true);
-            const newCurrentPage = currentPage + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPageForProducts(newCurrentPage);
-            setIsGetProducts(false);
+            if (section === "categories") {
+                setIsGetSubCategories(true);
+                const newCurrentPage = currentPage.forCategories + 1;
+                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(newCurrentPage, pageSizes.forCategories)).data.categories);
+                setCurrentPage({ ...currentPage, forCategories: newCurrentPage });
+                setIsGetSubCategories(false);
+            }
+            else {
+                setIsGetProducts(true);
+                const newCurrentPage = currentPage.forProducts + 1;
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSizes.forProducts, getFiltersAsQuery(filters.forProducts), getSortDetailsAsQuery(sortDetails.forProducts))).data.products);
+                setCurrentPage({ ...currentPage, forProducts: newCurrentPage });
+                setIsGetProducts(false);
+            }
         }
         catch (err) {
             throw err;
         }
     }
 
-    const getSpecificPage = async (pageNumber) => {
+    const getSpecificPage = async (pageNumber, section) => {
         try {
-            setIsGetProducts(true);
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters), getSortDetailsAsQuery(sortDetails))).data.products);
-            setCurrentPageForProducts(pageNumber);
-            setIsGetProducts(false);
+            if (section === "categories") {
+                setIsGetSubCategories(true);
+                setAllSubCategoriesInsideThePage((await getAllCategoriesInsideThePage(pageNumber, pageSizes.forCategories)).data.categories);
+                setCurrentPage({ ...currentPage, forCategories: pageNumber });
+                setIsGetSubCategories(false);
+            }
+            else {
+                setIsGetProducts(true);
+                setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSizes.forProducts, getFiltersAsQuery(filters.forProducts), getSortDetailsAsQuery(sortDetails.forProducts))).data.products);
+                setCurrentPage({ ...currentPage, forProducts: pageNumber });
+                setIsGetProducts(false);
+            }
         }
         catch (err) {
             throw err;
@@ -252,11 +299,11 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         try {
             e.preventDefault();
             setIsGetProducts(true);
-            setCurrentPageForProducts(1);
+            setCurrentPage({ ...currentPage, forProducts: 1 });
             let filtersAsQuery = getFiltersAsQuery(filters);
-            const result = (await getAllProductsInsideThePage(1, pageSize, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data;
+            const result = (await getAllProductsInsideThePage(1, pageSizes.forProducts, filtersAsQuery, getSortDetailsAsQuery(sortDetails))).data;
             setAllProductsInsideThePage(result.products);
-            setTotalPagesCountForProducts(Math.ceil(result.productsCount / pageSize));
+            setTotalPagesCount({ forProducts: Math.ceil(result.productsCount / pageSizes.forProducts) });
             setIsGetProducts(false);
         }
         catch (err) {
@@ -306,13 +353,15 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                         placeholder={t("Please Enter The name Of The Product You Want To Search For")}
                                                         className="form-control"
                                                         onChange={(e) => {
-                                                            const tempFilters = { ...filters, name: e.target.value.trim() };
+                                                            const tempFilters = {
+                                                                ...filters, forProducts: { name: e.target.value.trim() }
+                                                            }
                                                             setFilters(tempFilters);
-                                                            searchOnProduct(e, tempFilters, sortDetails);
+                                                            searchOnProduct(e, tempFilters.forProducts, sortDetails.forProducts);
                                                         }}
                                                     />
                                                     <div className={`icon-box ${i18n.language === "ar" ? "ar-language-mode" : "other-languages-mode"}`}>
-                                                        <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters, sortDetails)} />
+                                                        <FaSearch className='icon' onClick={(e) => searchOnProduct(e, filters.forProducts, sortDetails.forProducts)} />
                                                     </div>
                                                 </div>
                                             </form>
@@ -358,10 +407,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                 />
                                             </motion.div>
                                         ))}
-                                        {!isGetProducts && totalPagesCountForProducts > 1 &&
+                                        {!isGetProducts && totalPagesCount.forProducts > 1 &&
                                             <PaginationBar
-                                                totalPagesCount={totalPagesCountForProducts}
-                                                currentPage={currentPageForProducts}
+                                                totalPagesCount={totalPagesCount.forProducts}
+                                                currentPage={currentPage.forProducts}
                                                 getPreviousPage={getPreviousPage}
                                                 getNextPage={getNextPage}
                                                 getSpecificPage={getSpecificPage}
