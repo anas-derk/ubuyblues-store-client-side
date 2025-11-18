@@ -67,10 +67,10 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
 
     const [filters, setFilters] = useState({
         forCategories: {
-            categoryId: "",
             name: "",
         },
         forProducts: {
+            categoryId: "",
             name: "",
         },
     });
@@ -164,6 +164,8 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                 setIsGetCategoryInfo(false);
                 if (Object.keys(result.data).length > 0) {
                     setCategoryInfo(result.data);
+                    const tempFilters = { ...filters, forProducts: { ...filters.forProducts, categoryId: categoryIdAsProperty } };
+                    setFilters(tempFilters);
                     let totalPagesCountTemp = {
                         forCategories: 0,
                         forProducts: 0,
