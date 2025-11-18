@@ -297,6 +297,27 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
         }
     }
 
+    const handleChangeSorts = async (e, section) => {
+        e.preventDefault();
+        if (section === "categories") {
+            const sortDetailsArray = e.target.value.split(",");
+            const tempSortDetails = {
+                ...sortDetails,
+                forCategories: { by: sortDetailsArray[0], type: sortDetailsArray[1] }
+            };
+            setSortDetails(tempSortDetails);
+            // search categories
+        } else {
+            const sortDetailsArray = e.target.value.split(",");
+            const tempSortDetails = {
+                ...sortDetails,
+                forProducts: { by: sortDetailsArray[0], type: sortDetailsArray[1] }
+            };
+            setSortDetails(tempSortDetails);
+            await searchOnProduct(e, filters.forProducts, tempSortDetails.forProducts);
+        }
+    }
+
     const searchOnProduct = async (e, filters, sortDetails) => {
         try {
             e.preventDefault();
@@ -372,12 +393,7 @@ export default function ProductByCategory({ countryAsProperty, categoryIdAsPrope
                                                 <div className="select-sort-type-box">
                                                     <select
                                                         className="select-sort-type form-select"
-                                                        onChange={(e) => {
-                                                            const sortDetailsArray = e.target.value.split(",");
-                                                            const tempSortDetails = { by: sortDetailsArray[0], type: sortDetailsArray[1] };
-                                                            setSortDetails(tempSortDetails);
-                                                            searchOnProduct(e, filters, tempSortDetails);
-                                                        }}
+                                                        onChange={(e) => handleChangeSorts(e, "products")}
                                                     >
                                                         <option value="" hidden>{t("Sort By")}</option>
                                                         <option value="postOfDate,-1">{t("From Latest To Oldest")}</option>
