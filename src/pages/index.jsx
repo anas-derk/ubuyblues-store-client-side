@@ -739,13 +739,13 @@ export default function Home({ countryAsProperty, storeId }) {
                             {!storeDetails.isMainStore && <section className="store-details text-white text-center mb-5">
                                 <img
                                     src={`${process.env.BASE_API_URL}/${storeDetails.imagePath}`}
-                                    alt={`${storeDetails.name} Store Image`}
+                                    alt={`${storeDetails.name[i18n.language]} Store Image`}
                                     width="200"
                                     height="200"
                                     className="d-block mx-auto mb-5 store-image"
                                 />
-                                <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto h3">{t("Welcome To You In Store")} {storeDetails.name}</h1>
-                                <h2 className="products-description mb-4 h4">{storeDetails.productsDescription}</h2>
+                                <h1 className="mb-5 border-bottom border-4 pb-3 welcome-msg mb-5 mw-100 mx-auto h3">{t("Welcome To You In Store")} {storeDetails.name[i18n.language]}</h1>
+                                <h2 className="products-description mb-4 h4">{storeDetails.productsDescription[i18n.language]}</h2>
                             </section>}
                             {/* End Store Details Section */}
                             {/* Start Image Ads Section */}
