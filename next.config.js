@@ -6,7 +6,7 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV === "production",
     },
     env: {
-        BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5200" : "https://api.ubuyblues.com",
+        BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5300" : "https://api.ubuyblues.com",
         WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ubuyblues.com",
         USER_TOKEN_NAME_IN_LOCAL_STORAGE: "ub-s-u-t",
         STORE_NAME: "Ubuyblues Store",
@@ -30,7 +30,7 @@ const nextConfig = {
     async headers() {
         return [
             {
-                source: process.env.NODE_ENV === "development" ? "//localhost:5200/(.*)" : "//api.ubuyblues.com/(.*)",
+                source: process.env.NODE_ENV === "development" ? "//localhost:5300/(.*)" : "//api.ubuyblues.com/(.*)",
                 headers: [
                     { key: "Access-Control-Allow-Credentials", value: "true" },
                     {
