@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 export default function PaginationBar({
     totalPagesCount,
     currentPage,
+    pageRangeDisplayed = 5,
     getPreviousPage,
     getNextPage,
     getSpecificPage,
@@ -21,6 +22,8 @@ export default function PaginationBar({
 
     const [pageNumber, setPageNumber] = useState(0);
 
+    const [windowIndex, setWindowIndex] = useState(0);
+
     const { i18n, t } = useTranslation();
 
     useEffect(() => {
@@ -28,62 +31,71 @@ export default function PaginationBar({
         handleSelectUserLanguage(userLanguage === "ar" || userLanguage === "en" || userLanguage === "tr" || userLanguage === "de" ? userLanguage : "en", i18n.changeLanguage);
     }, []);
 
+    const startPage = windowIndex * pageRangeDisplayed + 1;
+
+    const endPage = Math.min(
+        startPage + pageRangeDisplayed - 1,
+        totalPagesCount
+    );
+
+    const handleNext = async () => {
+        if (currentPage === endPage && endPage < totalPagesCount) {
+            setWindowIndex(prev => prev + 1);
+            await getSpecificPage(endPage + 1, section);
+        } else {
+            await getNextPage(section);
+        }
+    };
+
+    const handlePrevious = async () => {
+        if (currentPage === startPage && windowIndex > 0) {
+            setWindowIndex(prev => prev - 1);
+            await getSpecificPage(startPage - 1, section);
+        } else {
+            await getPreviousPage(section);
+        }
+    };
+
     const getSuitableArrow = (arrowDirection) => {
         if (arrowDirection === "to-previous") {
             if (i18n.language !== "ar") {
                 return (<BsArrowLeftSquare
                     className="previous-page-icon pagination-icon me-3"
-                    onClick={async () => await getPreviousPage(section)}
+                    onClick={handlePrevious}
                 />);
             }
             return (<BsArrowRightSquare
                 className="previous-page-icon pagination-icon me-3"
-                onClick={async () => await getPreviousPage(section)}
+                onClick={handlePrevious}
             />);
         } else {
             if (i18n.language !== "ar") {
                 return (<BsArrowRightSquare
                     className="next-page-icon pagination-icon me-3"
-                    onClick={async () => await getNextPage(section)}
+                    onClick={handleNext}
                 />);
             }
             return (<BsArrowLeftSquare
                 className="next-page-icon pagination-icon me-3"
-                onClick={async () => await getNextPage(section)}
+                onClick={handleNext}
             />);
         }
     }
 
     const getPaginationButtons = () => {
         const paginationButtons = [];
-        for (let i = 1; i <= totalPagesCount; i++) {
-            if (i < 11) {
-                paginationButtons.push(
-                    <button
-                        key={i}
-                        className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""}`}
-                        onClick={async () => await getSpecificPage(i, section)}
-                        style={{
-                            color: currentPage === i ? activePaginationButtonColor : paginationButtonTextColor,
-                            backgroundColor: currentPage === i ? activePaginationButtonBackgroundColor : paginationButtonBackgroundColor,
-                        }}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        if (totalPagesCount > 10) {
-            paginationButtons.push(
-                <span className="me-3 fw-bold" key={`${Math.random()}-${Date.now()}`}>...</span>
-            );
+        for (let i = startPage; i <= endPage; i++) {
             paginationButtons.push(
                 <button
-                    key={totalPagesCount}
-                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === totalPagesCount ? "selection" : ""}`}
-                    onClick={async () => await getSpecificPage(totalPagesCount, section)}
+                    key={i}
+                    className={`pagination-button me-3 p-2 ps-3 pe-3 ${currentPage === i ? "selection" : ""}`}
+                    onClick={async () => await getSpecificPage(i, section)}
+                    style={{
+                        color: currentPage === i ? activePaginationButtonColor : paginationButtonTextColor,
+                        backgroundColor: currentPage === i ? activePaginationButtonBackgroundColor : paginationButtonBackgroundColor,
+                    }}
                 >
-                    {totalPagesCount}
+                    {i}
                 </button>
             );
         }
