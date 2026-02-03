@@ -214,15 +214,13 @@ export default function Home({ countryAsProperty, storeId }) {
                     const tempFilters = { ...filters, storeId: storeDetailsResult.data._id };
                     setFilters(tempFilters);
                     const filtersAsString = getFiltersAsQuery(tempFilters);
-                    if (storeDetailsResult.data.isMainStore) {
-                        let allTextAdsTemp = [], allImageAdsTemp = [];
-                        (await getAllAds(filtersAsString)).data.forEach((ad) => {
-                            if (ad.type === "text") allTextAdsTemp.push(ad);
-                            else allImageAdsTemp.push(ad);
-                        });
-                        setAllTextAds(allTextAdsTemp);
-                        setAllImageAds(allImageAdsTemp);
-                    }
+                    let allTextAdsTemp = [], allImageAdsTemp = [];
+                    (await getAllAds(`storeId=${tempFilters.storeId}`)).data.forEach((ad) => {
+                        if (ad.type === "text") allTextAdsTemp.push(ad);
+                        else allImageAdsTemp.push(ad);
+                    });
+                    setAllTextAds(allTextAdsTemp);
+                    setAllImageAds(allImageAdsTemp);
                     // =============================================================================
                     let totalPagesCountTemp = {
                         forCategories: 0,
@@ -338,9 +336,9 @@ export default function Home({ countryAsProperty, storeId }) {
         setIsGetStores(true);
     }
 
-    const getAllAds = async () => {
+    const getAllAds = async (filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads?language=${i18n.language}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads?${filters ? filters : ""}&language=${i18n.language}`)).data;
         }
         catch (err) {
             throw err;
