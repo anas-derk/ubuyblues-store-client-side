@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 export default function PaginationBar({
     totalPagesCount,
     currentPage,
-    pageRangeDisplayed = 2,
+    pageRangeDisplayed = 5,
     getPreviousPage,
     getNextPage,
     getSpecificPage,
