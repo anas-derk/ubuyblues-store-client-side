@@ -227,7 +227,7 @@ export default function Cart({ countryAsProperty }) {
                         {allProductsData.length > 0 ? <section className="products-by-store">
                             {allProductsData.map((store, storeIndex) => (
                                 <div className="store mb-5 pb-5" key={store.storeId}>
-                                    <h4 className="mb-5">{t("Store-Associated Products")} : {store.storeId}</h4>
+                                    <h4 className="mb-5">{t("Store-Associated Products")} : {store.storeName[i18n.language]}</h4>
                                     <div className="row align-items-center">
                                         <div className="col-xl-8">
                                             {windowInnerWidth > 991 && <section className="products w-100">
