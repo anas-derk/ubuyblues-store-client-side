@@ -6,7 +6,7 @@ import NotFoundError from "@/components/NotFoundError";
 import { useTranslation } from "react-i18next";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
-import { getAllBrandsInsideThePage, getAnimationSettings, getInitialStateForElementBeforeAnimation, getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
+import { getAllBrandsInsideThePage, getAnimationSettings, getAppearedSections, getInitialStateForElementBeforeAnimation, getStoreDetails, getUserInfo, handleSelectUserLanguage } from "../../../public/global_functions/popular";
 import SectionLoader from "@/components/SectionLoader";
 import BrandCard from "@/components/BrandCard";
 import { motion } from "motion/react";
@@ -20,6 +20,10 @@ export default function AllBrands({ storeId }) {
     const [errorMsg, setErrorMsg] = useState("");
 
     const [isGetUserInfo, setIsGetUserInfo] = useState(true);
+
+    const [isGetAppearedSections, setIsGetAppearedSections] = useState(true);
+
+    const [isServiceAvailable, setIsServiceAvailable] = useState(false);
 
     const [isGetBrands, setIsGetBrands] = useState(true);
 
@@ -66,6 +70,25 @@ export default function AllBrands({ storeId }) {
         } else {
             setIsGetUserInfo(false);
         }
+    }, []);
+
+    useEffect(() => {
+        getAppearedSections()
+            .then(async (result) => {
+                const appearedSectionsLength = result.data.length;
+                if (appearedSectionsLength > 0) {
+                    for (let i = 0; i < appearedSectionsLength; i++) {
+                        if (result.data[i].sectionName === "add your store" && result.data[i].isAppeared) {
+                            setIsServiceAvailable(true);
+                        }
+                    }
+                }
+                setIsGetAppearedSections(false);
+            })
+            .catch((err) => {
+                setIsLoadingPage(false);
+                setErrorMsgOnLoadingThePage(err?.message === "Network Error" ? "Network Error" : "Sorry, Something Went Wrong, Please Try Again !");
+            });
     }, []);
 
     useEffect(() => {
@@ -117,35 +140,37 @@ export default function AllBrands({ storeId }) {
                 <Header />
                 <div className="page-content pb-5 pt-5">
                     <div className="container-fluid">
-                        {Object.keys(storeDetails).length > 0 ? <>
-                            <motion.h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white h3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("All The Brands Of The Store")}: {storeDetails.name[i18n.language]}</motion.h1>
-                            <div className="row brands-box section-data-box mb-5">
-                                {allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
-                                    <motion.div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}
-                                        initial={{
-                                            scale: 0.7,
-                                        }}
-                                        whileInView={{
-                                            scale: 1,
-                                            transition: {
-                                                duration: 0.5,
-                                            }
-                                        }}
-                                        whileHover={{
-                                            scale: 1.1
-                                        }}
-                                    >
-                                        <BrandCard
-                                            brandDetails={brand}
-                                        />
-                                    </motion.div>
-                                ))}
-                                {allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
-                                {isGetBrands && <SectionLoader />}
-                            </div>
-                            {!isGetBrands && currentPage < totalPagesCount && <button className="mb-4 d-block mx-auto text-center show-btn p-3" onClick={getNextPage}>Show More</button>}
-                            {errorMsg && <NotFoundError errorMsg={errorMsg} />}
-                        </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
+                        {isServiceAvailable ? <section className="brands">
+                            {Object.keys(storeDetails).length > 0 ? <>
+                                <motion.h1 className="welcome-msg mb-5 border-bottom border-2 pb-3 w-fit mx-auto text-white h3" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("All The Brands Of The Store")}: {storeDetails.name[i18n.language]}</motion.h1>
+                                <div className="row brands-box section-data-box mb-5">
+                                    {allBrandsInsideThePage.length > 0 && allBrandsInsideThePage.map((brand) => (
+                                        <motion.div className="col-xs-12 col-lg-6 col-xl-4" key={brand._id}
+                                            initial={{
+                                                scale: 0.7,
+                                            }}
+                                            whileInView={{
+                                                scale: 1,
+                                                transition: {
+                                                    duration: 0.5,
+                                                }
+                                            }}
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                        >
+                                            <BrandCard
+                                                brandDetails={brand}
+                                            />
+                                        </motion.div>
+                                    ))}
+                                    {allBrandsInsideThePage.length === 0 && <NotFoundError errorMsg={t("Sorry, Not Found Any Brands !!")} />}
+                                    {isGetBrands && <SectionLoader />}
+                                </div>
+                                {!isGetBrands && currentPage < totalPagesCount && <button className="mb-4 d-block mx-auto text-center show-btn p-3" onClick={getNextPage}>Show More</button>}
+                                {errorMsg && <NotFoundError errorMsg={errorMsg} />}
+                            </> : <NotFoundError errorMsg={t("Sorry, This Store Is Not Found !!")} />}
+                        </section> : <NotFoundError errorMsg={t("Sorry, This Service Is Not Available Now !!")} />}
                     </div>
                 </div>
                 <Footer />
