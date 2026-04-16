@@ -67,10 +67,25 @@ export default function PolicesTermsAndConditions() {
                                 whileInView={getAnimationSettings}
                             >{t("Introduction")}</motion.h2>
                             <motion.p
-                                className="mb-5"
+                                className="mb-3"
                                 initial={getInitialStateForElementBeforeAnimation()}
                                 whileInView={getAnimationSettings}
                             >{t("This privacy notice defines how Ubuyblues or its owner or operator of this website collects and processes your personal data for the promotion, execution, and provision of Ubuyblues services. By visiting this website, submitting your personal data, or accessing Ubuyblues services or purchasing them, you expressly agree to comply with the terms and conditions of this privacy notice. If you do not agree, please refrain from using or accessing this website or any Ubuyblues services .")}</motion.p>
+                            <motion.p
+                                className="mb-3"
+                                initial={getInitialStateForElementBeforeAnimation()}
+                                whileInView={getAnimationSettings}
+                            >{t("UbuyBlues is operated and managed by Asfour International Company, which is the legal owner and the entity responsible for all associated operations")} .</motion.p>
+                            <motion.p
+                                className="mb-3"
+                                initial={getInitialStateForElementBeforeAnimation()}
+                                whileInView={getAnimationSettings}
+                            >{t("These Terms and Conditions are subject to the laws and regulations in force in the country of headquarters where the service is provided")} .</motion.p>
+                            <motion.p
+                                className="mb-3"
+                                initial={getInitialStateForElementBeforeAnimation()}
+                                whileInView={getAnimationSettings}
+                            >{t("The Platform reserves the right to amend, update, or change any part of the Terms of Use or Privacy Policy at any time at its sole discretion. Such modifications shall become effective immediately upon posting on the Website. Your continued use of the Platform following any changes constitutes your implicit consent to the modified terms. Therefore, please review this page periodically to stay informed of any updates")} .</motion.p>
                             <motion.h2
                                 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2"
                                 initial={getInitialStateForElementBeforeAnimation()}
@@ -90,6 +105,7 @@ export default function PolicesTermsAndConditions() {
                             </ul>
                             <motion.h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("What personal data do we collect ?")}</motion.h2>
                             <motion.p className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("We collect your personal data to provide and continually improve the services of ubuyblues. We gather various types of personal data")} .</motion.p>
+                            <motion.p className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Data is collected and processed in compliance with local and international privacy policies to ensure the service is provided with the highest security standards")} .</motion.p>
                             <motion.h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("The personal data provided by the data subject")}</motion.h2>
                             <ul>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("To provide a seamless customer experience, we receive and store your personal data related to the services of ubuyblues, including, but not limited to")} .</motion.li>
@@ -246,6 +262,7 @@ export default function PolicesTermsAndConditions() {
                             <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Terms and conditions")}</motion.h5>
                             <ul>
                                 <motion.li className="mb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("The Tabby payment service is available on the UbuyBlues website")} .</motion.li>
+                                <motion.li className="mb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Payment options are available in accordance with the geographic policies applicable in the customer's country at the time of purchase")} .</motion.li>
                                 <motion.li className="mb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Payment through Tabby service is available on all products")} .</motion.li>
                                 <motion.li className="mb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Products purchased through the Tabby service cannot be returned")} .</motion.li>
                                 <motion.li className="mb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("UbuyBlues' policy applies to exchanges and returns")} .</motion.li>
