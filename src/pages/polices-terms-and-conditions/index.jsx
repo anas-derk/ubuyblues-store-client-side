@@ -338,20 +338,6 @@ export default function PolicesTermsAndConditions() {
                             </ul>
                             <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("How long does it take to process a refund ?")}</motion.h5>
                             <motion.p className="mb-4">{t("The amount will be refunded to the card used for the payment, and it will take 2-5 business days. But the process may take longer depending on your bank")} :</motion.p>
-                            <motion.h4 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("BINANCE")}</motion.h4>
-                            <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Using Binance on UbuyBlues")}</motion.h5>
-                            <motion.p className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("checking out with Binance on UbuyBlues is easy and secure. Refunds for purchases made via Binance can be processed directly to Binance")} .</motion.p>
-                            <motion.p className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("The pay with Binance option is only available on desktop currently")} .</motion.p>
-                            <ol>
-                                <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("During the Payment section of checkout select, the Binance option then proceed to pay with Binance")} .</motion.li>
-                                <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Begin payment and select your wallet Binance")} .</motion.li>
-                                <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Select your USDT currency")} .</motion.li>
-                                <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Once you’re ready to pay either")} .</motion.li>
-                                <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("scan the QR code within your mobile Binance app or Select Pay in Wallet")} .</motion.li>
-                            </ol>
-                            <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("All returns follow our return policy")}</motion.h5>
-                            <motion.h5 className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Note")} :</motion.h5>
-                            <motion.p className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("When using Binance as your payment method, once you have clicked the “Pay with Binance” button, you will have only 15 minutes to complete your payment. If you are unable to complete your payment, you will have two options: You can try again later to place a new order or you can change your payment method later from Order History in My Account")} .</motion.p>
                             <motion.h2 className="fw-bold mb-4 h4 border-bottom border-2 w-fit pb-2" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Crypto Payment")}</motion.h2>
                             <ol>
                                 <motion.li className="mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("​Service Scope: The user acknowledges that the digital payment option is a global technical feature, and its availability on the website does not constitute an invitation to violate local laws in the user’s country")} .</motion.li>
