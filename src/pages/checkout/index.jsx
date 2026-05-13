@@ -171,6 +171,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
     useEffect(() => {
         getStoreDetails(storeId)
             .then(async (result) => {
+                console.log(result)
                 if (!result.error) {
                     if (result.data?.status === "approving") {
                         setStoreDetails(result.data);
