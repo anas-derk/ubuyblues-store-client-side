@@ -171,7 +171,6 @@ export default function Checkout({ countryAsProperty, storeId }) {
     useEffect(() => {
         getStoreDetails(storeId)
             .then(async (result) => {
-                console.log(result)
                 if (!result.error) {
                     if (result.data?.status === "approving") {
                         setStoreDetails(result.data);
@@ -179,11 +178,9 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
                             if (tempAllProductsDataInsideTheCart.length > 0) {
                                 result = await getProductsByIdsAndStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
-                                console.log(result)
                                 if (result.data.products.length > 0) {
                                     setCurrentDate(result.data.currentDate);
                                     const totalPrices = calcTotalPrices(result.data.currentDate, result.data.products);
-                                    console.log(totalPrices)
                                     setPricesDetailsSummary(totalPrices);
                                     setAllProductsData(result.data.products);
                                     const userData = await getAndSetUserInfoData();
@@ -1105,7 +1102,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <motion.h6 className="text-center mb-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("For Local Products")} ( {t("That Are Available Within The Country And Shipped Within The Same Country")} )</motion.h6>
                                                     <motion.h6 className="text-center mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Product Names")} :</motion.h6>
                                                     <ul className={`mb-5 border border-2 p-3`}>
-                                                        {localAndInternationlProducts.local.map((product, productIndex) => <motion.li key={productIndex} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{product} .</motion.li>)}
+                                                        {localAndInternationlProducts.local.map((product, productIndex) => <motion.li key={productIndex} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{product[i18n.language]} .</motion.li>)}
                                                     </ul>
                                                 </>}
                                                 <motion.div className={`row align-items-center mb-5`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
@@ -1146,7 +1143,7 @@ export default function Checkout({ countryAsProperty, storeId }) {
                                                     <motion.h6 className="text-center mb-4 border-top pt-4" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("For International Products")} ( {t("That Are Available Within One Country And Shipped To Another Country")} ) :</motion.h6>
                                                     <motion.h6 className="text-center mb-3 fw-bold" initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{t("Product Names")} :</motion.h6>
                                                     <ul className={`mb-5 border border-2 p-3`}>
-                                                        {localAndInternationlProducts.international.map((product, productIndex) => <motion.li key={productIndex} className={`${productIndex !== localAndInternationlProducts.international.length - 1 ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{product} .</motion.li>)}
+                                                        {localAndInternationlProducts.international.map((product, productIndex) => <motion.li key={productIndex} className={`${productIndex !== localAndInternationlProducts.international.length - 1 ? "mb-3" : ""}`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>{product[i18n.language]} .</motion.li>)}
                                                     </ul>
                                                 </>}
                                                 <motion.div className={`row align-items-center pt-4 mb-5`} initial={getInitialStateForElementBeforeAnimation()} whileInView={getAnimationSettings}>
