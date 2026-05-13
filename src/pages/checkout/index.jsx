@@ -178,9 +178,11 @@ export default function Checkout({ countryAsProperty, storeId }) {
                         if (Array.isArray(tempAllProductsDataInsideTheCart)) {
                             if (tempAllProductsDataInsideTheCart.length > 0) {
                                 result = await getProductsByIdsAndStoreId(storeId, tempAllProductsDataInsideTheCart.map((product) => product._id));
+                                console.log(result)
                                 if (result.data.products.length > 0) {
                                     setCurrentDate(result.data.currentDate);
                                     const totalPrices = calcTotalPrices(result.data.currentDate, result.data.products);
+                                    console.log(totalPrices)
                                     setPricesDetailsSummary(totalPrices);
                                     setAllProductsData(result.data.products);
                                     const userData = await getAndSetUserInfoData();
